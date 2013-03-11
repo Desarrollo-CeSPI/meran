@@ -1,0 +1,15 @@
+INSERT INTO  `pref_preferencia_sistema` (
+    `id` ,
+    `variable` ,
+    `value` ,
+    `explanation` ,
+    `options` ,
+    `type` ,
+    `categoria` ,
+    `label` ,
+    `explicacion_interna` ,
+    `revisado`
+)
+VALUES (
+    NULL ,  'registradoMeran',  '1',  'Indica si se registro la instalacion de MERAN', NULL ,  'bool',  'interna', NULL ,  'Indica si se registro la instalacion de MERAN',  '0'
+);

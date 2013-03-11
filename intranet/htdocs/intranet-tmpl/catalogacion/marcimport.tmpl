@@ -1,0 +1,60 @@
+<!-- TMPL_INCLUDE NAME="intranet-top.inc" -->
+<h1>Sistema de adquisici&oacute;n MARC</h1>
+
+<table bgcolor="#ffcc00" width="80%" cellpadding="3">
+	<tr valign="center">
+	<td><font size="4">Importar en la breeding farm</font></td>
+	</tr>
+</table>
+
+<!-- TMPL_IF name="uploadmarc" -->
+<p>Importar resultados :</p>
+<ul>
+	<p><!-- TMPL_VAR name="imported" --> registros importados </p>
+	<p><!-- TMPL_VAR name="alreadyindb" --> No se importaron porque ya est&aacute;n en la BD</p>
+	<p><!-- TMPL_VAR name="alreadyinfarm" --> no se importaron porque ya est&aacute;n en la granja</p>
+	<p><!-- TMPL_VAR name="notmarcrecord" --> not imported because they seems not to be MARC format (or ISBN/ISSN missing) !</p>
+	<p><!-- TMPL_VAR name="total" -->  registros procesados</p>
+	<p><a href="addbooks.pl">Volver a la adquisici&oacute;n</a>
+</ul>
+<!-- TMPL_ELSE -->
+<ul>
+	<li>Elija un archivo para importar en la breeding farm. Esta va a ser analizado, y por cada ISBN encontrado, un nuevo hijo sera creado en la breeding farm.</li>
+	<li>Si un ISBN ya existea en la breeding farm, puedes elegir entre ignorar el nuevo o sobreescribir el viejo.</li>
+	<li>Puede dar un nombre para este import. Puede ser &uacute;til, cuando crea una descripci&oacute;n bibliogr&aacute;fica, recordar de donde provienen los datos MARC sugeridos!</li>
+	<li>Por supuesto, si el ISBN ya existe en la BD activa, la descripci&oacute;n bibliogr&aacute;fica ser&aacute; ignorada</li>
+</ul>
+<form method="post" action="<!-- TMPL_VAR name="SCRIPT_NAME" -->" enctype="multipart/form-data">
+<table cellpadding="3" border=0>
+	<tr valign="top">
+		<td>Seleccione el archivo para importar:</td>
+		<td>
+			<input type="file" name="uploadmarc"/><br/>
+		</td>
+	</tr>
+	<tr valign="top">
+		<td>Nombre de este importe:</td>
+		<td>
+			<input type="text" name="filename"/><br/>
+		</td>
+	</tr>
+	<tr valign="top">
+		<td>Character encoding (MARC21 or UNIMARC)</td>
+		<td>
+			<select name="syntax"/><option value="MARC21">MARC21</option><option value="UNIMARC">UNIMARC</option></select><br/>
+		</td>
+	</tr>
+	<tr valign="top">
+		<td>Si el ISBN ya esta en la breeding farm: </td>
+		<td><input type="radio" name="overwrite_biblio" value="0" checked>Ignorar este, mantener el existente <br/>
+			<input type="radio" name="overwrite_biblio" value="1">Sobre escribir el actual con este</td>
+	</tr>
+	<tr valign="top">
+		<td>&nbsp; </td>
+		<td><input type="submit" value="Importaci&oacute;n"></td>
+	</tr>
+
+</table>
+</form>
+<!-- /TMPL_IF -->
+<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

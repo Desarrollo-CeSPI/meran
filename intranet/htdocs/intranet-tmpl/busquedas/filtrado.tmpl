@@ -1,0 +1,219 @@
+
+[% INCLUDE "intranet-top.inc" %]
+
+<script type="text/javascript" src="/intranet-tmpl/includes/estantesVirtuales.js"></script>
+<script type="text/javascript" src="/intranet-tmpl/includes/busquedasCatalogo-min.js"> </script>
+
+
+<script type="text/javascript">
+
+var ORDEN="";
+var ASC= true;
+
+$(document).ready(function() {
+
+    onEnter('keyword',buscar,true);
+    onEnter('titulo',buscar,true);
+    onEnter('autor',buscar,true);
+    onEnter('signatura',buscar,true);
+    onEnter('dictionary',buscar,true);
+    onEnter('isbn',buscar,true);
+    onEnter('codBarra',buscar,true);
+    onEnter('tema',buscar,true);
+    onEnter('estante',buscar,true);
+    
+    $("#volver").hide();
+
+    $("#volver").click(function(){
+        //muestro el resultado de la busqueda
+        $("#resultBusqueda").slideDown("fast");
+        $("#volver").hide();
+    });
+
+    $("#filtrosBusqueda").show();
+    
+   
+});
+
+function limpiarArriba(){
+	$('#keyword').val('');
+}
+
+function limpiarCentro(){
+
+}
+
+function limpiarAbajo(){
+
+    $('#titulo').val('');
+    $('#autor').val('');
+    $('#signatura').val('');
+    $('#isbn').val('');
+    $('#dictionary').val('');
+    $('#codBarra').val('');
+    $('#tema').val('');
+    $('#estante').val('');
+}
+
+function limpiarCampos(side){
+
+    if (side == 'arriba'){
+        limpiarCentro();
+        limpiarAbajo();
+    }else{
+    	limpiarArriba();
+        limpiarCentro();
+    }
+}
+
+function limpiar(){
+	limpiarAbajo();
+	limpiarCentro();
+	limpiarArriba();
+}
+
+function changePageBusquedas(ini){
+    objAH.changePage(ini);
+}
+
+
+</script>
+
+<!-- PARA PODER CREAR EL FORMULARIO -->
+<div id="formulario"></div>
+
+<section class="center-section-form">
+			<div id="filtrosBusqueda" class="filtrosBusqueda">
+	            <form id="busqueda_combinada" class="form-horizontal" onsubmit="return false;">
+		            <fieldset>
+		                <legend class="titulo_legend">[% "B&uacute;squeda combinada" | i18n %]</legend>
+		                    <div class="control-group">
+			                    <label class="control-label" for="keyword">
+			                        [% "B&uacute;squeda combinada" | i18n %]
+			                    </label>
+			                    <div class="controls"> 
+				                    <input type="text" id="keyword" size="25" onkeypress="limpiarCampos('arriba')">
+				                    [% PERL %]
+				                        print C4::AR::Filtros::getComboMatchMode();
+				                    [% END %]
+			                    </div>
+		                    </div>
+		            </fieldset>
+		          </form>
+			</div> 
+			<div>
+	            <form id="busqueda_simple" class="form-horizontal" onsubmit="return false;">
+		            <fieldset>
+		            <legend class="titulo_legend">[% "B&uacute;squeda espec&iacute;fica" | i18n %]</legend>
+		                <div class="control-group">
+						      <label class="control-label" for="titulo"> 
+						          [% "T&iacute;tulo" %]
+						      </label>
+						     <div class="controls"> 
+							     <input type="text"  size="25" id="titulo" onkeypress="limpiarCampos('abajo')">
+							
+							    <input name="tipo" type=radio id=tipo value="normal" checked>
+							                    [% "Normal" | i18n %]
+							    <input name="tipo" type=radio id=tipo value="exacto">
+							                    [% "Exacto" | i18n %]
+		                    </div>
+						</div>
+						
+	                  <div class="control-group">
+	                        <label class="control-label" for="autor">
+	                            [% "Autor" %]
+	                        </label>
+	                        <div class="controls">
+	                          <input type="text" size="25" id="autor" onkeypress="limpiarCampos('abajo')">
+	                        </div>
+	                  </div>
+		                <div class="control-group">
+		                    <label class="control-label" for="isbn">
+		                        ISBN   
+		                    </label>
+		                    <div class="controls">
+		                       <input type="text" id="isbn" size="25"  onkeypress="limpiarCampos('abajo')">
+	                       </div>
+		                </div>
+	                  <div class="control-group">
+	                    <label class="control-label" for="tipo_nivel3_id">
+	                        [% "Tipo de documento" | i18n %] 
+	                    </label>
+	                    <div class="controls">
+	                        [% comboTipoDocumento %]
+	                    </div>
+	                  </div>
+	                  
+	                   <div class="control-group">
+	                       <label class="control-label" for="tema">
+	                           [% "Tema" | i18n %]
+	                       </label>
+	                       <div class="controls">
+	                            <input type="text" size="25" id="tema"  onkeypress="limpiarCampos('centro')">
+	                       </div>
+	                   </div>
+	                   <div class="control-group">
+	                       <label class="control-label" for="estante">
+	                           [% "Estantes Virtuales" | i18n %]
+	                       </label>
+	                       <div class="controls">
+	                            <input type="text" size="25" id="estante" onkeypress="limpiarCampos('centro')">
+	                       </div>
+	                   </div>
+	
+	                <div class="control-group">
+	                    <label class="control-label" for="codBarra">
+	                        [% "C&oacute;digo de barras" | i18n %]
+	                    </label>
+	                    <div class="controls">
+	                        <input type="text" size="25" id="codBarra" onkeypress="limpiarCampos('centro')">
+	                    </div>
+	                </div>
+	
+	                 <div class="control-group">
+	                       <label class="control-label" for="signatura">
+	                           [% "Signatura Topogr&aacute;fica" | i18n %]
+	                       </label>
+	                       <div class="controls">
+	                            <input type="text" size="25" id="signatura"  onkeypress="limpiarCampos('abajo')">
+	                       </div>
+	                 </div>
+                    <div class="control-group">
+                        <div class="controls">
+                            <input type="hidden" name="type" value="intra">
+                            <input id="only_available" type="checkbox" name="only_available">[% " S&oacute;lo disponibles para pr&eacute;stamo" | i18n %]
+                        </div>
+
+              </fieldset>
+
+
+	              
+                                <div class="form-actions">
+                                    [% PERL %]
+                                                        print C4::AR::Filtros::to_Button(   text    => "[% 'Limpiar' | i18n %]",
+                                                                                            onClick => "limpiar();",
+                                                                                            boton    => "btn",
+                                                                                            inline => "1",
+                                                                ) ;
+                                    [% END %]
+
+                                    [% PERL %]
+                                                        print C4::AR::Filtros::to_Button(   text    => "[% 'Buscar' | i18n %]",
+                                                                                            onClick => "buscar();",
+                                                                                            boton    => "btn btn-primary",
+                                                                                            inline => "1",
+                                                                ) ;
+                                    [% END %]
+
+                                </div>
+	                    
+	                
+            </div>
+       </form>
+    </div>
+</section>
+<div style="text-align: center; cursor:pointer;">
+    <span id="volver">Volver</span>
+</div>
+
+[% INCLUDE "intranet-bottom.inc" %]

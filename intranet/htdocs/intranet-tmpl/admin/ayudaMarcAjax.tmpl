@@ -1,0 +1,55 @@
+<fieldset>
+    <legend>[% "Ayudas MARC" | i18n %]</legend>
+        [% IF cant %]
+                [% PERL %]
+                    print C4::AR::Filtros::tableHeader(   
+                                           id              => "portada_opac_result",
+                                           class           => "",
+                                           columns         => ['[% "Campo"|i18n %]','[% "Subcampo"|i18n %]','[% "Ayuda"|i18n %]','[% "Acciones"|i18n %]',]
+                                ) ;
+                [% END %]
+                
+                <tbody id="portada_opac_result_sortable">
+                [% FOREACH a IN ayudasMarc %]
+                    <tr id="[% a.id %]">
+                        <td>[% a.getCampo %]</td>
+                        <td>[% a.getSubCampo %]</td>
+                        <td>[% a.getAyudaShort %]</td>
+                        <td>
+                              [% PERL %]
+                                      print C4::AR::Filtros::action_set_button(    
+
+                                            title           => "Modificar", 
+                                            action          => "showModificarAyudaMarc([% a.id %])", 
+                                            icon            => "icon-white icon-edit",
+                                            button          => 'btn btn-primary',
+                                            actions         => [
+                                                                    {title    => "Eliminar", 
+                                                                     action   => "eliminarAyudaMarc([% a.id %])",
+                                                                     icon     => "icon-trash"
+                                                                    },
+                                                                ],
+                                              ) ;
+                            [% END %]
+                        </td>
+                    </tr>    
+                [% END %]
+                </tbody>
+             </table>
+        [% ELSE %]
+            <div class="alert alert-info">[% 'No hay niguna ayuda MARC' | i18n %]</div>
+        [% END %]
+</fieldset>
+
+<div class="form-actions">
+
+    <a class="btn btn-primary click" onclick="agregarAyudaMarcShow()">
+        <i class="icon-plus-sign icon-white"></i> 
+        [% 'Agregar ayuda' | i18n %]
+    </a>
+
+</div>
+
+<div id="addAyudaMarcForm" class="modal hide fade" >
+    [% INCLUDE 'form_ayuda_marc.inc' %]
+</div>

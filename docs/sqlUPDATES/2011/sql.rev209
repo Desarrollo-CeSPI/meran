@@ -1,0 +1,1 @@
+ALTER TABLE  `usr_regularidad` CHANGE  `regular`  `condicion` INT( 11 ) NOT NULL DEFAULT  '1';

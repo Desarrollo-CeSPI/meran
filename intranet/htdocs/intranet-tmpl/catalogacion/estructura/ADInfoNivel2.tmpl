@@ -1,0 +1,82 @@
+ [% IF OK != 1 %]
+
+            [% PERL %]
+                print C4::AR::Filtros::get_error_message( 
+                                            debug   => "Error de parametros en ADInfoNivel2.tmpl",
+                                            msg     => "[% 'ERROR EN LOS PARAMETROS DE NIVEL 2'| i18n %]",
+                                );
+            [% END %]
+
+    [% ELSE %]
+
+
+        [% FOREACH nivel2 IN nivel2_array %]    
+        <span id="grupo_[% nivel2.getId2 %]">
+        <fieldset>
+            <legend class="nivel2Selected trigger trigger_n2_[% nivel2.getId2 %] click">
+                <div class="alert alert-success">
+                    <h2>[% 'Edici&oacute;n:' | i18n %] <small>[% nivel2.getId2 %] - [% nivel2.getTipoDocumentoObject.getNombre %] ([% nivel2.getTemplate %])</small></h2>
+                </div>
+            </legend>
+          <div id="nive2_id_[% nivel2.getId2 %]" class="nive2_id_[% nivel2.getId2 %]">
+
+            <div>
+                   
+                [% PERL %]
+                    print C4::AR::Filtros::action_set_button(    
+                                                        title           => "[% 'Edici&oacute;n' | i18n %]",
+                                                        button          => 'btn btn-primary',
+
+                                                        actions         => [
+                                                                            {title => "Modificar", action=>'modificarN2("[% nivel2.getId2 %]", "[% nivel2.getTemplate %]")',icon=>"icon-edit"},
+                                                                            {title => "Eliminar", action=>'borrarN2([% nivel2.getId2 %])', icon=>"icon-trash"},
+                                                                            {title => "Agregar ejemplares", action=>'agregarN3("[% nivel2.getId2 %]","[% nivel2.getTipoDocumento %]")', icon=>"icon-plus-sign"},
+                                                                            {title => "Mostrar ejemplares", action=>'mostrarInfoAltaNivel3([% nivel2.getId2 %])', icon=>"icon-book"},
+                                                                            {title => "Eliminar", action=>'borrarN2([% nivel2.getId2 %])', icon=>"icon-trash"},
+                                                                            [% IF indice_edit == 1 %]
+                                                                                {title => "Editar &iacute;ndice", action=>'agregarIndice([% nivel2.getId2 %])', icon=>"icon-list"},
+                                                                            [% ELSE %]
+                                                                                {title => "Agregar &iacute;ndice", action=>'agregarIndice([% nivel2.getId2 %])', icon=>"icon-list"},
+                                                                            [% END %]
+                                                                            ],
+
+                            ) ;
+                [% END %]
+                
+            </div>
+                <dl>
+                     <dt class="inline left rightMargin">[% 'Edici&oacute;n:' | i18n %]&nbsp;</dt> 
+                     <dd>[% nivel2.getEdicion %]&nbsp;</dd>
+                
+                     <dt class="inline left rightMargin">[% 'Fecha:' | i18n %]</dt>
+                        <dd>   
+                             [% FOREACH fecha IN nivel2.getAnio_publicacion %] 
+                                 [% fecha %] [% IF !loop.last() %],[% END %]
+                             [% END %]
+                        </dd> 
+                     <dt class="inline left rightMargin">[% 'Soporte:' | i18n %]</dt> 
+                     <dd>[% nivel2.getSoporteObject.getDescription %]</dd>
+                     <dt class="inline left rightMargin">[% 'Lugar:' | i18n %]</dt> 
+                     <dd>[% nivel2.getCiudadObject.getNombre %]</dd>
+                     <dt class="inline left rightMargin">[% 'Volumen:' | i18n %]</dt> 
+                        <dd>   
+                             [% FOREACH v IN nivel2.getVolumen %]
+                                    [% v %] [% IF !loop.last() %],[% END %]
+                             [% END %]   
+                        </dd>
+                     <dt class="inline left rightMargin">[% 'Idioma:' | i18n %]</dt> 
+                     <dd>[% nivel2.getIdiomaObject.getDescription %]</dd>
+                </dl>
+
+        <br />
+        <span id="ejemplaresDelGrupo[% id2 %]">
+            [% INCLUDE "estructura/ejemplaresDelGrupo_edicion.tmpl" %]
+        </span>
+        
+        <script type="text/javascript">makeToggle("nive2_id_[% nivel2.getId2 %]","trigger_n2_[% nivel2.getId2 %]",null,false);</script>
+            </fieldset>
+        </div>
+        </span>
+        [% END %]
+
+    [% END %]

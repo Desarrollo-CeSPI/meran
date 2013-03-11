@@ -1,0 +1,35 @@
+<fieldset>
+<legend>[% "Agregar M&eacute;todo de Autenticaci&oacute;n:" | i18n %]</legend>
+    <form class="form-horizontal" onsubmit="return false">
+    
+        <div class="control-group">
+            <label class="control-label" for="variable">[% 'Metodo' | i18n %]: </label>
+            <div class="controls">
+                <input id="name_metodo" required type="text">
+                [% PERL %]
+                    print C4::AR::Filtros::setHelpInput(   
+                                                    text        => "[% 'El M&eacute;todo se agrega deshabilitado por defecto.' | i18n %]",
+                                                    class       => "info",
+                                                    textLabel   => "NOTA:"
+                                            ) ;
+                    
+                [% END %]
+            </div>
+        </div>
+        
+        <div class="form-actions">
+            [% PERL %]
+                        print C4::AR::Filtros::to_Button(   
+                                            text    => "[% 'Guardar M&eacute;todo' | i18n %]",
+                                            boton   => "boton_agregar",
+                                            onClick => "guardarMetodo();",
+                                            width   => "auto",
+                                            title   => "[% 'Guardar M&eoacute;todo' | i18n %]", 
+                                            alternClass   => "botonCentrado",
+                                            inline  => "1"
+                                ) ;
+            [% END %]
+        </div>
+        
+    </form>
+</fieldset>

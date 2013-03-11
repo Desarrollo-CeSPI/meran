@@ -1,0 +1,93 @@
+<script type="text/javascript">
+
+    $(document).ready(function() {
+          makeToggle('datos_tabla_div_importacion','trigger',null,false);
+    });
+
+</script>
+
+[% INCLUDE "FormValidateHelper.inc" %]
+
+<div class="contenedor_paginador">[% paginador %]</div>
+<fieldset class="resultados_busqueda">
+    <legend class="titulo_legend trigger click">[% "Resultados de la b&uacute;squeda (Importaciones)" | i18n %]</legend>
+        <div class="datos_tabla_div_importacion">
+        
+            <div class="well">
+                [% "Ha buscado por" | i18n %]: <strong>[% importacion_busqueda %]</strong></br>
+            
+            [% IF cantidad %]
+            
+                [% "La cantidad de Importaciones es" | i18n %]: <strong>[% cantidad %]</strong>
+            </div>
+            
+                [% PERL %]
+                    print C4::AR::Filtros::tableHeader(   
+                                      id              => "tablaResult",
+                                      columns         => ['[% "Nombre"|i18n %]',
+													      '[% "Comentario"|i18n %]',
+													      '[% "Formato"|i18n %]',
+													      '[% "Esquema"|i18n %]',
+													      '[% "Cantidad de Registros"|i18n %]',
+
+													      '[% "Fecha Subida"|i18n %]',
+													      '[% "Acciones"|i18n %]',
+                                                         ]
+                                            );
+                [% END %]
+                    
+                <tbody>
+
+                [% FOREACH importacion IN resultsloop %]
+                  [% TRY %]
+                    <tr>
+
+                          <td>
+                              [% importacion.getNombre %]
+                          </td>
+                          <td>
+                               [% importacion.getComentario %]
+                          </td>
+                          <td>
+                               [% importacion.getFormato %]
+                          </td>
+                          <td>
+                               [% importacion.getEsquema.getNombre %]
+                          </td>
+                          <td>
+                               [% importacion.getCantRegistros %]
+                          </td>
+                          <td>
+                               [% importacion.getFechaUpload_formateada %]
+                          </td>
+                          <!--  BOTONES ACCIONES (Editar, Borrar, Ver detalle) -->
+                          <td>
+            					      <div>
+            						          [% PERL %]
+                                               print C4::AR::Filtros::action_set_button(
+            									    title           => "[% 'Importaci&oacute;n' | i18n %]",
+                                                    button          => 'btn btn-primary',
+                                                    url				=>	"[% url_prefix %]/herramientas/importacion/detalle_importacion.pl",
+                                                    params 			=>   ["id_importacion=[% importacion.getId %]"],
+                                                    actions         => [
+            										    {title => "Detalle",icon=>"icon-search",url=>"[% url_prefix %]/herramientas/importacion/detalle_importacion.pl", params =>   ["id_importacion=[% importacion.getId %]"]},
+                                                        {title => "Configurar",icon=>"icon-pencil",url=>"[% url_prefix %]/herramientas/importacion/configurar_importacion.pl", params =>   ["id_importacion=[% importacion.getId %]"]},
+                                                        {title => "Borrar",action=>"borrarImportacion([% importacion.getId %]);", icon=>"icon-remove"},
+                                                                       ],
+            								    );
+                                              [% END %]
+            					      </div>
+                          </td>
+                    </tr>
+                  [% CATCH %]
+                  [% END %]
+                [% END %]
+                </tbody>
+                </table>
+            [% ELSE %]
+                </div>
+                <div class="alert alert-info">[% 'No hay importaciones para mostrar'| i18n %]</div>
+            [% END %]
+            
+        </div>
+</fieldset>

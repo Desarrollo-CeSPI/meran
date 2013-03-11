@@ -1,0 +1,3 @@
+ALTER TABLE  `cat_rating` ADD  `review_aprobado` INT NOT NULL DEFAULT  '0';
+UPDATE cat_rating
+SET review_aprobado = 1;

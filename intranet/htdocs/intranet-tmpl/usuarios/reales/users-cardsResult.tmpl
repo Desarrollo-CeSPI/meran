@@ -1,0 +1,94 @@
+<script type="text/javascript">
+      $(document).ready(function() {
+      });
+</script>
+<fieldset class="resultados_busqueda">
+      [% IF cantidad %]
+            <br />
+            <div class="well">
+              <div class="resultados_consulta">[% "T&eacute;rmino de b&uacute;squeda" | i18n %]: [% buscoPor %]</div>
+              <div class="resultados_consulta">[% "Total de registros" | i18n %]: [% cantidad %] </div>
+            </div>
+
+              <div class="contenedor_paginador">[% paginador %]</div>
+              <form method="post" id="form_cards_gen" onsubmit="[% url_prefix %]/usuarios/reales/users-cards.pl">
+
+                [% PERL %]
+                          print C4::AR::Filtros::tableHeader(   
+                          id              => "datos_tabla",
+                          class           => "",
+                          selectAll_id    => "",
+                          columns         => [  '[% "Apellido y Nombre"|i18n %]',
+                                                '[% "Tarjeta de Id"|i18n %]',
+                                                '[% "Legajo"|i18n %]','[% "Ingreso"|i18n %]',
+                                                '[% "Categoria"|i18n %]','[% "Regularidad"|i18n %]',  
+                                              ]
+                        
+                                ) ;
+                [% END %]
+
+                [% FOREACH socio IN RESULTSLOOP %]
+                   
+                    <tr>
+                        <td> 
+                            [% PERL %]
+                                print C4::AR::Filtros::link_to( text =>     "[% socio.persona.getApeYNom %]",
+                                                                url=>"[% url_prefix %]/usuarios/reales/datosUsuario.pl", 
+                                                                params =>   ["nro_socio=[% socio.getNro_socio %]"],
+                                                                title =>    "[% 'Ver datos de ' | i18n %] [% socio.persona.getApeYNom %]"
+                                                            ) ;
+                            [% END %]
+                      
+                        </td>
+                        
+                        <td> [% socio.getNro_socio %]</td>
+                        <td> [% socio.persona.legajo %]</td>
+                        <td> [% TRY %] 
+                                [% IF socio.getFecha_alta %] 
+                                    [% socio.getFecha_alta %] 
+                                [% ELSE %]
+                                    --------
+                                [% END %]
+                             [% CATCH %] 
+                                -------- 
+                             [% END %]
+                        </td>
+                        <td>
+                            [% TRY %]
+                              [% socio.categoria.getDescription %]
+                            [% CATCH %]
+                              [% 'Sin categor&iacute;a' | i18n %]
+                            [% END %] 
+                        </td>
+                        <td>
+                            <span class="label [% IF socio.esRegular %]label-success[% ELSE %]label-important[% END %]">[% socio.esRegularToString %]</span>
+                        </td> 
+                        <input type="hidden" name="[% socio.getNro_socio %]" value="[% socio.getNro_socio %]">
+                    </tr>
+                [% END %]
+                
+               </table>
+           
+        </div>
+
+      </form>
+</fieldset>
+
+<div class="form-actions">
+   
+    <script> var search2 = 'pdf'; </script>
+    [% PERL %]
+            print C4::AR::Filtros::action_button( 
+                                                title    =>  " [% 'Generar carnets' | i18n %]",
+                                                button   =>  "btn click btn-primary",
+                                                icon    => "icon-white icon-user"
+                                                action =>  "consultar(search2);",
+                                            );
+    [% END %]
+</div>
+
+ [% ELSE%]
+
+        <div class="alert alert-info">[% "No hay resultados para mostrar" | i18n %]</div>
+[% END %]
+

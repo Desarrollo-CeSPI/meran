@@ -1,0 +1,9 @@
+
+DELETE FROM `pref_preferencia_sistema`
+WHERE variable LIKE "tema_%";
+
+INSERT INTO `pref_preferencia_sistema` (`id`, `variable`, `value`, `explanation`, `options`, `type`, `categoria`) VALUES
+(125, 'tema_opac', 'DEO', 'El tema por defecto para OPAc', '', 'text', 'temas_opac'),
+(126, 'tema_intra', 'DEO', 'El tema por defecto para INTRANET', NULL, 'text', 'temas_intra'),
+(251, 'tema_opac', 'DIF', NULL, NULL, NULL, 'temas_opac'),
+(258, 'tema_intra', 'DIF', NULL, NULL, NULL, 'temas_intra');

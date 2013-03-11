@@ -1,0 +1,14 @@
+<!ELEMENT DBI (RESULTSET)>
+<!ELEMENT RESULTSET (ROW*)>
+<!ELEMENT ROW (campo, tipo_ejemplar?, pre?, inter?, post?, subcampo?, vista_opac?, vista_campo, orden, orden_subcampo, nivel?)>
+<!ELEMENT campo (#PCDATA)>
+<!ELEMENT tipo_ejemplar (#PCDATA)>
+<!ELEMENT pre (#PCDATA)>
+<!ELEMENT inter (#PCDATA)>
+<!ELEMENT post (#PCDATA)>
+<!ELEMENT subcampo (#PCDATA)>
+<!ELEMENT vista_opac (#PCDATA)>
+<!ELEMENT vista_campo (#PCDATA)>
+<!ELEMENT orden (#PCDATA)>
+<!ELEMENT orden_subcampo (#PCDATA)>
+<!ELEMENT nivel (#PCDATA)>

@@ -1,0 +1,1 @@
+ALTER TABLE  `cat_registro_marc_n2_analitica` CHANGE  `cat_registro_marc_n2_hijo_id`  `cat_registro_marc_n1_id` INT( 11 ) NOT NULL;

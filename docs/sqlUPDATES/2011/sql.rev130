@@ -1,0 +1,1 @@
+INSERT INTO `pref_preferencia_sistema` (`id`, `variable`, `value`, `explanation`, `options`, `type`, `categoria`) VALUES (NULL, 'offset_operacion_fuera_horario', '30', 'Cantidad de minutos para poder operar internamente, luego del cierre', NULL, 'texto', 'circulacion');

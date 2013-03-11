@@ -1,0 +1,3 @@
+UPDATE `pref_preferencia_sistema` 
+SET type="bool"
+WHERE variable="requisito_necesario";

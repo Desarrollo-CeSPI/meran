@@ -1,0 +1,56 @@
+[% INCLUDE 'installer-top.inc' %]
+
+      <h1>Datos para la conexi&oacute;n con la base de datos</h1>
+      <br />
+
+	 <form class="form-horizontal" action="installer.pl" method="post">
+        <fieldset>
+          <div class="control-group">
+            <label class="control-label" for="dbuser">Usuario</label>
+            <div class="controls">
+              <input type="text" class="input-xlarge" id="dbuser" name="dbuser" required value="[% dbuser %]">
+              <p class="help-block">Nombre de usuario para conectarse con la base de datos.</p>
+            </div>
+          </div>
+
+          <div class="control-group">
+            <label class="control-label" for="dbpassword">Contrase&ntilde;a</label>
+            <div class="controls">
+              <input type="text" class="input-xlarge" id="dbpassword" name="dbpassword" required value="[% dbpassword %]">
+              <p class="help-block">Contrase&ntilde;a del usuario anterior para conectarse con la base de datos.</p>
+            </div>
+          </div>
+
+          <div class="control-group">
+            <label class="control-label" for="dbname">Nombre de la base</label>
+            <div class="controls">
+              <input type="text" class="input-xlarge" id="dbname" name="dbname" required value="[% dbname %]">
+              <p class="help-block">Nombre de la base de datos que se utilizar&aacute;.</p>
+            </div>
+          </div>
+
+          <div class="control-group">
+            <label class="control-label" for="dbaddress">Direcci&oacute;n</label>
+            <div class="controls">
+              <input type="text" class="input-xlarge" id="dbaddress" name="dbaddress" required value="[% dbaddress %]">
+              <p class="help-block">Direcci&oacute;n del servidor de la base de datos.</p>
+            </div>
+          </div>
+          
+        </fieldset>
+        [% IF !next %]
+        <input type="hidden" id="action" name="action" value="checkbase">
+	      <p>
+	        <button type="submit" class="btn btn-large btn-primary" >Verificar conexi&oacute;n</button>
+	      </p>
+	    [% ELSE %]
+        <input type="hidden" id="action" name="action" value="nextbase">
+	      <p>
+	        <button type="submit" class="btn btn-large btn-primary" >Continuar</button>
+	      </p>
+	    [% END %]
+      </form>
+
+
+
+[% INCLUDE 'installer-bottom.inc' %]

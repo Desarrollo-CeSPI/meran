@@ -1,0 +1,63 @@
+#!/bin/sh
+
+### BEGIN INIT INFO
+# Provides:        ntp
+# Required-Start:  $network $remote_fs $syslog
+# Required-Stop:   $network $remote_fs $syslog
+# Default-Start:   2 3 4 5
+# Default-Stop:    0 1 6
+# Short-Description: Start NTP daemon
+### END INIT INFO
+
+PATH=/sbin:/bin:/usr/sbin:/usr/bin
+
+. /lib/lsb/init-functions
+
+DAEMON=/usr/local/bin/searchd
+PIDFILE=/usr/local/bin/searchd.pid
+
+test -x $DAEMON || exit 5
+
+if [ -e /usr/local/etc/sphinx.conf ]; then
+  NTPD_OPTS="$NTPD_OPTS -c /usr/local/etc/sphinx.conf"
+fi
+
+
+RUNASUSER=root
+UGID=$(getent passwd $RUNASUSER | cut -f 3,4 -d:) || true
+
+case $1 in
+  start)
+    log_daemon_msg "Starting Searchd server" "searchd"
+    if [ -z "$UGID" ]; then
+      log_failure_msg "user \"$RUNASUSER\" does not exist"
+      exit 1
+    fi
+      start-stop-daemon --start --quiet --oknodo --pidfile $PIDFILE --startas $DAEMON -- -p $PIDFILE -u $UGID $NTPD_OPTS
+    status=$?
+    log_end_msg $status
+      ;;
+  stop)
+    log_daemon_msg "Stopping Searchd server" "searchd"
+      start-stop-daemon --stop --quiet --oknodo --pidfile $PIDFILE
+    log_end_msg $?
+    rm -f $PIDFILE
+      ;;
+  reload)
+    exit 3
+    ;;
+  status)
+    pidofproc -p $PIDFILE $DAEMON >/dev/null
+    status=$?
+    if [ $status -eq 0 ]; then
+      log_success_msg "Searchd server is running."
+    else
+      log_failure_msg "Searchd server is not running."
+    fi
+    exit $status
+    ;;
+  *)
+    echo "Usage: $0 {start|stop|restart|status}"
+    exit 2
+    ;;
+esac

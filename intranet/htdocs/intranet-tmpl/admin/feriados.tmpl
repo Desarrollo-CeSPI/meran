@@ -1,0 +1,236 @@
+[% INCLUDE "intranet-top.inc" %]
+
+<link rel="stylesheet" href="/includes/jquery/datetimepicker/wijmo.css" type="text/css" media="screen" />
+<script src="/includes/jquery/datetimepicker/jquery-ui-datetimepicker.js" type="text/javascript"></script>
+<script type="text/javascript" src="/includes/jquery/datetimepicker/jquery.wijmo-open.all.2.1.6.min.js"></script>
+<script type="text/javascript" src="/includes/jquery/datetimepicker/wijmo-culture.js"></script>
+
+<script type="text/javascript">
+
+    //agregarFeriado
+    //agregado y quitado dinamicamente al input que agrega feriados
+    var handler = function(){
+
+        //si se intenta agregar un feriado sin seleccionar ninguna fecha no entra
+        if(fechasPost != ''){
+
+            _agregarFechasEnArray();
+
+            objAH               = new AjaxHelper(updateAgregarFeriado);
+            objAH.debug         = true;
+            objAH.showOverlay   = true;
+            objAH.url           = URL_PREFIX + '/admin/postFecha.pl';
+            objAH.debug         = true;
+            objAH.dates         = fechasPost;
+            objAH.stat          = 'true';
+            objAH.feriado       = $('#razonFeriado').val();
+            objAH.sendToServer();
+        }
+    }
+
+    function _agregarFechasEnArray(){
+        for(var i = 0; i < fechasTemp.length; i++){
+            fechas.push(new Date(fechasTemp[i]));
+        }
+    }
+
+    function eliminarFeriado(){
+
+        //si se intenta agregar un feriado sin seleccionar ninguna fecha no entra
+        if(fechasPost != ''){
+
+            //primero eliminamos la fecha del array de fechas
+            deleteFechasFromArray();
+
+            objAH               = new AjaxHelper(updateEliminarFeriado);
+            objAH.debug         = true;
+            objAH.showOverlay   = true;
+            objAH.url           = URL_PREFIX + '/admin/postFecha.pl';
+            objAH.debug         = true;
+            objAH.dates         = fechasPost;
+            objAH.stat          = 'false';
+            objAH.feriado       = $('#razonFeriado').val();
+            objAH.sendToServer();
+        }
+    }
+
+    function updateEliminarFeriado(responseText){
+        updateAgregarFeriado(responseText);
+    }
+
+    function updateAgregarFeriado(responseText){
+        $('#fechas').val('');
+        $('#razonFeriado').val('');
+        $('#mostrarFeriadosTotales').css('display', 'none');
+        $('#agregarFeriadoBoton').text('Agregar feriado');
+        $('#eliminarFeriadoBoton').css('display', 'none');
+        $('#agregarFeriadoBoton').removeClass('disabled btn btn-inverse');
+        $('#agregarFeriadoBoton').addClass('btn btn-primary');
+        $('#agregarFeriadoBoton').html('<i id="agregarFeriadoIcon" class="icon-white icon-plus"></i> Agregar feriado');
+
+        $("#calendarioFeriados").wijcalendar({
+            selectedDates: [fechas]
+        });
+
+        proximosFeriados();
+    }
+
+    //handler que se llama cuando se hace click en el boton
+    // 'mostrar feriados originales'
+    handlerMostrarFeriados = function(){
+        $('#mostrarFeriadosTotales').css('display', 'none');
+        $('#eliminarFeriadoBoton').css('display', 'none');
+        $('#agregarFeriadoBoton').removeClass('disabled');
+
+        $("#calendarioFeriados").wijcalendar({
+            selectedDates: [fechas]
+        });
+    }
+
+    function proximosFeriados(){
+        startOverlay();
+        objAH       = new AjaxHelper(updateProximosFeriados);
+        objAH.url   = URL_PREFIX + '/admin/proximosFeriados.pl';
+        objAH.sendToServer();
+        closeModal();
+    }
+
+    function updateProximosFeriados(responseText){
+        $('#proximosFeriados').html(responseText);
+    }
+
+    function deleteFechasFromArray(){
+
+        for(var i = 0; i < fechasDelete.length; i++){
+
+            for(var x = 0; x < fechas.length; x++){
+                if (fechasDelete[i].toString() == fechas[x].toString()){
+                    fechas.splice(x,x);
+                }
+            }          
+        }
+    }
+
+    var fechas          = new Array();
+    var razonesFeriado  = new Array(); //array con las razones de los feriados
+    var fechasPost      = new Array(); //se mandan por AJAX
+    var fechasTemp      = new Array(); //temporales para agregarlas al array fechas
+    var fechasDelete    = new Array(); //temporales a borrar
+
+    $(document).ready(function(){
+
+        $('#agregarFeriadoBoton').bind('click', handler);
+        $('#mostrarFeriadosTotales').bind('click', handlerMostrarFeriados);
+
+        [% FOREACH date IN dates %]
+            fechas.push(new Date('[% date.getFechaParaCalendario %]'));
+            razonesFeriado.push('[% date.getFeriado %]')
+        [% END %]
+
+        $("#calendarioFeriados").wijcalendar({
+            culture: "es-ES",
+            monthCols: 3,
+            monthRows: 2,
+            prevTooltip: "Anterior",
+            nextTooltip: "Siguiente",
+            toolTipFormat: "dd/MM/yyyy",
+
+            selectedDatesChanged: function (e, args) { 
+
+                //mostramos el botos para resetear las fechas seleccionadas
+                $('#mostrarFeriadosTotales').css('display', '');
+
+                //lo reinicializamos primero
+                fechasPost      = new Array();
+                fechasTemp      = new Array();
+                fechasDelete    = new Array();
+                var encontre    = false;
+                var index;
+
+                $.each(args.dates, function(index, value) { 
+
+                    var fechaTemp   = new Date(value);
+                    encontre        = false;
+
+                    for(var i = 0; i < fechas.length; i++) {
+                        if (fechaTemp.toString() == fechas[i].toString()){
+                            encontre    = true;
+                            index       = i;
+                        }
+                    }
+
+                    if(encontre != true){
+                        //estamos agregando una fecha nueva
+                        fechasTemp.push(fechaTemp);
+                        $('#razonFeriado').val('');
+                    }else{
+                        //estamos borrando una fecha ya seleccionada
+                        // fechasDelete = fechas;
+                        fechasDelete.push(fechaTemp);
+
+                        //mostramos en el input la razon del feriado
+                        $('#razonFeriado').val(razonesFeriado[index])
+                    }
+
+                    //las agregamos a este array que se manda en la peticion AJAX
+                    fechasPost.push(value.getDate() + "/" + (value.getMonth()+1) + "/" + value.getFullYear());
+
+                    $('#fechas').val(value.getDate() + "/" + (value.getMonth()+1) + "/" + value.getFullYear());
+                });
+
+                var firstDate = args.dates[0];
+                var lastDate  = args.dates[args.dates.length - 1];
+
+                //mostramos al usuario en el input la fecha o el rango seleccionado
+                $('#fechas').val(firstDate.getDate() + "/" + (firstDate.getMonth()+1) + "/" + firstDate.getFullYear());
+
+                if ((firstDate !== lastDate) && (lastDate !== null)) {
+                    $('#fechas').val($('#fechas').val() + " -> " + lastDate.getDate() + "/" + (lastDate.getMonth()+1) + "/" + lastDate.getFullYear());
+                }
+
+                if(encontre == true){
+                    $('#eliminarFeriadoBoton').css('display', '');
+                    $('#agregarFeriadoBoton').html('<i id="agregarFeriadoIcon" class="icon-white icon-pencil"></i> Editar feriado');
+                    $('#agregarFeriadoBoton').removeClass('btn btn-primary');
+                    $('#agregarFeriadoBoton').addClass('disabled btn btn-inverse');
+                }else{
+                    $('#agregarFeriadoBoton').html('<i id="agregarFeriadoIcon" class="icon-white icon-plus"></i> Agregar feriado');
+                    $('#eliminarFeriadoBoton').css('display', 'none');
+                    $('#agregarFeriadoBoton').removeClass('disabled');
+                    $('#agregarFeriadoBoton').bind('click', handler);
+                    $('#agregarFeriadoBoton').removeClass('btn btn-inverse');
+                    $('#agregarFeriadoBoton').addClass('btn btn-primary');
+                }
+                
+            },
+
+            selectedDates: [fechas]
+         });
+
+        proximosFeriados();
+    });
+
+</script>
+
+<fieldset>
+    <legend class="titulos">[% "Feriados" | i18n %]</legend>  
+
+    <div id="calendarioFeriados"></div><br />
+
+    <form class="well form-inline" onclick="return false;">
+        <input type="text" id="fechas" required placeholder="[% 'Fecha/s' | i18n %]">
+        <input type="hidden" id="action" value="add">
+        <input type="text" id="razonFeriado" value="" required placeholder="[% 'Razón del feriado' | i18n %]">
+        <button type="submit" id="agregarFeriadoBoton" class="btn btn-primary"><i id="agregarFeriadoIcon" class="icon-white icon-plus"></i> [% 'Agregar feriado' | i18n %]</button>
+        <button type="submit" id="eliminarFeriadoBoton" class="btn btn-danger" style="display:none;" onclick="eliminarFeriado();"><i id="eliminarFeriadoIcon" class="icon-white icon-trash"></i> [% 'Eliminar feriado' | i18n %]</button>
+        <button type="submit" id="mostrarFeriadosTotales" class="btn btn-info" style="display:none;">
+            <i id="mostrarFeriadosTotalesIcon" class="icon-white icon-eye-open"></i> [% 'Mostrar feriados originales' | i18n %]
+        </button>
+    </form>
+
+    <legend class="titulos">[% "Pr&oacute;ximos Feriados" | i18n %]</legend> 
+    <div id="proximosFeriados"></div><br />
+
+</fieldset>
+
+[% INCLUDE "intranet-bottom.inc" %]

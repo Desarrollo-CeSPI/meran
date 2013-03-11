@@ -1,0 +1,4 @@
+CREATE TABLE `pref_about` (
+`id` INT( 11 ) NOT NULL AUTO_INCREMENT PRIMARY KEY ,
+`descripcion` TEXT NOT NULL
+) ENGINE = InnoDB;

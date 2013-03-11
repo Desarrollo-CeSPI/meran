@@ -1,0 +1,2 @@
+INSERT INTO `pref_tabla_referencia` (`id`, `nombre_tabla`, `alias_tabla`, `campo_busqueda`, `client_title`) VALUES (NULL, 'ref_colaborador', 'colaborador', 'descripcion', 'Función de colaborador');
+INSERT INTO `pref_tabla_referencia_conf` (`id`, `tabla`, `campo`, `campo_alias`, `visible`) VALUES (NULL, 'ref_colaborador', 'codigo', 'codigo', '1'), (NULL, 'ref_colaborador', 'id', 'id', '1');

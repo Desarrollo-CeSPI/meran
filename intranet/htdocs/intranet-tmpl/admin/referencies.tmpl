@@ -1,0 +1,113 @@
+[% INCLUDE "intranet-top.inc" %]
+<SCRIPT>
+function enviarContenido(adonde,codigo){
+	document.getElementById("editandoCONTENIDO").href=adonde;
+	document.getElementById("editandocodigo").value=codigo;
+	document.getElementById("editandoCONTENIDO").submit();}
+function reloading(){
+	document.getElementById("editandoCONTENIDO").href="referencies.pl";
+	document.getElementById("editandoCONTENIDO").submit();}
+
+function search(){
+	document.getElementById("editandoCONTENIDO").href="referencies.pl";
+	document.getElementById("editandoCONTENIDO").submit();}
+</SCRIPT>
+
+<div class="titulos">[% 'Administraci&oacute;n de Categor&iacute;as' | i18n %]</div>
+							   
+
+	[% IF searchfield %]
+        [% "Ha buscado por"  | i18n %][% searchfield %]
+	[% END %]
+	<FORM id="editandoCONTENIDO" method="POST">
+	<input type="hidden" name="editandotabla" value="[% editandotabla %]" >
+	<input type="hidden" name="editandoidentificador" value="[% editandoidentificador %]" >
+	<INPUT type="hidden" name="editandocodigo" id="editandocodigo" value="" >
+	<INPUT type="hidden" name="editandoorden" id="editandoorden" value="[% editandoorden %]" >
+	<INPUT type="hidden" name="search" id="editandoorden" value="[% search %]" >
+<!--         <table> -->
+<!-- 	<tr>      -->
+	<form id="form1" action='[% script_name %]' method=post name="form1">
+<!-- 		<td> -->
+			<b>B&uacute;queda Simple:<b><br>
+			<input type=text class="inputFontNormal" name=description value='[% search %]'>
+<!-- 		</td> -->
+<!-- 		<td> -->
+			<a class="inputFontNormal" href="javascript:search()">
+			<img src="[% themelang %]/images/boton-buscar.png"  ALT="Buscar" hspace=0 vspace=0 border=0>
+			</a><br><br>		
+<!--  		</td> -->
+<!-- 	</tr> -->
+<!-- 	<tr> -->
+<!-- 		<td> -->
+			<b>B&uacute;queda en Bloque:</b><br>
+			Desde: <input type=text class="inputFontNormal" name=bloqueIni value="[% bloqueIni %]"><br>
+			Hasta: <input type=text class="inputFontNormal" name=bloqueFin value="[% bloqueFin %]">
+<!-- 		</td> -->
+<!-- 		<td> -->
+<!-- 		<td> -->
+			<a class="inputFontNormal" href="javascript:search()">
+			<img src="[% themelang %]/images/boton-buscar.png"  ALT="Buscar" hspace=0 vspace=0 border=0>
+			</a>
+<!-- 		</td> -->
+<!-- 	</tr> -->
+<!-- 	</table> -->
+        <table cellspacing="0" cellpadding="0" border="0" align="left"  class="tablaresultado datos_tabla" width="100%">
+		<tr class="titulo_tabla_resultado" height="24" valign="top">
+		[% FOREACH camposloop %]
+			<td valign="middle" height="24">[% campo %]</td>
+		[% END %]
+			<td valign="middle" height="24">Editar </td>
+			<td valign="middle" height="24">Eliminar </td>
+		</tr>
+		<tr><td>&nbsp;</td></tr>
+	[% FOREACH  loop %]
+		<tr valign="middle">
+		<td width="1%" class="<!-- TMPL_VAR NAME='clase'-->">&nbsp;</td>
+	   [% FOREACH registro %]
+		<td align="center" class="<!-- TMPL_VAR NAME='clase'-->">
+		 [% IF campo %] [% campo %] [% ELSE %] --- [% END %]
+		</td>
+	     [% END %]
+		 <td align="center" class="[% clase %]>"><a class="inputFontNormal" href="javascript:enviarContenido('editref.pl',[% id %])"><img src="[% themelang %]/images/editar.png"  ALT="Editar" hspace=0 vspace=0 border=0></a>
+		</td>
+                 <td align="center" class="[% clase %]"><a class="inputFontNormal" href="javascript:enviarContenido('deleteref.pl',[% id %])">
+		<img src="[% themelang %]/images/borrar.png" ALT="Eliminar" border="0"></a>
+		</td>
+			 <td  class="[% clase %]">&nbsp;</td>
+		</tr>
+	[% END %]
+ 	<tr> 
+        <td   align="left" colspan="15"><hr></td>
+        </tr>
+
+	</table>
+	</FORM>	
+
+<center>
+<br>
+[% IF ok2 %]
+		<a class="inputFontNormal" href="referencies.pl?ini=[% ant %]&editandotabla=[% editandotabla %]&editandoind=[% editandoind %]&editandocant=[% editandocant %]&editandoorden=[% editandoorden %]&orden=[% orden %]&bloqueIni=[% bloqueIni %]&bloqueFin=[% bloqueFin %]&search=[% search %]&description=[% search %]" >
+			<img src=[% themelang %]/images/numbers/ant.gif border=0>
+		</a>
+[% END %]
+
+[% FOREACH  numeros %]
+		[% IF actual %]
+		<a class="inputFontNormal" href="referencies.pl?ini=<!-- TMPL_VAR NAME=number -->&editandotabla=<!-- TMPL_VAR NAME=editandotabla -->&editandoind=<!-- TMPL_VAR NAME=editandoind -->&editandocant=<!-- TMPL_VAR NAME=editandocant -->&editandoorden=<!-- TMPL_VAR NAME=editandoorden -->&orden=<!-- TMPL_VAR NAME=orden -->&bloqueIni=<!-- TMPL_VAR NAME=bloqueIni -->&bloqueFin=<!-- TMPL_VAR NAME=bloqueFin -->&search=<!-- TMPL_VAR NAME='search' -->&description=<!-- TMPL_VAR NAME='search' -->"> 
+			<u>[% number %]</u>
+		</a>
+	[% ELSE %]
+        	<u>[% number %]</u>
+	[% END %]
+[% END %]
+
+[% IF ok %]
+		<a class="inputFontNormal" href="referencies.pl?ini=<!-- TMPL_VAR NAME=sig -->&editandotabla=<!-- TMPL_VAR NAME=editandotabla -->&editandoind=<!-- TMPL_VAR NAME=editandoind -->&editandocant=<!-- TMPL_VAR NAME=editandocant -->&editandoorden=<!-- TMPL_VAR NAME=editandoorden -->&orden=<!-- TMPL_VAR NAME=orden -->&bloqueIni=<!-- TMPL_VAR NAME=bloqueIni -->&bloqueFin=<!-- TMPL_VAR NAME=bloqueFin -->&search=<!-- TMPL_VAR NAME='search' -->&description=<!-- TMPL_VAR NAME='search' -->" >
+			<img src=[% themelang %]/images/numbers/next.gif border=0>
+		</a>
+[% END %]
+<br>
+</center>
+
+[% INCLUDE "intranet-bottom.inc" %]

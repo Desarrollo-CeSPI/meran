@@ -1,0 +1,64 @@
+[% INCLUDE "intranet-top.inc" %] 
+<div class="vcard"> 
+      <fieldset>
+          <legend class="titulo_legend_resaltado" title='[% "Datos del proveedor" | i18n %]'>
+                              [% "Datos del proveedor" | i18n %]
+          </legend>  
+          <div class="columna_izq" >
+                   <fieldset>
+                        <legend class="titulo_legend_resaltado" title='[% "Datos escenciales" | i18n %]'>
+                              [% "Datos escenciales" | i18n %]
+                        </legend>
+                        [% IF persona_fisica == 0 %]   
+                                  <li> [% "Razon Social:" | i18n %]<strong> [% proveedor.getRazonSocial %]</strong> </li>  
+                                  <li> [% "CUIT/CUIL:" | i18n %]<strong> [% proveedor.getCuitCuil %]</strong></li> 
+                        [% ELSE %]
+                                  <li> [% "Apellido:" | i18n %]<strong> [% proveedor.getApellido %]</strong> </li>             
+                                  <li> [% "Nombre:" | i18n %]<strong> [% proveedor.getNombre %]</strong> </li> 
+                                  <li> [% "Documento:" | i18n %]<strong> 
+                                        [% IF proveedor.getNroDoc != null %]
+                                            [% proveedor.ref_tipo_documento.getNombre %] [% proveedor.getNroDoc %]
+                                        [% END %]
+                                  </strong> </li>  
+                        [% END %]
+                  </fieldset>
+
+                  <fieldset>
+                        <legend  class="titulo_legend_resaltado" title='[% "Datos de contacto" | i18n %]'>
+                              [% "Datos de contacto" | i18n %]
+                        </legend>
+            
+                        <li> [% "Localidad:" | i18n %]<strong> [% proveedor.ref_localidad.NOMBRE%]</strong></li>  
+                        <li> [% "Domicilio:" | i18n %]<strong> [% proveedor.getDomicilio %]</strong></li>  
+                        <li> [% "Telefono:" | i18n %]<strong> [% proveedor.getTelefono %]</strong></li> 
+                        <li> [% "Fax:" | i18n %]<strong> [% proveedor.getFax %]</strong></li> 
+                        <li> [% "Email:" | i18n %]<strong> [% proveedor.getEmail %]</strong></li> 
+                  </fieldset>
+                  <fieldset>
+                        <legend class="titulo_legend_resaltado" title='[% "Monedas" | i18n %]'>
+                              [% "Monedas" | i18n %]
+                        </legend>
+                                  [% FOREACH moneda IN monedas %]   
+                                    <li> [% moneda.moneda_ref.nombre %]</li> 
+                                  [% END %]
+                  </fieldset>
+                  <fieldset>
+                        <legend  class="titulo_legend_resaltado" title='[% "Materiales" | i18n %]'>
+                              [% "Materiales" | i18n %]
+                        </legend>
+                                  [% FOREACH material IN materiales_proveedor %]   
+                                    <li> [% material.material_ref.nombre %]</li> 
+                                  [% END %]
+                  </fieldset>
+                  <fieldset>
+                        <legend class="titulo_legend_resaltado" title='[% "Formas de envio" | i18n %]'>
+                              [% "Formas de envio" | i18n %]
+                        </legend>
+                                  [% FOREACH forma_envio IN formas_envio_proveedor %]   
+                                    <li> [% forma_envio.forma_envio_ref.nombre %]</li> 
+                                  [% END %]
+                   </fieldset>
+    </div>
+    </fieldset>
+</div>
+[% INCLUDE "intranet-bottom.inc" %]

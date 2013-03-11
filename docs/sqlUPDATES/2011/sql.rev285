@@ -1,0 +1,1 @@
+INSERT INTO `cat_ref_tipo_nivel3` ( `id_tipo_doc`, `nombre`, `notforloan`, `agregacion_temp`, `disponible`, `enable_nivel3`) VALUES ( 'FOL', 'Folleto', NULL, NULL, '1', '1');

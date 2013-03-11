@@ -1,0 +1,8 @@
+UPDATE `pref_preferencia_sistema` SET `categoria` = 'mail' WHERE `pref_preferencia_sistema`.`variable` = 'smtp_server';
+UPDATE `pref_preferencia_sistema` SET `categoria` = 'mail' WHERE `pref_preferencia_sistema`.`variable` = 'smtp_metodo';
+UPDATE `pref_preferencia_sistema` SET `categoria` = 'mail' WHERE `pref_preferencia_sistema`.`variable` = 'port_mail';
+UPDATE `pref_preferencia_sistema` SET `categoria` = 'mail' WHERE `pref_preferencia_sistema`.`variable` = 'username_mail';
+UPDATE `pref_preferencia_sistema` SET `categoria` = 'mail' WHERE `pref_preferencia_sistema`.`variable` = 'password_mail';
+UPDATE `pref_preferencia_sistema` SET `categoria` = 'mail' WHERE `pref_preferencia_sistema`.`variable` = 'mailFrom';
+UPDATE `pref_preferencia_sistema` SET `categoria` = 'mail' WHERE `pref_preferencia_sistema`.`variable` = 'reserveFrom';
+UPDATE `pref_preferencia_sistema` SET `categoria` = 'mail' WHERE `pref_preferencia_sistema`.`variable` = 'smtp_server_sendmail';

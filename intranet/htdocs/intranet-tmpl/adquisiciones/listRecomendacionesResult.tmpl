@@ -1,0 +1,77 @@
+
+<fieldset class="resultados_busqueda">
+    <legend class="titulo_legend trigger click">[% "Listado de Recomendaciones Activas:" | i18n %]</legend>
+     <div class="datos_tabla_div_recom">
+            <div class="resultados_consulta">[% "La cantidad de Recomendaciones es" | i18n %]: [% cantidad %]</div> 
+            <div class="contenedor_paginador">[% paginador %]</div>
+
+            [% IF cantidad > 0 %]
+
+                        <table id="tablaResult" class="datos_tabla" border=0 cellspacing=0 cellpadding=0 width=100%>
+                            <thead>
+                                <tr class="titulo_tabla_resultado">
+                                    <th>
+                                        [% "Fecha" | i18n %]
+                                    </th>
+                                    <th>
+                                        [% "Recomendado por" | i18n %]
+                                    </th>         
+                                    <th>
+                                        [% "Acciones" | i18n %]
+                                    </th> 
+                                </tr>
+                            </thead>
+                        <tbody>
+                        
+                        [% FOREACH recomendacion IN recom_activas%]   
+                            <tr  align="center">
+                                  <td align="left" class="">
+                                      <p>[% recomendacion.getFecha %] </p>
+                                  </td>
+                                  <td align="left" class="">
+                                      [% recomendacion.ref_usr_socio.getNro_socio %]
+                                  </td>                     
+                                
+                                  <!--  BOTONES ACCIONES (Editar, Borrar, Ver detalle) -->
+                                  <td align='left' width="9%" class="">
+                                  
+                                  <div class="click horizontal icon_mas">
+                                      
+                                          [% PERL %]
+                                                        print C4::AR::Filtros::link_to(   
+                                                                                          text =>     C4::AR::Filtros::to_Icon( boton   => "icon_mas" ),
+                                                                                          url=>"[% url_prefix %]/adquisiciones/recomendacionesDB.pl", 
+                                                                                          params =>   ["id_recomendacion=[% recomendacion.getId %]",
+                                                                                                      "action=DETALLE"],
+                                                                                          class   => "link_det_rec",
+                                                                                       
+                                                                                        
+                                                                                    );
+                                          [% END %]
+                                        
+                                  </div>
+                              
+                                  <div class="click horizontal icon_borrar">
+                                    [% PERL %]
+                                    
+                                            print C4::AR::Filtros::to_Icon(    
+                                                                boton   => "icon_borrar",
+                                                                onClick => "eliminarRecomendacion([% recomendacion.getId %]);",
+                                                                title   => "[% 'Borrar' | i18n %]",
+                                            ) ;
+                                    
+                                    [% END %]
+                                  </div>                                      
+
+                        [% END %]
+                          <tr>
+                                <td class="lineafinaltabla"  align="left" colspan="14"></td>
+                          </tr>
+                        </tbody>
+                        </table>
+              [% ELSE %]
+                        <h3>No hay recomendaciones para mostrar</h3>
+              [% END %]
+  
+        </div>
+</fieldset>

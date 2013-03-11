@@ -1,0 +1,12 @@
+INSERT INTO `pref_preferencia_sistema` (
+`id` ,
+`variable` ,
+`value` ,
+`explanation` ,
+`options` ,
+`type` ,
+`categoria`
+)
+VALUES (
+NULL ,  're_captcha_public_key',  '6LehoMQSAAAAAOhylvTt_7RrPKVdll7CN0jJRdaf', NULL , NULL ,  'text',  'sistema'
+);

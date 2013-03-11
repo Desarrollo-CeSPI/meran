@@ -1,0 +1,31 @@
+<h4>[% "Ejemplares recomendados para la compra" | i18n %]</h4></br>
+      <table id="tablaEjemplaresCompra" class="datos_tabla" border=0 cellspacing=0 cellpadding=0 width=100%>
+      <thead>
+          <tr class="titulo_tabla_resultado">
+              <th id="titulo">
+                  [% "T&iacute;tulo del Libro" | i18n %]
+              </th>
+              <th id="cantidad">
+                  [% "Cantidad de Ejemplares" | i18n %]
+              </th>
+              <th id="fecha_publicacion">
+                  [% "Fecha de Publicaci&oacute;n" | i18n %]
+              </th>         
+          </tr>
+      </thead>
+      <tbody>
+            [% FOREACH resultsloop %]   
+            <tr align="center" >
+                  <td align="center" >
+                    <p>[% recomendacion.titulo %]</p> 
+                  </td>
+                  <td align="center" >
+                      <p>[% recomendacion.cantidad %]</p> 
+                  </td>
+                  <td align="center" >
+                      <p>[% recomendacion.fecha %]</p> 
+                  </td>
+            </tr>        
+            [% END %]    
+    </tbody>   
+</table>

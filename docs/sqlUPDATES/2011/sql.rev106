@@ -1,0 +1,22 @@
+CREATE TABLE  `sys_metodo_auth` (
+`id` INT( 12 ) NOT NULL AUTO_INCREMENT PRIMARY KEY ,
+`metodo` VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL ,
+`orden` INT( 12 ) NOT NULL
+) ENGINE = MYISAM ;
+
+ALTER TABLE  `sys_metodo_auth` ADD UNIQUE (`metodo`);
+
+INSERT INTO  `sys_metodo_auth` (`id` ,`metodo` ,`orden`)
+VALUES (NULL ,  'ldap',  '1'), 
+       (NULL ,  'mysql',  '2');
+
+CREATE TABLE  `usr_login_attempts` (
+`nro_socio` VARCHAR( 16 ) NOT NULL PRIMARY KEY,
+`attempts` INT( 32 ) NOT NULL DEFAULT  '0',
+UNIQUE (`nro_socio`)
+) ENGINE = MYISAM ;
+
+
+INSERT INTO  `pref_preferencia_sistema` (`id` ,`variable` ,`value` ,`explanation` ,`options` ,`type` ,`categoria`)
+VALUES (NULL ,  'requisito_necesario',  '1',  'Indica si el socio debe cumplir requisito para operar', NULL , NULL , 'sistema');
+

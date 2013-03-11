@@ -1,0 +1,118 @@
+[% INCLUDE "intranet-top.inc" %]
+
+<script>
+
+function checkedAll(check0){
+	var nombre="chk";
+	for(i=1;i<6;i++){
+		check=document.getElementById(nombre+i);
+		if(check0.checked){check.checked=true}
+                else{check.checked=false}
+	}
+}
+function desmarcar(chk){
+	if(!chk.checked){
+		document.getElementById("chk0").checked=false;
+	}
+}
+
+function submitForm(){
+    $('#adminLiDe').submit();
+    startOverlay();
+} 
+
+</script>
+[% IF message %]
+<div class="mensajes_informacion">
+    <div id="mensajes" style="opacity: 90; display: block;">
+        <div class="message_text">[% message %]</div>
+    </div>
+</div>
+[% END %]
+
+
+<form name="adminLiDe" id="adminLiDe" method="post" action="[% url_prefix %]/admin/usuarios/adminLibreDeuda.pl" class="form-horizontal">
+
+    <section class="center-section-form">
+        <fieldset>
+            <legend> [% "Administraci&oacute;n de Libre Deuda" | i18n %]</legend>
+            <p class="inputFontNormal">
+                  [% "Seleccione las causas por las cuales no se puede realizar la impresi&oacute;n del certificado de libre deuda" | i18n %]
+            </p><br>
+            <!--<legend class="titulo_legend">[% "Por tener" | i18n %]</legend>-->
+                  
+            <input type="hidden" name="newflags" value="1">
+            
+            <div class="control-group">
+                <div class="controls">
+                    <input type="checkbox" name="chk1" id="chk1" value="1" onclick="desmarcar(this)"> [% "Reservas adjudicadas" | i18n %]
+                </div>
+            </div>
+            
+            <div class="control-group">
+                <div class="controls">
+                    <input type="checkbox" name="chk2" id="chk2" value="1" onclick="desmarcar(this)"> [% "Reservas en espera" | i18n %]
+                </div>
+            </div>
+            
+            <div class="control-group">
+                <div class="controls">
+                    <input type="checkbox" name="chk3" id="chk3" value="1" onclick="desmarcar(this)"> [% "Prestamos vencidos" | i18n %]
+                </div>
+            </div>
+            
+            <div class="control-group">
+                <div class="controls">
+                    <input type="checkbox" name="chk4" id="chk4" value="1" onclick="desmarcar(this)"> [% "Prestamos en curso" | i18n %]
+                </div>
+            </div>
+            
+            <div class="control-group">
+                <div class="controls">
+                    <input type="checkbox" name="chk5" id="chk5" value="1" onclick="desmarcar(this)"> [% "Sanciones" | i18n %]
+                </div>
+            </div>
+            
+            <div class="control-group">
+                <div class="controls">
+                    <input type="checkbox" name="chk0" id="chk0" value="1" onclick="checkedAll(this)"> [% "Todas" | i18n %]
+                </div>
+            </div>
+            
+            <div class="form-actions">
+                  
+                [% PERL %]
+                                  print C4::AR::Filtros::action_button(   title    => " [% 'Guardar' | i18n %]",
+                                                                      button   => "btn btn-primary",
+                                                                      action => "submitForm();",
+                                                                      icon  => "icon-white icon-ok",  
+                                          ) ;
+                [% END %]
+                
+            </div>
+            
+        </fieldset>                      
+    </section>
+</form>
+<script>
+// PARA MARCAR LOS CHECKBOX QUE CORRESPONDE
+var l="[% libreD %]";
+if(l=="11111"){
+	var chk=document.getElementById("chk0");
+	chk.checked=true;
+	checkedAll(chk);
+}
+else{
+	for(i=0;i<5;i++){
+		var j=i+1;
+		if(l.charAt(i) == "1"){
+                document.getElementById("chk"+j).checked=true;
+        }else{
+            document.getElementById("chk"+j).checked=false;
+        }
+	}
+}
+
+</script>
+
+[% INCLUDE "intranet-bottom.inc" %]

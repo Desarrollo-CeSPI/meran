@@ -1,0 +1,15 @@
+ALTER TABLE  `io_importacion_iso_esquema_detalle` ADD  `orden` INT NULL ,
+ADD  `separador` VARCHAR( 32 ) NULL;
+
+ALTER TABLE  `io_importacion_iso_esquema_detalle` DROP INDEX  `id_importacion_esquema`;
+
+ALTER TABLE  `io_importacion_iso_esquema_detalle` ADD UNIQUE (
+`campo_origen` ,
+`id_importacion_esquema` ,
+`subcampo_origen` ,
+`campo_destino` ,
+`subcampo_destino` ,
+`orden`
+);
+
+

@@ -1,0 +1,87 @@
+
+
+[% IF TIPOS_PRESTAMOS_LOOP_COUNT > 0 %]
+
+    [% PERL %]
+        print C4::AR::Filtros::tableHeader(   
+                                                id              => "tablaResult",
+                                                class           => "",
+                                                columns         => ['[% "C&oacute;digo" | i18n %]','[% "Descripci&oacute;n" | i18n %]','[% "M&aacute;xima cantidad de pr&eacute;stamos" | i18n %]
+    ','[% "D&iacute;as de duraci&oacute;n del pr&eacute;stamo" | i18n %]','[% "Renovaciones" | i18n %]','[% "D&iacute;as de Renovaci&oacute;n" | i18n %]
+    ','[% "Cantidad de d&iacute;as para renovar" | i18n %]','[% "Para Sala" | i18n %]','[% "Habilitado" | i18n %]','[% "Editar" | i18n %]',
+                                                                   ]
+                                                
+                    ) ;
+    [% END %]
+
+      <tbody>
+        [% FOREACH tipo_prestamo IN TIPOS_PRESTAMOS_LOOP %]
+        <tr>    
+            <td>
+                    [% tipo_prestamo.getId_tipo_prestamo %]
+            </td>
+            <td>
+                    [% tipo_prestamo.getDescripcion %]
+            </td>
+            <td>
+                    [% tipo_prestamo.getPrestamos %]
+            </td>
+            <td>
+                    [% tipo_prestamo.getDias_prestamo %]
+            </td>
+            <td>
+                    [% tipo_prestamo.getRenovaciones %]
+            </td>
+            <td>
+                    [% tipo_prestamo.getDias_renovacion %]
+            </td>
+            <td>
+                    [% tipo_prestamo.getDias_antes_renovacion %]
+            </td>
+            <td>
+                    [% IF tipo_prestamo.codigo_disponibilidad == 'CIRC0001' %]
+                            [% "Si" | i18n %]
+                    [% ELSE %]
+                            [% "No" | i18n %]
+                    [% END %]
+            </td>
+            <td>
+                    [% IF tipo_prestamo.getHabilitado %]
+                            [% "Si" | i18n %]
+                    [% ELSE %]
+                            [% "No" | i18n %]
+                    [% END %]
+            </td>
+            <td>
+
+                                [% PERL %]
+                                      print C4::AR::Filtros::action_button(
+                                                                      button       => "btn btn-primary click",
+                                                                      action       => 'modificarTipoPrestamo("[% tipo_prestamo.getId_tipo_prestamo %]")',
+                                                                      icon         => "icon-white icon-pencil",
+                                                                      title        => "",
+                                      ) ;
+                                [% END %]
+
+
+            </td>
+        </tr>
+    [% END %]
+           
+     </tbody>
+    </table>
+[% ELSE %]
+    <div class="alert alert-info"> [% 'No hay ning&uacute;n tipo de pr&eacute;stamo definido.' | i18n %] </div>
+
+[% END %]
+  <div class="form-actions">
+	  [% PERL %]
+	                      
+	                      print C4::AR::Filtros::action_button(   
+	                                                          button   => "btn btn-primary",
+	                                                          action   => "agregarTipoPrestamo();",
+                                                              icon     => "icon-white icon-plus",
+	                                                          title    => " [% 'Agregar' | i18n %]",
+	                              ) ;
+	  [% END %]
+  </div>

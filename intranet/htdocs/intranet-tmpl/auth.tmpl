@@ -1,0 +1,147 @@
+<!doctype html>
+<html>
+	<head>
+
+	[% INCLUDE "message_INTRA.inc" %]
+	
+	[% IF page_sub_title %]
+	    <title>Meran::UNLP::[% page_sub_title %]</title>
+	[% ELSE %]
+	    <title>Meran::UNLP</title>
+	[% END %]
+	
+	<meta charset="utf-8" />
+	<meta http-equiv="cache-control" content="public">
+
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="shortcut icon" href="/includes/css/favicon.ico">
+	<link rel="stylesheet" href="/includes/jquery/fancybox/fancybox.css" type="text/css" media="screen" />
+    
+	<link rel="stylesheet" type="text/css" href="[% temas %]/default/includes/intranet.css">
+	<link rel='stylesheet' media='screen and (max-width: 900px)' href="[% temas %]/default/includes/intra-FF_fix.css" />
+
+
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	
+	<script type="text/javascript">
+	    var URL_PREFIX  = '[% url_prefix %]';
+	</script>
+	[% INCLUDE "BootstrapToolkit.inc" %]
+	<script type="text/javascript" src="/includes/util-min.js"></script>
+	<script type="text/javascript" src="/includes/md5-min.js"></script>
+	<script type="text/javascript" src="/includes/sha1-min.js"></script>
+	
+	<script type="text/javascript">
+		 var RecaptchaOptions = {
+		 };
+	</script>
+	
+	
+	<script type="text/javascript">
+	    function enviar(){
+	        [% IF plainPassword == 0 %]
+	            var nroRandom   = [% nroRandom %];
+	            var hash        = b64_sha256(b64_sha256(b64_md5($("#password_plain").val()))+nroRandom);
+	            $("#password").val(hash);
+	        [% ELSE %]
+	            $("#password").val($("#password_plain").val());
+	        [% END %]
+	        var username    = $.trim($("#username").val());
+	        $("#userid").val(username);
+	        $("#datosAEnviar").submit();
+	    }
+	
+	
+	    $(document).ready(function() {
+	        //onEnter con foco en input, ejecuta la busqueda
+	          onEnter("username",enviar);
+	          onEnter("password_plain",enviar);
+	          onEnter("recaptcha_response_field",enviar);
+	          $('#username').focus();
+	    });
+	
+	</script>
+	
+</head>
+<body>
+<noscript>
+    <div class='tableMsgUser'>
+        <font class='fontMsgUser'>
+                <b>[% 'Su navegador no soporta o no tiene habilidato Javascript' | i18n %]</b>
+        </font>
+    </div>
+</noscript>
+<header>
+	<div class="navbar navbar-inverse navbar-fixed-top">
+	    <div class="navbar-inner">
+	      <div class="container" style="width: auto;">
+	        <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+	          <span class="icon-bar"></span>
+	          <span class="icon-bar"></span>
+	          <span class="icon-bar"></span>
+	        </a>
+
+	        <div id="logo"><a>[% 'MERAN' | i18n %]</a></div>
+	        <div class="nav-collapse"></div>
+	      </div>
+	    </div>
+	</div>
+</header>
+<div class="container " style="padding-left:0;">
+    <div id="marco_principal" class="container" >   
+			    [% IF mensaje %]
+						<div class="alert [% mensaje_class %]">
+						        <strong>[% 'Info' | i18n %]</strong> [% mensaje %]
+						</div>
+			    [% END %]
+  		<div id="marco_contenido_datos" class="span5 offset2" style="padding:0;">
+	  		<!--  usado como referencia por el MessageHelper -->
+				<!-- <div id="content" class="login-form"> -->
+				 <fieldset class="textbox">
+					<div class="page-header">
+					    <h1>MERAN <small>[% 'Ingresar a Intranet' | i18n %]</small></h1>
+					</div>	
+						<div class="form-horizontal" id="login-form">
+					            <div class="control-group">
+					                <label class="control-label" for="username">[% 'Usuario' | i18n %]</label>
+					                <div class="controls">
+					                  <input type="text" class="input" id="username" name="username" autofocus>
+					                </div>
+					            </div>
+					            <div class="control-group">
+					                <label class="control-label" for="username">[% 'Contrase&ntilde;a' | i18n %]</label>
+					                <div class="controls">
+					                  <input type="password" class="input" id="password_plain" name="password_plain">
+					                </div>
+					            </div>
+							<div class="">
+							    <button type="submit" class="btn btn-large btn-block btn-primary" onclick="enviar();">[% 'Iniciar sesi&oacute;n' | i18n %]</button>
+							</div>	
+						  </div> 
+						 <form action='[% url_prefix %]/mainpage.pl' method="post" name="datosAEnviar" id="datosAEnviar">
+						 [%  IF mostrar_captcha  %]
+						  		<div class="alert alert-error" style="width:412px;" >[% 'Comprobaci&oacute;n de seguridad: Debido a que ha intentado iniciar sesi&oacute;n varias veces con el mismo usuario, deber&aacute; ingresar el siguiente c&oacute;digo de seguridad' | i18n %]</div>
+					  
+
+					             <div id="captcha"> 
+					               <script src="https://www.google.com/recaptcha/api/challenge?k=[% re_captcha_public_key %]" type="text/javascript"></script>
+					               <noscript><iframe frameborder="0" height="30" src="http://www.google.com/recaptcha/api/noscript?k=[% re_captcha_public_key %]" width="500"></iframe>
+					                         <textarea cols="40" name="recaptcha_challenge_field" rows="3"></textarea>
+					                         <input name="recaptcha_response_field" type="hidden" value="manual_challenge" />
+					               </noscript>
+					             </div>
+					        [% END %]
+					                <input type="hidden" name="userid" id="userid" >
+					                <input type="hidden" name="password" id="password">
+					     </form>
+				<!-- content -->
+			</fieldset>
+		</div><!--marco_contenido_datos -->
+	</div><!--marco_ppal -->
+</div> <!-- container_test -->
+
+
+
+
+</html>

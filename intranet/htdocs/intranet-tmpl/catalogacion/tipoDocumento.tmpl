@@ -1,0 +1,54 @@
+[% INCLUDE 'intranet-top.inc' %]
+[% USE HTML %]
+
+<script type="text/javascript" src="/intranet-tmpl/includes/tipoDocumento.js"></script>
+
+<div id="resultTipoDocumento"> </div>
+<div id="accionesTipoDocumento" class="modal hide fade"> </div>
+
+<div id="addTipoDocumento" class="modal hide fade">
+    <div class="modal-header">
+         <a href="#" class="close" data-dismiss="modal">×</a>
+        <h3>[% "Agregar Tipo de Documento:" | i18n %]</h3>
+    </div>
+
+     <div class="modal-body">
+        	<form class="form-horizontal" id="addTipoDocumentoForm" method="post" action="[% url_prefix %]/catalogacion/tipo_documento.pl" enctype="multipart/form-data">
+            <div class="control-group">
+                <label class="control-label" for="campoX"> [% "Nombre" | i18n %]: </label>
+                <div class="controls">
+                    <input type="text" id="nombre" name="nombre">
+                </div>
+            </div>
+            
+            <div class="control-group">
+                <label class="control-label" for="campo"> [% "Tipo de documento" | i18n %]: </label>
+                <div class="controls">
+                    <input type="text" id="tipoDocumento" name="tipoDocumento">
+                </div>
+            </div>
+            
+            <div class="control-group">
+                <label class="control-label" for="subcampo"> [% "Imagen" | i18n %]: </label>
+                <div class="controls">
+                    <input class="input-file" id="imagen" name="imagen" required type="file">
+                    <input type="hidden" id="tipoAccion" name="tipoAccion" value="ADD">
+                </div>
+            </div>
+    	</form>
+  	</div>
+
+    <div class="modal-footer">
+        [% PERL %]
+                print C4::AR::Filtros::action_button(   
+                                                    button   => "btn btn-primary",
+                                                    action  => "guardarTipoDoc()",
+                                                    icon    => "icon-white icon-ok",
+                                                    title   => " [% 'Agregar Tipo de Documento' | i18n %]",
+                        ) ;
+        [% END %]
+
+  </div>
+</div>
+                
+[% INCLUDE 'intranet-bottom.inc' %]

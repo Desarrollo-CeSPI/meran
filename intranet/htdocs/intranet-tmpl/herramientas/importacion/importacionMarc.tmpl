@@ -1,0 +1,301 @@
+<!-- TMPL_INCLUDE NAME="intranet-top.inc" -->
+<script>
+	function cambioUnidadDeInformacion(){
+     		document.unidad.submit();
+	}
+
+	function hacerSubmit(){
+	//esta funcion recorre todos los checknox y aquellos que fueron tildados, le añede a un input
+	//todos los valores asi estos son enviados para el pl
+		var a=new Array();
+		var b=new Array();
+		var longitud = document.importacionIso.elements.length;
+		for (i=0; i < longitud; i++) {
+			if ( document.importacionIso.elements[i].checked){//si esta chequeado
+				a.push(document.importacionIso.elements[i].value);//agrego el id del que esta tildadoi
+				b.push(document.importacionIso.elements[i+1].value)
+			}
+		}
+		document.importacionIso.descripciones.value=a.join();
+	 	document.importacionIso.tablas.value=b.join();
+	//	alert( document.importacionIso.descripciones.value);
+		document.importacionIso.submit();
+	}
+
+        listaValues= new Array();
+        listaOptions= new Array();
+        listaCaract= new Array();
+        <!-- TMPL_VAR NAME=inicializaciones -->
+        <!-- TMPL_VAR NAME=valores -->
+
+	function vaciarSelect(oSelect){
+		cant=oSelect.length;
+		for(i=0;i<cant;i++){
+			oSelect.options[0]=null;
+		}
+	}
+
+	function agregarOpcionASelect(oSelect,text,value){
+		var oOption = new Option( text,value );
+		oSelect.options[oSelect.options.length]=oOption;
+	}
+
+	function modificardatosMARC(id){
+	listaPrincipal=id.fMarc;
+	listaSecundaria=id.listaSecundaria;
+	auxppal=obtenerIndicePorValue(listaPrincipal,listaPrincipal[listaPrincipal.selectedIndex].value);
+	aux=obtenerIndicePorValue(listaSecundaria,listaSecundaria[listaSecundaria.selectedIndex].value);
+	if(listaCaract[auxppal][aux]){
+	if (listaCaract[auxppal][aux][0]==0){document.getElementById("chk"+id.name).checked=0;}
+	else{document.getElementById("chk"+id.name).checked=1;}
+        document.getElementById("librarian"+id.name).value=listaCaract[auxppal][aux][1];}
+	else{
+	document.getElementById("chk"+id.name).checked=0;
+        document.getElementById("librarian"+id.name).value="";
+	}
+	}
+
+	function cambiarListaDependiente(listaPrincipal,listaSecundaria,idfrm){
+		vaciarSelect(listaSecundaria);
+		if (listaPrincipal.options[listaPrincipal.selectedIndex].value != ''){
+			listaSecundariaValues= listaValues[listaPrincipal.selectedIndex];
+			listaSecundariaOptions= listaOptions[listaPrincipal.selectedIndex];
+			for (i=0 ; i < listaSecundariaValues.length ; i++){
+				agregarOpcionASelect(listaSecundaria,listaSecundariaOptions[i],listaSecundariaValues[i]);
+			}
+		}
+	if (idfrm){document.getElementById("chk"+idfrm.value).checked=0;
+        document.getElementById("librarian"+idfrm.value).value="";}
+	}
+
+	function obtenerIndicePorValue(lista,value){
+		for(i=0;i<lista.length;i++){
+			if (value == lista.options[i].value){
+				return(i);
+			}
+		}
+	}
+ 	
+
+	function ubicarElementosEnLista(listaPrincipal,listaSecundaria,valueListaPrincipal,valueListaSecundaria,idSeparador,valueSeparador,listaOrden,valueListaOrden,listaCampo9,valueListaCampo9,listaCampo5,valueListaCampo5,idfrm){
+		auxppal=obtenerIndicePorValue(listaPrincipal,valueListaPrincipal);
+		listaPrincipal[auxppal].selected=true;
+		cambiarListaDependiente(listaPrincipal,listaSecundaria);
+		if (valueListaSecundaria!= ""){
+			aux=obtenerIndicePorValue(listaSecundaria,valueListaSecundaria);
+			listaSecundaria[aux].selected=true;
+			document.getElementById("chk"+idfrm).checked=listaCaract[auxppal][aux][0];
+			document.getElementById("librarian"+idfrm).value=listaCaract[auxppal][aux][1];
+			
+		}
+		if (idSeparador!=""){
+			document.getElementById(idSeparador).value=valueSeparador;
+			}
+		if (valueListaOrden!= ""){
+			listaOrden[obtenerIndicePorValue(listaOrden,valueListaOrden)].selected=true;
+		}
+		if (valueListaCampo5!= ""){
+			listaCampo5[obtenerIndicePorValue(listaCampo5,valueListaCampo5)].selected=true;
+		}
+		if (valueListaCampo9!= ""){
+			listaCampo9[obtenerIndicePorValue(listaCampo9,valueListaCampo9)].selected=true;
+		}
+	}
+
+
+
+</script>
+
+<table width="100%"  border="0" cellpadding="0" cellspacing="0" align="center">
+	<tr>
+		<td class="pagetitle" >Importaci&oacute;n MARC</td>
+	</tr>
+	<tr>
+		<td class="lineagruesa"  align="left" colspan="3"></td>
+	</tr> 
+</table>
+
+<br>
+
+<table  border="0" cellspacing="0" cellpadding="0" width="100%" >
+	<tr valign="top">
+		<td>
+	<!-- TMPL_IF NAME=OK -->
+			<b>Usted ingreso en el campo:  <!-- TMPL_VAR  ESCAPE=HTML NAME=campoiso -->  
+			sobre el subcampo : <!-- TMPL_VAR  ESCAPE=HTML NAME=subcampoiso --></b>
+			
+	<!-- /TMPL_IF -->
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<form name="unidad" action="/cgi-bin/koha/importacionMarc.pl" method="post" >
+	<!-- TMPL_VAR  NAME="CGIbranch" -->
+				<input type="hidden" name="code" value="<!-- TMPL_VAR  ESCAPE=HTML NAME=code -->">
+			</form>
+		</td>
+	</tr>
+</table>
+
+<table border="0" cellspacing="0" cellpadding="0" width="100%">
+	<tr class="tablaresultadoTitle">
+ 		<td width="1%" align="left" valign="top"><img src="<!-- TMPL_VAR  ESCAPE=HTML NAME='interface' -->/<!-- TMPL_VAR  ESCAPE=HTML NAME="theme" -->/images/izquierda.png"></td>
+		<td>UI</td>
+		<td>Campo 5</td>
+		<td>Campo 9</td>
+		<td>Campo ISO</td>
+		<td>Subcampo ISO</td>
+		<td>Descripci&oacute;n</td>
+		<td>Campo MARC</td>
+		<td>Subcampo MARC</td>
+		<td>Descripci&oacute;n MARC</td>
+		<td>Rep.</td>
+		<td>Separador</td>
+		<td>Orden</td>
+		<td>Agregar</td>
+		<td width="1%" align="right" valign="top"><img src="<!-- TMPL_VAR  ESCAPE=HTML NAME='interface' -->/<!-- TMPL_VAR  ESCAPE=HTML NAME="theme" -->/images/derecha.png"></td>
+	</tr>
+	<tr>
+ 		<form  name="frmnuevo" action="/cgi-bin/koha/guardarImportacionMarc.pl" method="post" >
+   			<input type="hidden" value="<!-- TMPL_VAR  NAME=branch -->"  name="branch">
+   			<input type="hidden" value="frmnuevo"  name="idfrm" >
+  		<tr valign="middle">
+  			<td width="1%">&nbsp;</td>	
+  			<td><!-- TMPL_VAR NAME=branch --></td>
+  			<td align="center">
+				<select  name="campo5">
+ 					<option selected="selected" value="0">0</option>
+  					<option value="1">m</option>
+  					<option value="2">s</option>
+				</select> 
+			</td>
+  			<td align="center">
+				<select name="campo9">
+  					<option selected="selected" value="0">0</option>
+  					<option value="TI">TI</option>
+  					<option value="PE">PE</option>
+  					<option value="CO">CO</option>
+  					<option value="IN">IN</option>
+  					<option value="RE">RE</option>
+				</select> 
+			</td>
+  			<td align="center">
+				<input type="text" value=""  name="campoIso" size="4" >
+			</td>
+  			<td align="center">
+				<input type="text" value=""  name="subCampoIso" size="2">
+			</td>
+  			<td>
+				<textarea cols="20" rows="3" name="descripcion"></textarea> 
+			</td>
+			<td> <!-- TMPL_VAR NAME=FieldMarc --> </td>
+  			<td>
+				<select name="listaSecundaria" onchange="modificardatosMARC(document.frmnuevo);">
+				</select>
+			</td>
+  			<td>
+				<textarea cols="15" rows="3" name="liblibrarian" id="librarianfrmnuevo" readonly></textarea>
+			</td>
+  			<td>
+				<input type="checkbox" name="repeatable" id="chkfrmnuevo" disabled>
+			</td>
+  			<td>
+				<input type="text" name="separador" size="4">
+			</td>
+  			<td> <!-- TMPL_VAR NAME=ordenSelect --> </td>
+  			<td>
+				<input type="image" value="Agregar" src="<!-- TMPL_VAR  ESCAPE=HTML NAME="themelang" -->/images/agregar.png" border="0"> 
+			</td>
+  			<td width="1%">&nbsp;</td>	
+  		</tr>
+ 		</form>
+	</tr>
+</table>
+
+<script>
+ 	ubicarElementosEnLista(document.frmnuevo.fMarc,document.frmnuevo.listaSecundaria,'010','<!-- TMPL_VAR NAME=MARCsubfield -->','','','','','','','','','frmnuevo');	
+</script>
+
+<br>
+
+<table border="0" cellspacing="0" cellpadding="0" width="100%">
+	<tr class="tablaresultadoTitle">
+ 		<td width="1%" align="left" valign="top"><img src="<!-- TMPL_VAR  ESCAPE=HTML NAME='interface' -->/<!-- TMPL_VAR  ESCAPE=HTML NAME="theme" -->/images/izquierda.png"></td>
+		<td>UI</td>
+		<td>Campo 5</td>
+		<td>Campo 9</td>
+		<td>Campo ISO</td>
+		<td>Subcampo ISO</td>
+		<td>Descripci&oacute;n</td>
+		<td>Campo MARC</td>
+		<td>Subcampo MARC</td>
+		<td>Descripci&oacute;n MARC</td>
+		<td>Rep.</td>
+		<td>Separador</td>
+		<td>Orden</td>
+		<td>Guardar</td>
+		<td width="1%" align="right" valign="top"><img src="<!-- TMPL_VAR  ESCAPE=HTML NAME='interface' -->/<!-- TMPL_VAR  ESCAPE=HTML NAME="theme" -->/images/derecha.png"></td>
+	</tr>
+<!-- TMPL_LOOP NAME=RESULTSLOOP -->
+	<form  name="frm<!-- TMPL_VAR  ESCAPE=HTML NAME=id -->" action="/cgi-bin/koha/guardarImportacionMarc.pl" method="post" >
+  	<tr valign="middle">
+  		<td width="1%">&nbsp;</td>	
+
+  		<td align="center"> <!-- TMPL_VAR NAME=ui --> </td>
+  		<td> <!-- TMPL_VAR NAME=campo5s --> </td>
+  		<td> <!-- TMPL_VAR NAME=campo9s --> </td>
+  		<td align="center"> <!-- TMPL_VAR  NAME=campoIso --> </td>
+  		<td align="center"> <!-- TMPL_VAR  NAME=subcampoIso --> </td>
+
+  		<td> 
+			<textarea cols="20" rows="3" name="descripcion"><!-- TMPL_VAR  NAME=descripcion --></textarea>
+		</td>
+  		<td> <!-- TMPL_VAR  NAME=FieldMarc --> </td>
+  		<td>
+			<select name="listaSecundaria" onchange="modificardatosMARC(document.frm<!-- TMPL_VAR  ESCAPE=HTML NAME=id -->);">
+			</select>
+		</td>
+  		<td>
+			<textarea cols="15" rows="3" name="liblibrarian" id="librarianfrm<!-- TMPL_VAR  ESCAPE=HTML NAME=id -->" readonly></textarea>
+		</td>
+  		<td>
+			<input type="checkbox" name="repeatable" id="chkfrm<!-- TMPL_VAR  ESCAPE=HTML NAME=id -->" disabled>
+		</td>
+  		<td>
+			<input type="text" name="separador" size="4" id="<!-- TMPL_VAR  ESCAPE=HTML NAME=id -->"> 
+		</td>
+   		<input type="hidden" value="<!-- TMPL_VAR  ESCAPE=HTML NAME=id -->"  name="id" >
+   		<input type="hidden" value="frm<!-- TMPL_VAR  ESCAPE=HTML NAME=id -->"  name="idfrm" >
+   		<input type="hidden" value="<!-- TMPL_VAR  ESCAPE=HTML NAME=campoIso -->"  name="campoIso" >
+   		<input type="hidden" value="<!-- TMPL_VAR  ESCAPE=HTML NAME=subCampoIso -->"  name="subCampoIso" >
+   		<input type="hidden" value="<!-- TMPL_VAR  ESCAPE=HTML NAME=branch -->"  name="branch">
+  		<td> <!-- TMPL_VAR NAME=ordenSelect --> </td>
+  		<td>
+			<input type="image" value="Guardar Datos " src="<!-- TMPL_VAR  ESCAPE=HTML NAME="themelang" -->/images/guardar.png" border="0">
+		</td>
+ 		<td width="1%">&nbsp;</td>	
+  	</tr>
+  
+<script>
+ 	ubicarElementosEnLista(document.frm<!-- TMPL_VAR  ESCAPE=HTML NAME=id -->.fMarc,document.frm<!-- TMPL_VAR  ESCAPE=HTML NAME=id -->.listaSecundaria,'<!-- TMPL_VAR NAME=MARCfield -->','<!-- TMPL_VAR NAME=MARCsubfield -->',<!-- TMPL_VAR  ESCAPE=HTML NAME= id -->,'<!-- TMPL_VAR  ESCAPE=HTML NAME=separador -->',document.frm<!-- TMPL_VAR  ESCAPE=HTML NAME=id -->.orden,'<!-- TMPL_VAR  ESCAPE=HTML NAME=orden -->',document.frm<!-- TMPL_VAR  ESCAPE=HTML NAME=id -->.campo9,'<!-- TMPL_VAR  ESCAPE=HTML NAME=campo9 -->',document.frm<!-- TMPL_VAR  ESCAPE=HTML NAME=id -->.campo5,'<!-- TMPL_VAR  ESCAPE=HTML NAME=campo5 -->','frm<!-- TMPL_VAR  ESCAPE=HTML NAME=id -->');	
+</script>
+</form>
+<!-- /TMPL_LOOP -->
+	<tr>
+		<td colspan="11">&nbsp;</td>
+	</tr>
+	<tr>
+		<td colspan="11">&nbsp;</td>
+	</tr>
+	<tr>
+		<td colspan="11">&nbsp;</td>
+	</tr>
+	<tr valign="bottom" align="center">
+		<td colspan="10" class="number">
+		<!-- TMPL_LOOP NAME=indices -->
+        		<a href="importacionMarc.pl?code=<!-- TMPL_VAR  NAME=campoIso -->&branch=<!-- TMPL_VAR  ESCAPE=HTML NAME=branch -->"><!-- TMPL_VAR  ESCAPE=HTML NAME=campoIso --></a>
+		<!-- /TMPL_LOOP -->
+		</td>
+	</tr>
+</table>
+<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" --> 

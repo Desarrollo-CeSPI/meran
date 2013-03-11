@@ -1,0 +1,140 @@
+[% INCLUDE 'intranet-top.inc' %]
+[% USE HTML %]
+
+
+<script type="text/javascript">
+        function submitForm(editing){
+        	if ( ($('#imagen').val()) || (editing) ){
+	            $('#add_cover_form').modal('hide');
+	            startOverlay();
+	            $('#post_novedad_form').submit();
+	        }else{
+	        	jAlert("[% 'Debe seleccionar un archivo' | i18n %]");
+	        }
+        }
+
+
+		function modificarPortada(id){
+		    objAH                   = new AjaxHelper(updateModificarPortada);
+		    objAH.showOverlay       = true;
+		    objAH.url               = URL_PREFIX+'/admin/portada_opac.pl';
+		    objAH.id_portada        = id;
+		    objAH.tipoAccion        = 'SHOW_MOD_PORTADA';
+		    objAH.sendToServer();
+		}
+		
+		function updateModificarPortada(responseText){
+            $('#add_cover_form').html(responseText);
+            $('#add_cover_form').modal();
+		}
+
+		function agregarPortada(id){
+		    objAH                   = new AjaxHelper(updateModificarPortada);
+		    objAH.showOverlay       = true;
+		    objAH.url               = URL_PREFIX+'/admin/portada_opac.pl';
+		    objAH.id_portada        = id;
+		    objAH.tipoAccion        = 'SHOW_ADD_PORTADA';
+		    objAH.sendToServer();
+		}
+		
+		function updateAgregarPortada(responseText){
+            $('#add_cover_form').html(responseText);
+            $('#add_cover_form').modal();
+		}
+      
+      $(function() {
+
+          $("#portada_opac_result_sortable").sortable({
+              stop: function(event, ui) { 
+                  objAH               = new AjaxHelper(updateSortable);
+                  objAH.debug         = true;
+                  objAH.url           = URL_PREFIX+"/admin/portada_opac.pl";
+                  objAH.showOverlay   = false;
+                  objAH.tipoAccion    = "ORDEN";
+                  objAH.newOrderArray = $('#portada_opac_result_sortable').sortable('toArray');
+                  objAH.sendToServer(); 
+              }
+          });
+          
+          $("#portada_opac_result_sortable").disableSelection();
+  
+          function updateSortable(responseText){ }
+     });
+  
+      
+      
+</script>
+
+<fieldset>
+    <legend>[% "Portada del OPAC" | i18n %]</legend>
+        [% IF cantidad %]
+				[% PERL %]
+				    print C4::AR::Filtros::tableHeader(   
+                                           id              => "portada_opac_result",
+                                           class           => "",
+                                           columns         => ['[% "Foto"|i18n %]','[% "T&iacute;tulo"|i18n %]','[% "Nota al pie"|i18n %]','[% "Acciones"|i18n %]',]
+				                ) ;
+				[% END %]
+				
+				<tbody id="portada_opac_result_sortable">
+				[% FOREACH p IN portada %]
+				    <tr id="[% p.id %]">
+				        <td class="userImage">
+				            <a class="fancy_link" href="http://[% SERVER_ADDRESS_OPAC %]/opac-tmpl/uploads/portada/[% p.getImagePath %]">
+                                  <img border="0" src="http://[% SERVER_ADDRESS_OPAC %]/opac-tmpl/uploads/portada/[% p.getImagePath %]" alt >
+				            </a>
+			            </td>
+                        <td>[% p.getFooterTitle %]</td>
+                        <td>[% p.getFooter %]</td>
+				        <td style="min-width: 100px;">
+				                  [% PERL %]
+				                      print C4::AR::Filtros::action_set_button(    
+                                            action=>"modificarPortada([% p.id %])", 
+                                            icon=>"icon-white icon-pencil",
+				                            button          => 'btn btn-primary',
+				                            actions         => [
+					                                                {title  => "Eliminar", 
+					                                                 url    =>"[% url_prefix %]/admin/portada_opac.pl",
+					                                                 params =>['id_portada=[% p.id %]','tipoAccion=DEL'], 
+					                                                 icon   =>"icon-trash"
+					                                                },
+				                                                ],
+				                              ) ;
+				                  [% END %]
+				
+				        </td>
+				    </tr>    
+				[% END %]
+				</tbody>
+             </table>
+        [% ELSE %]
+            <div class="alert alert-info">[% 'No hay niguna entrada para la portada' | i18n %]</div>
+        [% END %]
+</fieldset>
+
+<div class="form-actions">
+	[% PERL %]
+	            print C4::AR::Filtros::action_button(   
+	                    button   => "btn btn-primary",
+	                    action   => 'agregarPortada();',
+	                    title    => " [% 'Agregar entrada' | i18n %]",
+	                    icon 	 => "icon-white icon-plus",
+	                ) ;
+	[% END %]
+</div>
+
+<div class="alert alert-block">
+        <h4 class="alert-heading">Atenci&oacute;n</h4>
+        <p>[% 'Cargue fotos exactamente  del mismo tama&ntilde;o, de lo contrario, la portada va a sufrir cambios de tama&ntilde;o, provocando molestia visual' | i18n %].
+            <br />
+           [% 'El tama&ntilde;o &oacute;nptimo para una correcta portada es de un m&aacute;ximo de 1200x200 px (manteniendo el aspecto) para im&aacute;genes sin texto, y de 1200x300 si se dispone de alguna descripci&oacute;n textual.' | i18n %]
+           </p>
+      </div>
+<div id="add_cover_form" class="modal hide fade" >
+    [% INCLUDE 'form_portada_opac.inc' %]
+</div>
+
+
+
+				
+[% INCLUDE 'intranet-bottom.inc' %]

@@ -1,0 +1,73 @@
+[% INCLUDE 'intranet-top.inc' %]
+
+<script type="text/javascript">
+
+    function showNovedad(id){
+
+		var objAH_novedadIntra	 		= new AjaxHelper(updateShowNovedadIntra);
+		objAH_novedadIntra.showOverlay  = true;
+		objAH_novedadIntra.debug        = true;
+		objAH_novedadIntra.url          = '[% url_prefix %]/admin/global/ver_novedad_intra.pl';
+		objAH_novedadIntra.id			= id;
+		objAH_novedadIntra.sendToServer();
+	}
+
+	function updateShowNovedadIntra(responseText){
+	    if (!verificarRespuesta(responseText))
+	        return(0);
+
+	    $('#mostrar_novedad').html(responseText);
+	    $('#mostrar_novedad').modal();
+	}
+
+    function obtenerNovedades(){
+        objAH               = new AjaxHelper(updateObtenerNovedades);
+        objAH.debug         = true;
+        objAH.showOverlay   = true;
+        objAH.url           = URL_PREFIX+'/admin/global/novedades_intraDB.pl';
+        objAH.tipoAccion    = 'LISTAR';
+        objAH.funcion       = 'changePage';
+        objAH.sendToServer();
+    }
+
+    function updateObtenerNovedades(responseText){
+            if (!verificarRespuesta(responseText))
+                return(0);
+            $('#novedades_intra_ajax').html(responseText);
+    }
+
+    
+    function eliminarNovedad(id_novedad){
+        bootbox.confirm(ELIMINAR_NOVEDAD, function(confirmStatus){
+            if (confirmStatus){
+                objAH               = new AjaxHelper(updateEliminarNovedad);
+                objAH.debug         = true;
+                objAH.url           = URL_PREFIX+'/admin/global/novedades_intraDB.pl';
+                objAH.showOverlay   = true;
+                objAH.tipoAccion    = 'ELIMINAR';
+                objAH.id            = id_novedad;
+                objAH.sendToServer();
+            }
+        });
+    }
+
+    function updateEliminarNovedad(responseText){
+            if (!verificarRespuesta(responseText))
+                return(0);
+            $('#novedades_intra_ajax').html(responseText);
+            //zebra('datos_tabla');
+    }
+    
+
+</script>
+
+<script type="text/javascript">
+      $(document).ready(function() {
+        obtenerNovedades();
+      });
+</script>
+
+<div id="novedades_intra_ajax"></div>
+
+
+[% INCLUDE 'intranet-bottom.inc' %]

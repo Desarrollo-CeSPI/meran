@@ -1,0 +1,80 @@
+<script>
+    $(document).ready(function() {
+        mostrarTabla();
+    });
+</script>
+
+
+<div id="add_vista_intra" class="modal hide fade">
+	<div class="form-horizontal">
+	    <div class="modal-header">
+	         <a href="#" class="close" data-dismiss="modal">×</a>
+	        <h3>[% "Agregar Visualizaci&oacute;n:" | i18n %]</h3>
+	    </div>
+	     <div class="modal-body">
+	       <div class="form-horizontal">
+	         <div class="control-group">
+	            <label class="control-label" for="campoX"> [% "Selecci&oacute;n" | i18n %]: </label>
+	            <div class="controls">
+	                [% selectCampoX %]
+	            </div>
+	        </div>
+	        
+	        <div class="control-group">
+	            <label class="control-label" for="campo"> [% "Campo" | i18n %]: </label>
+	            <div class="controls">
+	                <select name="campo" id="campo" onChange="eleccionCampo()">
+	                        <option value="-1">[% 'Seleccionar CampoX' | i18n %]</option>
+	                    </select><br />[% 'Nombre' | i18n %]: <strong><span id="nombre_campo"></span></strong>
+	            </div>
+	        </div>
+	        
+	        <div class="control-group">
+	            <label class="control-label" for="subcampo"> [% "Subcampo" | i18n %]: </label>
+	            <div class="controls">
+	                <select name="subcampo" id="subcampo" onChange="eleccionSubCampo()">
+	                        <option value="-1">[% 'Seleccionar SubCampo' | i18n %]</option>
+	                </select>
+	            </div>
+	        </div>
+	        
+	        <div class="control-group">
+	            <label class="control-label" for="pre"> [% "Pre" | i18n %]: </label>
+	            <div class="controls">
+	                <input id="pre" type="text" value="" size="50">
+	            </div>
+	        </div>
+	        
+	        <div class="control-group">
+	            <label class="control-label" for="liblibrarian"> [% "Vista en Intranet" | i18n %]: </label>
+	            <div class="controls">
+	                <input id="liblibrarian" type="text" value="" size="90">
+	            </div>
+	        </div>
+	        
+	        <div class="control-group">
+	            <label class="control-label" for="post"> [% "Post" | i18n %]: </label>
+	            <div class="controls">
+	                <input id="post" type="text" value="" size="50">
+	            </div>
+	        </div>
+	
+	        <div class="form-actions">
+	            [% PERL %]
+	                    print C4::AR::Filtros::to_Button(   text    => "[% 'Agregar Vista' | i18n %]",
+	                                                        boton   => "btn btn-primary",
+	                                                        onClick => "agregarVisualizacion()",
+	                                                        title   => "[% 'Agregar Vista' | i18n %]",
+	                                                        width => "auto",
+	                                                        alternClass => "botonCentrado",
+	                                                        inline => "1"
+	                            ) ;
+	            [% END %]
+	      </div>
+	    </div>
+	  </div>
+	</div>
+</div>
+<div id="divAgregarModificarVisualizacion"></div>
+<div id="tablaResultCampos"></div>
+<div id="tablaResultSubCampos"></div>

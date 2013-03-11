@@ -1,0 +1,93 @@
+[% INCLUDE "intranet-top.inc" %]
+
+[% INCLUDE 'AutocompleteHelper.inc'  %]
+<script type="text/javascript" src="/intranet-tmpl/includes/circulacion-min.js"></script>
+
+<script language=javascript>
+
+	function limpiar(nivel){
+		if (nivel == 1){
+			$('#buscarN1').val("");
+		    $('#buscarN1_hidden').val("");
+		}else{
+	        $('#buscarN2').val("");
+	        $('#buscarN2_hidden').val("");
+		}
+	}
+	
+	function detalle(){
+	
+        var id1 = $.trim($('#buscarN1_hidden').val());
+        var id2 = $.trim($('#buscarN2_hidden').val());
+        
+        var url = "";
+        
+        if (id1 != "")
+        	url = "[% url_prefix %]/catalogacion/estructura/detalle.pl?id1="+id1+"&token=[% token %]";
+        else
+            url = "[% url_prefix %]/catalogacion/estructura/detalle.pl?id1="+id2+"&token=[% token %]";
+
+        if (id1 != "-1"){
+	        startOverlay();
+	        window.location.href = url;
+        }
+	}
+	
+	
+	
+	$(document).ready( function() {
+	    onEnter("buscarN1",detalle);
+	    onEnter("buscarN2",detalle);
+        CrearAutocompleteCatalogoId({IdInput: 'buscarN1', IdInputHidden: 'buscarN1_hidden'});
+        CrearAutocompleteNivel2Id({IdInput: 'buscarN2', IdInputHidden: 'buscarN2_hidden'});
+	    
+	    
+	});
+
+</script>
+
+<section class="center-section-form">
+	<form class="form-horizontal" onsubmit="return false;">
+	    
+		<fieldset id="reportes">
+		    <legend class="titulo_legend"> <span class="titulos">[% "Acceso directo a Registros y Grupos" | i18n %] </span> </legend>
+            <div class="control-group">
+                   <label class="control-label" for="buscarN1">
+                       [% "Nro. de Registro" | i18n %]
+                   </label>
+          
+                  <div class="controls">
+                    <input type="text" class="span6" id="buscarN1" name="buscarN1" value="" onfocus="limpiar(2)">
+                    <input type="hidden" id="buscarN1_hidden" name="buscarN1_hidden" value="">
+                  </div>    
+            </div>  
+                
+            <div class="control-group">
+                   <label class="control-label" for="buscarN2">
+                       [% "Nro. de Grupo" | i18n %]
+                   </label>
+          
+                  <div class="controls">
+                    <input type="text" class="span6" id="buscarN2" name="buscarN2" value="" onfocus="limpiar(1)">
+                    <input type="hidden" id="buscarN2_hidden" name="buscarN2_hidden" value="">
+                  </div>    
+            </div>  
+                
+		        <div class="form-actions">
+		            [% PERL %]
+		                                print C4::AR::Filtros::action_button(   
+                                                                            title     => "[% 'Ver detalle' | i18n %]",
+		                                                                    button    => "btn btn-primary",
+		                                                                    action    => "detalle();",
+		                                                                    icon      => "icon-white icon-eye-open",
+		                                        ) ;
+		            [% END %]
+		        
+		          
+		        </div>
+		   </section>
+
+   </form>
+ </fieldset>
+ 
+[% INCLUDE "intranet-bottom.inc" %]

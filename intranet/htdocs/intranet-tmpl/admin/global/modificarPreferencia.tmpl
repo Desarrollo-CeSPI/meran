@@ -1,0 +1,86 @@
+[% USE HTML %]
+<div>
+    <form class="form-horizontal">
+        <fieldset>
+        <legend>[% "Modificar Preferencia:" | i18n %]</legend>
+        
+             <div class="control-group">
+                    <label class="control-label" for="variable"> [% "Variable" | i18n %]: </label>
+                    <div class="controls">
+                        [% IF variable %]
+		                    [% variable %]
+		                    <input type="hidden" id="variable" value="[% variable %]">
+	                    [% ELSE %]
+		                    <input type="text" id="variable" size="50">
+	                    [% END %]
+                
+		                <input type="hidden" id="tipoVar" value="[% tipo %]">
+		                [% IF tabla %]<input type="hidden" id="tabla" value="[% tabla %]">[% END %]
+		                [% IF campo %]<input type="hidden" id="campo" value="[% campo %]">[% END %]
+		                [% IF categoria %]<input type="hidden" id="categoria" value="[% categoria %]">[% END %]
+                    </div>
+                </div>
+                
+                <div class="control-group">
+                    <label class="control-label" for="valor"> [% "Valor" | i18n %]: </label>
+                    <div class="controls">
+                        [% IF valor %]
+                            [%  valor %]
+                        [% ELSE %]
+                            <input id="valor" type="text" size="50" name="valor">
+                        [% END %]
+                    </div>
+                </div>
+                
+                <div class="control-group">
+                    <label class="control-label" for="explicacion"> [% "Explicaci&oacute;n" | i18n %]: </label>
+                    <div class="controls">
+                        <textarea id="explicacion" cols="57" rows="2">[% HTML.escape(explicacion) %]</textarea>
+                    </div>
+                </div>
+                
+                <div class="form-actions">
+                        [% IF !nueva %]
+
+    	                    [% PERL %]
+    	                                print C4::AR::Filtros::action_button(   
+    	                                                    title    => "[% 'Guardar Modificaci&oacute;n' | i18n %]",
+    	                                                    button   => "btn btn-primary",
+    	                                                    action => "guardarModificacion();",
+                                                            icon    => "icon-ok icon-white",
+    	                                        ) ;
+    	                    [% END %]
+
+                        [% ELSE %]
+
+    	                    [% PERL %]
+    	                                print C4::AR::Filtros::action_button(   
+    	                                                    title    => "[% 'Guardar Nueva Variable' | i18n %]",
+    	                                                    button   => "btn btn-primary",
+    	                                                    action => "guardarNuevaVariable();",
+                                                            icon    => "icon-ok icon-white",
+    	                                        ) ;
+    	                    [% END %]
+                      [% END %]
+                </div>
+
+            [% PERL %]
+                print C4::AR::Filtros::setHelpInput(   
+                                    text        => "[% ' Para las variables que representan una hora o minutos, solo ingresar la hora en numeros (hh:mm) o los minutos (mm).' | i18n %]",
+                                    class       => "info",
+                                    textLabel   => "NOTA",   
+                        ) ;
+	       [% END %]
+	       
+	       
+	       [% PERL %]
+                print C4::AR::Filtros::setHelpInput(   
+                                    text        => "[% 'Ej: la variable close = 18:30, beginESissue = 60.' | i18n %]",
+                        ) ;
+	       [% END %]
+
+
+        </fieldset>
+    </form>
+</div>
+

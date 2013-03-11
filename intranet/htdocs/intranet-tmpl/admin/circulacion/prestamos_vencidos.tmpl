@@ -1,0 +1,184 @@
+[% INCLUDE "intranet-top.inc" %]
+
+<script type="text/javascript" src="/includes/jquery/jquery.uitablefilter.js" ></script>
+<script type="text/javascript" language="javascript">
+
+    $(document).ready( function() {
+      makeDataTable('#prestamosVencidos');
+      checkedAll("prestamos_vencidos", "prestamo");
+    });
+    
+    var selected = new Array();
+  
+    function enviarMailsATodos(){
+
+        objAH                   = new AjaxHelper(updateEnviarMailsATodos);
+        objAH.url               = URL_PREFIX+"/admin/circulacion/prestamos_vencidosDB.pl";
+        objAH.showOverlay       = true;
+        objAH.tipoAccion        = "ENVIAR_TODOS_MAILS_PRESTAMOS_VENCIDOS";
+        objAH.sendToServer();
+
+    }
+
+    function updateEnviarMailsATodos(responseText){
+
+        var Messages=JSONstring.toObject(responseText);
+        setMessages(Messages);
+
+    }
+    
+    function enviarMailsASeleccionados(){
+
+        objAH                   = new AjaxHelper(updateEnviarMailsASeleccionados);
+        objAH.url               = URL_PREFIX+"/admin/circulacion/prestamos_vencidosDB.pl";
+        objAH.showOverlay       = true;
+        objAH.tipoAccion        = "ENVIAR_A_SELECCION_MAILS_PRESTAMOS_VENCIDOS";
+        if(getSeleccionados()){
+            objAH.ids_prestamos     = selected;
+            objAH.sendToServer();
+        }
+
+    }
+
+    function updateEnviarMailsASeleccionados(responseText){
+
+        // limpia esta variable sino quedan prestamos viejos
+        selected = new Array();
+        var Messages=JSONstring.toObject(responseText);
+        setMessages(Messages);
+
+    }
+    
+    // devuelve los id de los prestamos seleccionados
+    function getSeleccionados(){
+    
+        var checkeds   = $("tr input[type='checkbox']:checked");
+
+        if (checkeds.length > 0){
+        
+            for(i = 0; i < checkeds.length; i++) {
+                selected.push(checkeds[i].id);
+            }
+            return true;
+        }else{
+            jAlert(POR_FAVOR_SELECCIONE_ALGUN_PRESTAMO);
+            return false;
+            
+        }   
+    }
+    
+    $(function() {
+      theTable = $("#prestamosVencidos");
+      $("#q").keyup(function() {
+      $.uiTableFilter(theTable, this.value);
+      });
+    });
+
+
+</script>
+
+<fieldset>
+    <legend class="titulo_legend">[% "Pr&eacute;stamos vencidos" | i18n %] </legend>
+
+    <form class="well form-search" onsubmit="return false">
+        <input class="placeholder" placeholder="Filtrar resultados" type="text" id="q" name="q">
+    </form>
+
+ [% IF cantidad  %]
+    
+    <table id="prestamosVencidos" class="table table-striped ">
+      <thead>
+        <tr>
+            <th>
+                <i id="prestamos_vencidos" class="icon-ok-sign click" title="Seleccionar todos"></i>
+            </th>
+            <th>[% 'Apellido y nombre' | i18n %]</th>
+            <th>[% 'Número de Socio' | i18n %]</th>
+            <th>[% 'Ejemplar' | i18n %]</th>
+            <th>[% 'Tipo de préstamo' | i18n %]</th>
+            <th>[% 'Fecha de préstamo' | i18n %]</th>
+            <th>[% 'Fecha de vencimiento' | i18n %]</th>
+            <th>
+        </tr>
+      </thead>
+
+      <tbody id="prest_venc_pag">
+          [% FOREACH prestamo IN prestamos %]
+            <tr>
+                <td>
+                <input type="checkbox" id="[% prestamo.getId_prestamo %]" name="prestamo" >
+            </td>
+                <td>
+                  [% TRY %]
+                      [% prestamo.socio.persona.getApeYNom %]
+                  [% CATCH %]
+                      [% 'Usuario inexistente' | i18n %]
+                  [% END %]
+            </td>
+                <td>
+                      [% TRY %]
+                        [% PERL %]
+                            print C4::AR::Filtros::link_to(   text   => "[% prestamo.socio.getNro_socio %]",
+                                                              url    => "[% url_prefix %]/usuarios/reales/datosUsuario.pl",
+                                                              params => ["nro_socio=[% prestamo.socio.getNro_socio %]"],
+                                                              title  => "[% 'Mostrar Detalle del Usuario' | i18n %]",
+                                                              blank  => 1,
+                                                        );
+                        [% END %]
+                      [% CATCH %]
+                          [% 'Usuario inexistente' | i18n %] ([% prestamo.nro_socio %])
+                      [% END %]
+            </td>
+            <td>
+                    [% PERL %]
+                            print C4::AR::Filtros::link_to( text    => "[% prestamo.nivel3.codigo_barra %]",
+                                                            url     => "[% url_prefix %]/catalogacion/estructura/detalleEjemplar.pl", 
+                                                            params  => ["id3=[% prestamo.nivel3.getId3 %]"],
+                                                            title   => "[% prestamo.nivel3.codigo_barra %]"
+                                                        );
+                        [% END %]
+            </td>
+                <td>
+                    [% prestamo.tipo.getDescripcion %]
+            </td>
+            <td>
+                    [% prestamo.getFecha_prestamo_formateada %]
+            </td>
+            <td>
+                    <span class="label label-important">[% prestamo.getFecha_vencimiento_reporte_formateada %]</span>
+            </td>
+            </tr>
+          [% END %]
+
+         </tbody>
+  </table>
+  <div id="loadmoreajaxloader" style="display:none;"><center><img src="/includes/jquery/indicator.gif" /></center></div>
+
+  <div class="form-actions">
+       [% PERL %]
+               print C4::AR::Filtros::action_button(
+                                               button       => "btn click btn-warning",
+                                               action       => "enviarMailsATodos();",
+                                               icon         => "",
+                                               title        => "Enviar a todos",
+                                           ) ;
+        
+       [% END %]
+       [% PERL %]
+               print C4::AR::Filtros::action_button(
+                                               button       => "btn click btn-primary",
+                                               action       => "enviarMailsASeleccionados();",
+                                               icon         => "",
+                                               title        => "Enviar a seleccionados",
+                                           ) ;
+        
+       [% END %]
+  </div>
+[% ELSE %]
+        <div class="alert alert-info">[% "No hay pr&eacute;stamos vencidos" | i18n %]</div> 
+[% END %]
+
+
+</fieldset>
+
+[% INCLUDE "intranet-bottom.inc" %]

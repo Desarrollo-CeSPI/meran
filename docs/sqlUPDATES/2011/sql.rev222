@@ -1,0 +1,2 @@
+UPDATE  `pref_preferencia_sistema` SET  `variable` =  'tema_opac_default',
+`explanation` =  'El tema por defecto para OPAC' WHERE  `pref_preferencia_sistema`.`variable` ='tema_opac_deo';

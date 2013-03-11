@@ -1,0 +1,6 @@
+CREATE TABLE IF NOT EXISTS `sys_novedad_intra_no_mostrar` (
+  `id_novedad` int(16) NOT NULL,
+  `usuario_novedad` varchar(16) NOT NULL,
+  PRIMARY KEY (`id_novedad`,`usuario_novedad`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+

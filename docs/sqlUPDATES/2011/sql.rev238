@@ -1,0 +1,19 @@
+INSERT INTO `pref_preferencia_sistema` (
+`id` ,
+`variable` ,
+`value` ,
+`explanation` ,
+`options` ,
+`type` ,
+`categoria`
+)
+VALUES 
+(NULL , 'minPassLength', '8', 'Cantidad de caracteres minimo que debe tener la password', NULL , 'text', 'sistema'),
+(NULL , 'minPassSymbol', '1', 'Cantidad de caracteres simbolicos que debe tener la password', NULL , 'text', 'sistema'),
+(NULL , 'minPassAlphaNumeric', '8', 'Cantidad de caracteres alfanumericos que debe tener la password', NULL , 'text', 'sistema'),
+(NULL , 'minPassAlpha', '6', 'Cantidad de caracteres alpha minimo que debe tener la password', NULL , 'text', 'sistema'),
+(NULL , 'minPassNumeric', '1', 'Cantidad de caracteres numericos minimo que debe tener la password', NULL , 'text', 'sistema'),
+(NULL , 'minPassLower', '0', 'Cantidad de caracteres con minuscula minimo que debe tener la password', NULL , 'text', 'sistema'),
+(NULL , 'minPassUpper', '0', 'Cantidad de caracteres con mayuscula minimo que debe tener la password', NULL , 'text', 'sistema'
+);
+ALTER TABLE `sys_novedad` ENGINE = InnoDB;

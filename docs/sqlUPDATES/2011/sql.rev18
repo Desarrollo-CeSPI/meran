@@ -1,0 +1,4 @@
+ALTER TABLE `circ_prestamo` CHANGE `id_ui_origen` `id_ui_origen` CHAR( 4 )  NOT NULL;
+ALTER TABLE `circ_prestamo` CHANGE `id_ui_prestamo` `id_ui_prestamo` CHAR( 4 ) NOT NULL;
+ALTER TABLE `circ_prestamo` CHANGE `fecha_prestamo` `fecha_prestamo` VARCHAR( 20 ) NOT NULL;
+ALTER TABLE `circ_reserva`  CHANGE `id_ui` `id_ui` VARCHAR( 4 ) NOT NULL;

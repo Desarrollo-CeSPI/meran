@@ -1,0 +1,109 @@
+[% INCLUDE "intranet-top.inc" %]
+
+<!-- para manejar la ventana de campos MARC -->
+<script src="/intranet-tmpl/includes/popups/helpCamposMARC.js"></script>
+
+<script>
+var objAH;
+
+function changePage(ini){
+    objAH.changePage(ini);
+}
+
+function ordenarPor(ord){
+    //seteo el orden de los resultados
+    objAH.sort(ord);
+}
+
+
+//Muestra lo catalogado seguen el nivel y el tipo de item seleccionado (nivel > 1)
+function eleccionDeNivel(){
+  
+  objAH = new AjaxHelper(updateEleccionDeNivel);
+  objAH.debug = true;
+  objAH.showOverlay       = true;
+  objAH.url=URL_PREFIX+"/herramientas/chequeo_importacionDB.pl";
+  objAH.nivel = $("#niveles_id").val();
+  objAH.tipoAccion = 'MOSTRAR_DATOS_NIVEL_REPETIBLE';
+  //se setea la funcion para cambiar de pagina
+  objAH.funcion= 'changePage';  
+  objAH.sendToServer();
+}
+
+
+function updateEleccionDeNivel(responseText){
+    $("#datos_nivel_repetible").html(responseText);
+    zebra("tabla_datos");
+}
+
+
+function eliminarCampo(id_rep){
+  jConfirm(ESTA_SEGURO_QUE_DESEA_BORRARLO, CATALOGO_ALERT_TITLE, function(confirmStatus){
+    objAH = new AjaxHelper(updateEliminarCampo);
+    objAH.showOverlay       = true;
+    objAH.debug = true;
+    objAH.url=URL_PREFIX+"/herramientas/chequeo_importacionDB.pl";
+    objAH.nivel = $("#niveles_id").val();
+    objAH.id_rep_array = [id_rep];
+    objAH.tipoAccion = 'ELIMINAR_NIVEL_REPETIBLE';
+    objAH.sendToServer();
+  });
+}
+
+function eliminarCampos(){
+  jConfirm(ESTA_SEGURO_QUE_DESEA_BORRARLO, CATALOGO_ALERT_TITLE, function(confirmStatus){
+    objAH = new AjaxHelper(updateEliminarCampo);
+    objAH.showOverlay       = true;
+    objAH.debug = true;
+    objAH.url=URL_PREFIX+"/herramientas/chequeo_importacionDB.pl";
+    objAH.nivel = $("#niveles_id").val();;  
+    objAH.id_rep_array = recuperarSeleccionados("checkNivelesRepetibles");
+    objAH.tipoAccion = 'ELIMINAR_NIVEL_REPETIBLE';
+    objAH.sendToServer();
+  });
+}
+
+function updateEliminarCampo(responseText){
+    var Message_arrayref = JSONstring.toObject(responseText);
+    setMessages(Message_arrayref);
+
+    if (! (hayError(Message_arrayref) ) ){
+      eleccionDeNivel();
+    }
+}
+
+function crearEstructura(){
+    alert("reusar el modulo de creacion de catalogo cuando este arreglado \n crear la estructura para el campo, subcampo seleccionado");
+}
+
+$(document).ready( function() {
+
+    
+});
+
+</script>
+
+[% PERL %]
+    print C4::AR::Filtros::ayuda_marc() ;
+[% END %]
+
+<div class="titulos" >Chequeo de la Importaci&oacute;n</div>
+
+
+<fieldset>
+    <legend><strong>[% "Seleccione el nivel:" | i18n %]</strong></legend>
+    <ul>
+        <li class="sub_item">
+            <label for="niveles_id" >
+                [% 'Nivel:' | i18n %]
+            </label>
+            [% selectNivel %]
+        </li>    
+    </ul>
+</fieldset>
+
+<!-- PARA MOSTRAR TEMPLATE DE DATOS DE NIVEL REPETIBLE SIN ESTRUCTURA DE CATALOGACION -->
+<div id= "datos_nivel_repetible"></div>
+
+[% INCLUDE "intranet-bottom.inc" %]
+

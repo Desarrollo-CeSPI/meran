@@ -1,0 +1,28 @@
+[% INCLUDE 'installer-top.inc' %]
+
+<<<<<<< HEAD
+[% session_id %]
+=======
+>>>>>>> cbb6c216d64fe7aa01b490fbbd78be8b4683492d
+
+      <h1>Bienvenido a la instalaci&oacute;n de Meran</h1>
+      <p>Deber&aacute; completar algunos datos para comenzar a utilizar su sistema de gesti&oacute;n.</p>
+
+
+
+      [% IF dependencies_not_satisfied %]
+
+        <p>
+            <span class="label label-important">Atenci&oacute;n!</span> Las dependencias que se listan a continuaci&oacute;n no se han encontrado instaladas en su sistema.
+            Por favor, instale los siguientes servicios, y refresque &eacute;sta p&aacute;gina.
+        </p>
+
+          [% FOREACH dep IN dependencies_not_satisfied %]
+
+          [% END %]
+      [% ELSE %]
+        <p>
+          <a class="btn btn-large btn-primary" href="installer.pl?action=base">Comenzar con la instalaci&oacute;n</a>
+        </p>
+      [% END %]
+[% INCLUDE 'installer-bottom.inc' %]

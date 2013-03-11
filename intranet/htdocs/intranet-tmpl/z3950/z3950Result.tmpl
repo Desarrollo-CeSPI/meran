@@ -1,0 +1,69 @@
+<fieldset class="resultados_busqueda">
+<legend class="titulo_legend">[% "Preferencias de los Servidores z3950" | i18n %]</legend>
+[% IF !servers %]
+    <li>
+        <ul>No tiene servidores z9350 actualmente.</ul>
+    </li>
+[% ELSE %]
+    <div class="tablaResultado_preferencias" id="tablaResultado_preferencias" >
+        <table name="tablaResult" class="table table-striped">
+            <thead>
+                <tr class="titulo_tabla_resultado">
+                    <th>[% "Servidor" | i18n %]</th>
+                    <th>[% "Puerto" | i18n %]</th>
+                    <th>[% "Base de Datos" | i18n %]</th>
+                    <th>[% "Usuario" | i18n %]</th>
+                    <th>[% "Password" | i18n %]</th>
+                    <th>[% "Nombre" | i18n %]</th>
+                    <th>[% "Sintaxis" | i18n %]</th>
+                    <th>[% "Acciones" | i18n %]</th>
+                </tr>
+            </thead>
+        <tbody>
+        [% FOREACH server IN servers %]
+            <tr>
+                <td>[% server.servidor %]</td>
+                <td>[% server.puerto %]</td>
+                <td>[% server.base %]</td>
+                <td>[% server.usuario %]</td>
+                <td>[% server.password %]</td>
+                <td>[% server.nombre %]</td>
+                <td>[% server.sintaxis %]</td> 
+                <td>
+                [% PERL %]
+                            print C4::AR::Filtros::to_Icon(    
+                                            boton   => "icon_edicion",
+                                            onClick => "editServer([% server.id %]);",
+                                            title   => "[% 'Editar Servidor' | i18n %]",
+                                            alternClass => "botonCentradoTabla"
+                                    ) ;
+                [% END %]
+                [% PERL %]
+                            print C4::AR::Filtros::to_Icon(    
+                                            boton   => "icon_borrar",
+                                            onClick => "deleteServer([% server.id %]);",
+                                            title   => "[% 'Eliminar Servidor' | i18n %]",
+                                            alternClass => "botonCentradoTabla"
+                                    ) ;
+                [% END %] 
+                </td>
+            </tr>
+        
+        [% END %]
+        </tbody>
+        </table>
+        <div class="form-actions">
+        [% PERL %]
+	                print C4::AR::Filtros::to_Button(   
+	                                    text    => "[% 'Agregar Servidor' | i18n %]",
+	                                    boton   => "btn btn-large btn-primary",
+	                                    onClick => "addServer();",
+	                                    width => "auto",
+	                                    title   => "[% 'Agregar Servidor' | i18n %]",
+	                                    alternClass   => "botonCentrado"    
+	                        ) ;
+	    [% END %]
+	    </div>
+    </div>
+[% END %]
+</fieldset>

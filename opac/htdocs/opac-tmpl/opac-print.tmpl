@@ -1,0 +1,80 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<title>Formato de Impresi&oacute;n</title>
+<style type="text/css">
+<!--
+.titulo {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 36pt;
+}
+.subtitulo {font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 24pt; }
+-->
+</style>
+</head>
+
+<body>
+<table width="90%"  align="center" cellpadding="4" cellspacing="0" border="0">
+	<tr>
+	   	<td align="center">
+        		<font class="titulo">Biblioteca </font><br>
+       			<font class="subtitulo"> Facultad de Ciencias Econ&oacute;micas</font>
+        	</td>
+		<td align="right">
+			<img src="<!-- TMPL_VAR NAME="themelang" -->/images/escudo.png" border="0" alt="Facultad de Ciencias Econ&oacute;micas" >
+		</td>
+	</tr>
+	<tr>
+		<td align="center" colspan="2">
+			<a >
+			<input onClick="print();return false;"  name="print" id="print" type="image" value="Imprimir"  src="<!-- TMPL_VAR NAME='themelang' -->/images/menu-imprimir.png" border="0" title="Imprimir Resultados">
+			</a>
+		</td>
+	</tr>
+
+	<tr>
+		<td align="center" colspan="2">
+			<!-- TMPL_VAR NAME="numrecords" --> resultados encontrados 
+			<hr>	
+		</td>
+	</tr>
+	<tr>
+		<td colspan="2">
+			<table align="center" cellpadding="4" cellspacing="0" border="1" width="100%">
+<!-- TMPL_LOOP NAME="SEARCH_RESULTS" -->
+				<tr>
+					<td>
+<!-- TMPL_IF NAME="analyticalnumber" -->
+	<!-- TMPL_IF name="analyticalauthor" -->
+		<!-- TMPL_LOOP NAME="analyticalauthor" -->
+			<!-- TMPL_VAR NAME="completo" -->
+		<!-- /TMPL_LOOP -->
+	<!-- /TMPL_IF -->
+
+	<b><i><!-- TMPL_VAR NAME=analyticaltitle ESCAPE=HTML -->.</i></b>
+	&nbsp;EN: <!-- TMPL_VAR NAME="completo" -->&nbsp;
+	<b><i><!-- TMPL_VAR NAME="title" ESCAPE=HTML -->.</i></b>
+	&nbsp; (Solicitar por <!-- TMPL_VAR NAME="firstbulk" -->)
+<!-- TMPL_ELSE -->
+	<!-- TMPL_VAR NAME="completo" -->&nbsp;
+	<b><i><!-- TMPL_VAR NAME="title" ESCAPE=HTML-->.</i></b>
+	&nbsp;  (Solicitar por <!-- TMPL_VAR NAME="firstbulk" -->)
+<!-- /TMPL_IF -->
+					</td>
+				</tr>
+<!-- /TMPL_LOOP  -->
+			</table>
+		</td>
+	</tr>
+	<tr>
+		<td align="center" colspan="2">
+			<hr>
+			<a >
+			<input onClick="print();return false;"  name="print" id="print" type="image" value="Imprimir"  src="<!-- TMPL_VAR NAME='themelang' -->/images/menu-imprimir.png" border="0" title="Imprimir Resultados">
+			</a>
+		</td>
+	</tr>
+
+</table>
+</body>
+</html>

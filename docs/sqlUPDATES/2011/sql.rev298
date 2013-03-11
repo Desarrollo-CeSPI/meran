@@ -1,0 +1,1 @@
+ALTER TABLE `cat_registro_marc_n2` ADD `promoted` BOOLEAN NOT NULL DEFAULT '0';

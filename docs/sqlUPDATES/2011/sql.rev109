@@ -1,0 +1,3 @@
+UPDATE pref_preferencia_sistema SET value = 'gasposelalastra', explanation = 'Contraseña-usuario de busqueda.' WHERE variable='ldap_bind_pw';
+UPDATE pref_preferencia_sistema SET value = 'cn=searchuser,dc=biblioteca,dc=econo,dc=unlp,dc=edu,dc=ar' WHERE variable='ldap_bind_dn';
+DELETE FROM pref_preferencia_sistema WHERE variable='ldap_enabled';

@@ -1,0 +1,3 @@
+UPDATE  `pref_preferencia_sistema` SET  `explanation` =  'Indica si el Fax de la Biblioteca se incluye como dato en la etiqueta',
+`type` =  'bool',
+`categoria` =  'catalogo' WHERE `variable` LIKE "incluir_fax_etiquetas";

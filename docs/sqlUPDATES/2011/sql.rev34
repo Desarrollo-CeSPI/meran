@@ -1,0 +1,12 @@
+INSERT INTO `pref_preferencia_sistema` (
+`id` ,
+`variable` ,
+`value` ,
+`explanation` ,
+`options` ,
+`type` ,
+`categoria`
+)
+VALUES (
+NULL , 'timeInterval', '300000', 'Set the miliseconds to the interval function in javascript', NULL , 'text', 'sistema'
+);

@@ -1,0 +1,5 @@
+/usr/local/koha/includes/util
+/usr/local/koha/includes/AjaxHelper
+/usr/local/koha/includes/MessageHelper
+/usr/local/koha/includes/WindowHelper
+/usr/local/koha/includes/AutocompleteHelper

@@ -1,0 +1,176 @@
+[% INCLUDE "intranet-top.inc" %]
+
+<script type="text/javascript" src="/includes/jquery/jquery.uitablefilter.js" ></script>
+<script type="text/javascript" language="javascript">
+
+    $(document).ready( function() {
+      checkedAll("revisiones_check", "revision");
+    });
+    
+    var selected = new Array();
+
+    function getSeleccionados(){
+    
+        var checkeds   = $("tr input[type='checkbox']:checked");
+
+        if (checkeds.length > 0){
+        
+            for(i = 0; i < checkeds.length; i++) {
+                selected.push(checkeds[i].id);
+            }
+            return true;
+        }else{
+            jAlert("[% 'Debe seleccionar alguna revisi&oacute;n' | i18n %]");
+            return false;
+            
+        }   
+    }
+
+    function eliminarSeleccionados(){
+        objAH                   = new AjaxHelper(updateEliminarSeleccionados);
+        objAH.url               = URL_PREFIX+"/admin/catalogo/revisiones_pendientesDB.pl";
+        objAH.showOverlay       = true;
+        objAH.tipoAccion        = "ELIMINAR_REVISIONES";
+        if(getSeleccionados()){
+            objAH.ids_revisiones= selected;
+            objAH.sendToServer();
+        }
+    }
+
+    function updateEliminarSeleccionados(responseText){
+        var Messages=JSONstring.toObject(responseText);
+        setMessages(Messages);
+        setTimeout(refreshMeranPage,5000);
+    }
+
+    function aprobarSeleccionados(){
+        objAH                   = new AjaxHelper(updateAprobarSeleccionados);
+        objAH.url               = URL_PREFIX+"/admin/catalogo/revisiones_pendientesDB.pl";
+        objAH.showOverlay       = true;
+        objAH.tipoAccion        = "APROBAR_REVISIONES";
+        if(getSeleccionados()){
+            objAH.ids_revisiones= selected;
+            objAH.sendToServer();
+        }
+    }
+
+    function updateAprobarSeleccionados(responseText){
+        var Messages=JSONstring.toObject(responseText);
+        setMessages(Messages);
+        setTimeout(refreshMeranPage,5000);
+    }
+
+
+      function verRevision(id_revision){
+
+        var objAH_novedadIntra      = new AjaxHelper(updateVerRevision);
+        objAH_novedadIntra.showOverlay  = true;
+        objAH_novedadIntra.debug        = true;
+        objAH_novedadIntra.url          = '[% url_prefix %]/admin/catalogo/ver_revision.pl';
+        objAH_novedadIntra.id_revision  = id_revision;
+        objAH_novedadIntra.sendToServer();
+      }
+
+
+     function updateVerRevision(responseText){
+        if (!verificarRespuesta(responseText))
+            return(0);
+
+        $('#mostrar_revision').html(responseText);
+        $('#mostrar_revision').modal('show');
+
+    }
+
+</script>
+
+<fieldset>
+    <legend class="titulo_legend">[% "Revisiones pendientes" | i18n %] </legend>
+    <br />
+ [% IF cantidad  %]
+      [% PERL %]
+                print C4::AR::Filtros::tableHeader(   
+                                  id              => "revisiones_pendientes",
+                                  class           => "",
+                                  selectAll_id    => "revisiones_check",
+                                  columns         => ['[% "Apellido y nombre" | i18n %]','[% "T&iacute;tulo" | i18n %]',
+                                                    '[% "Edicion"|i18n %]','[% "Fecha"|i18n %]',' ',
+                                                    
+                                                     ]
+                                                                   
+                                        ) ;
+      [% END %]
+
+      <tbody>
+          [% FOREACH revision IN revisiones %]
+            <tr>
+                <td>
+                    <input type="checkbox" id="[% revision.id %]" name="revision" >
+                </td>
+                <td>
+                      [% TRY %]
+                        [% PERL %]
+                            print C4::AR::Filtros::link_to(   text   => "[% revision.socio.persona.getApeYNom %]",
+                                                              url    => "[% url_prefix %]/usuarios/reales/datosUsuario.pl",
+                                                              params => ["nro_socio=[% revision.socio.getNro_socio %]"],
+                                                              title  => "[% 'Mostrar Detalle del Usuario' | i18n %]",
+                                                              blank  => 1,
+                                                        );
+                        [% END %]
+                      [% CATCH %]
+                          [% 'Usuario inexistente' | i18n %] ([% prestamo.nro_socio %])
+                      [% END %]
+                </td>
+                <td>
+                    [% revision.nivel2.nivel1.getTitulo %]
+                </td>
+                <td>
+                    [% IF revision.nivel2.getEdicion %] [% revision.nivel2.getEdicion %] [% ELSE %] ------ [% END %]
+                </td>
+                <td>
+                    [% revision.getDate %]
+                </td>
+                <td>
+                    [% PERL %]
+                            print C4::AR::Filtros::action_button( 
+                                                            button      => "btn btn-success",
+                                                            action      => "verRevision([% revision.id %])", 
+                                                            icon        => "icon-white icon-eye-open ",
+                                                           title        => '[% "Ver" | i18n %]',
+                                                        ) ;
+
+                    [% END %]
+                </td>
+            </tr>
+          [% END %]
+         </tbody>
+  </table>
+  <div class="form-actions">
+       [% PERL %]
+               print C4::AR::Filtros::action_button(
+                                               button       => "btn btn-danger",
+                                               action       => "eliminarSeleccionados();",
+                                               icon         => "icon-white icon-remove",
+                                               title        => "Eliminar",
+                                           ) ;
+        
+       [% END %]
+       [% PERL %]
+               print C4::AR::Filtros::action_button(
+                                               button       => "btn btn-primary",
+                                               action       => "aprobarSeleccionados();",
+                                               icon         => "icon-white icon-ok",
+                                               title        => "Aprobar",
+                                           ) ;
+        
+       [% END %]
+  </div>
+[% ELSE %]
+        <div class="alert alert-info">[% "No hay revisiones por aprobar" | i18n %]</div> 
+[% END %]
+
+   
+</fieldset>
+
+
+<div id="mostrar_revision" class="modal hide fade"></div>
+[% INCLUDE "intranet-bottom.inc" %]

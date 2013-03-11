@@ -1,0 +1,30 @@
+[% USE HTML %]
+
+<div class="modal-header">
+  <a href="#" class="close" data-dismiss="modal">×</a>
+  <h4>[% HTML.escape(novedad.getTitulo) %]</h4>
+</div>
+<div class="modal-body">
+  <span class="label right" title="[% 'Categor&iacute;a' | i18n %]">[% novedad.getCategoria %]</span>
+  <p>[% HTML.escape(novedad.getContenido) %]</p>
+  
+  [% IF cant_links %]
+    [% FOREACH link IN links %]
+        <a target="_blank" href="[% link %]">[% link %]</a></br>      
+    [% END %]
+  [% END %]
+  
+</div>
+<div class="modal-footer">
+   <h4 class="left">[% novedad.getFechaLegible %]</h4>
+  <p class="help-block">
+        [% 'Creado por ' | i18n %]
+        [% PERL %]
+            print C4::AR::Filtros::link_to(   text =>     "[% novedad.socio.persona.getApeYNom %]",
+                                              url=>"[% url_prefix %]/usuarios/reales/datosUsuario.pl", 
+                                              params =>   ["nro_socio=[% novedad.getUsuario %]"],
+                                              title =>    "[% 'Mostrar Detalle del Usuario' | i18n %]"
+                                        );
+        [% END %]
+    </p>        
+</div>

@@ -1,0 +1,86 @@
+[% INCLUDE 'intranet-top.inc' %]
+<link rel="stylesheet" type="text/css" media="screen,projection,print" href="/includes/css/wysiwyg.css" />
+<script src="/includes/jquery/jquery.wysiwyg.js"></script>
+<script>
+    function modificar(){
+        $('#form_novedad').submit();
+    }
+        
+    function agregar(){
+        $('#form_novedad').submit();
+    }
+</script>
+
+[% USE HTML %]
+
+<form id="form_novedad" action="[% url_prefix %]/admin/global/editar_novedad_intra.pl" class="form-horizontal" method="POST">
+    <fieldset class="resultados_busqueda">
+            [% IF editing %]
+                <legend>[% "Editar novedad de INTRA" | i18n %]:</legend>
+            [% ELSE %]
+                <legend>[% "Agregar novedad de INTRA" | i18n %]:</legend>
+            [% END %]
+            
+                <div class="control-group">
+                    <label class="control-label" for="titulo">[% 'Titulo' | i18n %]: </label>
+                    <div class="controls">
+                        <input type="text" id="titulo" name="titulo" value="[% novedad.getTitulo %]" required>
+                    </div>
+                </div>
+                
+                <div class="control-group">
+                    <label class="control-label" for="categoria">[% 'Categor&iacute;a' | i18n %]: </label>
+                    <div class="controls">
+                        <input type="text" id="categoria" name="categoria" value="[% novedad.getCategoria %]" required>
+                    </div>
+                </div>
+                
+                <div class="control-group">
+                    <label class="control-label" for="contenido">[% 'Contenido' | i18n %]: </label>
+                    <div class="controls">
+                        <textarea id="contenido" name="contenido" style="width: 88.3%" required>[%novedad.getContenido %]</textarea>
+                    </div>
+                </div>
+                
+                <div class="control-group">
+                    <label class="control-label" for="links">[% "Links" | i18n %]</label>
+                    <div class="controls">
+                        <input type="text" id="links" name="links" value="[% novedad.getLinks %]">
+                        [% PERL %]
+                        
+                            print C4::AR::Filtros::setHelpInput(
+                                                    text => "[% 'Ingrese los links separados por espacio.' | i18n %]",
+                            
+                            );
+                        
+                        [% END %]
+                    </div>
+                </div>
+
+            [% IF editing %]
+                    <input type="hidden" id="action" name="action" value="editar">
+                    <input type="hidden" id="token" name="token" value="[% token %]">
+                    <input type="hidden" id="novedad_id" name="novedad_id" value="[% novedad.id %]">
+            [% ELSE %]
+                    <input type="hidden" id="action" name="action" value="agregar">
+            [% END %]
+
+                <input type="hidden" id="token" name="token" value="[% token %]">
+                
+                <div class="form-actions">
+                    [% PERL %]
+                          print C4::AR::Filtros::action_link_button( 
+                                                          button    => "btn",
+                                                          url       => "[% url_prefix %]/admin/global/novedades_intra.pl",
+                                                          title     => " [% 'Volver al listado' | i18n %]",
+                                                          icon      => "icon-arrow-left",
+                                                      ) ;
+
+                    [% END %]
+                    <button class="btn btn-primary" type="submit"><i class="icon-white icon-ok"></i> [% 'Aceptar' | i18n %]</button>
+                </div>
+        </div>
+   </fieldset>
+ </form>
+
+[% INCLUDE 'intranet-bottom.inc' %]

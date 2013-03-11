@@ -1,0 +1,119 @@
+
+[% IF OK == 1 %] 
+
+[% USE HTML %]
+
+<!-- FIXME no se si se usa el hidden -->
+<input id="obligatorio" type="hidden" value="">
+
+<div class="modal">
+	
+	   <div class="modal-header">
+	       <h3>[% 'Modificar campo Marc para el nivel ' | i18n %] [% catalogacion.nivel %] [% TRY %][% catalogacion.tipoItem.getNombre %][% CATCH %] [% 'TODOS' | i18n %][% END %]</h3>
+		   <a href="#" class="close" data-dismiss="modal">×</a>
+	   </div>
+       <div class="modal-body">
+	      <form class="form-horizontal" onsubmit="return false;">
+			    <div class="control-group">
+			        <label class="control-label" for="tipo_nivel3_id"> [% "Esquema" | i18n %]: </label>
+			        <div class="controls">
+			            [% selectItemType %]
+			        </div>
+			    </div>
+			    
+			    <div class="control-group">
+			        <label class="control-label" for="campoX"> [% "Campo" | i18n %]: </label>
+			        <div class="controls">
+			            <input type="text" value="[% catalogacion.campo %]" disabled/>
+			        </div>
+			    </div>
+			    
+			    <div class="control-group">
+			        <label class="control-label" for="campoX"> [% "Subcampo" | i18n %]: </label>
+			        <div class="controls">
+			            <input type="text" value="[% catalogacion.subcampo %]" disabled/>
+			        </div>
+			    </div>
+			<!--     Si catalogacion.subCamposBase.getObligatorio (LA BIBLIA) dice que es obligatorio, no se puede modificar -->
+			    <div class="control-group">
+			        <label class="control-label" for="obligatorio"> [% "Obligatorio?" | i18n %]: </label>
+			        <div class="controls">
+			            <input  type=radio id="obligatorio_si" name="obligatorio" value="1" 
+			                [% IF catalogacion.obligatorio == '1' %] checked [% END %]
+			                [% IF catalogacion.subCamposBase.getObligatorio %] disabled [% END %]>
+			            [% 'S&iacute;' | i18n %]
+			            <input  type=radio id="obligatorio_no" name="obligatorio" value="0" 
+			                [% IF catalogacion.obligatorio == '0' %] checked [% END %]
+			                [% IF catalogacion.subCamposBase.getObligatorio %] disabled [% END %]>  
+			            [% 'No' | i18n %]
+			        </div>
+			    </div>
+			    
+			    <div class="control-group">
+			        <label class="control-label" for="liblibrarian"> [% "Vista en Intranet" | i18n %]: </label>
+			        <div class="controls">
+			            <input id="liblibrarian" type="text" value="[% catalogacion.getLiblibrarian %]" size="85"> 
+			        </div>
+			    </div>
+			    
+			    <div class="control-group">
+			        <label class="control-label" for="tipoInput"> [% "Tipo de entrada" | i18n %]: </label>
+			        <div class="controls">
+			            [% comboComponentes %]
+			        </div>
+			    </div>
+			    
+			    <div class="control-group">
+			        <label class="control-label" for="combo_validate"> [% "Validador" | i18n %]: </label>
+			        <div class="controls">
+			            [% PERL %]
+			                        print C4::AR::Filtros::getComboValidadores();
+			            [% END %]
+			        </div>
+			    </div>
+			    
+			    <div class="control-group">
+			        <label class="control-label" for="tablas_ref"> [% "Tabla de referencia" | i18n %]: </label>
+			        <div class="controls">
+			            [% tabla_referencias %]
+			        </div>
+			    </div>
+			    
+			
+		        <div class="control-group">
+		            <label class="control-label" for="orden"> [% "Orden" | i18n %]: </label>
+		            <div class="controls">
+		                <select name="camposSelect" id="camposSelect"></select>
+		            </div>
+		        </div>
+		        
+		        <div class="control-group">
+		            <label class="control-label" for="camposRef"> [% "Campos" | i18n %]: </label>
+		            <div class="controls">
+		                <select name="camposRef" id="camposRef"></select>
+		            </div>
+		        </div>
+			
+			    <div class="modal-footer">
+			     
+				    [% PERL %]
+				                        print C4::AR::Filtros::to_Button(   text    => "[% 'Guardar Campo' | i18n %]",
+				                                                            boton   => "btn btn-primary",
+				                                                            onClick => "modificarEstructuraCatalogacion([% catalogacion.getId %]);",
+				                                                            title   => "[% 'Guardar Campo' | i18n %]",
+				                                                            alternClass => "botonCentrado",
+				                                                            width   => "auto",
+				                                                            inline  => "1",
+				                                ) ;
+				    [% END %]
+			    </div>
+		</form>
+	</div>
+</section>
+[% ELSE %]
+    [% PERL %]
+            print C4::AR::Filtros::get_error_message( 
+                                            debug => "Error de parametros en modificarCampoMARC.tmpl",
+                                );
+    [% END %]
+[% END %]

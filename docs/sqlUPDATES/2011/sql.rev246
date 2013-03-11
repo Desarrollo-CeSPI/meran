@@ -1,0 +1,1 @@
+ALTER TABLE  `cat_registro_marc_n1` ADD  `clave_unicidad` VARCHAR( 255 ) NOT NULL AFTER  `template`

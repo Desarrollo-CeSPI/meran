@@ -1,0 +1,1 @@
+ALTER TABLE  `cat_registro_marc_n3` CHANGE  `codigo_barra`  `codigo_barra` VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL;

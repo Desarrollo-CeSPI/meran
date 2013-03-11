@@ -1,0 +1,21 @@
+RENAME TABLE marc_import TO io_importacion_iso;
+RENAME TABLE marc_import_record TO io_importacion_iso_registro;
+ALTER TABLE `io_importacion_iso_registro` CHANGE `id_marc_import` `id_importacion_iso` INT( 11 ) NOT NULL;
+ALTER TABLE `io_importacion_iso` ADD `id_importacion_esquema` INT NOT NULL AFTER `id`;
+
+CREATE TABLE `io_importacion_iso_esquema` (
+`id` INT NOT NULL AUTO_INCREMENT ,
+`nombre` VARCHAR( 255 ) NOT NULL ,
+`descripcion` TEXT NOT NULL ,
+PRIMARY KEY ( `id` )
+) ENGINE = InnoDB CHARACTER SET utf8 COLLATE utf8_general_ci;
+
+CREATE TABLE `io_importacion_iso_esquema_detalle` (
+`id` INT NOT NULL ,
+`id_importacion_esquema` INT NOT NULL ,
+`campo_origen` CHAR( 3 ) NOT NULL ,
+`subcampo_origen` CHAR( 1 ) NOT NULL ,
+`campo_destino` CHAR( 3 ) NOT NULL ,
+`subcampo_destino` CHAR( 1 ) NOT NULL ,
+PRIMARY KEY ( `id` )
+) ENGINE = InnoDB;

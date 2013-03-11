@@ -1,0 +1,47 @@
+div.dimmer {
+	background-color:grey;
+	font-family:verdana;
+	font-weight:bold;
+	left:0;
+	opacity:0.8;
+	padding:40px;
+	position:absolute;
+	top:0;
+	visibility:hidden;
+}
+
+div.dimming {
+	background-color:#FFFFFF;
+/* 	background-image:url(/org-img/MP3/loader1.gif); */
+	background-position:center;
+	background-repeat:no-repeat;
+	border:1px solid #999999;
+	font-family:Verdana,Arial,Helvetica,sans-serif;
+	font-size:11px;
+	font-style:normal;
+	left:16px;
+	position:absolute;
+	top:64px;
+/* 	visibility:hidden; */
+	z-index:80;
+} 
+
+.winHeader {
+    background: transparent url(../imagenes/tablaresultado.png) repeat-x scroll 0 0;
+    color:#FFFFFF;
+    font-family:Arial,Helvetica,sans-serif;
+    font-size:13px;
+    font-weight:bold;
+    height:24px;
+}
+
+
+/* no se si se usa */
+.ventanaContenido {
+	overflow: auto;
+}
+
+li {
+    list-style-type:none;
+}
+

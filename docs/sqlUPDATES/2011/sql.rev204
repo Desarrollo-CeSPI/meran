@@ -1,0 +1,1 @@
+ALTER TABLE `io_importacion_iso_registro` CHANGE `id` `id` INT( 11 ) NOT NULL AUTO_INCREMENT ;

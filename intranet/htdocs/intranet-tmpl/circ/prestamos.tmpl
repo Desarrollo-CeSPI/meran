@@ -1,0 +1,55 @@
+[% INCLUDE 'intranet-top.inc' %]
+
+[% INCLUDE  'AutocompleteHelper.inc'  %]
+
+<script src="/intranet-tmpl/includes/circulacion.js"></script>
+
+<script type="text/javascript">
+
+function detalleDelUsuario(){
+	var nro_socio= $('#nro_socio_hidden').val();
+	USUARIO= new objeto_usuario();
+	USUARIO.text= $('#usuarioAutocomplete').val();
+	USUARIO.ID= nro_socio;
+	//detalleUsuario esta implementado en circulacion,js
+	startOverlay();
+	detalleUsuario(nro_socio);
+	detalleReservas(nro_socio, updateInfoReservas);
+	detalleSanciones(nro_socio);
+}
+
+$(document).ready(function() {
+	//se crea el autocomplete para buscar el usuario
+	CrearAutocompleteUsuarios({	IdInput: 'usuarioAutocomplete', 
+							IdInputHidden: 'nro_socio_hidden', 
+							callBackFunction: detalleDelUsuario
+					});
+});
+
+</script>
+
+<section class="center-section-form"> 
+    <form id="form_circulacion_rapida" class="classform form-horizontal" onsubmit="return false;">
+        <fieldset>
+            <legend class="titulo_legend"><span class="titulos">[% 'Pr&eacute;stamos' | i18n %]</span></legend>
+                
+			    <div id="buscarUsuario"  class="control-group">
+			
+		                <label for="usuarioAutocomplete" class="control-label">[% 'Apellido y Nombres, DNI o Legajo' | i18n %]</label>
+		                <div class="controls">
+		                  <input id="usuarioAutocomplete" type="text" size="40">
+	                    </div>
+		                
+		                <input id="nro_socio_hidden" type="hidden">
+			    </div> 
+        </fieldset>
+      </form>
+      
+    <!-- DELTALLE DEL USUARIO -->
+    <div id="detalleUsuario"></div>
+    <!-- DELTALLE DE SANCIONES -->
+    <div id="sanciones"></div>
+    <!-- DETALLE DE PRESTAMOS -->
+    <div id="tablaReservas"></div>
+</section>
+[% INCLUDE 'intranet-bottom.inc' %]

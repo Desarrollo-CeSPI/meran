@@ -1,0 +1,15 @@
+CREATE TABLE IF NOT EXISTS `sys_novedad_intra` (
+  `id` int(16) NOT NULL AUTO_INCREMENT,
+  `usuario` varchar(16) CHARACTER SET utf8 NOT NULL,
+  `fecha` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `titulo` varchar(255) CHARACTER SET utf8 NOT NULL,
+  `categoria` varchar(255) CHARACTER SET utf8 NOT NULL,
+  `contenido` text CHARACTER SET utf8 NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=2 ;
+
+CREATE TABLE IF NOT EXISTS `sys_novedad_intra_no_mostrar` (
+  `id_novedad` int(16) NOT NULL,
+  `usuario_novedad` varchar(16) NOT NULL,
+  PRIMARY KEY (`id_novedad`,`usuario_novedad`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;

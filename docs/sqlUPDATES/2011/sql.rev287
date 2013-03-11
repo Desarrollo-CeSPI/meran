@@ -1,0 +1,3 @@
+DELETE FROM pref_tabla_referencia
+WHERE (nombre_tabla = "cat_registro_marc_n2") 
+OR (nombre_tabla = "cat_perfil_opac")

@@ -1,0 +1,13 @@
+ALTER TABLE `pref_unidad_informacion` ENGINE = InnoDB;
+CREATE TABLE `cat_ayuda_marc` (
+`id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY ,
+`ui` INT NOT NULL ,
+`campo` CHAR( 3 ) NOT NULL ,
+`subcampo` CHAR( 1 ) NOT NULL ,
+`ayuda` TEXT NOT NULL
+) ENGINE = InnoDB;
+
+ALTER TABLE `cat_ayuda_marc` ADD INDEX ( `ui` );
+ALTER TABLE `cat_ayuda_marc` ADD FOREIGN KEY ( `ui` ) REFERENCES `pref_unidad_informacion` (
+`id`
+) ON DELETE NO ACTION ON UPDATE NO ACTION ;

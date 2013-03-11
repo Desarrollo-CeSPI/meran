@@ -1,0 +1,1 @@
+UPDATE rep_historial_circulacion SET tipo_operacion='reserva' WHERE tipo_operacion='reserve';

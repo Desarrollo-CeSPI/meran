@@ -1,0 +1,1 @@
+ALTER TABLE  `cat_ref_tipo_nivel3` CHANGE  `id_tipo_doc`  `id_tipo_doc` VARCHAR( 8 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL;

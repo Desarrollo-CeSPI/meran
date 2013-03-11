@@ -1,0 +1,67 @@
+[% USE HTML %]
+    <fieldset>
+      <div class="well form-actions">    
+        <legend class="titulo_legend">[% "Informaci&oacute;n del ejemplar" | i18n %] </legend>
+        <ul class="lista_datos_ejemplar unstyled">
+    
+            <li>
+                <strong>[% 'T&iacute;tulo: ' | i18n %]</strong>
+                     [% PERL %]
+                         print C4::AR::Filtros::link_to( text =>     "[% HTML.escape(titulo) %]",
+                                                         url=>"[% url_prefix %]/catalogacion/estructura/detalle.pl", 
+                                                         params =>   ["id1=[% nivel3.nivel2.id1 %]"],
+                                                         title =>    "[% 'Mostrar Detalle del Registro' | i18n %]",
+                                                         blank => 1,
+                                                     ) ;
+                     [% END %]
+            </li>
+
+            <li>
+                <strong>[% 'Autor: ' | i18n %]</strong>
+	             <a class="click" onClick="buscarPorAutor('[% nivel3.nivel2.nivel1.getAutor %]')" title="[% 'Buscar sobre este autor' | i18n %]">
+	                 [% nivel3.nivel2.nivel1.getAutor %]
+	             </a>
+                
+            </li>
+
+            <li><strong>[% 'Disponibilidad: ' | i18n %]</strong>
+            <span class="label [% IF nivel3.esParaPrestamo %] label-info [% END %]">[% nivel3.getDisponibilidadObject.getNombre  %]</span></li>
+
+            <li><strong>[% 'Estado:' | i18n %]</strong>
+                    [% IF socio_prestamo %]
+                        <strong class="label [% IF nivel3.estadoDisponible %] label-success [% ELSE %] label-important [% END %]">[% 'Prestado a:' | i18n  %]</strong>
+                        [% PERL %]
+                            print C4::AR::Filtros::link_to(   text =>     "[% socio_prestamo.persona.getApeYNom %]",
+                                                              url=>"[% url_prefix %]/usuarios/reales/datosUsuario.pl",
+                                                              params =>   ["nro_socio=[% socio_prestamo.getNro_socio %]"],
+                                                              title =>    "[% 'Mostrar Detalle del Usuario' | i18n %]",
+                                                              blank =>  1,
+                                                        );
+                        [% END %]
+                        <script>
+                            //Actualizamos los datos del usuario
+                            $('#nro_socio_hidden').val('[% socio_prestamo.getNro_socio %]');
+                            $('#usuario').val('[% socio_prestamo.persona.getApeYNom %] ([% socio_prestamo.getNro_socio %])');
+                            onCompleteUsuarios();
+                        </script>
+                    [% ELSE %]
+                        <strong class="label [% IF nivel3.estadoDisponible %] label-success [% ELSE %] label-important [% END %]">[% nivel3.getEstadoObject.getNombre  %]</strong>
+                    [% END %]
+                    [% IF socio_reserva %]
+                    <br />
+                        [% 'Reservado a:' | i18n  %]
+                        <strong>
+                        [% PERL %]
+                            print C4::AR::Filtros::link_to(   text =>     "[% socio_reserva.persona.getApeYNom %]",
+                                                              url=>"[% url_prefix %]/usuarios/reales/datosUsuario.pl",
+                                                              params =>   ["nro_socio=[% socio_reserva.getNro_socio %]"],
+                                                              title =>    "[% 'Mostrar Detalle del Usuario' | i18n %]",
+                                                              blank =>  1,
+                                                        ); 
+                        [% END %]
+                        </strong>
+                    [% END %]</li>
+
+        </ul>
+      </div>
+    </fieldset>

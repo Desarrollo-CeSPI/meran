@@ -1,0 +1,1 @@
+INSERT INTO `pref_preferencia_sistema` (`id`, `variable`, `value`, `explanation`, `options`, `type`, `categoria`) VALUES (NULL, 'renglones', '10', NULL, NULL, NULL, NULL);

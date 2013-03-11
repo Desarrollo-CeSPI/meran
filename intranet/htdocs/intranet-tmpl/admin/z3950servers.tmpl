@@ -1,0 +1,354 @@
+[% INCLUDE "intranet-top.inc" %]
+
+<script type="text/javascript">
+function swap(id,src){
+    document.getElementById(id).src=src;
+}
+</script>
+										       
+[% IF add_form %]
+<script>
+	function swap(id,src){
+		document.getElementById(id).src=src;
+	}
+											       
+	function _(s) { return s } // dummy function for gettext
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        function isNotNull(f,noalert) {
+                if (f.value.length ==0) {
+                    return false;
+                }
+                return true;
+        }
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        function toUC(f) {
+                var x=f.value.toUpperCase();
+                f.value=x;
+                return true;
+        }
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        function isNum(v,maybenull) {
+        var n = new N&uacute;mero(v.value);
+        if (isNaN(n)) {
+                return false;
+                }
+        if (maybenull==0 && v.value=='') {
+                return false;
+        }
+        return true;
+        }
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        function isDate(f) {
+                var t = Fecha.parse(f.value);
+                if (isNaN(t)) {
+                       return false;                       
+                }
+        }
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        function Check(f) {
+                var ok=1;
+                var _alertString="";
+                var alertString2;
+                if (f.searchfield.value.length==0) {
+                        _alertString += "\n- " + _("site name missing");
+                }
+                if (f.host.value.length==0) {
+                        _alertString += "\n- " + _("host missing");
+                }
+                if (f.port.value.length==0) {
+                        _alertString += "\n- " + _("port missing");
+                }
+                if (f.db.value.length==0) {
+                        _alertString += "\n- " + _("database missing");
+                }
+                if (isNaN(f.port.value)) {
+                        _alertString += "\n- " + _("port must be a number");
+                }
+                if (isNaN(f.rank.value)) {
+                        _alertString += "\n- " + _("rank must be a number");
+                }
+                if (isNaN(f.checked.value) || f.checked.value<0 || f.checked.value>1) {
+                        _alertString += "\n- " + _("checked must be 0 or 1");
+                }
+                if (_alertString.length==0) {
+                        document.Aform.submit();
+                } else {
+                        alertString2  = _("Form not submitted because of the following problem(s)");
+                        alertString2 += "\n------------------------------------------------------------------------------------\n";
+                        alertString2 += _alertString;
+                        jAlert(alertString2);
+                }
+        }
+</script>
+<fieldset>
+<legend>
+    [% IF searchfield %]
+		Modificar server Z39.50
+    [% ELSE %]
+		Agregar Servidor Z39.50
+	[% END %]
+</legend>						        
+<form action="[% script_name %]" name="Aform" method="post">
+    <input type="hidden" name="op" value='add_validate'>
+
+    <table>
+	    <tr>
+            [% IF searchfield %]
+            	<td class="inputFontNormal">Servidor Z39.50</td>
+                    <td class="inputFontNormal">
+                    <input type="hidden" name="searchfield" value='[% searchfield %]'>
+                        [% searchfield %]
+                    </td>
+            [% ELSE %]
+            	<td class="inputFontNormal">Servidor Z39.50</td>
+                    <td>
+                    	<input class="inputFontNormal" type="text" name="searchfield" size="100" maxlength="100" onBlur="toUC(this)">
+                    </td>
+             [% END %]
+	    </tr>
+	    <tr>
+		    <td class="inputFontNormal">Hostname</td>
+		    <td class="inputFontNormal">
+			    <input type=text  class="inputFontNormal" name="host" size="30" value='[% host %]'>
+		    </td>
+	    </tr>
+	    <tr>
+		    <td class="inputFontNormal">Puerto</td>
+		    <td>
+			    <input class="inputFontNormal" type="text" name="port" size="5" value='[% port %]' onBlur="isNum(this)">
+		    </td>
+	    </tr>
+	    <tr>
+		    <td class="inputFontNormal">Base de datos</td>
+		    <td>
+			    <input class="inputFontNormal"type="text" name="db" value='[% db %]'>
+		    </td>
+	    </tr>
+	    <tr>
+		    <td class="inputFontNormal">Userid</td>
+		    <td>
+			    <input class="inputFontNormal" type="text" name="userid" value='[% userid %]'>
+		    </td>
+	    </tr>
+	    <tr>
+		    <td class="inputFontNormal">Contrase&ntilde;a</td>
+		    <td>
+			    <input type=text class="inputFontNormal" name="password" value='[% password %]'>
+		    </td>
+	    </tr>
+	    <tr>
+		    <td class="inputFontNormal">Chequeado (searched by default)</td>
+		    <td>
+			    <input type=text class="inputFontNormal" size="1" name="checked" value='[% checked %]' onBlur="isNum(this)">  
+	    <tr>
+		    <td class="inputFontNormal">Ranking (display order)</td>
+		    <td>
+			    <input type=text class="inputFontNormal" name="rank" size="4" value='[% rank %]' onBlur="isNum(this)">
+		    </td>
+	    </tr>
+	    <tr>
+		    <td class="inputFontNormal">Sintaxis (z3950 can send records in various format. Choose one)</td>
+		    <td>
+			    <select name="syntax" class="inputFontNormal">
+				    <option value="UNIMARC">UNIMARC</option>
+				    <option value="USMARC">USMARC</option>
+			    </select>
+		    </td>
+	    </tr>
+	    <tr>
+		    <td> </td>
+		    <td>
+			    <input type="image" alt="Guardar Cambios"  src="[% interface %]/[% theme %]/images/guardar.png" onclick="Aform.submit">
+		    </td>
+	    </tr>
+    </table>
+</form>
+</fieldset>
+
+[% END %]
+
+ [% IF add_validate %]
+        Registro de datos
+        <form action='[% script_name %]' method="post">
+        <input type="submit" value="OK">
+        </form>
+ [% END %]
+
+[% IF delete_confirm %]
+
+        [% reqsel %]
+<fieldset>
+<table border="0" cellspacing="0" cellpadding="5">
+        <tr class="titulo_tabla_resultado">
+                <td >
+                        <b>Sitio</b>
+                </td>
+                <td >
+                        [% searchfield %]
+                </td>
+        </tr>
+        <form action='[% script_name %]' method=post>
+                <input type="hidden" name="op" value="delete_confirmed">
+                <input type="hidden" name="searchfield" value="[% id %]">
+        <tr>
+                <td class="inputFontNormal">Hostname</td>
+                <td class="inputFontNormal">[% host %]</td>
+        </tr>
+        <tr>
+                <td class="inputFontNormal">Puerto</td>
+                <td class="inputFontNormal">[% port %]</td>
+        </tr>
+        <tr>
+                <td class="inputFontNormal">Base de datos</td>
+                <td class="inputFontNormal">[% db %]</td>
+        </tr>
+        <tr>
+                <td class="inputFontNormal">Userid</td>
+                <td class="inputFontNormal">[% userid %]</td>
+        </tr>
+        <tr>
+                <td class="inputFontNormal">Contrase&ntilde;a</td>
+                <td class="inputFontNormal">[% password %]</td>
+        </tr>
+        <tr>
+                <td class="inputFontNormal">Chequeado</td>
+                <td class="inputFontNormal">[% checked %]</td>
+        </tr>
+        <tr>
+                <td class="inputFontNormal">Ranking</td>
+                <td class="inputFontNormal">[% rank %]</td>
+        </tr>
+        <tr>
+                <td class="inputFontNormal" colspan=2 align="center">CONFIRME BORRADO</td>
+        </tr>
+        <tr>
+                <td><INPUT type=submit value='SI'></form></td>
+                <td><form action='[% script_name %]' method="post"><input type="submit" value="NO"></form></td>
+        </tr>
+</table>
+</fieldset>
+[% END %]
+
+[% IF delete_confirmed %]
+        Borrado de datos
+        <form action='[% script_name %]' method="post">
+                <input type="submit" value="OK">
+        </form>
+ [% END %]
+
+[% IF else %]
+<fieldset>
+<legend>Administraci&oacute;n de Servidores Z39.50</legend>
+
+<table width="100%" class="titulo" border="0" cellpadding="0" cellspacing="0" >
+    <tr>
+		<td class="lineagruesa"  align="left" colspan="3"></td>
+	</tr>
+</table>
+
+<br>
+
+<table>
+	<tr> 
+        <form action='[% script_name %]' method=post name=form1>
+            <td><input class="inputFontNormal" type="text" name="description" value="[% searchfield %]"></td>
+		    <td><a href="#" onClick="form1.reset()" >
+		    <img name="clear" id="clear" alt="Limpiar" src="[% themelang %]/images/borrar2.png" border="0"></a></td>
+		</form>
+	</tr>
+</table>
+        [% IF searchfield %]
+                Ha buscado por <b>[% searchfield %]</b>
+         [% END %]
+
+<table border=0 cellspacing=0 cellpadding=0 width="100%">
+	<tr class="titulo_tabla_resultado">
+		<td width="1%" align="left" valign="top"><img src="[% interface %]/[% theme %]/images/izquierda.png"></td>
+                <td >Sitio</td>
+                <td>Hostname</td>
+                <td>Puerto</td>
+                <td>Base de datos</td>
+                <td>Userid</td>
+                <td>Contrase&ntilde;a</td>
+                <td>Chequeado</td>
+                <td>Ranking</td>
+                <td>Sintaxis</td>
+                <td>Editar</td>
+                <td>Eliminar</td>
+		<td width="1%" align="rigth" valign="top"><img src="[% interface %]/[% theme %]/images/derecha.png"></td>
+	</tr>
+            [% FOREACH loop %]
+        <tr valign="middle">
+		<td height=25 class="[% clase %]">&nbsp;</td>
+                <td class="[% clase %]" class="inputFontNormal">
+                [% name %]
+		</td>
+                <td class="[% clase %]" class="inputFontNormal">
+                [% host %]
+		</td>
+                <td class="[% clase %]" class="inputFontNormal">
+                [% port %]
+		</td>
+                <td class="[% clase %]" class="inputFontNormal">
+                [% db %]
+		</td>
+                <td class="[% clase %]" class="inputFontNormal">
+                [% userid %]
+		</td>
+                <td class="[% clase %]" class="inputFontNormal">
+                [% password %]
+		</td>
+                <td class="[% clase %]" class="inputFontNormal">
+                [% checked %]
+		</td>
+                <td class="[% clase %]" class="inputFontNormal">
+                [% rank %]
+		</td>
+                <td class="[% clase %]" class="inputFontNormal">
+                [% syntax %]
+		</td>
+                <td class="[% clase %]" align="center">
+			<a class="inputFontNormal" href="[% script_name %]?op=add_form&searchfield=[% name %]"><img src="[% interface %]/[% theme %]/images/editar.png" ALT="Editar" title="edit" BORDER="0" ></a>
+		</td>
+                <td align="center" class="[% clase %]">
+			<a class="inputFontNormal" href="[% script_name %]?op=delete_confirm&searchfield=[% name %]"><img src="[% interface %]/[% theme %]/images/borrar.png" ALT="Eliminar" title="delete" BORDER="0" ></a>
+		</td>
+		<td height=25 class="[% clase %]">&nbsp;</td>
+	</tr>
+               [% END %]
+	<tr valign=bottom>
+        	<td class="lineafinaltabla"  align="left" colspan="13"></td>
+	</tr>
+
+</table>
+
+<br><br>
+
+<form action='[% script_name %]' method=post name=form2>
+        <input type=hidden name=op value=add_form>
+
+<table width=100%>
+	<tr>
+		<td width=10% align="left">
+                [% IF offsetgtzero %]
+                	<a class="inputFontNormal" href="[% script_name %]?offset=[% prevpage %]">&lt;&lt; Anteriores</a>
+        		[% END %]
+        	</td>
+
+        	<td width="80%" align="center">
+			<input type="image" alt="Agregar Servidor Z39.50"  src="[% interface %]/[% theme %]/images/agregar.png" onclick="form2.submit">
+		</td>
+		
+		<td width=10% align="right">
+        [% IF ltcount %]
+                <a class="inputFontNormal" href="[% script_name %]?offset=[% nextpage %]">Siguiente &gt;&gt;</a>
+         [% END %]
+		</td>
+	</tr>
+</table>
+
+</form>
+</fieldset>
+[% END %]
+
+[% INCLUDE "intranet-bottom.inc" %]

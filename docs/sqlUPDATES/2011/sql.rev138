@@ -1,0 +1,13 @@
+INSERT INTO  `pref_preferencia_sistema` (
+`id` ,
+`variable` ,
+`value` ,
+`explanation` ,
+`options` ,
+`type` ,
+`categoria`
+)
+VALUES (
+NULL ,  'mostrar_ui_opac',  '0',  'Habilita/Deshabilita que se muestre la UI poseedora y la UI origen en el detalle de ejemplares del OPAC', NULL ,  'bool',  'catalogo'
+);
+ALTER TABLE `usr_socio` ADD `remindFlag` INT( 1 ) NOT NULL DEFAULT '1';

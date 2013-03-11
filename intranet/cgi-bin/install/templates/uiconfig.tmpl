@@ -1,0 +1,33 @@
+[% INCLUDE 'installer-top.inc' %]
+
+      <h1>Datos de la Biblioteca</h1>
+      <br />
+
+	 <form class="form-horizontal" action="installer.pl" method="post">
+        <fieldset>
+          <div class="control-group">
+            <label class="control-label" for="uiname">Nombre de la Bilbioteca</label>
+            <div class="controls">
+              <input type="text" class="input-xlarge" id="uiname" name="uiname" required value="[% uiname %]">
+              <p class="help-block">Nombre de la Biblioteca que se usar&aacute; para el env&iacute;o de mails, Opac, etc.</p>
+            </div>
+          </div>
+
+          <div class="control-group">
+            <label class="control-label" for="uicode">C&oacute;digo de la Bilbioteca</label>
+            <div class="controls">
+              <input type="text" class="input-xlarge" id="uicode" name="uicode" required value="[% uicode %]">
+              <p class="help-block">Preferentemente que sea de tres letras.</p>
+            </div>
+          </div>
+
+          <input type="hidden" id="action" name="action" value="uiconfig">
+        </fieldset>
+	      <p>
+	        <button type="submit" class="btn btn-large btn-primary" >Continuar</button>
+	      </p>
+      </form>
+
+
+
+[% INCLUDE 'installer-bottom.inc' %]

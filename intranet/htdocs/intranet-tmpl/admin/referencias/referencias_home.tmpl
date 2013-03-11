@@ -1,0 +1,42 @@
+[% INCLUDE "intranet-top.inc" %]
+
+<script src="/intranet-tmpl/includes/admin/tablasDeReferencia.js"></script>
+<script src="/includes/jquery/jquery.jeditable.js"></script>
+
+<script type="text/javascript">
+
+</script>
+
+
+<section class="center-section-form ">
+	<form onsubmit="return false;" class="form-horizontal">
+	    <fieldset>
+	        <legend class="titulo_legend">[% "Selecci&oacute;n de tablas de referencia" | i18n %]</legend>       
+              <div class="control-group">
+                  <label class="control-label" for="id_ui"> [% "Tabla" | i18n %]: </label>
+                  <div class="controls">
+                      [% combo_tablas %]
+              </div>
+
+              <div class="form-actions">
+	
+	                [% PERL %]
+	                    print C4::AR::Filtros::to_Button(   text    => "[% 'Obtener Tabla' | i18n %]",
+	                                                        boton   => "btn btn-primary",
+	                                                        onClick => "obtenerTabla();",
+	                                                        title   => "[% 'Obtener Tabla' | i18n %]",
+	                                                        inline  => "1"
+	                            ) ;
+	                [% END %]
+	            </div>
+	
+	    </fieldset>
+	    
+   </form>
+</section>
+    <div class="detalle_tabla" id="detalle_tabla"> </div>
+
+
+
+
+[% INCLUDE "intranet-bottom.inc" %]

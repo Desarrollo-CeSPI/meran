@@ -1,0 +1,1 @@
+ALTER TABLE `rep_historial_prestamo` ADD `fecha_vencimiento` VARCHAR( 20 ) NOT NULL AFTER `fecha_ultima_renovacion` ;

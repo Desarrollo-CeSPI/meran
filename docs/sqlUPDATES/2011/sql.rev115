@@ -1,0 +1,1 @@
+ALTER TABLE  `cat_registro_marc_n1` CHANGE  `tipo_documento`  `tipo_documento` CHAR( 3 ) NOT NULL;

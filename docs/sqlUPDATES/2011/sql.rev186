@@ -1,0 +1,9 @@
+CREATE TABLE  `barcode_format` (
+`id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY ,
+`id_tipo_doc` VARCHAR( 4 ) NOT NULL ,
+`format` VARCHAR( 255 ) NOT NULL ,
+UNIQUE (
+`id_tipo_doc`
+)
+) ENGINE = MYISAM ;
+

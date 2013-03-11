@@ -1,0 +1,4 @@
+UPDATE `pref_preferencia_sistema` SET `explanation` = 'Cantidad de numeros de digitos que conforman la parte numerica del numero de inventario',
+`label` = 'Longitud de Nro de inventario ',
+`explicacion_interna` = 'Cantidad de numeros de digitos que conforman la parte numerica del numero de inventario' WHERE `pref_preferencia_sistema`.`variable` = 'longitud_barcode';
+

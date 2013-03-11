@@ -1,0 +1,1 @@
+UPDATE `rep_historial_sancion` SET `fecha_comienzo` = `fecha` where fecha_comienzo is null;

@@ -1,0 +1,152 @@
+@import url("layouts/layout-2d.css");
+
+.calendar { border-color: #232; }
+
+.calendar table {
+  border-color: #565;
+  color: #000;
+  background-color: #efe;
+}
+
+/* Header part -- contains navigation buttons and day names. */
+
+.calendar .button { /* "<<", "<", ">", ">>" buttons have this class */
+  background-color: #676;
+  color: #fff;
+}
+
+.calendar .nav {
+  background-color: #676;
+}
+
+.calendar thead .title { /* This holds the current "month, year" */
+  background-color: #250;
+  color: #efa;
+}
+
+.calendar thead .headrow { /* Row <TR> containing navigation buttons */
+}
+
+.calendar thead .name { /* Cells <TD> containing the day names */
+  border-color: #565;
+  color: #000;
+}
+
+.calendar thead .weekend { /* How a weekend day name shows in header */
+  color: #a66;
+}
+
+.calendar thead .hilite { /* How do the buttons in header appear when hover */
+  background-color: #afa;
+  color: #000;
+  border-color: #084;
+}
+
+.calendar thead .active { /* Active (pressed) buttons in header */
+  background-color: #7c7;
+}
+
+.calendar thead .daynames { /* Row <TR> containing the day names */
+  background-color: #dfb;
+}
+
+/* The body part -- contains all the days in month. */
+
+.calendar tbody .day { /* Cells <TD> containing month days dates */
+  color: #564;
+}
+.calendar tbody .day.othermonth {
+  color: #888;
+}
+.calendar tbody .day.othermonth.oweekend {
+  color: #c88;
+}
+
+.calendar table .wn {
+  border-color: #8a8;
+  background-color: #dfb;
+}
+
+.calendar tbody .rowhilite td {
+  background-color: #dfd;
+}
+
+.calendar tbody .rowhilite td.wn {
+  background-color: #efe;
+}
+
+.calendar tbody td.hilite { /* Hovered cells <TD> */
+  background-color: #efd;
+  border-color: #bbb;
+}
+
+.calendar tbody td.active { /* Active (pressed) cells <TD> */
+  background-color: #dec;
+}
+
+.calendar tbody td.selected { /* Cell showing today date */
+  border-color: #000;
+  background-color: #f8fff8;
+  color: #000;
+}
+
+.calendar tbody td.weekend { /* Cells showing weekend days */
+  color: #a66;
+}
+
+.calendar tbody td.today { color: #0a0; }
+
+.calendar tbody .disabled { color: #999; }
+
+.calendar tbody .emptycell { /* Empty cells (the best is to hide them) */
+}
+
+.calendar tbody .emptyrow { /* Empty row (some months need less than 6 rows) */
+}
+
+/* The footer part -- status bar and "Close" button */
+
+.calendar tfoot .footrow { /* The <TR> in footer (only one right now) */
+  background-color: #565;
+  color: #fff;
+}
+
+.calendar tfoot .ttip { /* Tooltip (status bar) cell <TD> */
+  background-color: #250;
+  color: #efa;
+}
+
+.calendar tfoot .hilite { /* Hover style for buttons in footer */
+  background-color: #afa;
+  border-color: #084;
+  color: #000;
+}
+
+.calendar tfoot .active { /* Active (pressed) style for buttons in footer */
+  background-color: #7c7;
+}
+
+/* Combo boxes (menus that display months/years for direct selection) */
+
+.calendar .combo {
+  border-color: #565;
+  background-color: #efd;
+  color: #000;
+}
+
+.calendar .combo .hilite {
+  background-color: #af8;
+}
+
+.calendar .combo .active {
+  border-color: #6a4;
+  background-color: #efe;
+}
+
+/* time */
+
+.calendar tfoot tr.time td { border-color: #8a8; }
+.calendar tfoot tr.time td.hour,
+.calendar tfoot tr.time td.minute { border-color: #aca; }
+.calendar tfoot tr.time td.hilite { background-color: #af8; }
+.calendar tfoot tr.time td.active { background-color: #7c7; }

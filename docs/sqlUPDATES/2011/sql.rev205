@@ -1,0 +1,10 @@
+ALTER TABLE `io_importacion_iso_esquema_detalle` DROP PRIMARY KEY, ADD PRIMARY KEY(`id`);
+
+ALTER TABLE  `io_importacion_iso_esquema_detalle` ADD UNIQUE (
+`id_importacion_esquema` ,
+`campo_origen` ,
+`subcampo_origen` ,
+`campo_destino` ,
+`subcampo_destino`
+);
+

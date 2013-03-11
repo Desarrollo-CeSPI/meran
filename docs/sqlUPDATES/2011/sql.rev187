@@ -1,0 +1,25 @@
+INSERT INTO `pref_preferencia_sistema` (
+`id` ,
+`variable` ,
+`value` ,
+`explanation` ,
+`options` ,
+`type` ,
+`categoria`
+)
+VALUES (
+NULL , 'vencidoMessage', 'Sr./Sra. FIRSTNAME SURNAME : El dia VENCIMIENTO se le ha vencido e ejemplar que posee del libro "TITLE:UNITITLE" - De: "AUTHOR" (EDICION).', 'Mensaje del mail de préstamos vencidos. NO modificar las palabras en mayuscula', NULL , 'text', 'sistema'
+);
+
+INSERT INTO `pref_preferencia_sistema` (
+`id` ,
+`variable` ,
+`value` ,
+`explanation` ,
+`options` ,
+`type` ,
+`categoria`
+)
+VALUES (
+NULL , 'vencidoSubject', 'URGENTE', 'Subject del mail de préstamos vencidos', NULL , 'text', 'sistema'
+);

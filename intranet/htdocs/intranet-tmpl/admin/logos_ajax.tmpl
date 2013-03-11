@@ -1,0 +1,81 @@
+[% USE HTML %]
+
+<script type="text/javascript">
+    $(document).ready(function() {
+        $('.fancy_link').fancybox();
+    });
+</script>
+
+<fieldset>
+    <legend>[% "Listado de logos de etiquetas" | i18n %]:</legend>
+        [% IF logos %]
+            <div class="datos_tabla_div_user">
+                
+                    [% PERL %]
+                        print C4::AR::Filtros::tableHeader(   
+                                          id              => "logosTable",
+                                          class           => "",
+                                          selectAll_id    => "",
+                                          columns         => ['[% "Logo"|i18n %]','[% "Nombre"|i18n %]','[% "Acciones"|i18n %]',
+                                                             ]
+             
+                                                ) ;
+                    [% END %]
+
+                    <tbody>
+                        [% FOREACH logo IN logos %]
+                            <tr>
+                                <td class="logoImage">
+                                    <a class="fancy_link" href="https://[% SERVER_ADDRESS %]/private-uploads/logos/[% logo.getImagenPath %]">
+                                          <img border="0" src="https://[% SERVER_ADDRESS %]/private-uploads/logos/[% logo.getImagenPath %]" alt="[% logo.getNombre %]" >
+				                    </a>
+                                </td>
+                                <td>
+                                    [% logo.nombre %]
+                                </td>
+                                <td style="width:150px">
+                                
+                                    [% PERL %]
+                                        print C4::AR::Filtros::action_set_button(    
+                                              title   => " [% 'Eliminar' | i18n %]",
+                                              button  => 'btn btn-danger',
+                                              action  => "eliminarLogo([% logo.id %])", 
+                                              icon    => "icon-white icon-remove",
+                     
+                                                ) ;
+                                    [% END %]
+                            
+                                </td>
+                            </tr>
+                        [% END %]
+                    </tbody>
+                </table>
+            </div>
+        [% ELSE %]
+            <div class="alert alert-info">[% 'No hay logos que listar' | i18n %]</div>
+        [% END %]
+</fieldset>
+
+<div class="form-actions">	                
+	[% PERL %]
+        print C4::AR::Filtros::action_button(   
+            button   => "btn btn-primary",
+            action   => 'agregarPortada_show();',
+            title   => "[% 'Agregar Logo' | i18n %]",
+        ) ;
+	[% END %]
+</div>
+
+<div id="agregarLogoForm" class="modal hide fade" >
+    [% INCLUDE 'formAgregarLogo.inc' %]
+</div>
+
+
+<div class="alert alert-block">
+  <h4 class="alert-heading">Atención</h4>
+  <p>
+  Cargue fotos exactamente del mismo tamaño, de lo contrario, los logos va a sufrir cambios de tamaño, provocando molestia visual.
+  <br>
+  El tamaño óptimo para un logo correcto es de 2522x1822 px (manteniendo el aspecto).
+  </p>
+</div>

@@ -1,0 +1,29 @@
+DROP TABLE IF EXISTS `pref_tabla_referencia`;
+CREATE TABLE `pref_tabla_referencia` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `nombre_tabla` varchar(40) NOT NULL,
+  `alias_tabla` varchar(20) NOT NULL DEFAULT '0',
+  `campo_busqueda` varchar(255) NOT NULL DEFAULT 'jmmj',
+  `client_title` varchar(255) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `campo_busqueda` (`campo_busqueda`)
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=23 ;
+
+
+INSERT INTO `pref_tabla_referencia` (`id`, `nombre_tabla`, `alias_tabla`, `campo_busqueda`, `client_title`) VALUES
+(3, 'cat_autor', 'autor', 'completo', 'Autor'),
+(4, 'cat_ref_tipo_nivel3', 'tipo_ejemplar', 'nombre', 'Tipo de Documento'),
+(5, 'pref_unidad_informacion', 'ui', 'nombre', 'Unidad de Informacion'),
+(6, 'ref_idioma', 'idioma', 'description', 'Idioma'),
+(7, 'ref_pais', 'pais', 'nombre_largo', 'Pais'),
+(8, 'ref_disponibilidad', 'disponibilidad', 'nombre', 'Disponibilidad'),
+(9, 'circ_ref_tipo_prestamo', 'tipo_prestamo', 'descripcion', 'Tipos de Prestamo'),
+(10, 'ref_soporte', 'soporte', 'description', 'Soporte'),
+(11, 'ref_nivel_bibliografico', 'nivel_bibliografico', 'description', 'Nivel bibliografico'),
+(12, 'cat_tema', 'tema', 'nombre', 'Tema'),
+(13, 'usr_ref_categoria_socio', 'tipo_socio', 'description', 'Categorias de Socio'),
+(14, 'usr_ref_tipo_documento', 'tipo_documento_usr', 'nombre', 'Tipo de documentos de Socio'),
+(15, 'ref_estado', 'estado', 'nombre', 'Estado del ejemplar'),
+(16, 'ref_localidad', 'ciudad', 'NOMBRE', 'Localidad'),
+(17, 'cat_perfil_opac', 'perfiles_opac', 'nombre', 'Perfiles OPAC'),
+(22, 'cat_editorial', 'editorial', 'editorial', 'Editorial');

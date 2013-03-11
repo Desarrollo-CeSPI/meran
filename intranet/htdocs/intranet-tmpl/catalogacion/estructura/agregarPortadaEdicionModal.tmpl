@@ -1,0 +1,84 @@
+[% IF editing %]
+
+    <script>
+
+        $(document).ready(function() {      
+
+            $('.fancylink').fancybox();
+      
+        });
+
+</script>
+
+[% END %]
+
+<div class="modal-header">
+    <a class="close" data-dismiss="modal">×</a>
+    <h3>[% 'Agregar portada' | i18n %]</h3>
+</div>
+<div class="modal-body">
+    <form class="form-horizontal" id="formAddPortadaEdicion" method="post" action="[% url_prefix %]/catalogacion/addPortadaEdicion.pl" enctype="multipart/form-data">
+    <div class="control-group">
+        <label class="control-label" for="contenido">[% "Imagen/es" | i18n %]</label>
+        <div class="controls">
+            <span>[% " Agregar archivos..." | i18n %]</span><input name="imagenes" type="file" multiple>
+            <input type="hidden" name="id2" value="[% id2 %]" />
+            <input type="hidden" name="id1" value="[% id1 %]" />
+            <input type="hidden" name="token" value="[% token %]" />
+        </div>
+        
+        <div id="imagesList"></div>
+        
+    </div>                         
+
+[% IF portadasEdicion %]
+            
+    <div class="control-group">
+        <label class="control-label" >[% "Imagen/es a eliminar" | i18n %]</label>
+        <div class="controls">
+            [% FOREACH p IN portadasEdicion %]
+                <div class="portadaEdicionImage">
+                    <a class="fancylink" id="imagen_[% imagen.getImageName %]" rel="group" href="https://[% SERVER_ADDRESS %]/uploads/covers-added/[% p.getImageName %]">
+                        <img border="0" src="https://[% SERVER_ADDRESS %]/uploads/covers-added/[% p.getImageName %]" style="width: 60%; max-width: 120px;" >
+                    </a>
+                    <input type="checkbox" name="eliminar_imagen_[% p.getId %]"  id="[% p.getImageName %]" />
+                </div>
+            [% END %]
+
+        </div>
+        <div id="listImagesDelete"></div>
+    </div>
+    
+[% END %]
+
+</div>
+
+<div class="modal-footer">
+    [% IF editing %]
+        
+        [% PERL %]
+              print C4::AR::Filtros::action_button( 
+                                                button      => "btn btn-primary",
+                                                action      => "checkEliminarPortadasNivel2()", 
+                                                title       => "[% 'Guardar' | i18n %]",
+                                              ) ;
+
+
+        [% END %]
+        
+    [% ELSE %]
+
+        [% PERL %]
+              print C4::AR::Filtros::action_button( 
+                                                button      => "btn btn-primary",
+                                                action      => "guardarFormPortadaEdicion()", 
+                                                title       => "[% 'Guardar' | i18n %]",
+                                              ) ;
+
+
+        [% END %]
+        
+    [% END %]
+    
+</div>
+</form>

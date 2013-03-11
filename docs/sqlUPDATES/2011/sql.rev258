@@ -1,0 +1,5 @@
+ALTER TABLE  `circ_prestamo` ADD UNIQUE (
+`id3` ,
+`nro_socio`
+);
+

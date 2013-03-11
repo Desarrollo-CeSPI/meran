@@ -1,0 +1,83 @@
+[% USE HTML %]
+
+[% IF cant %]
+        <div class="well">
+		  [% "Cantidad de registros en el historial de sanciones" | i18n %]: <strong>[% cant %]</strong></div> 
+        
+		<div class="contenedor_paginador">[% paginador %]</div>
+
+           [% PERL %]
+                                print C4::AR::Filtros::tableHeader(   
+                                            id              => "tablaHistorialSanciones",
+                                            class           => "",
+                                            selectAll_id    => "",
+                                            columns         => ['[% "Operaci&oacute;n" | i18n %]','[% "Responsable"|i18n %]','[% "Fecha Inicial" | i18n %]',
+                                                                '[% "Fecha Final" | i18n %]','[% "Tipo de Sanci&oacute;n" | i18n %]',
+                                                                '[% "Dias Sancion" | i18n %]','[% "Autor" %]','[% "T&iacute;tulo"|i18n %]','[% "Edicion/A&ntildeo" | i18n %]'
+                                                              ]
+                                                                            
+                                                  ) ;
+           [% END %]
+
+            <tbody>
+            [% FOREACH historial_sancion IN HISTORIAL_SANCIONES %]
+            <tr>
+                    [% IF historial_sancion.getTipo_operacion == "Borrado"  %]
+                        <td style="color:red;">
+                        [% 'Borrado el' | i18n %] [% historial_sancion.getTimestamp %]
+                    [% ELSE %]
+		                <td>
+		                --
+		            [% END %]
+                </td>
+                <td>
+                    [% IF historial_sancion.responsable == "Sistema" %]
+                        [% 'Sistema' | i18n %]
+                    [% ELSE %]
+                        [% historial_sancion.usr_responsable.persona.getApeYNom %]
+                    [% END %]
+                </td>
+                <td>
+                    [% historial_sancion.getFecha_comienzo_formateada %]
+                </td>
+                <td>
+                    [% historial_sancion.getFecha_final_formateada %]
+                </td>
+                <td>
+                  
+                    [% IF historial_sancion.getTipo_sancion %]
+                            [% historial_sancion.ref_tipo_sancion.ref_tipo_prestamo.getDescripcion %]
+                    [% ELSE %]
+                            Reserva no retirada
+                    [% END %]
+                </td>
+                </td>
+  
+                <td>
+                   [% historial_sancion.dias_sancion %]
+                </td>
+                <td>
+                   <a class="click" onClick="buscarPorAutor('[%  historial_sancion.nivel3.nivel1.getAutor %]')" title="[% 'Filtrar por Autor' | i18n %]">
+                    [%  historial_sancion.nivel3.nivel1.getAutor %]
+                    </a>
+                </td>
+                <td>
+                   [% PERL %]
+						    print C4::AR::Filtros::link_to(	text => 	"[% HTML.escape(historial_sancion.nivel3.nivel1.getTitulo) %]",
+		                                                    url => 		"[% url_prefix %]/catalogacion/estructura/detalle.pl",
+														    params =>	[	"id1=[% HTML.escape(historial_sancion.nivel3.nivel1.getId1) %]"], 
+													    ) ;
+				    [% END %]
+                </td>
+                <td>
+                   [% historial_sancion.nivel3.nivel2.getEdicion %] [% historial_sancion.nivel3.nivel2.getAnio_publicacion %]
+                </td>
+              </tr>
+            [% END %] 
+          
+		
+		</table>
+[% ELSE %]
+    </div>
+    <div class="alert alert-success"><i class="icon-ok"></i> [% "No existen registros en el hisotrial de sanciones" | i18n %]</div>
+[% END %] 

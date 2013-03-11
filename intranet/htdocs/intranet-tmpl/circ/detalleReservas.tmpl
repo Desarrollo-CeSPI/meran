@@ -1,0 +1,160 @@
+[% USE HTML %]
+<fieldset class="resultado_reservas">
+<legend class="titulo_legend_resaltado"><strong>[% 'Detalle de reservas asignadas' | i18n %]</strong></legend>
+[% IF reservas_asignadas_count %]
+<div class="resultados_consulta">[% 'El usuario tiene' | i18n %] [% reservas_asignadas_count %] 
+                                 [% 'ejemplar(es) reservado(s) esperando para ser retirado(s)' | i18n %]
+</div>
+
+<div class="titulo_tabla">[% "Ejemplares Asignados" | i18n %]</div>
+
+<table class="tablaReservas datos_tabla" border="0" cellspacing="0" cellpadding="0" width="100%" align="center">
+
+	<tr class="titulo_tabla_resultado">
+		<td>
+			<input type="image" id="checkAllReservas" src="[% temas %]/[% tema %]/imagenes/iconos/check.png" title="[% 'Seleccionar todos' | i18n %]">
+		</td>
+		<td>[% 'T&iacute;tulo' | i18n %]</td>
+		<td>[% 'Autor' | i18n %]</td>
+		<td>[% 'Edici&oacute;n' | i18n %]</td>
+		<td>[% 'Reservado desde' | i18n %]</td>
+		<td>[% 'Reservado hasta' | i18n %]</td>
+        <td>&nbsp;</td>
+	</tr>
+<!-- ESTE LOOP MUESTRA LOS EJEMPLARES RESERVADOS DEL USUARIO-->
+    [% FOREACH reserva IN RESERVAS_ASIGNADAS %]
+	<tr align="center">
+		<td>
+			<input type="checkbox"  name="chkboxReservas" value="[%  reserva.getId3 %]" id="[% reserva.getId3 %]">
+		</td>
+            <td width="16%">
+			[% PERL %]
+				print C4::AR::Filtros::link_to(	text => 	"[% HTML.escape(reserva.nivel2.nivel1.getTitulo) %]",
+												url => 		"[% url_prefix %]/catalogacion/estructura/detalle.pl", 
+												params =>	["id1=[% reserva.nivel2.nivel1.getId1 %]"],
+												title =>	"[% 'Mostrar Detalle del Ejemplar' | i18n %]"
+											) ;
+			[% END %]
+            </td>
+            <td>
+                [% IF reserva.nivel3.nivel1.getAutor %]
+                    [% reserva.nivel3.nivel1.cat_autor.getCompleto %]
+                [% ELSE %]
+                    &nbsp;
+                [% END %]
+            </td>
+		<td>
+        [% IF reserva.nivel3.nivel2.getEdicion %] [% reserva.nivel3.nivel2.getEdicion %] [% ELSE %] - [% END %]
+		</td>
+		<td>
+            [% IF reserva.getFecha_notificacion_formateada %]
+            [% reserva.getFecha_notificacion_formateada %] 
+            [% ELSE %]
+               - 
+            [% END %]
+		</td>
+		<td>
+            [% IF reserva.getFecha_recordatorio_formateada %]
+            <font  [% IF reserva.estaVencida %] color="red" [% END %] >[% reserva.getFecha_recordatorio_formateada %]</font>
+            [% ELSE %]
+               - 
+            [% END %]
+		</td>
+		<td align="middle"> 
+
+            [% PERL %]
+                                print C4::AR::Filtros::to_Icon(     text    => "[% 'Cancelar' | i18n %]",
+                                                                    boton   => "icon_cancelar",
+                                                                    onClick => "cancelarReserva('[% reserva.getId_reserva %]');",
+                                                                    title   => "[% 'Cancelar' | i18n %]",
+                                                                    alternClass => "botonCentradoTabla"
+                                        ) ;
+            [% END %]
+
+		</td>
+
+	</tr>
+    [% END %] 
+</table>
+
+        [% PERL %]
+            print C4::AR::Filtros::to_Icon(   text    => "[% 'Realizar pr&eacute;stamo' | i18n %]",
+                                                boton   => "icon_prestar",
+                                                onClick => "realizarAccion('CONFIRMAR_PRESTAMO','chkboxReservas',generaDivPrestamo);",
+                                                title   => "[% 'Realizar pr&eacute;stamo' | i18n %]",
+                                                alternClass => "botonCentradoTabla"
+                    ) ;
+        [% END %]
+
+[% ELSE %]
+
+    <div class="resultados_consulta">[% 'El usuario no tiene ejemplar(es) reservado(s) esperando para ser retirado(s).' | i18n %] </div>
+
+[% END %]
+
+</fieldset>
+<fieldset class="resultado_reservas">
+<legend class="titulo_legend_resaltado"><strong>[% 'Detalle de reservas en espera' | i18n %]</strong></legend>
+[% IF reservas_espera_count %]
+
+
+<div class="resultados_consulta">[% 'El usuario tiene' | i18n %] [% reservas_espera_count %] [% 'reserva(s) en espera' | i18n %]</div>
+
+
+<table border="0" cellspacing="0" cellpadding="0" width="100%" align="center" class="tablaReservas datos_tabla">
+	<tr class="titulo_tabla_resultado">
+
+		<td>[% 'T&iacute;tulo' | i18n %]</td>
+		<td>[% 'Autor' | i18n %]</td>
+		<td>[% 'Edici&oacute;n' | i18n %]</td>
+		<td>&nbsp;</td>
+		<td>&nbsp;</td>
+
+	</tr>
+	<!-- ESTE LOOP MUESTRA LAS RESERVAS EN ESPERA -->
+    [% FOREACH reserva IN RESERVAS_ESPERA %]
+		<tr valign="top"><!--
+			<td width="1%">&nbsp;</td>-->
+			<td>
+			[% PERL %]
+				print C4::AR::Filtros::link_to(	text => 	"[% HTML.escape(reserva.nivel2.nivel1.getTitulo) %]",
+												url => 		"[% url_prefix %]/catalogacion/estructura/detalle.pl", 
+												params =>	["id1=[% reserva.nivel2.nivel1.getId1 %]"],
+												title =>	"[% 'Mostrar Detalle del Ejemplar' | i18n %]"
+											) ;
+			[% END %]
+			</td>
+			<td>
+                [% IF reserva.nivel3.nivel1.getAutor %]
+                    [% reserva.nivel3.nivel1.cat_autor.getCompleto %]
+                [% ELSE %]
+                    &nbsp;
+                [% END %]
+			</td>
+			<td>
+            [% IF reserva.nivel3.nivel2.getEdicion %] [% reserva.nivel3.nivel2.getEdicion %] [% ELSE %] - [% END %]
+			</td>
+			<td>
+
+            [% PERL %]
+                                print C4::AR::Filtros::to_Icon(   text    => "[% 'Cancelar' | i18n %]",
+                                                                    boton   => "icon_cancelar",
+                                                                    onClick => "cancelarReserva('[% reserva.getId_reserva %]');",
+                                                                    title   => "[% 'Cancelar' | i18n %]",
+                                                                    alternClass => "botonCentradoTabla"
+                                        ) ;
+            [% END %]
+            
+			</td>
+			<td width="1%">&nbsp;</td>
+<!-- 			<td width="1%">&nbsp;</td> -->
+		</tr>
+	[% END %]
+</table>
+
+[% ELSE %]
+<div class="resultados_consulta">[% "El usuario no tiene reserva(s) en espera"| i18n %]</div>
+
+
+[% END %]
+</fieldset>

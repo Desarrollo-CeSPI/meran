@@ -1,0 +1,84 @@
+INSERT INTO  `pref_estructura_campo_marc` (
+`campo` ,
+`liblibrarian` ,
+`libopac` ,
+`repeatable` ,
+`mandatory` ,
+`descripcion` ,
+`indicador_primario` ,
+`indicador_secundario` ,
+`nivel`
+)
+VALUES (
+'859',  'No se que es',  'No se que es',  '0',  '0', NULL , NULL , NULL ,  '2'
+);
+
+
+
+
+
+INSERT INTO `pref_estructura_subcampo_marc` (
+`nivel` ,
+`obligatorio` ,
+`campo` ,
+`subcampo` ,
+`liblibrarian` ,
+`libopac` ,
+`descripcion` ,
+`repetible` ,
+`mandatory` ,
+`kohafield`
+)
+VALUES (
+'2',  '0',  '859',  'd',  'No se que es',  'No se que es',  'No se que es',  '0',  '0', NULL
+);
+
+
+INSERT INTO  `pref_estructura_subcampo_marc` (
+`nivel` ,
+`obligatorio` ,
+`campo` ,
+`subcampo` ,
+`liblibrarian` ,
+`libopac` ,
+`descripcion` ,
+`repetible` ,
+`mandatory` ,
+`kohafield`
+)
+VALUES (
+'2',  '0',  '859',  'e',  'No se que es',  'No se que es',  'No se que es',  '0',  '0', NULL
+);
+
+INSERT INTO  `pref_estructura_subcampo_marc` (
+`nivel` ,
+`obligatorio` ,
+`campo` ,
+`subcampo` ,
+`liblibrarian` ,
+`libopac` ,
+`descripcion` ,
+`repetible` ,
+`mandatory` ,
+`kohafield`
+)
+VALUES (
+'2',  '0',  '859',  'o',  'No se que es',  'No se que es',  'No se que es',  '0',  '0', NULL
+);
+
+INSERT INTO  `pref_estructura_subcampo_marc` (
+`nivel` ,
+`obligatorio` ,
+`campo` ,
+`subcampo` ,
+`liblibrarian` ,
+`libopac` ,
+`descripcion` ,
+`repetible` ,
+`mandatory` ,
+`kohafield`
+)
+VALUES (
+'2',  '0',  '859',  's',  'No se que es',  'No se que es',  'No se que es',  '0',  '0', NULL
+);
+

@@ -1,0 +1,3 @@
+UPDATE  `ref_disponibilidad` SET  `codigo` =  'CIRC0000' WHERE  `ref_disponibilidad`.`id` =0;
+
+UPDATE  `ref_disponibilidad` SET  `codigo` =  'CIRC0001' WHERE  `ref_disponibilidad`.`id` =1;

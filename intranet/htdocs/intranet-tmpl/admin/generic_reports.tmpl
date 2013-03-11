@@ -1,0 +1,226 @@
+[% intranet-top.inc %]
+ <script type="text/javascript">
+  
+	function table_selected(op){
+	   document.tabla.op.value=op;
+	   document.tabla.submit();
+	 	}
+
+	
+	function table_deleted(table,field){
+	   document.tabla.op.value='DELETE';
+	   document.getElementById('table').value=table;
+	   document.getElementById('field').value=field;
+	   document.tabla.submit();
+	 	}
+
+	function tablejoin_selected(op){
+	   document.join.op.value=op;
+	   document.join.submit();
+	   }
+
+	function join_deleted(table1,field1,table2,field2){
+	   document.join.op.value='DELETEJOIN';
+	   document.getElementById('tabla1').value=table1;
+	   document.getElementById('campo1').value=field1;
+	   document.getElementById('tabla2').value=table2;
+	   document.getElementById('campo2').value=field2;
+	   document.join.submit();
+	 	}
+
+</script>			 
+
+<div class="titulo">Reportes Gen&eacute;ricos</div>
+
+<table width="100%"  border="0" cellpadding="0" cellspacing="0" >
+ <tr>
+ <td width="50%" >
+ <h2 align='center' valign='top'>Campos involucrados</h2>
+ </td>
+ <td width="50%" >
+ <h2 align='center' valign='top'>Relaciones</h2>
+ </td>
+ </tr>
+</table>
+
+<table width="100%"  border="0" cellpadding="0" cellspacing="0" >
+ <tr><td width="50%" valign="top">
+
+  [% IF msg %]
+           [% msg %]
+  [% END %]
+
+
+<table align='center'>
+	<tr>
+	<td align='left'>Tablas</td>
+    	[% fieldnames %]
+		<td align='left'>Campos</td>
+	[% END %]
+	</tr>
+	<tr>
+	<form  method="post" name="tabla" action='generic_reports.pl'>
+	<input type="hidden" name="op" id="op">
+	<input type="hidden" name="table" id="table">
+	<input type="hidden" name="field" id="field">
+		<td>
+			[% tablenames %] 
+		</td>
+
+    		[% IF fieldnames %]
+		<td>
+	 [% fieldnames %] 
+		</td>
+		</tr>	
+		<tr>
+		<td colspan="2" align='left'>Nombre</td>
+		</tr>
+		<tr>
+		<td>
+		<input type="text" name="nombre" id="nombre">
+		</td>   
+		<td>
+<input type="image" alt="Agregar" src="[% interface %]/[% theme %]/images/agregar.png" onclick="table_selected('ADD')">
+		</td>
+		[% END %]
+	</tr>	
+	</form>
+</table>
+
+[% IF TABLES %]
+	<br><br><br>
+	<table border=0 cellspacing=0 cellpadding=0  width="90%" align='center'>
+		<tr class="titulo_tabla_resultado">
+
+			<td>Tabla</td>
+			<td>Campo</td>
+			<td>Nombre</td>
+
+		</tr>
+	[% FOREACH TABLES %]
+		<tr valign=middle>
+			
+			<td class="[% clase %]" class="inputFontNormal" align="center">
+				[% tabla %]
+			</td>
+			
+			<td  class="[% clase %]" class="inputFontNormal"  align="center">
+				[% campo %]
+			</td>
+			
+			<td  class="[% clase %]" class="inputFontNormal"  align="center">
+				[% nombre %]
+			</td>
+			<td height=25 class="[% clase %]">
+	
+		<a class="inputFontNormal" href="#" onclick="table_deleted('[% tabla %]','[% campo %]')"><img src="[% interface %]/[% theme %]/images/borrar.png" ALT="Eliminar" hspace=0 vspace=0 border=0></a>
+		
+			</td>
+		</tr>
+	[% END %]
+		<tr valign=bottom>
+			<td class="lineafinaltabla"  align="left" colspan="7"></td>
+		</tr>
+	</table>
+[% END %]
+
+</td>
+<td width="50%" valign="top" >
+
+<table align="center" valign="top">
+	<tr>
+	<td align='left'>Tablas</td>
+    	[% IF fields1 %]
+		<td align='left'>Campos</td>
+	[% END %]
+	</tr>
+
+	<form  method="post" name="join" action='generic_reports.pl'>
+	<tr>
+	<input type="hidden" name="op" id="op">
+	<input type="hidden" name="tabla1" id="tabla1">
+	<input type="hidden" name="campo1" id="campo1">
+	<input type="hidden" name="tabla2" id="tabla2">
+	<input type="hidden" name="campo2" id="campo2">
+
+		<td>[% tables1 %]</td>
+
+    		[% IF fields1 %]
+			<td>[% fields1 %]</td>
+			<td>&nbsp;</td>
+		[% END %]
+	</tr>  
+
+	[% IF fields1 %]
+	<tr>		
+		<td>[% tables2 %]</td>
+
+    		[% IF fields2 %]
+			<td>[% fields2 %]</td>
+			<td>
+			&nbsp;
+			</td>
+		[% END %]
+	</tr>
+	<tr>
+	<td>Tipo: [% jointype %] </td>
+	<td colspan="2">
+	<input type="image" alt="Agregar" src="[% interface %]/[% theme %]/images/agregar.png" onclick="tablejoin_selected('ADDJOIN')">
+	</td>
+	</tr>
+	[% END %]
+	</form>
+</table>
+
+[% IF JOINS %]
+<br>
+<table border=0 cellspacing=0 cellpadding=0  width="90%" align='center'>
+	<tr class="titulo_tabla_resultado">
+
+		<td>Tabla</td>
+		<td>Campo</td>
+		<td>Tabla</td>
+		<td>Campo</td>
+		<td>Tipo</td>
+
+	</tr>
+[% FOREACH JOINS %]
+	<tr valign=middle>
+		
+		<td class="[% clase %]" class="inputFontNormal" align="center">
+			[% table1 %]
+		</td>
+		
+		<td  class="[% clase %]" class="inputFontNormal" align="center">
+			[% field1 %]
+		</td>
+		
+		<td class="[% clase %]" class="inputFontNormal" align="center">
+			[% table2 %]
+		</td>
+		
+		<td  class="[% clase %]" class="inputFontNormal" align="center">
+			[% field2 %]
+		</td>
+		
+		<td  class="[% clase %]" class="inputFontNormal" align="center">
+			[% unionjoin %]
+		</td>
+		<td height=25 class="[% clase %]">
+
+	<a class="inputFontNormal" href="#" onclick="join_deleted('[% table1 %]','[% field1 %]', '[% table2 %]','[% field2 %]' )"><img src="[% interface %]/[% themelang %]/images/borrar.png" ALT="Eliminar" hspace=0 vspace=0 border=0></a>
+	
+		</td>
+	</tr>
+[% END %]
+ 	<tr valign=bottom>
+        	<td class="lineafinaltabla"  align="left" colspan="7"></td>
+        </tr>
+</table>
+[% END %]
+
+ </td></tr>
+ </table>
+
+<br>
+[% INCLUDE "intranet-bottom.inc" %]

@@ -1,0 +1,22 @@
+
+[% IF socio.tieneAutorizado %]   
+  <div class="well"> 
+   <fieldset>
+        <legend class="titulo_legend">[% "Informaci&oacute;n del usuario Adicional" | i18n %] </legend>
+        <ul class="unstyled">
+           
+            <li><strong>[% "Nombre y Apellido: " | i18n %]</strong>[% socio.getNombre_apellido_autorizado %]</li>
+       
+            <li><strong>[% "Documento: " | i18n %]</strong>[% socio.getDni_autorizado %]</li>
+        
+            <li><strong>[% "Tel&eacute;fono: " | i18n %]</strong>[% socio.getTelefono_autorizado %]</li><br>
+
+            <li><label class="checkbox"><input  type="checkbox" id="auth_selected" name="auth_selected" value="autorizado">
+                                        <span class="label label-important">[% 'Realizar pr&eacute;stamo a este usuario' %]</span>
+                </label>
+            </li>
+      </ul>
+
+    </fieldset>
+</div>
+[% END %]

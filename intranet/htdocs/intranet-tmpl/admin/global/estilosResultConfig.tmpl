@@ -1,0 +1,42 @@
+<fieldset class="resultados_busqueda">
+    <legend class="titulo_legend">[% "Preferencias de Estilos" | i18n %]</legend>
+    <div class="tablaResultado_preferencias" id="tablaResultado_preferencias" >
+    
+        [% PERL %]
+            print C4::AR::Filtros::tableHeader(   
+                              id              => "estilosTable",
+                              class           => "",
+                              selectAll_id    => "",
+                              columns         => ['[% "Variable"|i18n %]','[% "Valor"|i18n %]',
+                                                '[% "Explicaci&oacute;n"|i18n %]', '[% "Editar"|i18n %]',
+                                                 ]                 
+                                    ) ;
+        [% END %]
+
+        <tbody>
+        [% FOREACH preferencia IN preferencias %]
+            <tr>
+                <td >[% preferencia.getVariable %]</td>
+                <td >[% preferencia.getShowValue %]</td>
+                <td >[% preferencia.getExplanation %]</td>
+                <td>
+                    
+                     [% PERL %]
+                        print C4::AR::Filtros::action_button( 
+                                                      button    => "btn btn-primary click",
+                                                      action    => 'modificarVariable("[% preferencia.getVariable %]","[% preferencia.getCategoria %]");', 
+                                                      icon      => "icon-pencil icon-white",
+                                                      title     => "",
+                                                  ) ;
+                    [% END %]
+                </td>
+            
+            </tr>
+        [% END %]
+        
+            </tbody>
+        </table>
+    </div>
+</fieldset>
+
+<div id="divResultado" style="clear: both;"></div>

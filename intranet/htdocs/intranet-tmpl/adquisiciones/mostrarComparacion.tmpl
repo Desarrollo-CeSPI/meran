@@ -1,0 +1,131 @@
+
+                   
+    [% FOREACH pres IN presupuestos %]     
+                <fieldset>   
+                    <li>Renglon: [% pres.renglon %]</li>
+                    <li>Autor: [%  pres.autor %]</li>
+                    <li>Titulo: [% pres.titulo %]</li>
+      
+                </fieldset> 
+                <table "class="datos_tabla">
+                      <thead>
+                            <tr class="titulo_tabla_resultado">
+                                    <th>
+                                        [% "Proveedor" | i18n %]
+                                    </th>
+                                    <th>
+                                        [% "Precio Unitario" | i18n %]
+                                    </th>
+                                    <th>
+                                        [% "Cantidad" | i18n %]
+                                    </th>
+                                    <th>
+                                        [% "Total" | i18n %]
+                                    </th>           
+                              </tr>
+                      </thead>
+                      <tbody>
+                            [% i = 1 %]
+                            [% FOREACH p IN pres.presup_renglon %]
+                                <tr  align="center"
+                                          [% IF i % 2 == 0 %] 
+                                              [% "class='par'" %]
+                                          [% ELSE %]
+                                              [% "class='impar'" %]
+                                              >
+                                          [% END %]
+                                    <td align="center" class="proveedores"> [% p.proveedor %] </td>
+                                    [% IF p.precio_unitario == 0 %]     
+                                          <td>No cotiza</td>
+                                          <td>0</td>
+                                          <td>0</td>  
+                                    
+                                    [% ELSE %]
+                                    
+                                          <td align="center" class="pres"> [% p.precio_unitario %] </td>
+                                          <td align="center" class="pres"> [% p.cant%] </td>
+                                          <td align="center" class="pres"> [% p.total %]  </td>
+                                    
+                                    [% END %] 
+                                </tr>
+                                  [% i = i + 1 %] 
+                              [% END %]
+                                            
+                      </tbody>
+                  </table>
+          
+                
+      [% END %]
+
+      <fieldset>   
+                  <legend class="titulos">    [% "Mejor Presupuesto" | i18n %] </legend>
+                        <form id="formOrdenCompra" action="exportaciones.pl" method="post"> 
+                            <table id="mejor_pres">  
+                              <thead>
+                                  <tr class="titulo_tabla_resultado">
+                                            <th>
+                                                [% "Renglon" | i18n %]
+                                            </th>
+                                            <th>
+                                                [% "Proveedor" | i18n %]
+                                            </th>
+                                            <th>
+                                                [% "Datos Editoriales" | i18n %]
+                                            </th>
+                                            <th>
+                                                [% "Precio Unitario" | i18n %]
+                                            </th>
+                                            <th>
+                                                [% "Cantidad" | i18n %]
+                                            </th>
+                                            <th>
+                                                [% "Total" | i18n %]
+                                            </th>           
+                                    </tr>
+                              </thead> 
+                              <tbody>  
+                                
+                                        [% i = 0 %]                           
+                                        [% FOREACH renglon IN mejor_pres %]   
+                                              [% IF renglon.proveedor != "" %]
+                                                <tr>    
+                                                  <td><input type="text" name="renglon[% renglon.renglon %]" id="renglon[% renglon.renglon %]" value="[% renglon.renglon %]"></td>
+                                                  <td><input type="text" id="prov[% prov.renglon %]" value="[% renglon.proveedor %]"></td>
+                                                  <td><input type="text" name="datosEdit[% renglon.renglon %]" id="datosEdit[% renglon.renglon %]" value="[% renglon.titulo %] - [% renglon.autor %] - [% renglon.editorial %]"></td>
+                                                  <td><input type="text" name="precio[% renglon.renglon %]" id="precio[% renglon.renglon %]" value="[% renglon.precio%]"></td>
+                                                  <td><input type="text" name="cantidad[% renglon.renglon %]" id="cantidad[% renglon.renglon %]" value="[% renglon.cantidad %]"></td> 
+                                                  <td><input type="text" name="total[% renglon.renglon %]" id="total[% renglon.renglon %]" value="[% renglon.total %]"></td>
+                                                </tr>                          
+                                                [% END %]  
+                                            [% i = loop.index() %]                                          
+                                        [% END %]
+                                  <input type="hidden" name="cantidad" value="[% i + 1 %]" />                                                   
+                                  <input type="hidden" name="nombreProveedor" value="[% renglon.proveedor %]" />       
+                            </tbody>
+                      </table>
+                      </form> 
+                      <input id='exportHidden' type='hidden' name='exportXLS' value='xls' />
+                      [% PERL %]                               
+                                  print C4::AR::Filtros::to_Button( 
+                                                                  text    =>  "[% 'Exportar a XLS' | i18n %]",
+                                                                  boton   =>  "boton_buscar",
+                                                                  onClick =>  "exportarMejorPresupuesto();",
+                                  ) ;
+                                  
+                                  print C4::AR::Filtros::to_Button( 
+                                                                  text    =>  "[% 'Generar Orden de Compra' | i18n %]",
+                                                                  boton   =>  "boton_buscar",
+                                                                  onClick =>  "generateOrdenCompra('formOrdenCompra');",
+                                  ) ;
+                      [% END %]                  
+              </form>
+      </fieldset> 
+
+                                    
+
+
+
+
+
+
+                  

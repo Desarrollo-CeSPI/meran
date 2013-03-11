@@ -1,0 +1,1 @@
+ALTER TABLE `cat_rating` CHANGE `nro_socio` `nro_socio` VARCHAR( 32 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL;

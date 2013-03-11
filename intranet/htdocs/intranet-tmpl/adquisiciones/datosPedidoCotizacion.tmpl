@@ -1,0 +1,88 @@
+[% INCLUDE "intranet-top.inc" %]
+<script type="text/javascript"src="/intranet-tmpl/includes/adquisiciones/generatePedidoCotizacion.js"></script>
+<script type="text/javascript">
+    $(document).ready(function() {
+        $('#pedido_cotizacion').hide() 
+    });
+</script>
+<fieldset id="datos_pedido_cotizacion">
+<input type="hidden" value="[% pedido_cotizacion_id %]" id="pedido_cotizacion_id" />
+    <legend class="titulo_legend">[% "Pedido De Cotizaci&oacute;n" | i18n %]</legend>
+        <table id="tablaPedidoCotizacion" name="tabla" class="datos_tabla" border=0 cellspacing=0 cellpadding=0 >
+        <thead>
+            <tr class="titulo_tabla_resultado">
+                <th>
+                    [% "Autor" | i18n %]
+                </th>
+                <th>
+                    [% "Titulo" | i18n %]
+                </th>
+                <th>
+                    [% "Lugar Publicacion" | i18n %]
+                </th>
+                <th>
+                    [% "Editorial" | i18n %]
+                </th>
+                <th>
+                    [% "Fecha Publicacion" | i18n %]
+                </th>
+                <th>
+                    [% "Coleccion" | i18n %]
+                </th>
+                <th>
+                    [% "ISBN/ISSN" | i18n %]
+                </th>
+                <th>
+                    [% "Cantidad Ejemplares" | i18n %]
+                </th>
+
+            </tr>
+        </thead>
+        <tbody> 
+        [% i = 1 %]
+        [% FOREACH pedido IN pedido_cotizacion %]
+            <tr align="center" 
+            [% IF i % 2 == 0 %] 
+                [% "class='par'" %]
+            [% ELSE %]
+                [% "class='impar'" %]
+            [% END %]>
+                <td align="right" >
+                    <p>[% pedido.getAutor %]</p> 
+                <td align="right" >
+                    <p>[% pedido.getTitulo %]</p>  
+                </td>
+                <td align="right" >
+                    <p>[% pedido.getLugarPublicacion %]</p>  
+                </td>
+                <td align="right" >
+                    <p>[% pedido.getEditorial %]</p>  
+                </td>
+                <td align="right" >
+                    <p>[% pedido.getFechaPublicacion %]</p>  
+                </td>
+                <td align="right" >
+                    <p>[% pedido.getColeccion %]</p>  
+                </td>
+                <td align="right" >
+                    <p>[% pedido.getIsbnIssn %]</p>  
+                </td>
+                <td align="right" >
+                    <p>[% pedido.getCantidadEjemplares %]</p>  
+                </td>
+            </tr> 
+        [% i = i + 1 %]         
+        [% END %]
+        </tbody>   
+        </table>
+                    [% PERL %]
+            print C4::AR::Filtros::to_Button( 
+                                                text    =>  "[% 'Agregar Nuevo Pedido' | i18n %]",
+                                                boton   =>  "boton_buscar",
+                                                onClick =>  "getTemplateAddPedidoCotizacion()",
+                    ) ;                 
+        [% END %]
+</fieldset>
+<div id="pedido_cotizacion"></div>
+
+[% INCLUDE "intranet-bottom.inc" %]

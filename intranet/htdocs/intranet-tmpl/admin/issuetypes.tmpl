@@ -1,0 +1,338 @@
+[% INCLUDE "intranet-top.inc" %]
+
+<script>
+
+function _(s) { return s } // dummy function for gettext
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+function isNotNull(f,noalert) {
+	if (f.value.length ==0) {
+		return false;
+	}
+	return true;
+}
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+function toUC(f) {
+	var x=f.value.toUpperCase();
+	f.value=x;
+	return true;
+}
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+function isNum(v,maybenull) {
+var n = new N&uacute;mero(v.value);
+if (isNaN(n)) {
+	return false;
+	}
+if (maybenull==0 && v.value=='') {
+	return false;
+}
+return true;
+}
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+function isDate(f) {
+	var t = Fecha.parse(f.value);
+	if (isNaN(t)) {
+		return false;
+	}
+}
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+function Check(f) {
+	var ok=1;
+	var _alertString="";
+	var alertString2;
+	if (f.itemtype.value.length==0) {
+		_alertString += "\n- " + _("Tipo de documento perdido");
+	}
+	if (!(isNotNull(window.document.Aform.description,1))) {
+		_alertString += "\n- " + _("Descripci&oacute;n perdida");
+	}
+	if ((!isNum(f.loanlength,0)) && f.loanlength.value.length > 0) {
+		_alertString += "\n- " + _("Duraci&oacute;n del pr&eacute;stamo no es un n&uacute;mero");
+	}
+	if ((!isNum(f.rentalcharge,0)) && f.rentalcharge.value.length > 0) {
+		_alertString += "\n- " + _("Costo de pr&eacute;stamo no es un n&uacute;mero");
+	}
+	if (_alertString.length==0) {
+		document.Aform.submit();
+	} else {
+		alertString2  = _("Problemas");
+		alertString2 += "\n------------------------------------------------------------------------------------\n";
+		alertString2 += _alertString;
+		jAlert(alertString2);
+	}
+}
+</SCRIPT>
+
+<!-- EL NOT DEL IF NO VA, ESTA AHORA SOLO PARA VER EL TEMPLATE COMPILADO -->
+[% IF !add_form %]     
+	[% IF itemtype %]
+            <div class="titulos">
+                [% "Modificar Tipo de Pr&eacute;stamo" | i18n %]
+            </div>
+	[% ELSE %]
+            <div class="titulos">
+                [% "Agregar Tipo de Pr&eacute;stamo" | i18n %]
+            </div>
+    [% END %]
+        <form action='[% script_name %]' name=Aform method=post>
+                <input type=hidden name=op value='add_validate'>
+                <input type=hidden name=checked value=0>
+                <table class="tablaresultado" width="95%">
+                [% IF issuetype %]
+                        <tr>
+                                <td>[% "Tipo de pr&eacute;stamo" | i18n %]</td>
+                                <td><input type=hidden name=issuetype value=[% issuetype %]>[% issuetype %]</td>
+                        </tr>
+                [% ELSE %]
+                        <tr>
+                                <td>[% "Tipo de pr&eacute;stamo" | i18n %]</td>
+                                <td><input type=text name=issuetype size=6 maxlength=4 onBlur="toUC(this)"></td>
+                        </tr>
+                [% END %]
+                <tr>
+                        <td>[% "Descripci&oacute;n" | i18n %]</td>
+                        <td><input  type=text name=description size=40 maxlength=80 value='[% HTML.escape(description) %]'>&nbsp;</td>
+                </tr>
+
+                <tr>
+                        <td>[% "Para Sala" | i18n %]</td>
+                        <td>
+                                [% IF notforloan %]
+                                    <input  type=checkbox name=notforloan checked value=1>
+                                [% ELSE %]
+                                    <input  type=checkbox name=notforloan value=1>
+                                [% END %]
+                        </td>
+                </tr>
+                <tr>
+                        <td>[% "Habilitado" | i18n %]</td>
+                        <td>
+                                [% IF enabled %]
+                                    <input  type=checkbox name=enabled checked value=1>
+                                [% ELSE %]
+                                  <input  type=checkbox name=enabled value=1>
+                                [% END %]
+                        </td>
+                </tr>
+                <tr>
+                        <td>
+                                [% "M&aacute;xima cantidad de pr&eacute;stamos" | i18n %]
+                        </td>
+                        <td>
+                                <input type=text  name=maxissues size=10 value='[% maxissues %]'>
+                        </td>
+                </tr>
+        
+                
+                <tr>
+                        <td>
+                                [% "D&iacute;as de duraci&oacute;n del pr&eacute;stamo" | i18n %]
+                        </td>
+                        <td>
+                                <input  type=text name=daysissues size=40 maxlength=80 value='[% HTML.escape(daysissues) %]'>&nbsp;
+                        </td>
+                </tr>
+
+                <tr>
+                        <td>
+                                [% "Renovaciones" | i18n %]
+                        </td>
+                        <td>
+                                <input  type=text name=renew size=40 maxlength=80 value='[% HTML.escape(renew) %]'>&nbsp;
+                        </td>
+                </tr>
+
+                <tr>
+                        <td>
+                                [% "D&iacute;as de Renovaci&oacute;n" | i18n %]
+                        </td>
+                        <td>
+                                <input type=text name=renewdays size=40 maxlength=80 value='[% HTML.escape(renewdays) %]'>&nbsp;
+                        </td>
+                </tr>
+
+                <tr>
+                        <td>
+                                [% "Cuantos d&iacute;as antes se puede renovar" | i18n %]
+                        </td>
+                        <td>
+                                <input  type=text name=dayscanrenew size=40 maxlength=80 value='[% HTML.escape(dayscanrenew) %]'>&nbsp;
+                        </td>
+                </tr>
+
+                <tr>
+                        <td>&nbsp;</td>
+                        <td>
+                                <input type="image" alt="Guardar Cambios"  src="[% interface %]/[% themelang %]/images/guardar.png" onclick="Aform.submit">
+
+                        </td>
+                </tr>
+                </table>
+             </form>
+        [% END %]
+
+[% IF delete_confirm %]
+            <TABLE width="90%">
+                    <tr>
+                            <td>[% "Tipo de pr&eacute;stamo" | i18n %]</td>
+                            <td>[% issuetype %]</td>
+                    </tr>
+            <form action='[% script_name %]' method=post>
+                            <input type=hidden name=op value=delete_confirmed><input type=hidden name=issuetype value='[% issuetype %]'>
+                    <tr>
+                            <td>[% "Descripci&oacute;n" | i18n %]</td>
+                            <td>[% description %]</td>
+                    </tr>
+                    <tr>
+                            <td>[% "M&aacute;xima cantidad de pr&eacute;stamos" | i18n %]</td>
+                            <td>[% maxissues %]</td>
+                    </tr>
+                    <tr>
+                            <td>[% "D&iacute;as de duraci&oacute;n del pr&eacute;stamo" | i18n %]</td>
+                            <td>[% daysissues %]</td>
+                    </tr>
+                    <tr>
+                            <td>[% "Renovaciones" | i18n %]</td>
+                            <td>[% renew %]</td>
+                    </tr>
+                    <tr>
+                            <td>[% "D&iacute;as de Renovaci&oacute;n" | i18n %]</td>
+                            <td>[% renewdays %]</td>
+                    </tr>
+                    <tr>
+                            <td>[% "Cuantos d&iacute;as antes se puede renovar" | i18n %]</td>
+                            <td>[% dayscanrenew %]</td>
+                    </tr>
+            
+            [% IF total %]
+            
+                    <tr>
+                            <td colspan=2 align=center><b>[% "El registro esta en siendo utilizado" | i18n %] [% total %] [% "veces. No se puede borrar." | i18n %]</b></td>
+                    </tr>
+                    </form>
+                    <tr>
+                        <td colspan=2>
+                            <form action='[% script_name %]' method=post>
+                                    <input type=submit value=OK>
+                            </form>
+                        </td>
+                    </tr>
+            
+            [% ELSE %]
+            
+                    <tr>
+                            <td colspan=2  align=center>[% "CONFIRME BORRADO" | i18n %]</td>
+                    </tr>
+                    <tr class="inputFormNormal" >
+                            <td>
+                                    <INPUT  type=submit value='SI'>
+                            </td>
+                            </form>
+                            <td>
+                                <form action='[% script_name %]' method=post>
+                                    <input type=submit value=NO>
+                                </form>
+                            </td>
+                    </tr>
+            [% END %]
+            
+            </table>
+[% END %]
+
+[% IF else %]
+            <div class="titulos">
+                [% "Administraci&oacute;n de Tipos de Pr&eacute;stamo" | i18n %]
+            </div>
+            
+            <table border='0' cellpadding='0' cellspacing='0' width='100%'>
+                    <tr class="titulo_tabla_resultado">
+
+                            <td>[% "C&oacute;digo" | i18n %]</td>
+                            <td>[% "Descripci&oacute;n" | i18n %]</td>
+                            <td>[% "M&aacute;xima cantidad de pr&eacute;stamos" | i18n %]</td>
+                            <td>[% "D&iacute;as de duraci&oacute;n del pr&eacute;stamo" | i18n %]</td>
+                            <td>[% "Renovaciones" | i18n %]</td>
+                            <td>[% "D&iacute;as de Renovaci&oacute;n" | i18n %]</td>
+                            <td>[% "Cantidad de d&iacute;as para renovar" | i18n %]</td>
+                            <td>[% "Para Sala" | i18n %]</td>
+                            <td>[% "Habilitado" | i18n %]</td>
+                            <td width="8%">[% "Editar" | i18n %]</td>
+                            <td>[% "Eliminar" | i18n %]</td>
+
+                    </tr>
+            [% FOREACH loop %]
+                    <tr align="middle">    
+        
+                            <td class="[% clase %]">
+                                    [% issuetype %]
+                            </td>
+                            <td class="[% clase %]">
+                                    [% description %]
+                            </td>
+                            <td class="[% clase %]" align="center">
+                                    [% maxissues %]
+                            </td>
+                            <td class="[% clase %]" align="center">
+                                    [% daysissues %]
+                            </td>
+                            <td class="[% clase %]" align="center">
+                                    [% renew %]
+                            </td>
+                            <td class="[% clase %]" align="center">
+                                    [% renewdays %]
+                            </td>
+                            <td class="[% clase %]" align="center">
+                                    [% dayscanrenew %]
+                            </td>
+                            <td class="[% clase %]" align="center">
+                                    [% IF notforloan %]
+                                            [% "Si" | i18n %]
+                                    [% ELSE %]
+                                            [% "No" | i18n %]
+                                    [% END %]
+                            </td>
+                            <td class='[% clase %]' align="center">
+                                    [% IF enabled %]
+                                            [% "Si" | i18n %]
+                                    [% ELSE %]
+                                            [% "No" | i18n %]
+                                    [% END %]
+                            </td>
+                            <td class="[% clase %]" align="center">
+                                    <a  href="[% script_name %]?op=add_form&issuetype=[% HTML.escape(issuetype) %]"><img src="[% interface %]/[% themelang %]/images/editar.png" hspace=0 vspace=0 border=0 ALT="Editar"></a>
+                            </td>
+                            <td class="[% clase %]" align="center">
+                                    <a  href="[% script_name %]?op=delete_confirm&issuetype=[% HTML.escape(issuetype) %]"><img src="[% interface %]/[% themelang %]/images/borrar.png" hspace=0 vspace=0 border=0 ALT="Eliminar"></a>
+                            </td>
+                            
+                    </tr>
+            [% END %]
+                    <tr valign=bottom>
+                            <td class="lineafinaltabla"  align="left" colspan="9"></td>
+                    </tr>
+            </table>
+            
+            <form action='[% script_name %]' method=post name=formDoc>
+            <input type=hidden name=op value=add_form>
+            <br>
+            <center>
+            <table width=40%>
+                    <tr>
+                            <td width="60%" align="right">
+                                    <input type="image" alt="Agregar Tipo de Pr&eacute;stamo"  src="[% interface %]/[% themelang %]/images/agregar.png" onclick="formDoc.submit">
+                            </td>
+                            <td width=10%>
+                                    [% IF previous %]
+                                            <a  href="[% previous %]"><input type=image src="[% interface %]/[% themelang %]/images/1leftarrow.png" title="previous" ALT="previous" BORDER=0></a>
+                                    [% END %]
+                            </td>
+                            <td width=10%>
+                                    [% IF next %]
+                                            <a href="[% next %]"><input type=image src="[% interface %]/[% theme %]/images/1rightarrow.png" title="next" ALT="next" BORDER=0></a>
+                                    [% END %]
+                            </td>
+                    </tr>
+            </table>
+            </center>
+            </form>
+[% END %]
+[% INCLUDE "intranet-bottom.inc" %]

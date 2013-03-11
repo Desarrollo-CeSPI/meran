@@ -1,0 +1,74 @@
+[% INCLUDE "intranet-top.inc" %]
+
+<header class="jumbotron subhead" id="overview">
+  <h1>Components</h1>
+  <p class="lead">Dozens of reusable components are built into Bootstrap to provide navigation, alerts, popovers, and much more.</p>
+  <div class="subnav">
+    <ul class="nav nav-pills">
+                               <li>
+
+                                   [% PERL %]
+                                       print C4::AR::Filtros::link_to( text =>     "[% 'Listado de Proveedores' | i18n %]",
+                                                                       url =>      "[% url_prefix %]/adquisiciones/listProveedores.pl",
+                                                                       title =>    "[% 'Listado de Proveedores' | i18n %]"
+                                                                   ) ;
+                                   [% END %]
+                               </li>
+
+                               <li>
+                                   [% PERL %]
+                                       print C4::AR::Filtros::link_to( text =>     "[% 'Agregar Proveedor' | i18n %]",
+                                                                       url =>      "[% url_prefix %]/adquisiciones/addProveedores.pl",
+                                                                       title =>    "[% 'Agregar Proveedores' | i18n %]"
+                                                                   ) ;
+                                   [% END %]
+                               </li>
+                               <li>
+
+                                   [% PERL %]
+                                       print C4::AR::Filtros::link_to( text =>     "[% 'Carga de presupuestos' | i18n %]",
+                                                                       url =>      "[% url_prefix %]/adquisiciones/cargaPresupuesto.pl",
+                                                                       title =>    "[% 'Carga de presupuestos' | i18n %]"
+                                                                   ) ;
+                                   [% END %]
+                               </li>
+                               <li>
+
+                                   [% PERL %]
+                                       print C4::AR::Filtros::link_to( text =>     "[% 'Comparar Presupuestos' | i18n %]",
+                                                                       url =>      "[% url_prefix %]/adquisiciones/compararPresupuestos.pl",
+                                                                       title =>    "[% 'Comparar presupuestos' | i18n %]"
+                                                                   ) ;
+                                   [% END %]
+                               </li>
+                               <li>
+
+                                   [% PERL %]
+                                       print C4::AR::Filtros::link_to( text =>     "[% 'Generar Pedido Cotizacion' | i18n %]",
+                                                                       url =>      "[% url_prefix %]/adquisiciones/generatePedidoCotizacion.pl",
+                                                                       title =>    "[% 'Generar Pedido Cotizacion' | i18n %]"
+                                                                   ) ;
+                                   [% END %]
+                               </li>
+                               <li>
+
+                                   [% PERL %]
+                                       print C4::AR::Filtros::link_to( text =>     "[% 'Listado de Pedidos Cotizacion' | i18n %]",
+                                                                       url =>      "[% url_prefix %]/adquisiciones/listPedidoCotizacion.pl",
+                                                                       title =>    "[% 'Listado de Pedidos Cotizacion' | i18n %]"
+                                                                   ) ;
+                                   [% END %]
+                               </li>
+                               <li>
+                                   [% PERL %]
+                                       print C4::AR::Filtros::link_to( text =>     "[% 'Recomendaciones' | i18n %]",
+                                                                       url =>      "[% url_prefix %]/adquisiciones/recomendaciones.pl",
+                                                                       title =>    "[% 'Estante virtual' | i18n %]"
+                                                                   ) ;
+                                   [% END %]
+                               </li>    
+          </ul>
+  </div>
+</header>
+
+[% INCLUDE "intranet-bottom.inc" %]

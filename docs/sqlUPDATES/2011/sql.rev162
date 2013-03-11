@@ -1,0 +1,14 @@
+ALTER TABLE  `perm_circulacion` ADD  `circ_prestar` VARCHAR( 8 ) NOT NULL ,
+ADD  `circ_renovar` VARCHAR( 8 ) NOT NULL ,
+ADD  `circ_sanciones` VARCHAR( 8 ) NOT NULL ,
+ADD  `circ_devolver` VARCHAR( 8 ) NOT NULL;
+
+
+UPDATE `perm_circulacion`
+SET
+`circ_prestar` = "11111111",
+`circ_renovar` = "11111111",
+`circ_devolver` = "11111111",
+`circ_sanciones` = "11111111"
+
+WHERE nro_socio IN (SELECT nro_socio FROM usr_socio WHERE is_super_user = 1);

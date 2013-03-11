@@ -1,0 +1,18 @@
+<fieldset id="datos_proveedor">
+<legend class="titulo_legend">[% "Proveedores a Presupuestar" | i18n %]</legend>
+    <ul>
+        <li class="sub_item">Proveedor/es:</li>
+        <li class="sub_item"> [% combo_proveedores %] </li>
+    </ul>
+    <ul>
+        [% PERL %]
+            print C4::AR::Filtros::to_Button( 
+                                                text    =>  "[% 'Aceptar' | i18n %]",
+                                                boton   =>  "boton_buscar",
+                                                onClick =>  "generatePresupuesto([% pedido_cotizacion_id %]);",
+                    ) ;
+         print C4::AR::Filtros::setHelp(text => "[% 'Seleccione el/los proveedor/es que desea presupuestar el pedido de cotizacion seleccionado.' | i18n %]",
+                                        );
+        [% END %]                              
+    </ul>
+</fieldset> 

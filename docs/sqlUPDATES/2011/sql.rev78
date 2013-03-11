@@ -1,0 +1,4 @@
+UPDATE `pref_preferencia_sistema` SET `type` = 'text' WHERE `pref_preferencia_sistema`.`variable` = 'tema_opac';
+UPDATE `pref_preferencia_sistema` SET `type` = 'text' WHERE `pref_preferencia_sistema`.`variable` = 'tema_intra_test';
+UPDATE `pref_preferencia_sistema` SET `type` = 'text' WHERE `pref_preferencia_sistema`.`variable` = 'tema_opac_test';
+UPDATE `pref_preferencia_sistema` SET `type` = 'text' WHERE `pref_preferencia_sistema`.`variable` = 'tema_intra';

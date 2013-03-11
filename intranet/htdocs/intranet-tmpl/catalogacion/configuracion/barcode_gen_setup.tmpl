@@ -1,0 +1,89 @@
+[% INCLUDE "intranet-top.inc" %]
+
+[% INCLUDE  'AutocompleteHelper.inc'  %] 
+
+
+<script>
+	//Init Form
+	var objAH; //Objeto AjaxHelper.
+	
+	function eleccionDeBarcodeFormat(){
+	    objAH               = new AjaxHelper(updateEleccionDeBarcodeFormat);
+	    objAH.debug         = true;
+	    objAH.cache         = false;
+	    objAH.showOverlay   = true;
+	    objAH.url           = URL_PREFIX+'/admin/catalogo/barcode_gen_setup.pl';
+	    objAH.id_tipo_doc   = $('#tipo_nivel3_id').val();
+	    objAH.tipoAccion    = "ELECCION_BARCODE";
+	    //se envia la consulta
+	    objAH.sendToServer();
+	}
+
+	function updateEleccionDeBarcodeFormat(responseText){
+	    $('#result').slideDown('slow');
+	    //se borran los mensajes de error/informacion del usuario
+	    $('#result').html(responseText);
+	}
+	
+
+	
+   function actualizarBarcode(){
+        objAH                = new AjaxHelper(updateActualizarBarcode);
+        objAH.debug          = true;
+        objAH.cache          = false;
+        objAH.showOverlay    = true;
+        objAH.url            = URL_PREFIX+'/admin/catalogo/barcode_gen_setup.pl';
+        objAH.id_tipo_doc    = $('#tipo_nivel3_id').val();
+        objAH.barcode_format =$('#unique_modify_value').val();
+        objAH.barcode_long   =$('#digits_input').val();
+        objAH.tipoAccion     = "MODIFICACION_BARCODE";
+        //se envia la consulta
+        objAH.sendToServer();
+    }
+
+    function updateActualizarBarcode(responseText){
+        var Messages=JSONstring.toObject(responseText);
+        setMessages(Messages);
+    }
+	
+    function searchKeyPress(e)
+    {
+         // look for window.event in case event isn't passed in
+         if (window.event) { e = window.event; }
+         if (e.keyCode == 13)
+         {
+             document.getElementById('unique_modify_button').click();
+         }
+    }	
+	
+	$(document).ready(function() {
+	});
+</script>
+
+<section class="center-section-form">
+	<form class="form-horizontal" onsubmit="return false;">
+		<fieldset>
+		    <legend>[% 'Configuraci&oacute;n de formatos de c&oacute;digos de inventario' | i18n %]</legend>
+			    <div class="control-group">
+                    <label class="control-label" for="tipo_nivel3_id">[% 'Tipo de documento' | i18n %]</label>		
+                    <div class="controls">	       
+			             [% selectItemType %]
+	                </div>
+			    </div>
+			    <div class="form-actions">
+					[% PERL %]
+					                    print C4::AR::Filtros::action_button(   
+					                    									title    	=> "[% 'Buscar' | i18n %]",
+					                                                        action 		=> "eleccionDeBarcodeFormat();",
+					                                                        button    	=> "btn btn-primary",
+					                            ) ;
+					[% END %]
+			    </div>    
+		</fieldset>
+	</div>
+</section>
+
+<div id="result"></div>
+
+
+[% INCLUDE "intranet-bottom.inc" %]

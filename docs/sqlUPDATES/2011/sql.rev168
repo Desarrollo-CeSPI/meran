@@ -1,0 +1,18 @@
+INSERT INTO `pref_preferencia_sistema` (
+`id` ,
+`variable` ,
+`value` ,
+`explanation` ,
+`options` ,
+`type` ,
+`categoria`
+)
+VALUES (
+NULL , 
+'mailMessageForgotPass',
+'Estimado/a <b>SOCIO</b>, socio de NOMBRE_UI, recientemente Ud. ha solicitado reestablecer su clave.<br /> Para hacerlo, haga click en el siguiente enlace y siga los pasos que el sistema le va a indicar.<br /> <p><a href=''LINK'' style=''margin:4px 0;padding:2px 4px;border-top:1px #f90 solid;border-right:1px #c63 solid;border-left:1px #f90 solid;border-bottom:1px #c63 solid;background-color:#f60;color:#fff;font-size:1em;font-weight:bold;text-decoration:none;''><strong>Aceptar &raquo;</strong></a></p> <br /><br /><br /><br /><br /> Si no puede abrir el enlace, copie y pegue la siguente URL en su navegador: <br /> LINK <br /> <br /><br />Si Ud. NO ha solicitado un reseteo de su clave, simplemente ignore este mail. <br /> Atte. NOMBRE_UI.', 
+'Cuerpo del mail de reseteo de password. No cambiar las paralbar en mayusculas', 
+NULL , 
+'text', 
+'sistema'
+);

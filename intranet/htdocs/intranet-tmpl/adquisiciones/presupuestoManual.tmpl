@@ -1,0 +1,48 @@
+<fieldset class="proveedor" >
+                           
+                            <div>
+                                  <li> [% "Numero de presupuesto:" | i18n %]<strong> [% pres.id %]</strong> </li>  
+                                  <li> [% "Proveedor:" | i18n %]<strong> [% pres.ref_proveedor.getNombre %]</strong> </li>     
+                                  <li> [% "Fecha:" | i18n %]<strong> [% pres.fecha %]</strong> </li>  
+       
+                                  <input type="hidden" id="id_prov" value="[% pres.proveedor_id %]">
+                                  <input type="hidden" id="id_pres" value="[% pres.id %]">
+                            </div>
+</fieldset>              
+                      <table id="tablaResult" class="datos_tabla" border=0 cellspacing=0 cellpadding=0 width=100%>
+                              <thead>
+                              <tr class="titulo_tabla_resultado">
+                                  <th id="renglon">[% "Renglon" | i18n %]</th>
+                                  <th id="cantidad">[% "Cantidad" | i18n %]</th>
+                                  <th id="articulo">[% "Articulo" | i18n %]</th>
+                                  <th id="precio_unitario">[% "Precio Unitario" | i18n %]</th>  
+                                  <th id="total">[% "Total" | i18n %]</th>          
+                              </tr>
+                              </thead>
+                              <tbody>
+                                  [% cant = 1 %] 
+                                  [% FOREACH detalle IN detalle_presupuesto %] 
+                                      [% total = detalle.cantidad * detalle.precio_unitario %] 
+                                      <tr  align="center" id="[% cant %]">  
+                                          <td align="left" class="presupuesto">
+                                                <input type="text" name="renglon[% cant %]" id="renglon[% cant %]" value="[% cant %]" READONLY> 
+                                          </td>
+                                          <td align="left" class="presupuesto">
+                                                <input type="text" name="cantidad[% cant %]" id="cantidad[% cant %]" onblur="calcularTotal([% cant %])" value="[% detalle.cantidad %]"  READONLY> 
+                                          </td>
+                                          <td align="left" class="presupuesto">
+                                                <input type="text" name="articulo[% cant %]" id="articulo[% cant %]" value="[% detalle.ref_recomendacion_detalle.getAutor %] - [% detalle.ref_recomendacion_detalle.getTitulo %]" READONLY> 
+                                          </td>
+
+                                          <td align="left" class="presupuesto">
+                                                <input type="text" name="precio_unitario[% cant %]" id="precio_unitario[% cant %]" onblur="calcularTotal([% cant %])" value="[% detalle.precio_unitario %]"  READONLY> 
+                                          </td>
+                                          <td align="left" class="presupuesto">
+                                                <input type="text" name="total[% cant %]" id="total[% cant %]" value="[% total %]" READONLY>
+                                          </td> 
+                                      
+                                          [% cant = cant + 1 %]
+                                      </tr> 
+                                  [% END %]   
+                              </tbody>  
+             </table>

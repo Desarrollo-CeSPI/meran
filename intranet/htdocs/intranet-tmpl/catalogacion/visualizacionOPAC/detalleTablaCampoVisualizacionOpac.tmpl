@@ -1,0 +1,88 @@
+<script type="text/javascript" language="javascript" src="/includes/jquery/jquery-ui-1.8.13.sortable.min.js"></script>
+<script type="text/javascript" language="javascript">
+    $("#enable_sort_campo").change(function(){
+        if($(this).is(':checked')){
+            $("#sortable").sortable({
+            stop: function(event, ui) {
+                actualizarOrdenCampo($('#sortable').sortable('toArray'));
+            }
+        });
+        }
+    });
+</script>
+<script type="text/javascript" language="javascript">
+    loaderPath = '<img src="'+imagesForJS+'/loaders/loader_facebook.gif"'+'>';
+    $('.vista_campo').editable('[% url_prefix %]/catalogacion/visualizacionOPAC/visualizacionOpacDB.pl', { 
+          type      : 'text',
+          cancel    : CANCELAR,
+          submit    : OK,
+          tooltip   : EDITABLE_MSG,
+          placeholder: EDITABLE_MSG,
+          style   : 'display: inline',
+          submitdata : {token: "[% token %]", edit: 1, type: 'vista_campo', nivel: $('#eleccion_nivel').val(), tipo_ejemplar: $('#tipo_nivel3_id').val()},
+          indicator : loaderPath,
+
+    });
+</script>
+<fieldset>
+    <legend>[% "Configuraci&oacute;n de la Visualizaci&oacute;n de Campo:" | i18n %]</legend> 
+    
+        [% PERL %]
+                print C4::AR::Filtros::tableHeader(   
+                                  id              => "visualizacionOpac_table",
+                                  class           => "",
+                                  selectAll_id    => "",
+                                  columns         => ['[% "Campo"|i18n %]','[% "Vista OPAC"|i18n %]','[% "Acciones"|i18n %]',
+                                                     ]
+
+                                                                    
+                                        ) ;
+        [% END %]
+        
+            <tbody id="sortable">
+                <input type="checkbox" name="enable_sort_campo" id="enable_sort_campo" /> Seleccione para Ordenar
+                [% FOREACH campo IN visualizacion %]
+                    <tr id="[% campo.getId %]" align="center">
+                        <td>[% campo.getCampo %]</td>
+                        <td class="vista_campo" id="[% campo.getCampo %]">[% campo.getVistaCampo %]</td>
+                        <td style="width: 110px;">
+                                                   
+                            [% PERL %]
+                                print C4::AR::Filtros::action_set_button(    
+                                      title           => "[% 'Campo' | i18n %]",
+                                      button          => 'btn btn-primary',
+                                      actions         => [
+                                                          {title    => "[% 'Editar Subcampos' | i18n %]", 
+                                                            action  => 'editSubcampos("[% campo.getCampo %]");',
+                                                            icon    => "icon-pencil"
+                                                          },
+                                                           {title   => "[% 'Eliminar Campo' | i18n %]", 
+                                                            action  => 'eliminarTodoElCampo("[% campo.getCampo %]");',
+                                                            icon    => "icon-trash"
+                                                           },
+                                                          ],
+                                        popover       => {text  => 'Esta acci&oacute;n se aplica para todos los ejemplares seleccionados', 
+                                                          title => 'Atenci&oacute;n'},
+
+                                        ) ;
+                            [% END %]
+
+                        </td>
+                    </tr>
+                [% END %]
+            </tbody>
+        </table>
+            <div class="form-actions">
+                     [% PERL %]
+                           print C4::AR::Filtros::action_button( 
+                                                           button       => "btn btn-success",
+                                                           action       => "showAddVistaOPAC()", 
+                                                           icon         => "icon-plus-sign icon-white",
+                                                           title        => "Agregar vista",
+                                                       ) ;
+        
+        
+                     [% END %]
+            </div>
+            
+</fieldset>

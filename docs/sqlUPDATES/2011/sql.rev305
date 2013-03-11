@@ -1,0 +1,13 @@
+UPDATE  `pref_preferencia_sistema` SET  `categoria` =  'interna' WHERE  `pref_preferencia_sistema`.`variable` = 'showMenuItem_circ_prestamos';
+UPDATE  `pref_preferencia_sistema` SET  `categoria` =  'interna' WHERE  `pref_preferencia_sistema`.`variable` = 'intranetGroupReserve';
+UPDATE  `pref_preferencia_sistema` SET  `categoria` =  'interna' WHERE  `pref_preferencia_sistema`.`variable` = 'permite_cambio_password_desde_opac';
+UPDATE  `pref_preferencia_sistema` SET  `categoria` =  'interna' WHERE  `pref_preferencia_sistema`.`variable` = 'usercourse';
+UPDATE  `pref_preferencia_sistema` SET  `categoria` =  'interna' WHERE  `pref_preferencia_sistema`.`variable` = 'limite_resultados_autocompletables';
+UPDATE  `pref_preferencia_sistema` SET  `categoria` =  'interna' WHERE  `pref_preferencia_sistema`.`variable` = 'dateformat';
+UPDATE  `pref_preferencia_sistema` SET  `categoria` =  'interna' WHERE  `pref_preferencia_sistema`.`variable` = 'renglones_autocomplete';
+UPDATE  `pref_preferencia_sistema` SET  `categoria` =  'interna' WHERE  `pref_preferencia_sistema`.`variable` = 'libreDeuda';
+UPDATE  `pref_preferencia_sistema` SET  `categoria` =  'interna' WHERE  `pref_preferencia_sistema`.`variable` = 'nombre_indice_sphinx';
+UPDATE  `pref_preferencia_sistema` SET  `categoria` =  'interna' WHERE  `pref_preferencia_sistema`.`variable` = 'habilitar_https';
+UPDATE  `pref_preferencia_sistema` SET  `categoria` =  'interna' WHERE  `pref_preferencia_sistema`.`variable` = 'z3950_ cant_resultados';
+UPDATE  `pref_preferencia_sistema` SET  `categoria` =  'interna' WHERE  `pref_preferencia_sistema`.`variable` = 'twitter_username_to_search';
+UPDATE  `pref_preferencia_sistema` SET  `type` =  'text' WHERE  `pref_preferencia_sistema`.`variable` = 'keeppasswordalive';

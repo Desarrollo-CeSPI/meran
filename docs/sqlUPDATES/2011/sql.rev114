@@ -1,0 +1,1 @@
+ALTER TABLE  `cat_registro_marc_n1` ADD  `tipo_documento` INT( 11 ) NOT NULL AFTER  `marc_record`;

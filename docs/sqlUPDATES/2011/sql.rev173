@@ -1,0 +1,2 @@
+UPDATE `cat_estructura_catalogacion` SET `repetible`=0 WHERE `nivel` = 3;
+UPDATE `pref_estructura_subcampo_marc` SET repetible=0 WHERE `nivel` = 3;

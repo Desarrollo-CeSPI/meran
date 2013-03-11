@@ -1,0 +1,3 @@
+UPDATE `pref_preferencia_sistema` SET `type` = 'bool' WHERE `pref_preferencia_sistema`.`variable` = 'BookLabelPage';
+UPDATE `pref_preferencia_sistema` SET `value` = '1' WHERE `pref_preferencia_sistema`.`variable` = 'BookLabelPage';
+UPDATE `pref_preferencia_sistema` SET `explanation` = 'Impresión en A4' WHERE `pref_preferencia_sistema`.`variable` = 'BookLabelPage';

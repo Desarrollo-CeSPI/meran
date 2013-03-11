@@ -1,0 +1,4 @@
+DELETE FROM `pref_preferencia_sistema` WHERE `pref_preferencia_sistema`.`variable` = 'ldap_changepasswordurl';
+DELETE FROM `pref_preferencia_sistema` WHERE `pref_preferencia_sistema`.`variable` = 'ldap_stdchangepassword';
+DELETE FROM `pref_preferencia_sistema` WHERE `pref_preferencia_sistema`.`variable` = 'ldap_forcechangepassword';
+DELETE FROM `pref_preferencia_sistema` WHERE `pref_preferencia_sistema`.`variable` = 'ldap_preventpassindb';

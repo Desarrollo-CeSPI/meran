@@ -1,0 +1,69 @@
+[% INCLUDE "intranet-top.inc" %]
+
+<script>
+
+var objAH;
+
+function ordenar(orden){
+	objAH.sort(orden);
+}
+
+var tipoReserva; // Para poder ocultar el boton ya que si realiza la consulta por Grupo o todas y cambia el combo por ejemplar el boton de contactar por mail se hace visible, con esta variable me aseguro que eso no pase. Se setea cuando se hace la consulta.
+
+function updateInfo(responseText){
+	$("#result").html(responseText);
+	zebra("datos_tabla");
+}
+
+function changePage(ini){
+	objAH.changePage(ini);
+}
+
+
+function consultar(){
+	tipoReserva=$("#tipoReserva").val();
+	objAH=new AjaxHelper(updateInfo);
+    objAH.showOverlay  = true;
+	objAH.debug    = true;
+    objAH.url=URL_PREFIX+"/circ/reservas_activas_result.pl";
+	
+	objAH.tipoReserva=tipoReserva;
+	objAH.funcion= "changePage";
+	
+	objAH.sendToServer();
+}
+
+</script>
+
+<section class="center-section-form">
+    <form class="form-horizontal">
+	    <fieldset>
+	        <legend class="titulo_legend">[% "Reservas activas" | i18n %]</legend>
+	  
+	          <div class="control-group">
+	              <label class="control-label" for="tipoReserva">[% "Seleccione el tipo de reserva" | i18n %]</label>
+	              <div class="controls">
+	                  <select name="tipoReserva" id="tipoReserva" onchange="consultar();">
+	                      <option selected="selected" value="EJ" id="EJ">[% "Por ejemplar" | i18n %]</option>
+	                      <option value="GR" id="GR">[% "Por grupo" | i18n %]</option>
+	                      <option value="TO" id="TO">[% "Todas" | i18n %]</option>
+	                  </select>
+	              </div>
+	          </div>
+	    
+	          <div class="form-actions">
+	                [% PERL %]
+	                                print C4::AR::Filtros::action_button( 
+	                                                                    title    =>  "[% 'Buscar' | i18n %]",
+	                                                                    button   =>  "btn btn-primary",
+	                                                                    action =>  "consultar();",
+	                                        ) ;
+	                [% END %]
+	        </div>
+	       </fieldset>
+     </form>
+</section>
+
+<div id="result"></div>
+
+[% INCLUDE "intranet-bottom.inc" %]

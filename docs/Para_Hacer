@@ -1,0 +1,78 @@
+USUARIOS:
+
+    .- el DNI y tipo UNIQUE - GASPAR    LISTO
+    .- Normalizar los errores de "filed required" (siempre lo mismo) - GASPAR (Fer nos va a mandar los mensajes, dejar para mas adelante) LISTO
+    .- El AUTO-GENERAR va como preferencia, para econo quieren que sea el DNI - GASPAR LISTO
+    .- Usuario adicional (autorizaciones de prestamos a terceros) y el prestamo con el flag de quien de los dos fue - (SOLO FALTA PRESTAR CON FLAG)
+    .- Mail OBLIGATORIO - GASPAR LISTO
+	
+	En el detalle del usuario, si el usuario intanta devolver algo q ya esta devuelto (q se devolvio desde otra ventana y no se refresco la ventana del detalle del usuario) se rompe
+
+
+
+* Usuarios Potenciales:
+
+Elimnar potencial no hace nada, ELIMINAR EL BOTON y la LOGICA - GASPAR  LISTO (de potenciales nomas, de reales se desactiva)
+
+* Mesajes: (TODOS)
+
+pasar TODOS los mensajes armados en el cliente con javascript a message_INTRA.inc, separalos por modulos, mas adelante
+se vera si es necesario separalos en .inc por modulos.
+El message_INTRA.inc ya se encuentra agregado en el intranet-top.inc asi que no es necesario agregarlo.
+
+* Links y TOKEN: (TODOS)
+
+ir pasando TODOS los links (tags A) a:
+
+[% PERL %]
+print C4::AR::Filtros::link_to(	text => 	"[% socio.persona.getApellido %], [% socio.persona.getNombre %]",
+				url => 		"/cgi-bin/koha/usuarios/reales/datosUsuario.pl", 
+				params =>	["nro_socio=[% socio.getNro_socio %]"],
+				title =>	"[% 'Mostrar Detalle del Usuario' | i18n %]"
+			) ;
+[% END %]
+
+tener en cuenta:
+
+- los redirects en javascript, window.location....
+- los formularios, agregar <input type='hidden' name='token' value=[% token %]>
+
+
+CIRCULACION: .
+
+- Preferencia para DONDE circular y donde no. (ventanita de nro_socio y barcode, y presta) - MIGUEL LISTO y TESTEADO
+- Circulacion Rapida - MIGUEL en tramite
+
+
+
+Catalogación:
+            Al agregar un campo en estructura de catalogacion, no se muestra en la carga :( - MIGUEL
+
+            Modificar ejemplar: DEO checkeo - MIGUEL
+
+            NIvel 2: ES SOLO EL AÑO - MIGUEL y GASPAR
+
+            El orden de visibilidad de los campos esta roto - GASPAR
+
+            Dejar modificar el nombre visible de los campos (fijos tambien) - GASPAR
+
+Preferencias:
+
+da error en tablesorter y no hace la zebra - MIGUEL - LISTO
+
+
+OPAC:
+
+Tratar de armar mas templates separados e incluirlos, quizas usar menos AJAX
+
+Luego de llegar a la cant. maximas de reservas, nos muestra las reservas y da la posibilidad de cancelar y reservar esto no funciona 
+
+No redirecciona a opac-user.pl luego de iniciar sesion desde opac-mail.pl y desde auth.pl
+
+REPORTES_
+
+Reservas: se reserva algo desde el OPAC y muestra un mensaje en negro
+
+ULTIMA ACTUALIZACION 163.10.20.30: 1493
+
+

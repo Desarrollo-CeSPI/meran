@@ -1,0 +1,1 @@
+INSERT INTO `pref_preferencia_sistema` (`id`, `variable`, `value`, `explanation`, `options`, `type`, `categoria`) VALUES (NULL, 'library_thing_key', '0429c5b67a8c0eb1c2e3d6f6dd64cea6', 'Key de http://www.librarything.com/ para obtener portadas de los registros.', NULL, 'text', 'sistema');

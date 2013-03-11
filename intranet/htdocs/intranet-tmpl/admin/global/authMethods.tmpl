@@ -1,0 +1,114 @@
+[% INCLUDE "intranet-top.inc" %]
+
+<script type="text/javascript">
+    $(document).ready(function() {    
+    });
+    
+    $(function() {
+
+		    $("#sortable").sortable({
+                stop: function(event, ui) { 
+                    objAH               = new AjaxHelper(updateSortable);
+	                objAH.debug         = true;
+	                objAH.url           = URL_PREFIX+"/admin/global/auth_methodsDB.pl";
+                    objAH.showOverlay   = false;
+	                objAH.tipoAccion    = "ACTUALIZAR_ORDEN";
+	                objAH.newOrderArray = $('#sortable').sortable('toArray');
+	                objAH.sendToServer(); 
+                }
+            });
+            
+		    $("#sortable").disableSelection();
+    
+		    function updateSortable(responseText){ }
+    });
+    
+    function changeMethod(id){
+        var newValue = $('#enable'+id).val();
+        objAH               = new AjaxHelper(updateChangeMethod);
+        objAH.debug         = true;
+        objAH.url           = URL_PREFIX+"/admin/global/auth_methodsDB.pl";
+        objAH.showOverlay   = true;
+        objAH.idMetodo      = id;
+        if(newValue == "1"){ 
+            $('#enable'+id).val("0");   
+            objAH.newValue  = "0"; 
+        }else{
+            $('#enable'+id).val("1");
+            objAH.newValue  = "1"; 
+        }
+        objAH.tipoAccion    = "CHANGE_ENABLE";
+        objAH.sendToServer(); 
+    }
+    
+    function updateChangeMethod(responseText){ }
+    
+    function agregarMetodo(){
+        objAH               = new AjaxHelper(updateAgregarOrden);
+        objAH.debug         = true;
+        objAH.url           = URL_PREFIX+"/admin/global/auth_methodsDB.pl";
+        objAH.showOverlay   = true;
+        objAH.tipoAccion    = "MOSTRAR_AGREGAR_METODO";
+        objAH.sendToServer();     
+    }
+    
+    function updateAgregarOrden(responseText){ 
+        $('#agregar_metodo').html(responseText);
+    }
+        
+    function guardarMetodo(){
+        if($('#name_metodo').val() != ""){
+            objAH               = new AjaxHelper(updateGuardarMetodo);
+            objAH.debug         = true;
+            objAH.url           = URL_PREFIX+"/admin/global/auth_methodsDB.pl";
+            objAH.showOverlay   = true;
+            objAH.metodo        = $('#name_metodo').val();
+            objAH.tipoAccion    = "AGREGAR_METODO";
+            objAH.sendToServer();   
+        }  
+    }
+    
+    function updateGuardarMetodo(responseText){ 
+       location.reload();
+    }
+
+</script>
+
+<fieldset>
+    <legend> [% "M&eacute;todos de Autenticaci&oacute;n" | i18n %]</legend>
+    
+            [% PERL %]
+                print C4::AR::Filtros::tableHeader(   
+                                  id              => "metodosAuthTable",
+                                  class           => "",
+                                  selectAll_id    => "",
+                                  columns         => ['[% "Nombre"|i18n %]','[% "Habilitado"|i18n %]',
+                                                     ]
+
+                                                                    
+                                        ) ;
+            [% END %]
+
+            <tbody id="sortable">
+                [% FOREACH metodo IN metodos %]
+                    <tr id="[% metodo.id %]">
+                        <td>[% metodo.metodo %]</td>
+                        <td><input onclick="changeMethod([% metodo.id %])" type="checkbox" id="enable[% metodo.id %]" name="metodo_enabled" [% IF metodo.enabled == '1' %] checked="true" [% ELSE %] [% END %] value="[% metodo.enabled %]"/></td>
+                    </tr>
+                [% END %]
+            </tbody>
+        </table>
+
+</fieldset>
+<div class="form-actions">
+[% PERL %]
+    print C4::AR::Filtros::to_Button(   text    => "[% 'Agregar M&eacute;todo' | i18n %]",
+                                        boton   => "boton_buscar",
+                                        onClick => "agregarMetodo()",
+                                        title   => "[% 'Agregar Metodo' | i18n %]"
+    ) ;
+[% END %]
+</div>
+<div id="agregar_metodo"></div>
+
+[% INCLUDE "intranet-bottom.inc" %]

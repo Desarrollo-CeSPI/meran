@@ -1,0 +1,13 @@
+DELETE FROM `pref_preferencia_sistema` WHERE `pref_preferencia_sistema`.`variable` = 'ldap_expiration';
+DELETE FROM `pref_preferencia_sistema` WHERE `pref_preferencia_sistema`.`variable` = 'ldap_expiration_warning';
+DELETE FROM `pref_preferencia_sistema` WHERE `pref_preferencia_sistema`.`variable` = 'ldap_expireattr';
+DELETE FROM `pref_preferencia_sistema` WHERE `pref_preferencia_sistema`.`variable` = 'ldap_gracelogins';
+DELETE FROM `pref_preferencia_sistema` WHERE `pref_preferencia_sistema`.`variable` = 'ldap_graceattr';
+DELETE FROM `pref_preferencia_sistema` WHERE `pref_preferencia_sistema`.`variable` = 'ldap_auth_user_create';
+DELETE FROM `pref_preferencia_sistema` WHERE `pref_preferencia_sistema`.`variable` = 'ldap_create_context';
+DELETE FROM `pref_preferencia_sistema` WHERE `pref_preferencia_sistema`.`variable` = 'ldap_creators';
+DELETE FROM `pref_preferencia_sistema` WHERE `pref_preferencia_sistema`.`variable` = 'ldap_removeuser';
+DELETE FROM `pref_preferencia_sistema` WHERE `pref_preferencia_sistema`.`variable` = 'ldap_ntlmsso_enabled';
+DELETE FROM `pref_preferencia_sistema` WHERE `pref_preferencia_sistema`.`variable` = 'ldap_ntlmsso_subnet';
+DELETE FROM `pref_preferencia_sistema` WHERE `pref_preferencia_sistema`.`variable` = 'ldap_ntlmsso_ie_fastpath';
+

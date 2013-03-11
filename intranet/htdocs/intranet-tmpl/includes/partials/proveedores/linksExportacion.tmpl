@@ -1,0 +1,11 @@
+<fieldset id="exportacion_presupuesto">
+<legend class="titulo_legend">[% "Presupuestos Generados" | i18n %]</legend>
+<ul>
+[% FOREACH nom IN nombres %]
+[% x = loop.index() %]
+    <li>
+    <a href="exportaciones.pl?token=[% token %]&proveedor=[% ids_array.$x %]&pedido_cotizacion=[% pedido_cotizacion_id %]&exportXLS=1"> [% nom %] </a>
+    </li>
+[% END %]
+</ul>
+</fieldset> 

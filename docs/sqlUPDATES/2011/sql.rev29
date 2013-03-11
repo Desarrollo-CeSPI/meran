@@ -1,0 +1,22 @@
+DROP TABLE IF EXISTS `ref_estado`;
+CREATE TABLE IF NOT EXISTS `ref_estado` (
+  `id` tinyint(5) NOT NULL,
+  `nombre` varchar(255) NOT NULL DEFAULT '',
+  `codigo` varchar(8) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `nombre` (`nombre`),
+  UNIQUE KEY `nombre_2` (`nombre`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+INSERT INTO `ref_estado` (`id`, `nombre`, `codigo`) VALUES
+(1, 'Perdido', 'STATE005'),
+(2, 'Compartido', 'STATE001'),
+(3, 'Disponible', 'STATE002'),
+(4, 'Baja', 'STATE000'),
+(5, 'Ejemplar deteriorado', 'STATE003'),
+(6, 'En Encuadernacion', 'STATE004'),
+(7, 'En Etiquetado', 'STATE006'),
+(8, 'En Impresiones', 'STATE007'),
+(9, 'En procesos tecnicos', 'STATE008');
+

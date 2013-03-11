@@ -1,0 +1,75 @@
+[% USE HTML %]
+
+<link rel="stylesheet" type="text/css" href="/intranet-tmpl/intranet-structure.css">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+
+<fieldset class="">
+    <div class="encabezado">
+        <div width="400px">
+         
+            [% IF print_format == "1" %] 
+                <img src="[% escudo %]" alt="escudo" width="80px" height="100px" />
+                <img src="[% escudoUI %]" alt="escudoUI" width="120px" height="90px" align="right" />
+            [% ELSE %]
+                <img src="[% escudo %]" alt="escudo" width="60px" height="80px" />
+                <img src="[% escudoUI %]" alt="escudoUI" width="100px" height="70px" align="right" />
+            [% END %]
+        </div>
+
+        <br>
+        [% biblio.titulo_formal %]<br>
+        [% "BIBLIOTECA" | i18n  %]<br>
+        [% biblio.getNombrePDF %]<br><br>
+    </div>
+        [% IF print_format == "1" %] 
+                <br />
+        [% END %]
+    <h3 align="center">[% titulo %]</h3>
+    <p id="fecha" align="right">[% fecha %]
+    <div class="contenido" align="justify">
+        <p>[% cuerpo_mensaje %]</p><br>
+    </div>
+    <center> 
+        <div >
+          [% IF print_format == "1" %] 
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+          [% END %]
+          [% "Firma" | i18n  %]  ..........................   [% "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Aclaraci&oacute;n" | i18n  %]     .......................... <br> 
+               
+        </div>
+       
+    </center>
+   
+    </div>   
+    <div id="pie" style="clear:both; font-size:9px">
+   <br> <hr> 
+              [% "Biblioteca: " | i18n  %] [% biblio.getNombrePDF %][% "&nbsp;" %]<br> 
+              [% "Direcci&oacute;n:" | i18n  %]  [% biblio.getDireccionPDF %][% "&nbsp;" %]
+              [% "Tel/Fax:" | i18n  %]  [% biblio.getTelefono %]  [% IF biblio.getFax %] / [% biblio.getFax %][% END %] [% "&nbsp;" %] <br>
+              [% "Sitio web:" | i18n  %] [% biblio.getUrlServidor %][% "&nbsp;" %]<br>
+              [% "E-mail:" | i18n  %] [% biblio.getEmail %][% "&nbsp;" %]<br>
+    </div>
+</fieldset>

@@ -1,0 +1,1 @@
+ALTER TABLE `usr_socio` CHANGE `last_login` `last_login` TIMESTAMP NULL DEFAULT NULL ;

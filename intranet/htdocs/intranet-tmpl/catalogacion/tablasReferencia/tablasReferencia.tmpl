@@ -1,0 +1,66 @@
+[% INCLUDE "intranet-top.inc" %]
+<script src="/includes/jquery/jquery.jeditable.js"></script>
+<script>
+function obtenerTabla(){
+    objAH               = new AjaxHelper(updateObtenerTabla);
+    objAH.url           = URL_PREFIX+'/catalogacion/tablasReferencia/tablasReferenciaDB.pl';
+    objAH.cache         = false;
+    objAH.showOverlay   = true;
+    objAH.alias_tabla   = $('#tablas_ref').val();
+    objAH.accion        = "OBTENER_TABLA";
+    objAH.asignar       = 1;
+    objAH.sendToServer();
+}
+
+
+function updateObtenerTabla(responseText){
+    $('#detalle_tabla').html(responseText);
+}
+
+function cambiarVisibilidad(campo, tabla){
+    objAH               = new AjaxHelper(updateCambiarVisualizacion);
+    objAH.url           = URL_PREFIX+'/catalogacion/tablasReferencia/tablasReferenciaDB.pl';
+    objAH.cache         = false;
+    objAH.showOverlay   = true;
+    objAH.accion        = "CHANGE_VISIBILIDAD";
+    objAH.tabla         = tabla;
+    objAH.campo         = campo;
+    objAH.sendToServer();
+
+}
+
+function updateCambiarVisualizacion(){
+    obtenerTabla();
+}
+</script>
+
+<div class="center-section-form">
+    <form class="form-horizontal" onsubmit="return false;">
+        <fieldset>
+            <legend class="titulo_legend">[% "Selecci&oacute;n de tablas de referencia" | i18n %]</legend>
+                <div class="control-group">
+                    <label class="control-label" for="id_ui"> [% "Tabla" | i18n %]: </label>
+                    <div class="controls">
+                        [% combo_tablas %]
+                    </div>
+                </div>
+                
+                <div class="form-actions">
+  
+                    [% PERL %]
+                          print C4::AR::Filtros::action_button( 
+                                                          button    => "btn btn-primary",
+                                                          action    => "obtenerTabla()", 
+                                                          title     => "[% 'Obtener Tabla' | i18n %]",
+                                                      ) ;
+
+
+                    [% END %]
+                    
+                </div>
+        </fieldset>
+    </form>
+</div>
+<div id="detalle_tabla"> </div>
+
+[% INCLUDE "intranet-bottom.inc" %]

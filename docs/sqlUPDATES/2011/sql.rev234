@@ -1,0 +1,29 @@
+DROP TABLE IF EXISTS `usr_estado`;
+CREATE TABLE `usr_estado` (
+  `id_estado` int(11) NOT NULL AUTO_INCREMENT,
+  `categoria` char(2) DEFAULT NULL,
+  `fuente` varchar(255) DEFAULT NULL,
+  `nombre` varchar(255) NOT NULL,
+  PRIMARY KEY (`id_estado`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=12 ;
+
+--
+-- Volcar la base de datos para la tabla `usr_estado`
+--
+
+INSERT INTO `usr_estado` (`id_estado`, `categoria`, `fuente`, `nombre`) VALUES
+(1, NULL, 'GUARANI', 'ACTIVO REGULAR'),
+(2, NULL, 'GUARANI', 'ACTIVO IRREGULAR'),
+(3, NULL, 'GUARANI', 'INACTIVO REGULAR'),
+(4, NULL, 'GUARANI', 'INACTIVO IRREGULAR'),
+(5, NULL, 'MERAN', 'INDIFERENTE'),
+(6, NULL, 'MERAN', 'HABILITADO'),
+(7, NULL, 'MERAN', 'DESHABILITADO'),
+(8, NULL, 'GUARANI', 'EGRESADO REGULAR'),
+(9, NULL, 'GUARANI', 'EGRESADO IRREGULAR'),
+(10, NULL, 'GUARANI', 'PASIVO REGULAR'),
+(11, NULL, 'GUARANI', 'PASIVO IRREGULAR');
+
+UPDATE usr_socio
+SET id_estado = 5
+WHERE id_estado > 11;

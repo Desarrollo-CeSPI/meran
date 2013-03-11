@@ -1,0 +1,7 @@
+UPDATE `pref_estructura_subcampo_marc` SET `nivel` = '0' WHERE `pref_estructura_subcampo_marc`.`campo` = '856' AND `pref_estructura_subcampo_marc`.`subcampo` = 'u';
+
+UPDATE `pref_estructura_subcampo_marc` SET `liblibrarian` = 'Field link and sequence number (NR)', `libopac` = 'Field link and sequence number (NR)' WHERE `pref_estructura_subcampo_marc`.`campo` = '863' AND `pref_estructura_subcampo_marc`.`subcampo` = '8';
+
+INSERT INTO pref_estructura_subcampo_marc (`nivel` ,`obligatorio` ,`campo` ,`subcampo` ,`liblibrarian` ,`libopac` ,`descripcion` ,`repetible` ,`mandatory` ,`kohafield`)VALUES ('2', '0', '863', 'a', 'Volumen', 'Volumen', NULL , '0', '0', NULL),('2', '0', '863', 'b', 'Número', 'Número', NULL , '0', '0', NULL),('2', '0', '863', 'i', 'Año', 'Año', NULL , '0', '0', NULL);
+
+UPDATE `pref_estructura_subcampo_marc` SET `nivel` = '2' WHERE `pref_estructura_subcampo_marc`.`campo` = '505' AND `pref_estructura_subcampo_marc`.`subcampo` = 'g';

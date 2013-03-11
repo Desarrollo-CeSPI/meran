@@ -1,0 +1,13 @@
+INSERT INTO  `pref_preferencia_sistema` (
+`id` ,
+`variable` ,
+`value` ,
+`explanation` ,
+`options` ,
+`type` ,
+`categoria`
+)
+VALUES (
+NULL ,  'twitter_username_to_search',  '@meran_fce',  'Username para refrescar el timeline', NULL ,  'text',  'sistema'
+);
+

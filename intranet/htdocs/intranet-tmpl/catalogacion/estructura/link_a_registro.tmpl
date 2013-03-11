@@ -1,0 +1,12 @@
+
+    <legend class="titulo_legend">[% "Registro:" | i18n %]
+            [% PERL %]
+                print C4::AR::Filtros::link_to( text =>     [% nivel1.getId1 %],
+                                                url=>"detalle.pl", 
+                                                params =>   ["id1=[% nivel1.getId1 %]"],
+                                                title =>    "[% 'Ver Detalle del Registro' | i18n %]"
+                                            ) ;
+            [% END %]
+
+            <span id="template_[% nivel1.getId1 %]">([% nivel1.getTemplate %])</span>
+    </legend>

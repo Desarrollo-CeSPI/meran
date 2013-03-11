@@ -1,0 +1,25 @@
+[% USE HTML %]
+[% IF cant_noleidos %]
+    <fieldset>
+        <legend>[% "Mensajes de Contacto" | i18n %]</legend>    
+        <br />
+             [% FOREACH mens IN ultimos_no_leidos %]
+                <blockquote>
+                  <p><a href="#" onclick="showDirectMessage([% mens.id%])">[% HTML.escape(mens.getAsunto) %]</a></p>
+                  <small>[% HTML.escape(mens.getNombre) %] [% HTML.escape(mens.getApellido) %]
+                      <cite title=""><a href="mailto:[% HTML.escape(mens.getEmail) %]" target="_blank">([% HTML.escape(mens.getEmail) %])</a></cite>
+                  </small>
+                </blockquote>
+             [% END %]
+
+           [% PERL %]
+	           print C4::AR::Filtros::action_link_button( 
+	                 button => "btn btn-success",
+	                 url=>"[% url_prefix %]/admin/mensajes_contacto.pl", 
+	                 title =>    " [% 'Ver mensajes' | i18n %]",
+	                 icon  => "icon-white icon-comment",
+	                 );
+           [% END %]           
+    </fieldset> 
+[% END %]
+<div id="mostrar_mensaje" class="modal hide fade"></div>

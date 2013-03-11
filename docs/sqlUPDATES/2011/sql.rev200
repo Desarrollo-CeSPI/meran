@@ -1,0 +1,13 @@
+ALTER TABLE `io_importacion_iso` ADD `nombre` VARCHAR( 255 ) NOT NULL AFTER `id_importacion_esquema` ;
+ALTER TABLE `io_importacion_iso` ADD `formato` VARCHAR( 255 ) NOT NULL AFTER `archivo`;
+INSERT INTO `io_importacion_iso_esquema` (`id`, `nombre`, `descripcion`) VALUES (1, 'Marc', 'Esquema sin detalle, los campos pasan como entran.');
+
+ALTER TABLE `io_importacion_iso` CHANGE `fecha_import` `fecha_import` DATE NULL DEFAULT NULL ,
+CHANGE `cant_registros_n1` `cant_registros_n1` INT( 11 ) NULL DEFAULT NULL ,
+CHANGE `cant_registros_n2` `cant_registros_n2` INT( 11 ) NULL DEFAULT NULL ,
+CHANGE `cant_registros_n3` `cant_registros_n3` INT( 11 ) NULL DEFAULT NULL ,
+CHANGE `reglas_matcheo` `reglas_matcheo` MEDIUMTEXT CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL ;
+
+
+ALTER TABLE `io_importacion_iso` CHANGE `fecha_upload` `fecha_upload` VARCHAR( 20 ) NOT NULL ,
+CHANGE `fecha_import` `fecha_import` VARCHAR( 20 ) NULL DEFAULT NULL ;

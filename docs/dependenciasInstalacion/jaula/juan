@@ -1,0 +1,170 @@
+CPAN: Storable loaded ok (v2.30)
+Reading '/root/.cpan/Metadata'
+  Database was generated on Thu, 12 Jul 2012 01:19:03 GMT
+CPAN: Module::CoreList loaded ok (v2.60)
+Apache::Session is up to date (1.89).
+Captcha::reCAPTCHA is up to date (0.93).
+CGI::Session is up to date (4.48).
+Chart::OFC is up to date (0.11).
+Crypt::CBC is up to date (2.30).
+Date::Manip is up to date (6.32).
+DateTime::Format::DateManip is up to date (0.04).
+DateTime::Format::MySQL is up to date (0.04).
+Running install for module 'Digest::SHA'
+Running make for M/MS/MSHELOR/Digest-SHA-5.71.tar.gz
+CPAN: Digest::SHA loaded ok (v5.70)
+CPAN: Compress::Zlib loaded ok (v2.048)
+Checksum for /root/.cpan/sources/authors/id/M/MS/MSHELOR/Digest-SHA-5.71.tar.gz ok
+CPAN: Archive::Tar loaded ok (v1.82)
+Digest-SHA-5.71/
+Digest-SHA-5.71/examples/
+Digest-SHA-5.71/examples/dups
+Digest-SHA-5.71/MANIFEST
+Digest-SHA-5.71/Changes
+Digest-SHA-5.71/Makefile.PL
+Digest-SHA-5.71/lib/
+Digest-SHA-5.71/lib/Digest/
+Digest-SHA-5.71/lib/Digest/SHA.pm
+Digest-SHA-5.71/README
+Digest-SHA-5.71/shasum
+Digest-SHA-5.71/SHA.xs
+Digest-SHA-5.71/META.yml
+Digest-SHA-5.71/t/
+Digest-SHA-5.71/t/rfc2202.t
+Digest-SHA-5.71/t/sha512.t
+Digest-SHA-5.71/t/gg.t
+Digest-SHA-5.71/t/gglong.t
+Digest-SHA-5.71/t/pod.t
+Digest-SHA-5.71/t/hmacsha.t
+Digest-SHA-5.71/t/base64.t
+Digest-SHA-5.71/t/fips180-4.t
+Digest-SHA-5.71/t/bitbuf.t
+Digest-SHA-5.71/t/sha384.t
+Digest-SHA-5.71/t/fips198.t
+Digest-SHA-5.71/t/podcover.t
+Digest-SHA-5.71/t/woodbury.t
+Digest-SHA-5.71/t/ireland.t
+Digest-SHA-5.71/t/nistbyte.t
+Digest-SHA-5.71/t/dumpload.t
+Digest-SHA-5.71/t/sha256.t
+Digest-SHA-5.71/t/methods.t
+Digest-SHA-5.71/t/sha1.t
+Digest-SHA-5.71/t/sha224.t
+Digest-SHA-5.71/t/allfcns.t
+Digest-SHA-5.71/t/nistbit.t
+Digest-SHA-5.71/src/
+Digest-SHA-5.71/src/sha.h
+Digest-SHA-5.71/src/hmac.c
+Digest-SHA-5.71/src/sha.c
+Digest-SHA-5.71/src/sha64bit.h
+Digest-SHA-5.71/src/hmacxtra.c
+Digest-SHA-5.71/src/sha64bit.c
+Digest-SHA-5.71/src/shaxtra.c
+Digest-SHA-5.71/src/hmac.h
+Digest-SHA-5.71/typemap
+CPAN: File::Temp loaded ok (v0.22)
+CPAN: Parse::CPAN::Meta loaded ok (v1.4402)
+CPAN: CPAN::Meta loaded ok (v2.120351)
+
+  CPAN.pm: Building M/MS/MSHELOR/Digest-SHA-5.71.tar.gz
+
+Checking if your kit is complete...
+Looks good
+Writing Makefile for Digest::SHA
+Writing MYMETA.yml and MYMETA.json
+cp lib/Digest/SHA.pm blib/lib/Digest/SHA.pm
+/usr/bin/perl /usr/local/share/perl/5.10.1/ExtUtils/xsubpp  -typemap /usr/share/perl/5.10/ExtUtils/typemap -typemap typemap  SHA.xs > SHA.xsc && mv SHA.xsc SHA.c
+cc -c  -I. -D_REENTRANT -D_GNU_SOURCE -DDEBIAN -fno-strict-aliasing -pipe -fstack-protector -I/usr/local/include -D_LARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64 -O2 -g   -DVERSION=\"5.71\" -DXS_VERSION=\"5.71\" -fPIC "-I/usr/lib/perl/5.10/CORE"  -DSHA_PERL_MODULE SHA.c
+Running Mkbootstrap for Digest::SHA ()
+chmod 644 SHA.bs
+rm -f blib/arch/auto/Digest/SHA/SHA.so
+cc  -shared -O2 -g -L/usr/local/lib -fstack-protector SHA.o  -o blib/arch/auto/Digest/SHA/SHA.so 	\
+	     	\
+	  
+chmod 755 blib/arch/auto/Digest/SHA/SHA.so
+cp SHA.bs blib/arch/auto/Digest/SHA/SHA.bs
+chmod 644 blib/arch/auto/Digest/SHA/SHA.bs
+cp shasum blib/script/shasum
+/usr/bin/perl -MExtUtils::MY -e 'MY->fixin(shift)' -- blib/script/shasum
+Manifying blib/man1/shasum.1p
+Manifying blib/man3/Digest::SHA.3pm
+  MSHELOR/Digest-SHA-5.71.tar.gz
+  /usr/bin/make -- OK
+CPAN: YAML loaded ok (v0.73)
+Running make test
+PERL_DL_NONLAZY=1 /usr/bin/perl "-MExtUtils::Command::MM" "-e" "test_harness(0, 'blib/lib', 'blib/arch')" t/*.t
+t/allfcns.t .... ok
+t/base64.t ..... ok
+t/bitbuf.t ..... ok
+t/dumpload.t ... ok
+t/fips180-4.t .. ok
+t/fips198.t .... ok
+t/gg.t ......... ok
+t/gglong.t ..... ok
+t/hmacsha.t .... ok
+t/ireland.t .... ok
+t/methods.t .... ok
+t/nistbit.t .... ok
+t/nistbyte.t ... ok
+t/pod.t ........ ok
+t/podcover.t ... skipped: Test::Pod::Coverage 0.08 required for testing POD coverage
+t/rfc2202.t .... ok
+t/sha1.t ....... ok
+t/sha224.t ..... ok
+t/sha256.t ..... ok
+t/sha384.t ..... ok
+t/sha512.t ..... ok
+t/woodbury.t ... ok
+All tests successful.
+Files=22, Tests=128,  1 wallclock secs ( 0.08 usr  0.05 sys +  0.31 cusr  0.10 csys =  0.54 CPU)
+Result: PASS
+  MSHELOR/Digest-SHA-5.71.tar.gz
+  /usr/bin/make test -- OK
+Running make install
+Prepending /root/.cpan/build/Digest-SHA-5.71-Nip68h/blib/arch /root/.cpan/build/Digest-SHA-5.71-Nip68h/blib/lib to PERL5LIB for 'install'
+Files found in blib/arch: installing files in blib/lib into architecture dependent library tree
+Installing /usr/share/meran/intranet/modules/C4/Share64/lib/perl/5.10/auto/Digest/SHA/SHA.so
+Appending installation info to /usr/share/meran/intranet/modules/C4/Share64/lib/perl/5.10/perllocal.pod
+  MSHELOR/Digest-SHA-5.71.tar.gz
+  /usr/bin/make install  -- OK
+File::LibMagic is up to date (0.96).
+HTML::HTMLDoc is up to date (0.10).
+HTTP::BrowserDetect is up to date (1.44).
+Image::Size is up to date (3.232).
+JSON is up to date (2.53).
+JSON::XS is up to date (2.32).
+Data::Dumper is up to date (2.131).
+Net::Telnet is up to date (3.03).
+Net::Cmd is up to date (2.29).
+Locale::Maketext::Gettext is up to date (1.28).
+Mail::Sendmail is up to date (0.79_16).
+MARC::Crosswalk::DublinCore is up to date (0.02).
+MARC::Moose is up to date (0.026).
+MARC::Record is up to date (2.0.3).
+MARC::XML is up to date (0.4).
+MIME::Lite::TT::HTML is up to date (0.04).
+Net::SMTP::SSL is up to date (1.01).
+Net::SMTP::TLS is up to date (0.12).
+Net::Twitter is up to date (3.18003).
+Net::Z3950::ZOOM is up to date (1.28).
+PDF::Report is up to date (1.33).
+Net::LDAP is up to date (0.44).
+Proc::Simple is up to date (1.30).
+Rose::DB is up to date (0.769).
+Rose::DB::Object is up to date (0.798).
+Sphinx::Manager is up to date (0.06).
+Sphinx::Search is up to date (0.22).
+Spreadsheet::Read is up to date (0.47).
+Spreadsheet::WriteExcel is up to date (2.37).
+Spreadsheet::WriteExcel::Simple is up to date (1.04).
+Text::Aspell is up to date (0.09).
+Text::LevenshteinXS is up to date (0.03).
+Text::Unaccent is up to date (1.08).
+WWW::Facebook::API is up to date (0.4.18).
+WWW::Google::URLShortener is up to date (0.05).
+WWW::Shorten::Bitly is up to date (1.17).
+HTML::FormatText::WithLinks is up to date (0.14).
+Date::Calc is up to date (6.3).
+File::SearchPath is up to date (0.06).
+Image::Resize is up to date (0.5).
+GD is up to date (2.46).

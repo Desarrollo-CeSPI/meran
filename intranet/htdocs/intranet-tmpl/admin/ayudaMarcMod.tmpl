@@ -1,0 +1,45 @@
+<div class="modal-header">
+     <a href="#" class="close" data-dismiss="modal">×</a>
+    <h3>[% "Modificar Ayuda MARC:" | i18n %]</h3>
+</div>
+
+<div class="modal-body">
+    <div class="form-horizontal">
+        <div class="control-group">
+            <label class="control-label" for="liblibrarian"> [% "Campo:" | i18n %]</label>
+            <div class="controls">
+                <input type="text" disabled="disabled" value="[% ayuda.getCampo %]"/>
+                <input type="hidden" id="campoMod" disabled="disabled" value="[% ayuda.getCampo %]"/>
+            </div>
+        </div>
+
+        <div class="control-group">
+            <label class="control-label" for="liblibrarian">[% "Subcampo:" | i18n %]</label>
+            <div class="controls">
+                <input type="text" disabled="disabled" value="[% ayuda.getSubCampo %]"/>
+                <input type="hidden" id="subcampoMod" disabled="disabled" value="[% ayuda.getSubCampo %]"/>
+            </div>
+        </div>
+        
+        <div class="control-group">
+            <label class="control-label" for="liblibrarian"> [% "Ayuda" | i18n %]: </label>
+            <div class="controls">
+                <textarea id="ayudaMod" name="ayudaMod" value="" size="90">[% ayuda.getAyuda %]</textarea>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal-footer">
+    [% PERL %]
+            print C4::AR::Filtros::to_Button(   text    => "[% 'Agregar Ayuda' | i18n %]",
+                                                boton   => "btn btn-primary",
+                                                onClick => 'modificarAyudaMarc([% idAyuda %])',
+                                                title   => "[% 'Agregar Ayuda' | i18n %]",
+                                                width   => "auto",
+                                                alternClass => "botonCentrado",
+                                                inline  => "1"
+                    ) ;
+    [% END %]
+
+</div>

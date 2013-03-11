@@ -1,0 +1,1 @@
+ALTER TABLE cat_visualizacion_opac DROP INDEX campo_2;

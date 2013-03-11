@@ -1,0 +1,12 @@
+use utf8;
+use lib "reemplazarPATHBASE/reemplazarID/intranet/modules/";
+#use C4::Output;  
+#use C4::AR::Auth;
+use C4::Context;
+use CGI::Session;
+use CGI;
+use Rose::DB;
+use C4::AR::CacheMeran;
+use C4::AR::SphinxStarter;
+C4::AR::SphinxStarter->sphinx_start("reemplazarCONFMERAN/meranreemplazarID.conf");
+return 1;

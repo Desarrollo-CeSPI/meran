@@ -1,0 +1,40 @@
+<fieldset>
+<legend>[% "Agregar servidor externo:" | i18n %]</legend>
+    <form class="form-horizontal" action="[% url_prefix %]/admin/global/sys_externos_meran.pl" method="POST" >
+    
+        <div class="control-group">
+            <label class="control-label" for="variable">[% 'URL' | i18n %]: </label>
+            <div class="controls">
+                <input id="url_server" name="url_server" autofocus="autofocus" required type="text">
+                [% PERL %]
+                    print C4::AR::Filtros::setHelpInput( text => "El formato debe ser: http://SERVER_ADDRESS:PORT/meran/opac-oai-search.pl"
+
+                    );
+                [% END %]
+            </div>
+        </div>
+
+        <div class="control-group">
+            <label class="control-label" for="variable">[% 'UI' | i18n %]: </label>
+            <div class="controls">
+                [% combo_ui %]
+                <input type="hidden" name="form_action" value="1">
+            </div>
+        </div>
+        
+        <div class="form-actions">
+            [% PERL %]
+                print C4::AR::Filtros::to_Button(   text    => "[% 'Volver al listado' | i18n %]",
+                                                    boton   => "btn",
+                                                    onClick => "mostrar_listado()",
+                                                    title   => "[% 'Volver al listado' | i18n %]",
+                                                    width   => "auto",
+                                                    alternClass => "botonCentrado",
+                                                    inline  => "1",
+                            ) ;
+            [% END %]
+            <button type="submit" class="btn btn-primary">[% 'Guardar servidor'|i18n %]</button>
+        </div>
+        
+    </form>
+</fieldset>

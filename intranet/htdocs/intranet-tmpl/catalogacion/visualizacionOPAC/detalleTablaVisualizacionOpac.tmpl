@@ -1,0 +1,119 @@
+<script type="text/javascript" language="javascript">
+    $("#enable_sort_subcampo").change(function(){
+        if($(this).is(':checked')){
+            $("#sortable_subcampo").sortable({
+            stop: function(event, ui) {
+                actualizarOrdenSubCampos($('#sortable').sortable('toArray'));
+            }
+        });
+        }
+    });
+</script>
+<script type="text/javascript" language="javascript">
+    $(document).ready(function() {
+        makeToggle('divTablaAgregarVisualizacion','trigger',null,false);
+        onEnter('lib_librarian',agregarVisualizacion);
+        loaderPath = '<img src="'+imagesForJS+'/loaders/loader_facebook.gif"'+'>';
+        $('.editable').editable('[% url_prefix %]/catalogacion/visualizacionOPAC/visualizacionOpacDB.pl', { 
+              type      : 'text',
+              cancel    : CANCELAR,
+              submit    : OK,
+              tooltip   : EDITABLE_MSG,
+              placeholder: EDITABLE_MSG,
+              style   : 'display: inline',
+              submitdata : {token: "[% token %]", edit: 1, type: 'nombre'},
+              indicator : loaderPath,
+
+        });
+        $('.pre').editable('[% url_prefix %]/catalogacion/visualizacionOPAC/visualizacionOpacDB.pl', { 
+              type      : 'text',
+              cancel    : CANCELAR,
+              submit    : OK,
+              tooltip   : EDITABLE_MSG,
+              placeholder: EDITABLE_MSG,
+              style   : 'display: inline',
+              submitdata : {token: "[% token %]", edit: 1, type: 'pre'},
+              indicator : loaderPath,
+
+        });
+        $('.post').editable('[% url_prefix %]/catalogacion/visualizacionOPAC/visualizacionOpacDB.pl', { 
+              type      : 'text',
+              cancel    : CANCELAR,
+              submit    : OK,
+              tooltip   : EDITABLE_MSG,
+              placeholder: EDITABLE_MSG,
+              style   : 'display: inline',
+              submitdata : {token: "[% token %]", edit: 1, type: 'post'},
+              indicator : loaderPath,
+
+        });
+        
+        $('.inter').editable('[% url_prefix %]/catalogacion/visualizacionOPAC/visualizacionOpacDB.pl', { 
+              type      : 'text',
+              cancel    : CANCELAR,
+              submit    : OK,
+              tooltip   : EDITABLE_MSG,
+              placeholder: EDITABLE_MSG,
+              style   : 'display: inline',
+              submitdata : {token: "[% token %]", edit: 1, type: 'inter'},
+              indicator : loaderPath,
+
+        });
+        
+        $('.nivel').editable('[% url_prefix %]/catalogacion/visualizacionOPAC/visualizacionOpacDB.pl', { 
+              type      : 'text',
+              cancel    : CANCELAR,
+              submit    : OK,
+              tooltip   : EDITABLE_MSG,
+              placeholder: EDITABLE_MSG,
+              style   : 'display: inline',
+              submitdata : {token: "[% token %]", edit: 1, type: 'nivel'},
+              indicator : loaderPath,
+
+        });
+    });
+</script>
+<fieldset>
+    <legend class="titulo_legend trigger click">[% "Configuraci&oacute;n de la Visualizaci&oacute;n de SubCampos:" | i18n %]</legend>
+               
+        [% PERL %]
+                print C4::AR::Filtros::tableHeader(   
+                                  id              => "visualizacionOpac_table",
+                                  class           => "",
+                                  selectAll_id    => "",
+                                  columns         => ['[% "Campo"|i18n %]','[% "Subcampo"|i18n %]',
+                                                        '[% "Inicial"|i18n %]','[% "Separador" | i18n %]','[% "Final"|i18n %]',
+                                                        '[% "Vista en OPAC" | i18n %]','[% "Nivel"|i18n %]','[% "Acciones"|i18n %]',
+                                                     ]
+                                                                    
+                                        ) ;
+        [% END %]
+
+            <tbody id="sortable_subcampo">
+                <input type="checkbox" name="enable_sort_subcampo" id="enable_sort_subcampo" /> [% 'Seleccione para Ordenar' | i18n %]
+                [% FOREACH campo IN visualizacion %]
+                    <tr id="[% campo.getId %]" align="center">
+                        <td>[% campo.getCampo %]</td>
+                        <td>[% campo.getSubCampo %]</td>
+                        <td class="pre" id="[% campo.id %]">[% campo.getPreLimpio %]</td>
+                        <td class="inter" id="[% campo.id %]">[% campo.getInterLimpio %]</td>
+                        <td class="post" id="[% campo.id %]">[% campo.getPostLimpio %]</td>
+                        <td class="editable" id="[% campo.id %]">[% campo.getVistaOpac %]</td>
+                        <td id="[% campo.id %]">[% campo.getNivel %]</td>
+                        <td >
+                            [% PERL %]
+                                  print C4::AR::Filtros::action_button( 
+                                                                  button       => "btn click btn-danger",
+                                                                  action       => "eliminarVista([% campo.id %])", 
+                                                                  icon         => "icon-remove icon-white",
+                                                                  title        => "",
+                                                              ) ;
+
+
+                            [% END %]
+                        </td>
+                    </tr>
+                [% END %]
+            </tbody>
+        </table>
+</fieldset>

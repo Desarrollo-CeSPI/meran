@@ -1,0 +1,4 @@
+-- Se agrega la reserva para poder configurar sus sanciones
+
+INSERT INTO `circ_ref_tipo_prestamo` (`id`, `id_tipo_prestamo`, `descripcion`, `codigo_disponibilidad`, `prestamos`, `dias_prestamo`, `renovaciones`, `dias_renovacion`, `dias_antes_renovacion`, `habilitado`) VALUES
+(0, 'RE', 'Reserva', 'CIRC0000', 0, 0, 0, 0, 0, 1);

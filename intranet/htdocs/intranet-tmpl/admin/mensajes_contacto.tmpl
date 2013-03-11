@@ -1,0 +1,78 @@
+[% INCLUDE 'intranet-top.inc' %]
+[% USE HTML %]
+
+<script type="text/javascript" src="/includes/jquery/jquery.wysiwyg.js"></script>
+<link rel="stylesheet" href="/includes/css/wysiwyg.css" type="text/css" media="screen"/>
+
+<script type="text/javascript">
+var objAH;
+      $(document).ready(function() {
+        $('.fancy_link').fancybox({
+            'frameWidth':   600,
+            'frameHeight':  500,
+        });
+      });
+
+
+</script>
+
+
+<fieldset>
+    <legend>[% "Mensajes de Contacto" | i18n %]:</legend>
+        [% IF cant_mensajes %]
+	  
+	        <div class="datos_tabla_div_user">
+	            <div class="well">[% "La cantidad de mensajes es" | i18n %]: [% cant_mensajes %]</div>
+	                  <div>[% paginador %]</div>
+	            [% PERL %]
+	                print C4::AR::Filtros::tableHeader(   
+	                                  id              => "mensajes_contacto_table",
+	                                  class           => "",
+	                                  selectAll_id    => "",
+	                                  columns         => ['[% "Fecha"|i18n %]','[% "Asunto"|i18n %]',
+	                                                    '[% "Remitente"|i18n %]','[% "Eliminar"|i18n %]',
+	                                                     ]
+	     
+	                                        ) ;
+	            [% END %]
+	            
+	                <tbody>
+	                    [% FOREACH mensaje IN mensajes_contacto %]
+	                        <tr>
+	                            <td>
+	                                  [% IF mensaje.getRespondido %] <i class="icon-share-alt" title="[% 'Respondido por ' | i18n %] [% mensaje.respondido %]"></i> [% END %]
+	                                  [% mensaje.getFecha %] 
+	                            </td>
+	                            <td>
+	                               <a href="#" onclick="showDirectMessage([% mensaje.id%])">
+	                                    [% HTML.escape(mensaje.getAsunto) %]
+	                               </a>
+	                            </td>
+	                            <td>
+	                                <a href="#" onclick="showDirectMessage([% mensaje.id%])">
+	                                    [% HTML.escape(mensaje.getApellido) %], [% HTML.escape(mensaje.getNombre) %] 
+	                                </a>
+	                            </td>
+	                            <td>
+	                                
+	                                [% PERL %]
+	                                  print C4::AR::Filtros::action_link_button( 
+	                                                                  button    => "btn btn-danger click",
+	                                                                  url       => "[% url_prefix %]/admin/mensajes_contacto.pl?token=[% token %]&id=[% mensaje.id %]&tipoAccion=eliminar", 
+	                                                                  icon      => "icon-remove icon-white",
+	                                                                  title     => "",
+	                                                              ) ;
+	
+	                                [% END %]
+	                            </td>
+	                        </tr>
+	                    [% END %]
+	                </tbody>
+	            </table>
+	        </div>
+        [% ELSE %]
+            <div class="alert alert-info">[% 'No hay mensajes' | i18n %]</div>
+        [% END %]	        
+</fieldset>
+<div id="mostrar_mensaje" class="modal hide fade"></div>
+[% INCLUDE 'intranet-bottom.inc' %]

@@ -1,0 +1,12 @@
+INSERT INTO `pref_preferencia_sistema` (
+`id` ,
+`variable` ,
+`value` ,
+`explanation` ,
+`options` ,
+`type` ,
+`categoria`
+)
+VALUES (
+NULL , 'enableMailPrestVencidos', '0', 'Flag para habilitar el CRON de mails de prestamos vencidos', NULL , NULL , 'CRON'
+);

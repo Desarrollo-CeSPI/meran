@@ -1,0 +1,1 @@
+INSERT INTO `pref_preferencia_sistema` (`id`, `variable`, `value`, `explanation`, `options`, `type`, `categoria`) VALUES (NULL, 'nombre_indice_sphinx', 'test1', 'Indice de Sphinx a utilizar', NULL, 'text', 'sistema');

@@ -1,0 +1,49 @@
+catalogacion/estructura/estructuraCatalo.tmpl:<script src="/intranet-tmpl/includes/popups/helpCamposMARC.js"></script>
+catalogacion/estructura/datosDocumento.tmpl~:<script src="/intranet-tmpl/includes/CombosHelper.js"></script> 
+catalogacion/estructura/datosDocumento.tmpl~:<script src="/intranet-tmpl/includes/popups/helpCamposMARC.js"></script>
+catalogacion/estructura/datosDocumento.tmpl~:<script src="/intranet-tmpl/includes/catalogacion.js"></script>
+catalogacion/estructura/datosDocumento.tmpl~:<script src="/includes/jquery/datetimepicker/ui.datepicker.js"></script>
+catalogacion/estructura/datosDocumento.tmpl:<script src="/intranet-tmpl/includes/CombosHelper.js"></script> 
+catalogacion/estructura/datosDocumento.tmpl:<script src="/intranet-tmpl/includes/popups/helpCamposMARC.js"></script>
+catalogacion/estructura/datosDocumento.tmpl:<script src="/intranet-tmpl/includes/catalogacion.js"></script>
+catalogacion/estructura/detalle.tmpl:<script src="/intranet-tmpl/includes/circulacion.js"></script>
+catalogacion/estructura/detalle.tmpl:<!-- <script src="/intranet-tmpl/includes/catalogacion.js"></script> -->
+catalogacion/configuracion/controlAutoridades/controlAutoridadesSinonimos.tmpl:<script src="/includes/jquery/tablesorter/jquery.tablesorter.js" type="text/javascript"></script>
+catalogacion/configuracion/controlAutoridades/controlAutoridadesSeudonimos.tmpl:<script src="/includes/jquery/tablesorter/jquery.tablesorter.js"></script>
+catalogacion/visualizacionINTRA/visualizacionIntra.tmpl:<script src="/intranet-tmpl/includes/popups/helpCamposMARC.js"></script>
+catalogacion/visualizacionINTRA/visualizacionIntra.tmpl:<script src="/intranet-tmpl/includes/visualizacionINTRA.js"></script>
+catalogacion/visualizacionINTRA/detalleVisualizacionIntra.tmpl:<script src="/includes/jquery/jquery.jeditable.js"></script>
+circ/sanciones.tmpl:<script src="/intranet-tmpl/includes/circulacion.js"></script>
+circ/prestamos.tmpl:<script src="/intranet-tmpl/includes/circulacion.js"></script>
+circ/circulacionRapida.tmpl~:<script src="/intranet-tmpl/includes/circulacion.js"></script>
+circ/circulacionRapida.tmpl~:<script src="/intranet-tmpl/includes/usuarios/usuariosReales.js"></script>
+estantes/estante.tmpl:<script language="javascript" type="text/javascript" src="/includes/jquery/jquery.jeditable.js"></script>
+herramientas/chequeoImportacion.tmpl:<script src="/intranet-tmpl/includes/popups/helpCamposMARC.js"></script>
+includes/FormValidateHelper.inc:<script src="/includes/jquery/validate/jquery.validate.js"></script>
+includes/FormValidateHelper.inc:<script src="/includes/jquery/additional-methods.js"></script>
+includes/calendar/Index/index.html:		<script type="text/javascript" src="../src/utils.js"></script>
+includes/calendar/Index/index.html:		<script type="text/javascript" src="../src/calendar.js"></script>
+includes/calendar/Index/index.html:		<script type="text/javascript" src="../lang/calendar-es.js"></script>
+includes/calendar/Index/index.html:		<script type="text/javascript" src="../src/calendar-setup.js"></script>
+includes/calendar/src/utils.js:{if(/src\/calendar.js/i.test(scripts[ii].src))
+includes/calendar/src/utils.js:if(/src\/menu.js/i.test(scripts[ii].src))
+includes/calendar/src/utils.js:if(/src\/tree.js/i.test(scripts[ii].src))
+includes/calendar/src/utils.js:if(/wizard.js/i.test(scripts[ii].src))
+includes/circulacion.js: *	<script src="/intranet-tmpl/includes/jquery/jquery.js"></script>
+includes/circulacion.js: *	<script src="/intranet-tmpl/includes/json/jsonStringify.js"></script>
+includes/circulacion.js: *	<script src="/intranet-tmpl/includes/AjaxHelper.js"></script>
+includes/circulacion.js: *	<script src="/intranet-tmpl/includes/util.js"></script>
+includes/circulacion.js: *	<script src="/intranet-tmpl/includes/jquery/jquery.bgiframe.js"></script>
+includes/circulacion.js: *	<script src="/intranet-tmpl/includes/jquery/jquery.autocomplete.js"></script>
+includes/catalogacion.js: *	<script src="/includes/jquery/jquery.js"></script>
+includes/catalogacion.js: *	<script src="/includes/json/jsonStringify.js"></script>
+includes/catalogacion.js: *	<script src="/includes/AjaxHelper.js"></script>
+includes/catalogacion.js: *	<script src="/intranet-tmpl/includes/util.js"></script>
+reports/logueoBusqueda.tmpl:<script src="/includes/jquery/validate/jquery.validate.js"></script>
+reports/avail_year.tmpl:<script src="/includes/jquery/validate/jquery.validate.js"></script>
+reports/prestamos.tmpl:<script src="/includes/jquery/validate/jquery.validate.js"></script>
+reports/historicoSanciones.tmpl:<script src="/intranet-tmpl/includes/jquery/validate/jquery.validate.js"></script>
+reports/estadisticas.tmpl:<script src="/intranet-tmpl/includes/jquery/validate/jquery.validate.js"></script>
+reports/registro.tmpl:<script src="/includes/jquery/validate/jquery.validate.js"></script>
+reports/disponibilidad_ejemplares.tmpl:<script src="/includes/jquery/datetimepicker/ui.datepicker.js"></script>
+reports/disponibilidad_ejemplares.tmpl:<script src="/includes/jquery/validate/jquery.validate.js"></script>

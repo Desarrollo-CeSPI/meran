@@ -1,0 +1,150 @@
+[% INCLUDE "intranet-top.inc" %]
+<script type="text/javascript" src="/intranet-tmpl/includes/adquisiciones/addProveedores.js"></script>
+[% INCLUDE "FormValidateHelper.inc" %]
+[% INCLUDE 'AutocompleteHelper.inc'  %]
+
+<script type="text/javascript">
+ $(document).ready(function() {
+         validateForm(agregarProveedor)
+         $('#datos_proveedor').hide()
+         CrearAutocompleteCiudades({IdInput: 'ciudad', IdInputHidden: 'id_ciudad'})
+         CrearAutocompleteMonedas({IdInput: 'moneda', IdInputHidden: 'id_moneda'})
+         monedas()
+         // esconde el boton 'Guardar', se muestra cuando selecciona el tipo de proveedor
+         $('#agregar_proveedor').hide()
+ });
+</script>
+
+<fieldset>
+<legend class="titulos">
+                [% "Agregar Proveedor" | i18n %]
+</legend>
+
+<form method="post"  name="proveedorDataForm" id="proveedorDataForm">
+    <ul>
+      <li class="sub_item">
+          <input type="radio" name="radio" id="persona_fisica" value="persona_fisica" onclick="verDatosPersonaFisica()">Persona Fisica
+      </li>
+      <li class="sub_item">
+        <input type="radio" name="radio" id="persona_juridica" value="persona_juridica" onclick="verDatosPersonaJuridica()">Persona Juridica
+      </li>
+      [% PERL %]
+         print C4::AR::Filtros::setHelp(text => "[% 'Seleccione el tipo de proveedor.' | i18n %]",);
+      [% END %]
+    </ul>
+    <fieldset id="datos_proveedor">
+    <legend class="titulo_legend">[% "Datos del proveedor" | i18n %]</legend>
+    <ul>
+        <li class="sub_item">
+            <label for="nombre" id="label_nombre"> [% "Nombre" | i18n %] *</label>
+            <input id="nombre" name="nombre" class="required" type="text" size="25">
+        </li>
+        <li class="sub_item">
+            <label for="apellido" id="label_apellido"> [% "Apellido" | i18n %] *</label>
+            <input id="apellido" name="apellido" class="required" type="text" size="25">
+        </li>
+
+        <li class="sub_item">
+            <label for="nro_doc" id="label_nro_doc">[% "Documento" | i18n %] *</label>
+
+            [% combo_tipo_documento %] 
+
+            <input  id="nro_doc" name="nro_doc" class="required" type="text" size="7" 
+                    value="[% proveedor.getNroDoc %]">
+        </li>
+
+        <li class="sub_item">
+            <label for="razon_social" id="label_razon_social">[% "Razon Social" | i18n %] *</label>
+            <input 	id="razon_social" name="razon_social" class="required" type="text" size="15">
+        </li>
+
+        <li class="sub_item">
+            <label for="cuit_cuil">[% "CUIT/CUIL" | i18n %] *</label>
+            <input  id="cuit_cuil" name="cuit_cuil" class="required" type="text" size="15">
+        </li>
+     </ul>
+    </fieldset>
+    <fieldset>
+      <legend class="titulo_legend">[% "Datos de contacto del proveedor" | i18n %]</legend>
+        <ul>
+            <li class="sub_item">
+                <label for="ciudad">[% "Ciudad" | i18n %] *</label>
+                <input  id="ciudad" name="ciudad" class="required" type="text" size="15">
+                <input  id="id_ciudad" type="hidden" name="ciudad" class="required" type="text" size="15">
+            </li>
+            <li class="sub_item">
+                <label for="domicilio">[% "Domicilio" | i18n %] *</label>
+                <input  id="domicilio" name="domicilio" class="required" type="text" size="15">
+            </li>
+
+            <li class="sub_item">
+                <label for="telefono">[% "Telefono" | i18n %] *</label>
+                <input  id="telefono" name="telefono" class="required" type="text" size="15">
+            </li>
+
+            <li class="sub_item">
+                <label for="fax">[% "Fax" | i18n %] </label>
+                <input  id="fax" name="fax" type="text" size="15">
+            </li>
+
+            <li class="sub_item">
+                <label for="email">[% "Email" | i18n %]</label>
+                <input type=text name="email" id="email" size="15">
+            </li>
+      
+      </ul>
+</fieldset>
+
+<fieldset>
+      <legend class="titulo_legend">[% "Materiales que provee" | i18n %]</legend>
+         <li class="sub_item"> 
+            <label for="material"> [% "Materiales" | i18n %] *</label>
+             [% combo_tipo_materiales %] 
+         </li>
+</fieldset>
+
+<fieldset>
+      <legend class="titulo_legend">[% "Formas de Envio" | i18n %]</legend>
+        <li class="sub_item"> 
+            <label for="formas_envio"> [% "Envios" | i18n %] *</label>
+             [% combo_formas_envio %] 
+         </li>
+</fieldset>
+<fieldset>
+      <legend class="titulo_legend">[% "Monedas" | i18n %]</legend>
+        <li class="sub_item"> 
+          <div id="monedas">
+          
+          </div>
+        </li>
+          <!-- Autocomplete Monedas -->
+          <li class="sub_item"> 
+          <label for="moneda"> [% "Monedas posibles" | i18n %]</label>
+          <input  id="moneda" name="moneda" type="text" size="25" >           
+          <input  id="agregar_moneda" name="agregar_moneda" type="button" size="15" value="Agregar Moneda">
+          <input  id="borrar_moneda" name="borrar_moneda" type="button" size="15" value="Borrar Moneda">
+           <input type="hidden" id="id_moneda" name="id_moneda">
+          </li>
+          [% PERL %]
+                 print C4::AR::Filtros::setHelp(text => "[% 'Ingrese el nombre de la moneda.' | i18n %]",
+                                                );
+          [% END %]
+</fieldset>
+
+<div class="buttonContainerHorizontal">
+    <ul class="listaMenuBotones" >
+            [% PERL %]
+                    print C4::AR::Filtros::to_Button(   text    => "[% 'Guardar' | i18n %]",
+                                                        boton   => "boton_buscar",
+                                                        onClick => "save();",
+                                                        title   => "[% 'Guardar' | i18n %]",
+                                                        id      => "[% 'agregar_proveedor' %]",
+                                                                ) ;
+            [% END %]
+    </ul>
+</div>
+        <div>
+            <strong>(*) [% "Obligatorio" | i18n %]</strong>
+        </div>
+</form>
+[% INCLUDE "intranet-bottom.inc" %]

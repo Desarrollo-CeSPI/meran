@@ -1,0 +1,225 @@
+
+
+DROP TABLE IF EXISTS`adq_forma_envio`, `adq_item`, `adq_pedido_cotizacion`, `adq_pedido_cotizacion_detalle`, `adq_proveedor`, `adq_proveedor_forma_envio`, `adq_proveedor_item`, `adq_ref_moneda`, `adq_ref_proveedor_moneda`;
+
+SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `adq_forma_envio`
+--
+
+CREATE TABLE IF NOT EXISTS `adq_forma_envio` (
+  `id` int(11) NOT NULL,
+  `nombre` varchar(100) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `adq_item`
+--
+
+CREATE TABLE IF NOT EXISTS `adq_item` (
+  `id_item` int(11) NOT NULL AUTO_INCREMENT,
+  `descripcion` varchar(255) DEFAULT NULL,
+  `precio` float NOT NULL,
+  PRIMARY KEY (`id_item`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `adq_pedido_cotizacion`
+--
+
+CREATE TABLE IF NOT EXISTS `adq_pedido_cotizacion` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `fecha` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `adq_pedido_cotizacion_detalle`
+--
+
+CREATE TABLE IF NOT EXISTS `adq_pedido_cotizacion_detalle` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `adq_pedido_cotizacion_id` int(11) NOT NULL,
+  `cat_nivel2_id` int(11) DEFAULT NULL,
+  `autor` varchar(255) DEFAULT NULL,
+  `titulo` varchar(255) DEFAULT NULL,
+  `lugar_publicacion` varchar(255) DEFAULT NULL,
+  `editorial` varchar(255) DEFAULT NULL,
+  `fecha_publicacion` date DEFAULT NULL,
+  `coleccion` varchar(255) DEFAULT NULL,
+  `isbn_issn` varchar(45) DEFAULT NULL,
+  `cantidad_ejemplares` int(5) NOT NULL DEFAULT '1',
+  `precio_unitario` float NOT NULL,
+  `adq_recomendacion_detalle_id` int(11) DEFAULT NULL,
+  `nro_renglon` int(11) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `adq_presupuesto`
+--
+
+CREATE TABLE IF NOT EXISTS `adq_presupuesto` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `proveedor_id` int(11) NOT NULL,
+  `fecha` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `ref_estado_presupuesto_id` int(11) NOT NULL,
+  `ref_pedido_cotizacion_id` int(11) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `adq_proveedor`
+--
+
+CREATE TABLE IF NOT EXISTS `adq_proveedor` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `nombre` varchar(255) DEFAULT NULL,
+  `apellido` varchar(255) DEFAULT NULL,
+  `nro_doc` varchar(21) DEFAULT NULL,
+  `razon_social` varchar(255) DEFAULT NULL,
+  `cuit_cuil` int(11) NOT NULL,
+  `domicilio` varchar(255) DEFAULT NULL,
+  `telefono` varchar(32) DEFAULT NULL,
+  `fax` varchar(32) DEFAULT NULL,
+  `email` varchar(255) DEFAULT NULL,
+  `activo` int(1) NOT NULL,
+  `plazo_reclamo` int(11) DEFAULT NULL,
+  `usr_ref_tipo_documento_id` int(11) DEFAULT NULL,
+  `ref_localidad_id` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `fk_adq_proveedor_usr_ref_tipo_documento1` (`usr_ref_tipo_documento_id`),
+  KEY `fk_adq_proveedor_ref_localidad1` (`ref_localidad_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=7 ;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `adq_proveedor_forma_envio`
+--
+
+CREATE TABLE IF NOT EXISTS `adq_proveedor_forma_envio` (
+  `adq_forma_envio_id` int(11) NOT NULL,
+  `adq_proveedor_id` int(11) NOT NULL,
+  PRIMARY KEY (`adq_forma_envio_id`,`adq_proveedor_id`),
+  KEY `fk_adq_proveedor_forma_envio_adq_proveedor1` (`adq_proveedor_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `adq_proveedor_item`
+--
+
+CREATE TABLE IF NOT EXISTS `adq_proveedor_item` (
+  `id_proveedor` int(11) NOT NULL,
+  `id_item` int(11) NOT NULL,
+  PRIMARY KEY (`id_proveedor`,`id_item`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `adq_proveedor_tipo_material`
+--
+
+CREATE TABLE IF NOT EXISTS `adq_proveedor_tipo_material` (
+  `proveedor_id` int(11) NOT NULL,
+  `tipo_material_id` int(11) NOT NULL,
+  PRIMARY KEY (`proveedor_id`,`tipo_material_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `adq_recomendacion`
+--
+
+CREATE TABLE IF NOT EXISTS `adq_recomendacion` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `fecha` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `activa` tinyint(4) NOT NULL DEFAULT '1',
+  `adq_ref_tipo_recomendacion_id` int(11) NOT NULL,
+  `usr_socio_id` varchar(50) CHARACTER SET utf8 NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `fk_adq_recomendacion_adq_ref_tipo_recomendacion1` (`adq_ref_tipo_recomendacion_id`),
+  KEY `fk_adq_recomendacion_usr_socio1` (`usr_socio_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `adq_recomendacion_detalle`
+--
+
+CREATE TABLE IF NOT EXISTS `adq_recomendacion_detalle` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `cat_nivel2_id` int(11) DEFAULT NULL,
+  `autor` varchar(255) DEFAULT NULL,
+  `titulo` varchar(255) DEFAULT NULL,
+  `lugar_publicacion` varchar(255) DEFAULT NULL,
+  `editorial` varchar(255) DEFAULT NULL,
+  `fecha_publicacion` varchar(50) DEFAULT NULL,
+  `coleccion` varchar(255) DEFAULT NULL,
+  `isbn_issn` varchar(45) DEFAULT NULL,
+  `cantidad_ejemplares` int(5) NOT NULL DEFAULT '1',
+  `motivo_propuesta` text NOT NULL,
+  `comentario` text,
+  `reserva_material` tinyint(4) NOT NULL DEFAULT '0',
+  `adq_recomendacion_id` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `fk_adq_recomendacion_detalle_adq_recomendacion1` (`adq_recomendacion_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `adq_ref_proveedor_moneda`
+--
+
+CREATE TABLE IF NOT EXISTS `adq_ref_proveedor_moneda` (
+  `adq_ref_moneda_id` int(11) NOT NULL,
+  `adq_proveedor_id` int(11) NOT NULL,
+  PRIMARY KEY (`adq_ref_moneda_id`,`adq_proveedor_id`),
+  KEY `fk_adq_ref_moneda_has_adq_proveedor_adq_proveedor1` (`adq_proveedor_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `adq_tipo_material`
+--
+
+CREATE TABLE IF NOT EXISTS `adq_tipo_material` (
+  `id` int(11) NOT NULL,
+  `nombre` varchar(128) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `ref_adq_moneda`
+--
+
+CREATE TABLE IF NOT EXISTS `ref_adq_moneda` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `nombre` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `nombre` (`nombre`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=7 ;
+

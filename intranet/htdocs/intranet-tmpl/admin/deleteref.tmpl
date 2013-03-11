@@ -1,0 +1,163 @@
+<!-- TMPL_INCLUDE NAME="intranet-top.inc" -->
+<SCRIPT>
+function enviarContenido(codigo){
+	document.getElementById("editandoCONTENIDO").href="editref.pl";
+	document.getElementById("editandoCONTENIDO").submit();}
+function enviarContenido2(codigo){
+	document.getElementById("asignandoID").value=codigo;
+	document.getElementById("editandoCONTENIDO").href="asignar.pl";
+	document.getElementById("editandoCONTENIDO").submit();
+	}
+function enviarContenido3(codigo){
+	document.getElementById("editandoBORRAR").value="1";
+	enviarContenido2(codigo);
+	}	
+
+</SCRIPT>
+<div class="titulo">Administraci&oacute;n de Categor&iacute;as</div>
+							   
+	<!-- TMPL_IF NAME="editandoMensaje" -->
+		Actualizo el registro identificado por <strong><!-- TMPL_VAR name="editandoidentificador" --> </strong>igual a <strong><!-- TMPL_VAR name="editandocodigo" --></strong>
+	<!-- /TMPL_IF -->
+	<!-- TMPL_IF NAME="borrandoMensaje" -->
+		Se asignaron los registros asociados al registro identificado por <strong><!-- TMPL_VAR name="editandoidentificador" --> </strong> igual a <strong><!-- TMPL_VAR name="editandoidborrado" --></strong> por el identificado por <strong><!-- TMPL_VAR name="editandoidentificador" --> </strong> igual a <strong><!-- TMPL_VAR name="asignandoID" --></strong>
+		Se eliminaron los datos del registro identificado por <strong><!-- TMPL_VAR name="editandoidentificador" --> </strong> igual a <strong><!-- TMPL_VAR name="editandoidborrado" --></strong>
+	<!-- TMPL_ELSE --> 
+		<!-- TMPL_IF NAME="asignandoMensaje" -->
+		Asigno los registros del registro identificado por <strong><!-- TMPL_VAR name="editandoidentificador" --> </strong> igual a <strong><!-- TMPL_VAR name="editandocodigo" --></strong> por el identificado por <strong><!-- TMPL_VAR name="editandoidentificador" --> </strong> igual a <strong><!-- TMPL_VAR name="asignandoID" --></strong>
+		<!-- /TMPL_IF -->
+	
+	<!-- /TMPL_IF -->
+	
+	<!-- TMPL_IF NAME=searchfield -->
+		Ha Buscado por <!-- TMPL_VAR name=searchfield -->
+	<!-- /TMPL_IF -->
+	<FORM id="editandoCONTENIDO" href="">
+	<input type="hidden" name="editandotabla" value="<!-- TMPL_VAR NAME="editandotabla" -->" >
+	<input type="hidden" name="editandoidentificador" value="<!-- TMPL_VAR NAME="editandoidentificador" -->" >
+	<INPUT type="hidden" name="editandocodigo" id="editandocodigo" value="<!-- TMPL_VAR NAME="editandocodigo" -->" >
+	<INPUT type="hidden" name="editandoBORRAR" id="editandoBORRAR" value="0" >
+	
+	<INPUT type="hidden" name="editandoind" id="editandoind" value="<!-- TMPL_VAR NAME="editandoind" -->" >
+	<INPUT type="hidden" name="editandocant" id="editandocant" value="<!-- TMPL_VAR NAME="editandocant" -->" >
+	<INPUT type="hidden" name="editandoorden" id="editandoorden" value="<!-- TMPL_VAR NAME="editandoorden" -->" >
+        <INPUT type="hidden" name="accionopcion" id="accionopcion" value="editando" >
+	<INPUT type="hidden" name="asignandoID" id="asignandoID" value="" >
+	<INPUT type="hidden" name="accionvolver" id="accionvolver" value="0" >
+	<table>
+	<tr>
+
+	<form id="form1" action='<!-- TMPL_VAR NAME="script_name" -->' method=post name="form1">
+		<!--Miguel 24-04-07 - Se saca por ahora ver si es necesario --->
+		<!--<td><input type=text class="inputFontNormal"name=description value=<!-- TMPL_VAR name="searchfield" -->></td>
+		<td> <-img name="go" id="go" alt="Comenzar b&uacute;squeda" src="<!-- TMPL_VAR NAME="themelang" -->/images/boton-buscar.png" border="0" onMouseOut="swap('go','<!-- TMPL_VAR NAME="themelang" -->/images/boton-buscar.png')" onMouseOver="swap('go','<!-- TMPL_VAR NAME="themelang" -->/images/boton-buscarbis.png')" onClick="document.getElementById('form1').submit()">-->
+		 
+		</td>
+	</form>
+	</tr>
+	</table>
+
+        <table border=0 cellspacing=0 cellpadding="0" width="100%">
+		<tr class="titulo_tabla_resultado">
+			<td width="1%" align="left"  valign="top">
+				<img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/izquierda.png">
+			</td>
+			<td align="left">  Campo </td>
+			<td>Valor</td>
+			<td align="right" width="1%"  valign="top">
+				<img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/derecha.png">
+			</td>
+		</tr>
+		<!-- TMPL_LOOP NAME=loop -->
+			<tr valign="middle">
+			<td width="1%" align="right"  valign="top" class="<!-- TMPL_VAR NAME='clase'-->">
+				&nbsp;
+			</td>
+			<td class="<!-- TMPL_VAR NAME='clase'-->"><!-- TMPL_IF NAME=campo --><!-- TMPL_VAR NAME="campo"--><!--TMPL_ELSE --> --- <!-- /TMPL_IF --></td>
+		 	<td align="center" class="<!-- TMPL_VAR NAME='clase'-->"><!-- TMPL_IF NAME="valor" --><!-- TMPL_VAR NAME="valor"--><!--TMPL_ELSE --> --- <!-- /TMPL_IF -->
+			</td>
+                	<td height=20 class="<!-- TMPL_VAR NAME='clase'-->">&nbsp;</td>
+			</tr>
+		<!-- /TMPL_LOOP -->
+ 		<tr>
+		<!--<td class="lineafinaltabla"  align="left" colspan="15">
+		</td>
+		<td class="lineafinaltabla"  align="left" colspan="15"></td>
+		<td class="lineafinaltabla"  align="left" colspan="15"></td>-->
+		</tr>
+		<tr>
+			<td colspan="4" align="center" class="<!-- TMPL_VAR NAME="clase"-->"><a class="inputFontNormal" href="javascript:enviarContenido('<!-- TMPL_VAR NAME="editandocodigo" -->')"><img src="<!-- TMPL_VAR name="interface" -->/<!-- TMPL_VAR name="theme" -->/images/editar.png" ALT="Editar" border="0"></a>
+			</td>
+		</tr>
+		<tr valign=bottom> 
+        	<!--<td class="lineafinaltabla"  align="left" colspan="15"></td>-->
+        	</tr>
+	</table>
+	<br><br>
+	<!-- ACA EMPIEZAN LOS RESULTADOS DE LOS REGISTROS RELACIONADOS -->
+	<table border=0 cellspacing=0 cellpadding="0" width="100%"><!--<tr  valign="middle">-->
+		<tr class="titulo_tabla_resultado" valign="left">
+			<td colspan="3" align="left">Registros Relacionados:</td>			
+		</tr>
+		<!-- TMPL_IF NAME=loopRelacionados -->
+		<!-- TMPL_LOOP NAME=loopRelacionados -->
+		<tr valign="middle">
+			<td width="1%" align="right"  valign="top">
+			<!--<img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/izquierda.png">-->
+			</td>
+			<td> 
+			El registro tiene relacionados <!-- TMPL_VAR NAME="relacionadoTablaCantidad"--> 
+			tuplas de la tabla <!-- TMPL_VAR NAME="relacionadoTabla"-->
+			</td>
+		<!-- /TMPL_LOOP -->
+		<!--TMPL_ELSE --> 
+			<td> No tiene registros relacionados</td>
+	         <!-- /TMPL_IF -->
+		<!--<td height=20 class="<!-- TMPL_VAR NAME="clase"-->">&nbsp;</td>-->
+		</tr>
+		<tr valign=bottom> 
+        	<!--<td class="lineafinaltabla"  align="left" colspan="15"></td>-->
+        	</tr>
+ 	</table>
+	<br><br>
+
+
+	<table border=0 cellspacing=0 cellpadding="0" width="100%">
+		<tr class="titulo_tabla_resultado">
+			<td width="1%" align="right"  valign="top">
+				<img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR 
+				name='theme'-->/images/izquierda.png">
+			</td>
+			<!-- TMPL_LOOP NAME=camposloop -->
+			<td><!-- TMPL_VAR NAME="campo"--></td>
+			<!-- /TMPL_LOOP -->
+			<td>Asignar </td>
+			<td>Asignar y Borrar </td>
+			<td width="1%"  valign="top">
+				<img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/derecha.png">
+			</td>
+		</tr>
+		<!-- TMPL_LOOP NAME=editandoSimilares -->
+		<tr valign="middle">
+			<td>&nbsp;</td>
+		
+			<!-- TMPL_LOOP NAME=registro -->
+			<td align="center" class="<!-- TMPL_VAR NAME='clase'-->"><!-- TMPL_IF NAME=campo --><!-- TMPL_VAR NAME="campo"--><!--TMPL_ELSE --> --- <!-- /TMPL_IF --></td>
+			<!-- /TMPL_LOOP -->
+	                <td align="center" class="<!-- TMPL_VAR NAME='clase'-->"><a class="inputFontNormal" href="javascript:enviarContenido2('<!-- TMPL_VAR NAME=id -->')"><img src="<!-- TMPL_VAR name='interface' -->/<!-- TMPL_VAR name="theme" -->/images/borrar.png" ALT="Asignar" border="0"></a>
+			</td>
+			<td align="center" class="<!-- TMPL_VAR NAME='clase'-->"><a class="inputFontNormal" href="javascript:enviarContenido3('<!-- TMPL_VAR NAME=id -->')"><img src="<!-- TMPL_VAR name='interface' -->/<!-- TMPL_VAR name="theme" -->/images/borrar.png" ALT="Asignar" border="0"></a>
+			</td>
+			
+		</tr>
+		<!-- /TMPL_LOOP -->	
+	<!--</FORM>	-->
+ 	<tr valign=bottom> 
+        <td class="lineafinaltabla"  align="left" colspan="15"></td>
+        </tr>
+	
+	</table>
+
+	
+	<!--</FORM>	-->
+<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

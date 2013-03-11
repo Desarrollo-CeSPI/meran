@@ -1,0 +1,2 @@
+ALTER TABLE `io_importacion_iso_registro` ADD `identificacion` VARCHAR( 255 ) NULL AFTER `id_matching` ,
+ADD `relacion` VARCHAR( 255 ) NULL AFTER `identificacion` ;

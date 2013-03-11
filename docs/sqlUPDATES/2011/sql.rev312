@@ -1,0 +1,1 @@
+UPDATE pref_preferencia_sistema SET explanation = 'Habilita/Deshabilita la búsqueda en servidores externos Meran. También permite que sistemas externos busquen sobre este MERAN.' WHERE variable = "external_search";

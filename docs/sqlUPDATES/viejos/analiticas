@@ -1,0 +1,23 @@
+
+CREATE TABLE `analyticalauthors` (
+  `analyticalnumber` int(11) NOT NULL,
+    `author` text NOT NULL
+    ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+
+    CREATE TABLE `analyticalsubject` (
+      `analyticalnumber` int(11) NOT NULL,
+        `subject` text NOT NULL
+	) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+	CREATE TABLE `biblioanalysis` (
+	  `analyticaltitle` text,
+	    `biblionumber` int(11) NOT NULL default '0',
+	      `analyticalunititle` text,
+	        `biblioitemnumber` int(11) NOT NULL default '0',
+		  `parts` text NOT NULL,
+		    `timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
+		      `analyticalnumber` int(11) NOT NULL,
+		        `classification` varchar(25) default NULL,
+			  PRIMARY KEY  (`analyticalnumber`)
+			  ) ENGINE=MyISAM DEFAULT CHARSET=latin1;

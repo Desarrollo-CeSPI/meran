@@ -1,0 +1,105 @@
+[% INCLUDE "intranet-top.inc" %]
+<script type="text/javascript" src="/intranet-tmpl/includes/importacion/listaImportaciones.js"></script>
+
+[% INCLUDE "FormValidateHelper.inc" %]
+<script type="text/javascript">
+ $(document).ready(function() {
+       onEnter("nombre_proveedor",consultar);
+       consultar('TODOS');
+ });
+</script>
+
+     <form class="form-horizontal">
+        <section class="center-section-form">
+			<div class="right">
+                            [% PERL %]
+                                                print C4::AR::Filtros::action_link_button(   
+                                                                                    button   => "btn btn-warning",
+                                                                                    url => "[% url_prefix %]/herramientas/importacion/esquemas_importacion.pl",
+                                                                                    params => ["token=[% token%]",],
+                                                                                    icon => "icon-white icon-list-alt",
+                                                                                    title   => " [% 'Esquemas' | i18n %]",
+                                                        ) ;
+                            [% END %]
+			                [% PERL %]
+			                                    print C4::AR::Filtros::action_link_button(  
+			                                                                        button   => "btn btn-success",
+			                                                                        url => "[% url_prefix %]/herramientas/importacion/subirNuevaImportacion.pl",
+                                                                                    icon => "icon-white icon-plus-sign",
+			                                                                        params => ["token=[% token%]",],
+			                                                                        title   => " [% 'Nueva importaci&oacute;n' | i18n %]",
+			                                            ) ;
+			                [% END %]
+			</div>
+	        <fieldset>
+	            <legend class="titulo_legend_resaltado">Listado de Importaciones</legend>  
+	            <div class="control-group">
+	                <div class="controls">
+	                    <input id="nombre_importacion" type=text name="nombre_importacion" onFocus="checkFilter('focus')"
+	                        onBlur="checkFilter('blur')">
+	                    [% PERL %]
+	                 print C4::AR::Filtros::setHelpInput(text => "[% 'Tipee el nombre, el archivo o parte del comentario de la importaci&oacute;n que desea buscar.' | i18n %]",);
+	            [% END %]
+	                </div>
+	            </div>
+	            
+	            <div class="form-actions">
+	                [% PERL %]
+	                                    print C4::AR::Filtros::to_Button(   text    => "[% 'Buscar' | i18n %]",
+	                                                                        boton   => "btn btn-primary",
+	                                                                        onClick => "consultar();",
+	                                                                        title   => "[% 'Buscar' | i18n %]",
+	                                                                        inline => "1"
+	                                            ) ;
+	                [% END %]
+	                [% PERL %]
+	                                    print C4::AR::Filtros::to_Button(   text    => "[% 'Limpiar' | i18n %]",
+	                                                                        boton   => "btn",
+	                                                                        onClick => "borrar();",
+	                                                                        title   => "[% 'Limpiar' | i18n %]",
+	                                                                        inline => "1"
+	                                            ) ;
+	                [% END %]
+	            
+	            </div>
+        </fieldset>	    
+    </section>
+</form>
+
+
+<fieldset>
+    <legend class="titulo_legend">[% "Inicial de la importaci&oacute;n" | i18n %]</legend>
+    <div id="filterBar" style="text-align:center">
+            <a href="#tablaResult" onClick="consultar('A')"> A |</a>
+            <a href="#tablaResult" onClick="consultar('B')"> B |</a>
+            <a href="#tablaResult" onClick="consultar('C')"> C |</a>
+            <a href="#tablaResult" onClick="consultar('D')"> D |</a>
+            <a href="#tablaResult" onClick="consultar('E')"> E |</a>
+            <a href="#tablaResult" onClick="consultar('F')"> F |</a>
+            <a href="#tablaResult" onClick="consultar('G')"> G |</a>
+            <a href="#tablaResult" onClick="consultar('H')"> H |</a>
+            <a href="#tablaResult" onClick="consultar('I')"> I |</a>
+            <a href="#tablaResult" onClick="consultar('j')"> J |</a>
+            <a href="#tablaResult" onClick="consultar('K')"> K |</a>
+            <a href="#tablaResult" onClick="consultar('L')"> L |</a>
+            <a href="#tablaResult" onClick="consultar('M')"> M |</a>
+            <a href="#tablaResult" onClick="consultar('N')"> N |</a>
+            <a href="#tablaResult" onClick="consultar('O')"> O |</a>
+            <a href="#tablaResult" onClick="consultar('P')"> P |</a>
+            <a href="#tablaResult" onClick="consultar('Q')"> Q |</a>
+            <a href="#tablaResult" onClick="consultar('R')"> R |</a>
+            <a href="#tablaResult" onClick="consultar('S')"> S |</a>
+            <a href="#tablaResult" onClick="consultar('T')"> T |</a>
+            <a href="#tablaResult" onClick="consultar('U')"> U |</a>
+            <a href="#tablaResult" onClick="consultar('V')"> V |</a>
+            <a href="#tablaResult" onClick="consultar('W')"> W |</a>
+            <a href="#tablaResult" onClick="consultar('X')"> X |</a>
+            <a href="#tablaResult" onClick="consultar('Y')"> Y |</a>
+            <a href="#tablaResult" onClick="consultar('Z')"> Z |</a>
+            <a href="#tablaResult" onClick="consultar('TODOS')"> [% "TODOS" | i18n %] </a>
+    </div>
+</fieldset>
+<br>
+<div id="result"></div>
+<br>
+[% INCLUDE "intranet-bottom.inc" %]

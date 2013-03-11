@@ -1,0 +1,69 @@
+<div class="filtros_reportes">
+
+  <section class="center-section-form"> 
+    <form class="form-horizontal" name="filtros_reportes" id="filtros_reportes" onsubmit="return false;">
+      <fieldset>
+        <div class="control-group">
+                  <label class="control-label" for="apellido">[% "Apellido" | i18n %]</label>
+                  <div class="controls">
+                        <input type='text' id='surname1' name='surname1' value='[% surname1 %]'>
+                        <input type='text' id='surname2' name='surname2' value='[% surname2 %]'>
+                    
+                  </div>
+        </div>
+        <div class="control-group">
+                  <label class="control-label" for="legajo">[% "Legajo" | i18n %]</label>
+                  <div class="controls">
+                        <input type='text' id='legajo1' name='legajo1' value='[% legajo1 %]'>
+                        <input type='text' id='legajo2' name='legajo2' value='[% legajo2 %]'>
+                  </div>
+        </div>
+        <div class="control-group">
+                  <label class="control-label" for="UI">[% "Unidad de Informaci&oacute;n" | i18n %]</label>
+                  <div class="controls">
+                          [% unidades %]
+                  </div>
+        </div>
+        <div class="control-group">
+                  <label class="control-label" for="regulares">[% "Categoria" | i18n %]</label>
+                  <div class="controls">
+                          [% categories %]
+                  </div>
+        </div>
+        <div class="control-group">
+                  <label class="control-label" for="regulares">[% "Regularidad" | i18n %]*</label>
+                  <div class="controls">
+                          [% regulares %]
+                  </div>
+        </div>
+
+        <div class="form-actions">
+
+          
+                    <script> var search = 'search'; </script>
+              
+                    [% PERL %]
+                            print C4::AR::Filtros::action_button( 
+                                                            button       => "btn btn-primary click",
+                                                            action       => "consultar(search);", 
+                                                            icon         => "icon-search icon-white",
+                                                            title        => "[% 'Buscar' | i18n %]",
+                                                        ) ;
+                    [% END %]
+                
+        </div>
+
+
+    </fieldset>
+    </section>
+  </form>
+</div>
+<div id="result"></div>
+
+<!-- Formulario para poder crear el pdf -->
+<div id="formulario">
+</div>
+
+
+
+

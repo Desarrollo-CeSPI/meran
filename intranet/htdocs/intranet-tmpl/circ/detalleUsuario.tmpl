@@ -1,0 +1,60 @@
+[% INCLUDE "AjaxTemplateJSReadyActivations.inc" %]
+
+<div class="well form-actions"> 
+    <fieldset class="datos_usuario">
+        <legend class="titulo_legend_resaltado">[% 'Datos de Usuario' | i18n %]</legend>
+    
+           <div class="left span3 control-group">
+                 [% IF socio.tieneFoto %]  
+                     <a class="fancylink" rel="group" href="/uploads/pictures/[% socio.tieneFoto %]">
+                         <img border="0" src="/uploads/pictures/[% socio.tieneFoto %]"
+                               style="height: 60%; width: 60%; max-width: 120px; max-height: 120px;" 
+                               alt="[% socio.persona.getApellido %], [% socio.persona.getNombre %] ([% socio.getNro_socio %])"
+                               title="[% socio.persona.getApellido %], [% socio.persona.getNombre %] ([% socio.getNro_socio %])"
+                         >
+                     </a>
+                 [% ELSE %]
+                    [% IF socio.persona.sexo == 'F' %]
+                         <img border="0" src="/includes/css/images/no_foto_female.gif"
+                               style="height: 120px; width: 120x;" 
+                               alt='[% "Usuario sin foto" | i18n %]'
+                         >
+                    [% ELSE %]
+                         <img border="0" src="/includes/css/images/no_foto_male.gif"
+                               style="height: 120px; width: 120x;" 
+                               alt='[% "Usuario sin foto" | i18n %]'
+                         >
+                    [% END %]
+                 [% END %]
+           </div>
+         <div class="left span6">
+             <dl>
+                   <dt class="inline left rightMargin">[% "Apellido:" | i18n %]</dt>
+                   <dd>[% socio.persona.getApellido %] </dd>
+        
+                   <dt class="inline left rightMargin">[% "Nombre:" | i18n %]</dt>
+                   <dd>[% socio.persona.getNombre %] </dd>
+        
+                   <dt class="inline left rightMargin">[% "Documento:" | i18n %]</dt>
+                   <dd>[% socio.persona.getVersion_documento %]&nbsp; [% socio.persona.getNro_documento %]</dd>
+        
+                   <dt class="inline left rightMargin">[% "Categor&iacute;a:" | i18n %] </dt>
+                      <dd>
+                          [% TRY %]
+                            <span class="label label-info">[% socio.categoria.getDescription %]</span>
+                          [% CATCH %]
+                            <span class="label label-inverse">[% 'Sin categor&iacute;a' | i18n %]</span>
+                          [% END %] 
+                      </dd>
+
+                   [% IF !(socio.getNro_socio == socio.getNro_documento) %]
+                       <dt class="inline left rightMargin">[% "Tarjeta de identificaci&oacute;n :" | i18n %] </dt>
+                       <dd>[% socio.getNro_socio %]</dd>
+                   [% END %]
+             </dl>
+         </div>
+    
+    </fieldset>
+</div>
+
+

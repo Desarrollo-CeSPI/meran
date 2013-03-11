@@ -1,0 +1,41 @@
+<fieldset>
+    <legend>[% "Hist&oacute;rico de Disponibilidad" | i18n %]:</legend>
+    [% IF cant_historico %]
+            <div class="contenedor_paginador">[% paginador %]</div>
+              [% PERL %]
+                  print C4::AR::Filtros::tableHeader(   
+                                                          id              => "historico_disponibilidad",
+                                                          class           => "",
+                                                          columns         => [                                                                             
+                                                                              '[% "Disponibilidad" |i18n %]','[% "Estado" |i18n %]','[% "Fecha" |i18n %]',
+                                                                             ]
+                                                          
+                              ) ;
+              [% END %]
+              <tbody>
+                  [% FOREACH historico IN historico_disponibilidad %]
+                      <tr>
+                          <td>
+                              [% historico.getTipo_prestamo %] 
+                          </td>
+                          <td>
+                              [% historico.getDetalle %] 
+                          </td>
+                          <td>
+                              [% historico.getFecha %] 
+                          </td>
+                      </tr>
+                  [% END %]
+              </tbody>
+              <tfoot>
+                   <div class="page-header" style="border-bottom: none; padding-bottom: 0px;">
+                        <h3>
+                            <small>[% "Este ejemplar ha tenido" | i18n %]&nbsp;[% cant_historico %]&nbsp;[% "cambio/s en su disponibilidad " | i18n %]</small>
+                        </h3>
+                    </div>
+              </tfoot>
+          </table>
+     [% ELSE %]
+        <div class="alert alert-info">[% 'No hay hist&oacute;rico de disponibilidad'| i18n %]</div>
+     [% END %]
+</fieldset>

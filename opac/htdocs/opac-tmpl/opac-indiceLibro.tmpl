@@ -1,0 +1,67 @@
+<!-- TMPL_INCLUDE NAME="opac-top.inc" -->
+
+<table align="left" cellspacing=0 border="0" cellpadding=0 width="100%" class="tope">
+ 	<tr><td><span class="pagetitulo">Indice del Libro</span><td></tr>	
+	<tr><th >&nbsp;</th></tr>
+ 	<tr class="bordetabla"><th >&nbsp;</th></tr>
+	<tr class="bordetabla"><th >&nbsp;</th></tr>
+	<tr><th >&nbsp;</th></tr>
+</table>
+<br>
+<table align="left" cellpadding="0" cellspacing="0" border="0" width="100%" >
+<tr valign="top">
+  <td>
+
+<b>T&iacute;tulo:</b><!-- TMPL_VAR NAME="TITLE" ESCAPE=HTML --><br>
+
+<!-- TMPL_IF name="UNITITLE" -->
+	<b>T&iacute;tulo Informativo:</b> <!-- TMPL_VAR NAME="UNITITLE" --><br>
+<!-- /TMPL_IF -->
+
+<!-- TMPL_IF name="SUBTITLE" -->
+	<b>Otro T&iacute;tulo:</b> <!-- TMPL_VAR NAME="SUBTITLE" --><br>
+<!-- /TMPL_IF -->
+
+<!-- TMPL_LOOP NAME="AUTHOR" -->
+	<b>Autor:</b><br>
+		<a href="[% url_prefix %]/search.pl?authorid=<!-- TMPL_VAR NAME="id" ESCAPE="URL" -->&type=intra">
+			<!-- TMPL_VAR NAME="apellido" -->
+	<!-- TMPL_IF name="nombre" -->, <!-- TMPL_VAR NAME="nombre" -->
+	<!-- /TMPL_IF -->
+		</a><br>
+<!-- /TMPL_LOOP -->
+
+<!-- TMPL_IF name="ADDITIONAL" -->
+	<b>Autores Adicionales:</b> <br>
+	<!-- TMPL_LOOP NAME="ADDITIONAL" -->
+	<a href="[% url_prefix %]/search.pl?authorid=<!-- TMPL_VAR NAME="id" ESCAPE="URL" -->&type=intra">
+			<!-- TMPL_VAR NAME="apellido" --> <!-- TMPL_IF name="nombre" -->, <!-- TMPL_VAR NAME="nombre" --><!-- /TMPL_IF -->
+	</a><br>
+	<!-- /TMPL_LOOP -->
+<!-- /TMPL_IF -->
+
+<!-- TMPL_IF name="COLABS" -->
+	<b>Colaboradores :</b><br>
+	<!-- TMPL_LOOP NAME="COLABS" -->
+	<a href="[% url_prefix %]/search.pl?authorid=<!-- TMPL_VAR NAME='id' ESCAPE='URL' -->&type=intra">
+	<!-- TMPL_VAR NAME="apellido" --><!-- TMPL_IF name="nombre" -->, <!-- TMPL_VAR NAME="nombre" --><!-- /TMPL_IF --> (<!-- TMPL_VAR NAME="tipo" -->)
+	</a><br>
+	<!-- /TMPL_LOOP -->
+<!-- /TMPL_IF -->
+  </td>
+</tr>
+<tr><td>&nbsp;</td></tr>
+</table>
+
+<center>
+<textarea name="indice" rows="20" cols="120" disabled="disabled" style="background-color:white; color:black">
+<!-- TMPL_VAR NAME="infoIndice" -->
+</textarea>
+
+</center>
+
+
+<br>
+<center><a href="[% url_prefix %]/opac-detail.pl?type=opac&bib=<!-- TMPL_VAR Name='biblionumber' -->">Volver</a></center>
+
+<!-- TMPL_INCLUDE NAME="opac-bottom.inc" -->

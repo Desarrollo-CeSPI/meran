@@ -1,0 +1,58 @@
+    <fieldset>
+                            <div  >
+                                  <li> [% "Numero de presupuesto:" | i18n %]<strong> [% pres.id %]</strong> </li>  
+                                  <li> [% "Proveedor:" | i18n %]<strong> [% pres.ref_proveedor.getNombre %]</strong> </li>     
+                                  <li> [% "Fecha:" | i18n %]<strong> [% pres.fecha %]</strong> </li>  
+       
+                                  <input type="hidden" id="id_prov" value="[% pres.proveedor_id %]">
+                                  <input type="hidden" id="id_pres" value="[% pres.id %]">
+                            </div>
+    </fieldset>
+    <fieldset>
+          <table id="tablaResult" class="datos_tabla" border=0 cellspacing=0 cellpadding=0 width=100%>
+              <thead>
+                  <tr class="titulo_tabla_resultado">
+                      <th id="renglon">
+                          [% "Renglon" | i18n %]
+                      </th>
+                      <th id="cantidad">
+                          [% "Cantidad" | i18n %]
+                      </th>
+                      <th id="articulo">
+                          [% "Articulo" | i18n %]
+                      </th>
+                      <th id="precio_unitario">
+                          [% "Precio Unitario" | i18n %]
+                      </th>  
+                      <th id="total">
+                          [% "Total" | i18n %]
+                      </th>          
+                  </tr>
+              </thead>
+              <tbody>
+                  
+                    [% FOREACH datos_presupuesto %]   
+                    <tr  align="center" id="[% renglon %]">
+                          <td align="left" class="presupuesto">
+                            <input type="text" name="renglon[% renglon %]" id="renglon[% renglon %]" value="[% renglon %]" READONLY> 
+                          </td>
+                          <td align="left" class="presupuesto">
+                              <input type="text" name="cantidad[% renglon %]" id="cantidad[% renglon %]" onblur="calcularTotal([% renglon %])" value="[% cantidad %]"> 
+                          </td>
+                          <td align="left" class="presupuesto">
+                              <input type="text" name="articulo[% renglon %]" id="articulo[% renglon %]" value="[% articulo %]" READONLY> 
+                          </td>
+                          <td align="left" class="presupuesto">
+                              <input type="text" name="precio_unitario[% renglon %]" id="precio_unitario[% renglon %]" onblur="calcularTotal([% renglon %])" value="[% precio_unitario%]" > 
+                          </td>
+                          <td align="left" class="presupuesto">
+                              <input type="text" name="total[% renglon %]" id="total[% renglon %]" value="[% total%]" READONLY>
+                              
+                          </td> 
+                  </tr>        
+                  [% END %]    
+                    
+            </tbody>   
+          </table>
+</fieldset>
+ 

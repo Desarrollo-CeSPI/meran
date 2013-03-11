@@ -1,0 +1,5 @@
+RunAsUser=root
+LogDir=/var/log/koha
+KohaZ3950Dir=/usr/local/koha/intranet/scripts/z3950daemon
+KohaModuleDir=/usr/local/koha/intranet/modules
+KohaConf=/etc/koha.conf

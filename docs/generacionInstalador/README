@@ -1,0 +1,158 @@
+Este es el README de la version 0.9.3 de MERAN publicada el 05/03/2013.
+
+Para mas información visite el sitio del proyecto http://meran.unlp.edu.ar.
+
+Con este instalador se distribuye un script automatico de instalación para utilizarlo con GNU/Linux Debian 6 con todos los módulos precompilados para Perl 5.10.1.
+Igualmente distribuimos el código fuente pero tal vez sea necesario que instale las dependencias de Meran en forma manual dependiendo de la plataforma en que lo instale.
+
+##Instalar automatico, solo para Debian 6.0 o derivados como Lihuen GNU/Linux###
+
+1- Baje las fuentes del sistema desde el sitio del proyecto http://meran.unlp.edu.ar
+2- Descomprimir el tar.gz que se baja y luego
+3- Como usuario root ejecute el script de instalación pasando un identificador que se utilizará en el sitio:
+	# bash docs/instalador/instalar.sh -i identificador
+
+3- Siga paso a paso el proceso de instalación
+4- Comience a disfutar de Meran-> Apuntando con un navegador a la ip del servidor, para acceder a la intranet utilice https:// y para acceder al OPAC use http://
+5- El usuario predefinido es meranadmin y la password por defecto meranadmin123
+
+##En forma genérica##
+
+#Dependencias:
+Apache2
+MySQL server
+Apache2 mod perl2
+libgd2
+libxpm4
+htmldoc
+libaspell15
+sphinxsearch
+
+#Módulos que son necesarios habilitar en Apache:
+
+rewrite expires ssl headers
+
+#Dependencias de módulos Perl:
+
+Data::Dumper
+Version::Requirements
+CPAN::Meta::Requirements
+Path::Class
+MARC::Crosswalk::DublinCore
+Moose::Meta::Class
+Moose
+MRO::Compat
+Convert::ASN1
+Clone
+Clone::PP
+SQL::ReservedWords
+Bit::Vector::Overload
+Apache::Session
+Class::Singleton
+DateTime
+DateTime::Locale
+Class::Factory::Util
+Captcha::reCAPTCHA
+CGI::Session
+Chart::OFC
+Crypt::CBC
+Date::Manip
+DateTime::Format::DateManip
+DateTime::Format::MySQL
+Digest::SHA
+File::LibMagic
+HTML::HTMLDoc
+HTTP::BrowserDetect
+Image::Size
+JSON
+JSON::XS
+Bundle::libnet
+Locale::Maketext::Gettext
+Mail::Sendmail
+MARC::Crosswalk::DublinCore
+MARC::Record
+MARC::XML
+MIME::Lite::TT::HTML
+Net::SMTP::SSL
+Net::SMTP::TLS
+Net::Twitter
+Net::Z3950::ZOOM
+PDF::Report
+Net::LDAP
+Proc::Simple
+Rose::DateTime::Util
+Rose::DB
+Rose::DB::Object
+Sphinx::Manager
+Sphinx::Search
+Spreadsheet::Read
+Spreadsheet::WriteExcel
+Spreadsheet::WriteExcel::Simple
+Text::Aspell
+Text::LevenshteinXS
+Text::Unaccent
+WWW::Facebook::API
+WWW::Google::URLShortener
+WWW::Shorten::Bitly
+HTML::FormatText::WithLinks
+Date::Calc
+File::SearchPath
+Image::Resize
+GD
+XML::Checker
+DBIx::XML_RDB
+DBI
+Template
+Text::Unaccent
+Time::Clock
+Digest::HMAC_MD5
+XML::SAX
+Sub::Name
+PDF::API2
+Eval::Closure
+Devel::GlobalDestruction
+XML::Writer
+namespace::autoclean
+F/FR/FREDERICD/marc-moose-0.018.tar.gz
+S/SU/SULLR/IO-Socket-SSL-1.68.tar.gz
+Devel::StackTrace
+Data::Visitor::Callback
+Net::OAuth
+HTML::HeadParser
+URI
+WWW::Shorten::generic
+JSON::Any
+Params::Validate
+Crypt::Rijndael
+
+#Necesidad de modificar archivos:
+
+##Configuración de Apache:
+	Vamos a configurar 2 Virtualhosts, los archivos templates que estan en la carpeta docs/instalador son: apache-jaula-ssl y apache-jaula-opac. A partir de esos archivos modifique los parámetros que considere necesarios y habilite los virtualhosts.
+
+
+##Configuración de meran:
+
+	El archivo docs/instalador/meran.conf es el template de configuracion, hay que configurar uno a uno las líneas de acuerdo a su sistema 
+	También debe modificar los archivos docs/instalador/iniciando.pl y docs/instalador/sphinx.conf
+	Debe copiar estos 3 archivos en los directorio que haya seleccionado en el Virtualhost para el meran.conf y el iniciando.pl. 	En el caso de sphinx.conf debe copiarlo adonde corresponda el Sphinx.
+
+##Configuración de la base de datos:
+	Vamos a tener que crear la base de datos y darle permisos a uno o algunos usuarios en particular que utilizará Meran para conectarse a MySQL y a otro usuario que necesita el Sphinx para hacer consultas  a la base. 
+	La base debe crearse con el nombre definido en la variable database.
+	El archivo con la estructura de la base y un conjunto de datos mínimos es docs/instalador/base.sql.
+	Los permisos que se tienen que definir son para el usuario que se defina en la configuración de Meran en la variable user, userOPAC,userINTRA y userDEVELOP los cuales se van a identificar usando las passwords definidas en la variables password, passOPAC, passINTRA y passDEVELOP respectivamente. Aunque no es recomendable podría ser el mismo usuario y password para todas las variables.
+	Además debe dar permisos al usuario y password definidos en el sphinx.conf para que puede hacer select sólo sobre la tabla indice_busqueda.
+
+##Configuración de crons del sistema
+	Hay que configurar las tareas que se necesitan que se ejecuten regularmente.
+	Ver la subrutina generarCrons del archivo instalar.sh
+
+##Generación de directorios para logs
+	De acuerdo a lo que hayan configurado en los Virtualhost hay que generar los archivos de logs y darle permiso de escritura al usuario que corresponda
+
+##Generación de directorios para los indices de Sphinx
+	De acuerdo a la configuración que haya realizado para sphinx debe generar estos directorios
+
+##Configurar Logrotate 
+	En docs/instalador/logrotate.d-meran tiene un template de como configurarlo

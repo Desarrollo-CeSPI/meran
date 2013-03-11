@@ -1,0 +1,119 @@
+
+
+<table id="tablaEncabezados" class="tabla_datos" border=0 cellspacing=0 cellpadding=0 width="100%" align="center">
+
+ 	<tr class="titulo_tabla_resultado">	
+		<th>[% 'Encabezado' | i18n %]</th>
+		<th>[% 'Orden' | i18n %]</th>
+		<th>[% 'Visible' | i18n %]</th>
+		<th>[% 'En Linea' | i18n %]</th>
+		<th>[% 'Agregar' | i18n %]</th>
+		<th>[% 'Editar' | i18n %]</th>
+		<th>[% 'Eliminar' | i18n %]</th>
+		<th>[% 'Mostrar' | i18n %]</th>
+	</tr>
+
+[% FOREACH encabezado IN RESULTSLOOP %]
+	<tr align='center' >
+
+		<td id="encabezado[% encabezado.getIdEncabezado %]"> 
+
+			<div id="divEncabezado[% encabezado.getIdEncabezado %]" selected="off">
+				[% encabezado.getNombre %]
+			</div>
+		</td>
+		<td> 
+
+                        [% PERL %]
+                            print C4::AR::Filtros::to_Icon(    
+                                            boton   => "icon_subir",
+                                            onClick => "modificarOrden([% encabezado.getIdEncabezado %], [% encabezado.getOrden %], 'up')",
+                                            title   => "[% 'Subir en el Orden' | i18n %]",
+                                            alternClass => "botonCentradoTabla"
+                                    ) ;
+                        [% END %]
+
+                        [% PERL %]
+                            print C4::AR::Filtros::to_Icon(    
+                                            boton   => "icon_bajar",
+                                            onClick => "modificarOrden([% encabezado.getIdEncabezado %], [% encabezado.getOrden %], 'down');",
+                                            title   => "[% 'Bajar en el Orden' | i18n %]",
+                                            alternClass => "botonCentradoTabla"
+                                    ) ;
+                        [% END %]
+
+		</td>
+<!-- falta el check -->
+		<td> 
+			<input 	type='checkbox' value="[% encabezado.getVisible %]" 
+					onChange="cambiarVisibilidadEncabezado('[% encabezado.getIdEncabezado %]');" 
+			title="[% 'Cambiar la visibilidad del Encabezado' | i18n %]"
+			[% IF encabezado.getVisible %] 
+				checked	
+			[% END %] >
+		</td>
+		<td> 
+			<input 	id="checkbox[% encabezado.getIdEncabezado %]" type="checkbox" 
+					onClick="cambiarLineaEncabezado([% encabezado.getIdEncabezado %]);" 
+					title="[% 'para indicar si la salida es en linea' | i18n %]" value="[% encabezado.getLinea %]"
+			[% IF encabezado.getLinea %]
+				checked
+			[% END %] >
+		</td>
+		<td>
+
+                    [% PERL %]
+                        print C4::AR::Filtros::to_Icon(  
+                                                            boton   => "icon_agregar",
+                                                            onClick => "agregarConfVisualizacion();",
+                                                            title   => "[% 'Agregar Encabezado' | i18n %]",
+                                                            alternClass => "botonCentradoTabla"
+                                ) ;
+                    [% END %]
+
+		</td>
+		<td>
+
+                    [% PERL %]
+                        print C4::AR::Filtros::to_Icon(  
+                                    boton   => "icon_edicion",
+                                    onClick => "EditCell('encabezado[% encabezado.getIdEncabezado %]', '[% encabezado.getIdEncabezado %]');",
+                                    title   => "[% 'Editar Encabezado' | i18n %]",
+                                    alternClass => "botonCentradoTabla"
+                                ) ;
+                    [% END %]
+
+		</td>
+		<td>
+
+                    [% PERL %]
+                        print C4::AR::Filtros::to_Icon(  
+                                    boton   => "icon_borrar",
+                                    onClick => "deleteEncabezado([% encabezado.getIdEncabezado %]);",
+                                    title   => "[% 'Eliminar Encabezado' | i18n %]",
+                                    alternClass => "botonCentradoTabla"
+                                ) ;
+                    [% END %]
+
+		</td>
+		<td>
+
+                    [% PERL %]
+                        print C4::AR::Filtros::to_Icon(  
+                                    boton   => "icon_buscar",
+                                    onClick => "seleccionarEncabezado([% encabezado.getIdEncabezado %]);",
+                                    title   => "[% 'Mostrar informaci&oacute;n' | i18n %]",
+                                    alternClass => "botonCentradoTabla"
+                                ) ;
+                    [% END %]
+
+
+		</td>
+
+	</tr>
+[% END %]
+	<tr valign=bottom>
+	        <td class="lineafinaltabla"  align="left" colspan="9"></td>
+        </tr>
+
+</table>

@@ -1,0 +1,12 @@
+INSERT INTO `pref_preferencia_sistema` (
+`id` ,
+`variable` ,
+`value` ,
+`explanation` ,
+`options` ,
+`type` ,
+`categoria`
+)
+VALUES (
+NULL , 'limite_novedades', '3', 'La cantidad de novedades a mostrar en el OPAC', NULL , 'text', 'sistema'
+);

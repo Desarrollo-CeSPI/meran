@@ -1,0 +1,1 @@
+ALTER TABLE `adq_presupuesto` CHANGE `estado_presupuesto_id` `ref_estado_presupuesto_id` INT( 11 ) NOT NULL ;

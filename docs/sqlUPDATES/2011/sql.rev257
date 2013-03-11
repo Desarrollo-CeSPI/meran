@@ -1,0 +1,2 @@
+UPDATE `pref_preferencia_sistema` SET `value` = '10' WHERE `pref_preferencia_sistema`.`variable` = 'limite_resultados_autocompletables';
+UPDATE `pref_preferencia_sistema` SET `type` = 'text' WHERE `pref_preferencia_sistema`.`variable` ='limite_resultados_autocompletables';

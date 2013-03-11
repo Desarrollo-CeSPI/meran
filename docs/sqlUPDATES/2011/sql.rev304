@@ -1,0 +1,1 @@
+UPDATE  `pref_preferencia_sistema` SET  `categoria` =  'interna' WHERE  `pref_preferencia_sistema`.`variable` = 'permite_cambio_password_desde_opac';

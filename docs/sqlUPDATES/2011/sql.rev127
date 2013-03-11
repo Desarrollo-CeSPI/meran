@@ -1,0 +1,2 @@
+ALTER TABLE `cat_contenido_estante` ADD PRIMARY KEY ( `id_estante` , `id2` ) ;
+ALTER TABLE `cat_registro_marc_n2_analitica` ADD PRIMARY KEY ( `cat_registro_marc_n2_id` , `cat_registro_marc_n2_hijo_id` ) ;

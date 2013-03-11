@@ -1,0 +1,10 @@
+.calendar {
+  border-width: 1px;
+  font-size: 8px;
+}
+
+.calendar table {
+  font-size: 8px;
+}
+
+.calendar tbody .day { width: 1.5em; }

@@ -1,0 +1,4 @@
+ALTER TABLE  `usr_socio` ADD  `es_admin` INT( 1 ) NULL;
+UPDATE `usr_socio` 
+SET es_admin = 1
+WHERE nro_socio = "kohaadmin";

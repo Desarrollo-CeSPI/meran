@@ -1,0 +1,66 @@
+
+<script>
+        function borrar(sanctionrulecode){
+                document.frm.sanctionrulecode.value= sanctionrulecode;
+                document.frm.accion.value= 'delete';
+                document.frm.submit();
+        }
+
+        function agregar(){
+                document.frm.accion.value= 'add';
+                document.frm.submit();
+        }
+</script>
+
+
+<div class="modal-header">
+    <a href="#" class="close" data-dismiss="modal">×</a>
+    <h2>Reglas para sancionar</h2>
+</div>
+<div class="modal-body">
+  [% IF REGLAS_SANCIONES %]
+          [% PERL %]
+              print C4::AR::Filtros::tableHeader(   
+                                                      id              => "tablaResult",
+                                                      class           => "",
+                                                      columns         => ['[% "D&iacute;as de demora" | i18n %]','[% "D&iacute;as de sanci&oacute;n" | i18n %]',
+                                                                            '[% "Eliminar"|i18n %]',
+                                                                         ]
+                                                      
+                          ) ;
+          [% END %]
+          <tbody>
+          [% FOREACH regla IN REGLAS_SANCIONES %]
+               <tr>
+                <td>[% regla.getDias_demora %]</td>
+                <td>[% regla.getDias_sancion %]</td>
+                <td>
+                    [% PERL %]
+                            print C4::AR::Filtros::action_button(  
+                                                                button   => "btn btn-danger",
+                                                                action => "eliminarReglaSancion([% regla.getRegla_sancion %]);",
+                                                                icon   => "icon-white icon-remove",
+                                    ) ;
+                    [% END %]
+               </td>
+              </tr>
+          [% END %]
+           </tbody>
+        </table>
+  [% ELSE %]
+      <div class="alert alert-info">[% 'No hay ninguna regla definida' | i18n %]</div>
+  [% END %]
+          <div class="well form-inline">
+            <input type="text" class="input-medium" id="dias_demora" name="dias_demora" placeholder="[% 'D&iacute;as de demora' | i18n %]">
+            <input type="text" class="input-medium" id="dias_sancion" name="dias_sancion" placeholder="[% 'D&iacute;as de sanci&oacute;n' | i18n %]">
+             [% PERL %]
+                     print C4::AR::Filtros::action_button(  
+                                                         button   => "btn btn-primary",
+                                                         action => "agregarReglaSancion();",
+                                                         icon   => "icon-white icon-ok",
+                                                         title   => "[% 'Agregar Regla' | i18n %]",
+                             ) ;
+             [% END %]
+          </div>
+  
+</div>

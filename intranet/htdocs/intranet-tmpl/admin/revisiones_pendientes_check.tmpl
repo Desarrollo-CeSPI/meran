@@ -1,0 +1,18 @@
+[% IF cantidad %]
+   <div class="alert">
+      <a class="close" data-dismiss="alert">x</a>
+      <strong>[% 'Atenci&oacute;n' | i18n %]</strong> [% 'Hay revisiones de ediciones para moderar' | i18n %]&nbsp;
+
+       [% PERL %]
+               print C4::AR::Filtros::action_link_button(
+                                               button       => "btn btn-primary",
+                                               url          => "[% url_prefix %]/admin/catalogo/revisiones_pendientes.pl",
+                                               params       => ["token=[% token %]",],
+                                               icon         => "icon-white icon-eye-open",
+                                               title        => " [% 'Ver' | i18n %]",
+                                           ) ;
+        
+       [% END %]
+
+  </div>
+[% END %]

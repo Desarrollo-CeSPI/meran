@@ -1,0 +1,65 @@
+[% INCLUDE 'intranet-top.inc' %]
+[% INCLUDE 'datePicker.inc' %]
+
+<script type="text/javascript" src="/intranet-tmpl/estadisticas/estadisticas.js"></script>
+
+<script type="text/javascript">
+    $(document).ready(function() {
+        crearDatePicker('f_inicio');
+        crearDatePicker('f_fin');
+    });
+</script>
+<div>
+    <!--<div class="titulos" >[% "Generar estad&iacute;sticas de Consultas al OPAC" | i18n %]</div>-->
+<fieldset>
+    <legend class="titulo_legend"> <span class="titulos">[% "Generar estad&iacute;sticas de Consultas al OPAC" | i18n %] </span> </legend>
+    [% IF !logueo_opac %]
+        <div class="warning"><p>[% "ATENCION: El logueo de busquedas del OPAC esta deshabilitado" | i18n %].</p></div>
+    [% END %]
+    <center>
+        <div class="filtros_reportes">
+            <fieldset>
+                <legend class="titulo_legend">[% "Opciones para el c&aacute;lculo del reporte" | i18n %]</legend>
+                <ul class="filtros_reportes_izq">
+                    <li class="sub_item">
+                              <label for="total">[% "Total: " | i18n %]</label>
+                              <input type="checkbox" id="total" onchange="toggleChecks()" name="total" >
+                    </li>
+                    <li class="sub_item">
+                              <label for="registrados">[% "Registrados: " | i18n %]</label>
+                              <input type="checkbox" id="registrados" name="registrados" checked="checked" onchange="toggleChecks()">
+                    </li>
+                    <li class="sub_item">
+                        [% "Categor&iacute;as:" | i18n %]
+                        [% categorias_usuario %]
+                    </li>
+                    <fieldset>
+                        <legend class="titulo_legend">[% "Calendario" | i18n %]</legend>
+                            <li class="sub_item">
+                              <label for="f_inicio">[% "Inicio: " | i18n %]</label>
+                              <input id="f_inicio" name="f_inicio" value="[% fechaIni %]">
+                            </li>
+                            <li class="sub_item">
+                                <label for="f_fin">[% "Fin " | i18n %]:</label>
+                                <input id="f_fin" name="f_fin" value="[% fechaFin %]">
+                            </li>
+                    </fieldset>
+                </ul>
+            </fieldset>
+        </div>
+        <div class="buttonContainerHorizontal">
+            [% PERL %]
+                    print C4::AR::Filtros::to_Button( 
+                                                        text    =>  "[% "Graficar" | i18n %]",
+                                                        title    =>  "[% 'Buscar' | i18n %]",
+                                                        boton   =>  "boton_buscar",
+                                                        onClick =>  "consultarAccesosOPAC();",
+                                                    );
+            [% END %]
+        </div>
+    </center>
+</div>
+
+<div id="result_chart"></div>
+</fieldset>
+[% INCLUDE 'intranet-bottom.inc' %]

@@ -1,0 +1,1 @@
+INSERT INTO `pref_estructura_campo_marc` (`campo`, `liblibrarian`, `libopac`, `repeatable`, `mandatory`, `descripcion`, `indicador_primario`, `indicador_secundario`, `nivel`) VALUES ('900', 'Nivel Bibliográfico', 'Nivel Bibliográfico', '0', '0', NULL, NULL, NULL, 0);

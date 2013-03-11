@@ -1,0 +1,108 @@
+[% INCLUDE 'opac-top.inc' %]
+[% INCLUDE 'ChangePasswordHelper.inc' %]
+<script language=javascript>
+
+    CAMBIO_DE_CONTRASENIA= "[% 'Cambio de Contrase&ntilde;a' | i18n %]";
+
+    function updateGuardarCambiarPassword(responseText){
+        if (!verificarRespuesta(responseText))
+                return(0);
+
+        clearInput();
+        vModificarPassword.close();
+        var Messages= JSONstring.toObject(responseText);
+        setMessages(Messages);
+    }
+
+
+    function guardarCambiarPassword(claveUsuario, confirmeClave, actualPassword){
+
+        key= b64_sha256(b64_md5(actualPassword));
+        actualPassword = encriptar(actualPassword, key);
+        confirmeClave = encriptar(confirmeClave, key);
+        claveUsuario = encriptar(claveUsuario, key);
+
+        $.ajax({
+                    type: "POST",
+                    url: "[% url_prefix %]/change_password.pl",
+                    contentType: "text/x-www",
+                    data: ({actualPassword:'ago'}),
+                    success: function(msg){
+//                         alert( "Data Saved: " + msg );
+                    }
+        });
+    
+        
+    }
+    function verificarClaveUsuario(){
+        var claveUsuario= $('#newpassword').val();
+        var confirmeClave= $('#newpassword1').val();
+        var actualPassword= $('#actualPassword').val();
+        
+    
+        if (claveUsuario == ''){
+            alert(POR_FAVOR_INGRESE_UNA_CONTRASENIA);
+            clearInput();
+            $('#newpassword').focus();
+    
+        }else{
+            if (claveUsuario != confirmeClave){
+                alert(LAS_CLAVES_SON_DISTINTAS);
+                clearInput();
+                $('#newpassword').focus();
+        
+            }else{
+                guardarCambiarPassword(claveUsuario, confirmeClave, actualPassword);
+            }
+        }
+    }
+    function cambiarPassword(){
+         $('#formCambioPassword').submit();
+    }
+
+    $(document).ready(function() {
+        DetalleReservas();
+        DetallePrestamos();
+    });
+
+</script>
+
+[% INCLUDE "datos-usuario.inc" %]
+
+
+<div id="marco_contenido_datos" class="contenido">
+
+    <table class="tabla_datos" width="98%" cellspacing="0" cellpadding="4" border="0" align="center" valign="top">
+        <tr>
+            <td>
+                <div id="detallePrestamos"></div>
+            </td>
+        <tr>
+            <td>
+                <div id="detalleReservas"></div>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                [% INCLUDE "sanciones.inc"%]
+            </td>
+        </tr>
+    </table>
+
+</div>
+
+
+<!-- para mostrar los resultados de las busquedas -->
+<div id="result"></div>
+
+<div id="resultHistoriales"></div>
+
+[% IF foto_name %]
+    <form action="[% url_prefix %]/upload.pl" method=post style="display:none">
+        <input type="hidden" name="foto_name" value='[% foto_name %]' >
+        <input type="hidden" name="nro_socio" value='[% socio.getNro_socio %]'>
+    </form>
+[% END %]
+
+[% INCLUDE 'opac-bottom.inc' %]
+

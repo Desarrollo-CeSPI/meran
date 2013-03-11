@@ -1,0 +1,123 @@
+
+<script type="text/javascript">
+      $(document).ready(function() {
+          makeToggle('datos_tabla_div_user','trigger',null,false);
+          $('.user_pic_fancy').fancybox();
+          disableAlert();
+          $('#navBarResult').html('');
+      });
+</script>
+
+[% USE HTML %]
+
+<fieldset>
+    <legend>[% "Resultados de la b&uacute;squeda de Usuarios Reales" | i18n %]</legend>
+        <!--<div class="datos_tabla_div_user">-->
+             
+            <div class="well">
+                <div class="resultados_consulta">[% "Ha buscado por" | i18n %]: <strong>[% HTML.escape(socio_busqueda) %]</strong></div> 
+		         [% IF cantidad %]
+		                  <div class="resultados_consulta">[% "La cantidad de usuarios es" | i18n %]: <strong>[% cantidad %]</strong></div>
+		         [% END %]
+            </div>
+         [% IF cantidad %]
+                  <div class="contenedor_paginador">[% paginador %]</div>  
+                  [% PERL %]
+                      print C4::AR::Filtros::tableHeader(   
+                                        id              => "tablaResult",
+                                        class           => "",
+                                        selectAll_id    => "",
+                                        columns         => ['[% "Tarjeta Id." | i18n %]','[% 'Foto' | i18n %]',
+                                                            '[% "Apellido y Nombres" | i18n %]','[% "Documento" | i18n %]',
+                                                            '[% "Legajo" | i18n %]','[% "Cat." | i18n %]','[% "Prest." | i18n %]',
+                                                            '[% "Ven." | i18n %]','[% "Estado" | i18n %]'
+
+
+                                                            ]
+                                                                        
+                                              ) ;
+                  [% END %]
+
+                      <tbody>
+                  
+                            [% FOREACH resultsloop %]	
+                                <tr>
+                            
+                                      <td class="tarjetaId">
+                                          [% PERL %]
+                                              print C4::AR::Filtros::link_to(   text =>     "[% socio.getNro_socio %]",
+                                                                                url=>"[% url_prefix %]/usuarios/reales/datosUsuario.pl", 
+                                                                                params =>   ["nro_socio=[% socio.getNro_socio %]"],
+                                                                                title =>    "[% 'Mostrar Detalle del Usuario' | i18n %]"
+                                                                          );
+                                          [% END %]
+                                      </td>
+                                      <td class="userImage"> 
+                                          [% IF socio.tieneFoto %]
+                                              <a class="user_pic_fancy" href="/uploads/pictures/[% socio.tieneFoto %]">
+                                                  <img border="0" src="/uploads/pictures/[% socio.tieneFoto %]" 
+                                                        alt="[% 'Imagen de' | i18n %] [% socio.persona.getApellido %], [% socio.persona.getNombre %]"
+                                                        title="[% socio.persona.getApellido %], [% socio.persona.getNombre %] ([% socio.getNro_socio %])"
+                                                  >
+                                              </a>
+                                          [% ELSE %]
+                                              [% IF socio.persona.sexo == 'F' %]
+                                                   <img border="0" src="[% temas %]/[% tema %]/imagenes/no_foto_female.gif"
+                                                         style="height: 70px; width: 70px;" 
+                                                         alt='[% "Usuario sin foto" | i18n %]'
+                                                   >
+                                              [% ELSE %]
+                                                   <img border="0" src="[% temas %]/[% tema %]/imagenes/no_foto_male.gif"
+                                                         style="height: 70px; width: 70px;" 
+                                                         alt='[% "Usuario sin foto" | i18n %]'
+                                                   >
+                                              [% END %]                                          
+
+                                          [% END %]
+                                      </td>
+                                      <td class="nomCompleto">
+                                          [% PERL %]
+                                              print C4::AR::Filtros::link_to(	text => 	"[% socio.persona.getApeYNom %]",
+                                                                                url => 		"[% url_prefix %]/usuarios/reales/datosUsuario.pl", 
+                                                                                params =>	["nro_socio=[% socio.getNro_socio %]"],
+                                                                                title =>	"[% 'Mostrar Detalle del Usuario' | i18n %]"
+                                                                          );
+                                          [% END %]
+                                      </td>
+                                      <td class="documento">
+                                          [% socio.persona.getVersion_documento %]&nbsp;[% socio.persona.getNro_documento %]
+                                      </td>
+                                      <td class="legajo">
+                                          [% socio.persona.getLegajo %]
+                                      </td>
+                                      <td>
+                                          [% TRY %]
+                                            [% socio.categoria.getDescription %]
+                                          [% CATCH %]
+                                            [% 'Sin categor&iacute;a' | i18n %]
+                                          [% END %] 
+                                      </td>
+                                      <td>
+                                          [% issue %]
+                                      </td>
+                                      <td>
+                                          [% od %]
+                                      </td>
+                                      <td>
+                                        <span class="label [% IF socio.esRegular %]label-success[% ELSE %]label-important[% END %]">[% socio.esRegularToString %]</span>
+                                      </td>
+                            
+                                </tr>
+                            
+                            [% END %]
+                  
+                    <!-- <tr>
+                          <td class="lineafinaltabla"></td>
+                      </tr>-->
+                      </tbody>
+                  </table>
+             [% ELSE %]
+                 <div class="alert alert-info">[% 'No hay usuarios para mostrar'| i18n %]</div>
+             [% END %]
+        </div>
+</fieldset>

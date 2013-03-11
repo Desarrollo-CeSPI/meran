@@ -1,0 +1,12 @@
+INSERT `pref_preferencia_sistema` (
+`id` ,
+`variable` ,
+`value` ,
+`explanation` ,
+`options` ,
+`type` ,
+`categoria` 
+)
+VALUES (
+NULL , 'libre_deuda_fill_a4', '0', 'Formato de impresion de libre de deuda. Si su valor es 1 imprime en formato A4.', NULL , 'bool', 'sistema'
+);

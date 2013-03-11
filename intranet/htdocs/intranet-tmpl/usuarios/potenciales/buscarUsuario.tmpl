@@ -1,0 +1,172 @@
+[% INCLUDE "intranet-top.inc" %]
+
+<script src="/includes/jquery/jquery-highlight-min.js"></script>
+<script src="/intranet-tmpl/includes/usuarios/usuariosPotenciales.js"></script>
+
+<script type="text/javascript">
+
+
+function ordenar(orden){
+    objAH.sort(orden);
+}
+
+function changePage(ini){
+    objAH.changePage(ini);
+}
+
+
+var busqueda_armed,incial_armed;
+var flag_armed = false;
+
+function consultar(filtro){
+    
+    busqueda = jQuery.trim($('#persona').val());
+    inicial = '0';
+    if (filtro){
+        inicial = filtro;
+        busqueda = jQuery.trim(filtro);
+        $('#persona').val("filtro: "+filtro);
+    }
+    else
+       {
+        if (busqueda.substr(8,5).toUpperCase() == 'TODOS'){
+                busqueda = busqueda.substr(8,5);
+                $('#persona').val(busqueda);
+                consultar(busqueda);
+        }
+        else
+           {
+            if (busqueda.substr(0,6).toUpperCase() == 'FILTRO'){
+                busqueda = busqueda.substr(8,1);
+                $('#persona').val(busqueda);
+                consultar(busqueda);
+            }
+           }
+
+    }
+    if(busqueda.length > 0){
+        busqueda_armed = busqueda;
+        inicial_armed = inicial;
+        flag_armed = true;
+		buscarUsuariosPotenciales();
+    }
+    else{
+        jAlert(INGRESE_UN_DATO);
+        $('#persona').focus();
+    }
+
+}
+
+
+function buscarUsuariosPotenciales(){
+    objAH=new AjaxHelper(updateInfo);
+    objAH.showOverlay       = true;
+    objAH.debug= true;
+    objAH.url=URL_PREFIX+"/usuarios/potenciales/buscarUsuarioResult.pl";
+    objAH.funcion= "changePage";
+
+    if (flag_armed){
+        objAH.persona = busqueda_armed;
+        objAH.inicial = inicial_armed;
+    }else{   
+        var busqueda = $("#persona").val();
+	    if(busqueda != ""){
+		    objAH.persona= busqueda;
+	    }
+	    else{
+		    jAlert(INGRESE_UN_DATO);
+            $("#persona").focus();
+	    }
+    }
+
+	objAH.habilitados_filter = 0;
+    if ($("#habilitados_filter").attr('checked'))  
+        objAH.habilitados_filter = 1;
+
+    if(busqueda != ""){
+    	objAH.sendToServer();
+    }
+}
+
+function updateInfo(responseText){
+	$("#result").html(responseText);
+
+    var idArray = [];
+    var classes = [];
+    idArray[0] = 'persona';
+    classes[0] = 'nomCompleto';
+    classes[1] = 'documento';
+    busqueda = jQuery.trim($('#persona').val());
+
+    scrollTo('result');
+}
+
+function Borrar(){
+    $('#persona').val('');
+}
+
+function checkFilter(eventType){
+    var str = $('#persona').val();
+    
+    if (eventType.toUpperCase() == 'FOCUS'){
+
+        if (str.substr(0,6).toUpperCase() == 'FILTRO'){
+            globalSearchTemp = $('#persona').val();
+            Borrar();
+        }
+    }
+    else
+       {
+        if (jQuery.trim($('#persona').val()) == "")
+            $('#persona').val(globalSearchTemp);
+       }
+}
+
+
+$(document).ready(function() {
+	onEnter("persona",consultar);
+});
+
+</script>
+
+<fieldset>
+    <legend>[% "B&uacute;squeda de Usuarios Potenciales" | i18n %]</legend>
+      <section class="">
+
+              [% PERL %]
+                  print C4::AR::Filtros::tabbedPane(    titulo    => "",
+                                                        subtitulo => "",
+                                                        content   => [ {id => 'labels', text=> "[% 'B&uacute;squeda general' | i18n %]" },
+                                                                      {id => 'registro', text => "[% 'B&uacute;squeda por inicial' | i18n %]"},
+                                                                      ],
+                                                        content_id=> ['busqueda_usuarios_potenciales'],
+                                                        active_id => 'labels',
+                                                    );
+
+              [% END %]
+
+              <div class="tab-pane fade in active" id="labels">
+                   [% INCLUDE 'partials/usuarios/_busqueda_gral_usuarios_potenciales.inc' %]
+              </div>
+              <div class="tab-pane fade" id="registro">
+                   [% INCLUDE 'partials/usuarios/_busqueda_inicial_usuarios_potenciales.inc' %]
+              </div>
+              <br>
+             
+              [% PERL %]
+              print C4::AR::Filtros::setHelpInput(
+                                                   text =>"[% ' Navegue por las pesta&ntilde;as para acceder a los distintos tipos de b&uacute;squeda' | i18n %]",
+                                                   class => "info",
+                                                   icon => "icon-info-sign",
+                                                    
+              );
+              [% END %]
+  
+    </section>
+
+</fieldset>
+<br><br><div id="result"></div>
+
+
+[% INCLUDE "intranet-bottom.inc" %]
+

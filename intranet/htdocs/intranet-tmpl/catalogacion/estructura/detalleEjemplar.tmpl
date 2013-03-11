@@ -1,0 +1,159 @@
+[% INCLUDE "intranet-top.inc" %]
+[% INCLUDE 'datePicker.inc' %]
+[% USE HTML %]
+
+    <script src="/intranet-tmpl/includes/circulacion-min.js"></script>
+    <script src="/intranet-tmpl/includes/detalleEjemplar.js"></script>
+
+<script>
+var AUTO_GENERAR_COMPROBANTE = '[% auto_generar_comprobante_prestamo %]';
+    //2 objetos AJAX para que funcionen los paginadores a la vez en el mismo tmpl
+    var objAH,objAHCirculacion;
+    var ID_N2 = 0;
+    function changePage(ini){
+        objAH.changePage(ini);
+    }
+    
+    function changePageCirculacion(ini){
+        objAHCirculacion.changePage(ini);    
+    }
+
+    function ordenar(orden){
+        objAH.sort(orden);
+    }
+    
+    function ordenarHistorialCirculacion(orden){
+        objAHCirculacion.sort(orden);
+    }
+
+    function verHistoricoDisponibilidad(id3){
+        objAH               = new AjaxHelper(updateHistoricoDisponibilidad);
+        objAH.debug         = true;
+        objAH.showOverlay   = true;
+        objAH.url           = 'detalleEjemplar.pl';
+        objAH.funcion       = "changePage";
+        objAH.id3           = id3;
+        objAH.tipo          = 'VER_HISTORICO_DISPONIBILIDAD';
+        objAH.sendToServer();
+    }
+
+    function updateHistoricoDisponibilidad(responseText){
+        $('#historicoDisponibilidad').html(responseText);
+    }
+
+    function verHistoricoCirculacion(id3){
+        objAHCirculacion                = new AjaxHelper(updateHistoricoCirculacion);
+        objAHCirculacion.debug          = true;
+        objAHCirculacion.showOverlay    = true;
+        objAHCirculacion.url            = 'detalleEjemplar.pl';
+        objAHCirculacion.funcion        = "changePageCirculacion";
+        objAHCirculacion.fecha_inicial  = $('#fecha_inicial').val();
+        objAHCirculacion.fecha_final    = $('#fecha_final').val();
+        objAHCirculacion.id3            = id3;
+        objAHCirculacion.tipo           = 'VER_HISTORICO_CIRCULACION';
+        objAHCirculacion.sendToServer();
+    }
+
+    function updateHistoricoCirculacion(responseText){
+        $('#historicoCirculacion').html(responseText);
+    }
+
+    $(document).ready(function(){
+        verHistoricoDisponibilidad('[% nivel3.id %]');
+        verHistoricoCirculacion('[% nivel3.id %]');
+    });
+</script>
+
+<div id="detalleEjemplar">
+	<fieldset>
+	    <legend>
+	          <h2>[% "Detalle del ejemplar" | i18n %] [% nivel3.id %] 
+	              <small>
+	                   ([% "del grupo" | i18n %]
+                       [% PERL %]
+                           print C4::AR::Filtros::link_to( text => "[% nivel3.getId2 %]",
+                                                           url=>"[% url_prefix %]/catalogacion/estructura/detalle.pl", 
+                                                           params =>   ["id1=[% nivel3.nivel2.getId1 %]"],
+                                                           tooltip => "[% nivel3.nivel2.nivel1.getTitulo %]",
+                                                       ) ;
+                       [% END %])
+                  </small>
+	          </h2>
+	    </legend>
+	
+	    <dl>
+            <dt class="inline left rightMargin"> [% "Sig. Top."|i18n %]:</dt>        <dd>[% HTML.escape(nivel3.getSignatura_topografica) %]</dd>
+            <br />
+            <dt class="inline left rightMargin"> [% "C&oacute;digo"|i18n %]:</dt>    <dd>[% nivel3.getBarcode  %]</dd>
+            <dt class="inline left rightMargin"> [% "Disponibilidad"|i18n %]:</dt>   <dd>[% nivel3.getDisponibilidadObject.getNombre  %]</dd>
+            <dt class="inline left rightMargin"> [% "Estado"|i18n %]:</dt>           <dd>[% nivel3.getEstadoObject.getNombre  %]</dd>
+
+            [% IF nivel3.getCreatedAt_format != "0000-00-00 00:00:00" %]
+                <dt class="inline left rightMargin">[% "Fecha de carga"|i18n %]:</dt> <dd>[% nivel3.getCreatedAt_format  %]</dd>
+            [% END %]
+
+            [% IF nivel3.getUpdatedAt_format != "0000-00-00 00:00:00" %]
+                <dt class="inline left rightMargin">[% "Ultima actualizaci&oacute;n"|i18n %]:</dt> <dd>[% nivel3.getUpdatedAt_format  %]</dd>
+            [% END %]
+
+
+            <br />
+		   [% IF socio_reserva %]
+		       <dt class="inline left rightMargin">[% 'Reservado a:' | i18n  %]</dt> 
+		       <dd>
+		        [% PERL %]
+		            print C4::AR::Filtros::link_to(   text =>     "[% socio_reserva.persona.getApeYNom %]",
+		                                              url=>"[% url_prefix %]/usuarios/reales/datosUsuario.pl", 
+		                                              params =>   ["nro_socio=[% socio_reserva.getNro_socio %]"],
+		                                              title =>    "[% 'Mostrar Detalle del Usuario' | i18n %]",
+		                                              blank =>  1,
+		                                        );
+		        [% END %]
+		       </dd>
+                        [% PERL %]
+                             print C4::AR::Filtros::action_set_button(
+                                     title           => '[% " Prestar" | i18n %]',
+                                     button          => 'btn btn-success',
+                                     action          => 'prestarUsuarioConReserva("[% socio_reserva.getNro_socio %]", [% nivel3.id %]);',
+                                     icon            => "icon-repeat icon-white",
+                                 );
+                         [% END %]
+
+		   [% ELSE %]
+                [% IF nivel3.estaPrestado %]
+                       [% PERL %]
+                           print C4::AR::Filtros::action_set_button(    
+                                   title           => '[% "Devolver" | i18n %]',
+                                   action          =>'devolverPrestamo("[% socio_prestamo.getNro_socio %]","[% socio_prestamo.persona.getApeYNom %]","[% id2 %]","[% prestamo.getId_prestamo %]")',
+                                   button          => 'btn btn-danger',
+                                   icon=>"icon-share-alt icon-white",
+                                   actions         => [
+                                                       [% IF prestamo.sePuedeRenovar %]
+                                                           {title => "Renovar", 
+                                                            action=>'renovarPrestamo("[% socio_prestamo.getNro_socio %]","[% socio_prestamo.persona.getApeYNom %]","[% id2 %]","[% prestamo.getId_prestamo %]")', 
+                                                            icon=>"icon-retweet"
+                                                           },
+                                                       [% END %]
+                                                       ],
+                                   ) ;
+                       [% END %]
+	           [% ELSE %]
+	                [% PERL %]
+	                     print C4::AR::Filtros::action_set_button(    
+	                             title           => '[% " Prestar" | i18n %]',
+	                             button          => 'btn btn-success',
+	                             action          => 'buscarUsuario([% nivel3.id2 %],[% nivel3.id %])', 
+	                             icon            => "icon-repeat icon-white",
+	                         );
+	                 [% END %]
+	           
+			   [% END %]
+	     [% END %]
+	   </dl>
+	
+	<div id="historicoDisponibilidad"></div>
+	<div id="historicoCirculacion"></div>
+	
+	</fieldset>
+</div>
+[% INCLUDE "intranet-bottom.inc" %]

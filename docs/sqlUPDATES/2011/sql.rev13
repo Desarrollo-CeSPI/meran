@@ -1,0 +1,3 @@
+DROP TABLE `pref_relacion_unidad_informacion` ;
+DROP TABLE `pref_categoria_unidad_informacion`;
+

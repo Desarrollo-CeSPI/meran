@@ -1,0 +1,4565 @@
+
+--Number and Code Fields (01X-04X)--
+010 - NÚMERO DE CONTROL DE LA BIBLIOTECA DEL CONGRESO (NR)
+   Indicators
+      First - No definido
+         # - No definido
+      Second - No definido
+         # - No definido
+   Subfield Codes
+      $a - Número de control de LC (NR)
+      $b - Número de control NUCMC (R)
+      $z - Número de control LC no válido/cancelado (R)
+      $8 - Enlace y número de secuencia del campo (R)
+
+011 - NÚMERO DE CONTROL VINCULANTE DE LA BIBLIOTECA DEL CONGRESO (NR) [OBSOLETE]
+   Indicators
+      First - No definido
+         # - No definido
+      Second - No definido
+         # - No definido
+   Subfield Codes
+      $a - Número de control vinculante de LC (R)
+
+013 - INFORMACIÓN DE CONTROL DE PATENTES (R)
+   Indicators
+      First - No definido
+         # - No definido
+      Second - No definido
+         # - No definido
+   Subfield Codes
+      $a - Número (NR)
+      $b - País (NR)
+      $c - Tipo de número (NR)
+      $d - Fecha (R)
+      $e - Estado (R)
+      $f - Parte del documento (R)
+      $6 - Enlace (NR)
+      $8 - Enlace y número de secuencia del campo (R)
+
+015 - NÚMERO DE LA BIBLIOGRAFÍA NACIONAL (R)
+   Indicators
+      First - No definido
+         # - No definido
+      Second - No definido
+         # - No definido
+   Subfield Codes
+      $a - Número de la bibliografía nacional (R)
+      $z - Número de la bibliografía nacional no válido/cancelado (R)
+      $2 - Fuente (NR)
+      $6 - Enlace (NR)
+      $8 - Enlace y número de secuencia del campo (R)
+
+016 - NÚMERO DE CONTROL DE LA AGENCIA NACIONAL BIBLIOGRÁFICA (R)
+   Indicators
+      First - Agencia nacional bibliográfica
+         # - Biblioteca y archivos de Canada 
+         7 - Agencia identificada en el subcampo $2
+      Second - No definido
+         # - No definido
+   Subfield Codes
+      $a - Número de control de registro (NR)
+      $z - Número de control de registro no válido/cancelado (R)
+      $2 - Fuente (NR)
+      $8 - Enlace y número de secuencia del campo (R)
+
+017 - NÚMERO DE DEPÓSITO LEGAL O DERECHOS DE AUTOR (R)
+   Indicators
+      First - No definido
+         # - No definido
+      Second - Control de la constante a desplegar
+         # - Número de registro de depósito legal o derecho de autor
+         8 - No se generó controlador de constante de muestra 
+   Subfield Codes
+      $a - Número de depósito legal (R)
+      $b - Agencia que asigna el número (NR)
+      $d - Fecha (NR)
+      $i - Texto visualizado (NR)
+      $z - Número de depósito legal o derecho de autor no válido/cancelado (R) 
+      $2 - Fuente (NR)
+      $6 - Enlace (NR)
+      $8 - Enlace y número de secuencia del campo (R)
+
+018 - ARTÍCULO REGISTRADO-CÓDIGO DE PAGO (NR)
+   Indicators
+      First - No definido
+         # - No definido
+      Second - No definido
+         # - No definido
+   Subfield Codes
+      $a - Artículo registrado-código de pago (NR)
+      $6 - Enlace (NR)
+      $8 - Enlace y número de secuencia del campo (R)
+
+020 - NÚMERO INTERNACIONAL NORMALIZADO PARA LIBROS (ISBN) (R)
+   Indicators
+      First - No definido
+         # - No definido
+      Second - No definido
+         # - No definido
+   Subfield Codes
+      $a - Número Internacional Normalizado para Libros (NR)
+      $c - Términos de disponibilidad (NR)
+      $z - ISBN no válido/cancelado (R)
+      $6 - Enlace (NR)
+      $8 - Enlace y número de secuencia del campo (R)
+
+022 - NÚMERO INTERNACIONAL NORMALIZADO PARA PUBLICACIONES SERIADAS (ISSN) (R)
+   Indicators
+      First - Nivel de interés internacional
+         # - No se especifica nivel
+         0 - Publicación seriada de interés internacional
+         1 - Publicación seriada sin interés internacional
+      Second - No definido
+         # - No definido
+   Subfield Codes
+      $a - Número Internacional Normalizado para Publicaciones Seriadas (NR)
+      $l - ISSN-L (NR)
+      $m - ISSN-L cancelado (R)
+      $y - ISSN incorrecto (R)
+      $z - ISSN cancelado (R)
+      $2 - Fuente del número (NR)
+      $6 - Enlace (NR)
+      $8 - Enlace y número de secuencia del campo (R)
+
+024 - OTROS IDENTIFICADORES NORMALIZADOS (R)
+   Indicators
+      First - Tipo de número o código estandarizado
+         0 - Código Estándar Internacional de Grabación (ISRC)
+         1 - Código de producto universal (UPC) 
+         2 - Número internacional estandarizado para música (ISMN) 
+         3 - Número internacional para artículos (EAN) 
+         4 - Ítem seriado e identificador de contribución (SICI) 
+         7 - Fuente especificada en el subcampo $2
+         8 - Tipo de número estándar sin especificar
+      Second - Indicador de diferencia
+         # - No se suministra información
+         0 - No hay diferencia
+         1 - Hay diferencia
+   Subfield Codes
+      $a - Código o número estandarizado de grabación (NR)
+      $c - Términos de disponibilidad (NR)
+      $d - Códigos adicionales a continuación del número o código estandarizado (NR)
+      $z - Código cancelado/ no válido (R)
+      $2 - Fuente del código o número (NR)
+      $6 - Enlace (NR)
+      $8 - Enlace y número de secuencia del campo (R)
+
+025 - NÚMERO DE ADQUISICIÓN EN EL EXTRANJERO (R)
+   Indicators
+      First - No definido
+         # - No definido
+      Second - No definido
+         # - No definido
+   Subfield Codes
+      $a - Número de adquisición en el extranjero (R)
+      $8 - Enlace y número de secuencia del campo (R)
+
+026 - IDENTIFICADOR DE IDENTIDAD TIPOGRÁFICA (R)
+   Indicators
+       First - No definido
+         # - No definido
+      Second - No definido
+         # - No definido
+   Subfield Codes
+      $a - Primer y segundo grupo de caracteres (R)
+      $b - Tercer y cuarto grupo de caracteres (R)
+      $c - Fecha (NR)
+      $d - Número de volumen o parte (R)
+      $e - Huella digital sin analizar (NR)
+      $2 - Fuente (NR)
+      $5 - Institución a la que se aplica el campo (R) 
+      $6 - Enlace (NR)
+      $8 - Enlace y número de secuencia del campo (R)
+
+027 - NÚMERO NORMALIZADO DE INFORME TÉCNICO (R)
+   Indicators
+      First - No definido
+         # - No definido
+      Second - No definido
+         # - No definido
+   Subfield Codes
+      $a - Número normalizado de informe técnico (NR)
+      $z - Número cancelado/no válido (R)
+      $6 - Enlace (NR)
+      $8 - Enlace y número de secuencia del campo (R)
+
+028 - NÚMERO DE EDITOR (R)
+   Indicators
+      First - Tipo de número del editor
+         0 - Número de secuencia
+         1 - Número de la matriz 
+         2 - Número de placa 
+         3 - Other número de música
+         4 - Número de videograbación
+         5 - Other número de editor
+      Second - Nota/controlador de entrada secundaria
+         0 - No requiere nota, no requiere entrada secundaria
+         1 - Nota, entrada secundaria
+         2 - Nota, no requiere entrada secundaria
+         3 - No requiere nota, entrada secundaria
+   Subfield Codes
+      $a - Número del editor (NR)
+      $b - Fuente (NR)
+      $6 - Enlace (NR)
+      $8 - Enlace y número de secuencia del campo (R)
+
+030 - DESIGNACIÓN CODEN (R) 
+   Indicators
+      First - No definido
+         # - No definido
+      Second - No definido
+         # - No definido
+   Subfield Codes
+      $a - CODEN (NR)
+      $z - CODEN cancelado/no válido (R)
+      $6 - Enlace (NR)
+      $8 - Enlace y número de secuencia del campo (R)
+
+031 - INFORMACIÓN DE ÍNCIPITS MUSICALES (R) 
+   Indicators
+      First - No definido
+         # - No definido
+      Second - No definido
+         # - No definido
+   Subfield Codes
+      $a - Número de la obra (NR)
+      $b - Número del movimiento (NR)
+      $c - Número del extracto (NR)
+      $d - Título (R)
+      $e - Rol  (NR)
+      $g - Tono  (NR)
+      $m - Voz/instrumento (NR)
+      $n - Armadura (NR)
+      $o - Compás (NR)
+      $p - Notación musical (NR)
+      $q - Nota general (R)
+      $r - Tono o modo (NR)
+      $s - Nota de validez cifrada (R)
+      $t - Texto del íncipit (R)
+      $u - Identificador Uniforme de Recursos (URI) (R)
+      $y - Texto de enlace (R)
+      $z - Nota pública (R)
+      $2 - Código de sistema (NR)
+      $6 - Enlace (NR)
+      $8 - Enlace y número de secuencia del campo (R)
+
+032 - NÚMERO DE REGISTRO POSTAL (R)
+   Indicators
+      First - No definido
+         # - No definido
+      Second - No definido
+         # - No definido
+   Subfield Codes
+      $a - Número de registro postal (NR)
+      $b - Fuente (agencia que asigna el número) (NR)
+      $6 - Enlace (NR)
+      $8 - Enlace y número de secuencia del campo (R)
+
+033 - FECHA/HORA Y LUGAR DE UN EVENTO (R)
+   Indicators
+      First - Tipo de fecha en el subcampo $a
+         # - No hay información de fecha
+         0 - Fecha simple
+         1 - Múltiples fechas simples
+         2 - Rango de fechas
+      Second - Tipo de eventos
+         # - No se suministra información
+         0 - Captura
+         1 - Transmisión
+         2 - Hallazgo
+   Subfield Codes
+      $a - Fecha/hora formateados (R)
+      $b - Código de área de clasificación geográfica (R)
+      $c - Código de sub-área de clasificación geográfica (R)
+      $p - Place of event (R)
+      $0 - Record control number (R)
+      $2 - Source of term (R)
+      $3 - Materiales especificados (NR)
+      $6 - Enlace (NR)
+      $8 - Enlace y número de secuencia del campo (R)
+
+034 - DATOS MATEMÁTICOS CARTOGRÁFICOS CODIFICADOS (R)
+   Indicators
+      First - Tipos de escala
+         0 - Escala indeterminable/no hay escala registrada
+         1 - Escalas simples
+         3 - Rango de escalas
+      Second - Tipo de anillo
+         # - No corresponde
+         0 - Anillo exterior
+         1 - Anillo de exclusión
+   Subfield Codes
+      $a - Categoría de la escala (NR)
+      $b - Escala horizontal lineal de radio constante (R)
+      $c - Escala vertical lineal de radio constante (R)
+      $d - Coordenadas--Longitud Oeste (NR)
+      $e - Coordenadas--Longitud Este (NR)
+      $f - Coordenadas--Longitud Norte (NR)
+      $g - Coordenadas--Longitud Sur (NR)
+      $h - Escala angular (R)
+      $j - Declinación--Límite Norte (NR)
+      $k - Declinación--Límite Sur (NR)
+      $m - Ascensión derecha--Límite Este (NR)
+      $n - Ascensión derecha--Límite Oeste (NR)
+      $p - Equinoccio (NR)
+      $r - Distancia de la Tierra (NR)
+      $s - Latitud G-ring (R)
+      $t - Longitud G-ring (R)
+      $x - Fecha de inicio (NR)
+      $y - Fecha de fin (NR)
+      $z - Nombre del cuerpo extraterrestre (NR)
+      $2 - Fuente (NR)
+      $3 - Materials specified (NR)
+      $6 - Enlace (NR)
+      $8 - Enlace y número de secuencia del campo (R)
+
+035 - NÚMERO DE CONTROL DEL SISTEMA (R)
+   Indicators
+      First - No definido
+         # - No definido
+      Second - No definido
+         # - No definido
+   Subfield Codes
+      $a - Número de control del Sistema (NR)
+      $z - Número de control cancelado/no válido (R)
+      $6 - Enlace (NR)
+      $8 - Enlace y número de secuencia del campo (R)
+
+036 - NÚMERO DE ESTUDIO ORIGINAL PARA LOS ARCHIVOS DE DATOS (NR)
+   Indicators
+      First - No definido
+         # - No definido
+      Second - No definido
+         # - No definido
+   Subfield Codes
+      $a - Número de estudio original (NR)
+      $b - Fuente (agencia que asigna el número) (NR)
+      $6 - Enlace (NR)
+      $8 - Enlace y número de secuencia del campo (R)
+
+037 - FUENTE DE ADQUISICIÓN (R)
+   Indicators
+      First - No definido
+         # - No definido
+      Second - No definido
+         # - No definido
+   Subfield Codes
+      $a - Número de inventario (NR)
+      $b - Fuente del número de inventario/compra (NR)
+      $c - Términos de disponibilidad (R)
+      $f - Forma del ejemplar (R)
+      $g - Características adicionales del formato (R)
+      $n - Nota (R)
+      $6 - Enlace (NR)
+       $8 - Enlace y número de secuencia del campo (R)
+
+038 - REGISTRO DEL CONCEDENTE DE LA LICENCIA DEL CONTENIDO (NR)
+   Indicators
+      First - No definido
+         # - No definido
+      Second - No definido
+         # - No definido
+   Subfield Codes
+      $a - Registro del concedente de la licencia del contenido (NR)
+      $6 - Enlace (NR)
+      $8 - Enlace y número de secuencia del campo (R)
+
+040 - FUENTE DE CATALOGACIÓN (NR)
+   Indicators
+      First - No definido
+         # - No definido
+      Second - No definido
+         # - No definido
+   Subfield Codes
+      $a - Agencia/entidad que catalogó originalmente la obra (NR)
+      $b - Idioma en que se cataloga (NR)
+      $c - Entidad que transcribió la catalogación (NR)
+      $d - Entidad que modificó el registro (R)
+      $e - Convenciones de la descripción (R)
+      $6 - Enlace (NR)
+      $8 - Enlace y número de secuencia del campo (R)
+
+041 - CÓDIGO DE IDIOMA (R)
+   Indicators
+      First - Indicador de traducción
+         # - No se suministra información
+         0 - El ítem no es traducción/no incluye traducción
+         1 - El ítem es o incluye una traducción
+      Second - Fuente del código
+         # - Lista de códigos MARC
+         7 - Fuente identificada en subcampo $2 
+   Subfield Codes
+      $a - Código de idioma para texto o pista de sonido o título separado (R)
+      $b - Código de idioma del resumen (R)
+      $c - Idiomas de títulos separados (VM) [OBSOLETE]
+      $c - Idiomas de traducción disponible (SE) [OBSOLETE]
+      $d - Código de idioma de texto cantado o hablado (R)
+      $e - Código de idioma de libretos (R)
+      $f - Código de idioma de la tabla de contenidos (R)
+      $g - Código de idioma del material anexado diferente de libretos (R)
+      $h - Código de idioma de la versión original y/o traducciones intermedias del texto (R)
+      $j - Código de idioma de subtítulos (R)
+      $2 - Fuente del código (NR)
+      $6 - Enlace (NR)
+      $8 - Enlace y número de secuencia del campo (R)
+
+042 - CÓDIGO DE AUTENTICACIÓN (NR)
+   Indicators
+      First - No definido
+         # - No definido
+      Second - No definido
+         # - No definido
+   Subfield Codes
+      $a - Código de autenticación (R)
+
+043 - CÓDIGO DE ÁREA GEOGRÁFICA (NR)
+   Indicators
+      First - No definido
+         # - No definido
+      Second - No definido
+         # - No definido
+   Subfield Codes
+      $a - Código de área geográfica (R)
+      $b - Código local GAC (R)
+      $c - Código ISO (R)
+      $2 - Fuente de código local (R)
+      $6 - Enlace (NR)
+      $8 - Enlace y número de secuencia del campo (R)
+
+044 - CÓDIGO DE ENTIDAD DEL PAÍS DE PUBLICACIÓN/PRODUCCIÓN (NR)
+   Indicators
+      First - No definido
+         # - No definido
+      Second - No definido
+         # - No definido
+   Subfield Codes
+      $a - Código MARC del país (R)
+      $b - Código de sub-entidad local (R)
+      $c - Código ISO del país (R)
+      $2 - Fuente del código de sub-entidad local (R)
+      $6 - Enlace (NR)
+      $8 - Enlace y número de secuencia del campo (R)
+
+045 - PERÍODO CRONOLÓGICO DEL CONTENIDO (NR)
+   Indicators 
+      First - Tipo de período cronológico en los subcampos $b o $c
+         # - Subcampo $b o $c no presente
+         0 - Fecha/hora simple
+         1 - Múltiples fechas/horas simples
+         2 - Rango de fechas/horas
+      Second - No definido
+         # - No definido
+   Subfield Codes
+      $a - Código de período cronológico (R)
+      $b - Período cronológico de formato 9999 A.C. a D.C. (R)
+      $c - Período cronológico de formato anterior a 9999 A.C. (R)
+      $6 - Enlace (NR)
+      $8 - Enlace y número de secuencia del campo (R)
+
+046 - CÓDIGO ESPECIAL DE FECHAS (R)
+   Indicators
+      First - No definido
+         # - No definido
+      Second - No definido
+         # - No definido
+   Subfield Codes
+      $a - Código de tipo de fecha (NR)
+      $b - Fecha 1 (fecha A.C.) (NR)
+      $c - Fecha 1 (fecha D.C.) (NR)
+      $d - Fecha 2 (fecha A.C.) (NR)
+      $e - Fecha 2 (fecha D.C.) (NR)
+      $j - Fecha del recurso modificado (NR)
+      $k - Inicio o individualización de la fecha creada (NR)
+      $l - Finalización de la fecha creada (NR)
+      $m - Inicio de la fecha válida (NR)
+      $n - Término de la fecha válida (NR)
+      $2 - Fuente de la fecha (NR)
+      $6 - Enlace (NR)
+      $8 - Enlace y número de secuencia del campo (R)
+
+047 - CÓDIGO DE FORMA DE LA COMPOSICIÓN MUSICAL (R)
+   Indicators
+      First - No definido
+         # - No definido
+      Second - Fuente del código
+         # - Código MARC de la composición musical
+         7 - Fuente especificada en el subcampo $2
+   Subfield Codes
+      $a - Código de forma de la composición musical (R)
+      $2 - Fuente del código (NR)
+      $8 - Enlace y número de secuencia del campo (R)
+
+048 - NÚMERO DE INSTRUMENTOS MUSICALES O CÓDIGO DE VOCES (R)
+   Indicators
+      First - No definido
+         # - No definido
+      Second - Fuente del código
+         # - Código MARC 
+         7 - Fuente especificada en subcampo $2
+   Subfield Codes
+      $a - Intérprete o conjunto (R)
+      $b - Solista (R)
+      $2 - Fuente del código (NR)
+      $8 - Enlace y número de secuencia del campo (R)
+
+--Classification and Call Number Fields (05X-08X)--
+050 - NÚMERO DE UBICACIÓN EN LA BIBLIOTECA DEL CONGRESO (R)
+   Indicators
+      First - Existencia en la LC
+         # - No se suministra información
+         0 - El ítem está en la LC
+         1 - El ítem no está en la LC
+      Second - Fuente del número de ubicación
+         # - No se suministra información [OBSOLETE]
+         0 - Asignado por la LC
+         4 - Número asignado por una agencia diferente a la LC
+   Subfield Codes
+      $a - Número de clasificación (R)
+      $b - Número de item (NR)
+      $d - Número de clase suplementario (MU) [OBSOLETE]
+      $3 - Materiales especificados (NR)
+      $6 - Enlace (NR)
+      $8 - Enlace y número de secuencia del campo (R)
+
+051 - DECLARACIÓN DE LA BIBLIOTECA DEL CONGRESO SOBRE COPIAS,  OF CONGRESS COPY, ISSUE, OFFPRINT STATEMENT (R)
+   Indicators
+      First - No definido
+         # - No definido
+      Second - No definido
+         # - No definido
+      Second - Series call number (SE) [OBSOLETE]
+         0 - No series involved
+         1 - Main series
+         2 - Subseries
+         3 - Sub-subseries
+   Subfield Codes
+      $a - Número de clasificación (NR)
+      $b - Número de ítem (NR)
+      $c - Copy information (NR)
+      $8 - Enlace y número de secuencia del campo (R)
+
+052 - GEOGRAPHIC CLASSIFICATION (R)
+   Indicators
+      First - Code source
+         # - Library of Congress Classification
+         0 - U.S. Dept. of Defense Classification [OBSOLETE]
+         1 - U.S. Dept. of Defense Classification
+         7 - Source specified in subfield $2
+      Second - No definido
+         # - No definido
+   Subfield Codes
+      $a - Geographic classification area code (NR)
+      $b - Geographic classification subarea code (R)
+      $c - Subject (MP) [OBSOLETE]
+      $d - Populated place name (R)
+      $2 - Code Fuente (NR)
+      $6 - Enlace (NR)
+      $8 - Enlace y número de secuencia del campo (R)
+
+055 - CLASSIFICATION NUMBERS ASSIGNED IN CANADA (R)
+   Indicators
+      First - Existence in LAC collection
+         # - Information not provided
+         0 - Work held by LAC
+         1 - Work not held by LAC
+      Second - Type, completeness, source of class/call number
+         0 - LC-based call number assigned by LAC
+         1 - Complete LC class number assigned by LAC
+         2 - Incomplete LC class number assigned by LAC
+         3 - LC-based call number assigned by the contributing library
+         4 - Complete LC class number assigned by the contributing library
+         5 - Incomplete LC class number assigned by the contributing library
+         6 - Other call number assigned by LAC
+         7 - Other class number assigned by LAC
+         8 - Other call number assigned by the contributing library
+         9 - Other class number assigned by the contributing library
+   Subfield Codes
+      $a - Número de clasificación (NR)
+      $b - Número de ítem (NR)
+      $2 - Source of call/class number (NR)
+      $8 - Enlace y número de secuencia del campo (R)
+
+060 - NÚMERO DE UBICACIÓN EN LA BIBLIOTECA NACIONAL DE MEDICINA (R)
+   Indicators
+      First - Existe en la NML
+         # - No se suministra información
+         0 - Item is in NLM
+         1 - Item is not in NLM
+      Second - Fuente del número de ubicación
+         # - No se suministra información [OBSOLETE]
+         0 - Assigned by NLM
+         4 - Número asignado por una agencia diferente a la NLM
+   Subfield Codes
+      $a - Número de clasificación (R)
+      $b - Numero del ítem (NR)
+      $8 - Enlace y número de secuencia del campo (R)
+
+061 - NATIONAL LIBRARY OF MEDICINE COPY STATEMENT (R)
+   Indicators
+      First - No definido
+         # - No definido
+      Second - No definido
+         # - No definido
+   Subfield Codes
+      $a - Número de clasificación (R)
+      $b - Número de ítem (NR)
+      $c - Copy information (NR)
+      $8 - Enlace y número de secuencia del campo (R)
+
+066 - CONJUNTO DE CARACTERES PRESENTES (NR)
+   Indicators
+      First - No definido
+         # - No definido
+      Second - No definido
+         # - No definido
+   Subfield Codes
+      $a - Conjunto de caracteres primario G0 (NR)
+      $b - Conjunto de caracteres G1 (NR)
+      $c - Conjunto de caracteres alternos G0 o G1 (R)
+
+070 - NATIONAL AGRICULTURAL LIBRARY CALL NUMBER (R)
+   Indicators
+      First - Existence in NAL collection
+         0 - Item is in NAL
+         1 - Item is not in NAL
+      Second - No definido
+         # - No definido
+   Subfield Codes
+      $a - Número de clasificación (R)
+      $b - Número de ítem (NR)
+      $8 - Enlace y número de secuencia del campo (R)
+
+071 - NATIONAL AGRICULTURAL LIBRARY COPY STATEMENT (R)
+   Indicators
+      First - No definido
+         # - No definido
+      Second - No definido
+         # - No definido
+   Subfield Codes
+      $a - Número de clasificación (R)
+      $b - Número de ítem (NR)
+      $c - Copy information (NR)
+      $8 - Enlace y número de secuencia del campo (R)
+
+072 - CÓDIGO DE CATEGORIA TEMÁTICA (R)
+   Indicators
+      First - No definido
+         # - No definido
+      Second - Fuente especificada en el subcampo $2
+         0 - NAL subject category code list
+         7 - Código fuente especificado en el subcampo $2
+   Subfield Codes
+      $a - Código de categoría temática (NR) 
+      $x - Subdivisión de código de categoría temática (R)
+      $2 - Fuente (NR)
+      $6 - Enlace (NR)
+      $8 - Enlace y número de secuencia del campo (R)
+
+074 - GPO Número de ítem (R)
+   Indicators
+      First - No definido
+         # - No definido
+      Second - No definido
+         # - No definido
+   Subfield Codes
+      $a - GPO Número de ítem (NR)
+      $z - Canceled/invalid GPO Número de ítem (R)
+      $8 - Enlace y número de secuencia del campo (R)
+
+080 - NÚMERO DE CLASIFICACIÓN DECIMAL UNIVERSAL (R)
+   Indicators
+      First - Type of edition
+         # - No se suministra información
+         0 - Full
+         1 - Abridged
+      Second - No definido
+         # - No definido
+   Subfield Codes
+      $a - Número de Clasificación Decimal Universal (NR)
+      $b - Número del Item (NR)
+      $x - Subdivisión auxiliar común (R)
+      $2 - Identificador de la edición (NR)
+      $6 - Enlace (NR)
+      $8 - Enlace y número de secuencia del campo (R)
+
+082 - NÚMERO DE CLASIFICACIÓN DECIMAL DEWEY (R)
+   Indicators
+      First - Tipo de edición 
+         # - No se suministra información de edición (BK CF MU VM SE) [OBSOLETE]
+         0 - Edición completa
+         1 - Edición abreviada
+         2 - Versión NST abreviada (BK MU VM SE) [OBSOLETE]
+      Second - Fuente del número
+         # - No se suministra información
+         0 - Asignado por la LC
+         4 - Asignado por otra agencia diferente de la LC
+   Subfield Codes
+      $a - Número de clasificación (R)
+      $b - Número de ítem (NR)
+      $b - Número DDC -- versión NST abreviada (SE) [OBSOLETE]
+      $m - Designación estándar u opcional (NR)
+      $q - Assigning agency (NR)
+      $2 - Número de la edición (NR)
+      $6 - Enlace (NR)
+      $8 - Enlace y número de secuencia del campo (R)
+
+083 - NÚMERO DE CLASIFICACIÓN DECIMAL DEWEY ADICIONAL
+   Indicators
+      First - Type of edition
+         0 - Full edition
+         1 - Abridged edition
+      Second - No definido
+         # - No definido
+   Subfield Codes
+      $a - Número de clasificación (R)
+      $c - Classification number--Ending number of span (R)
+      $m - Standard or optional designation (NR)
+      $q - Assigning agency (NR)
+      $y - Table sequence number for internal subarrangement or add table (R)
+      $z - Table identification (R)
+      $2 - Número de edición (NR)
+      $6 - Enlace (NR)
+      $8 - Enlace y número de secuencia del campo (R)
+
+084 - OTRO NÚMERO DE CLASIFICACIÓN (R)
+   Indicators
+      First - No definido
+         # - No definido
+      Second - No definido
+         # - No definido
+   Subfield Codes
+      $a - Número de clasificación (R)
+      $b - Número de ítem (NR)
+      $2 - Fuente del número (NR)
+      $6 - Enlace (NR)
+      $8 - Enlace y número de secuencia del campo (R)
+
+085  SYNTHESIZED CLASSIFICATION NUMBER COMPONENTS (R)
+   Indicators
+      First - No definido
+         # - No definido
+      Second - No definido
+         # - No definido
+   Subfield Codes
+      $a - Number where instructions are found-single number or beginning number of span (R)
+      $b - Base number (R)
+      $c - Classification number-ending number of span (R)
+      $f - Facet designator (R)
+      $r - Root number (R)
+      $s - Digits added from classification number in schedule or external table (R)
+      $t - Digits added from internal subarrangement or add table (R)
+      $u - Number being analyzed (R)
+      $v - Number in internal subarrangement or add table where instructions are found (R)
+      $w - Table identification-Internal subarrangement or add table (R)
+      $y - Table sequence number for internal subarrangement or add table (R)
+      $z - Table identification (R)
+      $6 - Enlace (NR)
+      $8 - Enlace y número de secuencia del campo (R)
+
+086 - NÚMERO DE CLASIFICACION PARA DOCUMENTOS GUBERNAMENTALES (R)
+   Indicators
+      First - Fuente del número
+         # - Fuente especificada en el subcampo $2
+         # - No definido (BK MP MU VM SE) [OBSOLETE]
+         0 - Superintendent of Documents Classification System
+         1 - Government of Canada Publications: Outline of Classification
+      First - Jurisdicción gubernamental (BK MP MU VM SE) [OBSOLETE]
+      Second - No definido
+         # - No definido
+   Subfield Codes
+      $a - Número de clasificación (NR)
+      $z - Número de clasificación no válido/cancelado (R)
+      $2 - Fuente del número (NR)
+      $6 - Enlace (NR)
+      $8 - Enlace y número de secuencia del campo (R)
+
+088 - REPORT NUMBER (R)
+   Indicators
+      First - No definido
+         # - No definido
+      Second - No definido
+         # - No definido
+   Subfield Codes
+      $a - Report number (NR)
+      $z - Canceled/invalid report number (R)
+      $6 - Enlace (NR)
+      $8 - Enlace y número de secuencia del campo (R)
+
+090 - SHELF LOCATION (AM)[OBSOLETE]
+   Indicators
+      First - No definido
+         # - No definido
+      Second - No definido
+         # - No definido
+   Subfield Codes
+      $a - Shelf location (NR)
+
+091 - MICROFILM SHELF LOCATION (AM) [OBSOLETE]
+   Indicators
+      First - No definido
+         # - No definido
+      Second - No definido
+         # - No definido
+   Subfield Codes
+      $a - Microfilm shelf location (NR)
+
+--Main Entry Fields (1XX)--
+100 - MAIN ENTRY--PERSONAL NAME (NR)
+   Indicators
+      First - Type of personal name entry element
+         0 - Forename
+         1 - Surname
+         2 - Multiple surname [OBSOLETE]
+         3 - Family name
+      Second - No definido
+         # - No definido
+   Subfield Codes
+      $a - Personal name (NR)
+      $b - Numeration (NR)
+      $c - Titles and other words associated with a name (R)
+      $d - Dates associated with a name (NR)
+      $e - Relator term (R)
+      $f - Date of a work (NR)
+      $g - Miscellaneous information (NR)
+      $j - Attribution qualifier (R)
+      $k - Form subheading (R)
+      $l - Language of a work (NR)
+      $n - Number of part/section of a work (R)
+      $p - Name of part/section of a work (R)
+      $q - Fuller form of name (NR)
+      $t - Title of a work (NR)
+      $u - Affiliation (NR)
+      $0 - Authority record control number (R)
+      $4 - Relator code (R)
+      $6 - Enlace (NR)
+      $8 - Enlace y número de secuencia del campo (R)
+
+110 - MAIN ENTRY--CORPORATE NAME (NR)
+   Indicators
+      First - Type of corporate name entry element
+         0 - Inverted name
+         1 - Jurisdiction name
+         2 - Name in direct order
+      Second - No definido
+         # - No definido
+   Subfield Codes
+      $a - Corporate name or jurisdiction name as entry element (NR)
+      $b - Subordinate unit (R)
+      $c - Location of meeting (NR)
+      $d - Date of meeting or treaty signing (R)
+      $e - Relator term (R)
+      $f - Date of a work (NR)
+      $g - Miscellaneous information (NR)
+      $k - Form subheading (R)
+      $l - Language of a work (NR)
+      $n - Number of part/section/meeting (R)
+      $p - Name of part/section of a work (R)
+      $t - Title of a work (NR)
+      $u - Affiliation (NR)
+      $0 - Authority record control number (R)
+      $4 - Relator code (R)
+      $6 - Enlace (NR)
+      $8 - Enlace y número de secuencia del campo (R)
+
+111 - MAIN ENTRY--MEETING NAME (NR)
+   Indicators
+      First - Type of meeting name entry element
+         0 - Inverted name 
+         1 - Jurisdiction name
+         2 - Name in direct order
+      Second - No definido
+         # - No definido
+   Subfield Codes
+      $a - Meeting name or jurisdiction name as entry element (NR)
+      $b - Number (BK CF MP MU SE VM MX) [OBSOLETE]
+      $c - Location of meeting (NR)
+      $d - Date of meeting (NR)
+      $e - Subordinate unit (R)
+      $f - Date of a work (NR)
+      $g - Miscellaneous information (NR)
+      $j - Relator term (R)
+      $k - Form subheading (R)
+      $l - Language of a work (NR)
+      $n - Number of part/section/meeting (R)
+      $p - Name of part/section of a work (R)
+      $q - Name of meeting following jurisdiction name entry element (NR)
+      $t - Title of a work (NR)
+      $u - Affiliation (NR)
+      $0 - Authority record control number (R)
+      $4 - Relator code (R)
+      $6 - Enlace (NR)
+      $8 - Enlace y número de secuencia del campo (R)
+
+130 - MAIN ENTRY--UNIFORM TITLE (NR)
+   Indicators 
+      First - Nonfiling characters
+         0-9 - Number of nonfiling characters present
+         # - Nonfiling characters not specified [OBSOLETE]
+      Second - No definido
+         # - No definido
+   Subfield Codes
+      $a - Uniform title (NR)
+      $d - Date of treaty signing (R)
+      $f - Date of a work (NR)
+      $g - Miscellaneous information (NR)
+      $h - Medium (NR)
+      $k - Form subheading (R)
+      $l - Language of a work (NR)
+      $m - Medium of performance for music (R)
+      $n - Number of part/section of a work (R)
+      $o - Arranged statement for music (NR)
+      $p - Name of part/section of a work (R)
+      $r - Key for music (NR)
+      $s - Version (NR)
+      $t - Title of a work (NR)
+      $0 - Authority record control number (R)
+      $6 - Enlace (NR)
+      $8 - Enlace y número de secuencia del campo (R)
+
+--Title and Title-Related Fields (20X-24X)--
+210 - ABBREVIATED TITLE (R)
+   Indicators
+      First - Title added entry
+         0 - No added entry
+         1 - Added entry
+      Second - Type
+         # - Abbreviated key title
+         0 - Other abbreviated title
+   Subfield Codes
+      $a - Abbreviated title (NR)
+      $b - Qualifying information (NR)
+      $2 - Source (R)
+      $6 - Enlace (NR)
+      $8 - Enlace y número de secuencia del campo (R)
+
+211 - ACRONYM OR SHORTENED TITLE (R) [OBSOLETE]
+   Indicators
+      First - Title added entry
+         0 - No title added entry
+         1 - Title added entry
+      Second - Nonfiling characters
+         0-9 - Number of nonfiling characters present
+   Subfield Codes
+      $a - Acronym or shortened title (NR)
+      $6 - Enlace (NR)
+
+212 - VARIANT ACCESS TITLE (R) [OBSOLETE]
+   Indicators
+      First - Title added entry
+         0 - No title added entry
+         1 - Title added entry
+      Second - No definido
+         # - No definido
+   Subfield Codes
+      $a - Variant access title (NR)
+      $6 - Enlace (NR)
+
+214 - AUGMENTED TITLE (R) [OBSOLETE]
+   Indicators
+      First - Title added entry
+         0 - No title added entry
+         1 - Title added entry
+      Second - Nonfiling characters
+         0-9 - Number of nonfiling characters present
+   Subfield Codes
+      $a - Augmented title (NR)
+      $6 - Enlace (NR)
+
+222 - KEY TITLE (R)
+   Indicators
+      First - No definido
+         # - No definido
+      Second - Nonfiling characters
+         0-9 - Number of nonfiling characters
+   Subfield Codes
+      $a - Key title (NR)
+      $b - Qualifying information (NR)
+      $6 - Enlace (NR)
+      $8 - Enlace y número de secuencia del campo (R)
+
+240 - UNIFORM TITLE (NR)
+   Indicators
+      First - Uniform title printed or displayed
+         0 - Not printed or displayed
+         1 - Printed or displayed
+         2 - Not printed on card, title added entry (MU) [OBSOLETE]
+         3 - Printed on card, title added entry (MU) [OBSOLETE]
+      Second - Nonfiling characters
+         0-9 - Number of nonfiling characters
+   Subfield Codes
+      $a - Uniform title (NR)
+      $d - Date of treaty signing (R)
+      $f - Date of a work (NR)
+      $g - Miscellaneous information (NR)
+      $h - Medium (NR)
+      $k - Form subheading (R)
+      $l - Language of a work (NR)
+      $m - Medium of performance for music (R)
+      $n - Number of part/section of a work (R)
+      $o - Arranged statement for music (NR)
+      $p - Name of part/section of a work (R)
+      $r - Key for music (NR)
+      $s - Version (NR)
+      $0 - Authority record control number (R)
+      $6 - Enlace (NR)
+      $8 - Enlace y número de secuencia del campo (R)
+
+241 - ROMANIZED TITLE (BK AM CF MP MU VM) (NR) [OBSOLETE]
+   Indicators
+      First - Title added entry
+         0 - No title added entry
+         1 - Title added entry
+      Second - Nonfiling characters
+         0-9 - Number of nonfiling characters
+   Subfield Codes
+      $a - Romanized title (NR)
+      $h - Medium (NR)
+
+242 - TRANSLATION OF TITLE BY CATALOGING AGENCY (R)
+   Indicators
+      First - Title added entry
+         0 - No added entry
+         1 - Added entry
+      Second - Nonfiling characters
+         0-9 - Number of nonfiling characters
+   Subfield Codes
+      $a - Title (NR)
+      $b - Remainder of title (NR)
+      $c - Statement of responsibility, etc. (NR)
+      $d - Designation of section (BK AM MP MU VM SE) [OBSOLETE]
+      $e - Name of part/section (BK AM MP MU VM SE) [OBSOLETE]
+      $h - Medium (NR)
+      $n - Number of part/section of a work (R)
+      $p - Name of part/section of a work (R)
+      $y - Language code of translated title (NR)
+      $6 - Enlace (NR)
+      $8 - Enlace y número de secuencia del campo (R)
+
+243 - COLLECTIVE UNIFORM TITLE (NR)
+   Indicators 
+      First - Uniform title printed or displayed
+         0 - Not printed or displayed
+         1 - Printed or displayed
+         2 - Not printed on card, title added entry (MU) [OBSOLETE]
+         3 - Printed on card, title added entry (MU) [OBSOLETE]
+      Second - Nonfiling characters
+         0-9 - Number of nonfiling characters
+   Subfield Codes
+      $a - Uniform title (NR)
+      $d - Date of treaty signing (R)
+      $f - Date of a work (NR)
+      $g - Miscellaneous information (NR)
+      $h - Medium (NR)
+      $k - Form subheading (R)
+      $l - Language of a work (NR)
+      $m - Medium of performance for music (R)
+      $n - Number of part/section of a work (R)
+      $o - Arranged statement for music (NR)
+      $p - Name of part/section of a work (R)
+      $r - Key for music (NR)
+      $s - Version (NR)
+      $6 - Enlace (NR)
+      $8 - Enlace y número de secuencia del campo (R)
+
+245 - TITLE STATEMENT (NR)
+   Indicators
+      First - Title added entry
+         0 - No added entry
+         1 - Added entry
+      Second - Nonfiling characters
+         0-9 - Number of nonfiling characters
+   Subfield Codes
+      $a - Title (NR)
+      $b - Remainder of title (NR)
+      $c - Statement of responsibility, etc. (NR)
+      $d - Designation of section (SE) [OBSOLETE]
+      $e - Name of part/section (SE) [OBSOLETE]
+      $f - Inclusive dates (NR)
+      $g - Bulk dates (NR)
+      $h - Medium (NR)
+      $k - Form (R)
+      $n - Number of part/section of a work (R)
+      $p - Name of part/section of a work (R)
+      $s - Version (NR)
+      $6 - Enlace (NR)
+      $8 - Enlace y número de secuencia del campo (R)
+
+246 - VARYING FORM OF TITLE (R)
+   Indicators
+      First - Note/added entry controller
+         0 - Note, no added entry
+         1 - Note, added entry
+         2 - No note, no title added entry
+         3 - No note, added entry 
+      Second - Type of title
+         # - No type specified
+         0 - Portion of title
+         1 - Parallel title
+         2 - Distinctive title
+         3 - Other title
+         4 - Cover title
+         5 - Added title page title
+         6 - Caption title
+         7 - Running title
+         8 - Spine title
+   Subfield Codes
+      $a - Title proper/short title (NR)
+      $b - Remainder of title (NR)
+      $d - Designation of section (SE) [OBSOLETE]
+      $e - Name of part/section (SE) [OBSOLETE]
+      $f - Date or sequential designation (NR)
+      $g - Miscellaneous information (NR)
+      $h - Medium (NR)
+      $i - Display text (NR)
+      $n - Number of part/section of a work (R)
+      $p - Name of part/section of a work (R)
+      $5 - Institución a la que se aplica el campo (NR) 
+      $6 - Enlace (NR)
+      $8 - Enlace y número de secuencia del campo (R)
+
+247 - FORMER TITLE (R)
+   Indicators
+      First - Title added entry
+         0 - No added entry
+         1 - Added entry
+      Second - Note controller
+         0 - Display note
+         1 - Do not display note
+   Subfield Codes
+      $a - Title (NR)
+      $b - Remainder of title (NR)
+      $d - Designation of section (SE) [OBSOLETE]
+      $e - Name of part/section (SE) [OBSOLETE]
+      $f - Date or sequential designation (NR)
+      $g - Miscellaneous information (NR)
+      $h - Medium (NR)
+      $n - Number of part/section of a work (R)
+      $p - Name of part/section of a work (R)
+      $x - International Standard Serial Number (NR)
+      $6 - Enlace (NR)
+      $8 - Enlace y número de secuencia del campo (R)
+
+--Edition, Imprint, etc. Fields 250-270--
+250 - EDITION STATEMENT (NR)
+   Indicators
+      First - No definido
+         # - No definido
+      Second - No definido
+         # - No definido
+   Subfield Codes
+      $a - Edition statement (NR)
+      $b - Remainder of edition statement (NR)
+      $6 - Enlace (NR)
+      $8 - Enlace y número de secuencia del campo (R)
+
+254 - MUSICAL PRESENTATION STATEMENT (NR)
+   Indicators
+      First - No definido
+         # - No definido
+      Second - No definido
+         # - No definido
+   Subfield Codes
+      $a - Musical presentation statement (NR)
+      $6 - Enlace (NR)
+      $8 - Enlace y número de secuencia del campo (R)
+
+255 - CARTOGRAPHIC MATHEMATICAL DATA (R)
+   Indicators
+      First - No definido
+         # - No definido
+      Second - No definido
+         # - No definido
+   Subfield Codes
+      $a - Statement of scale (NR)
+      $b - Statement of projection (NR)
+      $c - Statement of coordinates (NR)
+      $d - Statement of zone (NR)
+      $e - Statement of equinox (NR)
+      $f - Outer G-ring coordinate pairs (NR)
+      $g - Exclusion G-ring coordinate pairs (NR)
+      $6 - Enlace (NR)
+      $8 - Enlace y número de secuencia del campo (R)
+
+256 - COMPUTER FILE CHARACTERISTICS (NR)
+   Indicators
+      First - No definido
+         # - No definido
+      Second - No definido
+         # - No definido
+   Subfield Codes
+      $a - Computer file characteristics (NR)
+      $6 - Enlace (NR)
+      $8 - Enlace y número de secuencia del campo (R)
+
+257 - COUNTRY OF PRODUCING ENTITY (R)
+   Indicators
+      First - No definido
+         # - No definido
+      Second - No definido
+         # - No definido
+   Subfield Codes
+      $a - Country of producing entity (R)
+      $2 - Fuente (NR)
+      $6 - Enlace (NR)
+      $8 - Enlace y número de secuencia del campo (R)
+
+258 - PHILATELIC ISSUE Fecha (R)
+   Indicators
+      First - No definido
+         # - No definido
+      Second - No definido
+         # - No definido
+   Subfield Codes
+      $a - Issuing jurisdiction (NR)
+      $b - Denomination (NR)
+      $6 - Enlace (NR)
+      $8 - Enlace y número de secuencia del campo (R)
+
+260 - PUBLICATION, DISTRIBUTION, ETC. (IMPRINT) (R)
+   Indicators
+      First - Sequence of publishing statements
+         # - No corresponde/No se suministra información/Earliest available publisher
+         2 - Intervening publisher
+         3 - Current/latest publisher
+      Second - No definido
+         # - No definido
+   Subfield Codes
+      $a - Place of publication, distribution, etc. (R)
+      $b - Name of publisher, distributor, etc. (R)
+      $c - Date of publication, distribution, etc. (R)
+      $d - Plate or publisher's number for music (Pre-AACR 2) (NR) [LOCAL]
+      $e - Place of manufacture (R)
+      $f - Manufacturer (R)
+      $g - Date of manufacture (R)
+      $3 - Materiales especificados (NR)
+      $6 - Enlace (NR)
+      $8 - Enlace y número de secuencia del campo (R)
+
+261 - IMPRINT STATEMENT FOR FILMS (Pre-AACR 1 Revised) (NR) [LOCAL]
+   Indicators
+      First - No definido
+         # - No definido
+      Second - No definido
+         # - No definido
+   Subfield Codes
+      $a - Producing company (R)
+      $b - Releasing company (primary distributor) (R)
+      $d - Date of production, release, etc. (R)
+      $e - Contractual producer (R)
+      $f - Place of production, release, etc. (R)
+      $6 - Enlace (NR)
+      $8 - Enlace y número de secuencia del campo (R)
+
+262 - IMPRINT STATEMENT FOR SOUND RECORDINGS (Pre-AACR 2) (NR) [LOCAL]
+   Indicators
+      First - No definido
+         # - No definido
+      Second - No definido
+         # - No definido
+   Subfield Codes
+      $a - Place of production, release, etc. (NR)
+      $b - Publisher or trade name (NR)
+      $c - Date of production, release, etc. (NR)
+      $k - Serial identification (NR)
+      $l - Matrix and/or take number (NR)
+      $6 - Enlace (NR)
+      $8 - Enlace y número de secuencia del campo (R)
+
+263 - PROJECTED PUBLICATION Fecha (NR)
+   Indicators
+      First - No definido
+         # - No definido
+      Second - No definido
+         # - No definido
+   Subfield Codes
+      $a - Projected publication Fecha (NR)
+      $6 - Enlace (NR)
+      $8 - Enlace y número de secuencia del campo (R)
+
+265 - SOURCE FOR ACQUISITION/SUBSCRIPTION ADDRESS (NR) [OBSOLETE]
+   Indicators
+      First - No definido
+         # - No definido
+      Second - No definido
+         # - No definido
+   Subfield Codes
+      $a - Source for acquisition/subscription address (R)
+      $6 - Enlace (NR)
+
+270 - ADDRESS (R)
+   Indicators
+      First - Level
+         # - No level specified
+         1 - Primary
+         2 - Secondary
+      Second - Type of address
+         # - No type specified
+         0 - Mailing
+         7 - Type specified in subfield $i
+   Subfield Codes
+      $a - Address (R)
+      $b - City (NR)
+      $c - State or province (NR)
+      $d - Country (NR)
+      $e - Postal code (NR)
+      $f - Terms preceding attention name (NR)
+      $g - Attention name (NR)
+      $h - Attention position (NR)
+      $i - Type of address (NR)
+      $j - Specialized telephone number (R)
+      $k - Telephone number (R)
+      $l - Fax number (R)
+      $m - Electronic mail address (R)
+      $n - TDD or TTY number (R)
+      $p - Contact person (R)
+      $q - Title of contact person (R)
+      $r - Hours (R)
+      $z - Public note (R)
+      $4 - Relator code (R)
+      $6 - Enlace (NR)
+      $8 - Enlace y número de secuencia del campo (R)
+
+--Physical Description, etc. Fields (3XX)--
+300 - PHYSICAL DESCRIPTION (R)
+   Indicators
+      First - No definido
+         # - No definido
+      Second - No definido
+         # - No definido
+   Subfield Codes
+      $a - Extent (R)
+      $b - Other physical details (NR)
+      $c - Dimensions (R)
+      $e - Accompanying material (NR)
+      $f - Type of unit (R)
+      $g - Size of unit (R)
+      $3 - Materiales especificados (NR)
+      $6 - Enlace (NR)
+      $8 - Enlace y número de secuencia del campo (R)
+
+301 - PHYSICAL DESCRIPTION FOR FILMS (PRE-AACR 2) (VM) [OBSOLETE]
+   Indicators
+      First - No definido
+         # - No definido
+      Second - No definido
+         # - No definido
+   Subfield Codes
+      $a - Extent of item (NR)
+      $b - Sound characteristics (NR)
+      $c - Color characteristics (NR)
+      $d - Dimensions (NR)
+      $e - Accompanying material (NR)
+      $f - Speed (NR)
+
+302 - PAGE OR ITEM COUNT (BK AM) [OBSOLETE]
+   Indicators
+      First - No definido
+         # - No definido
+      Second - No definido
+         # - No definido
+   Subfield Codes
+      $a - Page count (NR)
+
+303 - UNIT COUNT (AM) [OBSOLETE]
+   Indicators
+      First - No definido
+         # - No definido
+      Second - No definido
+         # - No definido
+   Subfield Codes
+      $a - Unit count (NR)
+
+304 - LINEAR FOOTAGE (AM) [OBSOLETE]
+   Indicators
+      First - No definido
+         # - No definido
+      Second - No definido
+         # - No definido
+   Subfield Codes
+      $a - Linear footage (NR)
+
+305 - PHYSICAL DESCRIPTION FOR SOUND RECORDINGS (Pre-AACR 2) (MU) [OBSOLETE]
+   Indicators
+      First - No definido
+         # - No definido
+      Second - No definido
+         # - No definido
+   Subfield Codes
+      $a - Extent (NR)
+      $b - Other physical details (NR)
+      $c - Dimensions (NR)
+      $d - Microgroove or standard (NR)
+      $e - Stereophonic, monaural (NR)
+      $f - Number of tracks (NR)
+      $m - Serial identification (NR)
+      $n - Matrix and/or take number (NR)
+      $6 - Enlace (NR)
+
+306 - PLAYING TIME (NR)
+   Indicators
+      First - No definido
+         # - No definido
+      Second - No definido
+         # - No definido
+   Subfield Codes
+      $a - Playing time (R)
+      $6 - Enlace (NR)
+      $8 - Enlace y número de secuencia del campo (R)
+
+307 - HOURS, ETC. (R)
+   Indicators
+      First - Display constant controller
+         # - Hours
+         8 - No display constant generated
+      Second - No definido
+         # - No definido
+   Subfield Codes
+      $a - Hours (NR)
+      $b - Additional information (NR)
+      $6 - Enlace (NR)
+      $8 - Enlace y número de secuencia del campo (R)
+
+308 - PHYSICAL DESCRIPTION FOR FILMS (ARCHIVAL) (VM) [OBSOLETE]
+   Indicators
+      First - No definido
+         # - No definido
+      Second - No definido
+         # - No definido
+   Subfield Codes
+      $a - Number of reels (NR)
+      $b - Footage (NR)
+      $c - Sound characteristics (NR)
+      $d - Color characteristics (NR)
+      $e - Width (NR)
+      $f - Presentation format (NR)
+      $6 - Enlace (NR)
+
+310 - CURRENT PUBLICATION FREQUENCY (NR)
+   Indicators
+      First - No definido
+         # - No definido
+      Second - No definido
+         # - No definido
+   Subfield Codes
+      $a - Current publication frequency (NR)
+      $b - Date of current publication frequency (NR)
+      $6 - Enlace (NR)
+      $8 - Enlace y número de secuencia del campo (R)
+
+315 - FREQUENCY (NR) (CF MP) [OBSOLETE]
+   Indicators
+      First - No definido
+         # - No definido
+      Second - No definido
+         # - No definido
+   Subfield Codes
+      $a - Frequency (R)
+      $b - Dates of frequency (R)
+      $6 - Enlace (NR)
+
+321 - FORMER PUBLICATION FREQUENCY (R)
+   Indicators
+      First - No definido
+         # - No definido
+      Second - No definido
+         # - No definido
+   Subfield Codes
+      $a - Former publication frequency (NR)
+      $b - Dates of former publication frequency (NR)
+      $6 - Enlace (NR)
+      $8 - Enlace y número de secuencia del campo (R)
+
+336 - CONTENT TYPE (R)
+   Indicators
+      First - No definido
+         # - No definido
+      Second - No definido
+         # - No definido
+   Subfield Codes
+      $a - Content type term (R)
+      $b - Content type code (R)
+      $2 - Fuente (NR)
+      $3 - Materiales especificados (NR)
+      $6 - Enlace (NR)
+      $8 - Enlace y número de secuencia del campo (R)
+
+337 - MEDIA TYPE (R)
+   Indicators
+      First - No definido
+         # - No definido
+      Second - No definido
+         # - No definido
+   Subfield Codes
+      $a - Media type term (R)
+      $b - Media type code (R)
+      $2 - Fuente (NR)
+      $3 - Materiales especificados (NR)
+      $6 - Enlace (NR)
+      $8 - Enlace y número de secuencia del campo (R)
+
+338 - CARRIER TYPE (R)
+   Indicators
+      First - No definido
+         # - No definido
+      Second - No definido
+         # - No definido
+   Subfield Codes
+      $a - Carrier type term (R)
+      $b - Carrier type code (R)
+      $2 - Fuente (NR)
+      $3 - Materiales especificados (NR)
+      $6 - Enlace (NR)
+      $8 - Enlace y número de secuencia del campo (R)
+
+340 - PHYSICAL MEDIUM (R)
+   Indicators 
+      First - No definido
+         # - No definido
+      Second - No definido
+         # - No definido
+   Subfield Codes
+      $a - Material base and configuration (R)
+      $b - Dimensions (R)
+      $c - Materials applied to surface (R)
+      $d - Information recording technique (R)
+      $e - Support (R)
+      $f - Production rate/ratio (R)
+      $h - Location within medium (R)
+      $i - Technical specifications of medium (R)
+      $3 - Materiales especificados (NR)
+      $6 - Enlace (NR)
+      $8 - Enlace y número de secuencia del campo (R)
+
+342 - GEOSPATIAL REFERENCE DATA (R)
+   Indicators
+      First - Geospatial reference dimension
+         0 - Horizontal coordinate system
+         1 - Vertical coordinate system
+      Second - Geospatial reference method
+         0 - Geographic
+         1 - Map projection
+         2 - Grid coordinate system
+         3 - Local planar
+         4 - Local
+         5 - Geodetic model
+         6 - Altitude
+         7 - Method specified in $2
+         8 - Depth
+   Subfield Codes
+      $a - Name (NR)
+      $b - Coordinate or distance units (NR)
+      $c - Latitude resolution (NR)
+      $d - Longitude resolution (NR)
+      $e - Standard parallel or oblique line latitude (R)
+      $f - Oblique line longitude (R)
+      $g - Longitude of central meridian or projection center (NR)
+      $h - Latitude of projection origin or projection center (NR)
+      $i - False easting (NR)
+      $j - False northing (NR)
+      $k - Scale factor (NR)
+      $l - Height of perspective point above surface (NR)
+      $m - Azimuthal angle (NR)
+      $n - Azimuth measure point longitude or straight vertical longitude from pole (NR)
+      $o - Landsat number and path number (NR)
+      $p - Zone identifier (NR)
+      $q - Ellipsoid name (NR)
+      $r - Semi-major axis (NR)
+      $s - Denominator of flattening ratio (NR)
+      $t - Vertical resolution (NR)
+      $u - Vertical encoding method (NR)
+      $v - Local planar, local, or other projection or grid description (NR)
+      $w - Local planar or local georeference information (NR)
+      $2 - Reference method used (NR)
+      $6 - Enlace (NR)
+      $8 - Enlace y número de secuencia del campo (R)
+
+343 - PLANAR COORDINATE DATA (R)
+   Indicators
+      First - No definido
+         # - No definido
+      Second - No definido
+         # - No definido
+   Subfield Codes
+      $a - Planar coordinate encoding method (NR)
+      $b - Planar distance units (NR)
+      $c - Abscissa resolution (NR)
+      $d - Ordinate resolution (NR)
+      $e - Distance resolution (NR)
+      $f - Bearing resolution (NR)
+      $g - Bearing units (NR)
+      $h - Bearing reference direction (NR)
+      $i - Bearing reference meridian (NR)
+      $6 - Enlace (NR)
+      $8 - Enlace y número de secuencia del campo (R)
+
+350 - PRICE (NR) (BK AM CF MU VM SE) [OBSOLETE] 
+   Indicators
+      First - No definido
+         # - No definido
+      Second - No definido
+         # - No definido
+   Subfield Codes
+      $a - Price (R)
+      $b - Form of issue (R)
+      $6 - Enlace (NR)
+
+351 - ORGANIZATION AND ARRANGEMENT OF MATERIALS (R)
+   Indicators
+      First - No definido
+         # - No definido
+      Second - No definido
+         # - No definido
+   Subfield Codes
+      $a - Organization (R)
+      $b - Arrangement (R)
+      $c - Hierarchical level (NR)
+      $3 - Materiales especificados (NR)
+      $6 - Enlace (NR)
+      $8 - Enlace y número de secuencia del campo (R)
+
+352 - DIGITAL GRAPHIC REPRESENTATION (R)
+   Indicators
+      First - No definido
+         # - No definido
+      Second - No definido
+         # - No definido
+   Subfield Codes
+      $a - Direct reference method (NR)
+      $b - Object type (R)
+      $c - Object count (R)
+      $d - Row count (NR)
+      $e - Column count (NR)
+      $f - Vertical count (NR)
+      $g - VPF topology level (NR)
+      $i - Indirect reference description (NR)
+      $q - Format of the digital image (R)
+      $6 - Enlace (NR)
+      $8 - Enlace y número de secuencia del campo (R)
+
+355 - SECURITY CLASSIFICATION CONTROL (R)
+   Indicators
+      First - Controlled element
+         0 - Document
+         1 - Title
+         2 - Abstract
+         3 - Contents note
+         4 - Author
+         5 - Record
+         8 - Other element
+      Second - No definido
+         # - No definido
+   Subfield Codes
+      $a - Security classification (NR)
+      $b - Handling instructions (R)
+      $c - External dissemination information (R)
+      $d - Downgrading or declassification event (NR)
+      $e - Classification system (NR)
+      $f - Country of origin code (NR)
+      $g - Downgrading Fecha (NR)
+      $h - Declassification Fecha (NR)
+      $j - Authorization (R)
+      $6 - Enlace (NR)
+      $8 - Enlace y número de secuencia del campo (R)
+
+357 - ORIGINATOR DISSEMINATION CONTROL (NR)
+   Indicators
+      First - No definido
+         # - No definido
+      Second - No definido
+         # - No definido
+   Subfields
+      $a - Originator control term (NR)
+      $b - Originating agency (R)
+      $c - Authorized recipients of material (R)
+      $g - Other restrictions (R)
+      $6 - Enlace (NR)
+      $8 - Enlace y número de secuencia del campo (R)
+
+359 - RENTAL PRICE (VM) [OBSOLETE]
+   Indicators
+      First - No definido
+         # - No definido
+      Second - No definido
+         # - No definido
+   Subfield Codes
+      $a - Rental price (NR)
+
+362 - DATES OF PUBLICATION AND/OR SEQUENTIAL DESIGNATION (R)
+   Indicators
+      First - Format of date
+         0 - Formatted style
+         1 - Unformatted note
+      Second - No definido
+         # - No definido
+   Subfield Codes
+      $a - Dates of publication and/or sequential designation (NR)
+      $z - Source of information (NR)
+      $6 - Enlace (NR)
+      $8 - Enlace y número de secuencia del campo (R)
+
+363 - NORMALIZED DATE AND SEQUENTIAL DESIGNATION (R)
+   Indicators
+      First - Start/End designator
+         # - No se suministra información          
+         0 - Starting information          
+         1 - Ending information 
+      Second - State of issuance
+         # - Not specified
+         0 - Closed
+         1 - Open 
+   Subfield Codes
+      $a - First level of enumeration (NR)       
+      $b - Second level of enumeration (NR)       
+      $c - Third level of enumeration (NR)       
+      $d - Fourth level of enumeration (NR)       
+      $e - Fifth level of enumeration (NR)       
+      $f - Sixth level of enumeration (NR)       
+      $g - Alternative numbering scheme, first level of enumeration (NR)       
+      $h - Alternative numbering scheme, second level of enumeration (NR)       
+      $i - First level of chronology (NR)
+      $j - Second level of chronology (NR) 
+      $k - Third level of chronology (NR) 
+      $l - Fourth level of chronology (NR) 
+      $m - Alternative numbering scheme, chronology (NR) 
+      $u - First level textual designation (NR) 
+      $v - First level of chronology, issuance (NR) 
+      $x - Nonpublic note (R)
+      $z - Public note (R) 
+      $6 - Enlace (NR) 
+      $8 - Enlace y número de secuencia del campo (NR)
+
+365 - TRADE PRICE (R)
+   Indicators
+      First - No definido
+         # - No definido 
+      Second - No definido
+         # - No definido 
+   Subfield Codes
+      $a - Price type code (NR)
+      $b - Price amount (NR)
+      $c - Currency code (NR)
+      $d - Unit of pricing (NR)
+      $e - Price note (NR)
+      $f - Price effective from (NR)
+      $g - Price effective until (NR)
+      $h - Tax rate 1 (NR)
+      $i - Tax rate 2 (NR)
+      $j - ISO country code (NR)
+      $k - MARC country code (NR)
+      $m - Identification of pricing entity (NR)
+      $2 - Source of price type code (NR)
+      $6 - Enlace (NR)
+      $8 - Enlace y número de secuencia del campo (R)
+
+366 - TRADE AVAILABILITY INFORMATION (R)
+   Indicators
+      First - No definido
+         # - No definido 
+      Second - No definido
+         # - No definido 
+   Subfield Codes
+      $a - Publishers' compressed title identification (NR)
+      $b - Detailed date of publication (NR)
+      $c - Availability status code (NR)
+      $d - Expected next availability Fecha (NR)
+      $e - Note (NR)
+      $f - Publishers' discount category (NR)
+      $g - Date made out of print (NR)
+      $j - ISO country code (NR)
+      $k - MARC country code (NR)
+      $m - Identification of agency (NR)
+      $2 - Source of availability status code (NR)
+      $6 - Enlace (NR) 
+      $8 - Enlace y número de secuencia del campo (R)
+
+380 - FORM OF WORK (R)
+   Indicators
+      First - Undefined
+         # - Undefined 
+      Second - Undefined
+         # - Undefined 
+   Subfield Codes
+      $a - Form of work (R)
+      $0 - Record control number (R)
+      $2 - Source of term (NR)
+      $6 - Linkage (NR) 
+      $8 - Field link and sequence number (R)
+	  
+381 - OTHER DISTINGUISHING CHARACTERISTICS OF WORK OR EXPRESSION (R)
+   Indicators
+      First - Undefined
+         # - Undefined 
+      Second - Undefined
+         # - Undefined 
+   Subfield Codes
+      $a - Other distinguishing characteristic (R)
+      $u - Uniform Resource Identifier (R)
+      $v - Source of information (R)
+      $0 - Record control number (R)
+      $2 - Source of term (NR)
+      $6 - Linkage (NR) 
+      $8 - Field link and sequence number (R)
+	  
+382 - MEDIUM OF PERFORMANCE (R)
+   Indicators
+      First - Undefined
+         # - Undefined 
+      Second - Undefined
+         # - Undefined 
+   Subfield Codes
+      $a - Medium of performance (R)
+      $0 - Record control number (R)
+      $2 - Source of term (NR)
+      $6 - Linkage (NR) 
+      $8 - Field link and sequence number (R)
+	  
+383 - NUMERIC DESIGNATION OF MUSICAL WORK (R)
+   Indicators
+      First - Undefined
+         # - Undefined 
+      Second - Undefined
+         # - Undefined 
+   Subfield Codes
+      $a - Serial number (R)
+      $b - Opus number (R)
+      $c - Thematic index number (R)
+      $6 - Linkage (NR) 
+      $8 - Field link and sequence number (R)
+	  
+384 - KEY (NR)
+   Indicators
+      First - Key type
+         # - Relationship to original unknown
+         0 - Original key
+         1 - Transposed key 
+      Second - Undefined
+         # - Undefined 
+   Subfield Codes
+      $a - Key (NR)
+      $6 - Linkage (NR) 
+      $8 - Field link and sequence number (R)
+
+--Series Statement Fields (4XX)--
+400 - SERIES STATEMENT/ADDED ENTRY--PERSONAL NAME  (R) [US-LOCAL]
+   Indicators
+      First - Type of personal name entry element
+         0 - Forename
+         1 - Surname
+         2 - Multiple surname [OBSOLETE]
+         3 - Family name
+      Second - Pronoun represents main entry
+         0 - Main entry not represented by pronoun
+         1 - Main entry represented by pronoun
+   Subfield Codes
+      $a - Personal name (NR)
+      $b - Numeration (NR) 
+      $c - Titles and other words associated with a name (R)
+      $d - Dates associated with a name (NR)
+      $e - Relator term (R)
+      $f - Date of a work (NR)
+      $g - Miscellaneous information (NR)
+      $k - Form subheading (R)
+      $l - Language of a work (NR)
+      $n - Number of part/section of a work (R)
+      $p - Name of part/section of a work (R)
+      $q - Fuller form of name (NR) [OBSOLETE]
+      $t - Title of a work (NR)
+      $u - Affiliation (NR)
+      $v - Volume number/sequential designation  (NR)
+      $x - International Standard Serial Number  (NR)
+      $4 - Relator code (R)
+      $6 - Enlace (NR)
+      $8 - Field link and sequence number  (R)
+
+410 - SERIES STATEMENT/ADDED ENTRY--CORPORATE NAME (R) [US-LOCAL]
+   Indicators
+      First - Type of corporate name entry element
+         0 - Inverted name
+         1 - Jurisdiction name
+         2 - Name in direct order
+      Second - Pronoun represents main entry
+         0 - Main entry not represented by pronoun
+         1 - Main entry represented by pronoun
+   Subfield Codes
+      $a - Corporate name or jurisdiction name as entry element (NR)
+      $b - Subordinate unit (R)
+      $c - Location of meeting (NR)
+      $d - Date of meeting or treaty signing (R)
+      $e - Relator term (R)
+      $f - Date of a work (NR)
+      $g - Miscellaneous information (NR)
+      $k - Form subheading (R)
+      $l - Language of a work (NR)
+      $n - Number of part/section/meeting (R)
+      $p - Name of part/section of a work (R)
+      $t - Title of a work (NR)
+      $u - Affiliation (NR)
+      $v - Volume number/sequential designation  (NR)
+      $x - International Standard Serial Number (NR)
+      $4 - Relator code (R)
+      $6 - Enlace (NR)
+      $8 - Enlace y número de secuencia del campo (R)
+
+411 - SERIES STATEMENT/ADDED ENTRY--MEETING NAME (R) [US-LOCAL]
+   Indicators
+      First - Type of meeting name entry element
+         0 - Inverted name
+         1 - Jurisdiction name
+         2 - Name in direct order
+      Second - Pronoun represents main entry
+         0 - Main entry not represented by pronoun
+         1 - Main entry represented by pronoun
+   Subfield Codes
+      $a - Meeting name or jurisdiction name as entry element (NR)
+      $b - Number  [OBSOLETE]
+      $c - Location of meeting (NR)
+      $d - Date of meeting (NR)
+      $e - Subordinate unit (R)
+      $f - Date of a work (NR)
+      $g - Miscellaneous information (NR)
+      $k - Form subheading (R)
+      $l - Language of a work (NR)
+      $n - Number of part/section/meeting (R)
+      $p - Name of part/section of a work (R)
+      $q - Name of meeting following jurisdiction name entry element (NR)
+      $t - Title of a work (NR)
+      $u - Affiliation (NR)
+      $v - Volume number/sequential designation  (NR)
+      $x - International Standard Serial Number (NR)
+      $4 - Relator code (R)
+      $6 - Enlace (NR)
+      $8 - Enlace y número de secuencia del campo (R)
+
+440 - SERIES STATEMENT/ADDED ENTRY--TITLE (R) [OBSOLETE]
+   Indicators
+      First - No definido
+         # - No definido
+      Second - Nonfiling characters
+         0-9 - Number of nonfiling characters 
+   Subfield Codes
+      $a - Title (NR)
+      $n - Number of part/section of a work (R)
+      $p - Name of part/section of a work (R)
+      $v - Volume number/sequential designation  (NR)
+      $w - Bibliographic record control number (R)
+      $x - International Standard Serial Number (NR)
+      $0 - Authority record control number (R)
+      $6 - Enlace (NR)
+      $8 - Enlace y número de secuencia del campo (R)
+
+490 - SERIES STATEMENT (R)
+   Indicators
+      First - Specifies whether series is traced
+         0 - Series not traced
+         1 - Series traced [REDEFINED]
+         1 - Series traced differently 
+      Second - No definido
+         # - No definido
+   Subfield Codes
+      $a - Series statement (R)
+      $l - Library of Congress call number (NR)
+      $v - Volume number/sequential designation  (R)
+      $x - International Standard Serial Number (R)
+      $3 - Materials specified
+      $6 - Enlace (NR)
+      $8 - Enlace y número de secuencia del campo (R)
+
+--Note Fields (Part 1: 50X-53X)--
+500 - GENERAL NOTE (R)
+   Indicators
+      First - No definido
+         # - No definido
+      Second - No definido
+         # - No definido
+   Subfield Codes
+      $a - General note (NR)
+      $l - Library of Congress call number (SE) [OBSOLETE]
+      $x - International Standard Serial Number (SE) [OBSOLETE]
+      $z - Source of note information (AM SE) [OBSOLETE]
+      $3 - Materiales especificados (NR)
+      $5 - Institución a la que se aplica el campo (NR) 
+      $6 - Enlace (NR)
+      $8 - Enlace y número de secuencia del campo (R)
+
+501 - WITH NOTE (R)
+   Indicators
+      First - No definido
+         # - No definido
+      Second - No definido
+         # - No definido
+   Subfield Codes
+      $a - With note (NR)
+      $5 - Institución a la que se aplica el campo (NR) 
+      $6 - Enlace (NR)
+      $8 - Enlace y número de secuencia del campo (R)
+
+502 - DISSERTATION NOTE (R)
+   Indicators
+      First - No definido
+         # - No definido
+      Second - No definido
+         # - No definido
+   Subfield Codes
+      $a - Dissertation note (NR)
+      $b - Degree type (NR)
+      $c - Name of granting institution (NR)  
+      $d - Year of degree granted (NR)
+      $g - Miscellaneous information (R)
+      $o - Dissertation identifier (R)
+      $6 - Enlace (NR)
+      $8 - Enlace y número de secuencia del campo (R)
+
+503 - BIBLIOGRAPHIC HISTORY NOTE (R) (BK CF MU) [OBSOLETE]
+   Indicators
+      First - No definido
+         # - No definido
+      Second - No definido
+         # - No definido
+   Subfield Codes
+      $a - Bibliographic history note (NR)
+      $6 - Enlace (NR)
+
+504 - BIBLIOGRAPHY, ETC. NOTE (R)
+   Indicators
+      First - No definido
+         # - No definido
+      Second - No definido
+         # - No definido
+   Subfield Codes
+      $a - Bibliography, etc. note (NR)
+      $b - Number of references (NR)
+      $6 - Enlace (NR)
+      $8 - Enlace y número de secuencia del campo (R)
+
+505 - FORMATTED CONTENTS NOTE (R)
+   Indicators
+      First - Display constant controller
+         0 - Contents
+         1 - Incomplete contents
+         2 - Partial contents
+         8 - No display constant generated
+      Second - Level of content designation
+         # - Basic
+         0 - Enhanced
+   Subfield Codes
+      $a - Formatted contents note (NR)
+      $g - Miscellaneous information (R)
+      $r - Statement of responsibility (R)
+      $t - Title (R)
+      $u - Uniform Resource Identifier (R) 
+      $6 - Enlace (NR)
+      $8 - Enlace y número de secuencia del campo (R)
+
+506 - RESTRICTIONS ON ACCESS NOTE (R)
+   Indicators
+      First - Restriction
+         # - No se suministra información         
+         0 - No restrictions
+         1 - Restrictions apply
+      Second - No definido
+         # - No definido
+   Subfield Codes
+      $a - Terms governing access (NR)
+      $b - Jurisdiction (R)
+      $c - Physical access provisions (R)
+      $d - Authorized users (R)
+      $e - Authorization (R)
+      $f - Standardized terminology for access restriction (R)
+      $u - Uniform Resource Identifier (R)
+      $2 - Source of term (NR)
+      $3 - Materiales especificados (NR)
+      $5 - Institución a la que se aplica el campo (NR) 
+      $6 - Enlace (NR)
+      $8 - Enlace y número de secuencia del campo (R)
+
+507 - SCALE NOTE FOR GRAPHIC MATERIAL (NR)
+   Indicators
+      First - No definido
+         # - No definido
+      Second - No definido
+         # - No definido
+   Subfield Codes
+      $a - Representative fraction of scale note (NR)
+      $b - Remainder of scale note (NR)
+      $6 - Enlace (NR)
+      $8 - Enlace y número de secuencia del campo (R)
+
+508 - CREATION/PRODUCTION CREDITS NOTE (R)
+   Indicators
+      First - No definido
+         # - No definido
+      Second - No definido
+         # - No definido
+   Subfield Codes
+      $a - Creation/production credits note (NR)
+      $6 - Enlace (NR)
+      $8 - Enlace y número de secuencia del campo (R)
+
+510 - CITATION/REFERENCES NOTE (R)
+   Indicators
+      First - Coverage/location in source
+         0 - Coverage unknown
+         1 - Coverage complete
+         2 - Coverage is selective
+         3 - Location in source not given
+         4 - Location in source given
+      Second - No definido
+         # - No definido
+   Subfield Codes
+      $a - Name of Fuente (NR)
+      $b - Coverage of Fuente (NR)
+      $c - Location within Fuente (NR)
+      $u - Uniform Resource Identifier (R)
+      $x - International Standard Serial Number (NR)
+      $3 - Materiales especificados (NR)
+      $6 - Enlace (NR)
+      $8 - Enlace y número de secuencia del campo (R)
+
+511 - PARTICIPANT OR PERFORMER NOTE (R)
+   Indicators
+      First - Display constant controller
+         # - No se suministra información (VM MU) [OBSOLETE]
+         0 - No display constant generated
+         1 - Cast
+         2 - Presenter (VM MU) [OBSOLETE]
+         3 - Narrator (VM MU) [OBSOLETE]
+      Second - No definido
+         # - No definido
+   Subfield Codes
+      $a - Participant or performer note (NR)
+      $6 - Enlace (NR)
+      $8 - Enlace y número de secuencia del campo (R)
+
+512 - EARLIER OR LATER VOLUMES SEPARATELY CATALOGED NOTE (SE) (R) [OBSOLETE]
+   Indicators
+      First - No definido
+         # - No definido
+      Second - No definido
+         # - No definido
+   Subfield Codes
+      $a - Earlier or later volumes separately cataloged note (NR)
+      $6 - Enlace (NR)
+
+513 - TYPE OF REPORT AND PERIOD COVERED NOTE (R)
+   Indicators
+      First - No definido
+         # - No definido
+      Second - No definido
+         # - No definido
+   Subfield Codes
+      $a - Type of report (NR)
+      $b - Period covered (NR)
+      $6 - Enlace (NR)
+      $8 - Enlace y número de secuencia del campo (R)
+
+514 - DATA QUALITY NOTE (NR)
+   Indicators
+      First - No definido
+         # - No definido
+      Second - No definido
+         # - No definido
+   Subfield Codes
+      $a - Attribute accuracy report (NR)
+      $b - Attribute accuracy value (R)
+      $c - Attribute accuracy explanation (R)
+      $d - Logical consistency report (NR)
+      $e - Completeness report (NR)
+      $f - Horizontal position accuracy report (NR)
+      $g - Horizontal position accuracy value (R)
+      $h - Horizontal position accuracy explanation (R)
+      $i - Vertical positional accuracy report (NR)
+      $j - Vertical positional accuracy value (R)
+      $k - Vertical positional accuracy explanation (R)
+      $m - Cloud cover (NR)
+      $u - Uniform Resource Identifier (R)
+      $z - Display note (R)
+      $6 - Enlace (NR)
+      $8 - Enlace y número de secuencia del campo (R)
+
+515 - NUMBERING PECULIARITIES NOTE (R)
+   Indicators 
+      First - No definido
+         # - No definido
+      Second - No definido
+         # - No definido
+   Subfield Codes
+      $a - Numbering peculiarities note (NR)
+      $z - Source of note information (NR) (SE) [OBSOLETE]
+      $6 - Enlace (NR)
+      $8 - Enlace y número de secuencia del campo (R)
+
+516 - TYPE OF COMPUTER FILE OR DATA NOTE (R)
+   Indicators
+      First - Display constant controller
+         # - Type of file
+         8 - No display constant generated
+      Second - No definido
+         # - No definido
+   Subfield Codes
+      $a - Type of computer file or data note (NR)
+      $6 - Enlace (NR)
+      $8 - Enlace y número de secuencia del campo (R)
+
+517 - CATEGORIES OF FILMS NOTE (ARCHIVAL) (VM) (NR) [OBSOLETE]
+   Indicators
+      First - Fiction specification
+         0 - Nonfiction
+         1 - Fiction
+      First - No definido
+         # - No definido
+      Second - No definido
+         # - No definido
+   Subfield Codes
+      $a - Different formats (NR)
+      $b - Content descriptors (R)
+      $c - Additional animation techniques (R)
+
+518 - DATE/TIME AND PLACE OF AN EVENT NOTE (R)
+   Indicators
+      First - No definido
+         # - No definido
+      Second - No definido
+         # - No definido
+   Subfield Codes
+      $a - Date/time and place of an event note (NR)
+      $d - Date of event (R)
+      $o - Other event information (R)
+      $p - Place of event (R)
+      $0 - Record control number (R)
+      $2 - Source of term (R)
+      $3 - Materiales especificados (NR)
+      $6 - Enlace (NR)
+      $8 - Enlace y número de secuencia del campo (R)
+
+520 - SUMMARY, ETC. (R)
+   Indicators
+      First - Display constant controller
+         # - Summary
+         0 - Subject
+         1 - Review
+         2 - Scope and content
+         3 - Abstract
+         4 - Content advice
+         8 - No display constant generated
+      Second - No definido
+         # - No definido
+   Subfield Codes
+      $a - Summary, etc. note (NR)
+      $b - Expansion of summary note (NR)
+      $c - Assigning agency (NR)
+      $u - Uniform Resource Identifier (R)
+      $z - Source of note information (NR) [OBSOLETE]
+      $2 - Fuente (NR)
+      $3 - Materiales especificados (NR)
+      $6 - Enlace (NR)
+      $8 - Enlace y número de secuencia del campo (R)
+
+521 - TARGET AUDIENCE NOTE (R)
+   Indicators
+      First - Display constant controller
+         # - Audience
+         0 - Reading grade level
+         1 - Interest age level
+         2 - Interest grade level
+         3 - Special audience characteristics
+         4 - Motivation interest level
+         8 - No display constant generated
+      Second - No definido 
+         # - No definido
+   Subfield Codes
+      $a - Target audience note (R)
+      $b - Fuente (NR)
+      $3 - Materiales especificados (NR)
+      $6 - Enlace (NR)
+      $8 - Enlace y número de secuencia del campo (R)
+
+522 - GEOGRAPHIC COVERAGE NOTE (R)
+   Indicators
+      First - Display constant controller
+         # - Geographic coverage
+         8 - No display constant generated
+      Second - No definido
+         # - No definido
+   Subfield Codes
+      $a - Geographic coverage note (NR)
+      $6 - Enlace (NR)
+      $8 - Enlace y número de secuencia del campo (R)
+
+523 - TIME PERIOD OF CONTENT NOTE (NR) (CF) [OBSOLETE]
+   Indicators
+      First - No definido
+         # - No definido
+      Second - No definido
+         # - No definido
+   Subfield Codes
+      $a - Time period of content note (NR)
+      $b - Dates of data collection note (NR)
+      $6 - Enlace (NR)
+
+524 - PREFERRED CITATION OF DESCRIBED MATERIALS NOTE (R)
+   Indicators
+      First - Display constant controller
+         # - Cite as
+         8 - No display constant generated
+      Second - No definido
+         # - No definido
+   Subfield Codes
+      $a - Preferred citation of described materials note (NR)
+      $2 - Source of schema used (NR)
+      $3 - Materiales especificados (NR)
+      $6 - Enlace (NR)
+      $8 - Enlace y número de secuencia del campo (R)
+
+525 - SUPPLEMENT NOTE (R)
+   Indicators
+      First - No definido
+         # - No definido
+      Second - No definido
+         # - No definido
+   Subfield Codes
+      $a - Supplement note (NR)
+      $z - Source of note information (NR) (SE) [OBSOLETE]
+      $6 - Enlace (NR)
+      $8 - Enlace y número de secuencia del campo (R)
+
+526 - STUDY PROGRAM INFORMATION NOTE (R)
+   Indicators
+      First - Display constant controller
+         0 - Reading program
+         8 - No display constant generated
+      Second - No definido
+         # - No definido
+   Subfield Codes
+      $a - Program name (NR)
+      $b - Interest level (NR)
+      $c - Reading level (NR)
+      $d - Title point value (NR)
+      $i - Display text (NR)
+      $x - Nonpublic note (R)
+      $z - Public note (R)
+      $5 - Institución a la que se aplica el campo (NR) 
+      $6 - Enlace (NR)
+      $8 - Enlace y número de secuencia del campo (R)
+
+527 - CENSORSHIP NOTE (VM) (R) [OBSOLETE]
+   Indicators
+      First - No definido
+         # - No definido
+      Second - No definido
+         # - No definido
+   Subfield Codes
+      $a - Censorship note (NR)
+      $6 - Enlace (NR)
+
+530 - ADDITIONAL PHYSICAL FORM AVAILABLE NOTE (R)
+   Indicators
+      First - No definido
+         # - No definido
+      Second - No definido
+         # - No definido
+   Subfield Codes
+      $a - Additional physical form available note (NR)
+      $b - Availability Fuente (NR)
+      $c - Availability conditions (NR)
+      $d - Order number (NR)
+      $u - Uniform Resource Identifier (R)
+      $z - Source of note information (NR) (AM CF VM SE) [OBSOLETE]
+      $3 - Materiales especificados (NR)
+      $6 - Enlace (NR)
+      $8 - Enlace y número de secuencia del campo (R)
+
+533 - REPRODUCTION NOTE (R)
+   Indicators
+      First - No definido
+         # - No definido
+      Second - No definido
+         # - No definido
+   Subfield Codes
+      $a - Type of reproduction (NR)
+      $b - Place of reproduction (R)
+      $c - Agency responsible for reproduction (R)
+      $d - Date of reproduction (NR)
+      $e - Physical description of reproduction (NR)
+      $f - Series statement of reproduction (R)
+      $m - Dates and/or sequential designation of issues reproduced (R)
+      $n - Note about reproduction (R)
+      $3 - Materiales especificados (NR)
+      $5 - Institución a la que se aplica el campo (NR) 
+      $6 - Enlace (NR)
+      $7 - Fixed-length data elements of reproduction (NR)
+      $8 - Enlace y número de secuencia del campo (R)
+
+534 - ORIGINAL VERSION NOTE (R)
+   Indicators
+      First - No definido
+         # - No definido
+      Second - No definido
+         # - No definido
+   Subfield Codes
+      $a - Main entry of original (NR)
+      $b - Edition statement of original (NR)
+      $c - Publication, distribution, etc. of original (NR)
+      $e - Physical description, etc. of original (NR)
+      $f - Series statement of original (R)
+      $k - Key title of original (R)
+      $l - Location of original (NR)
+      $m - Material specific details (NR)
+      $n - Note about original (R)
+      $o - Other resource identifier (R) 
+      $p - Introductory phrase (NR)
+      $t - Title statement of original (NR)
+      $x - International Standard Serial Number (R)
+      $z - International Standard Book Number (R)
+      $3 - Materiales especificados (NR)
+      $6 - Enlace (NR)
+      $8 - Enlace y número de secuencia del campo (R)
+
+535 - LOCATION OF ORIGINALS/DUPLICATES NOTE (R)
+   Indicators 
+      First - Additional information about custodian
+         0 - Repository (AM) [OBSOLETE]
+         1 - Holder of originals
+         2 - Holder of duplicates
+         3 - Holder of oral tapes (AM) [OBSOLETE]
+      Second - No definido
+         # - No definido
+   Subfield Codes
+      $a - Custodian (NR)
+      $b - Postal address (R)
+      $c - Country (R)
+      $d - Telecommunications address (R)
+      $g - Repository location code (NR)
+      $3 - Materiales especificados (NR)
+      $6 - Enlace (NR)
+      $8 - Enlace y número de secuencia del campo (R)
+
+--Note Fields (Part 2: 53X-58X)--
+536 - FUNDING INFORMATION NOTE (R)
+   Indicators
+      First - No definido
+         # - No definido
+      Second - No definido
+         # - No definido
+   Subfield Codes
+      $a - Text of note (NR) 
+      $b - Contract number (R)
+      $c - Grant number (R)
+      $d - Undifferentiated number (R)
+      $e - Program element number (R)
+      $f - Project number (R)
+      $g - Task number (R)
+      $h - Work unit number (R)
+      $6 - Enlace (NR)
+      $8 - Enlace y número de secuencia del campo (R)
+
+537 - SOURCE OF DATA NOTE (NR) (CF) [OBSOLETE]
+   Indicators
+      First - Display constant controller
+         # - No se suministra información
+         8 - No display constant generated
+      Second - No definido
+         # - No definido
+   Subfield Codes
+      $a - Source of data note (NR)
+      $6 - Enlace (NR)
+
+538 - SYSTEM DETAILS NOTE (R)
+   Indicators
+      First - No definido
+         # - No definido
+      Second - No definido
+         # - No definido
+   Subfield Codes
+      $a - System details note (NR)
+      $i - Display text (NR)
+      $u - Uniform Resource Identifier (R)
+      $3 - Materials specified  (NR)
+      $5 - Institución a la que se aplica el campo (NR) 
+      $6 - Enlace (NR)
+      $8 - Enlace y número de secuencia del campo (R)
+
+540 - TERMS GOVERNING USE AND REPRODUCTION NOTE (R)
+   Indicators
+      First - No definido
+         # - No definido
+      Second - No definido
+         # - No definido
+   Subfield Codes
+      $a - Terms governing use and reproduction (NR)
+      $b - Jurisdiction (NR)
+      $c - Authorization (NR)
+      $d - Authorized users (NR)
+      $u - Uniform Resource Identifier (R)
+      $3 - Materiales especificados (NR)
+      $5 - Institución a la que se aplica el campo (NR) 
+      $6 - Enlace (NR)
+      $8 - Enlace y número de secuencia del campo (R)
+
+541 - IMMEDIATE SOURCE OF ACQUISITION NOTE (R)
+   Indicators 
+      First - Privacy
+         # - No se suministra información
+         0 - Private
+         1 - Not private
+      Second - No definido
+         # - No definido
+   Subfield Codes
+      $a - Source of acquisition (NR)
+      $b - Address (NR)
+      $c - Method of acquisition (NR)
+      $d - Date of acquisition (NR)
+      $e - Accession number (NR)
+      $f - Owner (NR)
+      $h - Purchase price (NR)
+      $n - Extent (R)
+      $o - Type of unit (R)
+      $3 - Materiales especificados (NR)
+      $5 - Institución a la que se aplica el campo (NR) 
+      $6 - Enlace (NR)
+      $8 - Enlace y número de secuencia del campo (R)
+
+542 - INFORMATION RELATING TO COPYRIGHT STATUS (R)
+   Indicators
+      First - Privacy
+         # - No se suministra información
+         0 - Private
+         1 - Not private
+      Second - No definido
+         # - No definido
+      $a - Personal creator (NR)
+      $b - Personal creator death Fecha (NR)
+      $c - Corporate creator (NR)
+      $d - Copyright holder (R)
+      $e - Copyright holder contact information (R)
+      $f - Copyright statement (R)
+      $g - Copyright Fecha (NR)
+      $h - Copyright renewal Fecha (R)
+      $i - Publication Fecha (NR)
+      $j - Creation Fecha (NR)
+      $k - Publisher (R)
+      $l - Copyright status (NR)
+      $m - Publication status (NR)
+      $n - Note (R)
+      $o - Research Fecha (NR)
+      $q - Assigning agency (NR)
+      $r - Jurisdiction of copyright assessment (NR)
+      $s - Source of information (NR)
+      $u - Uniform Resource Identifier (R)
+      $3 - Materiales especificados (NR)
+      $6 - Enlace (NR)
+      $8 - Enlace y número de secuencia del campo (R)
+
+543 - SOLICITATION INFORMATION NOTE (AM) (R) [OBSOLETE]
+   Indicators
+      First - No definido
+         # - No definido
+      Second - No definido
+         # - No definido
+   Subfield Codes
+      $a - Solicitation information note (NR)
+      $6 - Enlace (NR)
+
+544 - LOCATION OF OTHER ARCHIVAL MATERIALS NOTE (R)
+   Indicators
+      First - Relationship
+         # - No se suministra información
+         0 - Associated materials
+         1 - Related materials
+      Second - No definido
+         # - No definido
+   Subfield Codes
+      $a - Custodian (R)
+      $b - Address (R)
+      $c - Country (R)
+      $d - Title (R)
+      $e - Provenance (R)
+      $n - Note (R)
+      $3 - Materiales especificados (NR)
+      $6 - Enlace (NR)
+      $8 - Enlace y número de secuencia del campo (R)
+
+545 - BIOGRAPHICAL OR HISTORICAL DATA (R)
+   Indicators
+      First - Type of data
+         # - No se suministra información
+         0 - Biographical sketch
+         1 - Administrative history
+      Second - No definido
+         # - No definido
+   Subfield Codes
+      $a - Biographical or historical note (NR)
+      $b - Expansion (NR)
+      $u - Uniform Resource Identifier (R)
+      $6 - Enlace (NR)
+      $8 - Enlace y número de secuencia del campo (R)
+
+546 - LANGUAGE NOTE (R)
+   Indicators
+      First - No definido
+         # - No definido
+      Second - No definido
+         # - No definido
+   Subfield Codes
+      $a - Language note (NR)
+      $b - Information code or alphabet (R)
+      $z - Source of note information (NR) (SE) [OBSOLETE]
+      $3 - Materiales especificados (NR)
+      $6 - Enlace (NR)
+      $8 - Enlace y número de secuencia del campo (R)
+
+547 - FORMER TITLE COMPLEXITY NOTE (R)
+   Indicators
+      First - No definido
+         # - No definido
+      Second - No definido
+         # - No definido
+   Subfield Codes
+      $a - Former title complexity note (NR)
+      $z - Source of note information (NR) (SE) [OBSOLETE]
+      $6 - Enlace (NR)
+      $8 - Enlace y número de secuencia del campo (R)
+
+550 - ISSUING BODY NOTE (R)
+   Indicators
+      First - No definido
+         # - No definido
+      Second - No definido
+         # - No definido
+   Subfield Codes
+      $a - Issuing body note (NR)
+      $z - Source of note information (NR) (SE) [OBSOLETE]
+      $6 - Enlace (NR)
+      $8 - Enlace y número de secuencia del campo (R)
+
+552 - ENTITY AND ATTRIBUTE INFORMATION NOTE (R)
+   Indicators
+      First - No definido
+         # - No definido
+      Second - No definido
+         # - No definido
+   Subfield Codes
+      $a - Entity type label (NR)
+      $b - Entity type definition and Fuente (NR)
+      $c - Attribute label (NR)
+      $d - Attribute definition and Fuente (NR)
+      $e - Enumerated domain value (R)
+      $f - Enumerated domain value definition and source (R)
+      $g - Range domain minimum and maximum (NR)
+      $h - Codeset name and Fuente (NR)
+      $i - Unrepresentable domain (NR)
+      $j - Attribute units of measurement and resolution (NR)
+      $k - Beginning date and ending date of attribute values (NR)
+      $l - Attribute value accuracy (NR)
+      $m - Attribute value accuracy explanation (NR)
+      $n - Attribute measurement frequency (NR)
+      $o - Entity and attribute overview (R)
+      $p - Entity and attribute detail citation (R)
+      $u - Uniform Resource Identifier (R)
+      $z - Display note (R)
+      $6 - Enlace (NR)
+      $8 - Enlace y número de secuencia del campo (R)
+
+555 - CUMULATIVE INDEX/FINDING AIDS NOTE (R)
+   Indicators
+      First - Display constant controller
+         # - Indexes
+         0 - Finding aids
+         8 - No display constant generated
+      Second - No definido
+         # - No definido
+   Subfield Codes
+      $a - Cumulative index/finding aids note (NR)
+      $b - Availability source (R)
+      $c - Degree of control (NR)
+      $d - Bibliographic reference (NR)
+      $u - Uniform Resource Identifier (R)
+      $3 - Materiales especificados (NR)
+      $6 - Enlace (NR)
+      $8 - Enlace y número de secuencia del campo (R)
+
+556 - INFORMATION ABOUT DOCUMENTATION NOTE (R)
+   Indicators
+      First - Display constant controller
+         # - Documentation
+         8 - No display constant generated
+      Second - No definido
+         # - No definido
+   Subfield Codes
+      $a - Information about documentation note (NR)
+      $z - International Standard Book Number (R)
+      $6 - Enlace (NR)
+      $8 - Enlace y número de secuencia del campo (R)
+
+561 - OWNERSHIP AND CUSTODIAL HISTORY (R)
+   Indicators
+      First - Privacy
+         # - No se suministra información
+         0 - Private
+         1 - Not private
+      Second - No definido
+         # - No definido
+   Subfield Codes
+      $a - History (NR)
+      $b - Time of collation (NR) [OBSOLETE]
+      $3 - Materiales especificados (NR)
+      $5 - Institución a la que se aplica el campo (NR) 
+      $6 - Enlace (NR)
+      $8 - Enlace y número de secuencia del campo (R)
+
+562 - COPY AND VERSION IDENTIFICATION NOTE (R)
+   Indicators
+      First - No definido
+         # - No definido
+      Second - No definido
+         # - No definido
+   Subfield Codes
+      $a - Identifying markings (R)
+      $b - Copy identification (R)
+      $c - Version identification (R)
+      $d - Presentation format (R)
+      $e - Number of copies (R)
+      $3 - Materiales especificados (NR)
+      $5 - Institución a la que se aplica el campo (NR) 
+      $6 - Enlace (NR)
+      $8 - Enlace y número de secuencia del campo (R)
+
+563 - BINDING INFORMATION (R)
+   Indicators
+      First - No definido
+         # - No definido
+      Second - No definido
+         # - No definido
+   Subfield Codes
+      $a - Binding note (NR)
+      $u - Uniform Resource Identifier (R)
+      $3 - Materiales especificados (NR)
+      $5 - Institución a la que se aplica el campo (NR) 
+      $6 - Enlace (NR)
+      $8 - Enlace y número de secuencia del campo (R)
+
+565 - CASE FILE CHARACTERISTICS NOTE (R)
+   Indicators
+      First - Display constant controller
+         # - File size
+         0 - Case file characteristics
+         8 - No display constant generated
+      Second - No definido
+         # - No definido
+   Subfield Codes
+      $a - Number of cases/variables (NR)
+      $b - Name of variable (R)
+      $c - Unit of analysis (R)
+      $d - Universe of data (R)
+      $e - Filing scheme or code (R)
+      $3 - Materiales especificados (NR)
+      $6 - Enlace (NR)
+      $8 - Enlace y número de secuencia del campo (R)
+
+567 - METHODOLOGY NOTE (R)
+   Indicators
+      First - Display constant controller
+         # - Methodology
+         8 - No display constant generated
+      Second - No definido
+         # - No definido
+   Subfield Codes
+      $a - Methodology note (NR)
+      $6 - Enlace (NR)
+      $8 - Enlace y número de secuencia del campo (R)
+
+570 - EDITOR NOTE (SE) (R) [OBSOLETE]
+   Indicators
+      First - No definido
+         # - No definido
+      Second - No definido
+         # - No definido
+   Subfield Codes
+      $a - Editor note (NR) 
+      $z - Source of note information (NR)
+      $6 - Enlace (NR)
+
+580 - LINKING ENTRY COMPLEXITY NOTE (R)
+   Indicators
+      First - No definido
+         # - No definido
+      Second - No definido
+         # - No definido
+   Subfield Codes
+      $a - Linking entry complexity note (NR)
+      $z - Source of note information (NR) [OBSOLETE]
+      $6 - Enlace (NR)
+      $8 - Enlace y número de secuencia del campo (R)
+
+581 - PUBLICATIONS ABOUT DESCRIBED MATERIALS NOTE (R)
+   Indicators
+      First - Display constant controller
+         # - Publications
+         8 - No display constant generated
+      Second - No definido
+         # - No definido
+   Subfield Codes
+      $a - Publications about described materials note (NR)
+      $z - International Standard Book Number (R)
+      $3 - Materiales especificados (NR)
+      $6 - Enlace (NR)
+      $8 - Enlace y número de secuencia del campo (R)
+
+582 - RELATED COMPUTER FILES NOTE (R) (CF) [OBSOLETE]
+   Indicators
+      First - Display constant controller
+         # - No se suministra información
+         8 - No display constant generated
+      Second - No definido
+         # - No definido
+   Subfield Codes
+      $a - Related computer files note (NR)
+      $6 - Enlace (NR)
+
+583 - ACTION NOTE (R)
+   Indicators
+      First - Privacy
+         # - No se suministra información
+         0 - Private
+         1 - Not private
+      Second - No definido
+         # - No definido
+   Subfield Codes
+      $a - Action (NR)
+      $b - Action identification (R)
+      $c - Time/date of action (R)
+      $d - Action interval (R)
+      $e - Contingency for action (R)
+      $f - Authorization (R)
+      $h - Jurisdiction (R)
+      $i - Method of action (R)
+      $j - Site of action (R)
+      $k - Action agent (R)
+      $l - Status (R)
+      $n - Extent (R)
+      $o - Type of unit (R)
+      $u - Uniform Resource Identifier (R)
+      $x - Nonpublic note (R)
+      $z - Public note (R)
+      $2 - Source of term (NR)
+      $3 - Materiales especificados (NR)
+      $5 - Institución a la que se aplica el campo (NR) 
+      $6 - Enlace (NR)
+      $8 - Enlace y número de secuencia del campo (R)
+
+584 - ACCUMULATION AND FREQUENCY OF USE NOTE (R)
+   Indicators
+      First - No definido
+         # - No definido
+      Second - No definido
+         # - No definido
+   Subfield Codes
+      $a - Accumulation (R)
+      $b - Frequency of use (R)
+      $3 - Materiales especificados (NR)
+      $5 - Institución a la que se aplica el campo (NR) 
+      $6 - Enlace (NR)
+      $8 - Enlace y número de secuencia del campo (R)
+
+585 - EXHIBITIONS NOTE (R)
+   Indicators
+      First - No definido
+         # - No definido
+      Second - No definido
+         # - No definido
+   Subfield Codes
+      $a - Exhibitions note (NR)
+      $3 - Materiales especificados (NR)
+      $5 - Institución a la que se aplica el campo (NR) 
+      $6 - Enlace (NR)
+      $8 - Enlace y número de secuencia del campo (R)
+
+586 - AWARDS NOTE (R)
+   Indicators
+      First - Display constant controller
+         # - Awards
+         8 - No display constant generated
+      Second - No definido
+         # - No definido
+   Subfield Codes
+      $a - Awards note (NR)
+      $3 - Materiales especificados (NR)
+      $6 - Enlace (NR)
+      $8 - Enlace y número de secuencia del campo (R)
+
+588 - SOURCE OF DESCRIPTION NOTE (R)
+   Indicators
+      First - No definido
+         # - No definido
+      Second - No definido
+         # - No definido
+   Subfield Codes
+      $a - Source of description note (NR)
+      $5 - Institución a la que se aplica el campo (NR) 
+      $6 - Enlace (NR)
+      $8 - Enlace y número de secuencia del campo (R)
+
+--59X - LOCAL NOTES--
+590 - LOCAL NOTE (BK CF MP MU SE VM MX) [OBSOLETE]
+   Indicators
+      First - No definido
+         # - No definido
+      Second - No definido
+         # - No definido
+   Subfield Codes
+      $a - Local note (NR)
+
+590 - RECEIPT DATE NOTE (VM) [OBSOLETE]
+   Indicators
+      First - No definido
+         # - No definido
+      Second - No definido
+         # - No definido
+   Subfield Codes
+      $a - Receipt Fecha (NR)
+      $b - Provenance (NR)
+      $d - Condition of individual reels (NR)
+      $d - Origin of safety copy (NR)
+
+--Subject Access Fields (6XX)--
+600 - SUBJECT ADDED ENTRY--PERSONAL NAME (R)
+   Indicators
+      First - Type of personal name entry element
+         0 - Forename
+         1 - Surname
+         2 - Multiple surname [OBSOLETE]
+         3 - Family name
+      Second - Thesaurus
+         0 - Library of Congress Subject Headings
+         1 - LC subject headings for children's literature
+         2 - Medical Subject Headings
+         3 - National Agricultural Library subject authority file
+         4 - Source not specified
+         5 - Canadian Subject Headings
+         6 - Répertoire de vedettes-matière
+         7 - Source specified in subfield $2
+   Subfield Codes
+      $a - Personal name (NR)
+      $b - Numeration (NR)
+      $c - Titles and other words associated with a name (R)
+      $d - Dates associated with a name (NR)
+      $e - Relator term (R)
+      $f - Date of a work (NR)
+      $g - Miscellaneous information (NR)
+      $h - Medium (NR)
+      $j - Attribution qualifier (R)
+      $k - Form subheading (R)
+      $l - Language of a work (NR)
+      $m - Medium of performance for music (R)
+      $n - Number of part/section of a work (R)
+      $o - Arranged statement for music (NR)
+      $p - Name of part/section of a work (R)
+      $q - Fuller form of name (NR)
+      $r - Key for music (NR)
+      $s - Version (NR)
+      $t - Title of a work (NR)
+      $u - Affiliation (NR)
+      $v - Form subdivision (R)
+      $x - General subdivision (R)
+      $y - Chronological subdivision (R)
+      $z - Geographic subdivision (R)
+      $0 - Authority record control number (R)
+      $2 - Source of heading or term (NR)
+      $3 - Materiales especificados (NR)
+      $4 - Relator code (R)
+      $6 - Enlace (NR)
+      $8 - Enlace y número de secuencia del campo (R)
+
+610 - SUBJECT ADDED ENTRY--CORPORATE NAME (R)
+   Indicators
+      First - Type of corporate name entry element
+         0 - Inverted name
+         1 - Jurisdiction name
+         2 - Name in direct order
+      Second - Thesaurus
+         0 - Library of Congress Subject Headings
+         1 - LC subject headings for children's literature
+         2 - Medical Subject Headings 
+         3 - National Agricultural Library subject authority file
+         4 - Source not specified
+         5 - Canadian Subject Headings
+         6 - Répertoire de vedettes-matière
+         7 - Source specified in subfield $2
+   Subfield Codes
+      $a - Corporate name or jurisdiction name as entry element (NR)
+      $b - Subordinate unit (R)
+      $c - Location of meeting (NR)
+      $d - Date of meeting or treaty signing (R)
+      $e - Relator term (R)
+      $f - Date of a work (NR)
+      $g - Miscellaneous information (NR)
+      $h - Medium (NR)
+      $k - Form subheading (R)
+      $l - Language of a work (NR)
+      $m - Medium of performance for music (R)
+      $n - Number of part/section/meeting (R)
+      $o - Arranged statement for music (NR)
+      $p - Name of part/section of a work (R)
+      $r - Key for music (NR)
+      $s - Version (NR)
+      $t - Title of a work (NR)
+      $u - Affiliation (NR)
+      $v - Form subdivision (R)
+      $x - General subdivision (R)
+      $y - Chronological subdivision (R)
+      $z - Geographic subdivision (R)
+      $0 - Authority record control number (R)
+      $2 - Source of heading or term (NR)
+      $3 - Materiales especificados (NR)
+      $4 - Relator code (R)
+      $6 - Enlace (NR)
+      $8 - Enlace y número de secuencia del campo (R)
+
+611 - SUBJECT ADDED ENTRY--MEETING NAME (R)
+   Indicators
+      First - Type of meeting name entry element
+         0 - Inverted name
+         1 - Jurisdiction name
+         2 - Name in direct order
+      Second - Thesaurus
+         0 - Library of Congress Subject Headings
+         1 - LC subject headings for children's literature
+         2 - Medical Subject Headings
+         3 - National Agricultural Library subject authority file
+         4 - Source not specified
+         5 - Canadian Subject Headings
+         6 - Répertoire de vedettes-matière
+         7 - Source specified in subfield $2
+   Subfield Codes
+      $a - Meeting name or jurisdiction name as entry element (NR)
+      $b - Number (BK CF MP MU SE VM MX) [OBSOLETE]
+      $c - Location of meeting (NR)
+      $d - Date of meeting (NR)
+      $e - Subordinate unit (R)
+      $f - Date of a work (NR)
+      $g - Miscellaneous information (NR)
+      $h - Medium (NR)
+      $j - Relator term (R)
+      $k - Form subheading (R)
+      $l - Language of a work (NR)
+      $n - Number of part/section/meeting (R)
+      $p - Name of part/section of a work (R)
+      $q - Name of meeting following jurisdiction name entry element (NR)
+      $s - Version (NR)
+      $t - Title of a work (NR)
+      $u - Affiliation (NR)
+      $v - Form subdivision (R)
+      $x - General subdivision (R)
+      $y - Chronological subdivision (R)
+      $z - Geographic subdivision (R)
+      $0 - Authority record control number (R)
+      $2 - Source of heading or term (NR)
+      $3 - Materiales especificados (NR)
+      $4 - Relator code (R)
+      $6 - Enlace (NR)
+      $8 - Enlace y número de secuencia del campo (R)
+
+630 - SUBJECT ADDED ENTRY--UNIFORM TITLE (R)
+   Indicators
+      First - Nonfiling characters
+         0-9 - Number of nonfiling characters
+         # - Nonfiling characters not specified [OBSOLETE]
+      Second - Thesaurus
+         0 - Library of Congress Subject Headings
+         1 - LC subject headings for children's literature
+         2 - Medical Subject Headings
+         3 - National Agricultural Library subject authority file
+         4 - Source not specified
+         5 - Canadian Subject Headings
+         6 - Répertoire de vedettes-matière
+         7 - Source specified in subfield $2
+   Subfield Codes
+      $a - Uniform title (NR)
+      $d - Date of treaty signing (R)
+      $e - Relator term (R)
+      $f - Date of a work (NR)
+      $g - Miscellaneous information (NR)
+      $h - Medium (NR)
+      $k - Form subheading (R)
+      $l - Language of a work (NR)
+      $m - Medium of performance for music (R)
+      $n - Number of part/section of a work (R)
+      $o - Arranged statement for music (NR)
+      $p - Name of part/section of a work (R)
+      $r - Key for music (NR)
+      $s - Version (NR)
+      $t - Title of a work (NR)
+      $v - Form subdivision (R)
+      $x - General subdivision (R)
+      $y - Chronological subdivision (R)
+      $z - Geographic subdivision (R)
+      $0 - Authority record control number (R)
+      $2 - Source of heading or term (NR)
+      $3 - Materiales especificados (NR)
+      $4 - Relator code (R)
+      $6 - Enlace (NR) 
+      $8 - Enlace y número de secuencia del campo (R)
+
+648 - SUBJECT ADDED ENTRY--CHRONOLOGICAL TERM (R)
+   Indicators
+      First - No definido
+         # - No definido
+      Second - Thesaurus
+         0 - Library of Congress Subject Headings
+         1 - LC subject headings for children's literature
+         2 - Medical Subject Headings
+         3 - National Agricultural Library subject authority file
+         4 - Source not specified
+         5 - Canadian Subject Headings
+         6 - Répertoire de vedettes-matière
+         7 - Source specified in subfield $2
+   Subfield Codes
+      $a - Chronological term (NR)
+      $v - Form subdivision (R)
+      $x - General subdivision (R)
+      $y - Chronological subdivision (R)
+      $z - Geographic subdivision (R)
+      $0 - Authority record control number (R)
+      $2 - Source of heading or term (NR)
+      $3 - Materiales especificados (NR)
+      $6 - Enlace (NR)
+      $8 - Enlace y número de secuencia del campo (R)
+
+650 - SUBJECT ADDED ENTRY--TOPICAL TERM (R)
+   Indicators
+      First - Level of subject
+         # - No se suministra información
+         0 - No level specified
+         1 - Primary
+         2 - Secondary
+      Second - Thesaurus
+         0 - Library of Congress Subject Headings
+         1 - LC subject headings for children's literature
+         2 - Medical Subject Headings
+         3 - National Agricultural Library subject authority file
+         4 - Source not specified
+         5 - Canadian Subject Headings
+         6 - Répertoire de vedettes-matière
+         7 - Source specified in subfield $2
+   Subfield Codes
+      $a - Topical term or geographic name as entry element (NR)
+      $b - Topical term following geographic name as entry element (NR)
+      $c - Location of event (NR)
+      $d - Active dates (NR)
+      $e - Relator term (NR)
+      $v - Form subdivision (R)
+      $x - General subdivision (R)
+      $y - Chronological subdivision (R)
+      $z - Geographic subdivision (R)
+      $0 - Authority record control number (R)
+      $2 - Source of heading or term (NR)
+      $3 - Materiales especificados (NR)
+      $4 - Relator code (R)
+      $6 - Enlace (NR)
+      $8 - Enlace y número de secuencia del campo (R)
+
+651 - SUBJECT ADDED ENTRY--GEOGRAPHIC NAME (R)
+   Indicators
+      First - No definido
+         # - No definido
+      Second - Thesaurus
+         0 - Library of Congress Subject Headings
+         1 - LC subject headings for children's literature
+         2 - Medical Subject Headings
+         3 - National Agricultural Library subject authority file
+         4 - Source not specified
+         5 - Canadian Subject Headings
+         6 - Répertoire de vedettes-matière
+         7 - Source specified in subfield $2
+   Subfield Codes
+      $a - Geographic name (NR)
+      $b - Geographic name following place entry element (R) [OBSOLETE]
+      $e - Relator term (R)
+      $v - Form subdivision (R)
+      $x - General subdivision (R)
+      $y - Chronological subdivision (R)
+      $z - Geographic subdivision (R)
+      $0 - Authority record control number (R)
+      $2 - Source of heading or term (NR)
+      $3 - Materiales especificados (NR)
+      $4 - Relator code (R)
+      $6 - Enlace (NR)
+      $8 - Enlace y número de secuencia del campo (R)
+
+652 - SUBJECT ADDED ENTRY--REVERSED GEOGRAPHIC (BK MP SE) [OBSOLETE] 
+   Indicators
+      First - No definido
+         # - No definido
+      Second - No definido
+         # - No definido
+   Subfield Codes
+      $a - Geographic name of place element (NR)
+      $x - General subdivision (R)
+      $y - Chronological subdivision (R)
+      $z - Geographic subdivision (R)
+
+653 - INDEX TERM--UNCONTROLLED (R)
+   Indicators
+      First - Level of index term
+         # - No se suministra información
+         0 - No level specified
+         1 - Primary 
+         2 - Secondary
+      Second - Type of term or name
+         # - No se suministra información
+         0 - Topical term
+         1 - Personal name
+         2 - Corporate name
+         3 - Meeting name
+         4 - Chronological term
+         5 - Geographic name
+         6 - Genre/form term
+   Subfield Codes
+      $a - Uncontrolled term (R)
+      $6 - Enlace (NR)
+      $8 - Enlace y número de secuencia del campo (R)
+
+654 - SUBJECT ADDED ENTRY--FACETED TOPICAL TERMS (R)
+   Indicators
+      First - Level of subject
+         # - No se suministra información
+         0 - No level specified
+         1 - Primary 
+         2 - Secondary
+      Second - No definido
+         # - No definido
+   Subfield Codes
+      $a - Focus term (R)
+      $b - Non-focus term (R)
+      $c - Facet/hierarchy designation (R)
+      $e - Relator term (R)
+      $v - Form subdivision (R)
+      $y - Chronological subdivision (R)
+      $z - Geographic subdivision (R)
+      $0 - Authority record control number (R)
+      $2 - Source of heading or term (NR)
+      $3 - Materiales especificados (NR)
+      $4 - Relator code (R)
+      $6 - Enlace (NR)
+      $8 - Enlace y número de secuencia del campo (R)
+
+655 - INDEX TERM--GENRE/FORM (R)
+   Indicators
+      First - Type of heading
+         # - Basic
+         0 - Faceted
+      Second - Thesaurus
+         0 - Library of Congress Subject Headings
+         1 - LC subject headings for children's literature
+         2 - Medical Subject Headings
+         3 - National Agricultural Library subject authority file
+         4 - Source not specified
+         5 - Canadian Subject Headings
+         6 - Répertoire de vedettes-matière
+         7 - Source specified in subfield $2
+   Subfield Codes
+      $a - Genre/form data or focus term (NR)
+      $b - Non-focus term (R)
+      $c - Facet/hierarchy designation (R)
+      $v - Form subdivision (R)
+      $x - General subdivision (R)
+      $y - Chronological subdivision (R)
+      $z - Geographic subdivision (R)
+      $0 - Authority record control number (R)
+      $2 - Source of term (NR)
+      $3 - Materiales especificados (NR)
+      $5 - Institución a la que se aplica el campo (NR) 
+      $6 - Enlace (NR)
+      $8 - Enlace y número de secuencia del campo (R)
+
+656 - INDEX TERM--OCCUPATION (R)
+   Indicators
+      First - No definido
+         # - No definido
+      Second - Source of term
+         7 - Source specified in subfield $2
+   Subfield Codes
+      $a - Occupation (NR)
+      $k - Form (NR)
+      $v - Form subdivision (R)
+      $x - General subdivision (R)
+      $y - Chronological subdivision (R)
+      $z - Geographic subdivision (R)
+      $0 - Authority record control number (R)
+      $2 - Source of term (NR)
+      $3 - Materiales especificados (NR)
+      $6 - Enlace (NR)
+      $8 - Enlace y número de secuencia del campo (R)
+
+657 - INDEX TERM--FUNCTION (R)
+   Indicators
+      First - No definido
+         # - No definido
+      Second - Source of term
+         7 - Source specified in subfield $2
+   Subfield Codes
+      $a - Function (NR)
+      $v - Form subdivision (R)
+      $x - General subdivision (R)
+      $y - Chronological subdivision (R)
+      $z - Geographic subdivision (R)
+      $0 - Authority record control number (R)
+      $2 - Source of term (NR)
+      $3 - Materiales especificados (NR)
+      $6 - Enlace (NR)
+      $8 - Enlace y número de secuencia del campo (R)
+
+658 - INDEX TERM--CURRICULUM OBJECTIVE (R)
+   Indicators
+      First - No definido
+         # - No definido
+      Second - No definido
+         # - No definido
+   Subfield Codes
+      $a - Main curriculum objective (NR)
+      $b - Subordinate curriculum objective (R)
+      $c - Curriculum code (NR)
+      $d - Correlation factor (NR)
+      $2 - Source of term or code (NR)
+      $6 - Enlace (NR)
+      $8 - Enlace y número de secuencia del campo (R)
+
+662 - SUBJECT ADDED ENTRY--HIERARCHICAL PLACE NAME (R)
+   Indicators
+      First - No definido
+         # - No definido
+      Second - No definido
+         # - No definido
+   Subfield Codes
+      $a - Country or larger entity (R)
+      $b - First-order political jurisdiction (NR)
+      $c - Intermediate political jurisdiction (R)
+      $d - City (NR)
+      $e - Relator term (R)
+      $f - City subsection (R)
+      $g - Other nonjurisdictional geographic region and feature (R)
+      $h - Extraterrestrial area (R)
+      $0 - Authority record control number (R)
+      $2 - Source of heading or term (NR)
+      $4 - Relator code (R)
+      $6 - Enlace (NR)
+      $8 - Enlace y número de secuencia del campo (R)
+
+--Added Entry Fields (70X-75X)--
+700 - ADDED ENTRY--PERSONAL NAME (R)
+   Indicators
+      First - Type of personal name entry element
+         0 - Forename
+         1 - Surname
+         2 - Multiple surname [OBSOLETE]
+         3 - Family name
+      Second - Type of added entry
+         # - No se suministra información
+         0 - Alternative entry (BK CF MP MU SE MX) [OBSOLETE]
+         1 - Secondary entry (BK CF MP MU SE MX) [OBSOLETE]
+         1 - Printed on card (VM) [OBSOLETE]
+         2 - Analytical entry
+         3 - Not printed on card (VM) [OBSOLETE]
+   Subfield Codes
+      $a - Personal name (NR)
+      $b - Numeration (NR)
+      $c - Titles and other words associated with a name (R)
+      $d - Dates associated with a name (NR)
+      $e - Relator term (R)
+      $f - Date of a work (NR)
+      $g - Miscellaneous information (NR)
+      $h - Medium (NR)
+      $i - Relationship information (R)
+      $j - Attribution qualifier (R) 
+      $k - Form subheading (R)
+      $l - Language of a work (NR)
+      $m - Medium of performance for music (R)
+      $n - Number of part/section of a work (R)
+      $o - Arranged statement for music (NR)
+      $p - Name of part/section of a work (R)
+      $q - Fuller form of name (NR)
+      $r - Key for music (NR)
+      $s - Version (NR)
+      $t - Title of a work (NR)
+      $u - Affiliation (NR)
+      $x - International Standard Serial Number (NR)
+      $0 - Authority record control number (R)
+      $3 - Materiales especificados (NR)
+      $4 - Relator code (R)
+      $5 - Institución a la que se aplica el campo (NR) 
+      $6 - Enlace (NR)
+      $8 - Enlace y número de secuencia del campo (R)
+
+705 - ADDED ENTRY--PERSONAL NAME (PERFORMER) (MU) [OBSOLETE]
+   Indicators
+      First - Type of personal name entry element
+         0 - Forename
+         1 - Single surname
+         2 - Multiple surname
+         3 - Family name
+      Second - Type of added entry
+         0 - Alternative entry
+         1 - Secondary entry
+         2 - Analytical entry
+   Subfield Codes
+      $a - Personal name (NR)
+      $b - Numeration (NR)
+      $c - Titles and other words associated with a name (R)
+      $d - Dates associated with a name (NR)
+      $e - Relator term (R)
+      $f - Date of a work (NR)
+      $g - Miscellaneous information (NR)
+      $h - Medium (NR)
+      $k - Form subheading (R)
+      $l - Language of a work (NR)
+      $m - Medium of performance for music (R)
+      $n - Number of part/section of a work (R)
+      $o - Arranged statement for music (NR)
+      $p - Name of part/section of a work (R)
+      $r - Key for music (NR)
+      $s - Version (NR)
+      $t - Title of a work (NR)
+
+710 - ADDED ENTRY--CORPORATE NAME (R)
+   Indicators
+      First - Type of corporate name entry element
+         0 - Inverted name
+         1 - Jurisdiction name
+         2 - Name in direct order
+      Second - Type of added entry
+         # - No se suministra información
+         0 - Alternative entry (BK CF MP MU SE MX) [OBSOLETE]
+         1 - Secondary entry (BK CF MP MU SE MX) [OBSOLETE]
+         1 - Printed on card (VM) [OBSOLETE]
+         2 - Analytical entry
+         3 - Not printed on card (VM) [OBSOLETE]
+   Subfield Codes
+      $a - Corporate name or jurisdiction name as entry element (NR)
+      $b - Subordinate unit (R)
+      $c - Location of meeting (NR)
+      $d - Date of meeting or treaty signing (R)
+      $e - Relator term (R)
+      $f - Date of a work (NR)
+      $g - Miscellaneous information (NR)
+      $h - Medium (NR)
+      $i - Relationship information (R)
+      $k - Form subheading (R)
+      $l - Language of a work (NR)
+      $m - Medium of performance for music (R)
+      $n - Number of part/section/meeting (R)
+      $o - Arranged statement for music (NR)
+      $p - Name of part/section of a work (R)
+      $r - Key for music (NR)
+      $s - Version (NR)
+      $t - Title of a work (NR)
+      $u - Affiliation (NR)
+      $x - International Standard Serial Number (NR)
+      $0 - Authority record control number (R)
+      $3 - Materiales especificados (NR)
+      $4 - Relator code (R)
+      $5 - Institución a la que se aplica el campo (NR) 
+      $6 - Enlace (NR)
+      $8 - Enlace y número de secuencia del campo (R)
+
+711 - ADDED ENTRY--MEETING NAME (R)
+   Indicators
+      First - Type of meeting name entry element
+         0 - Inverted name
+         1 - Jurisdiction name
+         2 - Name in direct order
+      Second - Type of added entry
+         # - No se suministra información
+         0 - Alternative entry (BK CF MP MU SE MX) [OBSOLETE]
+         1 - Secondary entry (BK CF MP MU SE MX) [OBSOLETE]
+         1 - Printed on card (VM) [OBSOLETE]
+         2 - Analytical entry
+         3 - Not printed on card (VM) [OBSOLETE]
+   Subfield Codes
+      $a - Meeting name or jurisdiction name as entry element (NR)
+      $b - Number (BK CF MP MU SE VM MX) [OBSOLETE]
+      $c - Location of meeting (NR)
+      $d - Date of meeting (NR)
+      $e - Subordinate unit (R)
+      $f - Date of a work (NR)
+      $g - Miscellaneous information (NR)
+      $h - Medium (NR)
+      $i - Relationship information (R)
+      $j - Relator term (R)
+      $k - Form subheading (R)
+      $l - Language of a work (NR)
+      $n - Number of part/section/meeting (R)
+      $p - Name of part/section of a work (R)
+      $q - Name of meeting following jurisdiction name entry element (NR)
+      $s - Version (NR)
+      $t - Title of a work (NR)
+      $u - Affiliation (NR)
+      $x - International Standard Serial Number (NR)
+      $0 - Authority record control number (R)
+      $3 - Materiales especificados (NR)
+      $4 - Relator code (R)
+      $5 - Institución a la que se aplica el campo (NR) 
+      $6 - Enlace (NR)
+      $8 - Enlace y número de secuencia del campo (R)
+
+715 - ADDED ENTRY--CORPORATE NAME (PERFORMING GROUP) (MU) [OBSOLETE]
+   Indicators
+      First - Type of corporate name entry element
+         0 - Inverted name
+         1 - Jurisdiction name
+         2 - Name in direct order
+      Second - Type of added entry
+         0 - Alternative entry
+         1 - Secondary entry
+         2 - Analytical entry
+   Subfield Codes
+      $a - Corporate name or jurisdiction name (NR)
+      $b - Subordinate unit (R)
+      $e - Relator term (R)
+      $f - Date of a work (NR)
+      $g - Miscellaneous information (NR)
+      $h - Medium (NR)
+      $k - Form subheading (R)
+      $l - Language of a work (NR)
+      $m - Medium of performance for music (R)
+      $n - Number of part/section/meeting (R)
+      $o - Arranged statement for music (NR)
+      $p - Name of part/section of a work (R)
+      $r - Key for music (NR)
+      $s - Version (NR)
+      $t - Title of a work (NR)
+      $u - Nonprinting information (NR)
+
+720 - ADDED ENTRY--UNCONTROLLED NAME (R)
+   Indicators
+      First - Type of name
+         # - Not specified
+         1 - Personal
+         2 - Other
+      Second - No definido
+         # - No definido
+   Subfield Codes
+      $a - Name (NR)
+      $e - Relator term (R)
+      $4 - Relator code (R)
+      $6 - Enlace (NR)
+      $8 - Enlace y número de secuencia del campo (R)
+
+730 - ADDED ENTRY--UNIFORM TITLE (R)
+   Indicators
+      First - Nonfiling characters
+         0-9 - Number of nonfiling characters
+         # - Nonfiling characters not specified [OBSOLETE]
+      Second - Type of added entry
+         # - No se suministra información
+         0 - Alternative entry (BK CF MP MU SE MX) [OBSOLETE]
+         1 - Secondary entry (BK CF MP MU SE MX) [OBSOLETE]
+         1 - Printed on card (VM) [OBSOLETE]
+         2 - Analytical entry
+         3 - Not printed on card (VM) [OBSOLETE]
+   Subfield Codes
+      $a - Uniform title (NR)
+      $d - Date of treaty signing (R)
+      $f - Date of a work (NR)
+      $g - Miscellaneous information (NR)
+      $h - Medium (NR)
+      $i - Relationship information (R)
+      $k - Form subheading (R)
+      $l - Language of a work (NR)
+      $m - Medium of performance for music (R)
+      $n - Number of part/section of a work (R)
+      $o - Arranged statement for music (NR)
+      $p - Name of part/section of a work (R)
+      $r - Key for music (NR)
+      $s - Version (NR)
+      $t - Title of a work (NR)
+      $x - International Standard Serial Number (NR)
+      $0 - Authority record control number (R)
+      $3 - Materiales especificados (NR)
+      $5 - Institución a la que se aplica el campo (NR) 
+      $6 - Enlace (NR)
+      $8 - Enlace y número de secuencia del campo (R)
+
+740 - ADDED ENTRY--UNCONTROLLED RELATED/ANALYTICAL TITLE (R)
+   Indicators
+      First - Nonfiling characters
+         0-9 - Number of nonfiling characters
+         # - Nonfiling characters not specified [OBSOLETE]
+      Second - Type of added entry
+         # - No se suministra información
+         0 - Alternative entry (BK AM CF MP MU) [OBSOLETE]
+         1 - Secondary entry (BK AM CF MP MU) [OBSOLETE]
+         1 - Printed on card (VM) [OBSOLETE]
+         2 - Analytical entry
+         3 - Not printed on card (VM) [OBSOLETE]
+   Subfield Codes
+      $a - Uncontrolled related/analytical title (NR)
+      $h - Medium (NR)
+      $n - Number of part/section of a work (R)
+      $p - Name of part/section of a work (R)
+      $5 - Institución a la que se aplica el campo (NR) 
+      $6 - Enlace (NR)
+      $8 - Enlace y número de secuencia del campo (R)
+
+751 - ADDED ENTRY--GEOGRAPHIC NAME (R)
+   Indicators
+      First - No definido
+         # - No definido
+      Second - No definido
+         # - No definido
+   Subfield Codes
+      $a - Geographic name (NR)
+      $e - Relator term (R)
+      $0 - Authority record control number (R)
+      $2 - Source of heading or term (NR) 
+      $3 - Materiales especificados (NR)
+      $4 - Relator code (R)
+      $6 - Enlace (NR)
+      $8 - Enlace y número de secuencia del campo (R)
+
+752 - ADDED ENTRY--HIERARCHICAL PLACE NAME (R)
+   Indicators
+      First - No definido
+         # - No definido
+      Second - No definido
+         # - No definido
+   Subfield Codes
+      $a - Country or larger entity (R)
+      $b - First-order political jurisdiction (NR)
+      $c - Intermediate political jurisdiction (R)
+      $d - City (NR)
+      $f - City subsection (R)
+      $g - Other nonjurisdictional geographic region and feature (R)
+      $h - Extraterrestrial area (R)
+      $0 - Authority record control number (R)
+      $2 - Source of heading or term (NR)
+      $6 - Enlace (NR)
+      $8 - Enlace y número de secuencia del campo (R)
+
+753 - SYSTEM DETAILS ACCESS TO COMPUTER FILES (R)
+   Indicators
+      First - No definido
+         # - No definido
+      Second - No definido
+         # - No definido
+   Subfield Codes
+      $a - Make and model of machine (NR)
+      $b - Programming language (NR)
+      $c - Operating system (NR)
+      $6 - Enlace (NR)
+      $8 - Enlace y número de secuencia del campo (R)
+
+754 - ADDED ENTRY--TAXONOMIC IDENTIFICATION (R)
+   Indicators 
+      First - No definido
+         # - No definido
+      Second - No definido
+         # - No definido
+   Subfield Codes
+      $a - Taxonomic name (R)
+      $c - Taxonomic category (R)
+      $d - Common or alternative name (R)
+      $x - Non-public note (R)
+      $z - Public note (R)
+      $0 - Authority record control number (R)
+      $2 - Source of taxonomic identification (NR)
+      $6 - Enlace (NR)
+      $8 - Enlace y número de secuencia del campo (R)
+
+755 - ADDED ENTRY--PHYSICAL CHARACTERISTICS (R) [OBSOLETE]
+   Indicators
+      First - No definido
+         # - No definido
+      Second - No definido
+         # - No definido
+   Subfield Codes
+      $a - Access term (NR)
+      $x - General subdivision (R)
+      $y - Chronological subdivision (R)
+      $z - Geographic subdivision (R)
+      $2 - Source of term (NR) 
+      $3 - Materiales especificados (NR)
+      $6 - Enlace (NR)
+      $8 - Enlace y número de secuencia del campo (R)
+
+--Linking Entry Fields (76X-78X)--
+760 - MAIN SERIES ENTRY (R)
+   Indicators
+      First - Note controller
+         0 - Display note
+         1 - Do not display note
+      Second - Display constant controller
+         # - Main series
+         8 - No display constant generated
+   Subfield Codes
+      $a - Main entry heading (NR)
+      $b - Edition (NR)
+      $c - Qualifying information (NR)
+      $d - Place, publisher, and date of publication (NR)
+      $g - Related parts (R)
+      $h - Physical description (NR)
+      $i - Relationship information (R)
+      $m - Material-specific details (NR)
+      $n - Note (R)
+      $o - Other item identifier (R)
+      $q - Parallel title (NR) (BK SE) [OBSOLETE]
+      $s - Uniform title (NR)
+      $t - Title (NR)
+      $w - Record control number (R)
+      $x - International Standard Serial Number (NR)
+      $y - CODEN designation (NR)
+      $4 - Relationship code (R)
+      $6 - Enlace (NR)
+      $7 - Control subfield (NR)
+      $8 - Enlace y número de secuencia del campo (R)
+
+762 - SUBSERIES ENTRY (R)
+   Indicators
+      First - Note controller
+         0 - Display note
+         1 - Do not display note
+      Second - Display constant controller
+         # - Has subseries
+         8 - No display constant generated
+   Subfield Codes
+      $a - Main entry heading (NR)
+      $b - Edition (NR)
+      $c - Qualifying information (NR)
+      $d - Place, publisher, and date of publication (NR)
+      $g - Related parts (R)
+      $h - Physical description (NR)
+      $i - Relationship information (R)
+      $m - Material-specific details (NR)
+      $n - Note (R)
+      $o - Other item identifier (R)
+      $q - Parallel title (NR) (BK SE) [OBSOLETE]
+      $s - Uniform title (NR)
+      $t - Title (NR)
+      $w - Record control number (R)
+      $x - International Standard Serial Number (NR)
+      $y - CODEN designation (NR)
+      $4 - Relationship code (R)
+      $6 - Enlace (NR)
+      $7 - Control subfield (NR)
+      $8 - Enlace y número de secuencia del campo (R)
+
+765 - ORIGINAL LANGUAGE ENTRY (R)
+   Indicators
+      First - Note controller
+         0 - Display note
+         1 - Do not display note
+      Second - Display constant controller
+         # - Translation of
+         8 - No display constant generated
+   Subfield Codes
+      $a - Main entry heading (NR)
+      $b - Edition (NR)
+      $c - Qualifying information (NR)
+      $d - Place, publisher, and date of publication (NR)
+      $g - Related parts (R)
+      $h - Physical description (NR)
+      $i - Relationship information (R)
+      $k - Series data for related item (R)
+      $m - Material-specific details (NR)
+      $n - Note (R)
+      $o - Other item identifier (R)
+      $q - Parallel title (NR) (BK SE) [OBSOLETE]
+      $r - Report number (R)
+      $s - Uniform title (NR)
+      $t - Title (NR)
+      $u - Standard Technical Report Number (NR)
+      $w - Record control number (R)
+      $x - International Standard Serial Number (NR)
+      $y - CODEN designation (NR)
+      $z - International Standard Book Number (R)
+      $4 - Relationship code (R)
+      $6 - Enlace (NR)
+      $7 - Control subfield (NR)
+      $8 - Enlace y número de secuencia del campo (R)
+
+767 - TRANSLATION ENTRY (R)
+   Indicators
+      First - Note controller
+         0 - Display note
+         1 - Do not display note
+      Second - Display constant controller
+         # - Translated as
+         8 - No display constant generated
+   Subfield Codes
+      $a - Main entry heading (NR)
+      $b - Edition (NR) 
+      $c - Qualifying information (NR)
+      $d - Place, publisher, and date of publication (NR)
+      $g - Related parts (R)
+      $h - Physical description (NR)
+      $i - Relationship information (R)
+      $k - Series data for related item (R)
+      $m - Material-specific details (NR)
+      $n - Note (R)
+      $o - Other item identifier (R)
+      $q - Parallel title (NR) (BK SE) [OBSOLETE]
+      $r - Report number (R)
+      $s - Uniform title (NR)
+      $t - Title (NR)
+      $u - Standard Technical Report Number (NR)
+      $w - Record control number (R)
+      $x - International Standard Serial Number (NR)
+      $y - CODEN designation (NR)
+      $z - International Standard Book Number (R)
+      $4 - Relationship code (R)
+      $6 - Enlace (NR)
+      $7 - Control subfield (NR)
+      $8 - Enlace y número de secuencia del campo (R)
+
+770 - SUPPLEMENT/SPECIAL ISSUE ENTRY (R)
+   Indicators
+      First - Note controller
+         0 - Display note
+         1 - Do not display note
+      Second - Display constant controller
+         # - Has supplement
+         8 - No display constant generated
+   Subfield Codes
+      $a - Main entry heading (NR)
+      $b - Edition (NR)
+      $c - Qualifying information (NR)
+      $d - Place, publisher, and date of publication (NR)
+      $g - Related parts (R)
+      $h - Physical description (NR) 
+      $i - Relationship information (R)
+      $k - Series data for related item (R)
+      $m - Material-specific details (NR)
+      $n - Note (R)
+      $o - Other item identifier (R)
+      $q - Parallel title (NR) (BK SE) [OBSOLETE]
+      $r - Report number (R)
+      $s - Uniform title (NR)
+      $t - Title (NR)
+      $u - Standard Technical Report Number (NR)
+      $w - Record control number (R)
+      $x - International Standard Serial Number (NR)
+      $y - CODEN designation (NR)
+      $z - International Standard Book Number (R)
+      $4 - Relationship code (R)
+      $6 - Enlace (NR)
+      $7 - Control subfield (NR)
+      $8 - Enlace y número de secuencia del campo (R)
+
+772 - SUPPLEMENT PARENT ENTRY (R)
+   Indicators
+      First - Note controller
+         0 - Display note
+         1 - Do not display note
+      Second - Display constant controller
+         # - Supplement to
+         0 - Parent
+         8 - No display constant generated
+   Subfield Codes
+      $a - Main entry heading (NR)
+      $b - Edition (NR)
+      $c - Qualifying information (NR)
+      $d - Place, publisher, and date of publication (NR)
+      $g - Related parts (R)
+      $h - Physical description (NR)
+      $i - Relationship information (R)
+      $k - Series data for related item (R)
+      $m - Material-specific details (NR)
+      $n - Note (R)
+      $o - Other item identifier (R)
+      $q - Parallel title (NR) (BK SE) [OBSOLETE]
+      $r - Report number (R)
+      $s - Uniform title (NR)
+      $t - Title (NR)
+      $u - Standard Technical Report Number (NR)
+      $w - Record control number (R)
+      $x - International Standard Serial Number (NR)
+      $y - CODEN designation (NR)
+      $z - International Stan dard Book Number (R)
+      $4 - Relationship code (R)
+      $6 - Enlace (NR)
+      $7 - Control subfield (NR)
+      $8 - Enlace y número de secuencia del campo (R)
+
+773 - HOST ITEM ENTRY (R)
+   Indicators
+      First - Note controller
+         0 - Display note
+         1 - Do not display note
+      Second - Display constant controller
+         # - In
+         8 - No display constant generated
+   Subfield Codes
+      $a - Main entry heading (NR)
+      $b - Edition (NR)
+      $d - Place, publisher, and date of publication (NR)
+      $g - Related parts (R)
+      $h - Physical description (NR)
+      $i - Relationship information (R)
+      $k - Series data for related item (R)
+      $m - Material-specific details (NR)
+      $n - Note (R)
+      $o - Other item identifier (R)
+      $p - Abbreviated title (NR)
+      $q - Enumeration and first page (NR)
+      $r - Report number (R)
+      $s - Uniform title (NR)
+      $t - Title (NR)
+      $u - Standard Technical Report Number (NR)
+      $w - Record control number (R)
+      $x - International Standard Serial Number (NR)
+      $y - CODEN designation (NR)
+      $z - International Standard Book Number (R)
+      $3 - Materiales especificados (NR)
+      $4 - Relationship code (R)
+      $6 - Enlace (NR)
+      $7 - Control subfield (NR)
+      $8 - Enlace y número de secuencia del campo (R)
+
+774 - CONSTITUENT UNIT ENTRY (R)
+   Indicators
+      First - Note controller
+         0 - Display note
+         1 - Do not display note
+      Second - Display constant controller
+         # - Constituent unit
+         8 - No display constant generated
+   Subfield Codes
+      $a - Main entry heading (NR)
+      $b - Edition (NR)
+      $c - Qualifying information (NR)
+      $d - Place, publisher, and date of publication (NR)
+      $g - Related parts (R)
+      $h - Physical description (NR)
+      $i - Relationship information (R)
+      $k - Series data for related item (R)
+      $m - Material-specific details (NR)
+      $n - Note (R)
+      $o - Other item identifier (R)
+      $r - Report number (R)
+      $s - Uniform title (NR)
+      $t - Title (NR)
+      $u - Standard Technical Report Number (NR)
+      $w - Record control number (R)
+      $x - International Standard Serial Number (NR)
+      $y - CODEN designation (NR)
+      $z - International Standard Book Number (R)
+      $4 - Relationship code (R)
+      $6 - Enlace (NR)
+      $7 - Control subfield (NR)
+      $8 - Enlace y número de secuencia del campo (R)
+
+775 - OTHER EDITION ENTRY (R)
+   Indicators
+      First - Note controller
+         0 - Display note
+         1 - Do not display note
+      Second - Display constant controller
+         # - Other edition available
+         8 - No display constant generated
+   Subfield Codes
+      $a - Main entry heading (NR)
+      $b - Edition (NR)
+      $c - Qualifying information (NR)
+      $d - Place, publisher, and date of publication (NR)
+      $e - Language code (NR)
+      $f - Country code (NR)
+      $g - Related parts (R)
+      $h - Physical description (NR)
+      $i - Relationship information (R)
+      $k - Series data for related item (R)
+      $m - Material-specific details (NR)
+      $n - Note (R)
+      $o - Other item identifier (R)
+      $q - Parallel title (NR) (BK SE) [OBSOLETE]
+      $r - Report number (R)
+      $s - Uniform title (NR)
+      $t - Title (NR)
+      $u - Standard Technical Report Number (NR)
+      $w - Record control number (R)
+      $x - International Standard Serial Number (NR)
+      $y - CODEN designation (NR)
+      $z - International Standard Book Number (R)
+      $4 - Relationship code (R)
+      $6 - Enlace (NR)
+      $7 - Control subfield (NR)
+      $8 - Enlace y número de secuencia del campo (R)
+
+776 - ADDITIONAL PHYSICAL FORM ENTRY (R)
+   Indicators
+      First - Note controller
+         0 - Display note
+         1 - Do not display note
+      Second - Display constant controller
+         # - Available in another form
+         8 - No display constant generated
+   Subfield Codes
+      $a - Main entry heading (NR)
+      $b - Edition (NR)
+      $c - Qualifying information (NR)
+      $d - Place, publisher, and date of publication (NR)
+      $g - Related parts (R)
+      $h - Physical description (NR)
+      $i - Relationship information (R)
+      $k - Series data for related item (R)
+      $m - Material-specific details (NR)
+      $n - Note (R)
+      $o - Other item identifier (R)
+      $q - Parallel title (NR) (BK SE) [OBSOLETE]
+      $r - Report number (R)
+      $s - Uniform title (NR)
+      $t - Title (NR)
+      $u - Standard Technical Report Number (NR)
+      $w - Record control number (R)
+      $x - International Standard Serial Number (NR)
+      $y - CODEN designation (NR)
+      $z - International Standard Book Number (R)
+      $4 - Relationship code (R)
+      $6 - Enlace (NR)
+      $7 - Control subfield (NR)
+      $8 - Enlace y número de secuencia del campo (R)
+
+777 - ISSUED WITH ENTRY (R)
+   Indicators
+      First - Note controller
+         0 - Display note
+         1 - Do not display note
+      Second - Display constant controller
+         # - Issued with
+         8 - No display constant generated
+   Subfield Codes
+      $a - Main entry heading (NR)
+      $b - Edition (NR)
+      $c - Qualifying information (NR)
+      $d - Place, publisher, and date of publication (NR)
+      $g - Related parts (R)
+      $h - Physical description (NR)
+      $i - Relationship information (R)
+      $k - Series data for related item (R)
+      $m - Material-specific details (NR)
+      $n - Note (R)
+      $o - Other item identifier (R)
+      $q - Parallel title (NR) (BK SE) [OBSOLETE]
+      $s - Uniform title (NR)
+      $t - Title (NR)
+      $w - Record control number (R)
+      $x - International Standard Serial Number (NR)
+      $y - CODEN designation (NR)
+      $4 - Relationship code (R)
+      $6 - Enlace (NR)
+      $7 - Control subfield (NR)
+      $8 - Enlace y número de secuencia del campo (R)
+
+780 - PRECEDING ENTRY (R)
+   Indicators
+      First - Note controller
+         0 - Display note
+         1 - Do not display note
+      Second - Type of relationship
+         0 - Continues
+         1 - Continues in part
+         2 - Supersedes
+         3 - Supersedes in part
+         4 - Formed by the union of ... and ...
+         5 - Absorbed
+         6 - Absorbed in part
+         7 - Separated from
+   Subfield Codes
+      $a - Main entry heading (NR)
+      $b - Edition (NR)
+      $c - Qualifying information (NR)
+      $d - Place, publisher, and date of publication (NR)
+      $g - Related parts (R)
+      $h - Physical description (NR)
+      $i - Relationship information (R)
+      $k - Series data for related item (R)
+      $m - Material-specific details (NR)
+      $n - Note (R)
+      $o - Other item identifier (R)
+      $q - Parallel title (NR) (BK SE) [OBSOLETE]
+      $r - Report number (R)
+      $s - Uniform title (NR)
+      $t - Title (NR)
+      $u - Standard Technical Report Number (NR)
+      $w - Record control number (R)
+      $x - International Standard Serial Number (NR)
+      $y - CODEN designation (NR)
+      $z - International Standard Book Number (R)
+      $4 - Relationship code (R)
+      $6 - Enlace (NR)
+      $7 - Control subfield (NR)
+      $8 - Enlace y número de secuencia del campo (R)
+
+785 - SUCCEEDING ENTRY (R)
+   Indicators
+      First - Note controller
+         0 - Display note
+         1 - Do not display note
+      Second - Type of relationship
+         0 - Continued by
+         1 - Continued in part by
+         2 - Superseded by
+         3 - Superseded in part by
+         4 - Absorbed by
+         5 - Absorbed in part by
+         6 - Split into ... and ...
+         7 - Merged with ... to form ...
+         8 - Changed back to
+   Subfield Codes
+      $a - Main entry heading (NR)
+      $b - Edition (NR)
+      $c - Qualifying information (NR)
+      $d - Place, publisher, and date of publication (NR)
+      $g - Related parts (R)
+      $h - Physical description (NR)
+      $i - Relationship information (R)
+      $k - Series data for related item (R)
+      $m - Material-specific details (NR)
+      $n - Note (R)
+      $o - Other item identifier (R)
+      $q - Parallel title (NR) (BK SE) [OBSOLETE]
+      $r - Report number (R)
+      $s - Uniform title (NR)
+      $t - Title (NR)
+      $u - Standa rd Technical Report Number (NR)
+      $w - Record control number (R)
+      $x - International Standard Serial Number (NR)
+      $y - CODEN designation (NR)
+      $z - International Standard Book Number (R)
+      $4 - Relationship code (R)
+      $6 - Enlace (NR)
+      $7 - Control subfield (NR)
+      $8 - Enlace y número de secuencia del campo (R)
+
+786 - DATA SOURCE ENTRY (R)
+   Indicators
+      First - Note controller
+         0 - Display note
+         1 - Do not display note
+      Second - Display constant controller
+         # - Data source
+         8 - No display constant generated
+   Subfield Codes
+      $a - Main entry heading (NR)
+      $b - Edition (NR)
+      $c - Qualifying information (NR)
+      $d - Place, publisher, and date of publication (NR)
+      $g - Related parts (R)
+      $h - Physical description (NR)
+      $i - Relationship information (R)
+      $j - Period of content (NR)
+      $k - Series data for related item (R)
+      $m - Material-specific details (NR)
+      $n - Note (R)
+      $o - Other item identifier (R)
+      $p - Abbreviated title (NR)
+      $r - Report number (R)
+      $s - Uniform title (NR)
+      $t - Title (NR)
+      $u - Standard Technical Report Number (NR)
+      $v - Source Contribution (NR)
+      $w - Record control number (R)
+      $x - International Standard Serial Number (NR)
+      $y - CODEN designation (NR)
+      $z - International Standard Book Number (R)
+      $4 - Relationship code (R)
+      $6 - Enlace (NR)
+      $7 - Control subfield (NR)
+      $8 - Enlace y número de secuencia del campo (R)
+
+787 - OTHER RELATIONSHIP ENTRY (R)
+   Indicators
+      First - Note controller
+         0 - Display note
+         1 - Do not display note
+      Second - Display constant controller
+         # - Related item
+         8 - No display constant generated
+   Subfield Codes
+      $a - Main entry heading (NR)
+      $b - Edition (NR)
+      $c - Qualifying information (NR)
+      $d - Place, publisher, and date of publication (NR)
+      $g - Relationship information (R)
+      $h - Physical description (NR)
+      $i - Display text (NR)
+      $k - Series data for related item (R)
+      $m - Material-specific details (NR)
+      $n - Note (R)
+      $o - Other item identifier (R)
+      $r - Report number (R)
+      $s - Uniform title (NR)
+      $t - Title (NR)
+      $u - Standard Technical Report Number (NR)
+      $w - Record control number (R)
+      $x - International Standard Serial Number (NR)
+      $y - CODEN designation (NR)
+      $z - International Standard Book Number (R)
+      $4 - Relationship code (R)
+      $6 - Enlace (NR)
+      $7 - Control subfield (NR)
+      $8 - Enlace y número de secuencia del campo (R)
+
+--Series Added Entry Fields (80X-830)--
+800 - SERIES ADDED ENTRY--PERSONAL NAME (R)
+   Indicators
+      First - Type of personal name entry element
+         0 - Forename
+         1 - Surname
+         3 - Family name
+      Second - No definido
+         # - No definido
+   Subfield Codes
+      $a - Personal name (NR)
+      $b - Numeration (NR)
+      $c - Titles and other words associated with a name (R)
+      $d - Dates associated with a name (NR)
+      $e - Relator term (R)
+      $f - Date of a work (NR)
+      $g - Miscellaneous information (NR)
+      $h - Medium (NR)
+      $j - Attribution qualifier (R)
+      $k - Form subheading (R)
+      $l - Language of a work (NR)
+      $m - Medium of performance for music (R)
+      $n - Number of part/section of a work  (R)
+      $o - Arranged statement for music (NR)
+      $p - Name of part/section of a work (R)
+      $q - Fuller form of name (NR)
+      $r - Key for music (NR)
+      $s - Version (NR)
+      $t - Title of a work (NR)
+      $u - Affiliation (NR)
+      $v - Volume/sequential designation  (NR)
+      $w - Bibliographic record control number (R)
+      $x - International Standard Serial Number (NR)
+      $0 - Authority record control number (R)
+      $3 - Materiales especificados (NR)
+      $4 - Relator code (R)
+      $5 - Institution to which field applies (R)
+      $6 - Enlace (NR)
+      $8 - Enlace y número de secuencia del campo (R)
+
+810 - SERIES ADDED ENTRY--CORPORATE NAME (R)
+   Indicators
+      First - Type of corporate name entry element
+         0 - Inverted name
+         1 - Jurisdiction name
+         2 - Name in direct order
+      Second - No definido
+         # - No definido
+   Subfield Codes
+      $a - Corporate name or jurisdiction name as entry element (NR)
+      $b - Subordinate unit (R)
+      $c - Location of meeting (NR)
+      $d - Date of meeting or treaty signing (R)
+      $e - Relator term (R)
+      $f - Date of a work (NR)
+      $g - Miscellaneous information (NR)
+      $h - Medium (NR)
+      $k - Form subheading (R)
+      $l - Language of a work (NR)
+      $m - Medium of performance for music (R)
+      $n - Number of part/section/meeting (R)
+      $o - Arranged statement for music (NR)
+      $p - Name of part/section of a work (R)
+      $r - Key for music (NR)
+      $s - Version (NR)
+      $t - Title of a work (NR)
+      $u - Affiliation (NR)
+      $v - Volume/sequential designation (NR)
+      $w - Bibliographic record control number (R)
+      $x - International Standard Serial Number (NR)
+      $0 - Authority record control number (R)
+      $3 - Materiales especificados (NR)
+      $4 - Relator code (R)
+      $5 - Institution to which field applies (R)
+      $6 - Enlace (NR)
+      $8 - Enlace y número de secuencia del campo (R)
+
+811 - SERIES ADDED ENTRY--MEETING NAME (R)
+   Indicators
+      First - Type of meeting name entry element
+         0 - Inverted name
+         1 - Jurisdiction name
+         2 - Name in direct order
+      Second - No definido
+         # - No definido
+   Subfield Codes
+      $a - Meeting name or jurisdiction name as entry element (NR)
+      $c - Location of meeting (NR)
+      $d - Date of meeting (NR)
+      $e - Subordinate unit (R)
+      $f - Date of a work (NR)
+      $g - Miscellaneous information (NR)
+      $h - Medium (NR)
+      $j - Relator term (R)
+      $k - Form subheading (R)
+      $l - Language of a work (NR)
+      $n - Number of part/section/meeting (R)
+      $p - Name of part/section of a work (R)
+      $q - Name of meeting following jurisdiction name entry element (NR)
+      $s - Version (NR)
+      $t - Title of a work (NR)
+      $u - Affiliation (NR)
+      $v - Volume/sequential designation (NR)
+      $w - Bibliographic record control number (R)
+      $x - International Standard Serial Number (NR)
+      $0 - Authority record control number (R)
+      $3 - Materiales especificados (NR)
+      $4 - Relator code (R)
+      $5 - Institution to which field applies (R)
+      $6 - Enlace (NR)
+      $8 - Enlace y número de secuencia del campo (R)
+
+830 - SERIES ADDED ENTRY--UNIFORM TITLE (R)
+   Indicators
+      First - No definido
+         # - No definido
+      Second - Nonfiling characters
+         0-9 - Number of nonfiling characters 
+   Subfield Codes
+      $a - Uniform title (NR)
+      $d - Date of treaty signing (R)
+      $f - Date of a work (NR)
+      $g - Miscellaneous information (NR)
+      $h - Medium (NR)
+      $k - Form subheading (R)
+      $l - Language of a work (NR)
+      $m - Medium of performance for music (R)
+      $n - Number of part/section of a work (R)
+      $o - Arranged statement for music (NR)
+      $p - Name of part/section of a work (R)
+      $r - Key for music (NR)
+      $s - Version (NR)
+      $t - Title of a work (NR) 
+      $v - Volume/sequential designation (NR)
+      $w - Bibliographic record control number (R)
+      $x - International Standard Serial Number (NR)
+      $0 - Authority record control number (R)
+      $3 - Materiales especificados (NR)
+      $5 - Institution to which field applies (R)
+      $6 - Enlace (NR)
+      $8 - Enlace y número de secuencia del campo (R)
+
+840 - SERIES ADDED ENTRY--TITLE (R) [OBSOLETE]
+   Indicators
+      First - No definido
+         # - No definido
+      Second - Nonfiling characters
+         0-9 - Number of nonfiling characters 
+   Subfield Codes
+      $a - Title (NR)
+      $h - Medium (NR)
+      $v - Volume/sequential designation (NR)
+
+--Holdings, Location, Alternate Graphics, etc. Fields (841-88X)--
+841 - HOLDINGS CODED DATA VALUES (NR)
+
+842 - TEXTUAL PHYSICAL FORM DESIGNATOR (NR)
+
+843 - REPRODUCTION NOTE (R)
+
+844 - NAME OF UNIT (NR)
+
+845 - TERMS GOVERNING USE AND REPRODUCTION NOTE (R)
+
+850 - HOLDING INSTITUTION (R)
+   Indicators
+      First - No definido
+         # - No definido
+      Second - No definido
+         # - No definido
+   Subfield Codes
+      $a - Holding institution (R)
+      $b - Holdings (NR) (MU VM SE) [OBSOLETE]
+      $d - Inclusive dates (NR) (MU VM SE) [OBSOLETE]
+      $e - Retention statement (NR) (CF MU VM SE) [OBSOLETE]
+      $8 - Enlace y número de secuencia del campo (R)
+
+  851 - LOCATION (R) [OBSOLETE]
+   Indicators
+      First - No definido
+         # - No definido
+      Second - No definido
+         # - No definido
+   Subfield Codes
+      $a - Name (custodian or owner) (NR)
+      $b - Institutional division (NR)
+      $c - Street address (NR)
+      $d - Country (NR)
+      $e - Location of units (NR)
+      $f - Número de ítem (NR)
+      $g - Repository location code (NR)
+      $3 - Materiales especificados (NR)
+      $6 - Enlace (NR)
+
+852 - LOCATION (R)
+   Indicators
+      First - Shelving scheme
+         # - No se suministra información
+         0 - Library of Congress classification
+         1 - Dewey Decimal classification
+         2 - National Library of Medicine classification
+         3 - Superintendent of Documents classification
+         4 - Shelving control number
+         5 - Title
+         6 - Shelved separately
+         7 - Source specified in subfield $2
+         8 - Other scheme
+      Second - Shelving order
+         # - No se suministra información
+         0 - Not enumeration
+         1 - Primary enumeration
+         2 - Alternative enumeration
+   Subfield Codes
+      $a - Location (NR)
+      $b - Sublocation or collection (R)
+      $c - Shelving location (R)
+      $d - Former shelving location (R)
+      $e - Address (R)
+      $f - Coded location qualifier (R)
+      $g - Non-coded location qualifier (R)
+      $h - Classification part (NR)
+      $i - Item part (R)
+      $j - Shelving control number (NR)
+      $k - Call number prefix (R)
+      $l - Shelving form of title (NR)
+      $m - Call number suffix (R)
+      $n - Country code (NR)
+      $p - Piece designation (NR)
+      $q - Piece physical condition (NR)
+      $s - Copyright article-fee code (R)
+      $t - Copy number (NR)
+      $u - Uniform Resource Identifier  (R)
+      $x - Nonpublic note (R)
+      $z - Public note (R)
+      $2 - Source of classification or shelving scheme (NR)
+      $3 - Materiales especificados (NR)
+      $6 - Enlace (NR)
+      $8 - Sequence number (NR)
+
+853 - CAPTIONS AND PATTERN--BASIC BIBLIOGRAPHIC UNIT (R)
+
+854 - CAPTIONS AND PATTERN--SUPPLEMENTARY MATERIAL (R)
+
+855 - CAPTIONS AND PATTERN--INDEXES (R)
+
+856 - ELECTRONIC LOCATION AND ACCESS (R)
+   Indicators
+      First - Access method
+         # - No se suministra información
+         0 - Email
+         1 - FTP
+         2 - Remote login (Telnet)
+         3 - Dial-up
+         4 - HTTP
+         7 - Method specified in subfield $2
+      Second - Relationship
+         # - No se suministra información
+         0 - Resource
+         1 - Version of resource
+         2 - Related resource
+         8 - No display constant generated
+   Subfield Codes
+      $a - Host name (R)
+      $b - Access number (R)
+      $c - Compression information (R)
+      $d - Path (R)
+      $f - Electronic name (R)
+      $g - Uniform Resource Name (R) [OBSOLETE]
+      $h - Processor of request (NR)
+      $i - Instruction (R)
+      $j - Bits per second (NR)
+      $k - Password (NR)
+      $l - Logon (NR)
+      $m - Contact for access assistance (R)
+      $n - Name of location of host (NR)
+      $o - Operating system (NR)
+      $p - Port (NR)
+      $q - Electronic format type (NR)
+      $r - Settings (NR)
+      $s - File size (R)
+      $t - Terminal emulation (R)
+      $u - Uniform Resource Identifier (R)
+      $v - Hours access method available (R)
+      $w - Record control number (R)
+      $x - Nonpublic note (R)
+      $y - Link text (R)
+      $z - Public note (R)
+      $2 - Access method (NR)
+      $3 - Materiales especificados (NR)
+      $6 - Enlace (NR)
+      $8 - Enlace y número de secuencia del campo (R)
+
+863 - ENUMERATION AND CHRONOLOGY--BASIC BIBLIOGRAPHIC UNIT (R)
+
+864 - ENUMERATION AND CHRONOLOGY--SUPPLEMENTARY MATERIAL (R)
+
+865 - ENUMERATION AND CHRONOLOGY--INDEXES (R)
+
+866 - TEXTUAL HOLDINGS--BASIC BIBLIOGRAPHIC UNIT (R)
+
+867 - TEXTUAL HOLDINGS--SUPPLEMENTARY MATERIAL (R)
+
+868 - TEXTUAL HOLDINGS--INDEXES (R)
+
+870 - VARIANT PERSONAL NAME (SE) [OBSOLETE]
+
+871 - VARIANT CORPORATE NAME (SE)[OBSOLETE]
+
+872 - VARIANT CONFERENCE OR MEETING NAME (SE) [OBSOLETE]
+
+873 - VARIANT UNIFORM TITLE HEADING (SE) [OBSOLETE]
+
+876 - ITEM INFORMATION--BASIC BIBLIOGRAPHIC UNIT (R)
+
+877 - ITEM INFORMATION--SUPPLEMENTARY MATERIAL (R)
+
+878 - ITEM INFORMATION--INDEXES (R)
+
+880 - ALTERNATE GRAPHIC REPRESENTATION (R)
+   Indicators
+      First - Same as associated field
+      Second - Same as associated field
+   Subfield Codes
+      $6 - Enlace (NR)
+      $a-z Same as associated field
+      $0-5 Same as associated field
+      $7-9 Same as associated field
+
+882 - REPLACEMENT RECORD INFORMATION (NR)
+   Indicators
+      First - No definido
+         # - No definido
+      Second - No definido
+         # - No definido
+   Subfield Codes
+      $a - Replacement title (R)
+      $i - Explanatory text (R)
+      $w - Replacement bibliographic record control number (R)
+      $6 - Enlace (NR)
+      $8 - Enlace y número de secuencia del campo (R)
+
+886 - FOREIGN MARC INFORMATION FIELD (R)
+   Indicators
+      First - Type of field
+         0 - Leader
+         1 - Variable control fields (002-009)
+         2 - Variable data fields (010-999)
+      Second - No definido
+         # - No definido
+   Subfield Codes
+      $a - Tag of the foreign MARC field (NR)
+      $b - Content of the foreign MARC field (NR)
+      $2 - Source of data (NR)
+      $a-z - Foreign MARC subfield (R)
+      $0-9 - Foreign MARC subfield (R)
+
+887 - NON-MARC INFORMATION FIELD (R)
+   Indicators
+      First - No definido
+         # - No definido
+      Second - No definido
+         # - No definido
+   Subfield Codes
+      $a - Content of non-MARC field (NR)
+      $2 - Source of data (NR)

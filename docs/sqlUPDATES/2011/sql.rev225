@@ -1,0 +1,6 @@
+CREATE TABLE `portada_opac` (
+`id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY ,
+`image_path` VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL ,
+`footer` TEXT CHARACTER SET utf8 COLLATE utf8_general_ci NULL ,
+`orden` INT( 10 ) NOT NULL
+) ENGINE = MYISAM ;

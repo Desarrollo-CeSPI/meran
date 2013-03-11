@@ -1,0 +1,2 @@
+DROP TABLE `cat_colaborador`;
+DROP TABLE `cat_ref_colaborador`;

@@ -1,0 +1,99 @@
+<script type="text/javascript">
+
+    $(document).ready(function() {
+          makeToggle('datos_tabla_div_user','trigger',null,false);
+          $('.user_pic_fancy').fancybox();
+    });
+
+</script>
+
+<script type="text/javascript" src="/intranet-tmpl/includes/adquisiciones/listProveedoresResult.js"></script>
+
+[% INCLUDE "FormValidateHelper.inc" %]
+
+
+<div class="contenedor_paginador">[% paginador %]</div>
+<fieldset class="resultados_busqueda">
+    <legend class="titulo_legend trigger click">[% "Resultados de la b&uacute;squeda (Proveedores):" | i18n %]</legend>
+        <div class="datos_tabla_div_proveedor">
+            <div class="resultados_consulta">[% "La cantidad de Proveedores es" | i18n %]: [% cantidad %]</div> 
+            <div class="resultados_consulta">[% "Ha buscado por" | i18n %]: [% proveedor_busqueda %]</div> 
+            <table id="tablaResult" class="datos_tabla" border=0 cellspacing=0 cellpadding=0 width=100%>
+                <thead>
+                    <tr class="titulo_tabla_resultado">
+                        <th>
+                            [% "Nombre o Raz&oacute;n Social" | i18n %]
+                        </th>
+                        <th>
+                            [% "CUIT/CIUL" | i18n %]
+                        </th>
+                        <th>
+                            [% "Mail" | i18n %]
+                        </th>
+                        <th>
+                            [% "Acciones" | i18n %]
+                        </th>           
+                    </tr>
+                </thead>
+            <tbody>
+            
+            [% FOREACH resultsloop %]   
+                <tr  align="center">
+
+                      <td align="left" class="proveedores">
+                      [% IF proveedor.getNombre == "" %]
+                          [% proveedor.getRazonSocial %]
+                      [% ELSE %]
+                          [% proveedor.getApellido %], [% proveedor.getNombre %]
+                      [% END %]
+                      </td>
+                      <td align="left" class="proveedores">
+                          [% proveedor.getCuitCuil %]
+                      </td>                     
+                      <td align="left" class="proveedores">
+                          [% proveedor.getEmail %]
+                      </td>
+                  
+                      <!--  BOTONES ACCIONES (Editar, Borrar, Ver detalle) -->
+                      <td align='left' width="9%" class="proveedores">
+                      
+                      <div class="click horizontal icon_mas">
+                              [% PERL %]
+                                            print C4::AR::Filtros::link_to(   
+                                                                              text =>     C4::AR::Filtros::to_Icon( boton   => "icon_mas" ),
+                                                                              url=>"[% url_prefix %]/adquisiciones/datosProveedor.pl", 
+                                                                              params =>   ["id_proveedor=[% proveedor.getId %]",
+                                                                                          "action=DETALLE"],
+                                                                              title =>    "[% 'Ver datos de contacto' | i18n %]"
+                                                                        );
+                              [% END %]
+                          </div>
+                          <div class="click horizontal icon_edicion">
+                              [% PERL %]
+                              print C4::AR::Filtros::link_to(   text =>     C4::AR::Filtros::to_Icon( boton   => "icon_edicion" ),
+                                                                url=>"[% url_prefix %]/adquisiciones/datosProveedor.pl", 
+                                                                params =>   ["action=EDITAR", "id_proveedor=[% proveedor.getId %]"],
+                                                                title =>    "[% 'Editar Proveedor' | i18n %]"
+                                                          );
+                             [% END %]
+              </div>
+              <div class="click horizontal icon_borrar">
+                [% PERL %]
+                
+                        print C4::AR::Filtros::to_Icon(    
+                                            boton   => "icon_borrar",
+                                            onClick => "borrarProveedor([% proveedor.getId %]);",
+                                            title   => "[% 'Borrar' | i18n %]",
+                ) ;
+                
+                [% END %]
+                                                           
+
+            [% END %]
+              <tr>
+                    <td class="lineafinaltabla"  align="left" colspan="14"></td>
+              </tr>
+            </tbody>
+            </table>
+        </div>
+</fieldset>

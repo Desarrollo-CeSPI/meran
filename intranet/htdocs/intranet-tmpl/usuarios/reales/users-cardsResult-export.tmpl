@@ -1,0 +1,67 @@
+<fieldset class="resultados_busqueda">
+    <legend class="titulo_legend trigger click">[% "Resultados de la b&uacute;squeda (cat&aacute;logo)" | i18n %]:</legend>
+        <div class="datos_tabla_div" id="datos_tabla_div">
+            <div class="resultados_consulta">[% "T&eacute;rmino de b&uacute;squeda" | i18n %]: [% buscoPor %]</div>
+            <div class="resultados_consulta">[% "Total de registros" | i18n %]: [% cantidad %]  en ([% timeSeg %] segundos)</div>
+                <table id="tablaResult" class="datos_tabla" border="0" cellspacing="0" cellpadding="0"  width="100%">
+                    <tr>
+                        <td class="titulo_tabla_resultado click" onclick="ordenar('apellido')" title=[% "Ordenar por apellido" | i18n %]>[% "Apellido" | i18n %]</td>
+                        <td class="titulo_tabla_resultado click" onclick="ordenar('nombre')" title=[% "Ordenar por nombre" | i18n %]>[% "Nombre" | i18n %]</td>
+                        <td class="titulo_tabla_resultado click" onclick="ordenar('direccion')" title=[% "Ordenar por direccion" | i18n %]>[% "Direcci&oacute;n" | i18n %]</td>
+                        <td class="titulo_tabla_resultado click" onclick="ordenar('nro_socio')" title=[% "Ordenar por tarjeta de id." | i18n %]>[% "Tarjeta de Id." | i18n %]</td>
+                        <td class="titulo_tabla_resultado click" onclick="ordenar('legajo')" title=[% "Ordenar por legajo" | i18n %]>[% "Legajo" | i18n %]</td>
+                        <td class="titulo_tabla_resultado">[% "Ciudad" | i18n %]</td>
+                        <td class="titulo_tabla_resultado click" onclick="ordenar('telefono')" title=[% "Ordenar por telefono" | i18n %]>[% "Telefono" | i18n %]</td>
+                        <td class="titulo_tabla_resultado click" onclick="ordenar('email')" title=[% "Ordenar por mail" | i18n %]>[% "E-mail" | i18n %]</td>
+                        <td class="titulo_tabla_resultado click" onclick="ordenar('nacimiento')" title=[% "Ordenar por fecha de ingreso" | i18n %]>[% "Ingreso" | i18n %]</td>
+                        <td class="titulo_tabla_resultado click" onclick="ordenar('cod_categoria')" title=[% "Ordenar por categoria" | i18n %]>[% "Categoria" | i18n %]</td>
+                        <td class="titulo_tabla_resultado">Regularidad</td>
+                    </tr>
+                
+                [% FOREACH socio IN RESULTSLOOP %]
+                    <tr align="center">
+                        <td> 
+                            [% PERL %]
+                                print C4::AR::Filtros::link_to( text =>     "[% socio.persona.getApeYNom %]",
+                                                                url=>"[% url_prefix %]/usuarios/reales/datosUsuario.pl", 
+                                                                params =>   ["nro_socio=[% socio.getNro_socio %]"],
+                                                                title =>    "[% 'Ver datos de ' | i18n %] [% socio.persona.getApeYNom %]"
+                                                            ) ;
+                            [% END %]
+                        </td>
+                        <td> [% socio.persona.getNombre %] </td>
+                        <td> [% socio.persona.getDireccion %]</td>
+                        <td> [% socio.getNro_socio %]</td>
+                        <td> [% socio.persona.legajo %]</td>
+                        <td> [% socio.persona.ciudad.getNombre %] </td>
+                        <td> [% socio.persona.getTelefono %] </td>
+                        <td> 
+                            [% IF ok %] 
+                                [% socio.persona.getEmail %]
+                            [% ELSE %]
+                                <a href="mailto:[% socio.persona.getEmail %]">[% socio.persona.getEmail %] </a>
+                            [% END %]
+                        </td>
+                        <td> [% socio.persona.getNacimiento %]</td>
+                        <td> [% socio.persona.categoria.getDescription %]</td>
+                        <td><b>[% socio.estado.getRegular %]</b></td>
+                    </tr>
+                [% END %]
+                
+                </table>
+        </div>
+</fieldset>
+
+<div class="buttonContainerHorizontal">
+    <script> var search2 = 'pdf'; </script>
+    [% PERL %]
+            print C4::AR::Filtros::to_Button( 
+                                                text    =>  "[% 'Carnets' | i18n %]",
+                                                title    =>  "[% 'Carnets' | i18n %]",
+                                                boton   =>  "boton_buscar",
+                                                onClick =>  "consultar(search2);",
+                                            );
+    [% END %]
+</div>
+
+

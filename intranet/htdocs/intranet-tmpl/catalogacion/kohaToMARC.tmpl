@@ -1,0 +1,166 @@
+<!-- TMPL_INCLUDE NAME="intranet-top.inc" -->
+
+<link href="/intranet-tmpl/includes/jquery/tablesorter/style.css" type="text/css" rel="stylesheet">
+<script type="text/javascript" src="/intranet-tmpl/includes/jquery/tablesorter/jquery.tablesorter-min.js"></script>
+
+<!-- para manejar la ventana de campos MARC -->
+<script type="text/javascript" src="/intranet-tmpl/includes/popups/helpCamposMARC-min.js"></script>
+
+
+<script>
+
+var objAH;
+function deleteRow(idmap){
+	objAH=new AjaxHelper(SelectTablasKohaChange);
+	objAH.url=URL_PREFIX+"/catalogacion/kohaToMARC_DB.pl";
+	objAH.idmap= idmap;
+    objAH.showOverlay       = true;
+	objAH.href="DELETE";
+	objAH.sendToServer();
+}
+
+function ValidarDatos(){
+	var campo= $('#campoMARC').val();
+	var subcampo= $('#subcampoMARC').val();
+
+	if(campo == ""){
+		jAlert("Ingrese el nombre del campo");
+		$('#campoMARC').focus();
+		return false;
+	}else if(subcampo == ""){
+			jAlert("Ingrese el subcampo");
+			$('#subcampoMARC').focus();
+			return false;
+		}else return true;
+}
+
+function agregarMapeo(){
+	
+	if(ValidarDatos()){
+		objAH=new AjaxHelper(SelectTablasKohaChange);
+        objAH.showOverlay       = true;
+		objAH.url=URL_PREFIX+"/catalogacion/kohaToMARC_DB.pl";
+		objAH.tabla= $('#tablasKoha').val();
+		objAH.campoKOHA=$('#camposKoha').val();
+		objAH.campoMARC= $('#campoMARC').val();
+		objAH.subcampoMARC=$('#subcampoMARC').val();
+		objAH.href="INSERT";
+		objAH.sendToServer();
+	}
+}
+
+function RefreshComposKoha(){
+	objAH=new AjaxHelper(updateInfo);
+    objAH.showOverlay       = true;
+	objAH.url=URL_PREFIX+"/catalogacion/kohaToMARC_DB.pl";
+	objAH.tabla= $('#tablasKoha').val();
+	objAH.href="SELECT";
+	objAH.sendToServer();
+}
+
+function updateInfo(responseText){
+	var resultSet = responseText;
+	var arreglo=resultSet.split("#");
+	var option = null;
+	var select = $("#camposKoha")[0];	
+	
+	//borro el combo
+	select.innerHTML= "";
+	for(var i=0; i<arreglo.length - 1;i++){
+		option = document.createElement("option");
+		option.setAttribute("value", arreglo[i]);
+        	option.appendChild(document.createTextNode(arreglo[i]));
+        	select.appendChild(option);
+	}
+}
+
+function SelectTablasKohaChange(){
+	objAH=new AjaxHelper(updateInfoRefresh);
+    objAH.showOverlay       = true;
+	objAH.url=URL_PREFIX+"/catalogacion/kohaToMARC_DB.pl";
+	objAH.tabla= $('#tablasKoha').val();
+	objAH.href="TABLARESULT";
+	objAH.sendToServer();
+}
+function updateInfoRefresh(responseText){
+	$('#result').html(responseText);
+	RefreshComposKoha();
+	$('#tablaMapeo').tablesorter({	
+ 		widgets: ['zebra'],
+  		headers: { 0: { sorter: false},
+ 		5: { sorter: false},
+ 		6: { sorter: false}}
+	});
+}
+
+//Init Form
+$(document).ready(function() {
+	
+	// Help
+	$("#topichelp").hide();
+	$("#tophelper img.showhelp ").click(function(){
+						$("#topichelp").slideToggle('fast');
+					});
+});
+
+</script>
+
+[% PERL %]
+    print C4::AR::Filtros::ayuda_marc() ;
+[% END %]
+
+<div style="position: static;" id="tophelper">
+<img class="showhelp" src="/intranet-tmpl/images/help.gif" alt="Descricion de la Ventana">
+    <div style="display: block;" id="topichelp">
+        <p>Aqu&iacute; se puede realizar el mapeo de campos KOHA a campo y subcampo MARC</p>
+    </div>
+</div>
+
+<div class="titulos" >Mapeo de Tablas a MARC</div>
+
+<div class="formElemets">
+  <div>
+<!-- contenedor superior -->
+	<ul>
+	<li>
+		<label for="tablasKoha" style="float: left; width:15%" >
+			Tablas KOHA 
+		</label>
+		<!-- TMPL_VAR NAME="tablasKoha" -->
+	</li>
+	<li>
+		<label for="tablasKoha" style="float: left; width:15%" >
+			Campo KOHA 
+		</label>
+		<Select id="camposKoha"></Select>
+	</li>
+	<li>
+		<label for="campoMARC" style="float: left; width:15%" >
+			Campo MARC
+		</label>
+		<input type="text" id="campoMARC">
+	</li>
+	<li>
+		<label for="subcampoMARC" style="float: left; width:15%" >
+			Subcampo
+		</label>
+		<input type="text" id="subcampoMARC">
+	</li>
+	<li>
+	  <center>
+		<input id="agregar" type="button" value="Agregar" Title="Agregar nuevo mapeo" onClick="agregarMapeo();">
+	  </center>
+	<li>
+	</ul>
+  </div>
+
+<ul>
+<li>
+	<div id="result"></div>
+<br>
+</li>
+<ul>
+</div>
+
+<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->
+

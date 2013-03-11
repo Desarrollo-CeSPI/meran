@@ -1,0 +1,54 @@
+[% INCLUDE "intranet-top.inc" %]
+<script src="/intranet-tmpl/includes/admin/permisosCommon.js"></script>
+<script>
+    $(document).ready(function() {
+    	$("#usuario").focus();
+    	CrearAutocompleteUsuarios({ IdInput: 'usuario', 
+                                    IdInputHidden: 'nro_socio_hidden', 
+                                 });
+    });
+
+	/*
+	* Actualiza todos los input checkbox ocultos para actualizar bien en el backend
+	*/
+	function actualizarCheckBoxes(nombre){
+
+	    var checked = $('#'+nombre).find('.active');
+
+	    // checked.text() tiene los nombres de los checkeados separados por un espacio
+	    var arrayText = checked.text().split(" ");
+
+	    //recorremos todos los textos que esten seleccionados
+	    for(text in arrayText){ 
+	        switch(arrayText[text])
+	        {
+	        case "[% "Todos" | i18n %]":
+	            $('#'+nombre+'_todos').attr('checked', 'checked');
+	            break;
+	        case "[% "Baja" | i18n %]":
+	            $('#'+nombre+'_baja').attr('checked', 'checked');
+	            break;
+	        case "[% "Modificación" | i18n %]":
+	            $('#'+nombre+'_modif').attr('checked', 'checked');
+	            break;
+	        case "[% "Alta" | i18n %]":
+	            $('#'+nombre+'_alta').attr('checked', 'checked');
+	            break;
+	        case "[% "Consulta" | i18n %]":
+	            $('#'+nombre+'_consulta').attr('checked', 'checked');
+	            break;
+	        }
+
+	    }
+	}
+</script>
+
+
+<div class="page-header">
+    <h2>[% "Administraci&oacute;n de permisos" | i18n %] <small></small></h2>
+</div>
+
+[% INCLUDE "partials/admin/_permisos.inc" %]
+
+
+[% INCLUDE "intranet-bottom.inc" %]

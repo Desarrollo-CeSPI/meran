@@ -1,0 +1,50 @@
+[core]
+	repositoryformatversion = 0
+	filemode = true
+	bare = false
+	logallrefupdates = true
+	url = ssh://dev@proyectos.linti.unlp.edu.ar/var/meran
+[remote "origin"]
+	url = ssh://dev@proyectos.linti.unlp.edu.ar/var/meran
+	fetch = +refs/heads/*:refs/remotes/origin/*
+	push = refs/heads/master:refs/heads/master
+[branch "master"]
+	remote = origin
+	merge = refs/heads/master
+[user]
+	name = Dev
+	mail = dev@koha.unlp.edu.ar
+[color]
+	ui = auto
+[color "branch"]
+	current = yellow reverse
+	local = yellow
+	remote = green
+[color "diff"]
+	meta = yellow bold
+	frag = magenta bold
+	old = red bold
+	new = green bold  
+[color]
+   	ui = true
+ 
+[color "diff"]
+    	whitespace = red reverse
+ 
+[core]
+    	whitespace=fix,-indent-with-non-tab,trailing-space,cr-at-eol
+ 
+[color "status"]
+	added = yellow
+	changed = green
+	untracked = cyan  
+[alias]
+	st = status
+	ci = commit -a -m
+	up = pull
+	br = branch
+	co = checkout
+	df = diff
+	lg = log -p
+[giggle]
+	file-view-path = intranet/htdocs/intranet-tmpl/temas/default/includes/intranet.css

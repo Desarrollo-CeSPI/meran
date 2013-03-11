@@ -1,0 +1,84 @@
+[% USE HTML %]
+<fieldset>
+    <legend>[% "Novedades de OPAC" | i18n %]:</legend>
+        <div class="contenedor_paginador">[% paginador %]</div>
+        [% IF novedades %]
+            <div class="datos_tabla_div_user">
+                <div class="well">[% "La cantidad de novedades es" | i18n %]: [% cant_novedades %]</div>
+                
+                    [% PERL %]
+                        print C4::AR::Filtros::tableHeader(   
+                                          id              => "novedades_opac_table",
+                                          class           => "",
+                                          selectAll_id    => "",
+                                          columns         => ['[% "Fecha"|i18n %]','[% "Usuario"|i18n %]',
+                                                            '[% "T&iacute;tulo"|i18n %]', '[% "Resumen"|i18n %]',
+                                                            '[% "Categor&iacute;a"|i18n%]', '[% "Acciones"|i18n %]', 
+                                                             ]
+             
+                                                ) ;
+                    [% END %]
+
+                    <tbody>
+                        [% FOREACH novedad IN novedades %]
+                            <tr class="leido[% novedad.getLeido %]">
+                                <td>
+                                    [% novedad.getFechaLegible %]
+                                </td>
+                                <td>
+                                    [% novedad.getUsuario%] 
+                                </td>
+                                <td>
+                                    [% novedad.getTitulo %] 
+                                </td>
+                                <td>
+                                    [% novedad.getResumen %] 
+                                </td>
+                                <td>
+                                    [% novedad.getCategoria %]
+                                </td>
+                                <td style="width:150px">
+                                
+                                    [% PERL %]
+                                        print C4::AR::Filtros::action_set_button(    
+                                              title   => " [% 'Novedad' | i18n %]",
+                                              button  => 'btn btn-primary',
+                                              action  => 'showNovedad("[% novedad.id %]")',
+                                              icon    => "icon-white icon-eye-open",
+                                              actions         => [
+                                                                  { title   => "Editar", 
+                                                                    url     => "[% url_prefix %]/admin/editar_novedad.pl",
+                                                                    icon    => "icon-edit",
+                                                                     params => ["id=[% novedad.id %]"],
+                                                                   },
+                                                                   { title   => "Eliminar", 
+                                                                    action  => 'eliminarNovedad("[% novedad.id %]")', 
+                                                                    icon    => "icon-remove",
+                                                                   },
+                                                                  ],
+
+                     
+                                                ) ;
+                                    [% END %]
+                            
+                                </td>
+                            </tr>
+                        [% END %]
+                    </tbody>
+                </table>
+            </div>
+        [% ELSE %]
+            <div class="alert alert-info">[% 'No hay novedades' | i18n %]</div>
+        [% END %]
+</fieldset>
+<div class="form-actions">
+	[% PERL %]
+	            print C4::AR::Filtros::action_link_button(   
+	                    button  => "btn btn-primary",
+	                    url     => "[% url_prefix %]/admin/agregar_novedad.pl?token=[% token %]",
+                      icon => "icon-white icon-plus",
+	                    title   => " [% 'Agregar novedad' | i18n %]",
+	                ) ;
+	[% END %]
+</div>
+<div id="mostrar_novedad" class="modal hide fade"></div>

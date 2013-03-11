@@ -1,0 +1,30 @@
+
+<center>
+<table border="0"  align="center">
+	<tr>
+		<td  class="fontresultado" align="center" colspan="100%">
+&nbsp;  T&eacute;rmino de b&uacute;squeda: <b> Tema <!-- TMPL_VAR NAME="value"  --></b>, <!-- TMPL_VAR NAME="numrecords" --> resultados encontrados
+		</td>
+	</tr>
+
+</table>
+
+<br>
+<!-- TMPL_IF NAME=numrecords -->
+
+<table id="tablaResult" class="tablaResult" border=0 cellspacing=0 cellpadding=2>
+	<tr class="titulo_tabla_resultado">
+		<th>Tema</th>
+	</tr>
+<!-- TMPL_LOOP NAME=SEARCH_RESULTS -->
+	<tr class="inputFontNormal">
+		<td>
+		<a class="click" onClick="verTema('<!-- TMPL_VAR NAME='id' -->','<!-- TMPL_VAR NAME=nombre -->');" title="Mostrar Detalle">
+		<!-- TMPL_VAR NAME=nombre --></a>
+		</td>
+	</tr>
+<!-- /TMPL_LOOP -->
+
+</table>
+<br>
+<!-- /TMPL_IF -->

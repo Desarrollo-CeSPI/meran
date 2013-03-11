@@ -1,0 +1,60 @@
+<fieldset>
+<legend class="titulo_legend">[% 'Sin&oacute;nimos existentes'| i18n %]</legend>
+<table id="tablaSinonimos" class="tablesorter datos_tabla" border=0 cellspacing=0 cellpadding=0 width="100%" align="center">
+	<thead>
+ 	<tr class="titulo_tabla_resultado">
+	
+		<th>[% 'Sin&oacute;nimo' | i18n %]</th>
+		<th>[% 'Eliminar' | i18n %]</th>
+		<th>[% 'Editar' | i18n %]</th>
+
+	</tr>
+	</thead>
+
+	<tbody>
+[% FOREACH sinonimo IN RESULTSLOOP %]
+	<tr align='center'>
+
+		<td id="sinonimo[%nroSinonimo%]"> 
+			[% sinonimo.autor %] [% sinonimo.tema %] [% sinonimo.editorial %]
+		</td>
+		<td align="center">
+            <div>
+                [% PERL %]
+                                print C4::AR::Filtros::to_Button( 
+                                                                    text    =>  "[% 'Eliminar' | i18n %]",
+                                                                    boton   =>  "boton_buscar",
+                                                                    onClick =>  "deleteSinonimo('[% sinonimo.id %]','[% sinonimo.autor %][% sinonimo.tema %][% sinonimo.editorial %]');",
+                                                                    title   =>  "[% 'Eliminar' | i18n %]",
+                                        ) ;
+                [% END %]
+            </div>
+        </td>
+		<td align="center">
+			<a class="click" 
+			onClick=""><img src="[% themelang %]/images/editar.png" Title="Editar" ALT='Editar' hspace='0' vspace='0' border='0'></a>
+            <div>
+                [% PERL %]
+                                print C4::AR::Filtros::to_Button( 
+                                                                    text    =>  "[% 'Editar' | i18n %]",
+                                                                    boton   =>  "boton_buscar",
+                                                                    onClick =>  "modificarSinonimo('[% sinonimo.id %]','[% nroSinonimo %]','[% sinonimo.autor %][% sinonimo.tema %][% sinonimo.geteditorial %]');",
+                                                                    title   =>  "[% 'Editar' | i18n %]",
+                                        ) ;
+                [% END %]
+            </div>
+        </td>
+
+	</tr>
+[% END %]
+	<tr valign=bottom>
+	        <td class="lineafinaltabla"  align="left" colspan="9"></td>
+        </tr>
+	</tbody>
+</table>
+
+<div id="updateSinonimo" style="display:none">
+	<input class="focus" type="text" id="nombreNuevo" >
+</div>
+
+</fieldset>

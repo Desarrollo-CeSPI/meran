@@ -1,0 +1,2 @@
+ALTER TABLE `pref_unidad_informacion` ADD `titulo_formal` VARCHAR( 255 ) NOT NULL DEFAULT 'Universidad Nacional de La Plata';
+ALTER TABLE `pref_unidad_informacion` ADD `ciudad` VARCHAR( 255 ) NOT NULL DEFAULT 'La Plata';

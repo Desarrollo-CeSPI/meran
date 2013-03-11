@@ -1,0 +1,136 @@
+@import url("layouts/layout-2d.css");
+
+.calendar, .calendar table {
+  border-color: #556;
+  color: #000;
+  background-color: #eef;
+}
+
+.calendar .nav {
+  background-color: #778;
+}
+
+.calendar thead .title {
+  background-color: #ccd;
+  color: #000;
+}
+
+.calendar thead .headrow {
+  background-color: #778;
+  color: #fff;
+}
+
+.calendar thead .daynames {
+  background-color: #bdf;
+}
+
+.calendar thead .name {
+  border-color: #556;
+  color: #000;
+}
+
+.calendar thead .weekend {
+  color: #a66;
+}
+
+.calendar thead .hilite {
+  background-color: #aaf;
+  color: #000;
+  border-color: #04f;
+}
+
+.calendar thead .active {
+  background-color: #77c;
+}
+
+.calendar tbody .day {
+  color: #456;
+}
+.calendar tbody .day.othermonth {
+  color: #bbb;
+}
+.calendar tbody .day.othermonth.oweekend {
+  color: #fbb;
+}
+
+.calendar table .wn {
+  border-color: #000;
+  background-color: #bdf;
+}
+
+.calendar tbody .rowhilite td {
+  background-color: #def;
+}
+
+.calendar tbody .rowhilite td.wn {
+  background-color: #eef;
+}
+
+.calendar tbody td.hilite {
+  background-color: #def;
+  border-color: #bbb;
+}
+
+.calendar tbody td.active {
+  background-color: #cde;
+}
+
+.calendar tbody td.selected {
+  border-color: #000;
+  background-color: #fff;
+  color: #000;
+}
+
+.calendar tbody td.weekend {
+  color: #a66;
+}
+
+.calendar tbody td.today {
+  color: #00f;
+}
+
+.calendar tbody .disabled { color: #999; }
+
+.calendar tfoot .footrow {
+  background-color: #556;
+  color: #fff;
+}
+
+.calendar tfoot .ttip {
+  background-color: #ccd;
+  color: #445;
+  border-color: #556;
+}
+
+.calendar tfoot .hilite {
+  background-color: #aaf;
+  border-color: #04f;
+  color: #000;
+}
+
+.calendar tfoot .active {
+  background-color: #77c;
+}
+
+.calendar .combo {
+  border-color: #655;
+  background-color: #def;
+  color: #000;
+}
+
+.calendar .combo .hilite {
+  background-color: #acf;
+}
+
+.calendar .combo .active {
+  border-color: #46a;
+  background-color: #eef;
+}
+
+/* time */
+
+.calendar tfoot tr.time td { border-color: #000; }
+.calendar tfoot tr.time td.hour,
+.calendar tfoot tr.time td.minute { border-color: #aac; }
+.calendar tfoot tr.time td.hilite { background-color: #acf; }
+.calendar tfoot tr.time td.active { background-color: #9be; }

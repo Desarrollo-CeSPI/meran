@@ -1,0 +1,13 @@
+CREATE TABLE  `background_job` (
+`id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY ,
+`jobID` VARCHAR( 255 ) NOT NULL ,
+`size` INT NOT NULL ,
+`progress` FLOAT (11)  NOT NULL ,
+`status` VARCHAR( 255 ) NOT NULL ,
+`name` VARCHAR( 255 ) NOT NULL ,
+`invoker` VARCHAR( 255 ) NOT NULL ,
+UNIQUE (
+`jobID`
+)
+) ENGINE = MYISAM ;
+

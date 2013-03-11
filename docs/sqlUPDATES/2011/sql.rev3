@@ -1,0 +1,1 @@
+ALTER TABLE `cat_estructura_catalogacion` ADD `edicion_grupal` TINYINT NOT NULL DEFAULT '1' AFTER `visible` ;

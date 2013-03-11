@@ -1,0 +1,1461 @@
+
+-- No se usa esta tabla
+drop table users;
+
+-- Se renombro la tabla
+
+RENAME TABLE usr_socios  TO usr_socio;
+
+--Se deja el id_persona en usr_socio
+ALTER TABLE `usr_persona`  DROP `id_socio`;
+
+--se modifico el campo
+ALTER TABLE `usr_persona` CHANGE `vesion_documento` `version_documento` CHAR( 1 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL DEFAULT 'P' ;
+
+--se modificaron los campos
+
+
+ALTER TABLE `usr_socio` CHANGE `lastlogin` `last_login` DATETIME NULL DEFAULT NULL ,
+CHANGE `lastchangepassword` `last_change_password` DATE NULL DEFAULT NULL ,
+CHANGE `changepassword` `change_password` TINYINT( 1 ) NOT NULL DEFAULT '0';
+
+ALTER TABLE `usr_persona` ADD `activo` tinyint( 1 ) unsigned NOT NULL default '1';
+
+ALTER TABLE `usr_estado` ADD `id_estado` INT( 11 ) NOT NULL AUTO_INCREMENT PRIMARY KEY FIRST ;
+ALTER TABLE `usr_estado` ADD UNIQUE (`id_persona` ,`fuente`);
+
+
+--RENAMES si no lo hacen no anda nada!!!--
+
+RENAME TABLE userflags TO usr_permiso;
+RENAME TABLE sessions TO sist_sesion;
+RENAME TABLE systempreferences TO pref_preferencia_sistema;
+--
+
+
+NO RENOMBRE LA TABLA CATEGORIES PARA NO ROMPER TODO, SE EXPORTO LA INFO Y SE MODIFICO EL NOMBRE DE LA TABLA
+HAY 2 TABLAS AHORA, MAS ADELANTE SE ELIMINA CATEGORIES
+
+CREATE TABLE `usr_ref_categoria_socio` (
+  `categorycode` char(2) NOT NULL default '',
+  `description` text,
+  `enrolmentperiod` smallint(6) default NULL,
+  `upperagelimit` smallint(6) default NULL,
+  `dateofbirthrequired` tinyint(1) default NULL,
+  `finetype` varchar(30) default NULL,
+  `bulk` tinyint(1) default NULL,
+  `enrolmentfee` decimal(28,6) default NULL,
+  `overduenoticerequired` tinyint(1) default NULL,
+  `issuelimit` smallint(6) default NULL,
+  `reservefee` decimal(28,6) default NULL,
+  `borrowingdays` smallint(30) NOT NULL default '14',
+  UNIQUE KEY `categorycode` (`categorycode`)
+) ENGINE=innodb DEFAULT CHARSET=latin1;
+
+-- 
+-- Volcar la base de datos para la tabla `categories`
+-- 
+
+INSERT INTO `usr_ref_categoria_socio` (`categorycode`, `description`, `enrolmentperiod`, `upperagelimit`, `dateofbirthrequired`, `finetype`, `bulk`, `enrolmentfee`, `overduenoticerequired`, `issuelimit`, `reservefee`, `borrowingdays`) VALUES 
+('ES', 'Estudiante', 0, 55, 18, NULL, NULL, 0.000000, 0, 0, 0.000000, 14),
+('IN', 'Investigador', 15, 100, 0, NULL, NULL, 0.000000, 0, 8, 0.000000, 14),
+('DO', 'Docente', 10, 80, 0, NULL, NULL, 0.000000, 1, 5, 0.000000, 14),
+('ND', 'No Docente', 10, 0, 0, NULL, NULL, 0.000000, 1, 3, 0.000000, 14),
+('EG', 'Egresado', 10, 0, 0, NULL, NULL, 0.000000, 1, 3, 0.000000, 14),
+('PG', 'Postgrado', NULL, 90, NULL, NULL, NULL, NULL, 1, 3, NULL, 14);
+
+ALTER TABLE `usr_ref_categoria_socio` ADD PRIMARY KEY ( `categorycode` ) ;
+
+ALTER TABLE usr_socio ADD FOREIGN KEY(id_persona) REFERENCES usr_persona(id_persona);
+
+
+
+-- LOS BRANCHES
+
+
+-- 
+-- Estructura de tabla para la tabla `pref_unidad_informacion`
+-- 
+
+CREATE TABLE `pref_unidad_informacion` (
+  `id_ui` varchar(4) NOT NULL,
+  `nombre` varchar(255) NOT NULL,
+  `direccion` varchar(255) default NULL,
+  `alt_direccion` varchar(255) default NULL,
+  `telefono` varchar(255) default NULL,
+  `fax` varchar(255) default NULL,
+  `email` varchar(255) default NULL,
+  PRIMARY KEY  (`id_ui`)
+) ENGINE=Innodb DEFAULT CHARSET=latin1;
+
+-- 
+-- Volcar la base de datos para la tabla `pref_unidad_informacion`
+-- 
+
+INSERT INTO `pref_unidad_informacion` (`id_ui`, `nombre`, `direccion`, `alt_direccion`, `telefono`, `fax`, `email`) VALUES 
+('DEO', 'Facultad de Ciencias Económicas', '6 entre 47 y 48. 1° subusuelo', '0221-423-6771/6769', '', 'biblio@econo.unlp.edu.ar', NULL),
+('DIF', 'Facultad de Informática', '115 esquina 50. 1° subusuelo', '', '', 'biblioteca@info.unlp.edu.ar', NULL),
+('CD', 'Centro de Documentación', '7 Nº 445', '', '', '', NULL);
+
+
+-- NUEVAS PREFERENCIAS
+
+
+INSERT  INTO  `pref_preferencia_sistema` (  `variable` ,  `value` ,  `explanation` ,  `options` ,  `type`  ) 
+VALUES ( 'autoActivarPersona',  '0',  'Activa por defecto un alta de una persona',  NULL ,  NULL );
+
+
+
+
+ALTER TABLE `pref_unidad_informacion` ADD PRIMARY KEY ( `id_ui` );
+
+
+-- Se creo una nueva preferencia, el 'defaultBranch' se conserva para que no se rompa nada, despues se borra
+
+INSERT INTO `pref_preferencia_sistema` ( `variable` , `value` , `explanation` , `options` , `type` )
+VALUES (
+'defaultUI', 'DEO', 'Unidad de informacion por defecto', NULL , NULL
+); 
+
+
+
+INSERT INTO `pref_preferencia_sistema` ( `variable` , `value` , `explanation` , `options` , `type` )
+VALUES (
+'defaultTipoDoc', 'DNI', 'Tipo de Documento por defecto', NULL , NULL
+); 
+
+
+INSERT INTO `pref_preferencia_sistema` ( `variable` , `value` , `explanation` , `options` , `type` )
+VALUES (
+'defaultCategoriaSocio', 'ES', 'Categoria de Socio por defecto', NULL , NULL
+); 
+
+INSERT INTO `pref_preferencia_sistema` ( `variable` , `value` , `explanation` , `options` , `type` )
+VALUES (
+'defaultDisponibilidad', 'ES', 'Disponibilidad por defecto', NULL , NULL
+); 
+
+
+
+CREATE TABLE `ref_disponibilidad` (
+  `codigo` tinyint(5) NOT NULL default '0',
+  `nombre` varchar(255) NOT NULL default '',
+  PRIMARY KEY  (`codigo`),
+  UNIQUE KEY `nombre` (`nombre`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+-- 
+-- Volcar la base de datos para la tabla `ref_disponibilidad`
+-- 
+
+INSERT INTO `ref_disponibilidad` (`codigo`, `nombre`) VALUES 
+(1, 'Perdido'),
+(2, 'Compartido'),
+(4, 'Baja'),
+(5, 'Ejemplar deteriorado'),
+(6, 'En Encuadernación'),
+(0, 'Disponible');
+
+ALTER TABLE usr_socio ADD FOREIGN KEY ( cod_categoria ) REFERENCES usr_ref_categoria_socio( categorycode ) ;
+
+ALTER TABLE `usr_persona` ADD `es_socio` INT( 1 ) UNSIGNED NOT NULL DEFAULT '0' COMMENT '1= si; 0=no';
+
+ALTER TABLE `usr_estado` DROP `id_socio` ;
+
+ALTER TABLE `usr_estado` DROP INDEX `id_persona` ;
+
+ ALTER TABLE `usr_estado`
+  DROP `id_persona`;
+
+
+ALTER TABLE usr_socio ADD FOREIGN KEY ( id_estado ) REFERENCES usr_estado( id_estado ) ;
+
+
+ALTER TABLE `usr_socio` ADD `activo` TINYINT( 1 ) UNSIGNED NOT NULL DEFAULT '1' AFTER `id_estado` ;
+
+ALTER TABLE `usr_persona` DROP `activo` ;
+
+ALTER TABLE `usr_persona` ADD `legajo` VARCHAR( 8 ) NOT NULL ;
+
+--- PARA TESTEAR SESSIONES, PARA Q NO SE QUEDEN AFUERA
+
+INSERT INTO `usr_estado` (`id_estado`, `regular`, `categoria`, `fuente`) VALUES
+(20, 1, 'NN', 'ES UNA FUENTE DEFAULT, PREGUNTARLE A EINAR....');
+
+INSERT INTO `usr_persona` (`id_persona`, `legajo`, `version_documento`, `nro_documento`, `tipo_documento`, `apellido`, `nombre`, `titulo`, `otros_nombres`, `iniciales`, `calle`, `barrio`, `ciudad`, `telefono`, `email`, `fax`, `msg_texto`, `alt_calle`, `alt_barrio`, `alt_ciudad`, `alt_telefono`, `nacimiento`, `fecha_alta`, `sexo`, `telefono_laboral`, `cumple_condicion`) VALUES 
+(1, '26329', 'P', '27855859', '1', 'Carbone', 'Miguel', 'titulo', 'otros nombreeeeeessssssssssss', 'DGR', '1', NULL, '343978', '4227804', 'carbon@yahoo.com.ar', NULL, NULL, NULL, NULL, '7920', NULL, '2009-12-24', NULL, 'M', NULL, 0);
+
+
+INSERT INTO `usr_socio` (`id_persona`, `id_socio`, `nro_socio`, `id_ui`, `cod_categoria`, `fecha_alta`, `expira`, `flags`, `password`, `last_login`, `last_change_password`, `change_password`, `cumple_requisito`, `id_estado`, `activo`) VALUES 
+(1, 3, '26320', 'DEO', 'DO', NULL, NULL, NULL, 'ICy5YqxZB1uWSwcVLSNLcA', NULL, NULL, 0, NULL, 20, 1);
+
+
+ALTER TABLE `usr_permiso` ADD PRIMARY KEY ( `bit` ) ;
+
+ALTER TABLE `usr_permiso` ADD UNIQUE (`flagdesc`);
+
+ALTER TABLE `usr_permiso` CHANGE `flag` `flag` VARCHAR( 255 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL , CHANGE `flagdesc` `flagdesc` VARCHAR( 255 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL ;
+
+
+ALTER TABLE `usr_estado`  ENGINE = innodb;
+
+ALTER TABLE `usr_ref_estado`  ENGINE = innodb;
+
+ALTER TABLE `usr_permiso`  ENGINE = innodb;
+
+--Se agrego en koha.conf la siguiente variable, si se setea en 1 se loguean "solos" los objetos, "en Desarrollo" ;)
+debug=1
+
+--Usuario KOHAADMIN, para el MONOOOOOOOOO
+user: kohaadmin
+pass: kohaadmin (cambiar pass)
+
+
+INSERT INTO `usr_estado` (`id_estado`, `regular`, `categoria`, `fuente`) 
+VALUES (46, 1, 'NN', 'MONO TU FUCKING KOHAADMIN SUPERLIBRARIAN');
+
+INSERT INTO `usr_persona` (`id_persona`, `legajo`, `version_documento`, `nro_documento`, `tipo_documento`, `apellido`, `nombre`, `titulo`, `otros_nombres`, `iniciales`, `calle`, `barrio`, `ciudad`, `telefono`, `email`, `fax`, `msg_texto`, `alt_calle`, `alt_barrio`, `alt_ciudad`, `alt_telefono`, `nacimiento`, `fecha_alta`, `sexo`, `telefono_laboral`, `cumple_condicion`)
+VALUES (21, '007', 'P', '27000000', '1', 'Kohaadmin', 'Kohaadmin', NULL, NULL, 'DGR', '007', NULL, '16648', '', '', NULL, NULL, NULL, NULL, '', NULL, '2009-12-23', NULL, NULL, NULL, 0);
+
+INSERT INTO `usr_socio` (`id_persona`, `id_socio`, `nro_socio`, `id_ui`, `cod_categoria`, `fecha_alta`, `expira`, `flags`, `password`, `last_login`, `last_change_password`, `change_password`, `cumple_requisito`, `id_estado`, `activo`) 
+VALUES (21, 12, 'kohaadmin', 'DEO', 'DO', NULL, NULL, 1, 'yaI/N9MQNziYMukMdHMW4w', '2009-12-13 00:00:00', '2009-12-13', 0, '0000-00-00', 46, 1);
+
+
+--Modificaciones en Reservas (`circ_reserva`)
+ALTER TABLE `circ_reserva`  DROP `cancellationdate`, DROP `reservenotes`, DROP `biblioitemnumber`;
+ALTER TABLE `circ_reserva` CHANGE `borrowernumber` `nro_socio` VARCHAR( 16 ) NOT NULL DEFAULT '0';
+ALTER TABLE `circ_reserva` DROP INDEX `IdUnico` , ADD UNIQUE `IdUnico` ( `nro_socio` , `id3` );
+ALTER TABLE `circ_reserva` CHANGE `reservenumber` `id_reserva` INT( 11 ) NOT NULL AUTO_INCREMENT ,
+CHANGE `reservedate` `fecha_reserva` DATE NOT NULL DEFAULT '0000-00-00',
+CHANGE `notificationdate` `fecha_notificacion` DATE NULL DEFAULT NULL ,
+CHANGE `reminderdate` `fecha_recodatorio` DATE NULL DEFAULT NULL ;
+
+ALTER TABLE `circ_reserva` CHANGE `branchcode` `id_ui` VARCHAR( 4 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL;
+
+--Se elimino la siguiente tabla, se usa usr_ref_tipo_documento (DNI, LE, LC, etc)
+DROP TABLE `ref_tipo_documento`;
+
+ALTER TABLE `cat_ref_tipo_nivel3`
+  DROP `loanlength`,
+  DROP `renewalsallowed`,
+  DROP `rentalcharge`,
+  DROP `search`,
+  DROP `detail`;
+
+ALTER TABLE `cat_ref_tipo_nivel3` CHANGE `itemtype` `id_tipo_doc` VARCHAR( 4 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL ,
+CHANGE `description` `nombre` VARCHAR( 255 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL ;
+
+UPDATE `pref_preferencia_sistema` SET `variable` = 'defaultTipoNivel3' WHERE CONVERT( `pref_preferencia_sistema`.`variable` USING utf8 ) = 'defaultitemtype' LIMIT 1 ;
+
+--Modificaciones en Valores Autorizados
+
+ALTER TABLE `pref_valor_autorizado` CHANGE `category` `category` CHAR( 40 );
+
+--Se modifico en pref_informacion_referencia, campos y orden pueden ser null
+
+ALTER TABLE `pref_informacion_referencia` CHANGE `orden` `orden` VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL ,
+CHANGE `campos` `campos` VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL 
+
+ALTER TABLE `cat_estructura_catalogacion` ADD `idinforef` INT( 11 ) NULL AFTER `visible` ;
+
+DROP TABLE `pref_tabla_referencia`;
+-- 
+-- Estructura de tabla para la tabla `pref_tabla_referencia`
+-- 
+
+CREATE TABLE `pref_tabla_referencia` (
+  `id` int(11) unsigned NOT NULL auto_increment,
+  `nombre_tabla` varchar(40) NOT NULL,
+  `alias_tabla` varchar(20) NOT NULL default '0',
+  PRIMARY KEY  (`id`)
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=3 ;
+
+INSERT INTO `pref_tabla_referencia` (`nombre_tabla`, `alias_tabla`) VALUES
+('cat_autor', 'autor'),
+('cat_ref_tipo_nivel3', 'tipo_ejemplar'),
+('pref_unidad_informacion', 'ui'),
+('ref_idioma', 'idioma'),
+('ref_pais', 'pais'),
+('ref_disponibilidad', 'disponibilidad'),
+('circ_ref_tipo_prestamo', 'tipo_prestamo'),
+('ref_soporte', 'soporte'),
+('ref_nivel_bibliografico', 'nivel_bibliografico'),
+('cat_tema', 'tema');
+
+
+ALTER TABLE `cat_estructura_catalogacion` ADD `idCompCliente` VARCHAR( 255 ) NOT NULL AFTER `idinforef` ;
+
+ALTER TABLE `cat_nivel1` CHANGE `timestamp` `timestamp` TIMESTAMP ON UPDATE CURRENT_TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP;
+
+ALTER TABLE `cat_nivel1_repetible` CHANGE `timestamp` `timestamp` TIMESTAMP ON UPDATE CURRENT_TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP;
+
+-- Se modifico la tabla de cat_nivel3
+
+ALTER TABLE `cat_nivel3` CHANGE `notforloan` `id_disponibilidad` TINYINT( 5 ) NULL DEFAULT '0';
+ALTER TABLE `cat_nivel3` CHANGE `wthdrawn` `para_sala` SMALLINT( 1 ) NOT NULL DEFAULT '0';
+ALTER TABLE `cat_nivel3` CHANGE `homebranch` `id_ui_origen` VARCHAR( 4 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL;
+ALTER TABLE `cat_nivel3` CHANGE `holdingbranch` `id_ui_poseedora` VARCHAR( 4 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL;
+
+--Modificaciones en PREFERENCIAS
+UPDATE pref_preferencia_sistema SET type = 'text';
+
+--Los que cambiaron a bool
+UPDATE pref_preferencia_sistema SET value = '0',type = 'bool' WHERE variable = 'insecure';
+UPDATE pref_preferencia_sistema SET value = '0',type = 'bool' WHERE variable = 'ldapenabled';
+UPDATE pref_preferencia_sistema SET value = '1',type = 'bool' WHERE variable = 'UploadPictureFromOPAC';
+UPDATE pref_preferencia_sistema SET value = '1',type = 'bool' WHERE variable = 'sanctions';
+
+--Todos los demas bool
+UPDATE pref_preferencia_sistema SET type = 'bool' WHERE variable = 'autoActivarPersona' OR variable = 'autoMemberNum' OR variable = 'CheckUpdateDataEnabled' OR variable = 'circulation' OR variable = 'EnabledMailSystem' OR variable = 'habilitar_irregulares' OR variable = 'keeppasswordalive' OR variable = 'logSearchINTRA' OR variable = 'logSearchOPAC' OR variable = 'marc' OR variable = 'opacSearchAnonymous' OR variable = 'opacUnavail' OR variable = 'print_renew' OR variable = 'reminderMail' OR variable = 'selectHomeBranch' OR variable = 'showHistoricReserves' OR variable = 'susp' OR variable = 'usercourse' OR variable = 'viewDetail' OR variable = 'virtuallibrary';
+
+-- Los Valores Autorizados
+UPDATE pref_preferencia_sistema SET options = 'dateformat', type = 'valAuto' WHERE variable = 'dateformat';
+UPDATE pref_preferencia_sistema SET options = 'acquisitions', type = 'valAuto' WHERE variable = 'acquisitions';
+
+-- Tablas de Referencia
+UPDATE pref_preferencia_sistema SET options = 'ui|nombre', type = 'referencia' WHERE variable = 'defaultbranch';
+UPDATE pref_preferencia_sistema SET options = 'soporte|description',value='1', type = 'referencia' WHERE variable = 'defaultsuport';
+UPDATE pref_preferencia_sistema SET options = 'nivel_bibliografico|description', type = 'referencia' WHERE variable = 'defaultlevel';
+UPDATE pref_preferencia_sistema SET options = 'tipo_documento_usr|descripcion', type = 'referencia' WHERE variable = 'defaultTipoDoc';
+UPDATE pref_preferencia_sistema SET options = 'tipo_prestamo|description', type = 'referencia' WHERE variable = 'defaultissuetype';
+UPDATE pref_preferencia_sistema SET options = 'tipo_ejemplar|nombre', type = 'referencia' WHERE variable = 'defaultTipoNivel3';
+UPDATE pref_preferencia_sistema SET options = 'disponibilidad|nombre',value='0', type = 'referencia' WHERE variable = 'defaultDisponibilidad';
+UPDATE pref_preferencia_sistema SET options = 'tipo_socio|description', type = 'referencia' WHERE variable = 'defaultCategoriaSocio';
+
+--Los TextaArea
+UPDATE pref_preferencia_sistema SET type = 'texta' WHERE variable = 'mailMessage' OR variable = 'reserveMessage' OR  variable = 'reminderMessage' OR  variable = 'mailMensajeVencido';
+
+--Tipos de socios
+INSERT INTO `pref_tabla_referencia` (`nombre_tabla` , `alias_tabla`) VALUES ('usr_ref_categoria_socio', 'tipo_socio');
+--Tipos de documento
+INSERT INTO `pref_tabla_referencia` (`nombre_tabla` , `alias_tabla`) VALUES ('usr_ref_tipo_documento', 'tipo_documento_usr');
+
+TRUNCATE TABLE `usr_ref_tipo_documento`;
+ALTER TABLE `usr_ref_tipo_documento` DROP `id_tipo_documento`;
+ALTER TABLE `usr_ref_tipo_documento` ADD PRIMARY KEY ( `nombre` );
+
+INSERT INTO `usr_ref_tipo_documento` (`nombre`, `descripcion`) VALUES ('DNI', 'DNI'),('LC', 'LC'),('PAS', 'PAS'),('LE', 'LE');
+
+--Idioma
+ALTER TABLE `ref_idioma` ADD PRIMARY KEY ( `idLanguage` ) ;
+
+TRUNCATE pref_valor_autorizado;
+INSERT INTO `pref_valor_autorizado` (`id`, `category`, `authorised_value`, `lib`) VALUES
+(6, 'loan', '1', 'Para Sala'),
+(7, 'loan', '0', 'Domiciliario'),
+(8, 'wthdrawn', '0', 'Disponible'),
+(9, 'wthdrawn', '1', 'Perdido'),
+(10, 'wthdrawn', '4', 'Baja'),
+(11, 'wthdrawn', '5', 'Ejemplar deteriorado'),
+(12, 'wthdrawn', '6', 'En Encuadernación'),
+(13, 'dateformat', 'metric', 'metric'),
+(14, 'dateformat', 'us', 'us'),
+(15, 'dateformat', 'iso', 'iso'),
+(18, 'acquisitions', 'simple', 'simple'),
+(19, 'acquisitions', 'normal', 'normal');
+
+--HISTORICO DE CIRCULACION!!!
+
+ALTER TABLE `rep_historial_circulacion` CHANGE `borrowernumber` `nro_socio` INT( 11 ) NOT NULL DEFAULT '0' ;
+ALTER TABLE `rep_historial_circulacion` CHANGE `branchcode` `id_ui` VARCHAR( 4 ) NULL DEFAULT NULL;
+ALTER TABLE `rep_historial_circulacion` CHANGE `type` `tipo` VARCHAR( 15 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL ,
+CHANGE `date` `fecha` DATE NOT NULL DEFAULT '0000-00-00',
+CHANGE `end_date` `fecha_fin` DATE NULL DEFAULT NULL ,
+CHANGE `issuetype` `tipo_prestamo` CHAR( 2 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL ;
+
+-- se modifico la tabla cat_estructura_catalogacion, se agrego el siguiente campo
+
+ALTER TABLE `cat_estructura_catalogacion` ADD `fijo` TINYINT( 1 ) NOT NULL DEFAULT '0' COMMENT 'modificable = 0, No modificable = 1' AFTER `idCompCliente` ;
+
+ALTER TABLE `cat_estructura_catalogacion` ADD `repetible` TINYINT( 1 ) NOT NULL DEFAULT '0' COMMENT 'repetible = 1 (es petible)' AFTER `fijo` ;
+
+ALTER TABLE `cat_nivel1` CHANGE `autor` `autor` INT( 11 ) NULL 
+
+insert into `pref_tabla_referencia`(`id`,`nombre_tabla`,`alias_tabla`) values ( NULL,'ref_estado','estado')
+
+--Poner rename de ref_disponibilidad y agregar DISPONIBILIDAD GASPAR
+
+
+-- ESTO ES LO MINIMO E INDISPENSABLE PARA EL CATALOGO DEBE ESTAR SI O SI
+
+
+INSERT INTO `pref_informacion_referencia` (`idinforef`, `idestcat`, `referencia`, `orden`, `campos`, `separador`) VALUES 
+(1, 0, 'autores', 'nacionalidad', 'id, nombre, apellido, nacionalidad, completo', '?'),
+(2, 0, 'temas', 'nombre', 'nombre', ','),
+(3, 0, 'bibliolevel', 'description', 'description', ','),
+(4, 0, 'soporte', 'description', 'idSupport, description', ','),
+(5, 0, 'countries', 'printable_name', 'printable_name', '/'),
+(6, 0, 'languages', 'description', 'description', '/'),
+(7, 0, 'ui', 'nombre', 'id_ui, nombre', ','),
+(8, 0, 'tipo_ejemplar', 'nombre', 'id_tipo_doc, nombre', ','),
+(9, 0, 'disponibilidad', 'nombre', 'codigo, nombre', ',');
+
+
+
+INSERT INTO `cat_estructura_catalogacion` (`id`, `campo`, `subcampo`, `itemtype`, `liblibrarian`, `tipo`, `referencia`, `nivel`, `obligatorio`, `intranet_habilitado`, `visible`, `idinforef`, `idCompCliente`, `fijo`) VALUES 
+(51, '245', 'a', 'ALL', 'Título', 'text', 0, 1, 1, 1, 1, 0, '1', 1),
+(52, '995', 'd', 'ALL', 'Unidad de Información de Origen', 'combo', 1, 3, 1, 2, 1, 7, '2', 1),
+(53, '995', 'c', 'ALL', 'Unidad de Información', 'combo', 1, 3, 1, 3, 1, 7, '3', 1),
+(54, '995', 'o', 'ALL', 'Disponibilidad', 'combo', 1, 3, 1, 4, 1, 9, '4', 1),
+(55, '995', 'e', 'ALL', 'Estado', 'combo', 1, 3, 1, 5, 1, 9, '5', 1),
+(56, '910', 'a', 'ALL', 'Tipo de Documento', 'combo', 1, 2, 1, 6, 1, 8, '6', 1);
+
+-- FIN ESTO ES LO MINIMO E INDISPENSABLE PARA EL CATALOGO DEBE ESTAR SI O SI
+
+
+-- se creo la tabla de disponibilidad
+
+CREATE TABLE `ref_disponibilidad` (
+  `codigo` tinyint(5) NOT NULL default '0',
+  `nombre` varchar(255) NOT NULL default '',
+  PRIMARY KEY  (`codigo`),
+  UNIQUE KEY `nombre` (`nombre`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+
+ALTER TABLE `cat_nivel2` CHANGE `id2` `id2` INT( 11 ) NOT NULL AUTO_INCREMENT ,
+CHANGE `tipo_documento` `tipo_documento` VARCHAR( 4 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL ,
+CHANGE `timestamp` `timestamp` TIMESTAMP ON UPDATE CURRENT_TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP ,
+CHANGE `id1` `id1` INT( 11 ) NOT NULL ,
+CHANGE `nivel_bibliografico` `nivel_bibliografico` VARCHAR( 2 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL ,
+CHANGE `soporte` `soporte` VARCHAR( 3 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL ,
+CHANGE `pais_publicacion` `pais_publicacion` CHAR( 2 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL ,
+CHANGE `lenguaje` `lenguaje` CHAR( 2 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL ,
+CHANGE `ciudad_publicacion` `ciudad_publicacion` VARCHAR( 20 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL ,
+CHANGE `anio_publicacion` `anio_publicacion` VARCHAR( 15 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL 
+
+-- se modifico el campo para_sala a id_estado en cat_nivel3, ahora id_estado es una referencia a ref_estado
+ ALTER TABLE `cat_nivel3` CHANGE `para_sala` `id_estado` TINYINT( 5 ) NOT NULL DEFAULT '0' 
+
+-- se creo la siguiente tabla para manejar los estados del ejemplar
+CREATE TABLE IF NOT EXISTS `ref_estado` (
+  `codigo` tinyint(5) NOT NULL default '0',
+  `nombre` varchar(255) NOT NULL default '',
+  PRIMARY KEY  (`codigo`),
+  UNIQUE KEY `nombre` (`nombre`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Volcar la base de datos para la tabla `ref_estado`
+--
+
+INSERT INTO `ref_estado` (`codigo`, `nombre`) VALUES
+(4, 'Baja'),
+(2, 'Compartido'),
+(0, 'Disponible'),
+(5, 'Ejemplar deteriorado'),
+(6, 'En Encuadernación'),
+(1, 'Perdido');
+
+
+
+CREATE TABLE IF NOT EXISTS `ref_disponibilidad` (
+  `codigo` tinyint(5) NOT NULL default '0',
+  `nombre` varchar(255) NOT NULL default '',
+  PRIMARY KEY  (`codigo`),
+  UNIQUE KEY `nombre` (`nombre`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Volcar la base de datos para la tabla `ref_disponibilidad`
+--
+
+INSERT INTO `ref_disponibilidad` (`codigo`, `nombre`) VALUES
+(0, 'Domiciliario'),
+(1, 'Para Sala'),
+(2, 'Descarga');
+
+--
+-- Para PRESTAMOS!!
+--
+
+DROP TABLE`circ_prestamo`;
+CREATE TABLE `circ_prestamo` (
+  `id_prestamo` int(11) NOT NULL auto_increment,
+  `id3` int(11) NOT NULL,
+  `nro_socio` int(11) NOT NULL default '0',
+  `tipo_prestamo` char(2) NOT NULL default 'DO',
+  `fecha_prestamo` date default NULL,
+  `id_ui` char(4) default NULL,
+  `id_ui_prestamo` char(4) default NULL,
+  `fecha_devolucion` date default NULL,
+  `renovaciones` tinyint(4) default NULL,
+  `fecha_ultima_renovacion` date default NULL,
+  `timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
+  PRIMARY KEY  (`id_prestamo`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+
+-- Sanciones!!
+
+ ALTER TABLE `circ_sancion` CHANGE `sanctionnumber` `id_sancion` INT( 11 ) NOT NULL AUTO_INCREMENT ,
+CHANGE `sanctiontypecode` `tipo_sancion` INT( 11 ) NULL DEFAULT '0',
+CHANGE `reservenumber` `id_reserva` INT( 11 ) NULL DEFAULT NULL ,
+CHANGE `borrowernumber` `nro_socio` INT( 11 ) NOT NULL DEFAULT '0',
+CHANGE `startdate` `fecha_comienzo` DATE NOT NULL DEFAULT '0000-00-00',
+CHANGE `enddate` `fecha_final` DATE NOT NULL DEFAULT '0000-00-00',
+CHANGE `delaydays` `dias_sancion` INT( 11 ) NULL DEFAULT '0',
+CHANGE `itemnumber` `id3` INT( 11 ) NULL DEFAULT NULL ;
+
+ALTER TABLE `circ_sancion` ADD INDEX ( `nro_socio` ) ;
+
+ALTER TABLE `rep_historial_sancion` CHANGE `id` `id` INT( 11 ) NOT NULL AUTO_INCREMENT ,
+CHANGE `type` `tipo` VARCHAR( 15 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL ,
+CHANGE `borrowernumber` `nro_socio` INT( 11 ) NOT NULL DEFAULT '0',
+CHANGE `responsable` `responsable` VARCHAR( 20 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL ,
+CHANGE `timestamp` `timestamp` TIMESTAMP ON UPDATE CURRENT_TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ,
+CHANGE `date` `fecha` DATE NOT NULL DEFAULT '0000-00-00',
+CHANGE `end_date` `fecha_final` DATE NULL DEFAULT NULL ,
+CHANGE `sanctiontypecode` `tipo_sancion` INT( 11 ) NULL DEFAULT '0' ;
+
+-- CAMBIOS GASPAREÑOS EL 23/03/2009
+
+ALTER TABLE `circ_prestamo` CHANGE `id_ui` `id_ui_origen` CHAR( 4 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL;
+
+ALTER TABLE `circ_prestamo` CHANGE `fecha_prestamo` `fecha_prestamo` VARCHAR( 20 ) NULL DEFAULT NULL ,
+CHANGE `fecha_devolucion` `fecha_devolucion` VARCHAR( 20 ) NULL DEFAULT NULL ,
+CHANGE `fecha_ultima_renovacion` `fecha_ultima_renovacion` VARCHAR( 20 ) NULL DEFAULT NULL ;
+
+ALTER TABLE `circ_sancion` ADD INDEX ( `nro_socio` ) ;
+
+ALTER TABLE `circ_reserva` CHANGE `reservenumber` `id_reserva` INT( 11 ) NOT NULL AUTO_INCREMENT ,
+CHANGE `reservedate` `fecha_reserva` DATE NOT NULL DEFAULT '0000-00-00'
+
+ALTER TABLE `circ_reserva` CHANGE `notificationdate` `fecha_notificacion` DATE NULL DEFAULT NULL ,
+CHANGE `reminderdate` `fecha_recordatorio` DATE NULL DEFAULT NULL 
+ALTER TABLE `circ_sancion` ADD INDEX ( `nro_socio` ) ;
+
+
+ALTER TABLE circ_reserva CHANGE fecha_reserva fecha_reserva VARCHAR( 20 ) NOT NULL DEFAULT '0000-00-00' ,
+CHANGE fecha_notificacion fecha_notificacion VARCHAR( 20 ) NULL DEFAULT NULL ,
+CHANGE fecha_recodatorio fecha_recordatorio VARCHAR( 20 ) NULL DEFAULT NULL ;
+
+ALTER TABLE `rep_registro_modificacion` CHANGE `responsable` `responsable` VARCHAR( 16 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT '0';
+
+
+--TIPOS DE PRESTAMO (26/03/2209 13:00)
+
+ ALTER TABLE `circ_ref_tipo_prestamo` CHANGE `issuecode` `id_tipo_prestamo` CHAR( 2 ) CHARACTER SET latin1 COLLATE latin1_spanish_ci NOT NULL ,
+CHANGE `description` `descripcion` TEXT CHARACTER SET latin1 COLLATE latin1_spanish_ci NULL DEFAULT NULL ,
+CHANGE `notforloan` `id_disponibilidad` TINYINT( 1 ) NOT NULL DEFAULT '0',
+CHANGE `maxissues` `prestamos` INT( 11 ) NOT NULL DEFAULT '0',
+CHANGE `daysissues` `dias_prestamo` INT( 11 ) NOT NULL DEFAULT '0',
+CHANGE `renew` `renovaciones` INT( 11 ) NOT NULL DEFAULT '0',
+CHANGE `renewdays` `dias_renovacion` TINYINT( 3 ) NOT NULL DEFAULT '0',
+CHANGE `dayscanrenew` `dias_antes_renovacion` TINYINT( 10 ) NOT NULL DEFAULT '0',
+CHANGE `enabled` `habilitado` TINYINT( 4 ) NULL DEFAULT '1';
+
+--TIPOS DE SANCION (26/03/2209 14:00)
+
+ ALTER TABLE `circ_tipo_prestamo_sancion` CHANGE `sanctiontypecode` `tipo_sancion` INT( 11 ) NOT NULL DEFAULT '0',
+CHANGE `issuecode` `tipo_prestamo` CHAR( 2 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL;
+
+ ALTER TABLE `circ_tipo_sancion` CHANGE `sanctiontypecode` `tipo_sancion` INT( 11 ) NOT NULL AUTO_INCREMENT ,
+CHANGE `categorycode` `categoria_socio` CHAR( 2 ) CHARACTER SET latin1 COLLATE latin1_spanish_ci NOT NULL ,
+CHANGE `issuecode` `tipo_prestamo` CHAR( 2 ) CHARACTER SET latin1 COLLATE latin1_spanish_ci NOT NULL ;
+
+-- Se modifico el siguiente campo de cat_estructra_catalogacion (30/03/09)
+
+ ALTER TABLE `cat_estructura_catalogacion` CHANGE `tipo` `tipo` VARCHAR( 255 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL  
+
+
+-- GASPAR EL 27/03/2009
+
+CREATE TABLE `V3`.`cat_historico_disponibilidad` (
+`id_detalle` int( 11 ) NOT NULL AUTO_INCREMENT ,
+`id3` int( 11 ) NOT NULL ,
+`detalle` varchar( 30 ) NOT NULL ,
+`timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP ,
+`fecha` varchar( 10 ) NOT NULL default '0000-00-00',
+`tipo_prestamo` varchar( 40 ) NOT NULL ,
+`id_ui` varchar( 5 ) NOT NULL ,
+PRIMARY KEY ( `id_detalle` )
+) ENGINE = InnoDB DEFAULT CHARSET = latin1 AUTO_INCREMENT =2736;
+
+INSERT INTO `V3`.`cat_historico_disponibilidad`
+SELECT *
+FROM `V3_NEW`.`cat_detalle_disponibilidad` ;
+
+DROP TABLE `V3_NEW`.`cat_detalle_disponibilidad` ;
+
+UPDATE `ref_disponibilidad` SET `nombre` = 'PRESTAMO' WHERE `ref_disponibilidad`.`codigo` =3 LIMIT 1 ;
+
+UPDATE `ref_disponibilidad` SET `nombre` = 'SALA DE LECTURA' WHERE `ref_disponibilidad`.`codigo` =2 LIMIT 1 ;
+
+
+-- (30-03-09)
+--no me funciono el sql update anterior asi q arme este, pal q le sirve ;)
+
+ ALTER TABLE `cat_detalle_disponibilidad` CHANGE `id3` `id3` VARCHAR( 10 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL ,
+CHANGE `avail` `detalle` VARCHAR( 30 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL ,
+CHANGE `timestamp` `timestamp` TIMESTAMP ON UPDATE CURRENT_TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ,
+CHANGE `date` `fecha` DATE NOT NULL DEFAULT '0000-00-00',
+CHANGE `loan` `tipo_prestamo` VARCHAR( 15 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL ,
+CHANGE `branch` `id_ui` VARCHAR( 5 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL 
+
+
+ALTER TABLE `cat_detalle_disponibilidad` ADD `id_detalle` INT( 11 ) NOT NULL AUTO_INCREMENT PRIMARY KEY FIRST ;
+RENAME TABLE `cat_detalle_disponibilidad`  TO `cat_historico_disponibilidad` ;
+
+
+
+
+--GASPAR 30/03/2009 casi a las 16:00
+
+ALTER TABLE `rep_historial_sancion` CHANGE `tipo` `tipo_operacion` VARCHAR( 30 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL ,
+CHANGE `nro_socio` `nro_socio` VARCHAR( 16 ) NOT NULL DEFAULT '0',
+CHANGE `responsable` `responsable` VARCHAR( 16 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL;
+
+CREATE TABLE `ref_tipo_operacion` (
+`id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY ,
+`descripcion` VARCHAR( 20 ) NOT NULL
+) ENGINE = InnoDB ;
+
+-- CADA VEZ QUE EN UNA TABLA SE NECESITEN USAR FUNCIONES DE AGREGACION (MAX, MIN, AVG, etc...), CREAR (SI YA NO ESTÁ) UN CAMPO EN LA ESTRUCTURA DE
+-- LA TABLA, POR CONVENCION SE PUEDE NOMBRAR `agregacion_temp`, VARCHAR (255)
+
+ALTER TABLE `circ_prestamo` ADD `agregacion_temp` VARCHAR( 255 ) NULL ;
+
+ALTER TABLE `rep_busqueda` CHANGE `borrower` `id_socio` INT( 11 ) NULL DEFAULT NULL;
+ALTER TABLE `usr_socio` ADD `agregacion_temp` VARCHAR( 255 ) NULL ;
+
+
+ALTER TABLE `cat_detalle_disponibilidad` CHANGE `id3` `id3` INT( 11 ) NOT NULL ,
+CHANGE `avail` `estado` VARCHAR( 30 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL ,
+CHANGE `timestamp` `timestamp` TIMESTAMP ON UPDATE CURRENT_TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ,
+CHANGE `date` `fecha` DATE NOT NULL DEFAULT '0000-00-00',
+CHANGE `loan` `disponibilidad` VARCHAR( 15 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL ,
+CHANGE `branch` `id_ui` VARCHAR( 5 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
+CHANGE `fecha` `fecha` VARCHAR( 10 ) NOT NULL DEFAULT '0000-00-00',
+ADD `agregacion_temp` VARCHAR( 255 ) NOT NULL,
+ADD `id_detalle_disponibilidad` INT NOT NULL AUTO_INCREMENT PRIMARY KEY FIRST,
+ADD `mes_agregacion` VARCHAR( 255 ) NOT NULL ,
+ADD `anio_agregacion` VARCHAR( 255 ) NOT NULL ;
+
+ALTER TABLE `cat_nivel1_repetible` ADD `agregacion_temp` VARCHAR( 255 ) NOT NULL ;
+
+ALTER TABLE `cat_nivel2_repetible` ADD `agregacion_temp` VARCHAR( 255 ) NOT NULL ;
+
+ALTER TABLE `cat_nivel3_repetible` ADD `agregacion_temp` VARCHAR( 255 ) NOT NULL ;
+
+
+ALTER TABLE `cat_nivel3` ADD `agregacion_temp` VARCHAR( 255 ) NOT NULL ;
+
+ALTER TABLE `rep_historial_busqueda` CHANGE `HTTP_USER_AGENT` `agent` VARCHAR( 255 ) NOT NULL ;
+ALTER TABLE `rep_busqueda` CHANGE `fecha` `fecha` VARCHAR( 12 ) NOT NULL ;
+
+--MIGUEL (14/04/09) hasta aca actualizada la 163.10.20.30
+
+
+--GASPAR
+ ALTER TABLE `usr_socio` CHANGE `agregacion_temp` `agregacion_temp` VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL  
+
+--Matias (22/04/2009 - 13:00)
+-- Reglas de sanciones !!!
+
+ ALTER TABLE `circ_regla_tipo_sancion` CHANGE `sanctiontypecode` `tipo_sancion` INT( 11 ) NOT NULL DEFAULT '0',
+CHANGE `sanctionrulecode` `regla_sancion` INT( 11 ) NOT NULL DEFAULT '0',
+CHANGE `orden` `orden` INT( 11 ) NOT NULL DEFAULT '1',
+CHANGE `amount` `cantidad` INT( 11 ) NOT NULL DEFAULT '1';
+
+ ALTER TABLE `circ_regla_sancion` CHANGE `sanctionrulecode` `regla_sancion` INT( 11 ) NOT NULL AUTO_INCREMENT ,
+CHANGE `sanctiondays` `dias_sancion` INT( 11 ) NOT NULL DEFAULT '0',
+CHANGE `delaydays` `dias_demora` INT( 11 ) NOT NULL DEFAULT '0';
+
+--Moficaciones
+
+Nueva Organizacion de las js
+
+usr/local/koha
+		=> /includes/  js comunes a los dos sitios OPAC e INTRA  (NUEVO)
+		=> /intranet-tmpl/blue/includes/ solo js utilizadas en la INTRA
+		=> /opac-tmpl/default/includes/  solo js utilizadas en el OPAC
+
+con esta nueva organizacion se evita tener que modificar dos helpers, por ej. AjaxHelper de ser necesario.
+
+Agregar esto en opac y ssl en /etc/apache2/sites-enabled/
+para q apache pueda leer las js comunes a los dos sitios
+
+
+Alias /includes/ "/usr/local/koha/includes/"
+<Directory /usr/local/koha/includes/ >
+ Options  -Indexes
+  Order allow,deny
+  Allow from all
+</Directory>
+
+--Fin Modificaciones
+
+
+--
+-- Estructura de tabla para la tabla `cat_control_sinonimo_editorial`
+--
+
+CREATE TABLE IF NOT EXISTS `cat_control_sinonimo_editorial` (
+  `id` int(11) NOT NULL,
+  `editorial` varchar(255) NOT NULL,
+  PRIMARY KEY  (`id`,`editorial`),
+  KEY `editorial` (`editorial`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+
+--
+-- Estructura de tabla para la tabla `cat_editorial`
+--
+
+CREATE TABLE IF NOT EXISTS `cat_editorial`(
+  `id` int(11) NOT NULL auto_increment,
+  `editorial` text NOT NULL,
+  PRIMARY KEY  (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1448 
+
+
+--Se agrega el campo token en la tabla 
+
+ALTER TABLE `sist_sesion` ADD `token` VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL AFTER `nroRandom` ;
+
+-- Preferencias
+
+UPDATE pref_preferencia_sistema SET `options` = 'tipo_prestamo|descripcion' WHERE CONVERT( `pref_preferencia_sistema`.`variable` USING utf8 ) = 'defaultissuetype' LIMIT 1 ;
+
+
+ALTER TABLE `cat_control_seudonimo_autor`
+CHANGE `id2` `id_autor_seudonimo` INT( 11 ) NOT NULL,
+CHANGE `id` `id_autor` INT( 11 ) NOT NULL;
+
+ ALTER TABLE `cat_control_seudonimo_tema` 
+CHANGE `id2` `id_tema_seudonimo` INT( 11 ) NOT NULL,
+ CHANGE `id` `id_tema` INT( 11 ) NOT NULL;
+
+ALTER TABLE `cat_control_seudonimo_editorial`
+CHANGE `id2` `id_editorial_seudonimo` INT( 11 ) NOT NULL,
+CHANGE `id` `id_editorial` INT( 11 ) NOT NULL;
+
+--para al que le haga falta
+
+ ALTER TABLE `cat_nivel1_repetible` CHANGE `agregacion_temp` `agregacion_temp` VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL ;
+ ALTER TABLE `cat_nivel2_repetible` CHANGE `agregacion_temp` `agregacion_temp` VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL  ;
+ ALTER TABLE `cat_nivel3` CHANGE `agregacion_temp` `agregacion_temp` VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL;
+
+--nuevas preferencias, para permitir o no circulacion de otro lugar que no sea Circulacion
+INSERT INTO `pref_preferencia_sistema` (`variable` ,`value` ,`explanation` ,`options` ,`type`)
+VALUES ('circularDesdeDetalleUsuario', '1', 'se permite (=1) circular desde el detalle del usuario', NULL , 'bool'), 
+('circularDesdeDetalleDelRegistro', '1', 'se permite (=1) circular desde el detalle del registro', NULL , 'bool');
+
+ALTER TABLE `usr_persona` ADD UNIQUE (
+`nro_documento` ,
+`tipo_documento`
+);
+
+
+ALTER TABLE `usr_socio` ADD `nombre_apellido_autorizado` VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL ,
+ADD `dni_autorizado` VARCHAR( 16 ) NULL ,
+ADD `telefono_autorizado` VARCHAR( 255 ) NULL ;
+
+
+INSERT INTO `pref_preferencia_sistema` (
+`variable` ,
+`value` ,
+`explanation` ,
+`options` ,
+`type`
+)
+VALUES (
+'auto-nro_socio_from_dni', '1', 'Preferencia que configura el auto-generar de nro de socio. Si es 0, es el autogenerar "serial", sino sera el documento.', NULL , NULL );
+
+--En cat_nivel3 el barcode es unico
+ALTER TABLE `cat_nivel3` ADD UNIQUE( `barcode`)
+
+--index
+
+ALTER TABLE `usr_persona` ADD INDEX ( `apellido` ) ;
+ALTER TABLE `usr_persona` ADD INDEX ( `nro_documento` ) ;
+ALTER TABLE `usr_persona` ADD INDEX ( `legajo` )  ;
+
+INSERT INTO `pref_preferencia_sistema` (
+`variable` ,
+`value` ,
+`explanation` ,
+`options` ,
+`type`
+)
+VALUES 
+('showMenuItem_circ_prestamos', '1', 'Preferencia que configura si el menu item dado se muestra o no en el menu (1 sí ; 0 no).', NULL , 'bool' ),
+('showMenuItem_circ_devolucion_renovacion', '1', 'Preferencia que configura si el menu item dado se muestra o no en el menu (1 sí ; 0 no).', NULL , 'bool' );
+
+
+--Agregamos la tabla de permisos sobre catalogo---
+
+ CREATE TABLE `perm_catalogo` (
+`id_persona` INT( 11 ) NOT NULL ,
+`ui` VARCHAR( 4 ) NOT NULL ,
+`tipo_documento` VARCHAR( 4 ) NOT NULL ,
+`datos_nivel1` VARBINARY( 8 ) NOT NULL DEFAULT '0000',
+`datos_nivel2` VARBINARY( 8 ) NOT NULL DEFAULT '0000',
+`datos_nivel3` VARBINARY( 8 ) NOT NULL DEFAULT '0000',
+`estantes_virtuales` VARBINARY( 8 ) NOT NULL DEFAULT '0000',
+`estructura_catalogacion_n1` VARBINARY( 8 ) NOT NULL DEFAULT '0000',
+`estructura_catalogacion_n2` VARBINARY( 8 ) NOT NULL DEFAULT '0000',
+`estructura_catalogacion_n3` VARBINARY( 8 ) NOT NULL DEFAULT '0000',
+`tablas_de_refencia` VARBINARY( 8 ) NOT NULL DEFAULT '0000',
+`control_de_autoridades` VARBINARY( 8 ) NOT NULL DEFAULT '0000',
+`id` INT( 11 ) NOT NULL AUTO_INCREMENT PRIMARY KEY ,
+UNIQUE (
+`id_persona` ,
+`ui` ,
+`tipo_documento`
+)
+
+) ENGINE = InnoDB; 
+
+
+ALTER TABLE `cat_encabezado_campo_opac` ADD `visible` TINYINT( 1 ) NOT NULL DEFAULT '1' AFTER `nivel` ;
+
+
+
+ ALTER TABLE `perm_catalogo` CHANGE `datos_nivel1` `datos_nivel1` VARBINARY( 8 ) NOT NULL DEFAULT '00000',
+ CHANGE `datos_nivel2` `datos_nivel2` VARBINARY( 8 ) NOT NULL DEFAULT '00000',
+ CHANGE `datos_nivel3` `datos_nivel3` VARBINARY( 8 ) NOT NULL DEFAULT '00000',
+ CHANGE `estantes_virtuales` `estantes_virtuales` VARBINARY( 8 ) NOT NULL DEFAULT '00000',
+ CHANGE `estructura_catalogacion_n1` `estructura_catalogacion_n1` VARBINARY( 8 ) NOT NULL DEFAULT '00000',
+ CHANGE `estructura_catalogacion_n2` `estructura_catalogacion_n2` VARBINARY( 8 ) NOT NULL DEFAULT '00000',
+ CHANGE `estructura_catalogacion_n3` `estructura_catalogacion_n3` VARBINARY( 8 ) NOT NULL DEFAULT '00000',
+ CHANGE `tablas_de_refencia` `tablas_de_refencia` VARBINARY( 8 ) NOT NULL DEFAULT '00000',
+ CHANGE `control_de_autoridades` `control_de_autoridades` VARBINARY( 8 ) NOT NULL DEFAULT '00000';
+
+ALTER TABLE `perm_catalogo` DROP `id_persona`;
+
+ALTER TABLE `perm_catalogo` ADD `id_persona` INT( 11 ) UNSIGNED NOT NULL ;
+
+ALTER TABLE `perm_catalogo` ADD `nro_socio` VARCHAR( 16 ) NOT NULL ;
+
+ALTER TABLE `perm_catalogo` DROP INDEX `id_persona` ,
+ADD UNIQUE `id_persona` ( `ui` , `tipo_documento` , `nro_socio` );
+
+
+--para testear
+
+INSERT INTO `perm_catalogo` (`ui`, `tipo_documento`, `datos_nivel1`, `datos_nivel2`, `datos_nivel3`, `estantes_virtuales`, `estructura_catalogacion_n1`, `estructura_catalogacion_n2`, `estructura_catalogacion_n3`, `tablas_de_refencia`, `control_de_autoridades`, `nro_socio`) VALUES
+('CD', 'LIB', '00000', '00000', '00010000', '00000', '00000', '00000', '00000', '00000', '00000', '26320');
+
+
+ALTER TABLE `perm_catalogo` ADD `usuarios` VARCHAR( 8 ) NOT NULL DEFAULT '00000000' AFTER `control_de_autoridades` ;
+ALTER TABLE `perm_catalogo` ADD `sistema` VARCHAR( 8 ) NOT NULL DEFAULT '00000001' AFTER `usuarios` ;
+ALTER TABLE `perm_catalogo` ADD `undefined` VARCHAR( 8 ) NOT NULL DEFAULT '00000001' AFTER `sistema` ;
+
+ALTER TABLE `rep_historial_circulacion` CHANGE `tipo` `tipo_operacion` VARCHAR( 15 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL;
+ALTER TABLE `rep_historial_circulacion` CHANGE `responsable` `responsable` VARCHAR( 16 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL;
+ALTER TABLE `rep_historial_circulacion` CHANGE `nota` `nota` VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL;
+
+
+--se modifico el campo rep_busqueda
+
+ALTER TABLE `rep_busqueda` CHANGE `id_socio` `nro_socio` VARCHAR( 16 ) NULL DEFAULT NULL  
+
+ALTER TABLE `cat_nivel1` CHANGE `titulo` `titulo` VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL;
+
+
+
+
+--el historico de prestamos se va a manejar en otra tabla, cuando se devuelve un prestamo, la info del prestamo se pasa a rep_historial_prestamo,
+--en vez de quedar en circ_prestamo q crece mucho y es necesaria para manejar los prestamos activos
+
+ DROP TABLE `rep_historial_prestamo`  ;
+
+CREATE TABLE IF NOT EXISTS `rep_historial_prestamo` (
+  `id_historial_prestamo` int(11) NOT NULL auto_increment,
+  `id3` int(11) NOT NULL,
+  `nro_socio` int(11) NOT NULL default '0',
+  `tipo_prestamo` char(2) NOT NULL default 'DO',
+  `fecha_prestamo` varchar(20) default NULL,
+  `id_ui_origen` char(4) default NULL,
+  `id_ui_prestamo` char(4) default NULL,
+  `fecha_devolucion` varchar(20) default NULL,
+  `renovaciones` tinyint(4) default NULL,
+  `fecha_ultima_renovacion` varchar(20) default NULL,
+  `timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
+  `agregacion_temp` varchar(255) default NULL,
+  PRIMARY KEY  (`id_historial_prestamo`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+
+
+
+#RETOMANDO CIRCULACION NRO DE SOCIO EN TODOS LADOS (DECISION UNILATERAL) - MATIAS 
+ ALTER TABLE `rep_historial_prestamo` CHANGE `nro_socio` `nro_socio` VARCHAR( 16 ) NOT NULL ;
+ ALTER TABLE `circ_sancion` CHANGE `nro_socio` `nro_socio` VARCHAR( 16 ) NOT NULL ;
+ ALTER TABLE `circ_prestamo` CHANGE `nro_socio` `nro_socio` VARCHAR( 16 ) NOT NULL ;
+ ALTER TABLE `rep_historial_circulacion` CHANGE `nro_socio` `nro_socio` VARCHAR( 16 ) NOT NULL ;
+
+DELETE FROM `pref_preferencia_sistema` WHERE CONVERT(`pref_preferencia_sistema`.`variable` USING utf8) = 'defaultbranch';
+
+ALTER TABLE `rep_busqueda` CHANGE `id_socio` `nro_socio` VARCHAR( 16 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL;
+
+--nuevo PM
+
+install Digest::SHA
+--preferencia nueva para los titulos en el OPAC
+
+INSERT INTO `pref_preferencia_sistema` (
+`variable` ,
+`value` ,
+`explanation` ,
+`options` ,
+`type`
+)
+VALUES (
+'titulo_nombre_ui', 'Biblioteca - Facultad de Ciencias Econ&oacute;micas - U.N.L.P.', '', NULL , 'text'
+);
+
+ALTER TABLE `cat_historico_disponibilidad` ADD `agregacion_temp` VARCHAR( 255 ) NOT NULL ,
+      ADD `anio_agregacion` VARCHAR( 255 ) NOT NULL ,
+      ADD `mes_agregacion` VARCHAR( 255 ) NOT NULL ;
+
+
+--se modifica el campo password, para q soporte SHA256
+ ALTER TABLE `usr_socio` CHANGE `password` `password` VARCHAR( 255 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL;
+
+CREATE TABLE `perm_general` (
+`nro_socio` VARCHAR( 16 ) NOT NULL ,
+`ui` VARCHAR( 4 ) NOT NULL ,
+`tipo_documento` VARCHAR( 4 ) NOT NULL ,
+`preferencias` VARBINARY( 8 ) NOT NULL ,
+PRIMARY KEY ( `nro_socio` , `ui` , `tipo_documento` )
+) ENGINE = INNODB DEFAULT CHARSET=utf8;
+
+
+CREATE TABLE IF NOT EXISTS `perm_reporte` (
+  `nro_socio` varchar(16) NOT NULL,
+  `ui` varchar(4) NOT NULL,
+  `tipo_documento` varchar(4) NOT NULL,
+  `catalogo` varbinary(8) NOT NULL,
+  `circulacion` varbinary(8) NOT NULL,
+  PRIMARY KEY  (`nro_socio`,`ui`,`tipo_documento`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+RENAME TABLE `perm_reporte` TO `perm_circulacion` ;
+ALTER TABLE `perm_general` ADD `reportes` VARCHAR( 8 ) NOT NULL DEFAULT '00000000';
+ALTER TABLE `perm_circulacion` CHANGE `circulacion` `prestamos` VARBINARY( 8 ) NOT NULL;
+ALTER TABLE `perm_general` ADD `permisos` VARCHAR( 8 ) NOT NULL DEFAULT '00000000';
+
+ALTER TABLE `usr_socio` ADD `is_super_user` INT( 1 ) NOT NULL DEFAULT '0';
+
+ ALTER TABLE `usr_socio` CHANGE `is_super_user` `is_super_user` INT UNSIGNED NOT NULL DEFAULT '0';
+
+--18/08/09 nueva preferencia para permitir o no el cambio de password desde el OPAC
+INSERT INTO `pref_preferencia_sistema` (
+`variable` ,
+`value` ,
+`explanation` ,
+`options` ,
+`type`
+)
+VALUES (
+'permite_cambio_password_desde_opac', '1', 'permite (=1) o no (=0) el cambio de password desde el OPAC', NULL , 'bool'
+);
+INSERT INTO `cat_autor` (
+`id` ,
+`nombre` ,
+`apellido` ,
+`nacionalidad` ,
+`completo`
+)
+VALUES (
+'0', 'UNDEFINED', 'UNDEFINED', 'UND', 'UNDEFINED'
+);
+
+ALTER TABLE `cat_historico_disponibilidad` ADD `anio_agregacion` VARCHAR( 255 ) NOT NULL ,
+ADD `mes_agregacion` VARCHAR( 255 ) NOT NULL ,
+ADD `agregacion_temp` VARCHAR( 255 ) NOT NULL ;
+
+INSERT INTO `pref_preferencia_sistema` (
+`variable` ,
+`value` ,
+`explanation` ,
+`options` ,
+`type`
+)
+VALUES (
+'puerto_para_https', '444', 'puerto para https', NULL , 'text'
+);
+
+INSERT INTO `pref_preferencia_sistema` (
+`variable` ,
+`value` ,
+`explanation` ,
+`options` ,
+`type`
+)
+VALUES (
+'habilitar_https', 1, 'habilita https (=1) o no (=0)', NULL , 'bool'
+);
+
+
+-- ESTANTES!!!
+
+ ALTER TABLE `cat_estante` CHANGE `shelfnumber` `id` INT( 11 ) NOT NULL DEFAULT '0', 
+    CHANGE `shelfname` `estante` VARCHAR( 512 )  NULL DEFAULT NULL ,
+    CHANGE `type` `tipo` TEXT NOT NULL ,
+    CHANGE `parent` `padre` INT( 11 ) NOT NULL DEFAULT '0';
+
+
+ CREATE TABLE `pref_tabla_referencia_rel_catalogo` (
+`id` INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY ,
+`alias_tabla` VARCHAR( 32 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL ,
+`tabla_referente` VARCHAR( 32 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL ,
+`campo_referente` VARCHAR( 32 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL
+) ENGINE = InnoDB; 
+
+INSERT INTO `pref_tabla_referencia_rel_catalogo` (`id`, `alias_tabla`, `tabla_referente`, `campo_referente`) VALUES
+(1, 'autor', 'cat_nivel1', 'autor');
+
+
+ CREATE TABLE `pref_tabla_alias` (
+`id` INT UNSIGNED NOT NULL AUTO_INCREMENT ,
+`nombre` VARCHAR( 32 ) NOT NULL ,
+`alias` VARCHAR( 32 ) NOT NULL ,
+PRIMARY KEY ( `id` )
+) ENGINE = InnoDB;
+
+
+ ALTER TABLE `cat_contenido_estante` DROP `flags`;
+
+ ALTER TABLE `cat_contenido_estante` CHANGE `id2` `id2` INT( 11 ) NOT NULL ,
+CHANGE `shelfnumber` `id_estante` INT( 11 ) NOT NULL DEFAULT '0';
+
+
+--se permite null en cat_nivelX_repetible
+ ALTER TABLE `cat_nivel3_repetible` CHANGE `dato` `dato` VARCHAR( 250 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL;
+
+ ALTER TABLE `cat_nivel1_repetible` CHANGE `dato` `dato` VARCHAR( 250 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL;
+
+
+--ciudad_publicacion
+
+ALTER TABLE `cat_nivel2` CHANGE `ciudad_publicacion` `ciudad_publicacion` VARCHAR( 255 );
+
+
+
+
+
+--
+-- Estructura de tabla para la tabla `pref_tabla_referencia_rel_catalogo`
+--
+
+DROP TABLE IF EXISTS `pref_tabla_referencia_rel_catalogo`;
+CREATE TABLE IF NOT EXISTS `pref_tabla_referencia_rel_catalogo` (
+  `id` int(10) unsigned NOT NULL auto_increment,
+  `alias_tabla` varchar(32) NOT NULL,
+  `tabla_referente` varchar(32) NOT NULL,
+  `campo_referente` varchar(32) NOT NULL,
+  PRIMARY KEY  (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+--
+-- Volcar la base de datos para la tabla `pref_tabla_referencia_rel_catalogo`
+--
+
+INSERT INTO `pref_tabla_referencia_rel_catalogo` (`id`, `alias_tabla`, `tabla_referente`, `campo_referente`) VALUES
+(1, 'autor', 'cat_nivel1', 'autor'),
+(2, 'ui', 'usr_socio', 'id_ui'),
+(3, 'tipo_ejemplar', 'cat_nivel2', 'tipo_documento'),
+(5, 'ui', 'cat_nivel3', 'id_ui_origen'),
+(6, 'ui', 'cat_nivel3', 'id_ui_poseedora'),
+(7, 'idioma', 'cat_nivel2', 'lenguaje'),
+(8, 'pais', 'cat_nivel2', 'pais_publicacion'),
+(9, 'disponibilidad', 'cat_nivel3', 'id_disponibilidad'),
+(10, 'tipo_prestamo', 'circ_prestamo', 'tipo_prestamo'),
+(11, 'soporte', 'cat_nivel2', 'soporte'),
+(12, 'nivel_bibliografico', 'cat_nivel2', 'nivel_bibliografico'),
+(13, 'tipo_socio', 'usr_socio', 'cod_categoria'),
+(14, 'tipo_documento_usr', 'usr_persona', 'tipo_documento'),
+(15, 'estado', 'cat_nivel3', 'id_estado'),
+(16, 'ciudad', 'usr_persona', 'ciudad');
+
+
+-- ESTANTES AUTOINCREMENTABLES!!!
+ ALTER TABLE `cat_estante` CHANGE `id` `id` INT( 11 ) NOT NULL AUTO_INCREMENT;
+
+-- Z3950
+ ALTER TABLE `pref_servidor_z3950`
+CHANGE `name` `nombre` TEXT  NULL DEFAULT NULL ,
+CHANGE `checked` `habilitado` TINYINT( 1 ) NOT NULL DEFAULT '1';
+
+ ALTER TABLE `pref_servidor_z3950` DROP `rank`;
+
+ ALTER TABLE `pref_servidor_z3950` CHANGE `host` `servidor` VARCHAR( 255 ) NULL DEFAULT NULL ,
+CHANGE `port` `puerto` INT( 11 ) NULL DEFAULT NULL ,
+CHANGE `db` `base` VARCHAR( 255 ) NULL DEFAULT NULL ,
+CHANGE `userid` `usuario` VARCHAR( 255 ) NULL DEFAULT NULL ,
+CHANGE `syntax` `sintaxis` VARCHAR( 80 ) NULL DEFAULT NULL ;
+
+ ALTER TABLE `pref_servidor_z3950` CHANGE `id` `id` INT( 11 ) NOT NULL AUTO_INCREMENT;
+
+
+INSERT INTO `pref_preferencia_sistema` (`variable`, `value`, `explanation`, `options`, `type`) VALUES ('z3950_ cant_resultados', '25', 'Cantidad de resultados por servidor en una busqueda z3950', NULL, 'text');
+
+
+
+DROP TABLE IF EXISTS `cat_z3950_cola`;
+CREATE TABLE IF NOT EXISTS `cat_z3950_cola` (
+  `id` int(11) NOT NULL auto_increment,
+  `busqueda` text,
+  `cola` datetime NOT NULL,
+  `comienzo` datetime default NULL,
+  `fin` datetime default NULL,
+  PRIMARY KEY  (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 ;
+
+
+DROP TABLE IF EXISTS `cat_z3950_resultado`;
+CREATE TABLE IF NOT EXISTS `cat_z3950_resultado` (
+  `id` int(11) NOT NULL auto_increment,
+  `servidor_id` tinyint(4) NOT NULL,
+  `registro` longtext character set utf8,
+  `cola_id` int(11) NOT NULL,
+  PRIMARY KEY  (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 ;
+
+
+
+-- Portadas de Libros
+
+DROP TABLE IF EXISTS `cat_tapa_amazon`;
+DROP TABLE IF EXISTS `cat_portada_registro`;
+CREATE TABLE IF NOT EXISTS `cat_portada_registro` (
+  `id` tinyint(4) NOT NULL,
+  `isbn` varchar(50) NOT NULL,
+  `small` varchar(500) default NULL,
+  `medium` varchar(500) default NULL,
+  `large` varchar(500) default NULL,
+  UNIQUE KEY `isbn` (`isbn`),
+  KEY `id` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+
+ALTER TABLE `usr_ref_tipo_documento` DROP PRIMARY KEY;
+ALTER TABLE `usr_ref_tipo_documento` ADD `id` INT NOT NULL AUTO_INCREMENT FIRST ,ADD PRIMARY KEY ( id );
+ALTER TABLE `ref_estado` DROP PRIMARY KEY;
+ALTER TABLE `ref_estado` ADD `id` INT NOT NULL AUTO_INCREMENT FIRST ,ADD PRIMARY KEY ( id );
+ALTER TABLE usr_ref_categoria_socio DROP INDEX categorycode`;
+ALTER TABLE usr_ref_categoria_socio DROP PRIMARY KEY`;
+ALTER TABLE `ref_pais` DROP PRIMARY KEY;
+ALTER TABLE `ref_pais` ADD `id` INT NOT NULL AUTO_INCREMENT FIRST ,ADD PRIMARY KEY ( id );
+ALTER TABLE `ref_idioma` DROP PRIMARY KEY;
+ALTER TABLE `ref_idioma` ADD `id` INT NOT NULL AUTO_INCREMENT FIRST ,ADD PRIMARY KEY ( id );
+ALTER TABLE `ref_localidad` DROP PRIMARY KEY;
+ALTER TABLE `ref_localidad` ADD `id` INT NOT NULL AUTO_INCREMENT FIRST ,ADD PRIMARY KEY ( id );
+ALTER TABLE `circ_ref_tipo_prestamo` DROP PRIMARY KEY;
+ALTER TABLE `circ_ref_tipo_prestamo` ADD `id` INT NOT NULL AUTO_INCREMENT FIRST ,ADD PRIMARY KEY ( id );
+ALTER TABLE `ref_nivel_bibliografico` DROP PRIMARY KEY;
+ALTER TABLE `ref_nivel_bibliografico` ADD `id` INT NOT NULL AUTO_INCREMENT FIRST ,ADD PRIMARY KEY ( id );
+ALTER TABLE `ref_disponibilidad` DROP INDEX `nombre`;
+ALTER TABLE `ref_disponibilidad` DROP PRIMARY KEY;
+ALTER TABLE `ref_disponibilidad` ADD `id` INT NOT NULL AUTO_INCREMENT FIRST ,ADD PRIMARY KEY ( id );
+ALTER TABLE `ref_soporte` ADD `id` INT NOT NULL AUTO_INCREMENT FIRST ,ADD PRIMARY KEY ( id );
+ALTER TABLE  `cat_estructura_catalogacion` ADD  `rules` VARCHAR( 255 ) NULL;
+ALTER TABLE `ref_soporte` ADD `id` INT NOT NULL AUTO_INCREMENT FIRST ,ADD PRIMARY KEY ( id );
+
+ALTER TABLE `pref_unidad_informacion` DROP PRIMARY KEY;
+ALTER TABLE `pref_unidad_informacion` ADD `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY FIRST ;
+ALTER TABLE `cat_ref_tipo_nivel3` ADD `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY FIRST ;
+
+
+---CatEstructuraCatalogagion
+
+todos los demas = lettersonly: true
+calendar = dateITA: true
+anio = digits: true | minlength: 4 | maxlength: 4
+
+--tablas de referencia, campo por donde buscar en Busquedas
+
+DROP TABLE pref_tabla_referencia;
+
+CREATE TABLE IF NOT EXISTS `pref_tabla_referencia` (
+  `id` int(11) unsigned NOT NULL auto_increment,
+  `nombre_tabla` varchar(40) NOT NULL,
+  `alias_tabla` varchar(20) NOT NULL default '0',
+  `campo_busqueda` varchar(255) NOT NULL default 'jmmj',
+  PRIMARY KEY  (`id`),
+  KEY `campo_busqueda` (`campo_busqueda`)
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=17 ;
+
+ALTER TABLE  `cat_nivel1_repetible` ADD INDEX  `dato` (  `dato` );
+ALTER TABLE  `cat_nivel2_repetible` ADD INDEX  `dato` (  `dato` );
+ALTER TABLE  `cat_nivel3_repetible` ADD INDEX  `dato` (  `dato` );
+
+ALTER TABLE  `cat_autor` CHANGE  `nombre`  `nombre` VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL ,
+CHANGE  `apellido`  `apellido` VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL ,
+CHANGE  `completo`  `completo` VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL;
+
+ALTER TABLE  `cat_autor` ADD INDEX (  `nombre` );
+ALTER TABLE  `cat_autor` ADD INDEX (  `apellido` );
+ALTER TABLE  `cat_autor` ADD INDEX (  `completo` );
+ALTER TABLE  `cat_tema` CHANGE  `nombre`  `nombre` VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL;
+ALTER TABLE  `cat_tema` ADD INDEX (  `nombre` );
+ALTER TABLE  `ref_localidad` ADD INDEX (  `NOMBRE` );
+ALTER TABLE  `ref_localidad` ADD INDEX (  `NOMBRE_ABREVIADO` );
+ALTER TABLE  `usr_ref_tipo_documento` ADD INDEX (  `nombre` );
+ALTER TABLE  `ref_soporte` ADD INDEX (  `description` );
+ALTER TABLE  `circ_ref_tipo_prestamo` CHANGE  `descripcion`  `descripcion` VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL;
+ALTER TABLE  `circ_ref_tipo_prestamo` ADD INDEX (  `descripcion` );
+ALTER TABLE  `pref_unidad_informacion` ADD INDEX (  `nombre` );
+ALTER TABLE  `ref_idioma` ADD INDEX (  `description` );
+ALTER TABLE  `ref_localidad` ADD INDEX ( `NOMBRE_ABREVIADO` ) ;
+ALTER TABLE  `ref_localidad` ADD INDEX ( `NOMBRE` ) ;
+ALTER TABLE  `ref_nivel_bibliografico` ADD INDEX (  `description` );
+ALTER TABLE  `usr_ref_categoria_socio` CHANGE  `description`  `description` VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL;
+ALTER TABLE  `usr_ref_categoria_socio` ADD INDEX (  `description` );
+ALTER TABLE  `usr_ref_tipo_documento` ADD INDEX (  `nombre` );
+ALTER TABLE  `usr_ref_tipo_documento` CHANGE  `nombre`  `nombre` VARCHAR( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL ,
+CHANGE  `descripcion`  `descripcion` VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL;
+ALTER TABLE  `ref_pais` ADD INDEX (  `nombre` );
+ALTER TABLE  `ref_pais` ADD INDEX (  `nombre_largo` );
+ALTER TABLE  `ref_pais` ADD INDEX (  `iso` );
+ALTER TABLE  `ref_pais` ADD INDEX (  `iso3` );
+ALTER TABLE  `ref_disponibilidad` ADD INDEX (  `nombre` );
+ALTER TABLE  `cat_ref_tipo_nivel3` ADD INDEX (  `nombre` );
+ALTER TABLE  `ref_estado` ADD INDEX (  `nombre` );
+
+
+---INDICES
+
+CREATE TABLE IF NOT EXISTS `indice_busqueda` (
+  `id` int(11) NOT NULL auto_increment,
+  `titulo` text,
+  `autor` text,
+  `string` text NOT NULL,
+  `timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP,
+  PRIMARY KEY  (`id`),
+  FULLTEXT KEY `string` (`string`)
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
+
+ALTER TABLE `cat_nivel1_repetible` CHANGE `dato` `dato` VARCHAR( 500 );
+ALTER TABLE `cat_nivel2_repetible` CHANGE `dato` `dato` VARCHAR( 500 );
+ALTER TABLE `cat_nivel3_repetible` CHANGE `dato` `dato` VARCHAR( 500 );
+ALTER TABLE `usr_socio` ADD `credential_type` VARCHAR( 255 ) NOT NULL;
+ALTER TABLE `usr_socio` CHANGE `credential_type` `credential_type` VARCHAR( 255 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL DEFAULT 'estudiante';
+
+-- 10/11/09 se agrego el siguiente campo para poder agrupar las configuraciones del catalogo
+ALTER TABLE `cat_estructura_catalogacion` ADD `grupo` INT( 11 ) NOT NULL AFTER `rules` ;
+-- 11/11/09
+ALTER TABLE `pref_estructura_subcampo_marc` DROP `value_builder`;
+ALTER TABLE `pref_estructura_subcampo_marc` CHANGE `tagfield` `campo` CHAR( 3 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL ,
+ALTER TABLE `pref_estructura_campo_marc` CHANGE `tagfield` `campo` CHAR( 3 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL, 
+ALTER TABLE `pref_estructura_subcampo_marc` DROP `tab`, DROP `authorised_value`, DROP `thesaurus_category`
+CHANGE `tagsubfield` `subcampo` CHAR( 1 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL;
+ALTER TABLE `pref_estructura_campo_marc` CHANGE `tagfield` `campo` CHAR( 3 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL;
+ ALTER TABLE `pref_estructura_subcampo_marc` CHANGE `repeatable` `repetible` TINYINT( 4 ) NOT NULL DEFAULT '0';
+ALTER TABLE `pref_estructura_campo_marc` DROP `authorised_value`;
+ ALTER TABLE `pref_estructura_campo_marc` CHANGE `tagfield` `campo` CHAR( 3 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL;
+ ALTER TABLE `pref_estructura_subcampo_marc` CHANGE `tagsubfield` `subcampo` CHAR( 1 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL;
+ALTER TABLE `pref_estructura_campo_marc` CHANGE `tagfield` `campo` CHAR( 3 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL;
+
+--25/11/09
+ALTER TABLE `pref_estructura_campo_marc` ADD `IndicadorPrimario` VARCHAR( 50 ) NOT NULL
+ADD `IndicadorSecundario` VARCHAR( 50 ) NOT NULL ;
+CREATE TABLE `pref_indicadores_primarios` (
+         `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+         `indicador` VARCHAR( 50 ) NOT NULL,
+         `dato` VARCHAR( 50 ) NOT NULL,
+         `campo_marc` INT NOT NULL
+         );
+CREATE TABLE `pref_indicadores_secundarios` (
+         `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY ,
+         `indicador` VARCHAR( 50 ) NOT NULL,
+         `dato` VARCHAR( 50 ) NOT NULL,
+         `campo_marc` INT NOT NULL
+         ); 
+
+--26/11/09 actualizacion de campos y tablas para el catalogo
+--ver archivo update_catalogo.sql
+
+
+ CREATE TABLE `cat_registro_marc_n1` (
+`id` INT( 11 ) NOT NULL AUTO_INCREMENT PRIMARY KEY ,
+`marc_record` TEXT NOT NULL
+) ENGINE = InnoDB; 
+
+
+ CREATE TABLE `cat_registro_marc_n2` (
+`id` INT( 11 ) NOT NULL AUTO_INCREMENT PRIMARY KEY ,
+`marc_record` TEXT NOT NULL ,
+`id1` INT( 11 ) NOT NULL
+) ENGINE = InnoDB; 
+
+ CREATE TABLE `cat_registro_marc_n3` (
+`id` INT( 11 ) NOT NULL AUTO_INCREMENT PRIMARY KEY ,
+`marc_record` TEXT NOT NULL ,
+`id1` INT( 11 ) NOT NULL ,
+`id2` INT( 11 ) NOT NULL
+) ENGINE = Innodb; 
+
+
+ALTER TABLE `cat_registro_marc_n3`
+  ADD CONSTRAINT `cat_registro_marc_n3_n1` FOREIGN KEY (`id1`) REFERENCES `cat_registro_marc_n1` (`id`),
+  ADD CONSTRAINT `cat_registro_marc_n3_n2` FOREIGN KEY (`id2`) REFERENCES `cat_registro_marc_n2` (`id`);
+
+
+ALTER TABLE `cat_registro_marc_n2`  ADD CONSTRAINT `cat_registro_marc_n2_n1` FOREIGN KEY ( `id1` ) REFERENCES `cat_registro_marc_n1` ( `id` );
+
+--27/11/09
+DELETE FROM `cat_nivel2_repetible` WHERE dato = '';
+DELETE FROM `cat_nivel1_repetible` WHERE dato = '';
+DELETE FROM `cat_nivel3_repetible` WHERE dato = '';
+
+ALTER TABLE `pref_estructura_campo_marc` ADD `nivel` INT NOT NULL ;
+
+--tabla para contacto
+
+CREATE TABLE `contacto` (`id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY, `trato` VARCHAR(255) NOT NULL, `nombre` VARCHAR(255) NOT NULL, `apellido` VARCHAR(255) NOT NULL, `direccion` VARCHAR(255) NULL, `codigo_postal` VARCHAR(255) NULL, `ciudad` VARCHAR(255) NULL, `pais` VARCHAR(255) NULL, `telefono` VARCHAR(255) NULL, `email` VARCHAR(255) NOT NULL, `asunto` VARCHAR(255) NOT NULL, `mensaje` TEXT NOT NULL) ENGINE = MyISAM;
+ALTER TABLE `contacto` ADD `leido` INT NOT NULL DEFAULT '0';
+
+ALTER TABLE `pref_tabla_referencia_rel_catalogo` ADD `sub_campo_referente` VARCHAR( 255 ) NULL DEFAULT NULL;
+
+--11/12/09
+ ALTER TABLE `ref_estado` DROP `codigo`;
+ ALTER TABLE `ref_disponibilidad` DROP `codigo`;
+
+--14/12/09 estas referencias deben ser iguales para todos
+
+INSERT INTO `ref_disponibilidad` (`id`, `nombre`) VALUES
+(1, 'Domiciliario'),
+(2, 'Sala de Lectura');
+
+INSERT INTO `ref_estado` (`id`, `nombre`) VALUES
+(1, 'Baja'),
+(2, 'Compartido'),
+(3, 'Disponible'),
+(4, 'Ejemplar deteriorado'),
+(5, 'En Encuadernación'),
+(6, 'Perdido');
+
+
+
+UPDATE pref_preferencia_sistema SET `value` = 'UI,-,tipo_ejemplar,-' WHERE CONVERT( `pref_preferencia_sistema`.`variable` USING utf8 ) = 'barcodeFormat' LIMIT 1 ;
+
+
+INSERT INTO `pref_preferencia_sistema` (
+`variable` ,
+`value` ,
+`explanation` ,
+`options` ,
+`type`
+)
+VALUES (
+'split_by_levels', '1', 'Para mostrar en el OPAC el detalle dividido por niveles o no', NULL , NULL
+);
+
+DROP TABLE `cat_encabezado_campo_opac`;
+DROP TABLE `cat_encabezado_item_opac`;
+ALTER TABLE `cat_estructura_catalogacion_opac`
+  DROP `textsucc`,
+  DROP `separador`,
+  DROP `idencabezado`,
+  DROP `visible`;
+
+ALTER TABLE `cat_estructura_catalogacion_opac` CHANGE `idestcatopac` `id` INT( 11 ) NOT NULL AUTO_INCREMENT;
+ALTER TABLE `cat_estructura_catalogacion_opac` CHANGE `textpred` `vista_opac` VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL;
+ALTER TABLE `cat_estructura_catalogacion_opac` ADD `id_perfil` INT( 11 ) NOT NULL;
+
+ALTER TABLE `pref_preferencia_sistema` DROP PRIMARY KEY;
+
+ALTER TABLE `pref_preferencia_sistema` ADD UNIQUE (
+`variable`
+);
+
+ALTER TABLE `pref_preferencia_sistema` ADD `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY FIRST;
+
+INSERT INTO `pref_preferencia_sistema` (
+`variable` ,
+`value` ,
+`explanation` ,
+`options` ,
+`type`
+)
+VALUES (
+'longitud_barcode', '3', 'cantidad de caracteres que conforman el barcode', NULL , NULL
+);
+
+RENAME TABLE  `cat_estructura_catalogacion_opac` TO  `cat_visualizacion_opac` ;
+
+DROP TABLE IF EXISTS `cat_visualizacion_opac`;
+CREATE TABLE IF NOT EXISTS `cat_visualizacion_opac` (
+  `id` int(11) NOT NULL auto_increment,
+  `campo` char(3) NOT NULL,
+  `subcampo` char(1) NOT NULL,
+  `vista_opac` varchar(255) default NULL,
+  `id_perfil` int(11) NOT NULL,
+  PRIMARY KEY  (`id`),
+  KEY `campo` (`campo`,`subcampo`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=5 ;
+
+
+INSERT INTO `cat_visualizacion_opac` (`id`, `campo`, `subcampo`, `vista_opac`, `id_perfil`) VALUES
+(2, '013', 'b', 'rock', 1),
+(3, '110', 'f', 'No se, ni idea', 1),
+(4, '653', 'a', 'Lenguaje natural ananaan', 1);
+
+
+
+
+INSERT INTO `pref_preferencia_sistema` (
+`variable` ,
+`id` ,
+`value` ,
+`explanation` ,
+`options` ,
+`type`
+)
+VALUES (
+'limite_resultados_autocompletables', NULL , '20', 'limite de resultados a mostrar en los campos autocompletables', NULL , NULL
+);
+
+ALTER TABLE  `cat_portada_registro` DROP INDEX  `id`;
+ALTER TABLE  `cat_portada_registro` DROP INDEX  `isbn`;
+ALTER TABLE  `cat_portada_registro` DROP  `id`;
+ALTER TABLE  `cat_portada_registro` ADD  `id` INT( 11 ) NOT NULL AUTO_INCREMENT PRIMARY KEY FIRST ;
+
+CREATE TABLE  `cat_perfil_opac` (
+`id` INT( 11 ) NOT NULL AUTO_INCREMENT PRIMARY KEY ,
+`nombre` VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL
+) ENGINE = MYISAM;
+
+
+INSERT INTO  `pref_preferencia_sistema` (
+`id` ,
+`variable` ,
+`value` ,
+`explanation` ,
+`options` ,
+`type`
+)
+VALUES (
+NULL ,  'perfil_opac',  '1',  'Id del perfil de visualización para OPAC', NULL , NULL
+);
+
+INSERT INTO `pref_tabla_referencia` (`id`, `nombre_tabla`, `alias_tabla`, `campo_busqueda`) VALUES (NULL, 'cat_perfil_opac', 'perfiles_opac', 'nombre');
+
+
+INSERT INTO `pref_tabla_referencia_rel_catalogo` (`id`, `alias_tabla`, `tabla_referente`, `campo_referente`, `sub_campo_referente`) VALUES (NULL, 'perfiles_opac', 'cat_visualizacion_opac', 'id_perfil', NULL);
+
+
+DELETE FROM  `pref_tabla_referencia_rel_catalogo` WHERE  `pref_tabla_referencia_rel_catalogo`.`id` =3 LIMIT 1 ;
+
+DELETE FROM  `pref_tabla_referencia_rel_catalogo` WHERE  `pref_tabla_referencia_rel_catalogo`.`id` =5 LIMIT 1 ;
+
+DELETE FROM  `pref_tabla_referencia_rel_catalogo` WHERE  `pref_tabla_referencia_rel_catalogo`.`id` =6 LIMIT 1 ;
+
+DELETE FROM  `pref_tabla_referencia_rel_catalogo` WHERE  `pref_tabla_referencia_rel_catalogo`.`id` =7 LIMIT 1 ;
+
+DELETE FROM  `pref_tabla_referencia_rel_catalogo` WHERE  `pref_tabla_referencia_rel_catalogo`.`id` =8 LIMIT 1 ;
+
+DELETE FROM  `pref_tabla_referencia_rel_catalogo` WHERE  `pref_tabla_referencia_rel_catalogo`.`id` =9 LIMIT 1 ;
+
+DELETE FROM  `pref_tabla_referencia_rel_catalogo` WHERE  `pref_tabla_referencia_rel_catalogo`.`id` =11 LIMIT 1 ;
+
+DELETE FROM  `pref_tabla_referencia_rel_catalogo` WHERE  `pref_tabla_referencia_rel_catalogo`.`id` =12 LIMIT 1 ;
+
+DELETE FROM  `pref_tabla_referencia_rel_catalogo` WHERE  `pref_tabla_referencia_rel_catalogo`.`id` =15 LIMIT 1 ;
+
+
+

@@ -1,0 +1,27 @@
+<div class="modal-header">
+    <a href="#" class="close" data-dismiss="modal">×</a>
+    <h3>[% "Cambio de credenciales" | i18n %]</h3>
+</div>
+
+<div class="modal-body">
+            <div class="control-group">
+                
+                  <label  class="control-label" for="tipo_socio_id">[% "Credenciales" | i18n %]</label>
+                  <div class="controls">
+                      [% comboDeCredenciales %]
+                  </div>
+            </div>
+
+</div>
+
+<div class="modal-footer">
+                        [% PERL %]
+                             print C4::AR::Filtros::action_button(
+                                     title           => ' [% " Aceptar" | i18n %]',
+                                     button          => 'btn btn-success',
+                                     icon            => 'icon-white icon-ok',
+                                     action          => 'guardarModificacionCredenciales();',
+                                 );
+                         [% END %]
+
+</div>

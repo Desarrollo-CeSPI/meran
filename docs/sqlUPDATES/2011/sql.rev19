@@ -1,0 +1,4 @@
+ALTER TABLE `rep_historial_prestamo` CHANGE ` id_historial_prestamo` `id_historial_prestamo` INT( 11 ) NOT NULL AUTO_INCREMENT;
+
+ALTER TABLE `rep_historial_prestamo` CHANGE ` id_ui_prestamo` `id_ui_prestamo` CHAR(4) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL, 
+CHANGE ` fecha_devolucion` `fecha_devolucion` VARCHAR(20) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL;

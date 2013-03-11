@@ -1,0 +1,85 @@
+[% INCLUDE "FormValidateHelper.inc" %]
+[% INCLUDE  "AutocompleteHelper.inc"  %]
+<script type="text/javascript" src="/intranet-tmpl/includes/adquisiciones/editPedidoCotizacion.js"></script>
+<div class="column1-unit">
+    <div class="recomendacionform">
+            <input type="hidden" name="action" value="agregar">
+            </fieldset>
+              
+            <fieldset> <legend class="titulo_legend trigger click">[% "Busqueda de Datos del Material" | i18n %]</legend>
+                <p><label for="catalogo_search" class="left">[% 'Palabra Clave:' | i18n %]</label>
+                <input type='text' id='catalogo_search' name='catalogo_search' value='' size=40 tabindex='3' style="float: left"></p>
+                <input type='hidden' id='catalogo_search_hidden' name='catalogo_search_hidden' value=''> 
+                [% PERL %]
+                    print C4::AR::Filtros::setHelp(text => "[% 'Tipee el Titulo del libro, el autor, la editorial.' | i18n %]",);
+                [% END %]                               
+            </fieldset>
+            <div id="ediciones"></div>
+            <!-- <div id="agregarMano">
+                <fieldset><legend class="titulo_legend trigger click">&nbsp;[% 'Agregar Ejemplar a Mano' | i18n %]&nbsp;</legend>
+                        <p><label for="autor" class="left">[% 'Autor*' | i18n %]:</label>
+                        <input type="text" name="autor" id="autor" class="field" value="" tabindex="10" /></p>
+                        <p><label for="titulo" class="left">[% 'T&iacute;tulo*' | i18n %]:</label>
+                        <input type="text" name="titulo" id="titulo" class="field" value="" tabindex="10" /></p>
+                        <p><label for="lugar_publicacion_" class="left">[% 'Lugar de Publicaci&oacute;n*' | i18n %]:</label>
+                        <input type="text" name="lugar_publicacion" id="lugar_publicacion" class="field" value="" tabindex="10" /></p>
+                        <p><label for="editorial" class="left">[% 'Editorial*' | i18n %]:</label>
+                        <input type="text" name="editorial" id="editorial" class="field" value="" tabindex="10" /></p>
+                        <p><label for="fecha" class="left">[% 'Fecha*' | i18n %]:</label>
+                        <input type="text" name="fecha" id="fecha" class="field" value="" tabindex="10" /></p>
+                        <p><label for="coleccion" class="left">[% 'Colecci&oacute;n*' | i18n %]:</label>
+                        <input type="text" name="coleccion" id="coleccion" class="field" value="" tabindex="10" /></p>
+                        <p><label for="isbn_issn" class="left">[% 'ISBN/ISSN' | i18n %]:</label>
+                        <input type="text" name="isbn_issn" id="isbn_issn" class="field" value="" tabindex="10" /></p>
+                        <p><label for="cant_ejemplares" class="left">[% 'Cantidad de Ejemplares*' | i18n %]:</label>
+                        <input type="text" name="cant_ejemplares" id="cant_ejemplares" class="field" value="" tabindex="10" /></p>        
+                        [% PERL %]
+                            print C4::AR::Filtros::setHelp(text => "[% '(*) Obligatorio ' | i18n %]",                                );
+                        [% END %]
+                        <p><input type="button" onClick="agregarRenglon()" value="[% 'Agregar ejemplar' | i18n %]" tabindex="6" /> </p>  
+                </fieldset> 
+            </div> -->
+            <div id="datos_edicion_seleccionada"></div> 
+            <form id="pedido_cotizacion_form" name="recom_form" method="post" action="adquisiciones/pedidoCotizacionDB.pl">       
+            <fieldset  id="recomendacion"><legend class="titulo_legend trigger click">&nbsp;[% 'Recomendacion' | i18n %]&nbsp;</legend>
+                <table id="tabla_recomendacion" class="tabla_datos" cellspacing='0' cellpadding='0'>
+                    <thead>    
+                        <th align="center">
+                            [% "Autor" | i18n %]
+                        </th>
+                        <th align="center">
+                            [% "T&iacute;tulo" | i18n %]
+                        </th>
+                        <th align="center">
+                            [% "Edici&oacute;n" | i18n %]
+                        </th>
+                        <th align="center">
+                            [% "Lugar de publicaci&oacute;n" | i18n %]
+                        </th>
+                        <th align="center">
+                            [% "Editorial" | i18n %]
+                        </th>
+                        <th align="center">
+                            [% "Fecha" | i18n %]
+                        </th>
+                        <th align="center">
+                            [% "Colecci&oacute;n" | i18n %]
+                        </th>
+                        <th align="center">
+                            [% "ISBN/ISSN" | i18n %]
+                        </th>
+                        <th align="center">
+                            [% "Cantidad de ejemplares" | i18n %]
+                        </th>
+                        <th>
+                            [% "Eliminar" | i18n %]
+                        </th> 
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+                <input type="button" id="boton_agregar_pedido" value="Agregar Pedido" onclick="appendPedidoCotizacion('pedido_cotizacion_form')">
+            </fieldset>
+            </form>           
+    </div>         
+</div>

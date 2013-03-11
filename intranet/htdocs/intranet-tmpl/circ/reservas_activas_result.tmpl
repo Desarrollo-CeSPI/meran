@@ -1,0 +1,83 @@
+<fieldset>
+[% IF cantidad %]
+   <legend>[% "Resultados de la b&uacute;squeda" | i18n %]</legend>
+        <div class="datos_tabla_div" id="datos_tabla_div">
+       <div class="well">
+              [% "La cantidad reservas  es" | i18n %]: <strong>[% cantidad %]</strong>
+        </div>
+        
+              <div class="contenedor_paginador">[% paginador %]</div>
+
+           
+             
+
+                      [% PERL %]
+                            print C4::AR::Filtros::tableHeader(   
+                                  id              => "tablaResult",
+                                  class           => "",
+                                  selectAll_id    => "",
+                                  columns         => ['[% "Apellido" | i18n %]','[% "Nombre" | i18n %]',
+                                                      '[% "N&uacute;mero de socio" | i18n %]','[% "E-mail" | i18n %]',
+                                                      '[% "Fecha de reserva" | i18n %]','[% "Fecha de vencimiento" | i18n %]',
+                                                      '[% "Ejemplar/Edici&oacute;n" | i18n %]'
+                                                     ]
+
+                                                                    
+                                        ) ;
+                      [% END %]
+                
+                   
+                  <tbody>
+                [% FOREACH reserva IN reservas %]
+                    <tr>
+                        <td> 
+                            <a href="[% url_prefix %]/usuarios/reales/datosUsuario.pl?nro_socio=[% reserva.socio.getNro_socio %]">
+                                [% reserva.socio.persona.getApellido %]
+                            </a>
+                        </td>
+                        <td> 
+                            <a href="[% url_prefix %]/usuarios/reales/datosUsuario.pl?nro_socio=[% reserva.socio.getNro_socio %]">
+                                [% reserva.socio.persona.getNombre %]
+                            </a>
+                        </td>
+                        <td> 
+                            <a href="[% url_prefix %]/usuarios/reales/datosUsuario.pl?nro_socio=[% reserva.socio.getNro_socio %]">
+                                [% reserva.socio.getNro_socio%]
+                            </a>
+                        </td>
+                        <td> 
+                            <a  href="mailto:[% reserva.socio.persona.getEmail %]">[% reserva.socio.persona.getEmail %] </a>
+                        </td>
+                        <td> 
+                            [% reserva.getFecha_reserva_formateada %]
+                        </td>
+                        <td> 
+                                [% IF reserva.esEspera %]
+                                   <span class="label label-info">[% 'En espera' | i18n %]</span>
+                                [% ELSE %]
+                                <span class="label label-important">[% reserva.getFecha_recordatorio_formateada %]</span>
+                                [% END %]
+                        </td>
+                        <td> 
+                            [% IF reserva.getId3 %]
+                                <a href="[% url_prefix %]/catalogacion/estructura/detalleEjemplar.pl?id3=[% reserva.nivel3.getId %]&token=[% token %]">
+                                    [% reserva.nivel3.getBarcode %]
+                                </a>
+                            [% ELSE %]
+                                <a href="[% url_prefix %]/catalogacion/estructura/detalle.pl?id1=[% reserva.nivel2.getId1 %]&token=[% token %]">
+                                    Grupo [% reserva.nivel2.getId2 %]
+                                </a>
+                            [% END %]
+                        </td>
+                    </tr>
+                [% END %]
+                </tbody>
+                </table>
+          
+              [% ELSE %]
+                  <div class="alert alert-info">[% 'No hay reservas para mostrar'| i18n %]</div>
+              [% END %]
+      </div>
+</fieldset>
+<br>
+

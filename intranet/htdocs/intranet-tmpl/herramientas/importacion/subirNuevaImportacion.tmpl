@@ -1,0 +1,186 @@
+[% INCLUDE 'intranet-top.inc' %]
+
+<script type="text/javascript">
+
+
+    function cambiarFormato(){
+        
+        if ($('#formatoImportacion').val() == 'xls'){
+                    $('#seleccionar_xls').show();
+                  }
+                 else{
+                     $('#seleccionar_xls').hide();
+        }
+    }
+
+	function uploadFile(url) {
+	    previousBytesLoaded = 0;
+	    ID2_file = 1;
+	    document.getElementById('uploadResponse_1').style.display = 'none';
+	    document.getElementById('progressNumber_1').innerHTML = '';
+	    var progressBar = document.getElementById('progressBar_1');
+	    progressBar.style.display = 'block';
+	    progressBar.style.width = '0px';
+	
+	    /*
+	     * If you want to upload only a file along with arbitary data that is not in
+	     * the form, use this
+	     */
+	    var fd = new FormData();
+	    fd.append("titulo", document.getElementById('titulo').value);
+	    fd.append("upfile", document.getElementById('fileToUpload_1').files[0]);
+        fd.append("formatoImportacion",document.getElementById('formatoImportacion').value);
+        fd.append("comentario",document.getElementById('comentario').value);
+        if (document.getElementById('esquemaImportacion'))
+            fd.append("esquemaImportacion",document.getElementById('esquemaImportacion').value);
+        fd.append("nuevo_esquema",document.getElementById('nuevo_esquema').value);
+        if (document.getElementById('nombreEsquema'))
+            fd.append("nombreEsquema",document.getElementById('nombreEsquema').value);
+        
+	    
+	
+	    /* If you want to simply post the entire form, use this */
+	    // var fd = document.getElementById('form1').getFormData();
+	    xhr = new XMLHttpRequest();
+	    xhr.upload.addEventListener("progress", uploadProgress, false);
+	    xhr.addEventListener("load", uploadComplete, false);
+	    xhr.addEventListener("error", uploadFailed, false);
+	    xhr.addEventListener("abort", uploadCanceled, false);
+	    xhr.open("POST", url);
+	    xhr.send(fd);
+	
+	    intervalTimer = setInterval(updateTransferSpeed, 500);
+	}
+      
+      $(document).ready(
+        function() {
+        $('#seleccionar_xls').hide();
+        $('#nuevo_esquema').click (
+            function() {
+              if ($('#nuevo_esquema').attr('checked')){
+                    $('#esquema_nuevo').show();
+                    $('#nombreEsquema').attr('required',true);
+                    $('#seleccionar_esquema').hide();
+                    $('#nuevo_esquema_name').show();
+                    
+                  }
+                 else{
+                     $('#esquema_nuevo').hide();
+                     $('#nombreEsquema').removeAttr('required');
+                     $('#seleccionar_esquema').show();
+                     $('#nuevo_esquema_name').hide();
+                 }
+            }
+        );
+      });
+</script>
+
+
+<div class="form-horizontal" >
+            <div class="right">
+                            [% PERL %]
+                                                print C4::AR::Filtros::action_link_button(   text    => "[% 'Esquemas' | i18n %]",
+                                                                                    button   => "btn btn-warning",
+                                                                                    url => "[% url_prefix %]/herramientas/importacion/esquemas_importacion.pl",
+                                                                                    params => ["token=[% token%]",],
+                                                                                    title   => "[% 'Esquemas' | i18n %]",
+                                                        ) ;
+                            [% END %]
+            </div>
+
+	<form id="uploadfile" action="subirNuevaImportacion.pl" enctype="multipart/form-data" method="POST" class="form-horizontal">
+        <fieldset>
+        <legend>[% "Nueva Importaci&oacute;n:" | i18n %]</legend>
+		
+		    <div class="control-group">
+                <label class="control-label" for="titulo">[% 'T&iacute;tulo del archivo' | i18n %]: </label>
+                <div class="controls">
+                    <input type="text" name="titulo" id="titulo">
+                </div>
+            </div>
+            
+            <div class="control-group">
+                <label class="control-label" for="upfile">[% 'Archivo' | i18n %]: </label>
+                <div class="controls">
+                    <input type="file" name="upfile" id="fileToUpload_1" required accept="iso,xml" onchange="fileSelected(1);">
+                </div>
+            </div>
+
+
+              <div id="fileInfo_1" class="alert alert-info hide">
+                <div id="fileName_1" class="fileName"></div>
+                <div id="fileSize_1" class="fileSize"></div>
+                <div id="fileType_1" class="fileType"></div>
+              </div>
+
+            
+            <div class="control-group">
+                <label class="control-label">[% 'Formato' | i18n %]: </label>
+                <div class="controls">
+                    [% combo_formatos %]
+                </div>
+            </div>
+            
+            <div class="control-group" id="seleccionar_xls">
+                <label class="control-label" for="xls_first">[% 'La primera fila posee los encabezados?' | i18n %] </label>
+                <div class="controls">
+                    <input type="checkbox" name="xls_first" id="xls_first">
+                </div>
+            </div>
+            
+            <div class="control-group">
+                <label class="control-label" for="comentario">[% 'Comentario' | i18n %]: </label>
+                <div class="controls">
+                    <input type="text" name="comentario" id="comentario">
+                </div>
+            </div>
+            
+            <div class="control-group" id="seleccionar_esquema">
+                <label class="control-label">[% 'Seleccionar Esquema' | i18n %]: </label>
+                <div class="controls">
+                    [% IF combo_esquemas %][% combo_esquemas %][% ELSE %] [% 'No hay ning&uacute;n esquema definido.' %][% END %]
+                </div>
+            </div>
+            
+            <div class="control-group" id="nuevo_esquema_name" style="display: none;">
+                <label class="control-label" for="nombreEsquema">[% 'Nombre Nuevo Esquema' | i18n %]: </label>
+                <div class="controls">
+                    <input type="text" name="nombreEsquema" id="nombreEsquema" > 
+                    <p class="help-block">*[% 'Si se deja en blanco se utiliza el nombre del archivo' | i18n %]</p>
+                </div>
+            </div>
+            
+            <div class="control-group">
+                <label class="control-label" for="nuevo_esquema">[% 'Generar Nuevo Esquema' | i18n %]: </label>
+                <div class="controls">
+                    <input type="checkbox" name="nuevo_esquema" id="nuevo_esquema">
+                </div>
+            </div>
+             
+              <div class="row"></div>
+              <div id="progressIndicator_1" class="progressIndicator hide" > 
+
+                <div  class="progress progress-success progress-striped active">
+                  <div id="progressBar_1" class="bar"></div>
+                </div>
+
+
+                <div id="progressNumber_1" class="floatRight">&nbsp;</div>
+                <div>
+                  <div id="transferSpeedInfo_1" class="floatLeft" style="width: 80px;">&nbsp;</div>
+                  <div id="timeRemainingInfo_1" class="floatLeft" style="margin-left: 10px;">&nbsp;</div>
+                  <div id="transferBytesInfo_1" class="floatRight" style="text-align: right;">&nbsp;</div>
+                </div>    
+                <div id="uploadResponse_1" class="uploadResponse"></div>
+               </div> 	      
+
+             <div class="form-actions">
+               <input type="button" class="btn-large btn-primary" onclick="uploadFile('[% url_prefix %]/herramientas/importacion/subirNuevaImportacion.pl')" value="[% 'Subir' | i18n %]" />
+             </div>
+
+
+		</fieldset>
+	</form>
+</div>
+
+[% INCLUDE 'intranet-bottom.inc' %]

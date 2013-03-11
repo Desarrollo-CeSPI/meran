@@ -1,0 +1,151 @@
+<script>
+
+function _(s) { return s } // dummy function for gettext
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+function isNotNull(f,noalert) {
+	if (f.value.length ==0) {
+		return false;
+	}
+	return true;
+}
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+function toUC(f) {
+	var x=f.value.toUpperCase();
+	f.value=x;
+	return true;
+}
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+function isNum(v,maybenull) {
+var n = new N&uacute;mero(v.value);
+if (isNaN(n)) {
+	return false;
+	}
+if (maybenull==0 && v.value=='') {
+	return false;
+}
+return true;
+}
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+function isDate(f) {
+	var t = Fecha.parse(f.value);
+	if (isNaN(t)) {
+		return false;
+	}
+}
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+function Check(f) {
+	var ok=1;
+	var _alertString="";
+	var alertString2;
+	if (f.itemtype.value.length==0) {
+		_alertString += "\n- " + _("Tipo de documento perdido");
+	}
+	if (!(isNotNull(window.document.Aform.description,1))) {
+		_alertString += "\n- " + _("Descripci&oacute;n perdida");
+	}
+	if ((!isNum(f.loanlength,0)) && f.loanlength.value.length > 0) {
+		_alertString += "\n- " + _("Duraci&oacute;n del pr&eacute;stamo no es un n&uacute;mero");
+	}
+	if ((!isNum(f.rentalcharge,0)) && f.rentalcharge.value.length > 0) {
+		_alertString += "\n- " + _("Costo de pr&eacute;stamo no es un n&uacute;mero");
+	}
+	if (_alertString.length==0) {
+		document.Aform.submit();
+	} else {
+		alertString2  = _("Problemas");
+		alertString2 += "\n------------------------------------------------------------------------------------\n";
+		alertString2 += _alertString;
+		jAlert(alertString2);
+	}
+}
+</script>
+
+<fieldset>
+  <section class="center-section-form"> 
+    <legend class="titulo_legend">
+		[% IF tipo_prestamo %]
+		    [% "Modificar Tipo de Pr&eacute;stamo" | i18n %]
+		[% ELSE %]
+		    [% "Agregar Tipo de Pr&eacute;stamo" | i18n %]
+		[% END %]
+    </legend>
+
+          <form class="form-horizontal" onsubmit="[% IF tipo_prestamo %] guardarModificacionTipoPrestamo(); [% ELSE %] guardarNuevoTipoPrestamo(); [% END %] return false;">
+                <div class="control-group">
+                      [% IF tipo_prestamo %]
+                          <label for="tipo_prestamo" class="control-label">[% 'Tipo de pr&eacute;stamo' | i18n %]</label>
+                          <div class="controls">
+                              <input type="hidden" id='id_tipo_prestamo'  value='[% tipo_prestamo.getId_tipo_prestamo %]'>
+                              [% tipo_prestamo.getId_tipo_prestamo %]
+                          </div>
+                      [% ELSE %]
+                          <label for="tipo_prestamo" class="control-label">[% "Tipo de pr&eacute;stamo" | i18n %]</label>
+                          <div class="controls">
+                              <input type="text" id='id_tipo_prestamo' size="6" maxlength="4" onBlur="toUC(this)" required>
+                          </div>
+                      [% END %]
+                </div>
+                <div class="control-group">
+                          <label for="descripcion" class="control-label">[% "Descripci&oacute;n" | i18n %]</label>
+                          <div class="controls">
+                                <input type="text" id='descripcion' size="40" maxlength="80" value='[% tipo_prestamo.getDescripcion %]' required>
+                          </div>
+                </div>
+                <div class="control-group">
+                          <label for="sala" class="control-label">[% "Para Sala" | i18n %]</label>
+                          <div class="controls">
+                                [% IF tipo_prestamo.codigo_disponibilidad == 'CIRC0001' %]
+                                    <input type="checkbox" id='disponibilidad' checked value="1">
+                                [% ELSE %]
+                                    <input type="checkbox" id='disponibilidad' value=1>
+                                [% END %]
+                          </div>
+                </div>
+                <div class="control-group">
+                          <label for="habilitado" class="control-label">[% "Habilitado" | i18n %]</label>
+                          <div class="controls">
+                              [% IF tipo_prestamo.getHabilitado %]
+                              <input  type=checkbox id='habilitado' checked value=1>
+                              [% ELSE %]
+                              <input  type=checkbox id='habilitado' value=1>
+                              [% END %]
+                          </div>
+                </div>
+                <div class="control-group">
+                          <label for="max_prestamos" class="control-label">[% "M&aacute;xima cantidad de pr&eacute;stamos" | i18n %]</label>
+                          <div class="controls">
+                              <input type="text"  id='prestamos' size="10" value='[% tipo_prestamo.getPrestamos %]' required>
+                          </div>
+                </div>
+                <div class="control-group">
+                          <label for="max_prestamos" class="control-label">[% "D&iacute;as de duraci&oacute;n del pr&eacute;stamo" | i18n %]</label>
+                          <div class="controls">
+                                <input type="text" id='dias_prestamo' size="40" maxlength="80" value='[% tipo_prestamo.getDias_prestamo %]' required>
+                          </div> 
+                </div>
+
+                <div class="control-group">
+                    <label for="renovaciones" class="control-label">[% "Renovaciones" | i18n %]</label>
+                    <div class="controls">
+                        <input type="text" id='renovaciones' size="40" maxlength="80" value='[% tipo_prestamo.getRenovaciones %]' required>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label for="dias_renovaciones" class="control-label">[% "D&iacute;as de Renovaci&oacute;n" | i18n %]</label>
+                    <div class="controls">
+                        <input type="text" id='dias_renovacion' size="40" maxlength="80" value='[% tipo_prestamo.getDias_renovacion %]' required>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label for="dias_antes_renovaciones" class="control-label">[% "Cuantos d&iacute;as antes se puede renovar" | i18n %]</label>
+                    <div class="controls">
+                        <input type="text" id='dias_antes_renovacion' size="40" maxlength="80" value='[% tipo_prestamo.getDias_antes_renovacion %]' required>
+                    </div>
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-large btn-primary"><i class="icon-white icon-ok"></i> [% "Guardar" | i18n %] </button>
+                  </div>
+        </form>
+    </section>
+</fieldset>

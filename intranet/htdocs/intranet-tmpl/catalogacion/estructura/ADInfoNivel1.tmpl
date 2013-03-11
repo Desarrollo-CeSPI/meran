@@ -1,0 +1,42 @@
+
+    [% IF OK != 1 %]
+
+            [% PERL %]
+                print C4::AR::Filtros::get_error_message( 
+                                            debug   => "Error de parametros en ADInfoNivel1.tmpl",
+                                            msg     => "[% 'ERROR EN LOS PARAMETROS DE NIVEL 1'| i18n %]",
+                                );
+            [% END %]
+
+    [% ELSE %]
+
+
+    <fieldset>
+
+            <dl>
+	            <dt class="inline left rightMargin"> [% 'T&iacute;tulo' %] </dt>
+	            <dd>[% nivel1.getTitulo %]</dd>
+	            
+	            <dt class="inline left rightMargin">[% "Autor:" | i18n %] </dt> 
+	            <dd>[% nivel1.getAutorObject.getCompleto %]</dd>
+
+	            <dt class="inline left rightMargin">[% 'Nivel bibliogr&aacute;fico:' | i18n %]</dt> 
+	            <dd>[% nivel1.getNivelBibliograficoObject.getDescription %]</dd>
+            </dl>
+
+                [% PERL %]
+                    print C4::AR::Filtros::action_set_button(    
+                                                        title           => "[% 'Registro' | i18n %]",
+                                                        button          => 'btn btn-primary',
+
+                                                        actions         => [
+                                                                            {title => "Modificar", action=>'modificarN1("[% nivel1.getId1 %]", "[% nivel1.getTemplate %]")',icon=>"icon-edit"},
+                                                                            {title => "Eliminar", action=>'borrarN1([% nivel2.getId1 %])', icon=>"icon-trash"},
+                                                                            {title => "Agregar Edición", action=>'agregarN2()', icon=>"icon-plus-sign"},
+                                                                            ],
+
+                            ) ;
+                [% END %]
+    </fieldset>
+    [% END %]
+ <br />

@@ -1,0 +1,4 @@
+ALTER TABLE `usr_persona` ADD `institucion` VARCHAR( 255 ) NULL AFTER `es_socio` ,
+ADD `carrera` VARCHAR( 255 ) NULL AFTER `institucion` ,
+ADD `anio` VARCHAR( 255 ) NULL AFTER `carrera` ,
+ADD `division` VARCHAR( 255 ) NULL AFTER `anio`;

@@ -1,0 +1,94 @@
+#!/usr/bin/perl
+
+# script to generate cards for the borrowers
+# written 03/2005
+# by Luciano Iglesias - li@info.unlp.edu.ar - LINTI, Facultad de Inform�tica, UNLP Argentina
+
+# This file is part of Koha.
+#
+# Koha is free software; you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation; either version 2 of the License, or (at your option) any later
+# version.
+#
+# Koha is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+# A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# Koha; if not, write to the Free Software Foundation, Inc., 59 Temple Place,
+# Suite 330, Boston, MA  02111-1307 USA
+
+require Exporter;
+
+use strict;
+use CGI;
+use C4::AR::PdfGenerator;
+
+use C4::AR::Auth;
+use C4::AR::Busquedas;
+
+my $input= new CGI;
+my $bornum = $input->param('bornum');
+my $accion = $input->param('accion');
+
+if($accion eq "ingresarDatos"){
+	my  ($template, $borrowernumber, $cookie)= get_template_and_user({
+                            template_name => "printPrestInterBiblio.tmpl",
+                             query => $input,
+                             type => "intranet",
+                             authnotrequired => 1,
+                             flagsrequired => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'undefined'},
+                    });
+	
+	
+	#Por los branches
+	my @branches;
+	my @select_branch;
+	my %select_branches;
+	my $branches=C4::AR::Busquedas::getBranches();
+	foreach my $branch (keys %$branches) {
+        	push @select_branch, $branch;
+        	$select_branches{$branch} = $branches->{$branch}->{'branchname'};
+	}
+
+	my $branch= C4::AR::Preferencias::getValorPreferencia('defaultUI');
+
+	my $bibliotecas=CGI::scrolling_list(      -name      => 'branch',
+                                        -id        => 'branch',
+                                        -values    => \@select_branch,
+                                        -labels    => \%select_branches,
+                                        -size      => 1,
+                      );
+	#Fin: Por los branches
+
+	$template->param(
+		bibliotecas => $bibliotecas,
+		bornum      => $bornum,
+		);
+	
+	output_html_with_http_headers $input, $cookie, $template->output;
+}
+else{
+	my $biblioDestino = C4::AR::Busquedas::getBranch($input->param('branch'))->{'branchname'};
+	my $director = $input->param('director')||"___________________";
+	my @autores=split("#",$input->param('autores'));
+	my @titulos=split("#",$input->param('titulos'));
+	my @otros=split("#",$input->param('otros'));
+	my @datos;
+	for(my $i=0;$i<scalar(@titulos);$i++){
+		if($i<scalar(@autores)){
+			$datos[$i]->{'autor'}=$autores[$i];
+		}
+		else{$datos[$i]->{'autor'}="";}
+		if($i<scalar(@otros)){
+			$datos[$i]->{'otros'}=$otros[$i];
+		}
+		else{$datos[$i]->{'otros'}="";}
+		$datos[$i]->{'titulo'}=$titulos[$i];
+	}
+	my $borrewer= C4::AR::Usuarios::getBorrower($bornum);
+	&prestInterBiblio($bornum,$borrewer,$biblioDestino,$director,\@datos);
+}
+
+

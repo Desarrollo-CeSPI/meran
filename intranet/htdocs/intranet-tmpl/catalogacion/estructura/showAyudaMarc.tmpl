@@ -1,0 +1,33 @@
+
+<div class="modal-header">
+    <h3>[% "Ayuda MARC" | i18n %]</h3>
+</div>
+
+<div class="modal-body">    
+    
+    <div id="ayudaLocal">
+        <h3>[% "Ayuda local" | i18n %]</h3>
+        [% IF ayudasMarc %]
+
+            <dl class="dl-horizontal">
+            [% FOREACH a IN ayudasMarc %]
+                    <dt>[% "Campo" | i18n %]</dt>
+                    <dd>[% a.getCampo %]</dd>
+                    <dt>[% "Subcampo" | i18n %]</dt>
+                    <dd>[% a.getSubCampo %]</dd>
+                    <dt>[% "Ayuda" | i18n %]</dt>
+                    <dd>[% a.getAyuda %]</dd>
+                    <hr />
+            [% END %]
+
+        [% ELSE %]
+            <div class="alert alert-info">[% "No se cargaron ayudas para este campo" | i18n %]</div>
+        [% END %]
+    </div>
+
+    <div id="ayudaWeb"><h3>[% "Definici&oacute;n MARC" | i18n %]</h3>[% ayudaMarcWeb | i18n %]</div>
+   
+</div>
+
+<div class="modal-footer">
+</div>

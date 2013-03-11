@@ -1,0 +1,34 @@
+[% INCLUDE 'intranet-top.inc' %]
+
+<script type="text/javascript" src="/intranet-tmpl/estadisticas/estadisticas.js"></script>
+<div>
+    <div class="titulos" >[% "Generar estad&iacute;sticas de Estantes virtuales" | i18n %]</div>
+
+    <center>
+        <div class="filtros_reportes">
+            <fieldset>
+                <legend class="titulo_legend">[% "Opciones para el c&aacute;lculo del reporte" | i18n %]</legend>
+                <ul class="filtros_reportes_izq">
+                    <li class="sub_item">
+                        [% "Estantes Virtual:" | i18n %]
+                        [% estante_combo %]
+                    </li>
+                </ul>
+            </fieldset>
+        </div>
+        <div class="buttonContainerHorizontal">
+            [% PERL %]
+                    print C4::AR::Filtros::to_Button( 
+                                                        text    =>  "[% "Graficar" | i18n %]",
+                                                        title    =>  "[% 'Buscar' | i18n %]",
+                                                        boton   =>  "boton_buscar",
+                                                        onClick =>  "consultarEstantesVirtuales();",
+                                                    );
+            [% END %]
+        </div>
+    </center>
+</div>
+
+<div id="result_chart"></div>
+
+[% INCLUDE 'intranet-bottom.inc' %]

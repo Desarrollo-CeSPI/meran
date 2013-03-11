@@ -1,0 +1,1 @@
+ALTER TABLE `cat_visualizacion_intra` ADD `pre` VARCHAR( 12 ) NULL AFTER `campo`, ADD `post` VARCHAR( 12 ) NULL AFTER `pre`;

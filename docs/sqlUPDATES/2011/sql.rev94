@@ -1,0 +1,41 @@
+
+ALTER TABLE `circ_reserva` ADD INDEX ( `id2` );
+
+ALTER TABLE `circ_reserva` ADD INDEX ( `id3` );
+
+ALTER TABLE `circ_reserva` ADD INDEX ( `nro_socio` );
+
+ALTER TABLE `circ_prestamo` ADD INDEX ( `id3` ) ;
+ALTER TABLE `circ_prestamo` ADD INDEX ( `nro_socio` ) ;
+ALTER TABLE `circ_prestamo` ADD INDEX ( `tipo_prestamo` ) ;
+ALTER TABLE `circ_prestamo` ADD INDEX ( `fecha_prestamo` ) ;
+ALTER TABLE `circ_prestamo` ADD INDEX ( `fecha_devolucion` ) ;
+
+ALTER TABLE `circ_reserva` ADD INDEX ( `estado` ) ;
+
+
+
+
+
+
+ALTER TABLE `usr_persona` CHANGE `apellido` `apellido` VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL, CHANGE `nombre` `nombre` VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL, CHANGE `titulo` `titulo` VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL, CHANGE `otros_nombres` `otros_nombres` VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL, CHANGE `iniciales` `iniciales` VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL, CHANGE `calle` `calle` VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL, CHANGE `barrio` `barrio` VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL, CHANGE `ciudad` `ciudad` VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL, CHANGE `telefono` `telefono` VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL, CHANGE `email` `email` VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL, CHANGE `fax` `fax` VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL, CHANGE `msg_texto` `msg_texto` VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL, CHANGE `alt_calle` `alt_calle` VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL, CHANGE `alt_barrio` `alt_barrio` VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL, CHANGE `alt_ciudad` `alt_ciudad` VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL, CHANGE `alt_telefono` `alt_telefono` VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL;
+
+
+
+
+
+
+ALTER TABLE `usr_persona` ADD INDEX ( `id_persona` , `nro_documento` , `tipo_documento` ) ;
+ALTER TABLE `usr_persona` ADD INDEX ( `apellido` ) ;
+ALTER TABLE `usr_persona` ADD INDEX ( `nombre` ) ;
+ALTER TABLE `usr_persona` ADD INDEX ( `email` ) ;
+
+ALTER TABLE `usr_socio` ADD INDEX ( `id_persona` ) ;
+ALTER TABLE `usr_socio` ADD INDEX ( `nro_socio` ) ;
+
+ALTER TABLE `usr_socio` ADD INDEX ( `id_ui` );
+
+ALTER TABLE `cat_registro_marc_n3` ADD INDEX ( `id1` );
+ALTER TABLE `cat_registro_marc_n3` ADD INDEX ( `id2` );
+
+ALTER TABLE `cat_registro_marc_n2` ADD INDEX ( `id1` );

@@ -1,0 +1,4 @@
+INSERT INTO `pref_preferencia_sistema`  (`id`, `variable`, `value`, `explanation`, `options`, `type`, `categoria`) 
+VALUES (NULL, 'primer_dia_semana', '1', 'El primer día hábil de la semana para la biblioteca', NULL, 'text', NULL), (NULL, 'ultimo_dia_semana', '5', 'El último día hábil de la semana para la biblioteca', NULL, 'text', NULL);
+
+

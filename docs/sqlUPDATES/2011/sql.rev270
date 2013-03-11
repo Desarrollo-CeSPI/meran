@@ -1,0 +1,6 @@
+DROP TABLE `cat_estructura_catalogacion_opac`;
+DROP TABLE `oai_harvester_register`;
+DROP TABLE `oai_harvester_server`;
+DROP TABLE `pref_iso2709`;
+DROP TABLE `pref_palabra_frecuente`;
+

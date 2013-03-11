@@ -1,0 +1,70 @@
+[% INCLUDE 'partials/admin/_nuevoPermiso.inc' %]
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Nombre</th>
+            <th>Permisos</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>[% "Reportes" | i18n %]</td>
+            <td>
+                [% reportes %]
+            </td>
+            <input type="checkbox" id="reportes_todos" name="reportes" style="display:none;"/>
+            <input type="checkbox" id="reportes_baja" name="reportes" style="display:none;"/>
+            <input type="checkbox" id="reportes_modif" name="reportes" style="display:none;"/>
+            <input type="checkbox" id="reportes_alta" name="reportes" style="display:none;"/>
+            <input type="checkbox" id="reportes_consulta" name="reportes" style="display:none;"/>
+        </tr>
+        <tr>
+            <td>[% "Preferencias" | i18n %]</td>
+            <td>
+                [% preferencias %]
+            </td>
+            <input type="checkbox" id="preferencias_todos" name="preferencias" style="display:none;"/>
+            <input type="checkbox" id="preferencias_baja" name="preferencias" style="display:none;"/>
+            <input type="checkbox" id="preferencias_modif" name="preferencias" style="display:none;"/>
+            <input type="checkbox" id="preferencias_alta" name="preferencias" style="display:none;"/>
+            <input type="checkbox" id="preferencias_consulta" name="preferencias" style="display:none;"/>
+        </tr>
+        <tr>
+            <td>[% "Permisos" | i18n %]</td>
+            <td>
+                [% permisosButton %]
+            </td>
+            <input type="checkbox" id="permisos_todos" name="permisos" style="display:none;"/>
+            <input type="checkbox" id="permisos_baja" name="permisos" style="display:none;"/>
+            <input type="checkbox" id="permisos_modif" name="permisos"  style="display:none;"/>
+            <input type="checkbox" id="permisos_alta" name="permisos"  style="display:none;"/>
+            <input type="checkbox" id="permisos_consulta" name="permisos" style="display:none;"/>
+        </tr>
+        <tr>
+            <td>[% "Adquisiciones OPAC" | i18n %]</td>
+            <td>
+                [% adq_opac %]
+            </td>
+            <input type="checkbox" id="adq_opac_todos" name="adq_opac" style="display:none;"/>
+            <input type="checkbox" id="adq_opac_todos" name="adq_opac" style="display:none;"/>
+            <input type="checkbox" id="adq_opac_modif" name="adq_opac" style="display:none;"/>
+            <input type="checkbox" id="adq_opac_alta" name="adq_opac" style="display:none;"/>
+            <input type="checkbox" id="adq_opac_consulta" name="adq_opac" style="display:none;"/>
+        </tr>
+        <tr>
+            <td>[% "Adquisiciones INTRA" | i18n %]</td>
+            <td>
+                [% adq_intra %]
+            </td>
+            <input type="checkbox" id="adq_intra_todos" name="adq_intra" style="display:none;"/>
+            <input type="checkbox" id="adq_intra_baja" name="adq_intra" style="display:none;"/>
+            <input type="checkbox" id="adq_intra_modif" name="adq_intra" style="display:none;"/>
+            <input type="checkbox" id="adq_intra_alta" name="adq_intra" style="display:none;"/>
+            <input type="checkbox" id="adq_intra_consulta" name="adq_intra" style="display:none;"/>
+        </tr>
+
+    </tbody>
+</table>
+
+[% INCLUDE 'partials/admin/_guardarPermisos.inc' %]

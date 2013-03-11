@@ -1,0 +1,14 @@
+INSERT INTO `pref_preferencia_sistema` (
+`id` ,
+`variable` ,
+`value` ,
+`explanation` ,
+`options` ,
+`type` ,
+`categoria`
+)
+VALUES (
+NULL , 'enable_localization_flags', '0', 'Habilita/Deshabilita mostrar el cambio de idioma', NULL , 'bool', 'sistema'
+);
+
+

@@ -1,0 +1,40 @@
+[% INCLUDE 'intranet-top.inc' %]
+
+<script type="text/javascript" src="/intranet-tmpl/estadisticas/estadisticas.js"></script>
+<div>
+<fieldset>
+    <legend class="titulo_legend"> <span class="titulos">[% "Generar estad&iacute;sticas de Colecciones" | i18n %] </span> </legend>
+   <!-- <div class="titulos" >[% "Generar estad&iacute;sticas de Colecciones" | i18n %]</div>-->
+
+    <center>
+        <div class="filtros_reportes">
+            <fieldset>
+                <legend class="titulo_legend">[% "Opciones para el c&aacute;lculo del reporte" | i18n %]</legend>
+                <ul class="filtros_reportes_izq">
+                    <li class="sub_item">
+                        [% "Tipo de Item:" | i18n %]
+                        [% item_type_combo %]
+                    </li>
+                    <li class="sub_item">
+                        [% "Unidad de informaci&oacute;n:" | i18n %]
+                        [% ui_combo %]
+                    </li>
+                </ul>
+            </fieldset>
+        </div>
+        <div class="buttonContainerHorizontal">
+            [% PERL %]
+                    print C4::AR::Filtros::to_Button( 
+                                                        text    =>  "[% "Graficar" | i18n %]",
+                                                        title    =>  "[% 'Buscar' | i18n %]",
+                                                        boton   =>  "boton_buscar",
+                                                        onClick =>  "consultarColecciones();",
+                                                    );
+            [% END %]
+        </div>
+    </center>
+</div>
+
+<div id="result_chart"></div>
+</fieldset>
+[% INCLUDE 'intranet-bottom.inc' %]

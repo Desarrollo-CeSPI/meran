@@ -1,0 +1,3 @@
+ALTER TABLE `pref_preferencia_sistema` ADD UNIQUE (
+`variable`
+);

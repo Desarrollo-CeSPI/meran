@@ -1,0 +1,5 @@
+ALTER TABLE  `usr_persona` ADD  `id_categoria` INT( 2 ) NOT NULL DEFAULT  '8';
+
+UPDATE usr_persona UP
+INNER JOIN usr_socio S ON S.id_persona = UP.id_persona
+SET UP.id_categoria = S.id_categoria;

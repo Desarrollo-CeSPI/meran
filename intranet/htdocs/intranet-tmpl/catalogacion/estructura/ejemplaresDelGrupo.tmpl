@@ -1,0 +1,334 @@
+[% USE HTML %]
+[% IF cant_nivel3 %]
+		<script>
+		
+		    $(document).ready(function(){
+		        checkedAll("select_all"+"[% id2 %]", "checkEjemplares"+"[% id2 %]");
+		        $('.fancylink').fancybox();
+		    });
+		
+		</script>
+
+    <div class="accordion" id="ejemplares_del_grupo_[% id2 %]">
+            <div class="accordion-group">
+              <div class="accordion-heading">
+                <a class="accordion-toggle" data-toggle="collapse" data-parent="#ejemplares_del_grupo_[% id2 %]" href="#ejemplares_[% id2 %]">
+                  [% "Ejemplares" | i18n %] <span class="badge badge-warning" style="cursor: default;">[% cant_ejemplares %]</span>
+                </a>
+              </div>
+              <div id="ejemplares_[% id2 %]" class="accordion-body collapse in">
+                <div class="accordion-inner">
+					<div class="alert alert-info">
+					    <dl>
+							<dt class="inline left rightMargin">[% "Ejemplares Disponibles:"|i18n %]</dt>
+				               <dd> [% disponibles %]</dd>
+							<dt class="inline left rightMargin">[% "Reservas Realizadas:"|i18n %]</dt>
+							   <dd> 
+                                  [% PERL %]
+                                      print C4::AR::Filtros::link_to( text => "[% cantReservasAsignadas %]",
+                                                                      url=>"[% url_prefix %]/circ/reservas_activas_edicion.pl", 
+                                                                      params => ["id2=[% id2 %]","tipoReserva=EJ"],
+                                                                      class => "fancy_link fancybox.iframe",
+                                                                      tooltip => '[% "Reservas sobre el grupo con ejemplares asignados (en orden)" | i18n %]',
+                                                                  ) ;
+                                  [% END %]
+						     </dd>
+							<dt class="inline left rightMargin">[% "Reservas en Espera:"|i18n %]</dt>
+					           <dd> 
+                                  [% PERL %]
+                                      print C4::AR::Filtros::link_to( text => "[% cantReservasEnEspera %]",
+                                                                      url=>"[% url_prefix %]/circ/reservas_activas_edicion.pl", 
+                                                                      class => "fancy_link fancybox.iframe",
+                                                                      params => ["id2=[% id2 %]","tipoReserva=GR"],
+                                                                      tooltip => '[% "Reservas sobre el grupo en espera (en orden)" | i18n %]',
+                                                                  ) ;
+                                  [% END %]
+				               </dd>
+							<dt class="inline left rightMargin">[% "Ejemplares Prestados:"|i18n %]</dt>
+						      <dd> [% cantPrestados %]</dd>
+				        </dl>
+					</div>                
+
+					<form id="tablaEjemplares[% id2 %]" name="tablaEjemplares[% id2 %]" action="[% url_prefix %]/catalogacion/barcode_gen.pl" method="post">
+                        [% PERL %]
+                            print C4::AR::Filtros::tableHeader(   
+                                                                    id              => "tabla_ejemplares[% id2 %]",
+                                                                    class           => "",
+                                                                    selectAll_id    => "select_all[% id2 %]",
+                                                                    columns         => ['[% "Sig. Top."|i18n %]','[% "C&oacute;digo"|i18n %]','[% "Tipo de Pr&eacute;stamo"|i18n %]',
+                                                                                        '[% "Estado"|i18n %]','[% "Vencimiento"|i18n %]', [% IF circularDesdeDetalleDelRegistro %] '[% "Circulaci&oacute;n"|i18n %]' [% END %],
+                                                                                        '[% "MARC" |i18n %]','[% "Notas" |i18n %]','[% "Acciones" |i18n %]',
+                                                                                       ]
+                                                                    
+                                        ) ;
+                        [% END %]
+						
+                        <tbody>
+						[% FOREACH nivel3 %]
+								<tr>
+						                <td class="span1">
+						                    <input type="checkbox" id="checkEjemplares[% id2 %]" name="checkEjemplares[% id2 %]" class="icon_seleccionar" value="[% nivel3_obj.getId3 %]">
+						                </td>
+						                <td>[% HTML.escape(nivel3_obj.getSignatura_topografica) %]</td>
+						                <td>
+							                [% PERL %]
+							                    print C4::AR::Filtros::link_to( text => "[% nivel3_obj.getBarcode %]",
+							                                                    url=>"[% url_prefix %]/catalogacion/estructura/detalleEjemplar.pl", 
+							                                                    params =>   ["id3=[% id3 %]"],
+							                                                    title =>    "[% 'Detalle del ejemplar' | i18n %]",
+							                                                    tooltip => "[% 'Detalle del ejemplar' | i18n %]",
+							                                                ) ;
+							                [% END %]
+						                </td>
+						                <td>
+						           
+						
+                                           [% nivel3_obj.getDisponibilidadObject.getNombre %]
+						                   [% IF prestamo.getNro_socio %]
+						                   <br />
+						                        <strong class="[% IF nivel3_obj.estadoDisponible %]disponible[% ELSE %]nodisponible[% END %]">[% 'Prestado a:' | i18n  %]</strong> 
+						                        [% PERL %]
+						                            print C4::AR::Filtros::link_to(   text =>     "[% socio_prestamo.persona.getApeYNom %]",
+						                                                              url=>"[% url_prefix %]/usuarios/reales/datosUsuario.pl", 
+						                                                              params =>   ["nro_socio=[% socio_prestamo.getNro_socio %]"],
+						                                                              ancla   => "prestamos",
+						                                                              title =>    "[% 'Mostrar Detalle del Usuario' | i18n %]",
+						                                                              blank =>  1,
+						                                                        );
+						                        [% END %]
+						
+						                    [% END %]
+						                    
+						                    <!-- preguntamos si ya se muestra el usuario en el prestamo, para no mostrarlo dos veces -->
+                                            [% IF !prestamo.getNro_socio %]
+                                                [% IF reserva.getNro_socio %]
+                                                     <br />
+                                                     <input type="hidden" value="[%reserva.getNro_socio%]" id="" > 
+                                                     <strong class="[% IF nivel3_obj.estadoDisponible %]disponible[% ELSE %]nodisponible[% END %]">[% 'Reservado a:' | i18n  %]</strong> 
+                                                    [% PERL %]
+                                                        print C4::AR::Filtros::link_to(   text =>     "[% socio_reserva.persona.getApeYNom %]",
+                                                                                          url=>"[% url_prefix %]/usuarios/reales/datosUsuario.pl", 
+                                                                                          params =>   ["nro_socio=[% socio_reserva.getNro_socio %]"],
+                                                                                          title =>    "[% 'Mostrar Detalle del Usuario' | i18n %]",
+                                                                                          blank =>  1,
+                                                                                    );
+                                                    [% END %]
+                                                [% END %]
+                                            [% END %]
+						                </td>
+						                <td>
+					                        [% nivel3_obj.getEstadoObject.getNombre %]
+						                </td>
+						                <td>
+					                        [% IF prestamo %]
+					                            [% prestamo.getFecha_vencimiento_formateada %]
+					                        [% ELSE %]
+					                            -------
+					                        [% END %]
+						                </td>
+	                                    [% IF circularDesdeDetalleDelRegistro %]
+							                <td style="width:130px;">
+							                          [% IF disponible %]
+							                              [% IF prestamo.getNro_socio %]
+												                [% PERL %]
+												                    print C4::AR::Filtros::action_set_button(    
+					                                                        title           => '[% "Devolver" | i18n %]',
+					                                                        action          =>'devolverPrestamo("[% socio_prestamo.getNro_socio %]","[% socio_prestamo.persona.getApeYNom %]","[% id2 %]","[% prestamo.getId_prestamo %]")',
+					                                                        button          => 'btn btn-danger',
+					                                                        icon=>"icon-share-alt icon-white",
+					                                                        actions         => [
+					                                                                            [% IF prestamo.sePuedeRenovar %]
+					                                                                                {title => "Renovar", 
+					                                                                                 action=>'renovarPrestamo("[% socio_prestamo.getNro_socio %]","[% socio_prestamo.persona.getApeYNom %]","[% id2 %]","[% prestamo.getId_prestamo %]")', 
+					                                                                                 icon=>"icon-retweet"
+					                                                                                },
+					                                                                            [% END %]
+					                                                                            ],
+												                            ) ;
+												                [% END %]
+									                       [% ELSE %]
+									                           [% PERL %]
+                                                                    print C4::AR::Filtros::action_set_button(    
+                                                                            title           => '[% " Prestar" | i18n %]',
+                                                                            button          => 'btn [% IF reserva.getNro_socio %] btn-info [% ELSE %] btn-success [% END %]',
+                                                                            action          => '[% IF reserva.getNro_socio %]
+                                                                                                           prestarUsuarioConReserva("[% reserva.getNro_socio %]", [% id3 %]);
+                                                                                                [% ELSE %]
+                                                                                                           buscarUsuario([% id2 %],[% id3 %])
+                                                                                                [% END %] ', 
+                                                                            icon            => "icon-repeat icon-white"
+                                                                        );
+                                                                [% END %]
+                                                          [% END %]
+							                 [% END %]
+
+							                </td>
+	                                    [% END %] <!--END IF permiso_para_circular -->
+						                <td> 
+						                          [% PERL %]
+						                                  print C4::AR::Filtros::action_button( 
+						                                                                  button         => "btn click",
+						                                                                  action       => "detalleMARC([% id3 %])", 
+						                                                                  icon         => "icon-info-sign ",
+	                                                                                      title        => "",
+						                                                              ) ;
+	
+						                          [% END %]
+						                </td>
+						                <td>
+						
+						                    [% IF nivel3_obj.getNota != "" %]
+
+                                                [% nota_local = 'Problemas con el texto. Por favor, editarlo y corregirlo' %]
+
+                                                [% TRY %]
+                                                  [% nota_local = nivel3_obj.getNota %]
+                                                [% CATCH %]
+                                                [% END %]
+	
+	                                              <div id="nota_ejemplar_[% id3 %]" class="modal hide fade">
+	                                                   <div class="modal-header">
+                                                            <a href="#" class="close" data-dismiss="modal">×</a>
+	                                                        <h3>[% 'Nota del ejemplar' | i18n %]</h3>
+	                                                   </div>
+	                                                   <div id="text_nota_[% id3 %]" class="modal-body">
+                                                            [% nota_local %]
+                                                      </div>
+                                                   </div>	
+	
+						                          [% PERL %]
+						                                  print C4::AR::Filtros::action_button( 
+						                                                                  button   => "btn",
+	                                                                                      action   => 'verNota([% id3 %]);',
+	                                                                                      icon     => "icon-comment",
+	                                                                                      id       => 'text_nota_[% id3 %]',
+	                                                                                      popover => { title   =>'[% "Nota" | i18n %]',
+	                                                                                                   text    => "[% nota_local %]",
+	                                                                                                   placement => "left",
+	                                                                                                 }
+						                                                              ) ;
+						                          [% END %]
+						                    [% ELSE %]
+						                       ---
+						                    [% END %]
+						                </td>
+						                <td style="min-width:120px;">
+			                              [% PERL %]
+			                                  print C4::AR::Filtros::action_set_button(    
+                                                    button  => 'btn btn-primary',
+                                                    title   => "[% 'Modificar' | i18n %]",
+                                                    action  => "editarEjemplar([% id2 %],[% id3 %])",
+                                                    icon    => "icon-white icon-edit",
+                                                    actions => [
+                                                                        {title => "Borrar", 
+                                                                         action=>"borrarN3([% id2 %],[% id3 %])", 
+                                                                         icon=>"icon-trash"
+                                                                        },
+                                                                        {title => "Etiquetas", 
+                                                                         action=>'generarEtiqueta([% id3 %],"[% nivel3_obj.getBarcode %]")', 
+                                                                         icon=>"icon-barcode"
+                                                                        },
+                                                                        ],
+			              
+			                                          ) ;
+			                              [% END %]
+						                </td>
+						      </tr>
+					[%   IF loop.last %]
+						</tbody>
+                      </tbody>
+                    </table>
+<!-- FIXME y esto para q esta!!! -->
+					    [%   IF loop.count > 1 %]
+					        
+					        <form id="edicion_grupal[% id2 %]" name="edicion_grupal" action="datosDocumento.pl" method="post">
+					          
+					        </form>
+					
+					    [% END %]
+
+                            <form id="edicion_grupal[% id2 %]" name="edicion_grupal" action="datosDocumento.pl" method="post">
+                              
+                            </form>					
+					
+					[% END %]<!-- END IF loop.last -->
+					
+					<script>
+                        $('#ejemplares_del_grupo_[% id2 %]').on('hidden', function () {
+                            $('#actions_ejemplares_[% id2 %]').hide();
+                        })                  
+                        $('#ejemplares_del_grupo_[% id2 %]').on('shown', function () {
+                            $('#actions_ejemplares_[% id2 %]').show();
+                        })  
+					</script>
+					[% END %]<!-- END FOREACH NIVEL 3 -->
+                  </form>
+
+                  <br />
+                  <br />
+                  <br />
+                  
+             </div>
+         </div>
+     <div class="form-actions" id="actions_ejemplares_[% id2 %]" style="margin-bottom: 0;">
+               <td>
+                [% "Para los elementos que est&aacute;n marcados:" | i18n %]
+                  [% PERL %]
+                      print C4::AR::Filtros::action_set_button(    
+                            button          => 'btn btn-primary',
+                            title => "[% 'Modificar' | i18n %]",
+                            action =>"generarForm([% id1 %],[% id2 %])",
+                            icon =>"icon-white icon-edit",
+                                                
+                            actions         => [
+                                                {title => "Etiquetas", 
+                                                 action=>"generarVariasEtiquetas([% id2 %])", 
+                                                 icon=>"icon-barcode"
+                                                },
+                                                {title => "Borrar", 
+                                                 action=>"borrarEjemplaresN3([% id2 %])", 
+                                                 icon=>"icon-trash"
+                                                },
+                                                ],
+                             popover       => {text=>'Esta acci&oacute;n se aplica para todos los ejemplares seleccionados', 
+                                               title=> 'Atenci&oacute;n'}
+  
+                              ) ;
+                  [% END %]
+               </td>
+	         </div>       
+	    </div>
+    </div>    
+
+
+<script type="text/javascript">makeToggle('ejemplaresDelGrupo[% id2 %]','trigger_2_[% id2 %]',null,false);</script>
+[% ELSE %]
+
+    [% IF enable_nivel3 == 0 %]
+    <!-- ANA y ELE  no tienen nivel3 -->
+    <!-- si es ELE no muestro nada -->
+        [% IF ((nivel2_template == 'ANA')) %]        
+		    		<h3>		
+
+                [% PERL %]
+                    print C4::AR::Filtros::link_to(   text      => "[% titulo_registro_padre %]",
+                                                      url       => "[% url_prefix %]/catalogacion/estructura/detalle.pl", 
+                                                      params    => ["id1=[% nivel1_padre %]"],
+                                                      title     => "[% 'Detalle del registro fuente' | i18n %]"
+                                                );
+                [% END %]
+            </h3>
+            <br />
+            <dt class="inline left rightMargin">Signatura Topográfica:&nbsp; </dt> 
+            <dd>[% primer_signatura %]&nbsp;</dd>
+        [% END %]
+        
+    [% ELSE %]
+    
+	    <div class="alert fade in">
+           <strong>[% 'Este grupo no dispone de ejemplares' | i18n %]</strong>
+	    </div> 
+ 
+    [% END %]
+[% END %]
+

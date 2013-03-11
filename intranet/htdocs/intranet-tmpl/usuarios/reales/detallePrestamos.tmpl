@@ -1,0 +1,136 @@
+
+
+[% USE HTML %]
+[% IF prestamos_cant %]		
+		<fieldset> 
+              <legend class="titulo_legend_resaltado">
+                    [% "Ejemplares Prestados" | i18n %]
+                  [% IF prestamos_cant %] 
+                      <span class="badge badge-error" style="cursor: default;">[% prestamos_cant %]</span>
+                  [% END %]
+             </legend>
+                     [% IF prestamos_cant %]
+                          [% PERL %]
+                                print C4::AR::Filtros::tableHeader(   
+                                            id              => "table_tablaPrestamos",
+                                            class           => "",
+                                            selectAll_id    => "checkAllPrestamos",
+                                            columns         => ['[% "T&iacute;tulo"|i18n %]','[% "Autor"|i18n %]',
+                                                                '[% "C&oacute;digo de Barras" %]','[% "Sig. Top." | i18n %]',
+                                                                '[% "Ed." | i18n %]','[% "Vol." | i18n %]','[% "Pr&eacute;stamo" %]',
+                                                                '[% "Vencimiento" %]','[% "Tipo" %]'
+                                                              ]
+                                                                            
+                                                  ) ;
+                          [% END %]
+        
+                        
+                        <tbody>
+                        [% FOREACH prestamo IN PRESTAMOS %]
+                            <tr>
+                        
+                                <td>
+                                    <input type="checkbox" name="chkboxPrestamos" value="[% prestamo.getId_prestamo %]" id="[% prestamo.getId_prestamo %]">
+                                </td>
+
+                                <td>
+                                [% PERL %]
+                                    print C4::AR::Filtros::link_to(	text => "[% HTML.escape(prestamo.nivel3.nivel1.getTitulo) %]",
+                                                            url=>"[% url_prefix %]/catalogacion/estructura/detalle.pl", 
+                                                            params =>	["id1=[% prestamo.nivel3.nivel1.getId1 %]"],
+                                                          ) ;
+                                [% END %]
+                                </td>
+                                <td>
+                                [% IF prestamo.nivel3.nivel1.getAutor %]
+                                    [% prestamo.nivel3.nivel1.getAutor %]
+                                [% ELSE %]
+                                    &nbsp;
+                                [% END %]
+                                </td>
+                        
+                                <td>
+                                [% PERL %]
+                                    print C4::AR::Filtros::link_to(	text => 	"[% prestamo.nivel3.getBarcode %]",
+                                                                    url => 		"[% url_prefix %]/catalogacion/estructura/detalleEjemplar.pl", 
+                                                                    params =>	["id3=[% prestamo.getId3 %]"],
+                                                                    title =>	"[% 'Detalle del Ejemplar' | i18n %]"
+                                                                ) ;
+                                [% END %]
+                                </td>
+                        
+                                <td>
+                                    [% IF prestamo.nivel3.getSignatura_topografica %] 
+                                        [% PERL %]
+                                            print C4::AR::Filtros::link_to(	text => 	"[% prestamo.nivel3.getSignatura_topografica %]",
+                                                                            url => 		"[% url_prefix %]/catalogacion/estructura/detalle.pl", 
+                                                                            params =>	["id1=[% prestamo.nivel3.nivel1.getId1 %]"],
+                                                                ) ;
+                                        [% END %]
+                                    [% END %]
+                                </td>
+                        
+                                <td>  
+                                [% IF prestamo.nivel3.nivel2.getEdicion %] [% prestamo.nivel3.nivel2.getEdicion %] [% ELSE %] - [% END %]
+                                </td>
+                        
+                                <td> 
+                                [% IF prestamo.nivel3.nivel2.getVolumen %] t [% prestamo.nivel3.nivel2.getVolumen %] 
+                                    [% IF prestamo.nivel3.nivel2.getVolumenDesc %] ([% prestamo.nivel3.nivel2.getVolumenDesc %])  [% END %] 
+                                [% END %]
+                                </td>
+                                <td>
+                                [% IF prestamo.getFecha_prestamo %] 
+                                    [% prestamo.getFecha_prestamo_formateada %]
+                                [% ELSE %]
+                                    - 
+                                [% END %]
+                                </td>
+                        
+                                <td>
+                                    [% IF prestamo.getFecha_vencimiento %]
+                                     <span class="label [% IF prestamo.estaVencido %]label-important[% ELSE %] label-success[% END%]">
+                                         [% prestamo.getFecha_vencimiento_formateada %]
+                                      </span>
+                                    [% ELSE %]
+                                        - 
+                                    [% END %]
+                                </td>
+		
+                                <td>
+                                    [% IF prestamo.tipo.id_tipo_prestamo %]
+                                            [% prestamo.tipo.getDescripcion %]
+                                    [% END %]
+                                </td>
+                          </tr>
+                      [% END %] <!-- FOREACH prestamos -->
+                    </tbody>  
+                  
+			</table> 
+				[% IF circularDesdeDetalleUsuario == 1 %]
+				   [% IF prestamos_cant %]
+			            <div class="form-actions">
+			                      [% PERL %]
+			                              print C4::AR::Filtros::action_set_button(    
+			                                                                  button          => 'btn btn-primary',
+	                                                                          title => "Devolver", 
+	                                                                          action=>'realizarAccion("DEVOLUCION","table_tablaPrestamos",generaDivDevolucion)',
+	                                                                          icon=>"icon-white icon-share-alt",
+			                                                                  actions         => [
+			                                                                                      [% IF (algunoSeRenueva > 0) && (vencidos == 0) %]
+			                                                                                          {title => "Renovar", action=>'realizarAccion("RENOVACION","table_tablaPrestamos",generaDivRenovacion)', icon=>"icon-repeat"},
+		                                                                                          [% END %]
+			                                                                                      ],
+			                                                                  popover           => {title => "[% 'Pr&eacute;stamos' | i18n %]",
+			                                                                                        text => "[% 'Renovar (si aplica) o devolver ejemplares' | i18n %]" }
+			
+			                                      ) ;
+			                      [% END %]
+		                </div>
+	               [% END %]
+	            [% END %]
+            [% ELSE %]
+                <div class="alert alert-info">[% 'El usuario no tiene ning&uacute;n ejemplar en su poder.'| i18n %]</div>
+            [% END %]
+		</fieldset>
+[% END %]

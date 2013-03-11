@@ -1,0 +1,2 @@
+INSERT INTO `pref_tabla_referencia` (`id`, `nombre_tabla`, `alias_tabla`, `campo_busqueda`, `client_title`) 
+VALUES (NULL, 'usr_estado', 'usr_estado', 'nombre', 'Estado de Regularidad');

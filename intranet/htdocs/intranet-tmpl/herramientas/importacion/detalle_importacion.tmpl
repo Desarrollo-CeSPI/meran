@@ -1,0 +1,21 @@
+[% INCLUDE "intranet-top.inc" %]
+<script type="text/javascript" src="/intranet-tmpl/includes/importacion/detalleImportacion.js"></script>
+<script src="/intranet-tmpl/includes/visualizacionINTRA-min.js"></script>
+
+
+[% INCLUDE "FormValidateHelper.inc" %]
+
+<script type="text/javascript">
+
+    $(document).ready(function() {
+         detalleImportacion([% importacion.getId %]);
+    });
+
+</script>
+
+<div class="span90" id="detalleImportacion">
+
+</div>
+
+
+[% INCLUDE "intranet-bottom.inc" %]

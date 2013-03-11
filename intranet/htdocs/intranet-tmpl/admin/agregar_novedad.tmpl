@@ -1,0 +1,254 @@
+[% INCLUDE 'intranet-top.inc' %]
+
+<script>
+
+    //cantidad maxima de archivos a subir
+    var fileMax = 5;
+    
+    
+    function modificar(){
+        $('#form_novedad').submit();
+    }
+        
+    function agregar(){
+        $('#form_novedad').submit();
+    }
+    
+    function checkEliminarFotos(){
+    
+        var cant        = 0;
+        
+        $(':checkbox').each( 
+            function() { 
+                if($(this).attr('checked')){
+                    $('#listImagesDelete').append('<input type="hidden" name="imagen_' + cant +'" value="' + $(this).attr('id') + '">');
+                    cant++;
+                }
+            } 
+        ); 
+        
+        $('#listImagesDelete').append('<input type="hidden" name="cantidad" value="' + cant + '">');
+        
+        $('#form_novedad').submit();
+    
+    }
+    
+    $(document).ready(function() {      
+        
+        [% IF editing %]
+        
+            $('.fancylink').fancybox();
+        
+        [% END %]
+        
+    });
+    
+</script>
+
+[% USE HTML %]
+
+[% IF editing %]
+    <form id="form_novedad" action="[% url_prefix %]/admin/editar_novedad.pl" method="POST" class="form-horizontal" enctype="multipart/form-data">
+<fieldset>
+    <legend>[% "Editar novedad de OPAC" | i18n %]:</legend>
+[% ELSE %]
+    <form id="form_novedad" action="[% url_prefix %]/admin/agregar_novedad.pl" method="POST" class="form-horizontal" enctype="multipart/form-data">
+<fieldset>
+    <legend>[% "Agregar novedad de OPAC" | i18n %]:</legend>
+[% END %]
+
+                <div class="control-group">
+                    <label class="control-label" for="titulo">[% "Titulo" | i18n %]*</label>
+                    <div class="controls">
+                        <input type="text" id="titulo" required name="titulo" value="[% novedad.getTitulo %][% titulo %]" required>
+                    </div>
+                </div>
+                
+                <div class="control-group">
+                    <label class="control-label" for="categoria">[% "Categor&iacute;a" | i18n %]*</label>
+                    <div class="controls">
+                        <input type="text" id="categoria" required name="categoria" value="[% novedad.getCategoria %][% categoria %]" required>
+                    </div>
+                </div>
+                
+                <div class="control-group">
+                    <label class="control-label" for="contenido">[% "Contenido" | i18n %]*</label>
+                    <div class="controls">
+                        <textarea id="contenido" required name="contenido" style="width: 88.3%" required>[% novedad.getContenido %][% contenido %]</textarea>
+                    </div>
+                </div>
+
+                [% IF twitter_enabled %]
+                
+                    <div class="control-group">
+                        <div class="controls">
+                            <input type="checkbox" [% IF twiter %] checked="checked" [% END %] id="check_publicar" name="check_publicar" value="publicar">[% " Publicar en Twitter" | i18n %]
+                        </div>
+                    </div>
+
+                [% END %]
+                
+                <div class="control-group">
+                    <label class="control-label" for="contenido">[% "Archivo adjunto" | i18n %]</label>
+                    <div class="controls">
+                        [% IF editing %]
+                            [% IF novedad.getAdjunto %]
+                                <a href="http://[% SERVER_ADDRESS %]/opac-tmpl/uploads/novedades/[% novedad.getAdjunto %]">[% 'Click para ver adjunto' | i18n %]</a><br />
+                            [% END %]
+                        [% END %]
+                        <input type="file" name="adjunto" />
+                    </div>
+                </div>
+                
+                <div class="control-group">
+                    <label class="control-label" for="contenido">[% "Nombre del adjunto" | i18n %]</label>
+                    <div class="controls">
+                        [% IF editing %]
+                            <input type="text" value="[% novedad.getNombreAdjunto %]" name="nombreAdjunto" />
+                        [% ELSE %]
+                            <input type="text" value="" name="nombreAdjunto" />
+                        [% END %]
+                    </div>
+                </div>
+                
+                [% IF editing %]
+                
+                    <div class="control-group">
+                        <label class="control-label" for="links">[% "Links" | i18n %]</label>
+                        <div class="controls">
+                            <input type="text" id="links" name="links" value="[% novedad.getLinks %] [% links %]">
+                            [% PERL %]
+                            
+                                print C4::AR::Filtros::setHelpInput(
+                                                        text => "[% 'Ingrese los links separados por espacio.' | i18n %]",
+                                
+                                );
+                            
+                            [% END %]
+                        </div>
+                    </div>
+                    <input type="hidden" id="action" name="action" value="editar">
+                    <input type="hidden" id="token" name="token" value="[% token %]">
+                    <input type="hidden" id="novedad_id" name="novedad_id" value="[% novedad.id %]">
+ 
+                    [% IF cant_novedades %]
+                
+                    <div class="control-group">
+                        <label class="control-label" >[% "Imagen/es a eliminar" | i18n %]</label>
+                        <div class="controls">
+                            [% FOREACH imagen IN imagenes_hash %]
+	                            <a class="fancylink" id="imagen_[% imagen.getImageName %]" rel="group" href="http://[% SERVER_ADDRESS_OPAC %]/opac-tmpl/uploads/novedades/[% imagen.getImageName %]">
+                                    <img border="0" src="http://[% SERVER_ADDRESS_OPAC %]/opac-tmpl/uploads/novedades/[% imagen.getImageName %]"
+                                          style="width: 60%; max-width: 120px;" 
+                                          alt="[% socio.persona.getApellido %], [% socio.persona.getNombre %] ([% socio.getNro_socio %])"
+                                          title="[% socio.persona.getApellido %], [% socio.persona.getNombre %] ([% socio.getNro_socio %])"
+                                    >
+                                </a>
+                                <input type="checkbox" name="eliminar_imagen_[% imagen.getId %]"  id="[% imagen.getImageName %]" />
+	                        [% END %]
+
+                        </div>
+                        <div id="listImagesDelete"></div>
+                    </div>
+                    
+                    [% END %]
+                    
+                    <div id="divImages" class="accordion">
+                        <div class="accordion-group">
+                            <div class="accordion-heading">
+                                <a class="accordion-toggle" href="#addImages" data-parent="#divImages" data-toggle="collapse"> Agregar nuevas imagenes </a>
+                            </div>
+                                
+                            <div id="addImages" class="accordion-body collapse">
+                                <div class="accordion-inner">
+                                
+                                    <div class="control-group">
+                                        <label class="control-label" for="contenido">[% "Imagen/es" | i18n %]</label>
+                                        <div class="controls">
+                                            <span>[% " Agregar archivos..." | i18n %]</span><input name="imagenes" type="file" multiple>
+                                        </div>
+                                        
+                                        <div id="imagesList"></div>
+                                        
+                                    </div>
+                                
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                
+                
+                [% ELSE %]
+                
+                    <div class="control-group">
+                        <label class="control-label" for="links">[% "Links" | i18n %]</label>
+                        <div class="controls">
+                            <input type="text" id="links" name="links" value="[% novedad.getCategoria %]">
+                            [% PERL %]
+                            
+                                print C4::AR::Filtros::setHelpInput(
+                                                        text => "[% 'Ingrese los links separados por espacio.' | i18n %]",
+                                
+                                );
+                            
+                            [% END %]
+                        </div>
+                    </div>
+                
+                    <div class="control-group">
+                        <label class="control-label" >[% "Imagen/es" | i18n %]</label>
+                        <div class="controls">
+                            <span>[% " Agregar archivos..." | i18n %]</span><input name="imagenes" type="file" multiple>
+                        </div>
+                        
+                        <div id="imagesList"></div>
+                        
+                    </div>
+                    <input type="hidden" id="action" name="action" value="agregar">
+                    
+                [% END %]
+            
+                <input type="hidden" id="token" name="token" value="[% token %]">
+                <div class="form-actions">
+                [% IF editing %]
+                
+                    [% PERL %]
+                          print C4::AR::Filtros::action_link_button( 
+                                                          button    => "btn",
+                                                          url       => "[% url_prefix %]/admin/novedades_opac.pl",
+                                                          icon        => "icon-arrow-left",
+                                                          title     => " [% 'Volver al listado' | i18n %]",
+                                                      ) ;
+
+                    [% END %]
+                    
+                    [% PERL %]
+                          print C4::AR::Filtros::action_button( 
+                                                            button      => "btn btn-primary",
+                                                            action      => "checkEliminarFotos()", 
+                                                            icon        => "icon-white icon-pencil",
+                                                            title       => "[% 'Modificar' | i18n %]",
+                                                          ) ;
+
+
+                    [% END %]
+                    
+                [% ELSE %]
+                
+                    [% PERL %]
+                          print C4::AR::Filtros::action_link_button( 
+                                                          button    => "btn",
+                                                          icon        => "icon-arrow-left",
+                                                          url       => "[% url_prefix %]/admin/novedades_opac.pl",
+                                                          title     => " [% 'Volver al listado' | i18n %]",
+                                                      ) ;
+
+                    [% END %]
+                    <button class="btn btn-primary" type="submit"><i class="icon-white icon-ok"></i> [% 'Aceptar' | i18n %]</button>
+                    
+                [% END %]
+                </div>
+            </form>
+</fieldset>
+
+[% INCLUDE 'intranet-bottom.inc' %]

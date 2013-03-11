@@ -1,0 +1,5 @@
+ALTER TABLE `cat_visualizacion_opac` DROP `id_perfil`;
+ALTER TABLE `cat_visualizacion_opac` ADD `pre` VARCHAR( 12 ) NULL AFTER `campo`, ADD `post` VARCHAR( 12 ) NULL AFTER `pre`;
+ALTER TABLE `cat_visualizacion_opac` ADD `tipo_ejemplar` CHAR( 3 ) NULL DEFAULT NULL AFTER `campo`;
+UPDATE `cat_visualizacion_opac` SET `tipo_ejemplar` = 'ALL';
+DROP TABLE `cat_perfil_opac`;

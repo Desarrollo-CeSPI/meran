@@ -1,0 +1,2 @@
+ALTER TABLE `cat_ref_tipo_nivel3` ADD `enable_nivel3` INT( 1 ) NOT NULL DEFAULT '1';
+UPDATE `cat_ref_tipo_nivel3` SET `enable_nivel3` = 0 WHERE `id_tipo_doc` = 'ANA';

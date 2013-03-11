@@ -1,0 +1,11 @@
+ALTER TABLE `logoEtiquetas` CHANGE `ancho` `ancho` VARCHAR( 255 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL ,
+CHANGE `alto` `alto` VARCHAR( 255 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL ;
+
+CREATE TABLE IF NOT EXISTS `logoUI` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `nombre` varchar(256) NOT NULL,
+  `imagenPath` varchar(255) NOT NULL,
+  `ancho` varchar(255) DEFAULT NULL,
+  `alto` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=15 ;

@@ -1,0 +1,83 @@
+[% USE HTML %]
+<script src="/includes/jquery/jquery.jeditable.js"></script>
+<script src="/intranet-tmpl/includes/visualizacionINTRA-min.js"></script>
+
+<script type="text/javascript">
+      var loaderPath= "";
+      $(document).ready(function() {
+        loaderPath = '<img src="'+imagesForJS+'/loaders/loader_facebook.gif"'+'>'
+        $('.editable').editable('[% url_prefix %]/herramientas/importacion/esquemas_importacionDB.pl', { 
+              type      : 'text',
+              tooltip   : EDITABLE_MSG,
+              placeholder: EDITABLE_MSG,
+              style   : 'display: inline',
+              submitdata : {token: "[% token %]", edit: '1'},
+              indicator : loaderPath,
+              callback: function(){makeDataTable('#tablaResult');},
+
+        });
+
+      });
+</script>
+
+[% IF info_esquema %]
+	<div id="tabla_referencia">
+	    <fieldset>
+	        <legend>[% "Esquema " | i18n %] [% HTML.escape(esquema_title) %]</legend>
+	                        [% PERL %]
+                                print C4::AR::Filtros::tableHeader(   
+                                                  id              => "datos_tabla_div_esquema",
+                                                  class           => "clases_adicionales",
+                                                  selectAll_id    => "",
+                                                  columns         => ['[% "Nombre"|i18n %]','[% "Descripci&oacute;n"|i18n %]',
+                                                                    '[% "Eliminar"|i18n %]',
+                                                                     ]                                   
+                                            ) ;
+                            [% END %]
+                            
+	                        <tbody>
+	                             <tr>
+	                                <td class="editable_esquema" id="[% info_esquema.id %]___nombre">[% HTML.escape(info_esquema.getNombre) %]</td>
+	                                <td class="editable_esquema" id="[% info_esquema.id %]___desc">[% HTML.escape(info_esquema.getDescripcion) %]</td>
+	                                <script>
+	                                    $('.editable_esquema').editable('[% url_prefix %]/herramientas/importacion/esquemas_importacionDB.pl', { 
+	                                        type      : 'text',
+	                                        style   : 'display: inline',
+	                                        submitdata : {token: "[% token %]", edit: '1', edit_esquema: '1'},
+	                                        indicator : loaderPath,
+	
+	                                   }); 
+	                                </script>
+	                                <td>
+	                                    [% PERL %]
+                                            print C4::AR::Filtros::action_button( 
+                                                                          button    => "btn click btn-danger",
+                                                                          action    => "eliminarEsquema([% id3 %])", 
+                                                                          icon      => "icon-remove icon-white",
+                                                                          title     => "",
+                                                                      ) ;
+
+
+                                        [% END %]
+	                                </td>
+	                             </tr>
+	                        </tbody>
+	                    </table>
+	        [% IF table_error_message_esquema %]
+	        	<div class="alert alert-info" > [% table_error_message_esquema %] </div>
+	        [% END %]
+	    </fieldset>
+	</div>
+
+	<a class="btn" href="#split_campos">[% 'Separaci&oacute;n de Campos' | i18n %]</a>
+	<a class="btn" href="#join_campos">[% 'Uni&oacute;n de Campos' | i18n %]</a>
+	
+    </br>
+    </br>
+    </br>
+	<div class="pill-content">
+	  <div class="active" id="split_campos">[% INCLUDE 'herramientas/importacion/_detalle_esquema.inc' %]</div>
+	  <div id="join_campos"></div>
+	</div>
+	
+[% END %]

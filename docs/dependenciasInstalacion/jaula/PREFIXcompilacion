@@ -1,0 +1,1 @@
+INSTALL_BASE=/usr/share/meran/intranet/modules/C4/Share/ INSTALLMAN1DIR=/usr/share/meran/intranet/modules/C4/Share/usr/local/lib/perl5/man INSTALLMAN3DIR=/usr/share/meran/intranet/modules/C4/Share/usr/local/lib/perl5/man/man3

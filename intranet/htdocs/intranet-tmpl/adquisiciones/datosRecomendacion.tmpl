@@ -1,0 +1,134 @@
+[% INCLUDE "intranet-top.inc" %]
+
+<script type="text/javascript" charset="utf-8">
+
+function actualizarRecomendacion(){
+
+      objAH                     = new AjaxHelper(updateActualizarRecomendacion)
+      objAH.url=URL_PREFIX+'/adquisiciones/recomendacionesDB.pl'
+      objAH.debug               = true
+      objAH.showOverlay         = true;
+      objAH.id_recomendacion    = $('#recomendacion_id').val()
+      objAH.cat_nivel           = $('#cat_nivel').val()
+      objAH.autor               = $('#autor').val()
+      objAH.titulo              = $('#titulo').val()
+      objAH.lugar_publicacion   = $('#lugar_publicacion').val()
+      objAH.editorial           = $('#editorial').val()
+      objAH.fecha_publicacion   = $('#fecha_publicacion').val()
+      objAH.coleccion           = $('#coleccion').val()
+      objAH.isbn                = $('#isbn').val()
+      objAH.cantidad_ejemplares = $('#cantidad_ejemplares').val()
+      objAH.motivo_propuesta    = $('#motivo_propuesta').val()
+      objAH.comentario          = $('#comentario').val()
+      objAH.reserva_material    = $('#reserva_material').val()
+      
+      objAH.tipoAccion          = 'ACTUALIZAR_RECOMENDACION'
+      objAH.sendToServer()
+}
+
+function updateActualizarRecomendacion(responseText){
+    if (!verificarRespuesta(responseText))
+            return(0);
+    var Messages=JSONstring.toObject(responseText);
+    setMessages(Messages);
+}
+
+</script>
+
+<fieldset id="datos_pedido_cotizacion">
+    <legend class="titulo_legend">[% "Detalle de Recomendacion" | i18n %]</legend>
+        <table id="tablaPedidoCotizacion" name="tabla" class="datos_tabla" border=0 cellspacing=0 cellpadding=0 >
+        <thead>
+            <tr class="titulo_tabla_resultado">
+                <th>
+                    [% "Cat Nivel 2" | i18n %]
+                </th>
+                <th>
+                    [% "Autor" | i18n %]
+                </th>
+                <th>
+                    [% "Titulo" | i18n %]
+                </th>
+                <th>
+                    [% "Lugar Publicacion" | i18n %]
+                </th>
+                <th>
+                    [% "Editorial" | i18n %]
+                </th>
+                <th>
+                    [% "Fecha Publicacion" | i18n %]
+                </th>
+                <th>
+                    [% "Coleccion" | i18n %]
+                </th>
+                <th>
+                    [% "ISBN/ISSN" | i18n %]
+                </th>
+                <th>
+                    [% "Cantidad Ejemplares" | i18n %]
+                </th>
+                <th>
+                    [% "Motivo Propuesta" | i18n %]
+                </th>
+                <th>
+                    [% "Comentario" | i18n %]
+                </th>
+                <th>
+                    [% "Reserva Material" | i18n %]
+                </th>
+            </tr>
+        </thead>
+        <tbody> 
+        [% FOREACH recomendacion IN recomendaciones %]
+            <tr align="center">
+                <td align="right" >
+                    <input type="hidden" value="[% recomendacion.getId %]" id="recomendacion_id" />
+                    <input type="text" id="cat_nivel" value="[% recomendacion.getCatNivel2Id %]" />
+                </td>
+                <td align="right" >
+                    <input type="text" id="autor" value="[% recomendacion.getAutor %]" />
+                </td>
+                <td align="right" >
+                    <input type="text" id="titulo" value="[% recomendacion.getTitulo %]" />
+                </td>
+                <td align="right" >
+                    <input type="text" id="lugar_publicacion" value="[% recomendacion.getLugarPublicacion %]" />
+                </td>
+                <td align="right" >
+                    <input type="text" id="editorial" value="[% recomendacion.getEditorial %]" />
+                </td>
+                <td align="right" >
+                    <input type="text" id="fecha_publicacion" value="[% recomendacion.getFechaPublicacion %]" />
+                </td>
+                <td align="right" >
+                    <input type="text" id="coleccion" value="[% recomendacion.getColeccion %]" />
+                </td>
+                <td align="right" >
+                    <input type="text" id="isbn" value="[% recomendacion.getIsbnIssn %]" />
+                </td>
+                <td align="right" >
+                    <input type="text" id="cantidad_ejemplares" value="[% recomendacion.getCantidadEjemplares %]" />
+                </td>
+                <td align="right" >
+                    <input type="text" id="motivo_propuesta" value="[% recomendacion.getMotivoPropuesta %]" />
+                </td>
+                <td align="right" >
+                    <input type="text" id="comentario" value="[% recomendacion.getComentario %]" />
+                </td>
+                <td align="right" >
+                    <input type="text" id="reserva_material" value="[% recomendacion.getReservaMaterial %]" />
+                </td>
+            </tr>          
+        [% END %]
+        </tbody>   
+        </table>
+        [% PERL %]
+            print C4::AR::Filtros::to_Button( 
+                                                text    =>  "[% 'Aceptar' | i18n %]",
+                                                boton   =>  "boton_buscar",
+                                                onClick =>  "actualizarRecomendacion()",
+                    ) ;                    
+        [% END %]
+</fieldset>
+
+[% INCLUDE "intranet-bottom.inc" %]

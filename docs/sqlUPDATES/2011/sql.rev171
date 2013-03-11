@@ -1,0 +1,1 @@
+INSERT INTO `pref_tabla_referencia_conf` (`id`, `tabla`, `campo`, `campo_alias`, `visible`) VALUES (NULL, 'ref_colaborador', 'descripcion', 'descripcion', '1');

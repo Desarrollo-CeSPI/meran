@@ -1,0 +1,1 @@
+INSERT INTO `pref_preferencia_sistema` (`id`, `variable`, `value`, `explanation`, `options`, `type`, `categoria`) VALUES (NULL, 'open_sabado', '09:00', 'Horario de Apertura de la Biblioteca los dias sabado (DEBE SER HH:MM !!!!)', NULL, 'text', NULL), (NULL, 'close_sabado', '13:00', 'Horario de Cierre de la Biblioteca los dias sabado (DEBE SER HH:MM !!!!)', NULL, 'text', NULL);

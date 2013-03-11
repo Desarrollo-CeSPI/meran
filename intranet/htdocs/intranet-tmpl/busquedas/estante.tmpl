@@ -1,0 +1,60 @@
+<script type="text/javascript">
+      $(document).ready(function() {
+        $('.fancylink').fancybox();
+      });
+</script>
+<fieldset class="resultados_busqueda">
+    <legend class="click" title='[% "click para acceder a los resultados de la b&uacute;squeda" | i18n %]'>
+        [% "Resultados de la b&uacute;squeda (cat&aacute;logo)" | i18n %]:</legend>
+        <div class="datos_tabla_div" id="datos_tabla_div">
+            <div class="resultados_consulta">[% "T&eacute;rmino de b&uacute;squeda" | i18n %]:           
+                <h2><i>[% buscoPor %]</i></h2>
+            </div>
+            <div class="resultados_consulta">[% "Total de registros" | i18n %]: <b>[% cantidad %]</b>  en ([% timeSeg %] segundos)</div>
+           
+            <div class="contenedor_paginador">[% paginador %]</div>
+
+            [% PERL %]
+                      print C4::AR::Filtros::tableHeader(   
+                                        id              => "tablaResult",
+                                        class           => "",
+                                        selectAll_id    => "",
+                                        columns         => ['[% "Estante"|i18n %]']                                  
+                      ) ;
+            [% END %]
+
+              <tbody>
+                      <!-- Actual Resultados de la b&uacute;squeda -->
+                      [% FOREACH estante IN SEARCH_RESULTS %]
+                          <tr class="datos_tabla_estantes">
+                              <td>
+                                    [% auxEstante = estante %]
+                                    [% listaEstantes = '' %]
+                                    [% WHILE auxEstante > 0 %]
+                                        [% IF listaEstantes != ''%] [%  listaEstantes = ' / ' _ listaEstantes %] [% END %]
+                                        [%  listaEstantes = auxEstante.getEstante _ listaEstantes %]
+                                        [% IF auxEstante.getPadre %]
+                                              [% auxEstante = auxEstante.estante_padre %]
+                                        [% ELSE %]
+                                              [% auxEstante = 0 %]
+                                        [% END %]
+                                    [% END %]
+
+                                    [% PERL %]
+                                    print C4::AR::Filtros::link_to( text =>     "[% listaEstantes %]",
+                                                    url=>"[% url_prefix %]/estantes/verDetalleEstante.pl", 
+                                                    params =>   ["id_estante=[% estante.getId %]"],
+                                                    title =>    "[% 'Mostrar Detalle del Estante' | i18n %]",
+                                                    class => "link_to_detail"
+                                                    ) ;
+                                    [% END %]
+
+                              </td>
+                          </tr>
+                      [% END %]
+              </tbody>
+            </table>
+        </div>
+        
+        
+</fieldset>

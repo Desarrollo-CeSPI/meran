@@ -1,0 +1,5 @@
+ALTER TABLE  `sys_novedad_intra` ENGINE = INNODB;
+ALTER TABLE  `sys_novedad_intra_no_mostrar` ENGINE = INNODB;
+ALTER TABLE  `sist_sesion` ENGINE = INNODB;
+ALTER TABLE  `usr_socio` ENGINE = INNODB;
+ALTER TABLE  `usr_persona` ENGINE = INNODB;

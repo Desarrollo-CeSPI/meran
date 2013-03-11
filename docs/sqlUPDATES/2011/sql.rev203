@@ -1,0 +1,7 @@
+ALTER TABLE  `io_importacion_iso_esquema_detalle` CHANGE  `campo_destino`  `campo_destino` CHAR( 3 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL ,
+CHANGE  `subcampo_destino`  `subcampo_destino` CHAR( 1 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL;
+
+ALTER TABLE  `io_importacion_iso_esquema_detalle` ADD  `nivel` INT NULL ,
+ADD  `ignorar` INT NOT NULL DEFAULT  '0';
+
+ALTER TABLE  `io_importacion_iso_esquema_detalle` CHANGE  `id`  `id` INT( 11 ) NOT NULL AUTO_INCREMENT;

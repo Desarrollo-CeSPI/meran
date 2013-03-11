@@ -1,0 +1,186 @@
+
+<fieldset class="resultados_busqueda">
+    [% PERL %]
+    print C4::AR::Filtros::tabbedPane( titulo    => "[% 'Detalle de Registro' | i18n %]",
+                                 subtitulo => "[% 'Navegue por las pesta&ntilde;as para acceder a las distintas vistas' | i18n %]",
+                                 content   => [ {id => 'VP', text => "[% 'Vista Previa' | i18n %]"},
+												{id => 'RO', text=> "[% 'Registro Original' | i18n %]" },
+                                                {id => 'RR', text => "[% 'Registro Resultado' | i18n %]"},
+                                              ],
+                                 content_id=> ['detalle_registro'],
+                                 active_id => 'VP',
+
+    
+    );
+	[% END %]
+
+  <div class="tab-pane fade in active" id="VP">
+            
+    <fieldset>
+          <div class="page-header">
+            <h1>[% "Detalles de Nivel 1 registro" | i18n %]<small>([% nivel1_template %])</small></h1>
+           </div>
+
+        <div id="detalle1" class="detalle1">
+            <dl>
+                [% FOREACH nivel1 %]
+                        [% IF liblibrarian %]
+                            [% IF dato %]
+										<dt class="inline left rightMargin">[% liblibrarian %]:&nbsp;</dt> 
+										<dd>[% dato %]&nbsp;
+										[% IF referencia %]
+										([% "Referencia a " | i18n %] [% referencia %] => <b>[% referencia_tabla %]@[% IF referencia_encontrada %][% referencia_encontrada %][% ELSE %]__NUEVA__[% END %]</b>)
+                                        [% END %]
+                                        </dd>
+                            [% END %]
+                        [% END %]
+                [% END %]
+            </dl>
+
+ 	<h4>[% "N&uacute;mero Total de Ejemplares" | i18n %]:<b> [% cantItemN1 %]</b></h4>
+        </div>
+    </fieldset>
+
+[% FOREACH nivel2 %]
+
+        <div >
+            <fieldset>
+						<div class="page-header">
+	                       <h2>[% "Detalle de Nivel 2 " | i18n %] <small>[% "GRUPO" | i18n %] - [% tipo_documento.getNombre() %] ([% nivel2_template %])</small></h2>
+                        </div>                      
+                        
+                        <div id="grupo" class="grupo">
+
+                        <!-- NIVEL 2 -->
+                            <div id="[% id2 %]" style="position: relative; float:right;"></div>
+                           <div id="indice_data[% id2 %]" style="display:none">
+                            <pre>[% indice %]</pre>
+                          </div>
+
+                            <br>
+
+                            [% IF isbn %]
+                               <div style="position: relative; float:right; margin-right: 12px;">
+                                    <div class="google-books">
+                                        <a style="margin-left: 10px;" id="ISBN:[% isbn %]"  style="display:none" target="_blank">
+                                            <img src="/includes/css/gbs_preview_button1.gif" border="0" style="margin: 0"/>
+                                        </a>
+                                    </div>
+                                    <script src="http://books.google.com/books?jscmd=viewapi&bibkeys=ISBN:[% isbn %]&callback=ProcessGBSBookInfo"></script>
+                               </div>
+                            [% END %]
+
+                            <dl>
+                                [% FOREACH nivel2_array %]
+                                    [% IF liblibrarian %]
+                                        [% IF dato %]
+										<dt class="inline left rightMargin">[% liblibrarian %]:&nbsp;</dt> 
+										<dd>[% dato %]&nbsp;
+										[% IF referencia %]
+										([% "Referencia a " | i18n %] [% referencia %] => <b>[% referencia_tabla %]@[% IF referencia_encontrada %][% referencia_encontrada %][% ELSE %]__NUEVA__[% END %]</b>)
+                                        [% END %]
+										</dd>
+                                        [% END %]
+                                    [% END %]
+                                [% END %] <!-- END FOREACH nivel2_array -->
+                                <dd>
+                                                                       
+                                    [% IF cant_nivel3 %]
+		
+										<fieldset>
+											<div class="page-header">
+											<h3 >[% "Ejemplares" | i18n %]</h3>
+											</div>
+											<div id="ejemplaresDelGrupo" class="ejemplaresDelGrupo" >
+													<div class="alert alert-info">
+														<dl>
+															<dt class="inline left rightMargin">[% "Ejemplares Disponibles:"|i18n %]</dt>
+															   <dd> [% disponibles %]</dd>
+															 <dt class="inline left rightMargin">[% "Ejemplares Disponibles para Sala de Lectura:"|i18n %]</dt>
+															 <dd> [% disponibles_sala %]</dd>
+															 <dt class="inline left rightMargin">[% "Ejemplares Disponibles para Domicilio:"|i18n %]</dt>
+															 <dd> [% disponibles_domiciliario %]</dd>
+															 <dt class="inline left rightMargin">[% "Ejemplares No Disponibles:"|i18n %]</dt>
+															  <dd> [% no_disponibles %]</dd>
+														</dl>
+												</div>                
+
+													<form id="tablaEjemplares[% id2 %]" name="tablaEjemplares[% id2 %]" action="[% url_prefix %]/catalogacion/barcode_gen.pl" method="post">
+														[% PERL %]
+															print C4::AR::Filtros::tableHeader(   
+																									id              => "tabla_ejemplares[% id2 %]",
+																									class           => "",
+																									columns         => ['[% "Sig. Top."|i18n %]',
+																														'[% "C&oacute;digo"|i18n %]',
+																														'[% "Disponibilidad"|i18n %]',
+																														'[% "Estado"|i18n %]',
+																													   ]
+																									
+																		) ;
+														[% END %]
+														
+														<tbody>
+														[% FOREACH nivel3 %]
+																<tr>
+																		
+																		<td>[% signatura_topografica %]</td>
+																		<td>[% barcode %]</td>
+																		<td>[% disponibilidad.getNombre() %]</td>
+																		<td>[% estado.getNombre() %] </td>
+															  </tr>
+													[%   IF loop.last %]
+													</tbody>
+
+													[% END %]<!-- END IF loop.last -->
+													
+													
+													[% END %]<!-- END FOREACH NIVEL 3 -->
+													  </tbody>
+												  </form>
+											  </table>
+									</div> <!--end <div id="ejemplaresDelGrupo -->
+								</fieldset>
+
+								[% ELSE %]
+										<div class="alert fade in">
+										   <strong>[% 'Este grupo no dispone de ejemplares' | i18n %]</strong>
+										</div>    
+								[% END %]
+                                  
+                                </dt>
+                            </dd>
+
+                </div> <!--Fin <div id="grupo[  id2 ]-->
+            </fieldset>
+        </div>
+
+[% END %]<!-- END FOREACH Nivel 2-->
+</div> <!-- Fin DIV class="tab-pane fade in active" id="VP" -->
+
+        <div class="tab-pane fade" id="RO">
+                <pre>
+                    [% registro_importacion.getRegistroMARCOriginal.as_formatted %]
+                </pre>
+
+                [% FOREACH registro_ejemplar IN registro_importacion.getRegistrosHijo %]
+
+                    <fieldset class="resultados_busqueda">
+                    <legend class="titulo_legend trigger click">[% "Registro Hijo" | i18n %]</legend>
+                        <pre>
+                            [% registro_ejemplar.getRegistroMARCOriginal.as_formatted %]
+                        </pre>
+                    </fieldset>
+                [% END %]
+        </div>
+
+        <div class="tab-pane fade" id="RR">
+                <pre>
+                    [% registro_importacion.getRegistroMARCResultado.as_formatted %]
+                </pre>
+        </div>
+
+
+      </div>
+    </div>
+ </section>
+</fieldset>

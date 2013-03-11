@@ -1,0 +1,26 @@
+[% USE HTML %]
+
+[% IF cantidad %]
+<br />
+  <fieldset>
+      <legend>[% "Novedades internas" | i18n %]</legend>
+      <br />
+
+              [% FOREACH novedad IN novedades %]
+                  <blockquote>
+                    <p><a href='#' onclick="showNovedad([% novedad.getId %]);">[% HTML.escape(novedad.getTitulo) %] ([% novedad.getFechaLegible %])</a></p>
+                    <small>[% HTML.escape(novedad.getResumen) %]
+                        <cite title="">
+                              <a href='#' onclick="showNovedad([% novedad.getId %]);">
+                                          [% 'Leer m&aacute;s' | i18n %]
+                              </a>
+                        </cite>
+                    </small>
+                  </blockquote>
+
+              [% END %]
+
+  </fieldset>
+  
+<div id="mostrar_novedad" class="modal hide fade"></div>
+[% END %]

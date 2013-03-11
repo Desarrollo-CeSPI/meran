@@ -1,0 +1,1136 @@
+[% INCLUDE "intranet-top.inc" %]
+    
+<fieldset width="100%">
+    <legend class="titulo_legend"> [% "Configuraci&oacute;n del servidor LDAP" | i18n %] </legend>
+    <div>
+        <h3>Usar un servidor LDAP</h3>
+        <p>Este método proporciona autenticaci&oacute;n contra un servidor LDAP externo. Si el nombre de usuario y contraseña facilitados son validos, MERAN crea una nueva entrada para el usuario en su base de datos.</p>
+    </div>  
+<br>
+<form action="[% url_prefix %]/admin/global/ldap_config.pl?token=[% token %]" method="post" class="form-horizontal" onsubmit="startOverlay(); return true;">
+    <input type="hidden" name="adding" value="1"/>
+
+    <fieldset>
+        <legend>[% 'Ajustes de servidor LDAP' | i18n %] </legend>
+       
+	    <div class="control-group">
+	        <label class="control-label" for="host_url">[% 'URL del servidor' | i18n %]: </label>
+	        <div class="controls">
+	            <input name="host_url" size="30" value="[% preferencias.ldap_server %]" type="text">
+	            [% PERL %]
+	                print C4::AR::Filtros::setHelpInput(   
+	                                                text        => "[% 'Direccion del servidor LDAP.' | i18n %]",
+	                                        ) ;
+	                
+	            [% END %]
+	        </div>
+	    </div>
+	    
+	    <div class="control-group">
+	        <label class="control-label" for="host_port">[% 'Puerto del servidor' | i18n %]: </label>
+	        <div class="controls">
+	            <input name="host_port" size="30" value="[% preferencias.ldap_port %]" type="text">
+	            [% PERL %]
+	                print C4::AR::Filtros::setHelpInput(   
+	                                                text        => "[% 'Indique el numero de puerto del servidor.' | i18n %]",
+	                                        ) ;
+	                
+	            [% END %]
+	        </div>
+	    </div>
+	    
+	    <div class="control-group">
+	        <label class="control-label" for="host_type">[% 'Tipo de comunicaci&oacute;n' | i18n %]: </label>
+	        <div class="controls">
+	            <select name="host_type">
+	                <option value="TLS" [% IF preferencias.ldap_type == 'TLS' %] selected="selected" [% END %]>TLS</option>
+	                <option value="SSL" [% IF preferencias.ldap_type == 'SSL' %] selected="selected" [% END %]>SSL</option>
+	                <option value="PLAIN" [% IF preferencias.ldap_type == 'PLAIN' %] selected="selected" [% END %]>PLAIN</option>
+	            </select>
+	            [% PERL %]
+	                print C4::AR::Filtros::setHelpInput(   
+	                                    text        => "[% 'Indica como sera la comunicacion, SSL, TLS o PLAIN, por defecto es PLAIN.' | i18n %]",
+	                            ) ;
+	                
+	            [% END %]
+	        </div>
+	    </div>
+	    
+	    <div class="control-group">
+	        <label class="control-label" for="version">[% 'Versi&oacute;n' | i18n %]: </label>
+	        <div class="controls">
+	            <select id="menuversion" name="version"> 
+	               <option value="2" [% IF preferencias.ldap_version == 2 %] selected="selected" [% END %]>2</option> 
+	               <option value="3" [% IF preferencias.ldap_version == 3 %] selected="selected" [% END %]>3</option> 
+	            </select> 
+	            [% PERL %]
+	                print C4::AR::Filtros::setHelpInput(   
+	                                    text        => "[% 'La versi&oacute;n del protocolo LDAP que su servidor est&aacute; utilizando.' | i18n %]",
+	                            ) ;
+	                
+	            [% END %]
+	        </div>
+	    </div>
+	    
+	    <div class="control-group">
+	        <label class="control-label" for="ldapencoding">[% 'Codificaci&oacute;n LDAP' | i18n %]: </label>
+	        <div class="controls">
+	            <input id="ldapencoding" size="30" name="ldapencoding" value="[% preferencias.ldap_encoding %]" type="text"> 
+	            [% PERL %]
+	                print C4::AR::Filtros::setHelpInput(   
+	                                    text        => "[% 'Especifique la codificaci&oacute;n usada por el servidor LDAP. Muy probablemente utf-8, MS AD v2 utiliza codificaci&oacute;n de plataforma por defecto como cp1252, cp1250, etc.' | i18n %]",
+	                            ) ;
+	                
+	            [% END %]
+	        </div>
+	    </div>
+	    
+	    <div class="control-group">
+	        <label class="control-label" for="prefijo_base">[% 'Sufijo de la base de datos' | i18n %]: </label>
+	        <div class="controls">
+	            <input name="prefijo_base" size="30" value="[% preferencias.ldap_prefijo_base %]" type="text"> 
+	            [% PERL %]
+	                print C4::AR::Filtros::setHelpInput(   
+	                                    text        => "[% 'Sufijo de la Base de Datos Ldap que se usa para completar el usuario. Ej: dc=unlp,dc=edu,dc=ar.' | i18n %]",
+	                            ) ;
+	                
+	            [% END %]
+	        </div>
+	    </div>
+	    <br>
+    </fieldset> 
+    
+    <fieldset>
+        <legend>[% 'Fijar ajustes' | i18n %] </legend>
+    
+	    <div class="control-group">
+	        <label class="control-label" for="agregar_user_ldap">[% 'Agregar desde LDAP' | i18n %]: </label>
+	        <div class="controls">
+	            <select name="agregar_user_ldap">
+	                <option value="0" [% IF preferencias.ldap_agregar_user == 0 %] selected="selected" [% END %]>No</option>
+	                <option value="1" [% IF preferencias.ldap_agregar_user == 1 %] selected="selected" [% END %]>Si</option>
+	            </select>
+	            [% PERL %]
+	                print C4::AR::Filtros::setHelpInput(   
+	                                    text        => "[% 'Indica si se agrega automaticamente a la base de MERAN un usuario valido en el LDAP cuando se autentica positivamente. 0 o 1.' | i18n %]",
+	                            ) ;
+	                
+	            [% END %]
+	        </div>
+	    </div>
+	    
+	    <div class="control-group">
+	        <label class="control-label" for="bind_dn">[% 'Nombre distinguido' | i18n %]: </label>
+	        <div class="controls">
+	            <input name="bind_dn" id="bind_dn" size="30" value="[% preferencias.ldap_bind_dn %]" type="text"> 
+	            [% PERL %]
+	                print C4::AR::Filtros::setHelpInput(   
+	                                    text        => "[% 'Si quiere usar *bind-user* para buscar usuarios, especif&iacute;quelo aqu&iacute;. Algo como cn=ldapuser,ou=public,o=org.' | i18n %]",
+	                            ) ;
+	                
+	            [% END %]
+	        </div>
+	    </div>
+	    
+	    <div class="control-group">
+	        <label class="control-label" for="bind_pw">[% 'Contrase&ntilde;a' | i18n %]: </label>
+	        <div class="controls">
+	            <input name="bind_pw" id="bind_pw" size="30" value="[% preferencias.ldap_bind_pw %]" type="password"> 
+	            [% PERL %]
+	                print C4::AR::Filtros::setHelpInput(   
+	                                    text        => "[% 'Contrase&ntilde;a para bind-user.' | i18n %]",
+	                            ) ;
+	                
+	            [% END %]
+	        </div>
+	    </div>
+	    <br>
+    </fieldset> 
+    
+    <fieldset>
+        <legend>[% 'Ajustes de b&uacute;squeda de usuario' | i18n %] </legend>
+    
+	    <div class="control-group">
+	        <label class="control-label" for="user_type">[% 'Tipo de usuario' | i18n %]: </label>
+	        <div class="controls">
+	            <select id="menuuser_type" class="select menuuser_type" name="user_type"> 
+	               <option value="edir" [% IF preferencias.ldap_user_type == 'edir' %] selected="selected" [% END %]>Novell Edirectory</option> 
+	               <option value="rfc2307" [% IF preferencias.ldap_user_type == 'rfc2307' %] selected="selected" [% END %]>posixAccount (rfc2307)</option> 
+	               <option value="rfc2307bis" [% IF preferencias.ldap_user_type == 'rfc2307bis' %] selected="selected" [% END %]>posixAccount (rfc2307bis)</option> 
+	               <option value="samba" [% IF preferencias.ldap_user_type == 'samba' %] selected="selected" [% END %]>sambaSamAccount (v.3.0.7)</option> 
+	               <option value="ad" [% IF preferencias.ldap_user_type == 'ad' %] selected="selected" [% END %]>MS ActiveDirectory</option> 
+	               <option value="default" [% IF preferencias.ldap_user_type == 'default' %] selected="selected" [% END %]>Por defecto</option> 
+	            </select> 
+	            [% PERL %]
+	                print C4::AR::Filtros::setHelpInput(   
+	                                    text        => "[% 'Seleccione c&oacute;mo se almacenar&aacute;n los usuarios en LDAP. Este ajuste tambi&eacute;n especifica c&oacute;mo funcionar&aacute;n la caducidad del acceso, los accesos libres y la creaci&oacute;n de usuarios.' | i18n %]",
+	                            ) ;
+	                
+	            [% END %]
+	        </div>
+	    </div>
+	    
+	    <div class="control-group">
+	        <label class="control-label" for="contexts">[% 'Contextos' | i18n %]: </label>
+	        <div class="controls">
+	            <input name="contexts" id="contexts" size="30" value="[% preferencias.ldap_contexts %]" type="text">  
+	            [% PERL %]
+	                print C4::AR::Filtros::setHelpInput(   
+	                                    text        => "[% 'Lista de contextos donde estan localizados los usuarios. Separar contextos diferentes con *;*. Por ejemplo: ou=usuarios,o=org; ou=otros,o=org.' | i18n %]",
+	                            ) ;
+	                
+	            [% END %]
+	        </div>
+	    </div>
+	    
+	    <div class="control-group">
+	        <label class="control-label" for="search_sub">[% 'Buscar subcontextos' | i18n %]: </label>
+	        <div class="controls">
+	            <select id="menusearch_sub" class="select menusearch_sub" name="search_sub"> 
+	               <option value="0" [% IF preferencias.ldap_search_sub == 0 %] selected="selected" [% END %]>No</option> 
+	               <option value="1" [% IF preferencias.ldap_search_sub == 1 %] selected="selected" [% END %]>S&iacute;</option> 
+	            </select>  
+	            [% PERL %]
+	                print C4::AR::Filtros::setHelpInput(   
+	                                    text        => "[% 'Ponga Si, si quiere buscar usuarios desde subcontextos.' | i18n %]",
+	                            ) ;
+	                
+	            [% END %]
+	        </div>
+	    </div>
+	    
+	    <div class="control-group">
+	        <label class="control-label" for="opt_deref">[% 'Alias de referencia' | i18n %]: </label>
+	        <div class="controls">
+	            <select id="menuopt_deref" class="select menuopt_deref" name="opt_deref"> 
+	               <option value="LDAP_DEREF_NEVER" [% IF preferencias.ldap_opt_deref == 'LDAP_DEREF_NEVER' %] selected="selected" [% END %]>No</option> 
+	               <option value="LDAP_DEREF_ALWAYS" [% IF preferencias.ldap_opt_deref == 'LDAP_DEREF_ALWAYS' %] selected="selected" [% END %]>Si</option> 
+	            </select>  
+	            [% PERL %]
+	                print C4::AR::Filtros::setHelpInput(   
+	                                    text        => "[% 'Determina c&oacute;mo se manejan los alias durante la busqueda. Seleccione uno de los siguientes valores: *No* (LDAP_DEREF_NEVER) o *Si* (LDAP_DEREF_ALWAYS).' | i18n %]",
+	                            ) ;
+	                
+	            [% END %]
+	        </div>
+	    </div>
+	    
+	    <div class="control-group">
+	        <label class="control-label" for="user_prefijo">[% 'Prefijo de usuario' | i18n %]: </label>
+	        <div class="controls">
+	            <input name="user_prefijo" size="30" value="[% preferencias.ldap_user_prefijo %]" type="text"> 
+	            [% PERL %]
+	                print C4::AR::Filtros::setHelpInput(   
+	                                    text        => "[% 'Prefijo que va antes del identificador del usuario, ej uid. Esto se completara luego con el userid y el sufijo.' | i18n %]",
+	                            ) ;
+	                
+	            [% END %]
+	        </div>
+	    </div>
+	    
+	    <div class="control-group">
+	        <label class="control-label" for="user_attribute">[% 'Atributo de usuario' | i18n %]: </label>
+	        <div class="controls">
+	            <input name="user_attribute" id="user_attribute" size="30" value="[% preferencias.ldap_user_attribute %]" type="text"> 
+	            [% PERL %]
+	                print C4::AR::Filtros::setHelpInput(   
+	                                    text        => "[% 'El atributo usado para nombrar/buscar usuarios. Normalmente *cn*.' | i18n %]",
+	                            ) ;
+	                
+	            [% END %]
+	        </div>
+	    </div>
+	    
+	    <div class="control-group">
+	        <label class="control-label" for="memberattribute">[% 'Atributo de miembro' | i18n %]: </label>
+	        <div class="controls">
+	            <input name="memberattribute" id="memberattribute" value="[% preferencias.ldap_memberattribute %]" size="30" type="text"> 
+	            [% PERL %]
+	                print C4::AR::Filtros::setHelpInput(   
+	                                    text        => "[% 'Especificar el atributo para nombre de usuario, cuando los usuarios se integran en un grupo. Normalmente *miembro*.' | i18n %]",
+	                            ) ;
+	                
+	            [% END %]
+	        </div>
+	    </div>
+	    
+	    <div class="control-group">
+	        <label class="control-label" for="memberattribute_isdn">[% 'Atributo de miembro utilizan dn' | i18n %]: </label>
+	        <div class="controls">
+	            <input name="memberattribute_isdn" id="memberattribute_isdn" value="[% preferencias.ldap_memberattribute_isdn %]" size="30" type="text"> 
+	            [% PERL %]
+	                print C4::AR::Filtros::setHelpInput(   
+	                                    text        => "[% 'Opcional: Anula el manejo de valores de atributos de los miembros, es 0 o 1.' | i18n %]",
+	                            ) ;
+	                
+	            [% END %]
+	        </div>
+	    </div>
+	    
+	    <div class="control-group">
+	        <label class="control-label" for="objectclass">[% 'Clase de objetos' | i18n %]: </label>
+	        <div class="controls">
+	            <input name="objectclass" id="objectclass" value="[% preferencias.ldap_objectclass %]" size="30" type="text"> 
+	            [% PERL %]
+	                print C4::AR::Filtros::setHelpInput(   
+	                                    text        => "[% 'Filtro usado para usuarios name/search. Normalmente debera ajustarlo a algo parecido a objectClass=posixAccount. Valores por defecto para objectClass=* que devolveran todos los objetos desde LDAP.' | i18n %]",
+	                            ) ;
+	                
+	            [% END %]
+	        </div>
+	    </div>
+	    <br>
+	    
+	</fieldset>
+	   
+    <fieldset>
+        <legend>[% 'Contrase&ntilde;as' | i18n %] </legend>
+
+	    <div class="control-group">
+	        <label class="control-label" for="passtype">[% 'Formato de contrase&ntilde;a' | i18n %]: </label>
+	        <div class="controls">
+	            <select id="menupasstype" class="select menupasstype" name="passtype"> 
+	               <option value="plaintext" [% IF preferencias.ldap_passtype == 'plaintext' %] selected="selected" [% END %]>Texto plano</option> 
+	               <option value="md5" [% IF preferencias.ldap_passtype == 'md5' %] selected="selected" [% END %]>Encriptaci&oacute;n M5</option> 
+	               <option value="sha1" [% IF preferencias.ldap_passtype == 'sha1' %] selected="selected" [% END %]>SHA-1 hash</option> 
+	            </select> 
+	            [% PERL %]
+	                print C4::AR::Filtros::setHelpInput(   
+	                                    text        => "[% 'Especifique el formato de las contrase&ntilde;as nuevas o cambiadas en el servidor LDAP.' | i18n %]",
+	                            ) ;
+	                
+	            [% END %]
+	        </div>
+	    </div>
+	    <br>
+    </fieldset>
+    
+    <fieldset>
+        <legend>[% 'Mapeado de datos' | i18n %] </legend>
+     
+         [% PERL %]
+             print C4::AR::Filtros::setHelpInput(   
+                                 text        => "[% 'Estos campos son opcionales. Usted puede elegir pre-rellenar algunos campos de usuario en MERAN con informaci&oacute;n de los campos LDAP que especifique aqui' | i18n %].",
+                         ) ;
+             
+         [% END %]
+	       <br />
+	    <div class="control-group">
+	        <label class="control-label" for="passtype">[% 'Nombre' | i18n %]: </label>
+	        <div class="controls">
+	            [% lockconfig_field_map_firstnames %]
+	        </div>
+	    </div>
+	    
+	    <div class="control-group">
+	        <label class="control-label" for="lockconfig_field_updatelocal_firstname">[% 'Actualizar datos locales' | i18n %]: </label>
+	        <div class="controls">
+	        <select name="lockconfig_field_updatelocal_firstname"> 
+	           <option value="oncreate" [% IF preferencias.ldap_lockconfig_field_updatelocal_firstname == 'oncreate' %] selected="selected" [% END %]>Al crearse</option> 
+	           <option value="onlogin" [% IF preferencias.ldap_lockconfig_field_updatelocal_firstname == 'onlogin' %] selected="selected" [% END %]>En cada acceso</option> 
+	        </select>
+	            [% PERL %]
+	                print C4::AR::Filtros::setHelpInput(   
+	                                    text        => "[% 'Si esta activado, el campo debe ser actualizado (con autenticacion externa) cada vez que el usuario entra o se produce una sincronizacion de usuarios. Los campos a actualizar localmente deberian ser bloqueados.' | i18n %]",
+	                            ) ;
+	                
+	            [% END %]
+	        </div>
+	    </div>
+	    
+	    <div class="control-group">
+	        <label class="control-label" for="lockconfig_field_updatelocal_firstname">[% 'Actualizar datos externos' | i18n %]: </label>
+	        <div class="controls">
+	        <select name="lockconfig_field_updateremote_firstname"> 
+	           <option value="0" [% IF preferencias.ldap_lockconfig_field_updateremote_firstname == 0 %] selected="selected" [% END %]>Nunca</option> 
+	           <option value="1" [% IF preferencias.ldap_lockconfig_field_updateremote_firstname == 1 %] selected="selected" [% END %]>Al actualizar</option> 
+	        </select> 
+	            [% PERL %]
+	                print C4::AR::Filtros::setHelpInput(   
+	                                    text        => "[% 'Si esta activado, la autenticacion externa sera actualizada cuando se actualice el registro del usuario. Los campos deberian estar desbloqueados para poder editarlos.' | i18n %]",
+	                            ) ;
+	                
+	            [% END %]
+	        </div>
+	    </div>
+	    
+	    <div class="control-group">
+	        <label class="control-label" for="lockconfig_field_lock_firstname">[% 'Bloquear valor' | i18n %]: </label>
+	        <div class="controls">
+	        <select name="lockconfig_field_lock_firstname"> 
+	           <option value="unlocked" [% IF preferencias.ldap_lockconfig_field_lock_firstname == 'unlocked' %] selected="selected" [% END %]>Desbloqueado</option> 
+	           <option value="unlockedifempty" [% IF preferencias.ldap_lockconfig_field_lock_firstname == 'unlockedifempty' %] selected="selected" [% END %]>Desbloqueado si esta vacio</option> 
+	           <option value="locked" [% IF preferencias.ldap_lockconfig_field_lock_firstname == 'locked' %] selected="selected" [% END %]>Bloqueado</option> 
+	        </select> 
+	            [% PERL %]
+	                print C4::AR::Filtros::setHelpInput(   
+	                                    text        => "[% 'Si se activa, los usuarios y administradores de MERAN no podran editar directamente el campo. Utilice esta opcion si mantiene estos datos en el sistema de autentificacion externo.' | i18n %]",
+	                            ) ;
+	                
+	            [% END %]
+	        </div>
+	    </div>
+	    <hr>
+	    
+	    <div class="control-group">
+	        <label class="control-label">[% 'Apellidos' | i18n %]: </label>
+	        <div class="controls"> 
+	           [% lockconfig_field_map_lastname %]
+	        </div>
+	    </div>
+	    
+	    <div class="control-group">
+	        <label class="control-label" for="lockconfig_field_updatelocal_lastname">[% 'Actualizar datos locales' | i18n %]: </label>
+	        <div class="controls">
+	        <select name="lockconfig_field_updatelocal_lastname"> 
+	           <option value="oncreate" [% IF preferencias.ldap_lockconfig_field_updatelocal_lastname == 'oncreate' %] selected="selected" [% END %]>Al crearse</option> 
+	           <option value="onlogin" [% IF preferencias.ldap_lockconfig_field_updatelocal_lastname == 'onlogin' %] selected="selected" [% END %]>En cada acceso</option> 
+	        </select>  
+	            [% PERL %]
+	                print C4::AR::Filtros::setHelpInput(   
+	                                    text        => "[% 'Si esta activado, el campo debe ser actualizado (con autenticacion externa) cada vez que el usuario entra o se produce una sincronizacion de usuarios. Los campos a actualizar localmente deberian ser bloqueados.' | i18n %]",
+	                            ) ;
+	                
+	            [% END %]
+	        </div>
+	    </div>
+	    
+	    <div class="control-group">
+	        <label class="control-label" for="lockconfig_field_updateremote_lastname">[% 'Actualizar datos externos' | i18n %]: </label>
+	        <div class="controls">
+	        <select name="lockconfig_field_updateremote_lastname"> 
+	           <option value="0" [% IF preferencias.ldap_lockconfig_field_updateremote_lastname == 0 %] selected="selected" [% END %]>Nunca</option> 
+	           <option value="1" [% IF preferencias.ldap_lockconfig_field_updateremote_lastname == 1 %] selected="selected" [% END %]>Al actualizar</option> 
+	        </select> 
+	            [% PERL %]
+	                print C4::AR::Filtros::setHelpInput(   
+	                                    text        => "[% 'Si esta activado, la autenticacion externa sera actualizada cuando se actualice el registro del usuario. Los campos deberian estar desbloqueados para poder editarlos.' | i18n %]",
+	                            ) ;
+	                
+	            [% END %]
+	        </div>
+	    </div>
+	    
+	    <div class="control-group">
+	        <label class="control-label" for="lockconfig_field_lock_lastname">[% 'Bloquear valor' | i18n %]: </label>
+	        <div class="controls">
+	        <select name="lockconfig_field_lock_lastname"> 
+	           <option value="unlocked" [% IF preferencias.ldap_lockconfig_field_lock_lastname == 'unlocked' %] selected="selected" [% END %]>Desbloqueado</option> 
+	           <option value="unlockedifempty" [% IF preferencias.ldap_lockconfig_field_lock_lastname == 'unlockedifempty' %] selected="selected" [% END %]>Desbloqueado si esta vacio</option> 
+	           <option value="locked" [% IF preferencias.ldap_lockconfig_field_lock_lastname == 'locked' %] selected="selected" [% END %]>Bloqueado</option> 
+	        </select>   
+	            [% PERL %]
+	                print C4::AR::Filtros::setHelpInput(   
+	                                    text        => "[% 'Si se activa, los usuarios y administradores de MERAN no podran editar directamente el campo. Utilice esta opcion si mantiene estos datos en el sistema de autentificacion externo.' | i18n %]",
+	                            ) ;
+	                
+	            [% END %]
+	        </div>
+	    </div>
+	
+	    <hr>
+	    
+	    <div class="control-group">
+	        <label class="control-label">[% 'Correo electr&oacute;nico' | i18n %]: </label>
+	        <div class="controls"> 
+	           [% lockconfig_field_map_email %]
+	        </div>
+	    </div>
+	    
+	    <div class="control-group">
+	        <label class="control-label" for="datosLocales">[% 'Actualizar datos locales' | i18n %]: </label>
+	        <div class="controls">
+	        <select name="datosLocales"> 
+	           <option value="oncreate" [% IF preferencias.ldap_lockconfig_field_updatelocal_email == 'oncreate' %] selected="selected" [% END %]>Al crearse</option> 
+	           <option value="onlogin" [% IF preferencias.ldap_lockconfig_field_updatelocal_email == 'onlogin' %] selected="selected" [% END %]>En cada acceso</option> 
+	        </select>   
+	            [% PERL %]
+	                print C4::AR::Filtros::setHelpInput(   
+	                                    text        => "[% 'Si esta activado, el campo debe ser actualizado (con autenticacion externa) cada vez que el usuario entra o se produce una sincronizacion de usuarios. Los campos a actualizar localmente deberian ser bloqueados.' | i18n %]",
+	                            ) ;
+	                
+	            [% END %]
+	        </div>
+	    </div>
+	    
+	    <div class="control-group">
+	        <label class="control-label" for="lockconfig_field_updateremote_email">[% 'Actualizar datos externos' | i18n %]: </label>
+	        <div class="controls">
+	        <select name="lockconfig_field_updateremote_email"> 
+	           <option value="0" [% IF preferencias.ldap_lockconfig_field_updateremote_email == 0 %] selected="selected" [% END %]>Nunca</option> 
+	           <option value="1" [% IF preferencias.ldap_lockconfig_field_updateremote_email == 1 %] selected="selected" [% END %]>Al actualizar</option> 
+	        </select>  
+	            [% PERL %]
+	                print C4::AR::Filtros::setHelpInput(   
+	                                    text        => "[% 'Si esta activado, la autenticacion externa sera actualizada cuando se actualice el registro del usuario. Los campos deberian estar desbloqueados para poder editarlos.' | i18n %]",
+	                            ) ;
+	                
+	            [% END %]
+	        </div>
+	    </div>
+	    
+	    <div class="control-group">
+	        <label class="control-label" for="lockconfig_field_lock_email">[% 'Bloquear valor' | i18n %]: </label>
+	        <div class="controls">
+	        <select name="lockconfig_field_lock_email"> 
+	           <option value="unlocked" [% IF preferencias.ldap_lockconfig_field_lock_email == 'unlocked' %] selected="selected" [% END %]>Desbloqueado</option> 
+	           <option value="unlockedifempty" [% IF preferencias.ldap_lockconfig_field_lock_email == 'unlockedifempty' %] selected="selected" [% END %]>Desbloqueado si esta vacio</option> 
+	           <option value="locked" [% IF preferencias.ldap_lockconfig_field_lock_email == 'locked' %] selected="selected" [% END %]>Bloqueado</option> 
+	        </select>  
+	            [% PERL %]
+	                print C4::AR::Filtros::setHelpInput(   
+	                                    text        => "[% 'Si se activa, los usuarios y administradores de MERAN no podran editar directamente el campo. Utilice esta opcion si mantiene estos datos en el sistema de autentificacion externo.' | i18n %]",
+	                            ) ;
+	                
+	            [% END %]
+	        </div>
+	    </div>
+	    <hr>
+	    
+	    <div class="control-group">
+	        <label class="control-label">[% 'Ciudad' | i18n %]: </label>
+	        <div class="controls">
+	            [% lockconfig_field_map_city %]
+	        </div>
+	    </div>
+	    
+	    <div class="control-group">
+	        <label class="control-label" for="lockconfig_field_updatelocal_city">[% 'Actualizar datos locales' | i18n %]: </label>
+	        <div class="controls">
+	            <select name="lockconfig_field_updatelocal_city"> 
+	               <option value="oncreate" [% IF preferencias.ldap_lockconfig_field_updatelocal_city == 'oncreate' %] selected="selected" [% END %]>Al crearse</option> 
+	               <option value="onlogin" [% IF preferencias.ldap_lockconfig_field_updatelocal_city == 'onlogin' %] selected="selected" [% END %]>En cada acceso</option> 
+	            </select>  
+	            [% PERL %]
+	                print C4::AR::Filtros::setHelpInput(   
+	                                    text        => "[% 'Si esta activado, el campo debe ser actualizado (con autenticacion externa) cada vez que el usuario entra o se produce una sincronizacion de usuarios. Los campos a actualizar localmente deberian ser bloqueados.' | i18n %]",
+	                            ) ;
+	                
+	            [% END %]
+	        </div>
+	    </div>
+	    
+	    <div class="control-group">
+	        <label class="control-label" for="lockconfig_field_updatelocal_city">[% 'Actualizar datos externos' | i18n %]: </label>
+	        <div class="controls">
+	            <select name="lockconfig_field_updateremote_city"> 
+	               <option value="0" [% IF preferencias.ldap_lockconfig_field_updateremote_city == 0 %] selected="selected" [% END %]>Nunca</option> 
+	               <option value="1" [% IF preferencias.ldap_lockconfig_field_updateremote_city == 1 %] selected="selected" [% END %]>Al actualizar</option> 
+	            </select>  
+	            [% PERL %]
+	                print C4::AR::Filtros::setHelpInput(   
+	                                    text        => "[% 'Si esta activado, la autenticacion externa sera actualizada cuando se actualice el registro del usuario. Los campos deberian estar desbloqueados para poder editarlos.' | i18n %]",
+	                            ) ;
+	                
+	            [% END %]
+	        </div>
+	    </div>
+	    
+	    <div class="control-group">
+	        <label class="control-label" for="lockconfig_field_lock_city">[% 'Bloquear valor' | i18n %]: </label>
+	        <div class="controls">
+	            <select name="lockconfig_field_lock_city"> 
+	               <option value="unlocked" [% IF preferencias.ldap_lockconfig_field_lock_city == 'unlocked' %] selected="selected" [% END %]>Desbloqueado</option> 
+	               <option value="unlockedifempty" [% IF preferencias.ldap_lockconfig_field_lock_city == 'unlockedifempty' %] selected="selected" [% END %]>Desbloqueado si esta vacio</option> 
+	               <option value="locked" [% IF preferencias.ldap_lockconfig_field_lock_city == 'locked' %] selected="selected" [% END %]>Bloqueado</option> 
+	        </select> 
+	            [% PERL %]
+	                print C4::AR::Filtros::setHelpInput(   
+	                                    text        => "[% 'Si se activa, los usuarios y administradores de MERAN no podran editar directamente el campo. Utilice esta opcion si mantiene estos datos en el sistema de autentificacion externo.' | i18n %]",
+	                            ) ;
+	                
+	            [% END %]
+	        </div>
+	    </div>
+	
+	    <hr>
+	    
+	    <div class="control-group">
+	        <label class="control-label">[% 'Pa&iacute;s' | i18n %]: </label>
+	        <div class="controls">
+	            [% lockconfig_field_map_country %]
+	        </div>
+	    </div>
+	    
+	    <div class="control-group">
+	        <label class="control-label" for="lockconfig_field_updatelocal_country">[% 'Actualizar datos locales' | i18n %]: </label>
+	        <div class="controls">
+	            <select name="lockconfig_field_updatelocal_country"> 
+	               <option value="oncreate" [% IF preferencias.ldap_lockconfig_field_updatelocal_country == 'oncreate' %] selected="selected" [% END %]>Al crearse</option> 
+	               <option value="onlogin" [% IF preferencias.ldap_lockconfig_field_updatelocal_country == 'onlogin' %] selected="selected" [% END %]>En cada acceso</option> 
+	            </select> 
+	            [% PERL %]
+	                print C4::AR::Filtros::setHelpInput(   
+	                                    text        => "[% 'Si esta activado, el campo debe ser actualizado (con autenticacion externa) cada vez que el usuario entra o se produce una sincronizacion de usuarios. Los campos a actualizar localmente deberian ser bloqueados.' | i18n %]",
+	                            ) ;
+	                
+	            [% END %]
+	        </div>
+	    </div>
+	    
+	    <div class="control-group">
+	        <label class="control-label" for="lockconfig_field_updateremote_country">[% 'Actualizar datos externos' | i18n %]: </label>
+	        <div class="controls">
+	            <select name="lockconfig_field_updateremote_country"> 
+	               <option value="0" [% IF preferencias.ldap_lockconfig_field_updateremote_country == 0 %] selected="selected" [% END %]>Nunca</option> 
+	               <option value="1" [% IF preferencias.ldap_lockconfig_field_updateremote_country == 1 %] selected="selected" [% END %]>Al actualizar</option> 
+	            </select>  
+	            [% PERL %]
+	                print C4::AR::Filtros::setHelpInput(   
+	                                    text        => "[% 'Si esta activado, la autenticacion externa sera actualizada cuando se actualice el registro del usuario. Los campos deberian estar desbloqueados para poder editarlos.' | i18n %]",
+	                            ) ;
+	                
+	            [% END %]
+	        </div>
+	    </div>
+	    
+	    <div class="control-group">
+	        <label class="control-label" for="lockconfig_field_lock_country">[% 'Bloquear valor' | i18n %]: </label>
+	        <div class="controls">
+	            <select name="lockconfig_field_lock_country"> 
+	               <option value="unlocked" [% IF preferencias.ldap_lockconfig_field_lock_country == 'unlocked' %] selected="selected" [% END %]>Desbloqueado</option> 
+	               <option value="unlockedifempty" [% IF preferencias.ldap_lockconfig_field_lock_country == 'unlockedifempty' %] selected="selected" [% END %]>Desbloqueado si esta vacio</option> 
+	               <option value="locked" [% IF preferencias.ldap_lockconfig_field_lock_country == 'locked' %] selected="selected" [% END %]>Bloqueado</option> 
+	            </select>  
+	            [% PERL %]
+	                print C4::AR::Filtros::setHelpInput(   
+	                                    text        => "[% 'Si se activa, los usuarios y administradores de MERAN no podran editar directamente el campo. Utilice esta opcion si mantiene estos datos en el sistema de autentificacion externo.' | i18n %]",
+	                            ) ;
+	                
+	            [% END %]
+	        </div>
+	    </div>
+	    <hr>
+	    
+	    <div class="control-group">
+	        <label class="control-label">[% 'Idioma' | i18n %]: </label>
+	        <div class="controls">
+	            [% lockconfig_field_map_lang %]
+	        </div>
+	    </div>
+	    
+	    <div class="control-group">
+	        <label class="control-label" for="lockconfig_field_updatelocal_lang">[% 'Actualizar datos locales' | i18n %]: </label>
+	        <div class="controls">
+	            <select name="lockconfig_field_updatelocal_lang"> 
+	               <option value="oncreate" [% IF preferencias.ldap_lockconfig_field_updatelocal_lang == 'oncreate' %] selected="selected" [% END %]>Al crearse</option> 
+	               <option value="onlogin" [% IF preferencias.ldap_lockconfig_field_updatelocal_lang == 'onlogin' %] selected="selected" [% END %]>En cada acceso</option> 
+	            </select>   
+	            [% PERL %]
+	                print C4::AR::Filtros::setHelpInput(   
+	                                    text        => "[% 'Si esta activado, el campo debe ser actualizado (con autenticacion externa) cada vez que el usuario entra o se produce una sincronizacion de usuarios. Los campos a actualizar localmente deberian ser bloqueados.' | i18n %]",
+	                            ) ;
+	                
+	            [% END %]
+	        </div>
+	    </div>
+	    
+	    <div class="control-group">
+	        <label class="control-label" for="lockconfig_field_updateremote_lang">[% 'Actualizar datos externos' | i18n %]: </label>
+	        <div class="controls">
+	            <select name="lockconfig_field_updateremote_lang"> 
+	               <option value="0" [% IF preferencias.ldap_lockconfig_field_updateremote_lang == 0 %] selected="selected" [% END %]>Nunca</option> 
+	               <option value="1" [% IF preferencias.ldap_lockconfig_field_updateremote_lang == 1 %] selected="selected" [% END %]>Al actualizar</option> 
+	            </select>   
+	            [% PERL %]
+	                print C4::AR::Filtros::setHelpInput(   
+	                                    text        => "[% 'Si esta activado, la autenticacion externa sera actualizada cuando se actualice el registro del usuario. Los campos deberian estar desbloqueados para poder editarlos.' | i18n %]",
+	                            ) ;
+	                
+	            [% END %]
+	        </div>
+	    </div>
+	    
+	    <div class="control-group">
+	        <label class="control-label" for="lockconfig_field_lock_lang">[% 'Bloquear valor' | i18n %]: </label>
+	        <div class="controls">
+	            <select name="lockconfig_field_lock_lang"> 
+	               <option value="unlocked" [% IF preferencias.ldap_lockconfig_field_lock_lang == 'unlocked' %] selected="selected" [% END %]>Desbloqueado</option> 
+	               <option value="unlockedifempty" [% IF preferencias.ldap_lockconfig_field_lock_lang == 'unlockedifempty' %] selected="selected" [% END %]>Desbloqueado si esta vacio</option> 
+	               <option value="locked" [% IF preferencias.ldap_lockconfig_field_lock_lang == 'locked' %] selected="selected" [% END %]>Bloqueado</option> 
+	            </select>   
+	            [% PERL %]
+	                print C4::AR::Filtros::setHelpInput(   
+	                                    text        => "[% 'Si se activa, los usuarios y administradores de MERAN no podran editar directamente el campo. Utilice esta opcion si mantiene estos datos en el sistema de autentificacion externo.' | i18n %]",
+	                            ) ;
+	                
+	            [% END %]
+	        </div>
+	    </div>
+	    <hr>
+	    
+	    
+	    <div class="control-group">
+	        <label class="control-label">[% 'Descripci&oacute;n' | i18n %]: </label>
+	        <div class="controls">
+	            [% lockconfig_field_map_description %]
+	        </div>
+	    </div>
+	    
+	    <div class="control-group">
+	        <label class="control-label" for="lockconfig_field_updatelocal_description">[% 'Actualizar datos locales' | i18n %]: </label>
+	        <div class="controls">
+	           <select name="lockconfig_field_updatelocal_description"> 
+	               <option value="oncreate" [% IF preferencias.ldap_lockconfig_field_updatelocal_description == 'oncreate' %] selected="selected" [% END %]>Al crearse</option> 
+	               <option value="onlogin" [% IF preferencias.ldap_lockconfig_field_updatelocal_description == 'onlogin' %] selected="selected" [% END %]>En cada acceso</option> 
+	            </select>    
+	            [% PERL %]
+	                print C4::AR::Filtros::setHelpInput(   
+	                                    text        => "[% 'Si esta activado, el campo debe ser actualizado (con autenticacion externa) cada vez que el usuario entra o se produce una sincronizacion de usuarios. Los campos a actualizar localmente deberian ser bloqueados.' | i18n %]",
+	                            ) ;
+	                
+	            [% END %]
+	        </div>
+	    </div>
+	    
+	    <div class="control-group">
+	        <label class="control-label" for="lockconfig_field_updateremote_description">[% 'Actualizar datos externos' | i18n %]: </label>
+	        <div class="controls">
+	           <select name="lockconfig_field_updateremote_description"> 
+	               <option value="0" [% IF preferencias.ldap_lockconfig_field_updateremote_description == 0 %] selected="selected" [% END %]>Nunca</option> 
+	               <option value="1" [% IF preferencias.ldap_lockconfig_field_updateremote_description == 1 %] selected="selected" [% END %]>Al actualizar</option> 
+	            </select>     
+	            [% PERL %]
+	                print C4::AR::Filtros::setHelpInput(   
+	                                    text        => "[% 'Si esta activado, la autenticacion externa sera actualizada cuando se actualice el registro del usuario. Los campos deberian estar desbloqueados para poder editarlos.' | i18n %]",
+	                            ) ;
+	                
+	            [% END %]
+	        </div>
+	    </div>
+	    
+	    <div class="control-group">
+	        <label class="control-label" for="lockconfig_field_lock_description">[% 'Bloquear valor' | i18n %]: </label>
+	        <div class="controls">
+	           <select name="lockconfig_field_lock_description"> 
+	               <option value="unlocked" [% IF preferencias.ldap_lockconfig_field_lock_description == 'unlocked' %] selected="selected" [% END %]>Desbloqueado</option> 
+	               <option value="unlockedifempty" [% IF preferencias.ldap_lockconfig_field_lock_description == 'unlockedifempty' %] selected="selected" [% END %]>Desbloqueado si esta vacio</option> 
+	               <option value="locked" [% IF preferencias.ldap_lockconfig_field_lock_description == 'locked' %] selected="selected" [% END %]>Bloqueado</option> 
+	            </select>     
+	            [% PERL %]
+	                print C4::AR::Filtros::setHelpInput(   
+	                                    text        => "[% 'Si se activa, los usuarios y administradores de MERAN no podran editar directamente el campo. Utilice esta opcion si mantiene estos datos en el sistema de autentificacion externo.' | i18n %]",
+	                            ) ;
+	                
+	            [% END %]
+	        </div>
+	    </div>
+	    
+	    <hr>
+	    <div class="control-group">
+	        <label class="control-label">[% 'Pagina web' | i18n %]: </label>
+	        <div class="controls">
+	           [% lockconfig_field_map_url %]
+	        </div>
+	    </div>
+	    
+	    <div class="control-group">
+	        <label class="control-label" for="lockconfig_field_updatelocal_url">[% 'Actualizar datos locales' | i18n %]: </label>
+	        <div class="controls">
+	           <select name="lockconfig_field_updatelocal_url"> 
+	               <option value="oncreate" [% IF preferencias.ldap_lockconfig_field_updatelocal_url == 'oncreate' %] selected="selected" [% END %]>Al crearse</option> 
+	               <option value="onlogin" [% IF preferencias.ldap_lockconfig_field_updatelocal_url == 'onlogin' %] selected="selected" [% END %]>En cada acceso</option> 
+	            </select>    
+	            [% PERL %]
+	                print C4::AR::Filtros::setHelpInput(   
+	                                    text        => "[% 'Si esta activado, el campo debe ser actualizado (con autenticacion externa) cada vez que el usuario entra o se produce una sincronizacion de usuarios. Los campos a actualizar localmente deberian ser bloqueados.' | i18n %]",
+	                            ) ;
+	                
+	            [% END %]
+	        </div>
+	    </div>
+	    
+	    <div class="control-group">
+	        <label class="control-label" for="lockconfig_field_updateremote_url">[% 'Actualizar datos externos' | i18n %]: </label>
+	        <div class="controls">
+	          <select name="lockconfig_field_updateremote_url"> 
+	               <option value="0" [% IF preferencias.ldap_lockconfig_field_updateremote_url == 0 %] selected="selected" [% END %]>Nunca</option> 
+	               <option value="1" [% IF preferencias.ldap_lockconfig_field_updateremote_url == 0 %] selected="selected" [% END %]>Al actualizar</option> 
+	            </select>    
+	            [% PERL %]
+	                print C4::AR::Filtros::setHelpInput(   
+	                                    text        => "[% 'Si esta activado, la autenticacion externa sera actualizada cuando se actualice el registro del usuario. Los campos deberian estar desbloqueados para poder editarlos.' | i18n %]",
+	                            ) ;
+	                
+	            [% END %]
+	        </div>
+	    </div>
+	    
+	    <div class="control-group">
+	        <label class="control-label" for="lockconfig_field_lock_url">[% 'Bloquear valor' | i18n %]: </label>
+	        <div class="controls">
+	          <select name="lockconfig_field_lock_url"> 
+	               <option value="unlocked" [% IF preferencias.ldap_lockconfig_field_lock_url == 'unlocked' %] selected="selected" [% END %]>Desbloqueado</option> 
+	               <option value="unlockedifempty" [% IF preferencias.ldap_lockconfig_field_lock_url == 'unlockedifempty' %] selected="selected" [% END %]>Desbloqueado si esta vacio</option> 
+	               <option value="locked" [% IF preferencias.ldap_lockconfig_field_lock_url == 'locked' %] selected="selected" [% END %]>Bloqueado</option> 
+	            </select>    
+	            [% PERL %]
+	                print C4::AR::Filtros::setHelpInput(   
+	                                    text        => "[% 'Si se activa, los usuarios y administradores de MERAN no podran editar directamente el campo. Utilice esta opcion si mantiene estos datos en el sistema de autentificacion externo.' | i18n %]",
+	                            ) ;
+	                
+	            [% END %]
+	        </div>
+	    </div>
+	
+	    <hr>
+	    
+	    <div class="control-group">
+	        <label class="control-label">[% 'Numero de id' | i18n %]: </label>
+	        <div class="controls">
+	          [% lockconfig_field_map_idnumber %]
+	        </div>
+	    </div>
+	    
+	    <div class="control-group">
+	        <label class="control-label" for="lockconfig_field_updatelocal_idnumber">[% 'Actualizar datos locales' | i18n %]: </label>
+	        <div class="controls">
+	            <select name="lockconfig_field_updatelocal_idnumber"> 
+	               <option value="oncreate" [% IF preferencias.ldap_lockconfig_field_updatelocal_idnumber == 'oncreate' %] selected="selected" [% END %]>Al crearse</option> 
+	               <option value="onlogin" [% IF preferencias.ldap_lockconfig_field_updatelocal_idnumber == 'onlogin' %] selected="selected" [% END %]>En cada acceso</option> 
+	            </select>   
+	            [% PERL %]
+	                print C4::AR::Filtros::setHelpInput(   
+	                                    text        => "[% 'Si esta activado, el campo debe ser actualizado (con autenticacion externa) cada vez que el usuario entra o se produce una sincronizacion de usuarios. Los campos a actualizar localmente deberian ser bloqueados.' | i18n %]",
+	                            ) ;
+	                
+	            [% END %]
+	        </div>
+	    </div>
+	    
+	    <div class="control-group">
+	        <label class="control-label" for="lockconfig_field_updateremote_idnumber">[% 'Actualizar datos externos' | i18n %]: </label>
+	        <div class="controls">
+	            <select name="lockconfig_field_updateremote_idnumber"> 
+	               <option value="0" [% IF preferencias.ldap_lockconfig_field_updateremote_idnumber == 0 %] selected="selected" [% END %]>Nunca</option> 
+	               <option value="1" [% IF preferencias.ldap_lockconfig_field_updateremote_idnumber == 1 %] selected="selected" [% END %]>Al actualizar</option> 
+	            </select>    
+	            [% PERL %]
+	                print C4::AR::Filtros::setHelpInput(   
+	                                    text        => "[% 'Si esta activado, la autenticacion externa sera actualizada cuando se actualice el registro del usuario. Los campos deberian estar desbloqueados para poder editarlos.' | i18n %]",
+	                            ) ;
+	                
+	            [% END %]
+	        </div>
+	    </div>
+	    
+	    <div class="control-group">
+	        <label class="control-label" for="lockconfig_field_lock_idnumber">[% 'Bloquear valor' | i18n %]: </label>
+	        <div class="controls">
+	            <select name="lockconfig_field_lock_idnumber"> 
+	               <option value="unlocked" [% IF preferencias.ldap_lockconfig_field_lock_idnumber == 'unlocked' %] selected="selected" [% END %]>Desbloqueado</option> 
+	               <option value="unlockedifempty" [% IF preferencias.ldap_lockconfig_field_lock_idnumber == 'unlockedifempty' %] selected="selected" [% END %]>Desbloqueado si esta vacio</option> 
+	               <option value="locked" [% IF preferencias.ldap_lockconfig_field_lock_idnumber == 'locked' %] selected="selected" [% END %]>Bloqueado</option> 
+	            </select>     
+	            [% PERL %]
+	                print C4::AR::Filtros::setHelpInput(   
+	                                    text        => "[% 'Si se activa, los usuarios y administradores de MERAN no podran editar directamente el campo. Utilice esta opcion si mantiene estos datos en el sistema de autentificacion externo.' | i18n %]",
+	                            ) ;
+	                
+	            [% END %]
+	        </div>
+	    </div>
+	
+	    <hr>
+	    
+	    <div class="control-group">
+	        <label class="control-label">[% 'Instituci&oacute;n' | i18n %]: </label>
+	        <div class="controls">
+	            [% lockconfig_field_map_institution %]
+	        </div>
+	    </div>
+	    
+	    <div class="control-group">
+	        <label class="control-label" for="lockconfig_field_updatelocal_institution">[% 'Actualizar datos locales' | i18n %]: </label>
+	        <div class="controls">
+	            <select name="lockconfig_field_updatelocal_institution"> 
+	               <option value="oncreate" [% IF preferencias.ldap_lockconfig_field_updatelocal_institution == 'oncreate' %] selected="selected" [% END %]>Al crearse</option> 
+	               <option value="onlogin" [% IF preferencias.ldap_lockconfig_field_updatelocal_institution == 'onlogin' %] selected="selected" [% END %]>En cada acceso</option> 
+	            </select>      
+	            [% PERL %]
+	                print C4::AR::Filtros::setHelpInput(   
+	                                    text        => "[% 'Si esta activado, el campo debe ser actualizado (con autenticacion externa) cada vez que el usuario entra o se produce una sincronizacion de usuarios. Los campos a actualizar localmente deberian ser bloqueados.' | i18n %]",
+	                            ) ;
+	                
+	            [% END %]
+	        </div>
+	    </div>
+	    
+	    <div class="control-group">
+	        <label class="control-label" for="lockconfig_field_updateremote_institution">[% 'Actualizar datos externos' | i18n %]: </label>
+	        <div class="controls">
+	            <select name="lockconfig_field_updateremote_institution"> 
+	               <option value="0" [% IF preferencias.ldap_lockconfig_field_updateremote_institution == 0 %] selected="selected" [% END %]>Nunca</option> 
+	               <option value="1" [% IF preferencias.ldap_lockconfig_field_updateremote_institution == 1 %] selected="selected" [% END %]>Al actualizar</option> 
+	            </select>     
+	            [% PERL %]
+	                print C4::AR::Filtros::setHelpInput(   
+	                                    text        => "[% 'Si esta activado, la autenticacion externa sera actualizada cuando se actualice el registro del usuario. Los campos deberian estar desbloqueados para poder editarlos.' | i18n %]",
+	                            ) ;
+	                
+	            [% END %]
+	        </div>
+	    </div>
+	    
+	    <div class="control-group">
+	        <label class="control-label" for="lockconfig_field_lock_institution">[% 'Bloquear valor' | i18n %]: </label>
+	        <div class="controls">
+	            <select name="lockconfig_field_lock_institution"> 
+	               <option value="unlocked" [% IF preferencias.ldap_lockconfig_field_lock_institution == 'unlocked' %] selected="selected" [% END %]>Desbloqueado</option> 
+	               <option value="unlockedifempty" [% IF preferencias.ldap_lockconfig_field_lock_institution == 'unlockedifempty' %] selected="selected" [% END %]>Desbloqueado si esta vacio</option> 
+	               <option value="locked" [% IF preferencias.ldap_lockconfig_field_lock_institution == 'locked' %] selected="selected" [% END %]>Bloqueado</option> 
+	            </select>      
+	            [% PERL %]
+	                print C4::AR::Filtros::setHelpInput(   
+	                                    text        => "[% 'Si se activa, los usuarios y administradores de MERAN no podran editar directamente el campo. Utilice esta opcion si mantiene estos datos en el sistema de autentificacion externo.' | i18n %]",
+	                            ) ;
+	                
+	            [% END %]
+	        </div>
+	    </div>
+	
+	    <hr>
+	    
+	    <div class="control-group">
+	        <label class="control-label">[% 'Departamento' | i18n %]: </label>
+	        <div class="controls">
+	            [% lockconfig_field_map_departament %]
+	        </div>
+	    </div>
+	    
+	    <div class="control-group">
+	        <label class="control-label" for="lockconfig_field_updatelocal_department">[% 'Actualizar datos locales' | i18n %]: </label>
+	        <div class="controls">
+	            <select name="lockconfig_field_updatelocal_department"> 
+	               <option value="oncreate" [% IF preferencias.ldap_lockconfig_field_updatelocal_department == 'oncreate' %] selected="selected" [% END %]>Al crearse</option> 
+	               <option value="onlogin" [% IF preferencias.ldap_lockconfig_field_updatelocal_department == 'onlogin' %] selected="selected" [% END %]>En cada acceso</option> 
+	            </select>      
+	            [% PERL %]
+	                print C4::AR::Filtros::setHelpInput(   
+	                                    text        => "[% 'Si esta activado, el campo debe ser actualizado (con autenticacion externa) cada vez que el usuario entra o se produce una sincronizacion de usuarios. Los campos a actualizar localmente deberian ser bloqueados.' | i18n %]",
+	                            ) ;
+	                
+	            [% END %]
+	        </div>
+	    </div>
+	    
+	    <div class="control-group">
+	        <label class="control-label" for="lockconfig_field_updateremote_department">[% 'Actualizar datos externos' | i18n %]: </label>
+	        <div class="controls">
+	            <select name="lockconfig_field_updateremote_department"> 
+	               <option value="0" [% IF preferencias.ldap_lockconfig_field_updateremote_department == 0 %] selected="selected" [% END %]>Nunca</option> 
+	               <option value="1" [% IF preferencias.ldap_lockconfig_field_updateremote_department == 1 %] selected="selected" [% END %]>Al actualizar</option> 
+	            </select>      
+	            [% PERL %]
+	                print C4::AR::Filtros::setHelpInput(   
+	                                    text        => "[% 'Si esta activado, la autenticacion externa sera actualizada cuando se actualice el registro del usuario. Los campos deberian estar desbloqueados para poder editarlos.' | i18n %]",
+	                            ) ;
+	                
+	            [% END %]
+	        </div>
+	    </div>
+	    
+	    <div class="control-group">
+	        <label class="control-label" for="lockconfig_field_lock_department">[% 'Bloquear valor' | i18n %]: </label>
+	        <div class="controls">
+	            <select name="lockconfig_field_lock_department"> 
+	               <option value="unlocked" [% IF preferencias.ldap_lockconfig_field_lock_department == 'unlocked' %] selected="selected" [% END %]>Desbloqueado</option> 
+	               <option value="unlockedifempty" [% IF preferencias.ldap_lockconfig_field_lock_department == 'unlockedifempty' %] selected="selected" [% END %]>Desbloqueado si esta vacio</option> 
+	               <option value="locked" [% IF preferencias.ldap_lockconfig_field_lock_department == 'locked' %] selected="selected" [% END %]>Bloqueado</option> 
+	            </select>      
+	            [% PERL %]
+	                print C4::AR::Filtros::setHelpInput(   
+	                                    text        => "[% 'Si se activa, los usuarios y administradores de MERAN no podran editar directamente el campo. Utilice esta opcion si mantiene estos datos en el sistema de autentificacion externo.' | i18n %]",
+	                            ) ;
+	                
+	            [% END %]
+	        </div>
+	    </div>
+	
+	    <hr>
+	    
+	    <div class="control-group">
+	        <label class="control-label">[% 'Telefono 1' | i18n %]: </label>
+	        <div class="controls">
+	            [% lockconfig_field_map_phone1 %]
+	        </div>
+	    </div>
+	    
+	    <div class="control-group">
+	        <label class="control-label" for="lockconfig_field_updatelocal_phone1">[% 'Actualizar datos locales' | i18n %]: </label>
+	        <div class="controls">
+	            <select name="lockconfig_field_updatelocal_phone1"> 
+	               <option value="oncreate" [% IF preferencias.ldap_lockconfig_field_updatelocal_phone1 == 'oncreate' %] selected="selected" [% END %]>Al crearse</option> 
+	               <option value="onlogin" [% IF preferencias.ldap_lockconfig_field_updatelocal_phone1 == 'onlogin' %] selected="selected" [% END %]>En cada acceso</option> 
+	            </select>      
+	            [% PERL %]
+	                print C4::AR::Filtros::setHelpInput(   
+	                                    text        => "[% 'Si esta activado, el campo debe ser actualizado (con autenticacion externa) cada vez que el usuario entra o se produce una sincronizacion de usuarios. Los campos a actualizar localmente deberian ser bloqueados.' | i18n %]",
+	                            ) ;
+	                
+	            [% END %]
+	        </div>
+	    </div>
+	    
+	    <div class="control-group">
+	        <label class="control-label" for="lockconfig_field_updateremote_phone1">[% 'Actualizar datos externos' | i18n %]: </label>
+	        <div class="controls">
+	            <select name="lockconfig_field_updateremote_phone1"> 
+	               <option value="0" [% IF preferencias.ldap_lockconfig_field_updateremote_phone1 == 0 %] selected="selected" [% END %]>Nunca</option> 
+	               <option value="1" [% IF preferencias.ldap_lockconfig_field_updateremote_phone1 == 1 %] selected="selected" [% END %]>Al actualizar</option> 
+	            </select>     
+	            [% PERL %]
+	                print C4::AR::Filtros::setHelpInput(   
+	                                    text        => "[% 'Si esta activado, la autenticacion externa sera actualizada cuando se actualice el registro del usuario. Los campos deberian estar desbloqueados para poder editarlos.' | i18n %]",
+	                            ) ;
+	                
+	            [% END %]
+	        </div>
+	    </div>
+	    
+	    <div class="control-group">
+	        <label class="control-label" for="lockconfig_field_lock_phone1">[% 'Bloquear valor' | i18n %]: </label>
+	        <div class="controls">
+	            <select name="lockconfig_field_lock_phone1"> 
+	               <option value="unlocked" [% IF preferencias.ldap_lockconfig_field_lock_phone1 == 'unlocked' %] selected="selected" [% END %]>Desbloqueado</option> 
+	               <option value="unlockedifempty" [% IF preferencias.ldap_lockconfig_field_lock_phone1 == 'unlockedifempty' %] selected="selected" [% END %]>Desbloqueado si esta vacio</option> 
+	               <option value="locked" [% IF preferencias.ldap_lockconfig_field_lock_phone1 == 'locked' %] selected="selected" [% END %]>Bloqueado</option> 
+	            </select>      
+	            [% PERL %]
+	                print C4::AR::Filtros::setHelpInput(   
+	                                    text        => "[% 'Si se activa, los usuarios y administradores de MERAN no podran editar directamente el campo. Utilice esta opcion si mantiene estos datos en el sistema de autentificacion externo.' | i18n %]",
+	                            ) ;
+	                
+	            [% END %]
+	        </div>
+	    </div>
+	
+	    <hr>
+	    
+	    <div class="control-group">
+	        <label class="control-label">[% 'Telefono 2' | i18n %]: </label>
+	        <div class="controls">
+	            [% lockconfig_field_map_phone2 %]
+	        </div>
+	    </div>
+	    
+	    <div class="control-group">
+	        <label class="control-label" for="lockconfig_field_updatelocal_phone2">[% 'Actualizar datos locales' | i18n %]: </label>
+	        <div class="controls">
+	           <select name="lockconfig_field_updatelocal_phone2"> 
+	               <option value="oncreate" [% IF preferencias.ldap_lockconfig_field_updatelocal_phone2 == 'oncreate' %] selected="selected" [% END %]>Al crearse</option> 
+	               <option value="onlogin" [% IF preferencias.ldap_lockconfig_field_updatelocal_phone2 == 'onlogin' %] selected="selected" [% END %]>En cada acceso</option> 
+	            </select>       
+	            [% PERL %]
+	                print C4::AR::Filtros::setHelpInput(   
+	                                    text        => "[% 'Si esta activado, el campo debe ser actualizado (con autenticacion externa) cada vez que el usuario entra o se produce una sincronizacion de usuarios. Los campos a actualizar localmente deberian ser bloqueados.' | i18n %]",
+	                            ) ;
+	                
+	            [% END %]
+	        </div>
+	    </div>
+	    
+	    <div class="control-group">
+	        <label class="control-label" for="lockconfig_field_updateremote_phone2">[% 'Actualizar datos externos' | i18n %]: </label>
+	        <div class="controls">
+	           <select name="lockconfig_field_updateremote_phone2"> 
+	               <option value="0" [% IF preferencias.ldap_lockconfig_field_updateremote_phone2 == 0 %] selected="selected" [% END %]>Nunca</option> 
+	               <option value="1" [% IF preferencias.ldap_lockconfig_field_updateremote_phone2 == 1 %] selected="selected" [% END %]>Al actualizar</option> 
+	            </select>       
+	            [% PERL %]
+	                print C4::AR::Filtros::setHelpInput(   
+	                                    text        => "[% 'Si esta activado, la autenticacion externa sera actualizada cuando se actualice el registro del usuario. Los campos deberian estar desbloqueados para poder editarlos.' | i18n %]",
+	                            ) ;
+	                
+	            [% END %]
+	        </div>
+	    </div>
+	    
+	    <div class="control-group">
+	        <label class="control-label" for="lockconfig_field_lock_phone2">[% 'Bloquear valor' | i18n %]: </label>
+	        <div class="controls">
+	           <select name="lockconfig_field_lock_phone2"> 
+	               <option value="unlocked" [% IF preferencias.ldap_lockconfig_field_lock_phone2 == 'unlocked' %] selected="selected" [% END %]>Desbloqueado</option> 
+	               <option value="unlockedifempty" [% IF preferencias.ldap_lockconfig_field_lock_phone2 == 'unlockedifempty' %] selected="selected" [% END %]>Desbloqueado si esta vacio</option> 
+	               <option value="locked" [% IF preferencias.ldap_lockconfig_field_lock_phone2 == 'locked' %] selected="selected" [% END %]>Bloqueado</option> 
+	            </select>       
+	            [% PERL %]
+	                print C4::AR::Filtros::setHelpInput(   
+	                                    text        => "[% 'Si se activa, los usuarios y administradores de MERAN no podran editar directamente el campo. Utilice esta opcion si mantiene estos datos en el sistema de autentificacion externo.' | i18n %]",
+	                            ) ;
+	                
+	            [% END %]
+	        </div>
+	    </div>
+	
+	    <hr>
+	    
+	    <div class="control-group">
+	        <label class="control-label">[% 'Direcci&oacute;n' | i18n %]: </label>
+	        <div class="controls">
+	           [% lockconfig_field_map_adress %] 
+	        </div>
+	    </div>
+	    
+	    <div class="control-group">
+	        <label class="control-label" for="lockconfig_field_updatelocal_address">[% 'Actualizar datos locales' | i18n %]: </label>
+	        <div class="controls">
+	           <select name="lockconfig_field_updatelocal_address"> 
+	               <option value="oncreate" [% IF preferencias.ldap_lockconfig_field_updatelocal_address == 'oncreate' %] selected="selected" [% END %]>Al crearse</option> 
+	               <option value="onlogin" [% IF preferencias.ldap_lockconfig_field_updatelocal_address == 'onlogin' %] selected="selected" [% END %]>En cada acceso</option> 
+	            </select>        
+	            [% PERL %]
+	                print C4::AR::Filtros::setHelpInput(   
+	                                    text        => "[% 'Si esta activado, el campo debe ser actualizado (con autenticacion externa) cada vez que el usuario entra o se produce una sincronizacion de usuarios. Los campos a actualizar localmente deberian ser bloqueados.' | i18n %]",
+	                            ) ;
+	                
+	            [% END %]
+	        </div>
+	    </div>
+	    
+	    <div class="control-group">
+	        <label class="control-label" for="lockconfig_field_updateremote_address">[% 'Actualizar datos externos' | i18n %]: </label>
+	        <div class="controls">
+	           <select name="lockconfig_field_updateremote_address"> 
+	               <option value="0" [% IF preferencias.ldap_lockconfig_field_updateremote_adress == 0 %] selected="selected" [% END %]>Nunca</option> 
+	               <option value="1" [% IF preferencias.ldap_lockconfig_field_updateremote_adress == 1 %] selected="selected" [% END %]>Al actualizar</option> 
+	            </select>    
+	            [% PERL %]
+	                print C4::AR::Filtros::setHelpInput(   
+	                                    text        => "[% 'Si esta activado, la autenticacion externa sera actualizada cuando se actualice el registro del usuario. Los campos deberian estar desbloqueados para poder editarlos.' | i18n %]",
+	                            ) ;
+	                
+	            [% END %]
+	        </div>
+	    </div>
+	    
+	    <div class="control-group">
+	        <label class="control-label" for="lockconfig_field_updateremote_address">[% 'Bloquear valor' | i18n %]: </label>
+	        <div class="controls">
+	           <select name="lockconfig_field_lock_address"> 
+	               <option value="unlocked" [% IF preferencias.ldap_lockconfig_field_lock_adress == 'unlocked' %] selected="selected" [% END %]>Desbloqueado</option> 
+	               <option value="unlockedifempty" [% IF preferencias.ldap_lockconfig_field_lock_adress == 'unlockedifempty' %] selected="selected" [% END %]>Desbloqueado si esta vacio</option> 
+	               <option value="locked" [% IF preferencias.ldap_lockconfig_field_lock_adress == 'locked' %] selected="selected" [% END %]>Bloqueado</option> 
+	        </select>  
+	            [% PERL %]
+	                print C4::AR::Filtros::setHelpInput(   
+	                                    text        => "[% 'Si se activa, los usuarios y administradores de MERAN no podran editar directamente el campo. Utilice esta opcion si mantiene estos datos en el sistema de autentificacion externo.' | i18n %]",
+	                            ) ;
+	                
+	            [% END %]
+	        </div>
+	    </div>
+	
+	    <div class="form-actions">
+	    [% PERL %]
+	                print C4::AR::Filtros::to_Button(   text    => "[% 'Guardar Cambios' | i18n %]",
+	                                                    type    => "submit",
+	                                                    boton   => "boton_agregar",
+	                        ) ;
+	    [% END %]
+	    </div>
+	</fieldset>
+</form> 
+</fieldset>
+
+[% INCLUDE "intranet-bottom.inc" %]

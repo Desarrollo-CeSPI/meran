@@ -1,0 +1,41 @@
+<fieldset class="resultados_busqueda">
+<legend class="titulo_legend">[% "Detalle MARC" | i18n %] :</legend>
+
+<!--*****************************************MARC DETAIL*****************************************************  -->
+    <div class="guardarMARC">
+                        [% PERL %]
+                                print C4::AR::Filtros::to_Icon(
+                                                                    boton   => "icon_guardar",
+                                                                    onClick => "importarMARC('[% id_resultado %]')",
+                                                                    title   => "[% 'Importar MARC' | i18n %]",
+                                        ) ;
+                        [% END %]
+    </div>
+<ul class="MARCResult">
+
+[% FOREACH MARCDetail_array %]
+
+	[% IF header %]
+	<li class="MARCHeader">
+		[% campo %]&nbsp;[% header %]
+	</li>
+		[% FOREACH info_campo_array %]
+			<li class="MARCDetalle">
+				[% subcampo %]&nbsp;[% liblibrarian %]: &nbsp;<b>[% dato %]</b>
+			</li>
+		[% END %]
+	[% END %]  
+
+[% END %]
+
+</ul>
+    <div class="guardarMARC">
+                        [% PERL %]
+                                print C4::AR::Filtros::to_Icon(
+                                                                    boton   => "icon_guardar",
+                                                                    onClick => "importarMARC([% id_resultado %])",
+                                                                    title   => "[% 'Importar MARC' | i18n %]",
+                                        ) ;
+                        [% END %]
+    </div>
+</fieldset>

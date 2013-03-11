@@ -1,0 +1,1 @@
+ALTER TABLE  `io_importacion_iso` ADD  `jobID` VARCHAR( 255 ) NULL;

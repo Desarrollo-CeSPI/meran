@@ -1,0 +1,3 @@
+INSERT INTO `pref_preferencia_sistema` (`variable`, `value`, `explanation`, `options`, `type`, `categoria`) VALUES
+('detalle_INTRA_extendido', 0, 'Muestra el detalle de la INTRA extendido ', '', 'bool', 'sistema'),
+('detalle_OPAC_extendido', 0, 'Muestra el detalle del OPAC extendido ', '', 'bool', 'sistema');

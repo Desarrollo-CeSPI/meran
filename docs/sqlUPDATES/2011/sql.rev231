@@ -1,0 +1,4 @@
+ALTER TABLE  usr_persona ADD  foto VARCHAR( 255 ) NOT NULL;
+ALTER TABLE  usr_socio ADD  foto VARCHAR( 255 ) NOT NULL;
+UPDATE usr_persona SET foto = concat(sha( concat( id_persona, nombre, nro_documento ) ),".jpg" );
+UPDATE usr_socio SET foto = concat( sha( concat( nro_socio, id_ui, id_persona, nro_socio ) ) , ".jpg" );

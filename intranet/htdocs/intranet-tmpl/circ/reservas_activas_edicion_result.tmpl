@@ -1,0 +1,57 @@
+
+[% IF cantidad > 0%]
+	<fieldset class="resultados_busqueda" style="width: 680px;">
+	    <legend>[% "Hay " | i18n %] [% cantidad %] [% "reservas" | i18n %]</legend>
+	        <div class="datos_tabla_div" id="datos_tabla_div">
+			             [% PERL %]
+			                   print C4::AR::Filtros::tableHeader(   
+			                               id              => "reseravsEsperaResult",
+			                               class           => "",
+			                               selectAll_id    => "",
+			                               columns         => ['[% "Usuario"|i18n %]','[% "Nro. de Socio"|i18n %]',
+			                                                   '[% "Fecha reserva" | i18n %]','[% "Fecha vencimiento" %]',
+			                                                   '[% "Ejemplar" %]', 
+			                                                 ]
+			                                                               
+			                                     ) ;
+			             [% END %]	   
+			       <tbody>                     
+	                [% FOREACH reserva IN reservas %]
+	                    <tr>
+	                        <td> 
+	                            <a href="[% url_prefix %]/usuarios/reales/datosUsuario.pl?nro_socio=[% reserva.socio.getNro_socio %]">
+	                                [% reserva.socio.persona.getApellido %], [% reserva.socio.persona.getNombre%]
+	                            </a>
+	                        </td>
+	                        <td> 
+	                            <a href="[% url_prefix %]/usuarios/reales/datosUsuario.pl?nro_socio=[% reserva.socio.getNro_socio %]">
+	                                [% reserva.socio.getNro_socio%]
+	                            </a>
+	                        </td>
+	                        <td> 
+	                            [% reserva.getFecha_reserva_formateada %]
+	                        </td>
+	                        <td>
+	                            [% IF reserva.esEspera %]
+	                               [% 'En espera de asignaci&oacute;n' | i18n %]
+	                            [% ELSE %]
+	                               [% reserva.getFecha_recordatorio_formateada %]
+	                            [% END %]
+	                        </td>
+	                        <td> 
+	                            [% IF reserva.getId3 %]
+	                                <a href="[% url_prefix %]/catalogacion/estructura/detalleEjemplar.pl?id3=[% reserva.nivel3.getId %]&token=[% token %]">[% reserva.nivel3.getBarcode %]</a>
+	                            [% ELSE %]
+	                                <a href="[% url_prefix %]/catalogacion/estructura/detalle.pl?id1=[% reserva.nivel2.getId1 %]&token=[% token %]">Grupo [% reserva.nivel2.getId2 %]</a>
+	                            [% END %]
+	                        </td>
+	                    </tr>
+	                [% END %]
+	               </tbody>
+	          </table>
+	      </div>
+	</fieldset>
+	<br>
+[% ELSE %]
+    <div class="alert alert-info"><h3>[% 'Nadie ha reservado sobre este grupo/ejemplar' | i18n %]</h3></div>
+[% END %]

@@ -1,0 +1,7 @@
+
+
+DELETE FROM pref_preferencia_sistema WHERE variable = "requisito_necesario";
+
+INSERT INTO pref_preferencia_sistema (`id`, `variable`, `value`, `explanation`, `options`, `type`, `categoria`, `label`, `explicacion_interna`, `revisado`) VALUES
+(NULL, 'requisito_necesario', '1', 'Indica si el socio debe cumplir requisito para operar', NULL, 'bool', 'sistema', 'Cumple requisito', 'Indica si el socio debe cumplir requisito para operar', 0);
+

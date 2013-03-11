@@ -1,0 +1,7 @@
+<fieldset> <legend class="titulo_legend trigger click">[% "Ediciones" | i18n %]</legend>
+    <p><label for="combo_ediciones" class="left">[% 'Seleccione una edicion' | i18n %]:</label></p>  
+    [% combo_ediciones %]            
+    [% PERL %]
+        print C4::AR::Filtros::setHelp(text => "[% 'Seleccione la editorial del ejemplar.' | i18n %]",);
+    [% END %]               
+</fieldset>

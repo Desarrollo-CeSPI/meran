@@ -1,0 +1,3 @@
+UPDATE  `circ_ref_tipo_prestamo` SET  `id` =  '0' WHERE  `circ_ref_tipo_prestamo`.`id_tipo_prestamo` = "RE";
+
+DELETE  FROM `pref_preferencia_sistema` WHERE `variable` = 'daysOfSanctionReserves'; 

@@ -1,0 +1,12 @@
+INSERT INTO `pref_preferencia_sistema` (
+`id` ,
+`variable` ,
+`value` ,
+`explanation` ,
+`options` ,
+`type` ,
+`categoria`
+)
+VALUES (
+NULL , 'serverName', 'catalogo.info.unlp.edu.ar', 'URL del servidor', NULL , 'text', 'sistema'
+);

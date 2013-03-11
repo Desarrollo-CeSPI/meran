@@ -1,0 +1,1 @@
+UPDATE `pref_preferencia_sistema` SET `options` = 'ciudad|NOMBRE' WHERE `pref_preferencia_sistema`.`variable` = "defaultCiudad";

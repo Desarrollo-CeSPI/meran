@@ -1,0 +1,1 @@
+UPDATE  `pref_preferencia_sistema` SET  `type` =  'text' WHERE  `pref_preferencia_sistema`.`variable` = 'offset_operacion_fuera_horario';

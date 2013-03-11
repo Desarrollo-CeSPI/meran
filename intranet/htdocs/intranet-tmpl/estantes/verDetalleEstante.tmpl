@@ -1,0 +1,161 @@
+[% INCLUDE "intranet-top.inc" %]
+<script type="text/javascript" src="/intranet-tmpl/includes/estantesVirtuales.js">
+</script>
+
+
+<div id="editar_estante" class="modal hide fade">
+      <div class="modal-header">
+            <h3>[% "Editar Subestante" | i18n %]</h3>
+      </div>
+      <div class="modal-body">
+                <input type="hidden" id="input_id_estante">
+                <input type="hidden" id="input_padre_estante">
+                <input type="hidden" id="input_abuelo_estante">
+                <input type="text" id="input_valor_estante">
+                <script type="text/javascript">
+                          $(document).ready(function() {
+                              $('#input_valor_estante').keypress(function(e){if(e.which==13){if(this.value!=''){modificarEstante();}}});
+                              verSubEstantes([% estante %],0);
+                          });
+                </script>
+      </div>
+      <div class="modal-footer">
+
+                                          
+                  [% PERL %]
+                                        print C4::AR::Filtros::action_button(   
+                                                                            button   => "btn btn-primary",
+                                                                            action   => 'modificarEstante();',
+                                                                            icon     => 'icon-white icon-ok',
+                                                                            title   => " [% 'Aceptar' | i18n %]",
+                                                                        
+                                        ) ;
+                  [% END %]
+         
+      </div>
+   
+</div>
+
+<div id="contenido_estante" class="modal hide bigModal fade">
+ 
+
+      <div class="modal-header">
+            <a class="close" data-dismiss="modal" href="#">×</a>
+            <h3> [% "Buscar Contenido" | i18n %]</h3>
+      </div>
+      <div class="modal-body">
+          <section class="center-section-form">  
+          <form class="form-horizontal" onsubmit="return false;">
+
+                      <input type="hidden" id="input_contenido_id_estante">
+                      <input type="hidden" id="input_contenido_id_padre_estante">
+                  
+                      <div class="control-group">
+                              <label class="control-label" for="input01">Ingrese el criterio de busqueda</label>
+                              <div class="controls">
+                                  <input class="horizontal" type="text" id="input_busqueda_contenido">
+                              </div>
+                          <script type="text/javascript">
+                                $(document).ready(function() {
+                                          $('#input_busqueda_contenido').keypress(function(e){if(e.which==13){if(this.value!=''){buscarContenido();}}});
+                                });
+                          </script>
+                      </div>
+          </form>
+          </section>
+        </div>
+          <div class="modal-footer">
+                      [% PERL %]
+                                          print C4::AR::Filtros::action_button(
+                                                                              button   => "btn btn-primary",
+                                                                              id       => "buscarContBoton",
+                                                                              icon     => "icon-search icon-white",
+                                                                              action   => "buscarContenido();",
+                                                                              title    => "[% 'Buscar' | i18n %]",
+                                                          
+                                                  ) ;
+                      [% END %] 
+
+          </div>
+       
+      <div id="resultado_contenido_estante"> </div>
+
+</div>  
+
+<div id="estante">
+<fieldset class="resultados_busqueda">
+<legend>[% "Detalle de Estantes" | i18n %]</legend>
+        <div class="datos_tabla_div_estantes">
+            <div class="botonera_estantes">
+            <div id="boton_nuevo_estante_0">
+            [% PERL %]
+                                print C4::AR::Filtros::to_Icon(
+                                                                    boton   => "icon_agregar",
+                                                                    title   => "[% 'Agregar estante' | i18n %]",
+                                                                    onClick => "agregarNuevoEstante();",
+                                        ) ;
+            [% END %]
+            </div>
+
+      [% IF cant_estantes %]
+            [% PERL %]
+                                print C4::AR::Filtros::to_Icon(
+                                                                    boton   => "icon_borrar",
+                                                                    onClick => "borrarEstantesSeleccionados(0,0);",
+                                                                    title   => "[% 'Borrar seleccionados' | i18n %]",
+                                        ) ;
+            [% END %]
+        [% END %]
+
+            </div>
+        
+            [% INCLUDE "verEstante.inc" %]
+           
+        </div>
+</fieldset>
+</div>
+
+<div id="nuevo_sub_estante"  class="modal hide fade">
+      <div class="modal-header">
+            <h3>[% "Nuevo Subestante" | i18n %]</h3>
+      </div>
+      <div class="modal-body">
+              <input type="text" id="input_nuevo_sub_estante">
+              <input type="hidden" id="estante_nuevo_sub_estante">
+              <input type="hidden" id="padre_nuevo_sub_estante">
+              <script type="text/javascript">
+                          $(document).ready(function() {
+                          $('#input_nuevo_sub_estante').keypress(function(e){if(e.which==13){if(this.value!=''){agregarSubEstante();}}});
+                  });
+              </script>
+      </div>
+      <div class="modal-footer">
+
+                                          
+              [% PERL %]
+                                        print C4::AR::Filtros::action_button(  
+                                                                            button   => "btn btn-primary",
+                                                                            action => 'agregarSubEstante();',
+                                                                            icon    => 'icon-white icon-ok',
+                                                                            title   => "[% ' Agregar Subestante' | i18n %]",
+                                                                          
+                                                ) ;
+              [% END %]
+         
+      </div>
+
+</div>
+
+
+<div id="subestante">
+</div>
+
+<script>
+//  makeToggle('datos_tabla_div_estantes','trigger',null,false);
+
+ [% FOREACH es IN LISTA_ESTANTES %]
+     verSubEstantes([% es.getId %],[% es.getPadre %]);
+ [% END %]
+</script>
+
+[% INCLUDE "intranet-bottom.inc" %]

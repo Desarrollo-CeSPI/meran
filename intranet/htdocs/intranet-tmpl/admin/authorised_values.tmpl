@@ -1,0 +1,177 @@
+[% INCLUDE "intranet-top.inc" %]
+[% USE HTML %]
+
+<!-- EL NOT DEL IF NO VA, ESTA AHORA SOLO PARA VER EL TEMPLATE COMPILADO -->
+[% IF ! add_form %]
+<!---------------------------------------------------------------------------->
+
+<div class="titulos">
+
+ 	[% IF use-heading-flags-p %]
+ 		[% IF heading-modify-authorized-value-p %]
+			[% "Modificar Valores Autorizados" | i18n %]
+		[% END %]
+ 		[% IF heading-add-new-category-p %]
+			[% "Agregar Categor&iacute;a" | i18n %]
+		[% END %]
+ 		[% IF heading-add-authorized-value-p %]
+			[% "Agregar Valores Autorizados" | i18n %]
+		[% END %]
+ 		[% ELSE %]
+			[% action %]
+		[% END %]
+</div>
+
+<form action='[% script_name %]' name=Aform method=post>
+	<input type=hidden name=op value='add_validate'>
+	<table>
+	<tr>
+		<td class="inputFontNormal">[% "Categor&iacute;a" | i18n %]</td>
+		<td class="inputFontNormal">[% category %]</td>
+	</tr>
+	<tr>
+		<td class="inputFontNormal">[% "Valor Autorizado" | i18n %]</td>
+		<td>
+			<input class="inputFontNormal" type=text name="authorised_value" value='[% HTML.escape(authorised_value) %]'>
+		</td>
+	</tr>
+	<tr>
+		<td class="inputFontNormal">[% "Lib" | i18n %]</td>
+		<td>
+			<input type=text class="inputFontNormal" name="lib" value='[% lib %]'>
+		</td>
+	</tr>
+	<tr>
+		<td class="inputFontNormal">&nbsp;</td>
+		<td>
+			<input type="hidden" name="id" value="[% id %]">
+			<a href="#"  onClick="Aform.submit()" ><img name="save" id="save" alt="Guardar cambios" src="[% themelang %]/images/guardar.png" border="0"></a>
+		</td>
+	</tr>
+	</table>
+</form>
+	[% END %]
+
+
+[% IF delete_confirm %]
+<!---------------------------------------------------------------------------->
+<table border=0 cellspacing=0 cellpadding=2>
+	<tr valign=top>
+		<td class="inputFontNormal"><b>[% "Variable" | i18n %]</b></td>
+		<td class="inputFontNormal"><b>[% "Lib" | i18n %]</b></td>
+		<td class="inputFontNormal"><b>[% searchfield %]</b></td>
+	</tr>
+	<tr class="inputFontNormal">
+		<td>[% "Valor" | i18n %]</td>
+		<td>[% Tvalue %]</td>
+	</tr>
+	<form action='[% script_name %]' method=post>
+		<input type=hidden name=op value=delete_confirmed>
+		<input type=hidden name=id value='[% id %]'>
+		<input type="hidden" name="searchfield" value="[% searchfield %]">
+	<tr>
+		<td colspan=2 align=center>[% "CONFIRME BORRADO" | i18n %]</td>
+	</tr>
+	<tr>
+		<td><INPUT type=submit value='SI'></form></td>
+		<td>
+			<form action='[% script_name %]' method=post>
+				<input type=submit value=NO>
+			</form>
+		</td>
+	</tr>
+</table>
+[% END %]
+
+<!---------------------------------------------------------------------------->
+[% IF else %]
+
+<div class="titulos">[% "Administraci&oacute;n de Valores Autorizados" | i18n %]</div>
+		
+<p class="inputFontNormal">[% "Esta tabla es utilizada en la definici&oacute;n de MARC. Usted puede definir tantas categor&iacute;as como quiera, y tantos valores autorizados como necesite en cada categor&iacute;a." | i18n %] </p>
+<p class="inputFontNormal" >[% "Cuando defina la estructura del subcampo MARC, puede vincular un subcampo con una categor&iacute;a permitida. Cuando el usuario agrega o modifica un libro, el subcampo no se ingresa manualmente, se selecciona de una lista de valores permitidos." | i18n %]</p>
+<table>
+	<tr>
+		<form action=[% url_prefix %]/admin/authorised_values.pl method=post name="form1">
+		<td>[% tab_list %]</td>
+		<td><a onClick="form1.submit()" href="#"><img name="go" id="go" alt=[% "Comenzar b&uacute;squeda" | i18n %] src="[% themelang %]/images/boton-buscar.png" border=0></a>
+		</td>
+		<td><a class="inputFontNormal" href="authorised_values.pl?op=add_form">[% "Nueva Categor&iacute;a" | i18n %]</a>
+		</td>
+		</form>
+	</tr>
+</table>
+[% searchfield %]
+<br>
+
+<table border=0 cellspacing=0 cellpadding=0 width="80%">
+	<tr class="titulo_tabla_resultado">
+
+		<td>[% "Categor&iacute;a" | i18n %]</td>
+		<td>[% "Valor Autorizado" | i18n %]</td>
+		<td>[% "Lib" | i18n %]</td>
+		<td width="8%">[% "Editar" | i18n %]</td>
+		<td width="8%">[% "Eliminar" | i18n %]</td>
+
+[% FOREACH loop %]
+
+	<tr valign=middle >
+	
+		<td class="[% clase %]" class="inputFontNormal">
+			[% category %]
+		</td>
+		<td align="center" class="[% clase %]" class="inputFontNormal">
+			[% authorised_value %]
+		</td>
+		<td class="[% clase %]" class="inputFontNormal"> 
+			[% lib %]
+		</td>
+		<td class="[% clase %]" align="center">
+			<a class="inputFontNormal" href="[% edit %]"><img src="[% interface %]/[% theme %]/images/editar.png" ALT="Editar" hspace=0 vspace=0 border=0></a>
+		</td>
+		<td class="[% clase %]" align="center">
+			<a class="inputFontNormal" href="[% delete %]"><img src="[% interface %]/[% theme %]/images/borrar.png" ALT="Eliminar" hspace=0 vspace=0 border=0></a>
+		</td>
+
+	</tr>
+[% END  %]
+ 	<tr valign=bottom>
+        	<td class="lineafinaltabla"  align="left" colspan="7"></td>
+        </tr>
+</table>
+
+<form action='[% script_name %]' method=post>
+<input type=hidden name=op value=add_form>
+
+
+<table width=40%>
+	<tr>
+		<td width=50%>
+			[% IF isprevpage %]
+				<a class="inputFontNormal" ref="[% script_name %]?offset=[% prevpage %]&searchfield=[% searchfield %]">
+				<input type=image src="[% interface %]/[% theme %]/images/1leftarrow.png" title="previous" ALT="previous" BORDER=0>
+				</a>
+			[% END %]
+		</td>
+		<td width=50%>
+			[% IF nextpage %]
+				<a class="inputFontNormal" href="[% script_name %]?offset=[% nextpage %]&searchfield=[% searchfield %]">
+					<input type=image src="[% interface %]/[% theme %]/images/1rightarrow.png" title="next" ALT="next" BORDER=0>
+				</a>
+			[% END %]
+		</td>
+	</tr>
+</table>
+<form action='[% script_name %]' method=post name=form2>
+<input type="hidden" name="op" value="add_form">
+<input type="hidden" name="category" value="[% category %]">
+<br>
+<center>
+<input type="image" alt="Agregar Valor Autorizado"  src="[% interface %]/[% theme %]/images/agregar.png" onclick="form2.submit">
+<!--<input type=submit class="button" value="Agregar Valor Autorizado" title="Agregar Valor Autorizado" ALT="Agregar Valor Autorizado">--><br>
+</center>
+</form>
+[% END %]
+
+
+[% INCLUDE "intranet-bottom.inc" %]

@@ -1,0 +1,2 @@
+ALTER TABLE `cat_registro_marc_n3` ADD `codigo_barra` VARCHAR( 255 ) NOT NULL AFTER `id1` ,
+ADD `signatura` VARCHAR( 255 ) NOT NULL AFTER `codigo_barra` ;

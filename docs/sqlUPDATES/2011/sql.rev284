@@ -1,0 +1,18 @@
+ALTER TABLE `cat_visualizacion_opac` ADD `inter` VARCHAR( 255 ) NULL AFTER `pre` ;
+ALTER TABLE `cat_visualizacion_intra` ADD `inter` VARCHAR( 255 ) NULL AFTER `pre` ;
+
+ALTER TABLE `cat_visualizacion_opac` CHANGE `pre` `pre` VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL ,
+CHANGE `post` `post` VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL ;
+
+ALTER TABLE `cat_visualizacion_intra` CHANGE `pre` `pre` VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL ,
+CHANGE `post` `post` VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL ;
+
+
+UPDATE `cat_visualizacion_intra` set pre = SUBSTRING(pre,1, LENGTH(pre)-1) where SUBSTRING(pre, -1) = '|';
+UPDATE `cat_visualizacion_intra` set post = SUBSTRING(post,1, LENGTH(post)-1) where SUBSTRING(post, -1) = '|';
+UPDATE `cat_visualizacion_intra` set inter = SUBSTRING(inter,1, LENGTH(inter)-1) where SUBSTRING(inter, -1) = '|';
+
+
+UPDATE `cat_visualizacion_opac` set pre = SUBSTRING(pre,1, LENGTH(pre)-1) where SUBSTRING(pre, -1) = '|';
+UPDATE `cat_visualizacion_opac` set post = SUBSTRING(post,1, LENGTH(post)-1) where SUBSTRING(post, -1) = '|';
+UPDATE `cat_visualizacion_opac` set inter = SUBSTRING(inter,1, LENGTH(inter)-1) where SUBSTRING(inter, -1) = '|';

@@ -1,0 +1,187 @@
+[% INCLUDE "intranet-top.inc" %]
+
+<script type="text/javascript" src="/intranet-tmpl/includes/circulacion-min.js"></script>
+
+<script language=javascript>
+var objAH;//Objeto AjaxHelper.
+
+
+var ORDEN;
+var SENTIDO_ORDEN=1; //1 para ASC - 0 DESC
+
+/*
+ * borrarDiv
+ * Borra el div 
+ */
+function borrarDiv(){$("#divResultado").html("");}
+
+/*
+ * mostrarSanciones
+ * Busca todas las sanciones.
+ */
+function mostrarSanciones(){
+	objAH               = new AjaxHelper(updateMostrarSanciones);
+	objAH.debug         = true;
+    objAH.showOverlay   = true;
+    objAH.orden         = ORDEN;
+    objAH.sentido_orden = SENTIDO_ORDEN;
+	objAH.url=URL_PREFIX+"/circ/sancionesDB.pl";
+	objAH.accion        = 'MOSTRAR_SANCIONES'
+	objAH.funcion       = 'changePage';
+	objAH.sendToServer();
+}
+function updateMostrarSanciones(responseText){
+	$("#divResultado").html(responseText);
+    if (ORDEN){
+      cambiarSentidoOrd();
+    }
+
+}
+
+// function ordenar(orden){
+//     ORDEN = orden;
+//     mostrarSanciones();
+// }
+
+function borrarSanciones(chck){
+
+    var chck  = $("input[@name="+chck+"]:checked");
+    var array = new Array;
+    var long  = chck.length;
+    if ( long == 0){
+        jAlert("Elija al menos una sancion para eliminar");
+    }
+    else{
+
+        bootbox.confirm(ESTA_SEGURO_QUE_DESEA_CANCELAR_LA_SANCION, function(confirmStatus){if (confirmStatus) {
+
+            for(var i=0; i< long; i++){
+              array[i]=chck[i].value;
+            }
+
+            objAH               = new AjaxHelper(updateSanciones);
+            objAH.debug         = true;
+            objAH.showOverlay   = true;
+            objAH.url=URL_PREFIX+'/circ/sancionesDB.pl';
+            objAH.accion        = "ELIMINAR_SANCIONES"
+            objAH.datosArray    = array;
+
+            objAH.sendToServer();
+        }
+
+        });
+    }
+}
+
+
+function updateSanciones(responseText){
+
+	borrarDiv();	
+    if (!verificarRespuesta(responseText)){
+        return(0);
+    }        
+    var Messages = JSONstring.toObject(responseText);
+    setMessages(Messages);
+	mostrarSanciones();
+}
+
+
+$(document).ready( function() {
+	mostrarSanciones();
+	onEnter("buscar",buscarSancion);
+});
+
+
+
+/************************************************************* BUSQUEDA DE SANCIONES *************************************************/
+
+
+/*
+ * buscarSancion
+ * Busca todas las sanciones o las que se corresponden con el string ingresado para filtrar la busqueda.
+ */
+function buscarSancion(){
+	objAH               = new AjaxHelper(updateBuscaSancion)
+	objAH.debug         = true
+	objAH.showOverlay   = true;
+	objAH.url=URL_PREFIX+"/circ/sancionesDB.pl";
+	objAH.string        = $("#buscar").val()
+	objAH.accion        = "BUSCAR_SANCIONES"
+
+	objAH.funcion       = 'changePage';
+	objAH.sendToServer()
+}
+
+function updateBuscaSancion(responseText){
+	$("#divResultado").html(responseText);
+    if (ORDEN){
+      cambiarSentidoOrd();
+    }
+}
+
+
+/*
+ * limpiar
+ * Borra el texto ingresado en el componente de busqueda.
+ */
+function limpiar(){
+    $("#buscar").val("")
+}
+
+
+
+</script>
+
+<section class="center-section-form">
+    <form class="form-horizontal" onsubmit="return false;">
+            
+        <fieldset id="reportes">
+            <legend class="titulo_legend"> <span class="titulos">[% "Administraci&oacute;n de Sanciones del Sistema" | i18n %] </span> </legend>
+            <div class="control-group">
+                  <div class="controls">
+                    <input type="text" id="buscar" name="buscar" value="">
+
+                        [% PERL %]
+                            print C4::AR::Filtros::setHelpInput(   
+                                                            text        => "[% ' Ingrese el Apellido, Nombre o Numero de Socio.' | i18n %]",
+                                                            class       => "info",
+                                                    ) ;
+                            
+                        [% END %]
+                    
+                  </div>    
+                </div>  
+
+                
+                <div class="form-actions">
+                      [% PERL %]
+                                        print C4::AR::Filtros::to_Button(   text    => "[% 'Limpiar' | i18n %]",
+                                                                            boton   => "btn",
+                                                                            onClick => "limpiar();",
+                                                                            title   => "[% 'Limpiar' | i18n %]",
+                                                                            inline  => 1,
+                                                ) ;
+                    [% END %]
+
+                    [% PERL %]
+                                        print C4::AR::Filtros::to_Button(   text    => "[% 'Buscar' | i18n %]",
+                                                                            boton   => "btn btn-primary",
+                                                                            onClick => "buscarSancion();",
+                                                                            title   => "[% 'Buscar' | i18n %]",
+                                                                            inline  => 1,
+                                                ) ;
+                    [% END %]
+                
+                  
+                </div>
+            </fieldset>
+       </form>
+
+   </section>
+
+
+<fieldset class="resultados_busqueda">
+    <legend class="titulo_legend">[% "Sanciones" | i18n %]</legend>
+    <div id="divResultado"></div>
+</fieldset>
+[% INCLUDE "intranet-bottom.inc" %]

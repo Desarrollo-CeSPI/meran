@@ -1,0 +1,140 @@
+[% INCLUDE "intranet-top.inc" %] 
+[% INCLUDE 'AutocompleteHelper.inc' %]
+
+  <script type="text/javascript" src="/intranet-tmpl/includes/adquisiciones/datosProveedor.js"> </script>
+<div>
+      <fieldset>
+          <legend class="titulo_legend_resaltado">Datos del Proveedor</legend>  
+          <div id="detalleProveedor">
+             <input type="hidden" id="id_proveedor" value="[% proveedor.getId %]">
+	      <li class="sub_item">
+		  <label for="nombre" id="label_nombre"> [% "Nombre" | i18n %] *</label>
+		  <input id="nombre" name="nombre" class="required" type="text" size="25" value="[% proveedor.getNombre %]">
+	      </li>
+
+          <li class="sub_item">
+          <label for="apellido" id="label_apellido"> [% "Apellido" | i18n %] *</label>
+          <input id="apellido" name="apellido" class="required" type="text" size="25" value="[% proveedor.getApellido %]">
+          </li>
+
+          <li class="sub_item"> 
+          <label for="tipo_documento" id="label_tipo_documento_id"> [% "Tipo Documento" | i18n %] *</label>
+          [% combo_tipo_documento %] <input  id="numero_documento" name="numero_documento" class="required"  type="text" size="7" value="[% proveedor.getNroDoc %]">
+          </li>
+
+
+          <li class="sub_item"> 
+          <label for="razon_social" id="label_razon_social"> [% "Razon Social" | i18n %] *</label>
+          <input  id="razon_social" name="razon_social" class="required"  type="text" size="25" value="[% proveedor.getRazonSocial %]">
+          </li>
+
+          <li class="sub_item"> 
+          <label for="cuit_cuil"> [% "CUIT - CUIL" | i18n %] *</label>
+          <input  id="cuit_cuil" name="cuit_cuil" class="required" type="text" size="25" value="[% proveedor.getCuitCuil %]">
+          </li>
+
+          <li class="sub_item"> 
+          <label for="ciudad"> [% "Ciudad" | i18n %] *</label>
+          <input  id="ciudad" name="ciudad" type="text" class="required" size="25" value="[% proveedor.ref_localidad.getNombre %]">
+           <input type="hidden" id="id_ciudad" name="id_ciudad" value="[% proveedor.ref_localidad.id %]">
+          </li>
+
+          <li class="sub_item"> 
+          <label for="domicilio"> [% "Domicilio" | i18n %] *</label>
+          <input  id="domicilio" name="domicilio" class="required" type="text" size="25" value="[% proveedor.getDomicilio %]">
+          </li>
+
+	      <li class="sub_item">
+		  <label for="telefono">[% "Telefono" | i18n %] *</label>
+		  <input id="telefono" name="telefono" class="required" type="text" size="25" value="[% proveedor.getTelefono %]">
+	      </li>
+
+          <li class="sub_item">
+          <label for="fax">[% "Fax" | i18n %] </label>
+          <input id="fax" name="fax" type="text" size="25" value="[% proveedor.getFax %]">
+          </li>
+	      <li class="sub_item">
+		  <label for="email">[% "Email" | i18n %]</label>
+		  <input type="text" name="email" id="email" size="25" value="[% proveedor.getEmail %]">
+	      </li>
+
+          <li class="sub_item">
+          <label for="plazo_reclamo">[% "Plazo Reclamo" | i18n %] </label>
+          <input  id="plazo_reclamo" name="plazo_reclamo" type="text" size="25" value="[% proveedor.getPlazoReclamo %]">
+          </li>
+          
+          <!-- Materiales -->
+          <br>
+          [% PERL %]
+            print C4::AR::Filtros::setHelp(text => "[% 'A la izquierda se muestran los materiales del proveedor.' | i18n %]");
+          [% END %]           
+          <li class="sub_item"> 
+              <label for="material">[% "Materiales del proveedor" | i18n %]</label>
+                <select name="materiales" style="width:8%;" id="materiales_del_provedor" multiple="multiple" size="4">
+                [% FOREACH material IN materiales_proveedor %] 
+                    <option value="[% material.material_ref.id %]">[% material.material_ref.nombre %]
+                [% END %]
+                </select>
+                <input type="button" name="agregar_material" value="<" id="agregar_material"/>
+                <input type="button" name="quitar_material" value=">" id="quitar_material"/>
+                [% tipo_materiales %] 
+          </li>         
+          
+          <!-- Envios -->
+          <br>
+          [% PERL %]
+            print C4::AR::Filtros::setHelp(text => "[% 'A la izquierda se muestran las formas de envio del proveedor.' | i18n %]");
+          [% END %] 
+          <li class="sub_item"> 
+              <label for="envios">[% "Formas de envio del proveedor" | i18n %]</label>
+                <select name="formas_envios_proveedor" style="width:8%;" id="formas_envio_provedor" multiple="multiple" size="4">
+                [% FOREACH forma IN formas_envio_proveedor %] 
+                    <option value="[% forma.forma_envio_ref.id %]">[% forma.forma_envio_ref.nombre %]
+                [% END %]
+                </select>
+                <input type="button" name="agregar_forma_envio" value="<" id="agregar_forma_envio"/>
+                <input type="button" name="quitar_forma_envio" value=">" id="quitar_forma_envio"/>
+                [% formas_envio %] 
+          </li>
+          
+          <!-- Monedas -->
+          <br>
+          <li class="sub_item"> 
+            <label for="moneda">[% "Monedas del proveedor" | i18n %]</label>
+              <div id="monedas_proveedor">
+                <ul>
+                [% FOREACH moneda IN monedas %] 
+                    <input name="options" class="monedas" type="checkbox" value="[% moneda.moneda_ref.id %]"/>[% moneda.moneda_ref.nombre %]
+                [% END %]
+                </ul>
+              </div>
+          </li>
+
+          <!-- Autocomplete Monedas -->
+          <li class="sub_item"> 
+              <label for="moneda"> [% "Monedas posibles" | i18n %]</label>
+              <input  id="moneda" name="moneda" type="text" size="25" >           
+              <input  id="agregar_moneda" name="agregar_moneda" type="button" size="15" value="Agregar Moneda">
+              <input  id="borrar_moneda" name="borrar_moneda" type="button" size="15" value="Borrar Moneda">
+              <input type="hidden" id="id_moneda" name="id_moneda">
+          </li>
+          [% PERL %]
+            print C4::AR::Filtros::setHelp(text => "[% 'Tipee el nombre de la moneda que desea agregar.' | i18n %]");
+          [% END %]
+            <div>
+               <strong>(*) [% "Obligatorio" | i18n %]</strong>
+            </div>
+            <br>
+          <div id="accion">
+              [% PERL %]
+                         print C4::AR::Filtros::to_Button(   text    => "[% 'Guardar Cambios' | i18n %]",
+                                                               boton   => "boton_buscar",
+                                                               onClick => "modificarDatosDeProveedor();",
+                                                     ) ;
+              [% END %]
+          </div>
+</fieldset>
+        
+
+</div>
+[% INCLUDE "intranet-bottom.inc" %]

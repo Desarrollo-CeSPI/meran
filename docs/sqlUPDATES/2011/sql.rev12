@@ -1,0 +1,3 @@
+ALTER TABLE `adq_pedido_cotizacion_detalle` ADD `nro_renglon` INT NOT NULL AFTER `adq_recomendacion_detalle_id` ;
+
+ALTER TABLE `adq_presupuesto_detalle` ADD `nro_renglon` INT NOT NULL AFTER `seleccionado` ;

@@ -1,0 +1,63 @@
+<script type="text/javascript" language="javascript">
+    $("#enable_sort_subcampo").change(function(){
+        if($(this).is(':checked')){
+            $("#sortable_subcampo").sortable({
+            stop: function(event, ui) {
+                actualizarOrdenSubCampos($('#sortable_subcampo').sortable('toArray'));
+            }
+        });
+        }
+    });
+</script>
+<script type="text/javascript" language="javascript">
+    $(document).ready(function() {
+        onEnter('lib_librarian',agregarVisualizacion);
+        loaderPath = '<img src="'+imagesForJS+'/loaders/loader_facebook.gif"'+'>';
+        $('.editable').editable('[% url_prefix %]/herramientas/importacion/esquemas_importacionDB.pl', { 
+            type      : 'text',
+            tooltip   : EDITABLE_MSG,
+            placeholder: EDITABLE_MSG,
+            style   : 'display: inline',
+            submitdata : {token: "[% token %]", edit: '1'},
+            indicator : loaderPath,
+
+      });
+
+    });
+</script>
+<fieldset>
+    <legend class="titulo_legend trigger click">
+        [% "Campos destino para " | i18n %][% esquema_padre.getCampoOrigen %]$<span style="text-transform: lowercase;">[% esquema_padre.getSubcampoOrigen %]</span>
+    </legend>
+             [% PERL %]
+                 print C4::AR::Filtros::tableHeader(   
+                                   id              => "tabla_datos_visualizacion_intra",
+                                   class           => "clases_adicionales",
+                                   selectAll_id    => "",
+                                   columns         => ['[% "Campo Destino"|i18n %]','[% "Subcampo Destino"|i18n %]',
+                                                     '[% "Separador"|i18n %]','[% "Elminar"|i18n %]',
+                                                      ]                                   
+                             ) ;
+             [% END %]
+            
+            <tbody id="sortable_subcampo">
+                <input type="checkbox" name="enable_sort_subcampo" id="enable_sort_subcampo" /> Seleccione para Ordenar
+                [% FOREACH detalle IN esquema %]
+                    <tr id="[% detalle.id %]" align="center">
+                        <td class="editable" id="[% detalle.id %]___cd">[% detalle.getCampoDestino %]</td>
+                        <td class="editable" id="[% detalle.id %]___scd">[% detalle.getSubcampoDestino %]</td>
+                        <td class="editable" id="[% detalle.id %]___sep">[% detalle.getSeparador %]</td>
+                        <td>
+		                        [% PERL %]
+		                            print C4::AR::Filtros::action_button(  
+		                                                                button    => "btn click btn-danger",
+		                                                                action    => "eliminarEsquemaRowOne([% detalle.id %]);",
+		                                                                icon      => "icon-remove icon-white",
+		                                    ) ;
+		                        [% END %]                        
+                        </td>
+                    </tr>
+                [% END %]
+            </tbody>
+        </table>
+</fieldset>

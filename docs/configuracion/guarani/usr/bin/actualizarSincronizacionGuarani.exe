@@ -1,0 +1,4 @@
+#!/bin/sh
+cd /home/soportelinti/
+sed 's/\\|//' < Econo/salida > Econo/salidaLimpio
+./UPDATE.pl Econo/salidaLimpio 1 DEO "ou=usuarios,dc=biblio,dc=econo,dc=unlp,dc=edu,dc=ar"

@@ -1,0 +1,1 @@
+ALTER TABLE `cat_rating` ADD `date` VARCHAR( 20 ) NOT NULL AFTER `review` 

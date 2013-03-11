@@ -1,0 +1,113 @@
+<script>
+	$(document).ready(function(){
+	    $('.tooltip_link').tooltip({delay: { show: 1000, hide: 100 },});
+	});
+</script>
+
+[% PERL %]
+    print C4::AR::Filtros::tableHeader(   
+                                            id              => "tabla_ejemplares",
+                                            class           => "",
+                                            columns         => ['[% "Sig. Top."|i18n %]','[% "C&oacute;digo"|i18n %]','[% "Tipo de Pr&eacute;stamo"|i18n %]',
+                                                                '[% "Estado"|i18n %]','[% "Origen UI"|i18n %]', '[% "Due&ntilde;o UI"|i18n %]', '[% "Acci&oacute;n"|i18n %]'
+                                                               ],
+                                            selectAll_id   => 'select_all',
+                                            
+                ) ;
+[% END %]    
+[% FOREACH nivel3 IN nivel3_array %]
+    <tr>
+            <td>
+                <input type="checkbox" id="checkEjemplares" name="checkEjemplares" class="icon_seleccionar" value="[% nivel3.nivel3_obj.getId3 %]">
+            </td>
+            <td>[% nivel3.nivel3_obj.getSignatura_topografica %]</td>
+            <td>
+
+            [% PERL %]
+                print C4::AR::Filtros::link_to(	text => 	"[% nivel3.nivel3_obj.getBarcode %]",
+                                                url => 		"[% url_prefix %]/catalogacion/estructura/detalleEjemplar.pl", 
+                                                params =>	["id3=[% nivel3.nivel3_obj.getId3 %]"],
+                                                title =>	"[% 'Detalle del ejemplar' | i18n %]",
+                                                tooltip =>    "[% 'Detalle del ejemplar' | i18n %]"
+                                            ) ;
+            [% END %]
+
+            </td>
+            <td>
+                    [% IF nivel3.nivel3_obj.estaPrestado %]
+                        <strong class="[% IF nivel3.nivel3_obj.estadoDisponible %]disponible[% ELSE %]nodisponible[% END %]">[% 'Prestado a:' | i18n  %]</strong> 
+                        [% PERL %]
+                            print C4::AR::Filtros::link_to(   text =>     "[% nivel3.socio_prestamo.persona.getApeYNom %]",
+                                                              url=>"[% url_prefix %]/usuarios/reales/datosUsuario.pl", 
+                                                              params =>   ["nro_socio=[% nivel3.socio_prestamo.getNro_socio %]"],
+                                                              title =>    "[% 'Mostrar Detalle del Usuario' | i18n %]",
+                                                              blank =>  1,
+                                                        );
+                        [% END %]
+
+                    [% END %]
+
+                    <div class="[% claseDisponibilidad %]">
+                        [% nivel3.nivel3_obj.getDisponibilidadObject.getNombre %]
+                    </div>
+            </td>
+            <td>
+                <span class="[% IF nivel3.nivel3_obj.estadoDisponible %]disponible[% ELSE %]nodisponible[% END %]">
+                    [% nivel3.nivel3_obj.getEstadoObject.getNombre %]
+                </span>
+            </td>
+            <td>
+                [% nivel3.nivel3_obj.getId_ui_origen %] 
+            </td>
+            <td>
+                [% nivel3.nivel3_obj.getId_ui_poseedora %]
+            </td>
+            <td>
+
+
+                [% PERL %]
+                    print C4::AR::Filtros::action_set_button(    
+                                                        title           => "[% 'Ejemplar' | i18n %]",
+                                                        button          => 'btn btn-primary',
+
+                                                        actions         => [
+                                                                            {title => "Modificar", action=>'modificarN3("[% nivel3.nivel3_obj.getId3 %]", "[% nivel3.nivel3_obj.getTemplate %]")',icon=>"icon-edit"},
+                                                                            {title => "Eliminar", action=>'borrarN3("[% nivel3.nivel3_obj.getId3 %]")', icon=>"icon-trash"},
+                                                                            ],
+
+                            ) ;
+                [% END %]
+
+            </td>
+    </tr>
+[% END %] <!-- END FOREACH nivel3 -->
+
+	<tfoot>
+	       <tr>
+	           <td>
+	                 [% "Para los elementos que est&aacute;n marcados:" | i18n %]
+
+	                 [% PERL %]
+	                     print C4::AR::Filtros::action_set_button(    
+	                           title           => "[% 'Ejemplares' | i18n %]",
+	                           button          => 'btn btn-primary',
+	
+	                           actions         => [
+	                                               {title => "Modificar ejemplares", 
+	                                                action=>"modificarEjemplaresN3()",
+	                                                icon=>"icon-edit"
+	                                               },
+	                                               {title => "Borrar ejemplares", 
+	                                                action=>"borrarEjemplaresN3()", 
+	                                                icon=>"icon-trash"
+	                                               },
+	                                               ],
+	                            popover       => {text=>'Esta acci&oacute;n se aplica para todos los ejemplares seleccionados', 
+	                                              title=> 'Atenci&oacute;n'}
+	 
+	                             ) ;
+	                 [% END %]
+            </td>
+        </tr>
+    </tfoot>
+</table>

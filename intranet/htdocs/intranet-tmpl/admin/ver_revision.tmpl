@@ -1,0 +1,18 @@
+[% USE HTML %]
+<script type="text/javascript" language="javascript">
+    $('.fancylink').fancybox();
+</script>
+
+<div class="modal-header">
+  <a href="#" class="close" data-dismiss="modal">×</a>
+  <h3>[% revision.nivel2.nivel1.getTitulo %] ([% revision.nivel2.getEdicion %])</h3>
+</div>
+<div class="modal-body">
+    <p>[% HTML.escape(revision.getReview) %]</p>
+
+    </br>      
+  
+</div>
+<div class="modal-footer">
+   <h4> [% revision.socio.persona.getApeYNom %] <h6>[% revision.getDate %]</h6>
+</div>

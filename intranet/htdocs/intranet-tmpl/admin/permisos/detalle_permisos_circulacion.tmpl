@@ -1,0 +1,81 @@
+[% INCLUDE 'partials/admin/_nuevoPermiso.inc' %]
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Nombre</th>
+            <th>Permisos</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>[% "Prestamos" | i18n %]</td>
+            <td>
+                [% prestamos %]
+            </td>
+            <input type="checkbox" id="prestamos_todos" name="prestamos" style="display:none;"/>
+            <input type="checkbox" id="prestamos_baja" name="prestamos" style="display:none;"/>
+            <input type="checkbox" id="prestamos_modif" name="prestamos" style="display:none;"/>
+            <input type="checkbox" id="prestamos_alta" name="prestamos" style="display:none;"/>
+            <input type="checkbox" id="prestamos_consulta" name="prestamos" style="display:none;"/>
+        </tr>
+        <tr>
+            <td>[% "Reservar desde OPAC" | i18n %]</td>
+            <td>
+                [% circ_opac %]
+            </td>
+            <input type="checkbox" id="circ_opac_todos" name="circ_opac" style="display:none;"/>
+            <input type="checkbox" id="circ_opac_baja" name="circ_opac" style="display:none;"/>
+            <input type="checkbox" id="circ_opac_modif" name="circ_opac" style="display:none;"/>
+            <input type="checkbox" id="circ_opac_alta" name="circ_opac" style="display:none;"/>
+            <input type="checkbox" id="circ_opac_consulta" name="circ_opac" style="display:none;"/>
+        </tr>
+        <tr>
+            <td>[% "Realizar pr&eacute;stamos" | i18n %]</td>
+            <td>
+                [% circ_prestar %]
+            </td>
+            <input type="checkbox" id="circ_prestar_todos" name="circ_prestar" style="display:none;"/>
+            <input type="checkbox" id="circ_prestar_baja" name="circ_prestar" style="display:none;"/>
+            <input type="checkbox" id="circ_prestar_modif" name="circ_prestar"  style="display:none;"/>
+            <input type="checkbox" id="circ_prestar_alta" name="circ_prestar"  style="display:none;"/>
+            <input type="checkbox" id="circ_prestar_consulta" name="circ_prestar" style="display:none;"/>
+        </tr>
+        <tr>
+            <td>[% "Renovar pr&eacute;stamos" | i18n %]</td>
+            <td>
+                [% circ_renovar %]
+            </td>
+            <input type="checkbox" id="circ_renovar_todos" name="circ_renovar" style="display:none;"/>
+            <input type="checkbox" id="circ_renovar_todos" name="circ_renovar" style="display:none;"/>
+            <input type="checkbox" id="circ_renovar_modif" name="circ_renovar" style="display:none;"/>
+            <input type="checkbox" id="circ_renovar_alta" name="circ_renovar" style="display:none;"/>
+            <input type="checkbox" id="circ_renovar_consulta" name="circ_renovar" style="display:none;"/>
+        </tr>
+        <tr>
+            <td>[% "Devolver pr&eacute;stamos" | i18n %]</td>
+            <td>
+                [% circ_devolver %]
+            </td>
+            <input type="checkbox" id="circ_devolver_todos" name="circ_devolver" style="display:none;"/>
+            <input type="checkbox" id="circ_devolver_baja" name="circ_devolver" style="display:none;"/>
+            <input type="checkbox" id="circ_devolver_modif" name="circ_devolver" style="display:none;"/>
+            <input type="checkbox" id="circ_devolver_alta" name="circ_devolver" style="display:none;"/>
+            <input type="checkbox" id="circ_devolver_consulta" name="circ_devolver" style="display:none;"/>
+        </tr>
+        <tr>
+            <td>[% "Sanciones" | i18n %]</td>
+            <td>
+                [% circ_sanciones %]
+            </td>
+            <input type="checkbox" id="circ_sanciones_todos" name="circ_sanciones" style="display:none;"/>
+            <input type="checkbox" id="circ_sanciones_baja" name="circ_sanciones" style="display:none;"/>
+            <input type="checkbox" id="circ_sanciones_modif" name="circ_sanciones"  style="display:none;"/>
+            <input type="checkbox" id="circ_sanciones_alta" name="circ_sanciones" style="display:none;"/>
+            <input type="checkbox" id="circ_sanciones_consulta" name="circ_sanciones" style="display:none;"/>
+        </tr>
+
+    </tbody>
+</table>
+
+[% INCLUDE 'partials/admin/_guardarPermisos.inc' %]

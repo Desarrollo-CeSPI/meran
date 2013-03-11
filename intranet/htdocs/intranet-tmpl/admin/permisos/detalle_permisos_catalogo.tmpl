@@ -1,0 +1,148 @@
+[% INCLUDE 'partials/admin/_nuevoPermiso.inc' %]
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Nombre</th>
+            <th>Permisos</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>[% "Entorno Nivel 1" | i18n %]</td>
+            <td>
+                [% permisos_nivel1 %]
+            </td>
+            <input type="checkbox" id="datos_nivel1_todos" name="datos_nivel1" style="display:none;"/>
+            <input type="checkbox" id="datos_nivel1_baja" name="datos_nivel1" style="display:none;"/>
+            <input type="checkbox" id="datos_nivel1_modif" name="datos_nivel1" style="display:none;"/>
+            <input type="checkbox" id="datos_nivel1_alta" name="datos_nivel1" style="display:none;"/>
+            <input type="checkbox" id="datos_nivel1_consulta" name="datos_nivel1" style="display:none;"/>
+        </tr>
+        <tr>
+            <td>[% "Entorno Nivel 2" | i18n %]</td>
+            <td>
+                [% permisos_nivel2 %]
+            </td>
+            <input type="checkbox" id="datos_nivel2_todos" name="datos_nivel2" style="display:none;"/>
+            <input type="checkbox" id="datos_nivel2_baja" name="datos_nivel2" style="display:none;"/>
+            <input type="checkbox" id="datos_nivel2_modif" name="datos_nivel2" style="display:none;"/>
+            <input type="checkbox" id="datos_nivel2_alta" name="datos_nivel2" style="display:none;"/>
+            <input type="checkbox" id="datos_nivel2_consulta" name="datos_nivel2" style="display:none;"/>
+        </tr>
+        <tr>
+            <td>[% "Entorno Nivel 3" | i18n %]</td>
+            <td>
+                [% permisos_nivel3 %]
+            </td>
+            <input type="checkbox" id="datos_nivel3_todos" name="datos_nivel3" style="display:none;"/>
+            <input type="checkbox" id="datos_nivel3_baja" name="datos_nivel3" style="display:none;"/>
+            <input type="checkbox" id="datos_nivel3_modif" name="datos_nivel3"  style="display:none;"/>
+            <input type="checkbox" id="datos_nivel3_alta" name="datos_nivel3"  style="display:none;"/>
+            <input type="checkbox" id="datos_nivel3_consulta" name="datos_nivel3" style="display:none;"/>
+        </tr>
+        <tr>
+            <td>[% "Estantes Virtuales" | i18n %]</td>
+            <td>
+                [% permisos_estantes_virtuales %]
+            </td>
+            <input type="checkbox" id="estantes_virtuales_todos" name="estantes_virtuales" style="display:none;"/>
+            <input type="checkbox" id="estantes_virtuales_todos" name="estantes_virtuales" style="display:none;"/>
+            <input type="checkbox" id="estantes_virtuales_modif" name="estantes_virtuales" style="display:none;"/>
+            <input type="checkbox" id="estantes_virtuales_alta" name="estantes_virtuales" style="display:none;"/>
+            <input type="checkbox" id="estantes_virtuales_consulta" name="estantes_virtuales" style="display:none;"/>
+        </tr>
+        <tr>
+            <td>[% "Estructura Catalogaci&oacute;n Nivel 1" | i18n %]</td>
+            <td>
+                [% permisos_estructura_catalogacion_n1 %]
+            </td>
+            <input type="checkbox" id="estructura_catalogacion_n1_todos" name="estructura_catalogacion_n1" style="display:none;"/>
+            <input type="checkbox" id="estructura_catalogacion_n1_baja" name="estructura_catalogacion_n1" style="display:none;"/>
+            <input type="checkbox" id="estructura_catalogacion_n1_modif" name="estructura_catalogacion_n1" style="display:none;"/>
+            <input type="checkbox" id="estructura_catalogacion_n1_alta" name="estructura_catalogacion_n1" style="display:none;"/>
+            <input type="checkbox" id="estructura_catalogacion_n1_consulta" name="estructura_catalogacion_n1" style="display:none;"/>
+        </tr>
+        <tr>
+            <td>[% "Estructura Catalogaci&oacute;n Nivel 2" | i18n %]</td>
+            <td>
+                [% permisos_estructura_catalogacion_n2 %]
+            </td>
+            <input type="checkbox" id="estructura_catalogacion_n2_todos" name="estructura_catalogacion_n2" style="display:none;"/>
+            <input type="checkbox" id="estructura_catalogacion_n2_baja" name="estructura_catalogacion_n2" style="display:none;"/>
+            <input type="checkbox" id="estructura_catalogacion_n2_modif" name="estructura_catalogacion_n2"  style="display:none;"/>
+            <input type="checkbox" id="estructura_catalogacion_n2_alta" name="estructura_catalogacion_n2" style="display:none;"/>
+            <input type="checkbox" id="estructura_catalogacion_n2_consulta" name="estructura_catalogacion_n2" style="display:none;"/>
+        </tr>
+        <tr>
+            <td>[% "Estructura Catalogaci&oacute;n Nivel 3" | i18n %]</td>
+            <td>
+                [% permisos_estructura_catalogacion_n3 %]
+            </td>
+            <input type="checkbox" id="estructura_catalogacion_n3_todos" name="estructura_catalogacion_n3" style="display:none;"/>
+            <input type="checkbox" id="estructura_catalogacion_n3_baja" name="estructura_catalogacion_n3" style="display:none;"/>
+            <input type="checkbox" id="estructura_catalogacion_n3_modif" name="estructura_catalogacion_n3" style="display:none;"/>
+            <input type="checkbox" id="estructura_catalogacion_n3_alta" name="estructura_catalogacion_n3" style="display:none;"/>
+            <input type="checkbox" id="estructura_catalogacion_n3_consulta" name="estructura_catalogacion_n3" style="display:none;"/>
+        </tr>
+        <tr>
+            <td>[% "Tablas de referencia" | i18n %]</td>
+            <td>
+                [% permisos_tablas_de_refencia %]
+            </td>
+            <input type="checkbox" id="tablas_de_refencia_todos" name="tablas_de_refencia" style="display:none;"/>
+            <input type="checkbox" id="tablas_de_refencia_baja" name="tablas_de_refencia" style="display:none;"/>
+            <input type="checkbox" id="tablas_de_refencia_modif" name="tablas_de_refencia" style="display:none;"/>
+            <input type="checkbox" id="tablas_de_refencia_alta" name="tablas_de_refencia" style="display:none;"/>
+            <input type="checkbox" id="tablas_de_refencia_consulta" name="tablas_de_refencia" style="display:none;"/>
+        </tr>
+        <tr>
+            <td>[% "Control de autoridades" | i18n %]</td>
+            <td>
+                [% permisos_control_de_autoridades %]
+            </td>
+            <input type="checkbox" id="control_de_autoridades_todos" name="control_de_autoridades" style="display:none;"/>
+            <input type="checkbox" id="control_de_autoridades_baja" name="control_de_autoridades" style="display:none;"/>
+            <input type="checkbox" id="control_de_autoridades_modif" name="control_de_autoridades" style="display:none;"/>
+            <input type="checkbox" id="control_de_autoridades_alta" name="control_de_autoridades" style="display:none;"/>
+            <input type="checkbox" id="control_de_autoridades_consulta" name="control_de_autoridades" style="display:none;"/>
+        </tr>
+        <tr>
+            <td>[% "Administraci&oacute;n de Usuarios" | i18n %]</td>
+            <td>
+                [% permisos_usuarios %]
+            </td>
+            <input type="checkbox" id="usuarios_todos" name="usuarios" style="display:none;"/>
+            <input type="checkbox" id="usuarios_baja" name="usuarios" style="display:none;"/>
+            <input type="checkbox" id="usuarios_modif" name="usuarios" style="display:none;"/>
+            <input type="checkbox" id="usuarios_alta" name="usuarios" style="display:none;"/>
+            <input type="checkbox" id="usuarios_consulta" name="usuarios" style="display:none;"/>
+        </tr>
+        <tr>
+            <td>[% "Administraci&oacute;n de Sistema" | i18n %]</td>
+            <td>
+                [% permisos_sistema %]
+            </td>
+            <input type="checkbox" id="sistema_todos" name="sistema" style="display:none;"/>
+            <input type="checkbox" id="sistema_baja" name="sistema" style="display:none;"/>
+            <input type="checkbox" id="sistema_modif" name="sistema" style="display:none;"/>
+            <input type="checkbox" id="sistema_alta" name="sistema" style="display:none;"/>
+            <input type="checkbox" id="sistema_consulta" name="sistema" style="display:none;"/>
+        </tr>
+
+        <tr>
+            <td>[% "Undefined" | i18n %]</td>
+            <td>
+                [% permisos_undefined %]
+            </td>
+            <input type="checkbox" id="undefined_todos" name="undefined" style="display:none;"/>
+            <input type="checkbox" id="undefined_baja" name="undefined" style="display:none;"/>
+            <input type="checkbox" id="undefined_modif" name="undefined"  style="display:none;"/>
+            <input type="checkbox" id="undefined_alta" name="undefined" style="display:none;"/>
+            <input type="checkbox" id="undefined_consulta" name="undefined" style="display:none;"/>
+        </tr>
+
+    </tbody>
+</table>
+
+[% INCLUDE 'partials/admin/_guardarPermisos.inc' %]

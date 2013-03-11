@@ -1,0 +1,52 @@
+[% INCLUDE   'intranet-top.inc'  %]
+<script type="text/javascript" src="/includes/jquery/jquery-highlight-min.js"></script>
+<script type="text/javascript" src="/intranet-tmpl/includes/busquedasUsuarios-min.js"></script>
+<script type="text/javascript">
+
+
+$(document).ready(function() {
+    //onEnter con foco en input, ejecuta la busqueda
+    onEnter("socio",consultar);
+});
+
+</script>
+
+<fieldset>
+    <legend>[% "B&uacute;squeda de Usuarios Reales" | i18n %]</legend>
+   
+    <section class="">
+
+      [% PERL %]
+          print C4::AR::Filtros::tabbedPane(    titulo    => "",
+                                                subtitulo => "",
+                                                content   => [ {id => 'labels', text=> "[% 'B&uacute;squeda general' | i18n %]" },
+                                                               {id => 'registro', text => "[% 'B&uacute;squeda por inicial' | i18n %]"},
+                                                              ],
+                                                content_id=> ['busqueda_usuarios_reales'],
+                                                active_id => 'labels',
+                                            );
+
+      [% END %]
+
+              <div class="tab-pane fade in active" id="labels">
+                   [% INCLUDE 'partials/usuarios/_busqueda_gral_usuarios_reales.inc' %]
+              </div>
+              <div class="tab-pane fade" id="registro">
+                   [% INCLUDE 'partials/usuarios/_busqueda_inicial_usuarios_reales.inc' %]
+              </div><br>
+              [% PERL %]
+              print C4::AR::Filtros::setHelpInput(
+                                                   text =>"[% 'Navegue por las pesta&ntilde;as para acceder a los distintos tipos de b&uacute;squeda' | i18n %]",
+                                                   class => "info",
+                                                   icon => 'icon-info-sign',
+                                                    
+              );
+              [% END %]
+    </section>
+</fieldset>
+
+<br><br><div id="result"> </div>
+    
+
+[% INCLUDE 'intranet-bottom.inc' %]
+

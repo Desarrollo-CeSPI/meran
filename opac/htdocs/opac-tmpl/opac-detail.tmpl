@@ -1,0 +1,161 @@
+[% INCLUDE 'opac-top.inc' %]
+
+<script>
+
+// TODO esto on usa el helper de ajax
+	function MARCDetail(id3, IdDivDetalle, IdDivMARC){
+
+		var params= 'id3=' + id3;
+
+		$.ajax({	type: "POST", 
+				url: "opac-MARCDetail.pl",
+				data: params,
+				complete: function(ajax){
+						//se oculta el Detalle Normal
+						$('#'+IdDivDetalle).slideUp('slow');
+						//se agrega resultado MARC
+						$('#'+IdDivMARC).html(ajax.responseText);
+						//se muestra el resultado MARC
+						$('#'+IdDivMARC).slideDown('slow');
+						//se muestra el boton volver
+						$('#volver'+IdDivMARC).show();
+					}
+		});
+	}
+
+	function Volver(IdDivDetalle, IdDivMARC){
+		//se oculta el Detalle MARC
+		$('#'+IdDivMARC).slideUp('slow');
+		//se oculta el boton volver
+		$('#volver'+IdDivMARC).hide();
+		//se muestra el Detalle Normal
+		$('#'+IdDivDetalle).slideDown('slow');
+	}
+
+
+	$(document).ready(function(){
+		
+
+</script>
+
+<div id="resultadoReserva">
+    <!--*****************************************Detalle*****************************************************  -->
+
+    [% FOREACH nivel2 %]
+        <div id="content[% DivMARC %]" >
+          <center>
+            <input type="button" id="volver[% DivMARC %]" value="[% 'Volver' | i18n %]" style="display: none"
+            onClick="Volver('[% DivDetalle %]', '[% DivMARC %]')">
+          </center>
+          <div id="[% DivMARC %]"> </div>
+        </div>
+
+        <div id="[% DivDetalle %]">
+
+        <ul>
+            [% FOREACH nivel1 %]
+                [% IF librarian %]
+                  [% IF dato %]
+                      <li>[% librarian %]: <b>[% dato %]</b></li>
+                  [% END %]
+                [% END %]
+            [% END %]
+        </ul>
+
+        <!-- FIXME faltan los encabezados -->
+        [% FOREACH loopEncabezados %]
+            <div align="left">
+                <span class="Encabezados">[% encabezado %]</span>
+            </div>
+            <ul>
+                [% FOREACH resultado %]
+                    [% IF dato %]
+                        <li>[% librarian %] [% dato %]</li>
+                    [% END %]
+                [% END %]
+            </ul>
+        [% END %]
+
+        <table id="tablaDetalleNivel" class="tablaDetalleNivel3" cellspacing=0 border="0" cellpadding=0 width="100%" class="tope">
+        <thead>
+            <tr class="bordetabla" align="center">
+                <td>[% "C&oacute;digo" | i18n %]</td>
+                <td>[% "Signatura Topogr&aacute;fica" | i18n %]</td> 
+                <td>[% "Biblioteca que lo posee" | i18n %]</td>
+                <td>[% "Biblioteca de origen" | i18n %]</td>
+                <td>[% "Estado" | i18n %]</td>
+                <td>[% "Disponibilidad" | i18n %]</td>
+                <td>[% "MARC" | i18n %]</td>
+            </tr>
+        </thead>
+        <tbody>
+            [% FOREACH nivel3 %]
+            <tr align="center">
+                <td>[% nivel3_obj.getBarcode %]</td>
+                <td>[% nivel3_obj.getSignatura_topografica %]</td>
+                <td>[% nivel3_obj.getId_ui_poseedora %]</td>   
+                <td>[% nivel3_obj.getId_ui_origen %]</td>  
+                <td>[% nivel3_obj.getEstado %]</td>
+                <td>[% nivel3_obj.ref_disponibilidad.getNombre %]</td>
+                <td>
+                    <a class="click" onClick="MARCDetail('[% id3 %]', '[% DivDetalle %]', '[% DivMARC %]');">
+                    <img src="[% themelang %]/images/MARC.png" border="0" alt="[% 'Detalle MARC' | i18n %]" title="[% 'Detalle MARC' | i18n %]">
+                    </a>
+                </td>
+            </tr>
+            [% END %]
+        </tbody>
+        </table>
+
+
+        <!-- FIXME falta revisar!!!!!!!!!!! -->
+        <table  width="100%">
+            <tr>
+                <td class="impar" >
+                <a href="[% url_prefix %]/opac-shelves.pl?viewShelfItems=[% biblioitemnumber %]&biblio=[% biblionumber %]">
+                    <img src="[% themelang %]/images/vertodos.png" border="0" alt="[% 'Estantes Virtuales' | i18n %]"></a>
+                <a  href="[% url_prefix %]/opac-analysis.pl?bibnum=[% biblionumber %]&bibnumitems=[% biblioitemnumber %]">
+                    <img src="[% themelang %]/images/analiticas.png" border="0" alt="[% 'Anal&iacute;ticas' | i18n %] "></a>
+
+                <a  href="[% url_prefix %]/opac-indiceLibro.pl?biblionumber=[% biblionumber %]&biblioitemnumber=[% biblioitemnumber %]">
+                <img src="[% themelang %]/images/indice.png" border="0" alt="[% 'Indice' | i18n %]"></a>
+                <br>
+                [% "Disponibilidad Actual Para Pr&eacute;stamo:" | i18n %] <b>[% cantParaPrestamoActual %]</b><br>	
+                [% "Disponibilidad Actual Para Sala de Lectura:" | i18n %] <b>[% cantParaSalaActual %]</b><br>
+                [% "Cantidad Actual de Reservas:" | i18n %] <b>[% cantReservas %]</b><br>
+
+                [% IF allshared %]
+                <p align="right"><b>[% "Ejemplares compartidos" | i18n %]</b></p>
+                [% ELSE %]
+                    [% IF allcopy %]
+                        <p align="right"><b>[% "Solicitar copia" | i18n %]</b></p>
+                    [% ELSE %]
+                            [% IF cantParaPrestamo %]
+                                [% IF CirculationEnabled %]  <!-- si es 0 -->
+	                                [% IF socio_data.usr_permisos_opac %]
+	                                    [% PERL %]
+	                                        print C4::AR::Filtros::to_Icon(   text    => "[% 'Reservar' | i18n %]",
+	                                                                            boton   => "icon_reservar",
+	                                                                            width   => "100",
+	                                                                            onClick => "reservar([% id1 %],[% id2 %])",
+	                                                                            title   => "[% 'Reservar' | i18n %]"
+	                                                                    );
+                                        [% END %]
+                                    [% END %]
+                            [% ELSE %]
+                            <!-- Si el usuario no esta logueado, se le da la siguiente informacion-->
+                            <p align="right"><b>[% "Disponible para Reservar" | i18n %]</b></p>
+                            [% END %]
+                        [% ELSE %]
+                            <p align="right"><b>[% "Disponible s&oacute;lo para consulta en Sala de Lectura" | i18n %]</b></p>
+                        [% END %]
+                    [% END %]
+                [% END %]
+                </td>
+                </tr>
+        </table>
+        </div>
+    [% END %]
+    <!-- end loopnivel2 -->
+</div>
+[% INCLUDE 'opac-bottom.inc' %]

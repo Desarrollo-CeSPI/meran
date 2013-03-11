@@ -1,0 +1,133 @@
+[% INCLUDE "intranet-top.inc" %]
+
+[% INCLUDE "FormValidateHelper.inc" %]
+
+[% INCLUDE 'AutocompleteHelper.inc'  %]
+
+<script type="text/javascript" src="/includes/jquery/jquery.fileUploader-min.js"></script>
+<script type="text/javascript" src="/includes/jquery/jquery.livequery-min.js"></script>
+<script type="text/javascript" src="/intranet-tmpl/includes/adquisiciones/datosProveedor.js"> </script>
+<script type="text/javascript" src="/intranet-tmpl/includes/adquisiciones/tabletojson.js"> </script>
+<script type="text/javascript" src="/intranet-tmpl/includes/adquisiciones/datosPresupuesto.js"> </script>
+
+<script type="text/javascript">
+    
+
+            // Funcion que muestra solo lo necesario cuando se selecciona "carga manual"
+            function mostrarManual(){
+                    $('#presupuesto').hide();
+                    $('#carga_planilla').hide();
+                    $('#pres_manual').show();
+                    $('#accion').hide();
+            }
+
+            // Funcion que muestra solo lo necesario cuando se selecciona "cargar una planilla"
+            function mostrarPlanilla(){
+                    $('#pres_manual').hide();
+                    $('#carga_planilla').show();
+                    $('#presupuesto').show();
+                    $('#accion').hide();
+            }
+
+            $(document).ready(function() {
+                    makeToggle('toggle_container','trigger',null,true);
+                    createFileUploader();
+                    $('#carga_planilla').hide();
+                    $('#accion').hide();
+                    $('#presupuesto').hide();
+                    $('#pres_manual').hide();
+                    
+                    $('#combo_presupuesto').change(function(){
+                          $('#accion').show();  
+                          mostrarPresupuestoManual()
+                })
+            });
+
+            function onCompleteFileUpload(){
+                    $('#presupuesto').show();
+                    $('#accion').show();
+                    mostrarPresupuesto();
+            }
+
+            function calcularTotal(renglon){
+                  var total;  
+                  total= ($('#cantidad'+ renglon).val() * $('#precio_unitario' + renglon).val()).toFixed(2); 
+                  if (isNaN(total)){
+                      $('#total' + renglon).val("Valor incorrecto");
+                  } else{
+                      $('#total' + renglon).val(total);
+                  }
+
+            }
+
+            function createFileUploader(){
+            
+                if($("#uploader")[0] != null){
+              
+                  $("#uploader").fileUploader({
+                                    // perl script
+                                    file_types: "xls",
+                                    type_file: "planilla_xls",
+                                    ajaxFile: "importPresupuestoProveedores.pl",
+                                    uploadFolder: "/usr/share/meran/intranet/htdocs/intranet-tmpl/proveedores/",
+                                    funcionOnComplete: function (){
+                                                onCompleteFileUpload();
+                                    }
+                    });
+
+                }
+            }
+
+</script>
+
+<fieldset>
+    <legend class="titulos">    [% "Carga de presupuesto" | i18n %] </legend>
+           
+         <!-- <fieldset id="tipo_carga">-->
+        <!--        <legend class="titulo_legend">    [% "Elija una opcion" | i18n %] </legend>-->          
+                    <strong><p>Seleccione el archivo que desea cargar </p></strong> 
+                    <li><input type="radio" name="tipo_carga" value="carga_manual" onclick="mostrarManual()">Cargar datos manualmente</li>
+                    <li><input type="radio" name="tipo_carga" value="carga_planilla" onclick="mostrarPlanilla()">Cargar planilla</li>
+        <!--  </fieldset> -->
+         
+          <fieldset id="carga_planilla">
+                <legend class="titulo_legend">[% "Carga de Planilla Excel" | i18n %]</legend>
+                <input type="hidden" id="filepath" value="">
+                <!-- VER BIEN Q PONER-->
+                <p>Seleccione el archivo que desea cargar </p>
+                <div id="div_uploader" >
+                        <li>
+                               <div id="uploader"></div>
+                        </li>
+                </div>
+          </fieldset>
+          
+          <div id="presupuesto">
+          </div>
+          
+          <fieldset id="pres_manual">
+              <legend class="titulo_legend">[% "Datos del presupuesto" | i18n %]</legend> 
+              <p>Seleccione el presupuesto que desea cargar </p>
+                    [% combo_presupuestos %]
+                                     
+              <div id="presupuesto_manual">
+              </div>       
+          </fieldset>
+
+          <!--<fieldset id="acciones"> --> 
+              <div id="accion">
+                     [% PERL %]
+                                print C4::AR::Filtros::to_Button(   text    => "[% 'Guardar Cambios' | i18n %]",
+                                                                      boton   => "boton_buscar",
+                                                                      onClick => "modificarDatosDePresupuesto();",
+                                                            ) ;
+                      [% END %]
+                    
+                </div>
+          <!--</fieldset>--> 
+</fieldset>          
+
+
+
+[% INCLUDE "intranet-bottom.inc" %]
+

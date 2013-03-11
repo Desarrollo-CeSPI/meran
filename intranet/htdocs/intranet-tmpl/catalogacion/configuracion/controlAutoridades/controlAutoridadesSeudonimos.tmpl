@@ -1,0 +1,391 @@
+[% INCLUDE "intranet-top.inc" %]
+
+[% INCLUDE  'AutocompleteHelper.inc'  %]
+
+<link href="/includes/jquery/tablesorter/style.css" type="text/css" rel="stylesheet">
+<script src="/includes/jquery/tablesorter/jquery.tablesorter.js"></script>
+
+
+<script>
+
+function OnChangeComboTablasSeudonimos(){
+	
+	var tipo= $('#tabla').val();
+
+	switch(tipo){
+		case "temas": 
+			$('#content_search_temas').show();
+			$('#content_search_autores').hide();
+			$('#content_search_editoriales').hide();
+			$('#search_temas').val('');
+		break;
+		case "autores": 
+			$('#content_search_temas').hide();
+			$('#content_search_autores').show();
+			$('#content_search_editoriales').hide();
+			$('#search_autores').val('');
+		break;
+		case "editoriales": 
+			$('#content_search_temas').hide();
+			$('#content_search_autores').hide();
+			$('#content_search_editoriales').show();
+			$('#search_editoriales').val('');
+			
+		break;
+		case "Sin Seleccionar": ;
+		break;
+	}
+
+}
+
+function consultarTablaSeudonimos(seudonimo){
+
+	var tabla= $("#tabla").val();
+
+	objAH=new AjaxHelper(updateConsultarTablaSeudonimos);
+	objAH.debug= true;
+	objAH.url=URL_PREFIX+'/catalogacion/configuracion/controlAutoridades/controlAutoridadesDB.pl';
+	objAH.tipo= 'consultaTablasSeudonimos';
+	objAH.tabla= tabla;
+	objAH.seudonimo= seudonimo;
+    objAH.showOverlay       = true;
+	//se envia la consulta
+	objAH.sendToServer();
+}
+
+function updateConsultarTablaSeudonimos(responseText){
+
+	$('#resultSeudonimos').html(responseText);
+	$('#tablaSeudonimos').tablesorter({	
+						widgets: ['zebra'],
+						headers: { 0: { sorter: false},
+								2: { sorter: false},
+								3: { sorter: false}
+							}
+				});
+}
+
+//*********************************************Objeto Sinonimo*************************************************
+
+function object_seudonimo(text, ID){
+	this.text= text;
+	this.ID= ID;
+}
+
+OBJECTS_ARRAY= new Array();
+SEUDONIMO= 0;
+SEUDONIMO_SELECTED= 0;
+//******************************************Fin***Objeto Sinonimo***********************************************
+
+//******************************************TextArea************************************************************
+
+function pushSeudonimo(){
+    SEUDONIMO.text = $.trim(SEUDONIMO.text);
+	if (!exist(SEUDONIMO.text, OBJECTS_ARRAY)){
+		OBJECTS_ARRAY.push(SEUDONIMO);
+		mapToTextArea('textAreaSeudonimos', OBJECTS_ARRAY);
+        $('#search_autor_seudonimo').val('');
+        $('#search_tema_seudonimo').val('');
+        $('#search_editorial_seudonimo').val('');
+        $('#search_autor_seudonimo').focus;
+	}else{
+		jAlert(YA_EXISTE_EL_ELEMENTO);
+	}
+	//si hay elementos habilito el boton pop
+	if(OBJECTS_ARRAY.length > 0){
+		$('#pop').attr('disabled', false);
+	}
+}
+
+function exist(text, vector){
+	var found= false;
+	var long= vector.length;
+	var i= 0;
+	while (!(found) && (i<long)){
+		if(vector[i].text == text){
+			found= true;
+		}else{
+			i++;
+		}
+	}
+	return found;
+}
+
+function mapToTextArea(idTextArea, vector){
+	var seudonimo;
+
+	$('#'+idTextArea).val('');
+	for (var i=0;i<vector.length;i++){
+		seudonimo= vector[i].text;
+		$('#'+idTextArea).val(seudonimo + '\n' + $('#'+idTextArea).val() );
+	}
+	//deshabilito boton pop	
+	$('#pop').attr('disabled', false);
+}
+
+function popSeudonimo(){
+	var obj= OBJECTS_ARRAY.pop();
+	mapToTextArea('textAreaSeudonimos', OBJECTS_ARRAY);
+	//si se vacia, deshabilito el boton pop
+	if(OBJECTS_ARRAY.length == 0){
+		$('#pop').attr('disabled', true);
+	}
+}
+
+function clearDataTextArea(){
+	//clear data
+	OBJECTS_ARRAY= new Array();
+	//actualizo el textarea
+	mapToTextArea('textAreaSeudonimos', OBJECTS_ARRAY);
+}
+
+//****************************************************Fin TextArea******************************************
+
+//*********************************************ABM Seudonimos************************************************
+function updateGuardarDatos(responseText){
+	var Messages=JSONstring.toObject(responseText);
+	setMessages(Messages);
+	consultarTablaSeudonimos(SEUDONIMO_SELECTED.ID);
+	clearDataTextArea();
+}
+
+function guardarDatos(){
+	//validar datos
+	var tabla= $('#tabla').val();	
+
+	objAH=new AjaxHelper(updateGuardarDatos);
+	objAH.debug= true;
+    objAH.showOverlay       = true;
+	objAH.url=URL_PREFIX+'/catalogacion/configuracion/controlAutoridades/controlAutoridadesDB.pl';
+	objAH.tipo= 'insertarSeudonimos';
+	objAH.tabla= tabla;
+
+	objAH.id= SEUDONIMO_SELECTED.ID;
+	objAH.seudonimos= OBJECTS_ARRAY;
+	//se envia la consulta
+	objAH.sendToServer();
+
+}
+
+function deleteSeudonimo(idDelete){
+	var tabla= $('#tabla').val();
+
+	jConfirm(CONFIRMA_LA_BAJA_DEL_SEUDONIMO,CONTROL_AUTORIDADES_TITLE, function(confirmStatus){if (confirmStatus) {
+
+		objAH=new AjaxHelper(updateDeleteSeudonimo);
+		objAH.debug= true;
+        objAH.showOverlay       = true;
+		objAH.url=URL_PREFIX+'/catalogacion/configuracion/controlAutoridades/controlAutoridadesDB.pl';
+		objAH.tipo= 'eliminarSeudonimos';
+		objAH.tabla= tabla;
+		objAH.id= SEUDONIMO_SELECTED.ID;
+		objAH.idDelete= idDelete;
+		//se envia la consulta
+		objAH.sendToServer();
+	}
+
+    });
+
+}
+
+function updateDeleteSeudonimo(responseText){
+
+	var Messages=JSONstring.toObject(responseText);
+
+	setMessages(Messages);
+
+	consultarTablaSeudonimos(SEUDONIMO_SELECTED.ID);
+}
+
+//****************************************Fin****ABM Seudonimos************************************************
+
+function crearObjeto(idInput, idInputHidden, flag){
+/*@params idInput, idInputHidden, flag
+*/
+	var id= $('#'+idInputHidden).val();
+	var text= $('#'+idInput).val();
+	//creo un objeto para la autoridad con la q se va a trabajar
+	SEUDONIMO= new object_seudonimo(text, id);
+
+	if(flag != 'seudonimo'){
+		//creo un objeto para la autoridad con la q se va a trabajar
+		SEUDONIMO_SELECTED= new object_seudonimo(text, id);
+		//traigo info de seudonimos de la autoridad con la que se esta trabajando
+		consultarTablaSeudonimos(id);
+	}
+}
+
+function onCompleteTemas(){
+	crearObjeto('search_temas', 'search_temas_hidden', 'NULL');
+}
+
+function onCompleteTemasSeudonimo(){
+	crearObjeto('search_tema_seudonimo', 'search_tema_seudonimo_hidden', 'seudonimo');
+}
+
+function onCompleteAutores(){
+	crearObjeto('search_autores', 'search_autores_hidden', 'NULL');
+}
+
+function onCompleteAutoresSeudonimo(){
+	crearObjeto('search_autor_seudonimo', 'search_autor_seudonimo_hidden', 'seudonimo');
+}
+
+function onCompleteEditoriales(){
+	crearObjeto('search_editoriales', 'search_editoriales_hidden', 'NULL');
+}
+
+function onCompleteEditorialesSeudonimo(){
+	crearObjeto('search_editorial_seudonimo', 'search_editorial_seudonimo_hidden', 'seudonimo');
+}
+
+$(document).ready(function(){
+	// Help
+	$("#topichelp").hide();
+	$("#tophelper img.showhelp ").click(function(){
+						$("#topichelp").slideToggle('fast');
+					});
+
+	CrearAutocompleteTemas({	IdInput: 'search_temas', 
+								IdInputHidden: 'search_temas_hidden', 
+								callBackFunction: onCompleteTemas,
+						});
+
+	CrearAutocompleteTemas({	IdInput: 'search_tema_seudonimo', 
+								IdInputHidden: 'search_tema_seudonimo_hidden', 
+								callBackFunction: onCompleteTemasSeudonimo,
+						});
+
+ 	$('#content_search_temas').hide();
+
+	CrearAutocompleteAutores({	IdInput: 'search_autores', 
+								IdInputHidden: 'search_autores_hidden', 
+								callBackFunction: onCompleteAutores,
+							});
+
+	CrearAutocompleteAutores({	IdInput: 'search_autor_seudonimo', 
+								IdInputHidden: 'search_autor_seudonimo_hidden', 
+								callBackFunction: onCompleteAutoresSeudonimo,
+						});
+
+ 	$('#content_search_autores').hide();
+
+	CrearAutocompleteEditoriales({	IdInput: 'search_editoriales', 
+									IdInputHidden: 'search_editoriales_hidden', 
+									callBackFunction: onCompleteEditoriales,
+					});
+
+	CrearAutocompleteEditoriales({	IdInput: 'search_editorial_seudonimo', 
+									IdInputHidden: 'search_editorial_seudonimo_hidden', 
+									callBackFunction: onCompleteEditorialesSeudonimo,
+					});
+
+ 	$('#content_search_editoriales').hide();	
+
+
+	//registro evento para input de seudonimos
+	$('#search_autor_seudonimo').keydown(
+		function (e) {
+			if(e.which == 13){
+				pushSeudonimo();
+			}
+		});
+	$('#search_tema_seudonimo').keydown(
+		function (e) {
+			if(e.which == 13){
+				pushSeudonimo();
+			}
+		});
+	$('#search_editorial_seudonimo').keydown(
+		function (e) {
+			if(e.which == 13){
+				pushSeudonimo();
+			}
+		});
+
+
+});
+
+</script>
+
+[% PERL %]
+                print C4::AR::Filtros::ayuda_in_line("[% 'ayudaaaaa' | i18n %]") ;
+[% END %]
+
+<div class="titulos" >[% "Control de Autoridades - Seud&oacute;nimos" | i18n %]</div>
+
+<div class="formElemets">
+<ul>
+<fieldset>
+<legend class="titulo_legend">[% 'Datos a modificar'| i18n %]</legend>
+<li class="sub_item"><label for="tabla"> [% "Seleccione autoridad: " | i18n %]</label>
+
+		<Select id="tabla" name="tabla" onChange="OnChangeComboTablasSeudonimos();">
+			<option value="Sin Seleccionar">[% "Sin Seleccionar" | i18n %]</option>
+			<option value="autores">[% "Autores" | i18n %]</option>
+			<option value="temas">[% "Temas" | i18n %]</option>
+			<option value="editoriales">[% "Editoriales" | i18n %]</option>
+		</Select>
+	</li>
+
+	<div id="content_search_autores" style="display:none">
+        <li class="sub_item"  ><label for="search_autores">[% "Autor:" | i18n %] </label> 
+		<input id="search_autores" type="text" size="50"></li>
+			<input id="search_autores_hidden" type="hidden">
+        <li class="sub_item"  ><label for="search_autores">[% "Seud&oacute;nimo:" | i18n %] </label> 
+				<input id="search_autor_seudonimo" type="text" size="50">
+	            <input id="push" type="button" onClick="pushSeudonimo();" value="+" title="Agregar Sin&oacute;nimo a la lista"> 
+		</li>
+				<input id="search_autor_seudonimo_hidden" type="hidden">
+	</div>
+	<div id="content_search_temas" style="display:none">
+        <li class="sub_item"><label for="search_temas">[% "Tema:" | i18n %] </label> 
+		<input id="search_temas" type="text" size="50"></li>
+			<input id="search_temas_hidden" type="hidden">
+        <li class="sub_item"  ><label for="search_autores">[% "Seud&oacute;nimo:" | i18n %] </label> 
+				<input id="search_tema_seudonimo" type="text" size="50">
+	            <input id="push" type="button" onClick="pushSeudonimo();" value="+" title="Agregar Sin&oacute;nimo a la lista"> 
+		</li>
+				<input id="search_tema_seudonimo_hidden" type="hidden">
+	</div>
+	<div id="content_search_editoriales" style="display:none">
+        <li class="sub_item">
+        <label for="search_editoriales">[% "Editorial:" | i18n %] </label> 
+		<input id="search_editoriales" type="text" size="50"></li>
+			<input id="search_editoriales_hidden" type="hidden">
+        <li class="sub_item"  ><label for="search_autores">[% "Seud&oacute;nimo:" | i18n %] </label> 
+				<input id="search_editorial_seudonimo" type="text" size="50">
+	            <input id="push" type="button" onClick="pushSeudonimo();" value="+" title="Agregar Sin&oacute;nimo a la lista"> 
+	    </li>
+				<input id="search_editorial_seudonimo_hidden" type="hidden">
+    </div>
+
+<li class="sub_item">
+        <label for="textAreaSeudonimosos">[% "Seud&oacute;nimos a Ingresar:" | i18n %] </label> 
+		<textarea id="textAreaSeudonimos" style="height:60px; width:230px;" readonly></textarea>
+		<input id="pop" type="button" onClick="popSeudonimo();" value="-" title="Sacar sin&oacute;nimo de la lista" disabled="true" style="vertical-align:top;">
+</li>
+<li>
+           <div>
+                [% PERL %]
+                                print C4::AR::Filtros::to_Button( 
+                                                                    text    =>  "[% 'Guardar' | i18n %]",
+                                                                    boton   =>  "boton_guardar",
+                                                                    onClick =>  "guardarDatos();",
+                                                                    title   =>  "[% 'Guardar Seud&oacute;nimos' | i18n %]",
+                                                                    alternClass => 'botonCentrado',
+                                        ) ;
+                [% END %]
+            </div>
+</li>
+</fieldset>
+<li>
+	<div id="resultSeudonimos" class="resultados"></div>
+</li>
+
+</ul>
+</div>
+
+[% INCLUDE "intranet-bottom.inc" %]   
+
+

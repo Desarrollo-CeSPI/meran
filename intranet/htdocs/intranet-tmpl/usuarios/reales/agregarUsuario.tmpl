@@ -1,0 +1,327 @@
+[% IF addBorrower == 1 %]
+    [% INCLUDE "intranet-top.inc" %]
+	<script type="text/javascript">
+	    var AUTO_GENERAR_LABEL = "[% 'Auto-generar' | i18n %]";
+	</script>
+    <script type="text/javascript" src="/intranet-tmpl/includes/usuarios/usuariosReales-min.js"></script>
+[% END %]
+
+[% INCLUDE 'AutocompleteHelper.inc'  %]
+[% INCLUDE "FormValidateHelper.inc" %]
+
+
+<script type="text/javascript">
+
+    function validateNro_socio(){
+        nro_socio = $('#nro_socio').val();
+        if ( (($.trim(nro_socio)).length == 0 ) ) {
+            $('#nro_socio').val(AUTO_GENERAR_LABEL); 
+            $('#nro_socio').attr("readonly","true"); 
+            $('#nro_socio').attr("title",SOLO_SERA_NUMERICO);
+        }
+    }
+
+
+    function toggleNro_socio(){
+        if ($('#nro_socio').attr("readonly") == true){ 
+            $('#nro_socio').val(''); 
+            $('#nro_socio').removeAttr("readonly"); 
+            $('#nro_socio').removeAttr("title"); 
+        }
+    }
+
+    $(document).ready(function() {
+        [% IF addBorrower %]
+            validateNro_socio();
+            $('#nro_socio').click(function(){toggleNro_socio()});
+            $('#nro_socio').blur(function(){validateNro_socio()});
+            $("#temas_intra").change(function() {
+                $("link").attr("href","[% temas %]/"+$("#temas_intra").val()+"/includes/completo_min.css");
+                return false;
+            });
+        [% END %]
+        $('#nacimiento').datepicker();
+        CrearAutocompleteCiudades({IdInput: 'ciudad', IdInputHidden: 'id_ciudad'});
+        CrearAutocompleteCiudades({IdInput: 'alt_ciudad', IdInputHidden: 'id_alt_ciudad'});
+    });
+
+</script>
+
+
+[% IF addBorrower %]
+    <fieldset>
+        <legend class="titulo_legend">[% "Agregar usuario real" | i18n %]</legend>
+    </fieldset>
+[% ELSE  %]
+    <div class="modal-header">
+      <h3>[% "Modificar datos del usuario" | i18n %]</h3>
+    </div>
+[% END %]
+
+<fieldset>
+
+  <section class="center-section-form"> 
+
+  <form class="form-horizontal" method="post" name="userDataForm" id="userDataForm" 
+                onsubmit="return [% IF addBorrower == 1 %] add(); [% ELSE %] save_modif(); [% END %]">
+      <fieldset>
+        <legend class="titulo_legend">[% "Datos personales" | i18n %]</legend>
+            <div class="control-group error">
+                  <label class="control-label" for="apellido">[% "Apellido" | i18n %]*</label>
+                  <div class="controls">
+                        <input id="apellido" name="apellido" required  type="text" class="input focused" value="[% socio_modificar.persona.getApellido %]" autofocus >
+                        
+                        <script>
+                              if (!Modernizr.input.autofocus) {
+                                // no autofocus support :(
+                                $('#apellido').focus();
+                              }
+                          </script>  
+                  </div>
+            </div>
+
+            <div class="control-group error">
+                  <label class="control-label" for="nombre">[% "Nombres" | i18n %]*</label>
+                  <div class="controls">
+                        <input  id="nombre" name="nombre" required class="input focused" type="text" value="[% socio_modificar.persona.getNombre %]">
+                  </div>
+            </div>
+            
+            <div class="control-group error">
+                <label class="control-label" for="nro_documento">[% "Documento" | i18n %]*</label>    
+                      <div class="controls">
+                          [% combo_tipo_documento %] 
+                          <input  id="nro_documento" name="nro_documento" required class="input focused" type="text" value="[% socio_modificar.persona.getNro_documento %]">
+                      </div>
+            </div>
+
+            <div class="control-group">
+                
+                  <label  class="control-label" for="legajo">[% "Legajo" | i18n %]</label>
+                  <div class="controls">
+                      <input type="text" name="legajo" id="legajo"  value="[% socio_modificar.persona.getLegajo %]">
+                  </div>
+            </div>
+
+            <div class="control-group error">
+                      <label class="control-label" for="sexo">[% "Sexo" | i18n %] </label>
+                      <div class="controls">
+                           <input type="radio" name="sexo" value="F" required [% IF socio_modificar.persona.getSexo == 'F' %] checked="checked" [% END %] /> F
+                           <input type="radio" name="sexo" value="M" required [% IF socio_modificar.persona.getSexo == 'M' %] checked="checked" [% END %] /> M 
+                      </div>
+            </div>
+            
+            <div class="control-group error">
+                      <label class="control-label" for="nacimiento"> [% "Fecha de nacimiento " | i18n %]* </label>
+                      <div class="controls">
+                            <input type="text" id="nacimiento" name="nacimiento" data-datepicker="datepicker"  value="[% socio_modificar.persona.getNacimiento %]" required>
+                      </div>
+            </div>
+        </fieldset>
+
+        <fieldset>
+            <legend class="titulo_legend">[% "Informaci&oacute;n de contacto" | i18n %] </legend>
+
+              <div class="control-group error">
+                    <label class="control-label" for="calle"> [% "Direcci&oacute;n" | i18n %]*</label>
+                    <div class="controls">
+                          <input  id="calle" name="calle" class="input focused" required type="text" value="[% socio_modificar.persona.getCalle %]">
+                    </div>
+              </div>
+
+              <div class="control-group error">
+                    <label class="control-label" for="codigo_postal"> [% "C&oacute;digo Postal" | i18n %]*</label>
+                    <div class="controls">
+                          <input  id="codigo_postal" name="codigo_postal" class="input focused" type="number" value="[% socio_modificar.persona.codigo_postal %]">
+                    </div>
+              </div>
+
+              <div class="control-group error">
+                    <label class="control-label" for="ciudad"> [% "Ciudad" | i18n %]*</label>
+                    <div class="controls">
+                          <input  id="ciudad" name="ciudad" class="input focused" type="text" value="[% TRY %] [% socio_modificar.persona.ciudad_ref.getNombre %] [% CATCH %] [% END %]">
+                          <input type="hidden" id="id_ciudad" name="id_ciudad" value="[% TRY %] [% socio_modificar.persona.ciudad_ref.id %] [% CATCH %] [% END %]">
+                    </div>
+              </div>
+
+              <div class="control-group error">
+                    <label class="control-label" for="telefono"> [% "Tel&eacute;fono particular" | i18n %]*</label>
+                    <div class="controls">
+                          <input  id="telefono" name="telefono" required class="input focused" type="number" value="[% socio_modificar.persona.getTelefono %]">
+                    </div>
+              </div>
+
+              <div class="control-group">
+                    <label class="control-label" for="telefono_laboral"> [% "Tel&eacute;fono del trabajo" | i18n %] </label>
+                    <div class="controls">
+                          <input  id="telefono_laboral" name="telefono_laboral" class="input focused" type="number" value="[% socio_modificar.persona.getAlt_telefono %]">
+                    </div>
+              </div>
+
+              <div class="control-group">
+                    <label class="control-label" for="alt_calle"> [% "Direcci&oacute;n de origen" | i18n %]</label>
+                    <div class="controls">
+                          <input  id="alt_calle" name="alt_calle" class="input focused" type="text" value="[% socio_modificar.persona.getAlt_calle %]">
+                    </div>
+              </div>
+
+              <div class="control-group">
+                    <label class="control-label" for="id_alt_ciudad"> [% "Ciudad de origen" | i18n %]</label>
+                    <div class="controls">
+                          <input  id="alt_ciudad" name="alt_ciudad" class="input focused" type="text" value="[% socio_modificar.persona.alt_ciudad_ref.getNombre%]">
+                          <input type=hidden id="id_alt_ciudad" name="id_alt_ciudad" value="[% socio_modificar.persona.alt_ciudad_ref.id %]"> 
+                    </div>
+              </div>
+          
+              <div class="control-group error">
+                    <label class="control-label" for="email">[% "E-Mail" | i18n %]*</label>
+                    <div class="controls">
+                          <input  id="email" name="email" class="input focused" required type="email" value="[% socio_modificar.persona.getEmail %]">
+                    </div>
+              </div>
+        </fieldset>
+
+        <fieldset>
+            <legend class="titulo_legend">[% "Datos en el sistema" | i18n %]</legend>
+            
+            <div class="control-group error">
+                    <label class="control-label" for="nro_socio">[% "Tarjeta de identificaci&oacute;n" | i18n %]</label>
+                    <div class="controls">
+                        [% IF addBorrower %]
+                              <input id="nro_socio" type="text" class="" required name="nro_socio" value="" placeholder="[% 'Auto-generar' | i18n %]" >
+                              <p class="help-block">[% 'Dejando esta opci&oacute;n, la tarjeta ser&aacute; el Nro. de documento' | i18n %].</p>                              
+                        [% ELSE %]
+                              <input id="nro_socio" type="text" name="nro_socio" required class="disabled" disabled value="[% socio_modificar.getNro_socio %]">
+                        [% END %]            
+                    </div>
+            </div>
+
+            <div class="control-group error">
+                    <label class="control-label" for="categoria_socio_id">[% "Categor&iacute;a" | i18n %]*</label>
+                    <div class="controls">
+                          [% comboDeCategorias %]
+                    </div>
+            </div>
+
+            <div class="control-group error">
+                    <label class="control-label" for="estadi_socio_id">[% "Estado" | i18n %]*</label>
+                    <div class="controls">
+                          [% comboDeEstados %]
+                    </div>
+            </div>
+
+            [% IF addBorrower %]
+                <div class="control-group">
+                    <label class="control-label" for="tipo_socio_id"> [% "Credenciales" | i18n %]</label>
+                          <div class="controls">
+                                    [% comboDeCredentials %]
+                          </div>
+                </div>
+            [% END %]
+            
+            <div class="control-group">
+                    <div class="controls">
+                              <label class="checkbox">
+                                    <input  id="changepassword" name="changepassword" type="checkbox"  [% IF socio_modificar.getChange_password %] checked [% END %]>
+                                    [% "Forzar cambio de contrase&ntilde;a " | i18n %]
+                              </label>      
+                    </div>
+            </div>
+
+          [% IF cumple_requisito_on %]
+            <div class="control-group">
+                  
+                      <div class="controls">
+                                <label class="checkbox">
+                                      <input  id="cumple_requisito" name="cumple_requisito" type="checkbox"  [% IF socio_modificar.cumpleRequisito %]  checked [% END %]>[% "Cumple requisito" | i18n %]?
+                                </label>      
+                      </div>
+              </div>
+           [% END %]
+            <div class="control-group">
+                    <label class="control-label" for="id_ui">[% "Unidad de Informaci&oacute;n" | i18n %]</label>
+                    <div class="controls">
+                          [% comboDeUI %]
+                    </div>
+            </div>
+
+        </fieldset>
+
+        [% IF socio_modificar.tieneAutorizado %]
+              <fieldset>
+                  <legend class="titulo_legend">[% "Informaci&oacute;n del usuario Adicional" | i18n %] </legend>
+
+                      <div class="control-group">
+                            <label class="control-label" for="auth_nombre">[% "Nombre y Apellido" | i18n %]</label>
+                            <div class="controls">
+                                  <input  id="auth_nombre" name="auth_nombre" class="input focused" type="text" value="[% socio_modificar.getNombre_apellido_autorizado %]">
+                            </div>
+                      </div>
+
+                      <div class="control-group">
+                            <label class="control-label" for="auth_dni">[% "Documento" | i18n %]</label>
+                            <div class="controls">
+                                  <input  id="auth_dni" name="auth_dni" class="input focused" type="text" value="[% socio_modificar.getDni_autorizado %]">
+                            </div>
+                      </div>
+          
+                      <div class="control-group">
+                            <label class="control-label" for="auth_telefono">[% "Tel&eacute;fono" | i18n %]</label>
+                            <div class="controls">
+                                  <input  id="auth_telefono" name="auth_telefono" class="input focused" type="text" value="[% socio_modificar.getTelefono_autorizado %]">
+                            </div>
+                      </div>
+              </fieldset>
+        [% END %]
+
+    
+            <fieldset>
+                <legend class="titulo_legend">[% "Instituci&oacute;n" | i18n %]</legend>
+                
+                <div class="control-group">
+                    <label class="control-label" for="institucion">[% "Instituci&oacute;n" | i18n %]</label>
+                    <div class="controls">
+                          <input  id="institucion" name="institucion" class="input focused" type="text" value="[% socio_modificar.persona.getInstitucion %]">
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <label class="control-label" for="carrera">[% "Carrera" | i18n %]</label>
+                    <div class="controls">
+                          <input  id="carrera" name="carrera" class="input focused" type="text" value="[% socio_modificar.persona.getCarrera %]">
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <label class="control-label" for="anio">[% "A&ntilde;o" | i18n %]</label>
+                    <div class="controls">
+                          <input  id="anio" name="anio" class="input focused" type="number" value="[% socio_modificar.persona.getAnio %]">
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <label class="control-label" for="division">[% "Divisi&oacute;n" | i18n %]</label>
+                    <div class="controls">
+                          <input  id="division" name="division" class="input focused" type="text" value="[% socio_modificar.persona.getDivision %]">
+                    </div>
+                </div>
+
+                
+            </fieldset>
+            <p class="help-block">* [% 'Datos obligatorios' | i18n %].</p>                              
+
+            <div class="form-actions">
+                    [% IF addBorrower %]
+                        <button type="submit" class="btn btn-primary"><i class="icon-white icon-ok"></i> [% 'Agregar usuario' | i18n %]</button>
+                    [% ELSE  %]
+                        <button type="submit" class="btn btn-primary"><i class="icon-white icon-ok"></i> [% 'Guardar modificaci&oacute;n' | i18n %]</button>
+                    [% END %]
+        
+            </div>
+
+  </section>
+</form>
+
+[% IF addBorrower %]
+    [% INCLUDE "intranet-bottom.inc" %]
+[% END %]

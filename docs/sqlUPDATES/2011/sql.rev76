@@ -1,0 +1,2 @@
+INSERT INTO `pref_tabla_referencia` (`nombre_tabla` ,`alias_tabla` ,`campo_busqueda` ,`client_title`)
+VALUES ('cat_registro_marc_n2', 'nivel2', 'id', 'Nivel 2');

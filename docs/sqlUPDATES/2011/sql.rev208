@@ -1,0 +1,6 @@
+CREATE TABLE `usr_regularidad` (
+`id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY ,
+`usr_estado_id` INT NOT NULL ,
+`usr_ref_categoria_id` INT NOT NULL ,
+`regular` INT NOT NULL DEFAULT  '1'
+) ENGINE = MYISAM ;

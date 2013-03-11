@@ -1,0 +1,60 @@
+[% INCLUDE "opac-top.inc" %]
+<script>
+ $(document).ready(function() {
+        CrearAutocompleteCiudades({IdInput: 'ciudad', IdInputHidden: 'id_ciudad'});
+        CrearAutocompleteCiudades({IdInput: 'alt_ciudad', IdInputHidden: 'id_alt_ciudad'});
+    });
+
+</script>
+
+<!-- el if fue agregado por Einar para validar que las Unidades que no pueden hacerlo cambien la info de los socios siempre con la variable Guarani -->
+<div id="datosUsuario">
+    [% IF updatedata %] 
+        <p>
+            <i>Usted no tiene autorizaci&oacute;n para ver esta p&aacute;gina.</i><br>
+        </p>
+    [% ELSE %] 
+    <!-- Los cambios no aparecer&aacute;n hasta que la Unidad de Informaci&oacute;n los valide. -->
+        
+    <br><br><br><br><br><br><br><br><br>
+                <p align="center">
+                    <i>Por favor cambie lo que sea necesario. Un mail ser&aacute; enviado a la Unidad de Informaci&oacute;n. </i><br>
+                </p>
+    
+        <form action="[% url_prefix %]/opac-userupdate.pl" method="POST" class="formUpdateUsuario" id="formUpdateUsuario">
+                <input type="hidden"  value="[% token %]" name="token">
+                <div>
+                    <label class="inputFormLabel"> [% "Apellido" | i18n %] </label> <input type="text"  size="25" value="[% socio.persona.getApellido %]" name="apellido">
+                </div>
+                <div>
+                    <label class="inputFormLabel"> [% "Nombre" | i18n %] </label> <input type="text"  size="25" value="[% socio.persona.getNombre %]"  name="nombre">
+                </div>
+                <div>
+                    <label class="inputFormLabel"> [% "Calle" | i18n %] </label> <input type="text"  size="25" value="[% socio.persona.getCalle %]"  name="direccion">
+                </div>
+    
+                <div>
+                    <label class="inputFormLabel"> [% "Ciudad" | i18n %] </label>
+                        <input class="required" type=text id="ciudad" name="ciudad" value="[% socio.persona.ciudad_ref.getNombre %]" >
+                        <input type="hidden" id="id_ciudad" name="id_ciudad" value="[% socio.persona.ciudad_ref.LOCALIDAD %]">
+                </div>
+                <div>
+                    <label class="inputFormLabel"> [% "Tel&eacute;fono Personal" | i18n %] </label> <input type="text"  size="25" value="[% socio.persona.getTelefono %]"  name="numero_telefono">
+                </div>
+                <div>
+                    <label class="inputFormLabel"> [% "Tel&eacute;fono/Fax del trabajo" | i18n %] </label> <input type="text"  size="25" value="[% socio.persona.getFax %]"  name="numero_fax">
+                </div>
+                <div>
+                    <label class="inputFormLabel"> [% "Mail" | i18n %] </label> <input type="text"  size="25" value="[% socio.persona.getEmail %]" name="email">
+                </div>
+    
+                <br>
+                <input type="submit" value="Enviar">
+        </form>
+    
+    [% END %]
+    
+    <!-- fin del if agregado por Einar -->
+</div>
+
+[% INCLUDE "opac-bottom.inc" %]

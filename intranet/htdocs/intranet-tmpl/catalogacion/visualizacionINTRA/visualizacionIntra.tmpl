@@ -1,0 +1,115 @@
+[% INCLUDE "intranet-top.inc" %]
+
+[% INCLUDE  'AutocompleteHelper.inc'  %] 
+
+<!-- para manejar la ventana de campos MARC -->
+<script src="/intranet-tmpl/includes/popups/helpCamposMARC.js"></script>
+<script src="/intranet-tmpl/includes/visualizacionINTRA-min.js"></script>
+<script src="/includes/jquery/jquery.jeditable.js"></script>
+
+<script>
+//Init Form
+$(document).ready(function() {
+	// Help
+    toggle_ayuda_in_line();
+    makeToggle('divTablaAgregarVisualizacion','trigger',null,true);
+    makeToggle('divTablaVisualizacion','trigger',null,true);
+    agregar_quitar_nivel3();
+
+});
+
+</script>
+
+[% PERL %]
+    print C4::AR::Filtros::ayuda_marc() ;
+[% END %]
+
+[% PERL %]
+    print C4::AR::Filtros::ayuda_in_line("[% 'ayudaaaaa' | i18n %]") ;
+[% END %]
+
+<input type="hidden" id="idEncabezado">
+    
+<form class="form-horizontal" onsubmit="return false;">
+    <section class="center-section-form">
+        <div class="right">
+            <a class="btn btn-warning" onclick="exportarVisualizacion()"><i class="icon-white icon-share"></i> Exportar</a>
+
+            <a class="btn btn-success" onclick="showImportarVisualizacion()"><i class="icon-white icon-download-alt"></i> Importar</a>
+        </div>
+        <fieldset>
+            <legend>[% 'Visualizaci&oacute;n de campos MARC en INTRANET' | i18n %]</legend>
+	         <div class="control-group">
+                <label class="control-label" for="">[% "Tipo de documento" | i18n %]</label>
+                <div class="controls">
+                    [% combo_ejemplares %]
+                </div>
+	         </div>
+	
+            <div class="control-group">
+               <label class="control-label" for="eleccion_nivel">[% "Nivel" | i18n %]</label>
+               <div class="controls">
+                    <select name="eleccion_nivel" id="eleccion_nivel" onchange="eleccionDeEjemplar();">
+                        <option value="1">Nivel 1</option>
+                        <option value="2">Nivel 2</option>
+                        <option value="3">Nivel 3</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div class="form-actions">
+	            [% PERL %]
+	                    print C4::AR::Filtros::action_button(   
+	                                                        button   => "btn btn-primary",
+	                                                        action => "eleccionDeEjemplar();",
+	                                                        title   => "[% 'Buscar' | i18n %]",
+	                            ) ;
+	            [% END %]
+            </div>
+	
+        </fieldset>
+    </section>
+</form>
+<div id="result"></div>
+
+<div id="divFormExportarVisualizacion" style="display:none;">
+    <form id="formExportarVisualizacion" action="[% url_prefix %]/herramientas/exportacion/exportarVisualizacion.pl" method="POST">
+        <input type="hidden" id="tipo" name="tipo" value="intra">
+    </form>
+</div>
+
+<div id="importarVisualizacion" class="modal hide fade" >
+    <div class="modal-header">
+         <a href="#" class="close" data-dismiss="modal">×</a>
+        <h3>[% "Importar archivo de visualizaci&oacute;n" | i18n %]: </h3>
+    </div>
+
+    <div class="modal-body">
+        <form id="formImportarVisualizacion" class="form-horizontal" action="[% url_prefix %]/herramientas/importacion/importarVisualizacion.pl" method="POST" enctype="multipart/form-data">
+            <div class="control-group">
+                <label class="control-label" for="campoX"> [% "Archivo" | i18n %]: </label>
+                <div class="controls">
+                    <input class="input-file" id="fileImported" name="fileImported" required type="file">
+                    <input type="hidden" id="tipoAccion" name="tipoAccion" value="IMPORT">
+                    <input type="hidden" id="context" name="context" value="intra">
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <div class="modal-footer">
+        [% PERL %]
+                print C4::AR::Filtros::to_Button(   text    => "[% 'Aceptar' | i18n %]",
+                                                    boton   => "btn btn-primary",
+                                                    onClick => "realizarImportacion()",
+                                                    title   => "[% 'Aceptar' | i18n %]",
+                                                    width => "auto",
+                                                    alternClass => "botonCentrado",
+                                                    inline => "1"
+                        ) ;
+        [% END %]
+
+    </div>
+</div>
+
+[% INCLUDE "intranet-bottom.inc" %]

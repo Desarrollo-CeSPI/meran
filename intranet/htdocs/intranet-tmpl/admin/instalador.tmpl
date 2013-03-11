@@ -1,0 +1,131 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<!--Doctype is not required - can be HTML or XHTML-->
+<html>
+
+<script src="/intranet-tmpl/includes/jquery/jquery.js"></script>
+<script src="/intranet-tmpl/includes/json/jsonStringify.js"></script>
+<script src="/intranet-tmpl/includes/AjaxHelper.js"></script>
+
+<head>
+<title>Koha::UNLP</title>
+<link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR name='themelang' -->/includes/intranet.css">
+<meta http-equiv="Content-Tipo" content="text/html; charset=iso-8859-1">
+</head>
+
+<script type="text/javascript">
+
+function siguiente(){
+
+	objAH=new AjaxHelper(updateSiguiente);
+	objAH.url=URL_PREFIX+'/admin/instaladorDB.pl';
+// 	objAH.debug= true;
+    objAH.showOverlay  = true;
+	objAH.accion= 'SIGUIENTE';
+	//se envia la consulta
+	objAH.sendToServer();
+}
+
+function updateSiguiente(responseText){
+	var respuesta= JSONstring.toObject(responseText);
+	$("#result").html(respuesta[0].info);
+}
+
+function anterior(){
+
+	objAH=new AjaxHelper(updateAnterior);
+	objAH.debug= true;
+    objAH.showOverlay       = true;
+	objAH.url=URL_PREFIX+'/admin/instaladorDB.pl';
+	objAH.accion= 'ANTERIOR';
+	//se envia la consulta
+	objAH.sendToServer();
+}
+
+function updateAnterior(responseText){
+	var respuesta= JSONstring.toObject(responseText);
+	$("#result").html(respuesta[0].info);
+}
+
+
+//Init Form
+$(document).ready(function() {
+	
+	// Help
+	$("#topichelp").hide();
+	$("#tophelper img.showhelp ").click(function(){
+						$("#topichelp").slideToggle('fast');
+					});
+});
+
+</script>
+
+<body>
+
+
+<table  width="100%" height="100%" border="0" cellspacing="0" cellpadding="0" align="center">
+
+<tr valign="top">
+  <td align="center" colspan="2">
+  <table  width="100%"  border="0" cellspacing="0" cellpadding="0">
+   <tr>
+    <td width="410" ><img src="<!-- TMPL_VAR name='themelang' -->/images/back/backup.png" width="410" height="61" hspace="0" vspace="0" align="top" border="0"> </td>
+    <td height="61" ><img src="<!-- TMPL_VAR name='themelang' -->/images/back/backupmidle.png" width="100%" height="61" hspace="0" vspace="0" align="top" border="0"></td>
+    <td width="20" ><img src="<!-- TMPL_VAR name='themelang' -->/images/back/backupright.png" width="20" height="61" hspace="0" vspace="0" border="0" align="top"></td>
+      </tr>
+       </table>
+        <table width="100%" height="78%" border="0" cellspacing="0" cellpadding="0" bgcolor="#f7f6f6">
+	 <tr> <td width="9" ></td>
+	 <td>
+	 <table align="left" bgcolor="#f7f6f6" width="99%" height="100%" border="0" cellspacing="0" cellpadding="0" class="texto">
+	 <tr valign="top"><td align="left"> 
+
+
+
+<div style="position: static;" id="tophelper">
+<img class="showhelp" src="/intranet-tmpl/images/help.gif" alt="Descricion de la Ventana">
+    <div style="display: block;" id="topichelp">
+        <p>Descripcion breve para lo q sirve la ventana....</p>
+    </div>
+</div>
+
+<!-- Mensajes de Informacion al Usuario -->
+<div class="tableMsgUser">
+	<font class="fontMsgUser"><b>
+	<div id="mensajes"></div>
+	</b></font>
+</div>
+
+<div class="titulos" >Instalador KOHA</div>
+
+<div id="result"></div>
+
+<center>
+<input type="button" value="Siguiente" onClick="siguiente();">
+<input type="button" value="Anterior" onClick="anterior();">
+</center>
+
+
+<!-- </body> -->
+<!-- </html> -->
+
+
+
+</td></tr>
+</table>
+</td>
+<td width="20" class="includePNGderecho"> </td>
+</tr> </table>
+<table  width="100%"  border="0" cellspacing="0" cellpadding="0">
+<tr>       <td width="410" ><img src="<!-- TMPL_VAR name="themelang" -->/images/back/backdown.png" width="410" height="23" align="top" border="0" hspace="0" vspace="0"> </td>
+<td  height="23">
+<img src="<!-- TMPL_VAR name="themelang" -->/images/back/backdownmidle.png" width="100%" height="23" align="top" border="0" hspace="0" vspace="0"></td>
+<td width="20" ><img src="<!-- TMPL_VAR name="themelang" -->/images/back/backdownder.png" width="20" height="23" align="top" border="0" hspace="0" vspace="0"></td>
+</tr>
+
+</table>
+<a class="inputFontNormal" href="#">Ir Arriba...</a>
+</td>
+</tr></table>
+</body></html>
+
+

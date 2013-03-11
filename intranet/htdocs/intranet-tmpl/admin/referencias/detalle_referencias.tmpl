@@ -1,0 +1,152 @@
+[% USE HTML %]
+
+<script type="text/javascript">
+      $(document).ready(function() {
+          makeDataTable('#tablaResult_similares');
+          scrollTo('fieldset_tablaResult_involved');
+      });
+</script>
+<fieldset id="fieldset_tablaResult_involved">
+    <legend>[% "Registro " | i18n %]:</legend>
+        <div class="datos_tabla_div_referenced" id="datos_tabla_div">
+        
+            <table id="tablaResult_involved" class="table table-striped">
+              [% IF referer_involved %]
+                  <thead>
+                      <tr class="titulo_tabla_resultado">
+                          [% FOREACH campo IN referer_involved.getCamposAsArray %]
+                              <th> [% campo %]</th>
+                          [% END %]
+                          [% IF used == 0 %]
+                              <th> [% "Eliminar" | i18n %] </th>
+                          [% END %]
+                      </tr>
+                  </thead>
+                  <tbody>
+                      <tr>
+                          [% referer_involved.printAsTableElement %]
+                          [% IF used == 0 %]
+                              <td>                                  
+                                [% PERL %]
+                                
+                                  print C4::AR::Filtros::action_button( 
+                                              button    => "btn btn-danger click",
+                                              action    => 'eliminarReferencia("[% tabla_related %]","[%  referer_involved.get_key_value %]", "[% referer_involved.toString %]")', 
+                                              icon      => "icon-white icon-remove",
+                                              title     => "[% 'Eliminar' | i18n %]",
+                                      ) ;
+
+
+                                [% END %]
+                              </td>
+                          [% END %]
+                      </tr>
+
+                    [% ELSE %]
+                      <tr class="titulo_tabla_resultado">
+                          <td>[% "Campos" | i18n %]</td>
+                      </tr>
+                      <tr>
+                          <td>[% "No existe ninguna tabla que haga uso de esta tabla de referencia" | i18n %]</td>
+                      </tr>
+                    [% END %]
+                </tbody>
+            </table>
+        </div>
+</fieldset>
+</br>
+</br>
+<fieldset>
+    <legend>[% "Relaciones " | i18n %]: [% tabla %]</legend>
+        <div class="datos_tabla_div" id="datos_tabla_div">
+          [% IF involved_count > 0 %]
+            <table id="tablaResult_relacionados" class="table table-striped">
+                <thead>
+                    <tr class="titulo_tabla_resultado" id="related_header_title_temp">
+                            <th> [% "Tablas relacionadas " | i18n %]</th>
+                    </tr>
+                </thead>
+                <tbody>
+                          [% write = 0 %]
+                            [% FOREACH data IN involved %]
+                                [% IF data.cantidad > 0%]
+                                  [% write = 1 %]
+                                  <tr>
+                                      <td> [% "El registro tiene " | i18n %] [% data.cantidad %] [% " tupla(s) relacionada(s) en la tabla " | i18n %] [% data.tabla %]</td>
+                                  </tr>
+                                [% END %]
+                            [% END %]
+                            [% IF !write %]
+                                  <div class="alert alert-info">[% "No existe ninguna tabla que haga uso de esta tabla de referencia" | i18n %]</div>
+                                  <script>
+                                    $('#related_header_title_temp').hide();
+                                  </script>
+                            [% END %]
+                </tbody>
+            </table>
+          [% ELSE %]
+                <div class="alert alert-info">[% "No existe ninguna tabla que haga uso de esta tabla de referencia" | i18n %]</div>
+          [% END %]
+        </div>
+</fieldset>
+</br>
+</br>
+<fieldset>
+    <legend>[% "Similares " | i18n %]: [% tabla %]</legend>
+        <div class="datos_tabla_div_related" id="datos_tabla_div">
+          [% IF related_referers_count %]
+            <table id="tablaResult_similares" class="table table-striped">
+                <thead>
+                    [% IF referer_involved %]
+                        <tr class="titulo_tabla_resultado">
+                            [% FOREACH campo IN referer_involved.getCamposAsArray %]
+                                <th class="click"> [% campo %]</th>
+                            [% END %]
+                            <th>[% "Asignar" | i18n %]</th>
+                            <th>[% "Asignar y Eliminar" | i18n %]</th>
+                        </tr>
+                    [% END %]
+                </thead>
+                <tbody>
+                        [% FOREACH related IN related_referers %]
+                            <tr>
+                                <span onClick="mostrarReferencias('[% related.getAlias %]','[% related.getPkValue %]')">
+                                    [% related.printAsTableElement %]
+                                </span>
+                                <td>
+                                    
+                                    [% PERL %]
+                                        print C4::AR::Filtros::action_button( 
+                                                button      => "btn btn-warning click",
+                                                action      => 'asignarReferencia("[% tabla_related %]","[% related.getPkValue %]","[% referer_involved.getPkValue %]","[% referer_involved.get_key_value %]");', 
+                                                icon        => "icon-move icon-white",
+                                          ) ;
+
+
+                                    [% END %]
+                          
+                          
+                                </td>
+                                <td>                                    
+                                    
+                                    [% PERL %]
+                                        print C4::AR::Filtros::action_button( 
+                                                button      => "btn btn-danger click",
+                                                action      => 'asignarEliminarReferencia("[% tabla_related %]","[% related.getPkValue %]","[% referer_involved.getPkValue %]","[% referer_involved.get_key_value %]");', 
+                                                icon        => "icon-move icon-white",
+                                          ) ;
+
+
+                                    [% END %]
+                                    
+                                </td>
+                            </tr>
+                        [% END %]
+              </tbody>
+          </table>
+        [% ELSE %]
+              <div class="alert alert-warning">[% "No existe ninguna tabla que haga uso de esta tabla de referencia" | i18n %]</div>
+        [% END %]
+      </div>
+</fieldset>
+

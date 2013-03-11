@@ -1,0 +1,2 @@
+DELETE FROM pref_preferencia_sistema
+WHERE variable = 'usercourse';

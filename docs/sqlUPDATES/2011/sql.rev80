@@ -1,0 +1,3 @@
+ALTER TABLE `circ_ref_tipo_prestamo` CHANGE `id_disponibilidad` `codigo_disponibilidad` VARCHAR( 255 ) NOT NULL DEFAULT 'CIRC0000';
+UPDATE circ_ref_tipo_prestamo SET codigo_disponibilidad='CIRC0000' WHERE codigo_disponibilidad='0';
+UPDATE circ_ref_tipo_prestamo SET codigo_disponibilidad='CIRC0001' WHERE codigo_disponibilidad='1';

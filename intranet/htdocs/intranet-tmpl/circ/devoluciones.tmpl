@@ -1,0 +1,196 @@
+[% INCLUDE "intranet-top.inc" %]
+
+[% INCLUDE  'AutocompleteHelper.inc'  %]
+
+<script src="/intranet-tmpl/includes/circulacion-min.js"></script>
+
+<script type="text/javascript">
+
+function inicializar(){
+	USUARIO         = new objeto_usuario();
+	USUARIO.ID      = 0;
+	USUARIO.text    = '';
+
+	//input para buscar el usuario
+	$('#usuarioAutocomplete').val('');
+	$('#nro_socio_hidden').val('-1');
+	//input para buscar el barcode
+// 	$('#barcode_hidden').val('-1');
+    $('#prestamo_hidden').val('-1');
+	$('#barcode').val('');
+
+	//oculto el detalle del usuario
+	$('#detalleUsuario').slideUp('slow');
+	$('#detalleUsuario').html('');
+
+	$('#formActions').hide();
+	//oculto la tabla de prestamos
+	$('#tablaPrestamos').slideUp('slow');
+	$('#tablaPrestamos').html('');
+
+    //oculto la tabla de sanciones
+    $('#sanciones').slideUp('slow');
+    $('#sanciones').html('');
+}
+
+function onCompleteAutocompleteUsuarios(){
+    var nro_socio = $('#nro_socio_hidden').val();
+    
+	if (nro_socio != '-1'){
+	    USUARIO         = new objeto_usuario();
+	    USUARIO.text    = $('#usuarioAutocomplete').val();
+	    USUARIO.ID      = nro_socio;
+	    //detalleUsuario esta implementado en circulacion,js
+	    detalleUsuario(nro_socio);
+	    detallePrestamos(nro_socio, updateDetallePrestamos);
+    // 	detalleSanciones(nro_socio);
+	    $('#formActions').hide();
+    }
+}
+
+function updateDetallePrestamos(responseText){
+	//implementado en circulacion.js
+	updateInfoPrestamos(responseText);
+	detalleSanciones(USUARIO.ID);
+}
+
+function onCompleteAutocompleteBarcodesPrestados(){
+    if($('#prestamo_hidden').val() != '-1'){
+	    var prestamo    = $('#prestamo_hidden').val();
+        $('#barcode').attr('readonly', true);
+	    $('#formActions').show();
+	    //detalleUsuario esta implementado en circulacion,js
+	    getSocioFromPrestamo(prestamo);
+    }
+}
+
+function getSocioFromPrestamo(prestamo){
+
+	var objAH               = new AjaxHelper(updateGetSocioFromPrestamo);
+	objAH.debug             = true;
+    objAH.showOverlay       = true;
+	objAH.url=URL_PREFIX+"/circ/circulacionDB.pl";
+	objAH.prestamo          = prestamo;
+	objAH.tipoAccion        = "CIRCULACION_RAPIDA_OBTENER_SOCIO";
+	//se envia la consulta
+	objAH.sendToServer();
+}
+
+function updateGetSocioFromPrestamo(responseText){
+	var socio       = JSONstring.toObject(responseText);
+
+	USUARIO         = new objeto_usuario();
+	USUARIO.text    = socio.apeYNom;
+	USUARIO.ID      = socio.nro_socio;
+
+	detalleUsuario(USUARIO.ID);
+	detalleSanciones(USUARIO.ID);
+}
+
+function devolverPrestamo(){
+	var objAH           = new AjaxHelper(updateDevolverPrestamo);
+	objAH.debug         = true;
+    objAH.showOverlay   = true;
+	objAH.url=URL_PREFIX+'/circ/circulacionDB.pl';
+	objAH.tipoAccion    = 'DEVOLUCION';
+	objAH.datosArray    = [$('#prestamo_hidden').val()];
+	objAH.nro_socio     = USUARIO.ID;
+	//se envia la consulta
+	objAH.sendToServer();
+}
+
+function updateDevolverPrestamo(responseText){
+	//implementado en circulacion.js
+	generaDivDevolucion(responseText);
+}
+
+/*
+* REDEFINIDA, se encuentra definida en circulacion.js
+*/
+function updateInfoDevolver(responseText){
+	cancelarDiv();
+
+	var infoHash        = JSONstring.toObject(responseText);
+	var messageArray    = infoHash.Messages_arrayref;
+	setMessages(messageArray);
+
+	detallePrestamos(USUARIO.ID,updateDetallePrestamos);
+    $('#barcode').attr('readonly', false);
+}
+
+function cancelarDevolucion(){
+    $('#barcode').attr('readonly', false);
+}
+
+$(document).ready(function() {
+	inicializar();
+
+	//se crea el autocomplete para buscar el usuario
+	CrearAutocompleteUsuarios({	IdInput: 'usuarioAutocomplete', 
+								IdInputHidden: 'nro_socio_hidden', 
+								callBackFunction: onCompleteAutocompleteUsuarios
+						});
+
+	//se crea el autocomplete para buscar por codigo de barras
+	CrearAutocompleteBarcodesPrestados({	IdInput: 'barcode', 
+											IdInputHidden: 'prestamo_hidden', 
+											callBackFunction: onCompleteAutocompleteBarcodesPrestados
+										});
+
+});
+
+
+</script>
+<div id="confirmar_div"></div>
+<section class="center-section-form">
+    <form id="dev_rev" class="form-horizontal" onsubmit="return false;">
+        <fieldset>
+            <legend class="titulo_legend">[% "Devoluciones y renovaciones" | i18n %]</legend>
+
+	        <div class="control-group">
+	                <label for="usuarioAutocomplete" class="control-label">[% 'Apellido y Nombres, DNI o Legajo' | i18n %]</label>
+	                <div class="controls">
+		                <input id="usuarioAutocomplete" type="text" size="40" onClick="inicializar();">
+		                <input id="nro_socio_hidden" type="hidden">
+	                </div>
+	        </div>
+
+            <div class="control-group">
+	          <label for="barcode" class="control-label">[% 'Ingrese el c&oacute;digo de barras' | i18n %]</label>
+	          <div class="controls">
+	              <input id="barcode" type="text" size="40" onClick="inicializar();">
+	<!--           <input id="barcode_hidden" type="hidden"> -->
+	               <input id="prestamo_hidden" type="hidden">
+              </div>
+            </div>
+         </fieldset>
+
+
+		<div class="form-actions" id="formActions">
+
+                   [% PERL %]
+                           print C4::AR::Filtros::action_button( 
+                                                           button         => "btn btn-danger",
+                                                           action       => "cancelarDevolucion()", 
+                                                           title        => "[% 'Cancelar' | i18n %]",
+                                                       ) ;
+    
+                   [% END %]
+
+                   [% PERL %]
+                           print C4::AR::Filtros::action_button( 
+                                                           button         => "btn btn-primary",
+                                                           action       => "devolverPrestamo()", 
+                                                           title        => "[% 'Devolver' | i18n %]",
+                                                       ) ;
+    
+                   [% END %]
+	    </div>
+<!-- DELTALLE DEL USUARIO -->
+<div id="detalleUsuario"></div>
+<!-- DELTALLE DE SANCIONES -->
+<div id="sanciones"></div>
+<!-- DETALLE DE PRESTAMOS -->
+<div id="tablaPrestamos"></div>
+
+[% INCLUDE "intranet-bottom.inc" %]

@@ -1,0 +1,12 @@
+ALTER TABLE `cat_registro_marc_n1` CHANGE `tipo_documento` `template` CHAR( 3 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL ;
+ALTER TABLE `cat_registro_marc_n1` CHANGE `template` `template` CHAR( 3 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL ;
+
+
+ALTER TABLE `cat_registro_marc_n2` ADD `template` CHAR( 3 ) NOT NULL AFTER `indice` ;
+
+ALTER TABLE `cat_registro_marc_n3` ADD `template` CHAR( 3 ) NOT NULL AFTER `signatura` ;
+
+
+UPDATE `cat_registro_marc_n1` SET template = 'ALL'  WHERE template = 0;
+UPDATE `cat_registro_marc_n2` SET template = 'ALL'  WHERE 1;
+UPDATE `cat_registro_marc_n3` SET template = 'ALL'  WHERE 1;

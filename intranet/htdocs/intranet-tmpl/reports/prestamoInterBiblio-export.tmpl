@@ -1,0 +1,86 @@
+[% USE HTML %]
+
+<link rel="stylesheet" type="text/css" href="[% temas %]/[% user_theme %]/includes/intranet.css">
+
+<fieldset class="">
+            <div class="encabezado">
+                <img src="[% escudo %]" alt="escudo" width="80px" height="100px" /><img src="[% escudoUI %]" alt="escudoUI" width="120px" height="90px" align="right" /><br>
+                [% biblio.titulo_formal %]<br>
+                [% "BIBLIOTECA" | i18n  %]<br>
+                [% biblio.getNombrePDF %]<br><br><br>
+            </div>
+
+            <p id="fecha" align="right">[% fecha %]
+            <h2 align="center">[% "SOLICITUD DE PRESTAMO INTERBIBLIOTECARIO" | i18n %]<h2>
+            <p id="fecha"></p>
+            <div class="contenido">
+                [% "Sr/a Director/a de la Biblioteca" | i18n  %]<br>
+                [% biblio_destino.getNombrePDF  %]<br>
+                [% director %]<br>
+                S/D <br><br>
+                [% "Tengo el agrado de dirigirme a Ud. a fin de solicitarle en car&aacute;cter de pr&eacute;stamo interbibliotecario los siguientes items: "  | 
+i18n %]
+            </div>
+            <div id="datos_prest_interbib"><br>
+              <table class="datos_tabla" border=1 cellspacing=0 cellpadding=0 width="100%" padding:"10px">
+                <thead>
+                    <tr class="titulo_tabla_prest_interbib">
+                        <th>[% "Autor/es" | i18n %]</th>
+                        <th>[% "T&iacute;tulo" | i18n %]</th>
+                        <th>[% "Otros Datos" | i18n %]</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    [% FOREACH dato IN datos %]   
+                        <tr align="center" style="border-bottom: 1px; border:1px solid #CCCCCC; background-color: #CCCCCC;height:25px">
+                            <td align=center>
+                                [% dato.autor %]
+                            </td>
+                            <td align=center>
+                                [% dato.titulo %]
+                            </td>
+                            <td align="center">
+                                     [% dato.otros %]
+                            </td>
+                    
+                        </tr>
+                    [% END %]
+                            
+                </tbody>
+            
+            </table><br>
+     
+            [% "Lo(s) mismo(s) ser&aacute;n retirado(s) por: " | i18n  %]<br>
+            [% "Nombre y apellido: " | i18n  %]<span>[% socio_nombre %], [% socio_apellido%]</span><br>
+            [% "DNI: " | i18n  %][% socio.persona.nro_documento %]<br>
+            [% "Direcci&oacute;n: " | i18n  %][% socio.persona.calle %], [% socio.persona.barrio %], [% socio.persona.ciudad_ref.nombre %]<br>
+            [% "Tel&eacute;fono: " | i18n  %][% socio.persona.telefono %]<br>
+            [% "Correo electr&oacute;nico: " | i18n  %][% socio.persona.email %]<br><br>
+            
+
+            [% "Sin otro particular y agradeciendo ya su amabilidad, saludo a Ud. muy atentamente." %]<br><br><br><br>
+
+            
+            
+            <center>
+                [% "Firma    " | i18n  %]_________________________
+           <br><br>
+                [% "Aclaraci&oacute;n " | i18n  %] ______________________
+
+            </center><br><br>
+           <br><br>
+
+            </div>
+            <hr>
+            <div id="pie" padding:"40px">
+                      [% "Biblioteca: " | i18n  %] [% biblio.getNombre %]<br>
+                      [% "Direcci&oacute;n:" | i18n  %]  [% biblio.getDireccionPDF %]<br>
+                      [% "Tel/Fax:" | i18n  %]  [% biblio.telefono %]  [% IF biblio.fax %] / [% biblio.fax %][% END %]  <br>
+                      [% "Atenci&oacute;n: Lunes a Viernes " | i18n  %][% atencion %] <br>
+                      [% "E-mail:" | i18n  %] [% biblio.email %]<br>
+                      [% "Sitio web:" | i18n  %] [% biblio.url_servidor %]
+           
+            </div>
+ 
+     
+</fieldset>

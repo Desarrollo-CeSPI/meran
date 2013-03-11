@@ -1,0 +1,26 @@
+INSERT INTO  `pref_preferencia_sistema` (
+`id` ,
+`variable` ,
+`value` ,
+`explanation` ,
+`options` ,
+`type` ,
+`categoria`
+)
+VALUES (
+NULL ,  'reminderDays',  '3',  'Cantidad de dias en que comienza el envio de recordatorio de vencimiento al socio. Ejemplo: Si es 3, se le enviara un mail cuando falten 3 dias, 2 dias y 1 dia.', NULL , 'text',  'sistema'
+);
+INSERT INTO `pref_preferencia_sistema` (
+`id` ,
+`variable` ,
+`value` ,
+`explanation` ,
+`options` ,
+`type` ,
+`categoria`
+)
+VALUES (
+NULL , 'remindUser', '1', 'Indica si se habilita GLOBALMENTE recordarle al usuario el vencimiento del prestamo por el medio que tenga registrado', NULL , 'bool', 'sistema'
+);
+UPDATE `pref_preferencia_sistema` SET `value` = 'Sr./Sra. FIRSTNAME SURNAME : Se le recuerda que el día VENCIMIENTO debe regresar el ejemplar que posee del libro "TITLE:UNITITLE" - De: "AUTHOR" (EDICION) a la BRANCH para no ser sancionado. Muchas gracias ',
+`explanation` = 'Mensaje del mail de recordatorio de préstamo a vencer. NO modificar las palabras en mayuscula' WHERE `pref_preferencia_sistema`.`variable` ='reminderMessage';

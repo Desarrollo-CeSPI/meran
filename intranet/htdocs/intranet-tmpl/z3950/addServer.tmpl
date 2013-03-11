@@ -1,0 +1,144 @@
+[% IF editing %]
+<form method="post" id="form_editing_server" name="form_editing_server" class="form-horizontal"> 
+    <fieldset class="resultados_busqueda">
+    <legend class="titulo_legend">[% "Editar Servidor z3950" | i18n %]</legend>
+    
+        <div class="control-group">
+            <label class="control-label" for="server">[% "Servidor" | i18n %]</label>
+            <div class="controls">
+                <input  type="text" class="required" id="server" name="server" value="[% servidor.servidor %]"/>
+                <input type="hidden" name="id_server" value="[% servidor.id %]" id="id_server" />
+            </div>
+        </div>
+        
+        <div class="control-group">
+            <label class="control-label" for="puerto"> [% "Puerto" | i18n %]: </label>
+            <div class="controls">
+                <input  type="text" class="required" id="puerto" name="puerto" value="[% servidor.puerto %]"/>
+            </div>
+        </div>
+                
+        <div class="control-group">
+            <label class="control-label" for="base"> [% "Base de Datos" | i18n %]: </label>
+            <div class="controls">
+                <input  type="text" class="required" id="base" name="base" value="[% servidor.base %]"/>
+            </div>
+        </div>       
+         
+        <div class="control-group">
+            <label class="control-label" for="usuario"> [% "Usuario" | i18n %]: </label>
+            <div class="controls">
+                <input  type="text" class="required" id="usuario" name="usuario" value="[% servidor.usuario %]"/>
+            </div>
+        </div> 
+        
+        <div class="control-group">
+            <label class="control-label" for="password"> [% "Password" | i18n %]: </label>
+            <div class="controls">
+                <input type="password" class="required" id="password" name="password" value="[% servidor.password %]"/>
+            </div>
+        </div>     
+        
+        <div class="control-group">
+            <label class="control-label" for="nombre"> [% "Nombre" | i18n %]: </label>
+            <div class="controls">
+                <input  type="text" class="required" id="nombre" name="nombre" value="[% servidor.nombre %]"/>
+            </div>
+        </div> 
+        
+        <div class="control-group">
+            <label class="control-label" for="sintaxis"> [% "Sintaxis" | i18n %]: </label>
+            <div class="controls">
+                <input  type="text" class="required" id="sintaxis" name="sintaxis" value="[% servidor.sintaxis %]"/>
+            </div>
+        </div> 
+        
+        <div class="control-group">
+            <label class="control-label" for="habilitado"> [% "Habilitado" | i18n %]: </label>
+            <div class="controls">
+                <input type="checkbox" id="habilitado" [% IF servidor.habilitado == '1' %] checked="checked" [% END %] />
+            </div>
+        </div>
+
+        <div class="form-actions">
+        [% PERL %]
+            print C4::AR::Filtros::to_Button(   text    => "[% 'Guardar' | i18n %]",
+                                                boton   => "btn btn-large btn-primary",
+                                                onClick => "save('2');",
+                                                title   => "[% 'Guardar Cambios' | i18n %]",
+                                                alternClass => "botonCentrado"
+                    ) ;
+        [% END %]
+        </div>
+        
+        </fieldset>
+    </form>
+[% ELSE %]
+<form method="post" id="form_adding_server" name="form_adding_server" class="form-horizontal"> 
+    <fieldset class="resultados_busqueda">
+    <legend class="titulo_legend">[% "Agregar Nuevo Servidor z3950" | i18n %]</legend>
+    
+        <div class="control-group">
+            <label class="control-label" for="server">[% "Servidor" | i18n %]</label>
+            <div class="controls">
+                <input  type="text" class="required" name="server"/>
+            </div>
+        </div>
+        
+        <div class="control-group">
+            <label class="control-label" for="puerto"> [% "Puerto" | i18n %]: </label>
+            <div class="controls">
+                <input  type="text" class="required" name="puerto"/>
+            </div>
+        </div>
+                
+        <div class="control-group">
+            <label class="control-label" for="base"> [% "Base de Datos" | i18n %]: </label>
+            <div class="controls">
+                <input  type="text" class="required" name="base"/>
+            </div>
+        </div>       
+         
+        <div class="control-group">
+            <label class="control-label" for="usuario"> [% "Usuario" | i18n %]: </label>
+            <div class="controls">
+                <input  type="text" class="required" name="usuario"/>
+            </div>
+        </div> 
+        
+        <div class="control-group">
+            <label class="control-label" for="password"> [% "Password" | i18n %]: </label>
+            <div class="controls">
+                <input type="password" class="required" name="password"/>
+            </div>
+        </div> 
+        
+         <div class="control-group">
+            <label class="control-label" for="nombre"> [% "Nombre" | i18n %]: </label>
+            <div class="controls">
+                <input  type="text" class="required" name="nombre"/>
+            </div>
+        </div> 
+        
+        <div class="control-group">
+            <label class="control-label" for="sintaxis"> [% "Sintaxis" | i18n %]: </label>
+            <div class="controls">
+                <input  type="text" class="required" name="sintaxis"/>
+            </div>
+        </div> 
+        
+
+        <div class="form-actions">
+        [% PERL %]
+            print C4::AR::Filtros::to_Button(   text    => "[% 'Guardar' | i18n %]",
+                                                boton   => "btn btn-large btn-primary",
+                                                onClick => "save('1');",
+                                                title   => "[% 'Guardar Cambios' | i18n %]",
+                                                alternClass => "botonCentrado"
+                    ) ;
+        [% END %]
+        </div>
+        
+    </fieldset>
+</form>
+[% END %]

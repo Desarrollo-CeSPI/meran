@@ -1,0 +1,11 @@
+CREATE TABLE  `pref_tabla_referencia_conf` (
+`id` INT( 11 ) NOT NULL ,
+`tabla` VARCHAR( 255 ) NOT NULL ,
+`campo` VARCHAR( 255 ) NOT NULL ,
+`campo_alias` VARCHAR( 255 ) NOT NULL ,
+`visible` INT NOT NULL
+) ENGINE = MYISAM ;
+
+ALTER TABLE  `pref_tabla_referencia_conf` ADD PRIMARY KEY (  `id` );
+
+ALTER TABLE  `pref_tabla_referencia_conf` CHANGE  `id`  `id` INT( 11 ) NOT NULL AUTO_INCREMENT;

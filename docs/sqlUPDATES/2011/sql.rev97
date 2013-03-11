@@ -1,0 +1,3 @@
+ALTER TABLE `cat_ref_tipo_nivel3` ADD UNIQUE (
+`id_tipo_doc`
+);

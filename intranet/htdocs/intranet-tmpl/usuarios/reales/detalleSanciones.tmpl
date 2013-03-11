@@ -1,0 +1,105 @@
+<script>
+function borrarSancion(id_sancion){
+
+    var array = new Array; //array de una sola posicion, para que ante el eliminar sanciones
+    array[0]  = id_sancion;
+
+    bootbox.confirm(CONFIRMA_LA_BAJA, function (ok){ 
+        if (ok){
+            objAH               = new AjaxHelper(updateBorrarSancion);
+            objAH.debug         = true;
+            objAH.showOverlay   = true;
+            objAH.url=URL_PREFIX+'/circ/sancionesDB.pl';
+            objAH.accion        = "ELIMINAR_SANCIONES";
+            objAH.datosArray    = array;
+
+            objAH.sendToServer();
+        }
+    });
+}
+
+function updateBorrarSancion(responseText){
+    
+    if (!verificarRespuesta(responseText)){
+        return(0);
+    } 
+    var Messages = JSONstring.toObject(responseText);
+    setMessages(Messages);
+    detalleSanciones(USUARIO.ID);
+}
+
+</script>
+
+	[% IF SANCIONES %]
+	    <fieldset class="detalle_sanciones_sancionado"> 
+	[% ELSE %]
+	    <fieldset class="detalle_sanciones"> 
+	[% END %]
+	
+[% IF SANCIONES %]
+            <legend class="titulo_legend_resaltado">[% 'Detalle de sanciones' | i18n %]</legend>
+	   
+	           [% PERL %]
+	                                print C4::AR::Filtros::tableHeader(   
+	                                            id              => "detalleSancionesResult",
+	                                            class           => "",
+	                                            selectAll_id    => "",
+	                                            columns         => ['[% "Sancion Original" | i18n %]','[% "Se aplica" | i18n %]',
+	                                                                '[% "Desde" | i18n %]','[% "Hasta" | i18n %]',
+	                                                                '[% "Autor" | i18n %]','[% "T&iacute;tulo" | i18n %]','[% "Edicion" | i18n %]',
+	                                                                '[% "Eliminar" | i18n %]'
+	                                                              ]
+	                                                                            
+	                                                  ) ;
+	            [% END %]
+	        
+	            <tbody>
+	           
+	              [% FOREACH sancion IN SANCIONES %]
+	              
+	              <tr>
+	                  <td>[% IF sancion.ref_tipo_sancion.ref_tipo_prestamo.getId_tipo_prestamo %]
+	                          [% sancion.ref_tipo_sancion.ref_tipo_prestamo.getDescripcion %]
+	                      [% ELSE %]
+	                          [% "Reserva no retirada" | i18n %]
+	                      [% END %]
+	                  </td>
+	                  <td>
+	                      [% FOREACH ts IN sancion.ref_tipo_sancion.ref_tipo_prestamo_sancion %] 
+	                          [% ts.ref_tipo_prestamo.descripcion %]<br>
+	                      [% END %]
+	                  </td>
+	                  <td>[% sancion.getFecha_comienzo_formateada %]</td>
+	                  <td>[% sancion.getFecha_final_formateada %]</td>
+	                  <td>[% sancion.nivel3.nivel1.getAutor %]</td>
+	                  <td>[% sancion.nivel3.nivel1.getTitulo %]</td>
+	                  <td>[% sancion.nivel3.nivel2.getEdicion %]</td>
+	                  <td>
+	        
+	
+	                  [% PERL %]
+	                          print C4::AR::Filtros::action_button( 
+	                                                          button       => "btn click btn-danger",
+	                                                          action       => 'borrarSancion([% sancion.getId_sancion %])', 
+	                                                          icon         => "icon-trash icon-white",
+	                                                          title        => "",
+	                                                      ) ;
+	
+	                  [% END %]
+	
+	
+	
+	            
+	                  </td>
+	              </tr>	
+	         
+	              [% END %]	
+	            </tbody>
+	          </table>
+	</fieldset>
+[% ELSE %]
+    <br />
+    <div class="alert alert-success"><i class="icon-ok"></i> [% 'El usuario no tiene sanciones actualmente' | i18n %]</div>
+
+[% END %]
+	

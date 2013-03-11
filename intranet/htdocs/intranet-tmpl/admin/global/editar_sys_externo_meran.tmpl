@@ -1,0 +1,35 @@
+[% INCLUDE "intranet-top.inc" %]
+
+<fieldset>
+    <legend>[% "Editar servidor externo:" | i18n %]</legend>
+    <form class="form-horizontal" action="[% url_prefix %]/admin/global/editar_sys_externo_meran.pl" method="POST" >
+    
+        <div class="control-group">
+            <label class="control-label" for="variable">[% 'URL' | i18n %]: </label>
+            <div class="controls">
+                <input id="url_server" value="[% sys_externo_meran.getUrl %]" name="url_server" autofocus="autofocus" required type="text">
+                [% PERL %]
+                    print C4::AR::Filtros::setHelpInput( text => "El formato debe ser: http://SERVER_ADDRESS:PORT/meran/opac-oai-search.pl"
+
+                    );
+                [% END %]
+                <input type="hidden" name="id" value="[% sys_externo_meran.getId %]">
+            </div>
+        </div>
+
+        <div class="control-group">
+            <label class="control-label" for="variable">[% 'UI' | i18n %]: </label>
+            <div class="controls">
+                [% combo_ui %]
+                <input type="hidden" name="form_action" value="1">
+            </div>
+        </div>
+        
+        <div class="form-actions">
+            <button type="submit" class="btn btn-primary">[% 'Guardar cambios'|i18n %]</button>
+        </div>
+        
+    </form>
+</fieldset>
+
+[% INCLUDE "intranet-bottom.inc" %]

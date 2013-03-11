@@ -1,0 +1,52 @@
+[% USE HTML %]
+<script type="text/javascript" language="javascript">
+    $('.fancylink').fancybox();
+</script>
+
+<div class="modal-header">
+  <a href="#" class="close" data-dismiss="modal">×</a>
+  <h4>[% HTML.escape(novedad.getTitulo) %]</h4>
+</div>
+<div class="modal-body">
+    <p>[% HTML.escape(novedad.getContenido) %]</p>
+
+    [% IF cant_links %]
+        <p><strong>Links: </strong></p>
+        [% FOREACH link IN links %]
+            <a target="_blank" href="[% link %]">[% link %]</a></br>      
+        [% END %]
+    [% END %]
+
+    [% IF cant_novedades %]
+    </br>      
+    <div class="control-group">
+        <div class="controls">
+            [% FOREACH imagen IN imagenes_hash %]
+                <a class="fancylink" id="imagen_[% imagen.getImageName %]" rel="group" href="http://[% SERVER_ADDRESS_OPAC %]/opac-tmpl/uploads/novedades/[% imagen.getImageName %]">
+                    <img border="0" src="http://[% SERVER_ADDRESS_OPAC %]/opac-tmpl/uploads/novedades/[% imagen.getImageName %]"
+                          style="width: 60%; max-width: 120px;" 
+                          alt="[% socio.persona.getApellido %], [% socio.persona.getNombre %] ([% socio.getNro_socio %])"
+                          title="[% socio.persona.getApellido %], [% socio.persona.getNombre %] ([% socio.getNro_socio %])"
+                    >
+                </a>
+            [% END %]
+
+        </div>
+    </div>
+    
+[% END %]
+  
+</div>
+<div class="modal-footer">
+  <p class="help-block">
+     <h5 class="left">[% novedad.getFechaLegible %]</h5>
+        [% 'Creado por ' | i18n %]
+        [% PERL %]
+            print C4::AR::Filtros::link_to(   text =>     "[% novedad.getUsuario %]",
+                                              url=>"[% url_prefix %]/usuarios/reales/datosUsuario.pl", 
+                                              params =>   ["nro_socio=[% novedad.getUsuario %]"],
+                                              title =>    "[% 'Mostrar Detalle del Usuario' | i18n %]"
+                                        );
+        [% END %]
+    </p>        
+</div>

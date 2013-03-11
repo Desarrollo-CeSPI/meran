@@ -1,0 +1,143 @@
+[% INCLUDE "intranet-top.inc" %]
+
+<script type="text/javascript">
+
+    var prefBooleanas = new Array();
+
+    [% FOREACH pref IN preferenciasBooleanas %]
+    
+        prefBooleanas.push('[% pref.variable %]');
+
+    [% END %]
+
+
+    //actualizo los input hidden con los valores de los radio button de bootstrap
+    function guardarPreferencias(){
+
+        for(pref in prefBooleanas){
+
+            if($('#radios_' + prefBooleanas[pref] + '').find('.active').text() == "[% "Si" | i18n %]"){
+                $('#' + prefBooleanas[pref] +'').val(1);
+            }else{
+                $('#' + prefBooleanas[pref] +'').val(0);
+            }
+            
+        }
+
+        $('#formPreferenciasCatalogo').submit();
+
+    }
+
+</script>
+
+<style type="text/css">
+ button.btn-primary {
+  display: inline-block;
+  *display: inline;
+  /* IE7 inline-block hack */
+
+  *zoom: 1;
+  padding: 4px 12px;
+  margin-bottom: 0;
+  font-size: 14px;
+  line-height: 20px;
+  *line-height: 20px;
+  text-align: center;
+  vertical-align: middle;
+  cursor: pointer;
+  color: #333333;
+  text-shadow: 0 1px 1px rgba(255, 255, 255, 0.75);
+  background-color: #f5f5f5;
+  background-image: -moz-linear-gradient(top, #ffffff, #e6e6e6);
+  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#ffffff), to(#e6e6e6));
+  background-image: -webkit-linear-gradient(top, #ffffff, #e6e6e6);
+  background-image: -o-linear-gradient(top, #ffffff, #e6e6e6);
+  background-image: linear-gradient(to bottom, #ffffff, #e6e6e6);
+  background-repeat: repeat-x;
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffffff', endColorstr='#ffe6e6e6', GradientType=0);
+  border-color: #e6e6e6 #e6e6e6 #bfbfbf;
+  border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
+  *background-color: #e6e6e6;
+  /* Darken IE7 buttons by default so they stand out more given they won't have borders */
+
+  filter: progid:DXImageTransform.Microsoft.gradient(enabled = false);
+  border: 1px solid #bbbbbb;
+  *border: 0;
+  border-bottom-color: #a2a2a2;
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  border-radius: 4px;
+  *margin-left: .3em;
+  -webkit-box-shadow: inset 0 1px 0 rgba(255,255,255,.2), 0 1px 2px rgba(0,0,0,.05);
+  -moz-box-shadow: inset 0 1px 0 rgba(255,255,255,.2), 0 1px 2px rgba(0,0,0,.05);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.2), 0 1px 2px rgba(0,0,0,.05);
+}
+ button.btn:hover,
+button.btn.disabled,
+button.btn[disabled] {
+  color: #333333;
+  background-color: #e6e6e6;
+  *background-color: #d9d9d9;
+}
+</style>
+
+<script type="text/javascript" src="/intranet-tmpl/includes/busquedaPreferencias.js"></script>
+
+<form id="formPreferenciasCatalogo" class="form-horizontal" 
+      action="[% url_prefix %]/admin/global/catalogo_config.pl?token=[% token %]" method="post"
+      onsubmit="buttonPost('preferencias-submit');"
+      >
+    <fieldset class="resultados_busqueda fixed">
+    <legend>[% "Administraci&oacute;n de preferencias de Cat&oacute;logo" | i18n %]</legend>
+
+        <div class="buscadorPreferenciasClass">
+            <input name="buscador" id="buscadorPreferencias" type="text" placeholder="Ingrese la preferencia a buscar">
+        </div>
+    
+            [% FOREACH preferencia IN preferencias %]
+            
+                <div class="control-group">
+                    <label class="control-label">[% preferencia.preferencia.getLabel | i18n %]</label>
+                    <div class="controls">
+                    
+                        [% IF preferencia.valor %]
+                            [%  preferencia.valor %]
+                        [% ELSE %]
+                            <input id="valor" type="text" size="50" name="valor">
+                        [% END %]
+                        
+                        [% IF preferencia.tabla %]<input type="hidden" id="[% preferencia.preferencia.getId %]_tabla" value="[% preferencia.tabla %]">[% END %]
+                        [% IF preferencia.campo %]<input type="hidden" id="[% preferencia.preferencia.getId %]_campo" value="[% preferencia.campo %]">[% END %]
+                        
+                        [% PERL %]
+                            print C4::AR::Filtros::setHelpInput(   
+                                                text        => "[% preferencia.preferencia.getExplanation | i18n %]",
+                                        ) ;
+                            
+                        [% END %]
+                    </div>
+                </div>
+            [% END %]
+            
+    <input type="hidden" id="editando" name="editando" value="1">
+                    [% IF mensaje %]
+                            <div class="alert [% mensaje_class %]">
+                                    <strong>[% 'Informaci&oacute;n' | i18n %]</strong> [% mensaje %]
+                            </div>
+                    [% END %]
+    
+    <div class="form-actions">
+        [% PERL %]
+                    print C4::AR::Filtros::action_button(   
+                                                        title   => "[% 'Guardar' | i18n %]",
+                                                        button  => "btn btn-primary",
+                                                        id      => "preferencias-submit",
+                                                        action  => "guardarPreferencias();",
+                                                        icon    => "icon-white icon-ok",
+                            ) ;
+        [% END %]
+    </div>
+    <div class="alert alert-info" id="mensajePreferenciasNoEncontradas">[% 'No se encontraron preferencias' | i18n %]</div>
+</form>
+
+[% INCLUDE "intranet-bottom.inc" %]

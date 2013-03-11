@@ -1,0 +1,84 @@
+<script type="text/javascript">
+
+    function imprimir(){
+	    var autores="";
+	    var titulos="";
+	    var otros="";
+	    for(i=1;i<=2;i++){
+		    autores=autores+document.getElementById('autor'+i).value+"#";
+		    titulos=titulos+document.getElementById('titulo'+i).value+"#";
+		    otros=otros+document.getElementById('otro'+i).value+"#";
+	    }
+	    document.getElementById('autores').value=autores;
+	    document.getElementById('titulos').value=titulos;
+	    document.getElementById('otros').value=otros;
+	    document.getElementById('info').submit();
+	    
+	    $('#basic-modal-content').modal('hide');
+    }
+
+</script>
+
+    <div class="modal-header">
+        <a href="#" class="close" data-dismiss="modal">×</a>
+        <h3>[% 'Pr&eacute;stamo interbibliotecario' | i18n %]</h3>
+    </div>
+    <div class="modal-body">
+	    <form class="form-horizontal" name="info" id="info" action="[% url_prefix %]/usuarios/prestamoInterBiblio.pl" method="POST">
+	    <fieldset>
+	       <legend>[% 'Datos del pr&eacute;stamo' | i18n %] </legend>
+			<div class="control-group">
+	            <label class="control-label" for="id_ui">[% "Biblioteca" | i18n %]:</label>
+	            <div class="controls">
+	              [% comboDeUI %]
+	            </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label" for="director">[% "Nombre Director" | i18n %]:</label>
+                <div class="controls">
+                  <input type="text" id="director" name="director">
+                </div>
+            </div>						
+            
+            <input type="hidden" name="nro_socio" id="nro_socio" value="[% nro_socio %]">
+            <input type="hidden" name="accion" id="accion" value="imprimirPDF">
+            <input type="hidden" name="autores" id="autores">
+            <input type="hidden" name="titulos" id="titulos" />
+            <input type="hidden" name="otros" id="otros" />
+            <input type="hidden" name="token" value="[% token %]"/>
+
+
+            <div clas="form-inline">
+		        <fieldset>
+		           <legend>[% 'Datos de los documentos' | i18n %] </legend>
+	
+					<div class="control-group">
+						<input type=text name="autor1" id="autor1" value="" placeholder='[% "Autor" | i18n %]'>
+						<input type=text name="titulo1" id="titulo1" value="" placeholder='[% "T&iacute;tulo" | i18n %]'>
+						<input type=text name="otro1" id="otro1" value="" placeholder='[% "Otros Datos" | i18n %]'>
+                        <p class="help-block">[% "Complete lo siguiente s&oacute;lo si es necesario" | i18n %]</p>
+                    </div>
+                    <div class="control-group">
+		                <input type=text name="autor2" id="autor2" value="" placeholder='[% "Autor" | i18n %]'>
+		                <input type=text name="titulo2" id="titulo2" value="" placeholder='[% "T&iacute;tulo" | i18n %]'>
+		                <input type=text name="otro2" id="otro2" value="" placeholder='[% "Otros Datos" | i18n %]'>
+                    </div>
+	            </fieldset>
+			</div>
+
+          <div class="form-actions">
+             [% PERL %]
+                     print C4::AR::Filtros::action_button( 
+                                                     button         => "btn btn-primary click",
+                                                     action       => "imprimir()", 
+                                                     icon         => "icon-white icon-print ",
+                                                     title        => "[% 'Imprimir' | i18n %]",
+                                                 ) ;
+
+             [% END %]
+          </div>
+			
+		  </fieldset>
+	    </form>
+    </div>
+</div>

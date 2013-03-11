@@ -1,0 +1,2 @@
+ALTER TABLE `cat_visualizacion_intra` ADD `vista_campo` VARCHAR( 255 ) NULL DEFAULT NULL;
+ALTER TABLE `cat_visualizacion_intra` ADD `orden_subcampo` INT( 11 ) NOT NULL;

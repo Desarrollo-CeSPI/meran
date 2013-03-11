@@ -1,0 +1,26 @@
+CREATE TABLE  `sys_externos_meran` (
+`id` INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY ,
+`id_ui` INT UNSIGNED NOT NULL ,
+`url` VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL ,
+UNIQUE (
+`id_ui`
+)
+) ENGINE = MYISAM ;
+
+ALTER TABLE  `sys_externos_meran` CHANGE  `id_ui`  `id_ui` VARCHAR( 4 ) NOT NULL;
+
+INSERT INTO  `pref_preferencia_sistema` (
+`id` ,
+`variable` ,
+`value` ,
+`explanation` ,
+`options` ,
+`type` ,
+`categoria`
+)
+VALUES (
+NULL ,  'external_search',  '1',  'Habilita/Deshabilita la búsqueda en servidores externos Meran', NULL ,  'bool',  'catalogo'
+);
+
+
+

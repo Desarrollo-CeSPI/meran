@@ -1,0 +1,1 @@
+ALTER TABLE  `indice_busqueda` ADD  `hits` INT NOT NULL DEFAULT  '0';

@@ -1,0 +1,1 @@
+ALTER TABLE `pref_unidad_informacion` ADD `url_servidor` VARCHAR( 255 ) NULL AFTER `fax` 

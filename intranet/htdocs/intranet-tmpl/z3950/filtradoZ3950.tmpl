@@ -1,0 +1,198 @@
+[% INCLUDE 'intranet-top.inc' %]
+
+<script>
+
+function esconderResultadosZ3950(){
+    $('#busquedasZ3950').show();
+    $('#resultadoZ3950').hide();
+    $('#detalleMARC').hide();
+}
+
+function verResultadosZ3950 (id){
+    objAH=new AjaxHelper(updateVerResultadosZ3950);
+    objAH.showOverlay       = true;
+    objAH.url=URL_PREFIX+"/z3950/filtradoZ3950DB.pl";
+    objAH.tipo="VER_RESULTADO";
+    objAH.id_busqueda= id;
+    objAH.sendToServer();
+}
+
+function updateVerResultadosZ3950(responseText){
+    $('#resultadoZ3950').html(responseText);
+    zebra('datos_tabla');
+  $('#datos_busquedas_div').hide();
+    $('#resultadoZ3950').show();
+}
+
+
+function verBusquedas (){
+    objAH=new AjaxHelper(updateVerBusquedas);
+    objAH.showOverlay       = true;
+    objAH.url=URL_PREFIX+"/z3950/filtradoZ3950DB.pl";
+    objAH.tipo="VER_BUSQUEDAS";
+    objAH.sendToServer();
+}
+
+function updateVerBusquedas(responseText){
+    $('#busquedasZ3950').html(responseText);
+   zebra('datos_tabla');
+    $('#busquedasZ3950').show();
+}
+
+function agregarBusquedaZ3950(){
+    if(($('#titulo').val() !='')||($('#autor').val() !='')||($('#isbn').val() !='')||($('#issn').val() !='')||($('#termino').val() !='')||($('#pqf').val() !=''))
+    {
+    $('#resultadoZ3950').hide();
+    $('#detalleMARC').hide();
+	objAH=new AjaxHelper(updateAgregarBusquedaZ3950);
+    objAH.showOverlay       = true;
+	objAH.url=URL_PREFIX+"/z3950/filtradoZ3950DB.pl";
+    objAH.tipo="BUSCAR";
+    
+    var termino;
+    var busqueda;
+    
+    if ($('#titulo').val()) { termino="titulo"; busqueda=$('#titulo').val(); }
+    else {
+		if ($('#autor').val()) { termino="autor"; busqueda=$('#autor').val(); }
+		    else {
+				if ($('#isbn').val()) { termino="isbn"; busqueda=$('#isbn').val(); }
+				 else {
+					if ($('#issn').val()) { termino="issn"; busqueda=$('#issn').val(); }
+					else {
+						if ($('#termino').val()) { termino="termino"; busqueda=$('#termino').val(); }
+						else {
+							if ($('#pqf').val()) { termino="pqf"; busqueda=$('#pqf').val(); }
+						}
+					}
+				}
+			}
+    }
+    
+    objAH.termino= termino;
+    objAH.busqueda= busqueda;
+	
+	objAH.sendToServer();
+    }
+}
+
+function updateAgregarBusquedaZ3950(responseText){
+    verBusquedas();
+}
+
+
+function mostrarDetalleMARC (id_red){
+    objAH=new AjaxHelper(updateMostrarDetalleMARC);
+    objAH.url=URL_PREFIX+"/z3950/filtradoZ3950DB.pl";
+    objAH.showOverlay       = true;
+    objAH.id_resultado = id_red;
+
+    objAH.tipo="VER_DETALLE_MARC";
+    objAH.sendToServer();
+}
+
+function updateMostrarDetalleMARC(responseText){
+    $('#detalleMARC').html(responseText);
+    $('#datos_busquedas_div').hide();
+    $('#datos_tabla_div').hide();
+    $('#detalleMARC').show();
+}
+
+
+function importarMARC(id_resultado){
+    objAH=new AjaxHelper(updateImportarMARC);
+    objAH.showOverlay       = true;
+    objAH.url=URL_PREFIX+"/z3950/filtradoZ3950DB.pl";
+    objAH.id_resultado = id_resultado;
+    objAH.tipo="IMPORTAR_MARC";
+    objAH.sendToServer();
+}
+
+function updateImportarMARC(responseText){
+         var Messages= JSONstring.toObject(responseText);
+         setMessages(Messages);
+        $('#datos_busquedas_div').show();
+        $('#datos_tabla_div').show();
+        $('#detalleMARC').hide();
+}
+
+
+$(document).ready(function() {
+    verBusquedas();
+       //     setInterval( "verBusquedas()", 30000 );
+});
+</script>
+
+
+<section class="center-section-form">
+    <form class="form-horizontal" onsubmit="return false;">
+        <fieldset class="resultados_busqueda">
+        <legend class="titulo_legend">[% "B&uacute;squeda Z3950" | i18n %]</legend>
+        
+            <div class="control-group">
+                <label class="control-label" for="titutlo">[% "T&iacute;tulo" | i18n %]</label>
+                <div class="controls"> 
+                      <input type="text" id="titulo" size="20" tabindex=1>
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label" for="autor">    [% "Autor" | i18n %]</label>
+                <div class="controls"> 
+                       <input type="text" id="autor" tabindex=2>
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label" for="autor">[% "Autor" | i18n %]</label>
+                <div class="controls"> 
+                       <input type="text" id="autor" tabindex=3>
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label" for="isbn">  [% "ISBN" | i18n %]</label>
+                <div class="controls"> 
+                       <input type="text" id="isbn" tabindex=4>
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label" for="issn">[% "ISSN" | i18n %]</label>
+                <div class="controls"> 
+                       <input type="text" id="issn" tabindex=5>
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label" for="termino"> [% "B&uacute;squeda General" | i18n %]</label>
+                <div class="controls"> 
+                       <input type="text" id="termino" tabindex=6>
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label" for="pqf">[% "B&uacute;squeda PQF" | i18n %]</label>
+                <div class="controls"> 
+                       <input type="text" id="pqf" tabindex=7>
+                </div>
+            </div>
+
+
+            <div class="form-actions" >      
+               
+                        [% PERL %]
+                                            print C4::AR::Filtros::action_button( 
+                                                                            button       => "btn btn-primary",
+                                                                            action       => "agregarBusquedaZ3950();", 
+                                                                            icon         => "",
+                                                                            title        => "[% 'Buscar' | i18n %]",
+                                                                        ) ;
+
+                        [% END %]
+
+
+
+             </div>
+              
+      </fieldset>
+  </form>
+</section>
+
+<div id="busquedasZ3950"></div>
+<div id="resultadoZ3950"></div>
+[% INCLUDE 'intranet-bottom.inc' %]

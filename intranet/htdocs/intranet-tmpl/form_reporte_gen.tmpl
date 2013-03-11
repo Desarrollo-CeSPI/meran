@@ -1,0 +1,31 @@
+[% INCLUDE 'intranet-top.inc' %] 
+[% INCLUDE 'BootstrapToolkit.inc' %]
+
+[% USE HTML %]
+
+
+<script>
+
+	$(document).ready(function(){
+		$('.tabs').tabs();
+	    $('.alert-message').alert();
+	    $('#modal-from-dom').modal({keyboard: true,backdrop: true,});
+	});
+
+</script>
+
+<ul class="tabs">
+  <li class="active"><a href="#home">Demo toolkit</a></li>
+  <li><a href="#form_demo">Demo Form</a></li>
+  <li><a href="#profile">Reporte de Usuarios</a></li>
+  <li><a href="#settings">Settings</a></li>
+</ul>
+ 
+<div class="pill-content">
+  <div class="active" id="home">[% INCLUDE 'partials/reportes/_demo_toolkit.inc' %]</div>
+  <div id="profile">            [% INCLUDE 'partials/reportes/_reporte_usuarios.inc' %] </div>
+  <div id="form_demo">          [% INCLUDE 'partials/reportes/_form_demo.inc' %]</div>
+  <div id="settings">Settings</div>
+</div>
+
+[% INCLUDE 'intranet-bottom.inc' %]

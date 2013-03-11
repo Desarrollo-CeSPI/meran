@@ -1,0 +1,2837 @@
+
+*** REQUEST ***
+Please use Test::Reporter to report test results - it's the only way to measure
+popularity of distribution.
+
+Checking if your kit is complete...
+Looks good
+Writing Makefile for Apache::Session
+Writing MYMETA.yml and MYMETA.json
+cp lib/Apache/Session/File.pm blib/lib/Apache/Session/File.pm
+cp lib/Apache/Session/Store/Oracle.pm blib/lib/Apache/Session/Store/Oracle.pm
+cp lib/Apache/Session/Store/DB_File.pm blib/lib/Apache/Session/Store/DB_File.pm
+cp lib/Apache/Session/Informix.pm blib/lib/Apache/Session/Informix.pm
+cp lib/Apache/Session/Lock/File.pm blib/lib/Apache/Session/Lock/File.pm
+cp lib/Apache/Session/Generate/ModUsertrack.pm blib/lib/Apache/Session/Generate/ModUsertrack.pm
+cp lib/Apache/Session/Store/DBI.pm blib/lib/Apache/Session/Store/DBI.pm
+cp lib/Apache/Session/MySQL.pm blib/lib/Apache/Session/MySQL.pm
+cp lib/Apache/Session/Serialize/Base64.pm blib/lib/Apache/Session/Serialize/Base64.pm
+cp lib/Apache/Session/Serialize/Sybase.pm blib/lib/Apache/Session/Serialize/Sybase.pm
+cp lib/Apache/Session/Lock/Sybase.pm blib/lib/Apache/Session/Lock/Sybase.pm
+cp lib/Apache/Session/Generate/MD5.pm blib/lib/Apache/Session/Generate/MD5.pm
+cp lib/Apache/Session/Postgres.pm blib/lib/Apache/Session/Postgres.pm
+cp lib/Apache/Session/Sybase.pm blib/lib/Apache/Session/Sybase.pm
+cp lib/Apache/Session/Store/Sybase.pm blib/lib/Apache/Session/Store/Sybase.pm
+cp lib/Apache/Session/Store/File.pm blib/lib/Apache/Session/Store/File.pm
+cp lib/Apache/Session/DB_File.pm blib/lib/Apache/Session/DB_File.pm
+cp lib/Apache/Session/Store/Informix.pm blib/lib/Apache/Session/Store/Informix.pm
+cp lib/Apache/Session.pm blib/lib/Apache/Session.pm
+cp lib/Apache/Session/Store/MySQL.pm blib/lib/Apache/Session/Store/MySQL.pm
+cp lib/Apache/Session/Store/Postgres.pm blib/lib/Apache/Session/Store/Postgres.pm
+cp lib/Apache/Session/Oracle.pm blib/lib/Apache/Session/Oracle.pm
+cp lib/Apache/Session/Generate/ModUniqueId.pm blib/lib/Apache/Session/Generate/ModUniqueId.pm
+cp lib/Apache/Session/Lock/Semaphore.pm blib/lib/Apache/Session/Lock/Semaphore.pm
+cp lib/Apache/Session/Lock/Null.pm blib/lib/Apache/Session/Lock/Null.pm
+cp lib/Apache/Session/Serialize/Storable.pm blib/lib/Apache/Session/Serialize/Storable.pm
+cp lib/Apache/Session/Lock/MySQL.pm blib/lib/Apache/Session/Lock/MySQL.pm
+cp lib/Apache/Session/Flex.pm blib/lib/Apache/Session/Flex.pm
+cp lib/Apache/Session/Serialize/UUEncode.pm blib/lib/Apache/Session/Serialize/UUEncode.pm
+Manifying blib/man3/Apache::Session::File.3pm
+Manifying blib/man3/Apache::Session::Store::Oracle.3pm
+Manifying blib/man3/Apache::Session::Store::DB_File.3pm
+Manifying blib/man3/Apache::Session::Generate::ModUsertrack.3pm
+Manifying blib/man3/Apache::Session::Lock::File.3pm
+Manifying blib/man3/Apache::Session::Informix.3pm
+Manifying blib/man3/Apache::Session::Lock::Sybase.3pm
+Manifying blib/man3/Apache::Session::Serialize::Sybase.3pm
+Manifying blib/man3/Apache::Session::Serialize::Base64.3pm
+Manifying blib/man3/Apache::Session::MySQL.3pm
+Manifying blib/man3/Apache::Session::Generate::MD5.3pm
+Manifying blib/man3/Apache::Session::Postgres.3pm
+Manifying blib/man3/Apache::Session::Store::Sybase.3pm
+Manifying blib/man3/Apache::Session::Sybase.3pm
+Manifying blib/man3/Apache::Session::Store::File.3pm
+Manifying blib/man3/Apache::Session::DB_File.3pm
+Manifying blib/man3/Apache::Session.3pm
+Manifying blib/man3/Apache::Session::Store::Informix.3pm
+Manifying blib/man3/Apache::Session::Store::MySQL.3pm
+Manifying blib/man3/Apache::Session::Store::Postgres.3pm
+Manifying blib/man3/Apache::Session::Oracle.3pm
+Manifying blib/man3/Apache::Session::Generate::ModUniqueId.3pm
+Manifying blib/man3/Apache::Session::Lock::Null.3pm
+Manifying blib/man3/Apache::Session::Lock::Semaphore.3pm
+Manifying blib/man3/Apache::Session::Lock::MySQL.3pm
+Manifying blib/man3/Apache::Session::Serialize::Storable.3pm
+Manifying blib/man3/Apache::Session::Flex.3pm
+Manifying blib/man3/Apache::Session::Serialize::UUEncode.3pm
+Checking if your kit is complete...
+Looks good
+Writing Makefile for Captcha::reCAPTCHA
+Writing MYMETA.yml and MYMETA.json
+cp lib/Captcha/reCAPTCHA.pm blib/lib/Captcha/reCAPTCHA.pm
+Manifying blib/man3/Captcha::reCAPTCHA.3pm
+----------------------------------------
+#### WARNING ####
+
+If you are using custom CGI::Session drivers they may not be compatible
+with the current driver specifications. You will need to make some changes
+to your drivers' code before proceeding with this installation to make it
+compatible with CGI::Session 4.x.
+
+Fortunately, current driver specifications are a lot easier to adapt to.
+Should you have any assistance re-coding your current drivers, please let
+me know.
+
+Current driver specs are documented in CGI/Session/Driver.pm
+
+#### TESTING #####
+
+You are encouraged to run tests for the backend you will be using. The
+database backends that need a customized connection string won't run by
+default. To run them, some environment variables must be set.
+
+The simplest method is to use the standard "DBI_DSN/DBI_USER/DBI_PASS"
+environment variables.
+
+Otherwise, you can set these variables: 
+For PostgreSQL:
+    CGISESS_PG_DSN
+    CGISESS_PG_USER
+    CGISESS_PG_PASS
+
+For MySQL:
+    CGISESS_MYSQL_DSN
+    CGISESS_MYSQL_USER
+    CGISESS_MYSQL_PASS
+    CGISESS_MYSQL_SOCKET
+
+----------------------------------------
+Warning: Module::Metadata::Changes's ini.report.pl failed to generate or update Changelog.ini. 
+----------------------------------------
+'EXTRA_META' is not a known MakeMaker parameter name.
+Writing Makefile for CGI::Session
+Writing MYMETA.yml and MYMETA.json
+Skip blib/lib/CGI/Session/Test/Default.pm (unchanged)
+Skip blib/lib/CGI/Session/Driver/postgresql.pm (unchanged)
+Skip blib/lib/CGI/Session/Driver/sqlite.pm (unchanged)
+Skip blib/lib/CGI/Session/Driver.pm (unchanged)
+Skip blib/lib/CGI/Session/ID/static.pm (unchanged)
+Skip blib/lib/CGI/Session/Serialize/storable.pm (unchanged)
+Skip blib/lib/CGI/Session/Driver/db_file.pm (unchanged)
+Skip blib/lib/CGI/Session/Driver/mysql.pm (unchanged)
+Skip blib/lib/CGI/Session.pm (unchanged)
+Skip blib/lib/CGI/Session/Driver/DBI.pm (unchanged)
+Skip blib/lib/CGI/Session/Tutorial.pm (unchanged)
+Skip blib/lib/CGI/Session/ID/incr.pm (unchanged)
+Skip blib/lib/CGI/Session/Serialize/freezethaw.pm (unchanged)
+Skip blib/lib/CGI/Session/ErrorHandler.pm (unchanged)
+Skip blib/lib/CGI/Session/Serialize/default.pm (unchanged)
+Skip blib/lib/CGI/Session/Driver/file.pm (unchanged)
+Skip blib/lib/CGI/Session/ID/md5.pm (unchanged)
+Manifying blib/man3/CGI::Session::Test::Default.3pm
+Manifying blib/man3/CGI::Session::Driver::postgresql.3pm
+Manifying blib/man3/CGI::Session::Driver::sqlite.3pm
+Manifying blib/man3/CGI::Session::Driver.3pm
+Manifying blib/man3/CGI::Session::Serialize::storable.3pm
+Manifying blib/man3/CGI::Session::ID::static.3pm
+Manifying blib/man3/CGI::Session::Driver::mysql.3pm
+Manifying blib/man3/CGI::Session::Driver::db_file.3pm
+Manifying blib/man3/CGI::Session.3pm
+Manifying blib/man3/CGI::Session::Driver::DBI.3pm
+Manifying blib/man3/CGI::Session::Tutorial.3pm
+Manifying blib/man3/CGI::Session::ID::incr.3pm
+Manifying blib/man3/CGI::Session::Serialize::freezethaw.3pm
+Manifying blib/man3/CGI::Session::ErrorHandler.3pm
+Manifying blib/man3/CGI::Session::Serialize::default.3pm
+Manifying blib/man3/CGI::Session::Driver::file.3pm
+Manifying blib/man3/CGI::Session::ID::md5.3pm
+Checking if your kit is complete...
+Looks good
+Writing Makefile for Chart::OFC2
+Writing MYMETA.yml and MYMETA.json
+cp lib/Chart/OFC2/Title.pm blib/lib/Chart/OFC2/Title.pm
+cp lib/Chart/OFC2/Extremes.pm blib/lib/Chart/OFC2/Extremes.pm
+cp lib/Chart/OFC2/Labels.pm blib/lib/Chart/OFC2/Labels.pm
+cp lib/Chart/OFC2/Scatter.pm blib/lib/Chart/OFC2/Scatter.pm
+cp lib/Chart/OFC2/HBar.pm blib/lib/Chart/OFC2/HBar.pm
+cp lib/Chart/OFC2/Types.pm blib/lib/Chart/OFC2/Types.pm
+cp lib/Chart/OFC2/PieValues.pm blib/lib/Chart/OFC2/PieValues.pm
+cp lib/Chart/OFC2/BarLineBase.pm blib/lib/Chart/OFC2/BarLineBase.pm
+cp lib/Chart/OFC2/Element.pm blib/lib/Chart/OFC2/Element.pm
+cp lib/Chart/OFC2/Pie.pm blib/lib/Chart/OFC2/Pie.pm
+cp lib/Chart/OFC2/ToolTip.pm blib/lib/Chart/OFC2/ToolTip.pm
+cp lib/Chart/OFC2/Axis.pm blib/lib/Chart/OFC2/Axis.pm
+cp lib/Chart/OFC2/HBarValues.pm blib/lib/Chart/OFC2/HBarValues.pm
+cp lib/Chart/OFC2/Bar.pm blib/lib/Chart/OFC2/Bar.pm
+cp lib/Chart/OFC2.pm blib/lib/Chart/OFC2.pm
+cp lib/Chart/OFC2/Line.pm blib/lib/Chart/OFC2/Line.pm
+Manifying blib/man3/Chart::OFC2::Title.3pm
+Manifying blib/man3/Chart::OFC2::Extremes.3pm
+Manifying blib/man3/Chart::OFC2::Labels.3pm
+Manifying blib/man3/Chart::OFC2::Scatter.3pm
+Manifying blib/man3/Chart::OFC2::HBar.3pm
+Manifying blib/man3/Chart::OFC2::Types.3pm
+Manifying blib/man3/Chart::OFC2::PieValues.3pm
+Manifying blib/man3/Chart::OFC2::BarLineBase.3pm
+Manifying blib/man3/Chart::OFC2::Element.3pm
+Manifying blib/man3/Chart::OFC2::Pie.3pm
+Manifying blib/man3/Chart::OFC2::ToolTip.3pm
+Manifying blib/man3/Chart::OFC2::Axis.3pm
+Manifying blib/man3/Chart::OFC2::HBarValues.3pm
+Manifying blib/man3/Chart::OFC2::Bar.3pm
+Manifying blib/man3/Chart::OFC2.3pm
+Manifying blib/man3/Chart::OFC2::Line.3pm
+Checking if your kit is complete...
+Looks good
+Writing Makefile for Crypt::CBC
+Writing MYMETA.yml and MYMETA.json
+cp CBC.pm blib/lib/Crypt/CBC.pm
+Manifying blib/man3/Crypt::CBC.3pm
+Checking if your kit is complete...
+Looks good
+Writing Makefile for Date::Manip
+Writing MYMETA.yml and MYMETA.json
+cp lib/Date/Manip/TZ/inanta00.pm blib/lib/Date/Manip/TZ/inanta00.pm
+cp lib/Date/Manip/TZ/ammend00.pm blib/lib/Date/Manip/TZ/ammend00.pm
+cp lib/Date/Manip/Offset/off245.pm blib/lib/Date/Manip/Offset/off245.pm
+cp lib/Date/Manip/Offset/off401.pm blib/lib/Date/Manip/Offset/off401.pm
+cp lib/Date/Manip/Offset/off136.pm blib/lib/Date/Manip/Offset/off136.pm
+cp lib/Date/Manip/TZ/aftrip00.pm blib/lib/Date/Manip/TZ/aftrip00.pm
+cp lib/Date/Manip/TZ/amboa_00.pm blib/lib/Date/Manip/TZ/amboa_00.pm
+cp lib/Date/Manip/Offset/off213.pm blib/lib/Date/Manip/Offset/off213.pm
+cp lib/Date/Manip/TZ/etgmtp04.pm blib/lib/Date/Manip/TZ/etgmtp04.pm
+cp lib/Date/Manip/Offset/off388.pm blib/lib/Date/Manip/Offset/off388.pm
+cp lib/Date/Manip/Offset/off463.pm blib/lib/Date/Manip/Offset/off463.pm
+cp lib/Date/Manip/Offset/off341.pm blib/lib/Date/Manip/Offset/off341.pm
+cp lib/Date/Manip/TZ/wet00.pm blib/lib/Date/Manip/TZ/wet00.pm
+cp lib/Date/Manip/Offset/off142.pm blib/lib/Date/Manip/Offset/off142.pm
+cp lib/Date/Manip/Offset/off078.pm blib/lib/Date/Manip/Offset/off078.pm
+cp lib/Date/Manip/Offset/off455.pm blib/lib/Date/Manip/Offset/off455.pm
+cp lib/Date/Manip/Changes5.pod blib/lib/Date/Manip/Changes5.pod
+cp lib/Date/Manip/Offset/off337.pm blib/lib/Date/Manip/Offset/off337.pm
+cp lib/Date/Manip/Offset/off064.pm blib/lib/Date/Manip/Offset/off064.pm
+cp lib/Date/Manip/TZ/l00.pm blib/lib/Date/Manip/TZ/l00.pm
+cp lib/Date/Manip/Offset/off102.pm blib/lib/Date/Manip/Offset/off102.pm
+cp lib/Date/Manip/Offset/off386.pm blib/lib/Date/Manip/Offset/off386.pm
+cp lib/Date/Manip/Offset/off083.pm blib/lib/Date/Manip/Offset/off083.pm
+cp lib/Date/Manip/TZ/ammont04.pm blib/lib/Date/Manip/TZ/ammont04.pm
+cp lib/Date/Manip/TZ/etgmtm05.pm blib/lib/Date/Manip/TZ/etgmtm05.pm
+cp lib/Date/Manip/Offset/off205.pm blib/lib/Date/Manip/Offset/off205.pm
+cp lib/Date/Manip/TZ/afnoua00.pm blib/lib/Date/Manip/TZ/afnoua00.pm
+cp lib/Date/Manip/Offset/off217.pm blib/lib/Date/Manip/Offset/off217.pm
+cp lib/Date/Manip/Offset/off324.pm blib/lib/Date/Manip/Offset/off324.pm
+cp lib/Date/Manip/TZ/eumosc00.pm blib/lib/Date/Manip/TZ/eumosc00.pm
+cp lib/Date/Manip/Offset/off076.pm blib/lib/Date/Manip/Offset/off076.pm
+cp lib/Date/Manip/TZ/eusimf00.pm blib/lib/Date/Manip/TZ/eusimf00.pm
+cp lib/Date/Manip/TZ/pafuna00.pm blib/lib/Date/Manip/TZ/pafuna00.pm
+cp lib/Date/Manip/TZ/amnoro00.pm blib/lib/Date/Manip/TZ/amnoro00.pm
+cp lib/Date/Manip/Offset/off223.pm blib/lib/Date/Manip/Offset/off223.pm
+cp lib/Date/Manip/Offset/off394.pm blib/lib/Date/Manip/Offset/off394.pm
+cp lib/Date/Manip/Offset/off414.pm blib/lib/Date/Manip/Offset/off414.pm
+cp lib/Date/Manip/Offset/off332.pm blib/lib/Date/Manip/Offset/off332.pm
+cp lib/Date/Manip/Offset/off117.pm blib/lib/Date/Manip/Offset/off117.pm
+cp lib/Date/Manip/Offset/off379.pm blib/lib/Date/Manip/Offset/off379.pm
+cp lib/Date/Manip/Lang/english.pm blib/lib/Date/Manip/Lang/english.pm
+cp lib/Date/Manip/Offset/off466.pm blib/lib/Date/Manip/Offset/off466.pm
+cp lib/Date/Manip/Offset/off106.pm blib/lib/Date/Manip/Offset/off106.pm
+cp lib/Date/Manip/Offset/off273.pm blib/lib/Date/Manip/Offset/off273.pm
+cp lib/Date/Manip/TZ/pasaip00.pm blib/lib/Date/Manip/TZ/pasaip00.pm
+cp lib/Date/Manip/TZ/afjoha00.pm blib/lib/Date/Manip/TZ/afjoha00.pm
+cp lib/Date/Manip/Offset/off160.pm blib/lib/Date/Manip/Offset/off160.pm
+cp lib/Date/Manip/TZ/ampang00.pm blib/lib/Date/Manip/TZ/ampang00.pm
+cp lib/Date/Manip/TZ/ammonc00.pm blib/lib/Date/Manip/TZ/ammonc00.pm
+cp lib/Date/Manip/TZ/asbrun00.pm blib/lib/Date/Manip/TZ/asbrun00.pm
+cp lib/Date/Manip/TZ/etgmtp03.pm blib/lib/Date/Manip/TZ/etgmtp03.pm
+cp lib/Date/Manip/Offset/off012.pm blib/lib/Date/Manip/Offset/off012.pm
+cp lib/Date/Manip/TZ/afmoga00.pm blib/lib/Date/Manip/TZ/afmoga00.pm
+cp lib/Date/Manip/Offset/off329.pm blib/lib/Date/Manip/Offset/off329.pm
+cp lib/Date/Manip/TZ/aspyon00.pm blib/lib/Date/Manip/TZ/aspyon00.pm
+cp lib/Date/Manip/TZ/euluxe00.pm blib/lib/Date/Manip/TZ/euluxe00.pm
+cp lib/Date/Manip/TZ/euvien00.pm blib/lib/Date/Manip/TZ/euvien00.pm
+cp lib/Date/Manip/Offset/off259.pm blib/lib/Date/Manip/Offset/off259.pm
+cp lib/Date/Manip/Offset/off358.pm blib/lib/Date/Manip/Offset/off358.pm
+cp lib/Date/Manip/Offset/off314.pm blib/lib/Date/Manip/Offset/off314.pm
+cp lib/Date/Manip/Offset/off242.pm blib/lib/Date/Manip/Offset/off242.pm
+cp lib/Date/Manip/TZ/afel_a00.pm blib/lib/Date/Manip/TZ/afel_a00.pm
+cp lib/Date/Manip/Offset/off174.pm blib/lib/Date/Manip/Offset/off174.pm
+cp lib/Date/Manip/Offset/off442.pm blib/lib/Date/Manip/Offset/off442.pm
+cp lib/Date/Manip/Offset/off464.pm blib/lib/Date/Manip/Offset/off464.pm
+cp lib/Date/Manip/TZ/pafaka00.pm blib/lib/Date/Manip/TZ/pafaka00.pm
+cp lib/Date/Manip/TZ/amjuju00.pm blib/lib/Date/Manip/TZ/amjuju00.pm
+cp lib/Date/Manip/TZ/amjune00.pm blib/lib/Date/Manip/TZ/amjune00.pm
+cp lib/Date/Manip/TZ/euwars00.pm blib/lib/Date/Manip/TZ/euwars00.pm
+cp lib/Date/Manip/TZ/inchag00.pm blib/lib/Date/Manip/TZ/inchag00.pm
+cp lib/Date/Manip/TZ/eusofi00.pm blib/lib/Date/Manip/TZ/eusofi00.pm
+cp lib/Date/Manip/Offset/off011.pm blib/lib/Date/Manip/Offset/off011.pm
+cp lib/Date/Manip/Offset/off312.pm blib/lib/Date/Manip/Offset/off312.pm
+cp lib/Date/Manip/TZ/a00.pm blib/lib/Date/Manip/TZ/a00.pm
+cp lib/Date/Manip/TZ/atcape00.pm blib/lib/Date/Manip/TZ/atcape00.pm
+cp lib/Date/Manip/TZ/pahono00.pm blib/lib/Date/Manip/TZ/pahono00.pm
+cp lib/Date/Manip/TZ/ashong00.pm blib/lib/Date/Manip/TZ/ashong00.pm
+cp lib/Date/Manip/Offset/off187.pm blib/lib/Date/Manip/Offset/off187.pm
+cp lib/Date/Manip/Offset/off468.pm blib/lib/Date/Manip/Offset/off468.pm
+cp lib/Date/Manip/Offset/off251.pm blib/lib/Date/Manip/Offset/off251.pm
+cp lib/Date/Manip/TZ/asyaku00.pm blib/lib/Date/Manip/TZ/asyaku00.pm
+cp lib/Date/Manip/Offset/off261.pm blib/lib/Date/Manip/Offset/off261.pm
+cp lib/Date/Manip/TZ/assama00.pm blib/lib/Date/Manip/TZ/assama00.pm
+cp lib/Date/Manip/Offset/off304.pm blib/lib/Date/Manip/Offset/off304.pm
+cp lib/Date/Manip/Offset/off470.pm blib/lib/Date/Manip/Offset/off470.pm
+cp lib/Date/Manip/Offset/off108.pm blib/lib/Date/Manip/Offset/off108.pm
+cp lib/Date/Manip/Offset/off041.pm blib/lib/Date/Manip/Offset/off041.pm
+cp lib/Date/Manip.pm blib/lib/Date/Manip.pm
+cp lib/Date/Manip/Offset/off181.pm blib/lib/Date/Manip/Offset/off181.pm
+cp lib/Date/Manip/TZ/atsout00.pm blib/lib/Date/Manip/TZ/atsout00.pm
+cp lib/Date/Manip/Offset/off105.pm blib/lib/Date/Manip/Offset/off105.pm
+cp lib/Date/Manip/TZ/amdaws00.pm blib/lib/Date/Manip/TZ/amdaws00.pm
+cp lib/Date/Manip/TZ/anmacq00.pm blib/lib/Date/Manip/TZ/anmacq00.pm
+cp lib/Date/Manip/Offset/off074.pm blib/lib/Date/Manip/Offset/off074.pm
+cp lib/Date/Manip/Offset/off384.pm blib/lib/Date/Manip/Offset/off384.pm
+cp lib/Date/Manip/TZ/ammeri00.pm blib/lib/Date/Manip/TZ/ammeri00.pm
+cp lib/Date/Manip/Offset/off033.pm blib/lib/Date/Manip/Offset/off033.pm
+cp lib/Date/Manip/DM6.pod blib/lib/Date/Manip/DM6.pod
+cp lib/Date/Manip/Offset/off364.pm blib/lib/Date/Manip/Offset/off364.pm
+cp lib/Date/Manip/TZ/amhali00.pm blib/lib/Date/Manip/TZ/amhali00.pm
+cp lib/Date/Manip/Offset/off144.pm blib/lib/Date/Manip/Offset/off144.pm
+cp lib/Date/Manip/TZ/ascolo00.pm blib/lib/Date/Manip/TZ/ascolo00.pm
+cp lib/Date/Manip/Offset/off408.pm blib/lib/Date/Manip/Offset/off408.pm
+cp lib/Date/Manip/Offset/off322.pm blib/lib/Date/Manip/Offset/off322.pm
+cp lib/Date/Manip/Offset/off301.pm blib/lib/Date/Manip/Offset/off301.pm
+cp lib/Date/Manip/Offset/off327.pm blib/lib/Date/Manip/Offset/off327.pm
+cp lib/Date/Manip/TZ/assing00.pm blib/lib/Date/Manip/TZ/assing00.pm
+cp lib/Date/Manip/TZ/amreso00.pm blib/lib/Date/Manip/TZ/amreso00.pm
+cp lib/Date/Manip/TZ/amojin00.pm blib/lib/Date/Manip/TZ/amojin00.pm
+cp lib/Date/Manip/Offset/off260.pm blib/lib/Date/Manip/Offset/off260.pm
+cp lib/Date/Manip/TZ/afniam00.pm blib/lib/Date/Manip/TZ/afniam00.pm
+cp lib/Date/Manip/Offset/off276.pm blib/lib/Date/Manip/Offset/off276.pm
+cp lib/Date/Manip/Offset/off233.pm blib/lib/Date/Manip/Offset/off233.pm
+cp lib/Date/Manip/TZ/afbiss00.pm blib/lib/Date/Manip/TZ/afbiss00.pm
+cp lib/Date/Manip/TZ/astoky00.pm blib/lib/Date/Manip/TZ/astoky00.pm
+cp lib/Date/Manip/TZ/amsalt00.pm blib/lib/Date/Manip/TZ/amsalt00.pm
+cp lib/Date/Manip/Offset/off298.pm blib/lib/Date/Manip/Offset/off298.pm
+cp lib/Date/Manip/TZ/ampana00.pm blib/lib/Date/Manip/TZ/ampana00.pm
+cp lib/Date/Manip/Offset/off189.pm blib/lib/Date/Manip/Offset/off189.pm
+cp lib/Date/Manip/Offset/off232.pm blib/lib/Date/Manip/Offset/off232.pm
+cp lib/Date/Manip/TZ/amswif00.pm blib/lib/Date/Manip/TZ/amswif00.pm
+cp lib/Date/Manip/Offset/off246.pm blib/lib/Date/Manip/Offset/off246.pm
+cp lib/Date/Manip/TZ/incoco00.pm blib/lib/Date/Manip/TZ/incoco00.pm
+cp lib/Date/Manip/Offset/off271.pm blib/lib/Date/Manip/Offset/off271.pm
+cp lib/Date/Manip/TZ/y00.pm blib/lib/Date/Manip/TZ/y00.pm
+cp lib/Date/Manip/TZ/ammont01.pm blib/lib/Date/Manip/TZ/ammont01.pm
+cp lib/Date/Manip/TZ/astaip00.pm blib/lib/Date/Manip/TZ/astaip00.pm
+cp lib/Date/Manip/Offset/off048.pm blib/lib/Date/Manip/Offset/off048.pm
+cp lib/Date/Manip/Offset/off480.pm blib/lib/Date/Manip/Offset/off480.pm
+cp lib/Date/Manip/TZ/pachuu00.pm blib/lib/Date/Manip/TZ/pachuu00.pm
+cp lib/Date/Manip/TZ/amatik00.pm blib/lib/Date/Manip/TZ/amatik00.pm
+cp lib/Date/Manip/Offset/off061.pm blib/lib/Date/Manip/Offset/off061.pm
+cp lib/Date/Manip/TZ/amsant02.pm blib/lib/Date/Manip/TZ/amsant02.pm
+cp lib/Date/Manip/TZ/afdoua00.pm blib/lib/Date/Manip/TZ/afdoua00.pm
+cp lib/Date/Manip/TZ/asaqto00.pm blib/lib/Date/Manip/TZ/asaqto00.pm
+cp lib/Date/Manip/TZ/asmusc00.pm blib/lib/Date/Manip/TZ/asmusc00.pm
+cp lib/Date/Manip/TZ/amcord00.pm blib/lib/Date/Manip/TZ/amcord00.pm
+cp lib/Date/Manip/TZ/w00.pm blib/lib/Date/Manip/TZ/w00.pm
+cp lib/Date/Manip/Offset/off215.pm blib/lib/Date/Manip/Offset/off215.pm
+cp lib/Date/Manip/Offset/off077.pm blib/lib/Date/Manip/Offset/off077.pm
+cp lib/Date/Manip/TZ/pararo00.pm blib/lib/Date/Manip/TZ/pararo00.pm
+cp lib/Date/Manip/TZ/atst_h00.pm blib/lib/Date/Manip/TZ/atst_h00.pm
+cp lib/Date/Manip/Offset/off338.pm blib/lib/Date/Manip/Offset/off338.pm
+cp lib/Date/Manip/TZ/paende00.pm blib/lib/Date/Manip/TZ/paende00.pm
+cp lib/Date/Manip/Offset/off448.pm blib/lib/Date/Manip/Offset/off448.pm
+cp lib/Date/Manip/TZ/ambahi00.pm blib/lib/Date/Manip/TZ/ambahi00.pm
+cp lib/Date/Manip/TZ/aulind00.pm blib/lib/Date/Manip/TZ/aulind00.pm
+cp lib/Date/Manip/TZ/aubris00.pm blib/lib/Date/Manip/TZ/aubris00.pm
+cp lib/Date/Manip/TZ/pakosr00.pm blib/lib/Date/Manip/TZ/pakosr00.pm
+cp lib/Date/Manip/Recur.pm blib/lib/Date/Manip/Recur.pm
+cp lib/Date/Manip/Offset/off198.pm blib/lib/Date/Manip/Offset/off198.pm
+cp lib/Date/Manip/Offset/off130.pm blib/lib/Date/Manip/Offset/off130.pm
+cp lib/Date/Manip/TZ/etgmtp02.pm blib/lib/Date/Manip/TZ/etgmtp02.pm
+cp lib/Date/Manip/Offset/off306.pm blib/lib/Date/Manip/Offset/off306.pm
+cp lib/Date/Manip/TZ/asaqta00.pm blib/lib/Date/Manip/TZ/asaqta00.pm
+cp lib/Date/Manip/Offset/off036.pm blib/lib/Date/Manip/Offset/off036.pm
+cp lib/Date/Manip/Offset/off431.pm blib/lib/Date/Manip/Offset/off431.pm
+cp lib/Date/Manip/TZ/etgmtm08.pm blib/lib/Date/Manip/TZ/etgmtm08.pm
+cp lib/Date/Manip/Offset/off022.pm blib/lib/Date/Manip/Offset/off022.pm
+cp lib/Date/Manip/Offset/off179.pm blib/lib/Date/Manip/Offset/off179.pm
+cp lib/Date/Manip/Offset/off010.pm blib/lib/Date/Manip/Offset/off010.pm
+cp lib/Date/Manip/TZ/afalgi00.pm blib/lib/Date/Manip/TZ/afalgi00.pm
+cp lib/Date/Manip/Offset/off059.pm blib/lib/Date/Manip/Offset/off059.pm
+cp lib/Date/Manip/TZ/amveva00.pm blib/lib/Date/Manip/TZ/amveva00.pm
+cp lib/Date/Manip/Offset/off371.pm blib/lib/Date/Manip/Offset/off371.pm
+cp lib/Date/Manip/Offset/off278.pm blib/lib/Date/Manip/Offset/off278.pm
+cp lib/Date/Manip/TZ/amregi00.pm blib/lib/Date/Manip/TZ/amregi00.pm
+cp lib/Date/Manip/TZ/aupert00.pm blib/lib/Date/Manip/TZ/aupert00.pm
+cp lib/Date/Manip/TZ/amsitk00.pm blib/lib/Date/Manip/TZ/amsitk00.pm
+cp lib/Date/Manip/TZ/r00.pm blib/lib/Date/Manip/TZ/r00.pm
+cp lib/Date/Manip/TZ/euvolg00.pm blib/lib/Date/Manip/TZ/euvolg00.pm
+cp lib/Date/Manip/TZ/inreun00.pm blib/lib/Date/Manip/TZ/inreun00.pm
+cp lib/Date/Manip/Offset/off310.pm blib/lib/Date/Manip/Offset/off310.pm
+cp lib/Date/Manip/TZ/askual00.pm blib/lib/Date/Manip/TZ/askual00.pm
+cp lib/Date/Manip/Offset/off001.pm blib/lib/Date/Manip/Offset/off001.pm
+cp lib/Date/Manip/TZ/afceut00.pm blib/lib/Date/Manip/TZ/afceut00.pm
+cp lib/Date/Manip/TZ/afdar_00.pm blib/lib/Date/Manip/TZ/afdar_00.pm
+cp lib/Date/Manip/Offset/off366.pm blib/lib/Date/Manip/Offset/off366.pm
+cp lib/Date/Manip/Offset/off352.pm blib/lib/Date/Manip/Offset/off352.pm
+cp lib/Date/Manip/Offset/off360.pm blib/lib/Date/Manip/Offset/off360.pm
+cp lib/Date/Manip/TZ/etgmtm04.pm blib/lib/Date/Manip/TZ/etgmtm04.pm
+cp lib/Date/Manip/TZ/ambuen00.pm blib/lib/Date/Manip/TZ/ambuen00.pm
+cp lib/Date/Manip/TZ/ampete00.pm blib/lib/Date/Manip/TZ/ampete00.pm
+cp lib/Date/Manip/Offset/off472.pm blib/lib/Date/Manip/Offset/off472.pm
+cp lib/Date/Manip/Offset/off254.pm blib/lib/Date/Manip/Offset/off254.pm
+cp lib/Date/Manip/TZ/amnome00.pm blib/lib/Date/Manip/TZ/amnome00.pm
+cp lib/Date/Manip/TZ/asrang00.pm blib/lib/Date/Manip/TZ/asrang00.pm
+cp lib/Date/Manip/TZ/asdama00.pm blib/lib/Date/Manip/TZ/asdama00.pm
+cp lib/Date/Manip/TZ/etgmtm06.pm blib/lib/Date/Manip/TZ/etgmtm06.pm
+cp lib/Date/Manip/TZ/asmaka00.pm blib/lib/Date/Manip/TZ/asmaka00.pm
+cp lib/Date/Manip/TZ/etgmtm10.pm blib/lib/Date/Manip/TZ/etgmtm10.pm
+cp lib/Date/Manip/TZ/eucope00.pm blib/lib/Date/Manip/TZ/eucope00.pm
+cp lib/Date/Manip/Offset/off479.pm blib/lib/Date/Manip/Offset/off479.pm
+cp lib/Date/Manip/TZ/asdush00.pm blib/lib/Date/Manip/TZ/asdush00.pm
+cp lib/Date/Manip/TZ/asho_c00.pm blib/lib/Date/Manip/TZ/asho_c00.pm
+cp lib/Date/Manip/TZ/amnew_01.pm blib/lib/Date/Manip/TZ/amnew_01.pm
+cp lib/Date/Manip/TZ/eukali00.pm blib/lib/Date/Manip/TZ/eukali00.pm
+cp lib/Date/Manip/Offset/off094.pm blib/lib/Date/Manip/Offset/off094.pm
+cp lib/Date/Manip/Lang/swedish.pm blib/lib/Date/Manip/Lang/swedish.pm
+cp lib/Date/Manip/Offset/off374.pm blib/lib/Date/Manip/Offset/off374.pm
+cp lib/Date/Manip/TZ/papohn00.pm blib/lib/Date/Manip/TZ/papohn00.pm
+cp lib/Date/Manip/Offset/off016.pm blib/lib/Date/Manip/Offset/off016.pm
+cp lib/Date/Manip/TZ/amadak00.pm blib/lib/Date/Manip/TZ/amadak00.pm
+cp lib/Date/Manip/TZ/amanti00.pm blib/lib/Date/Manip/TZ/amanti00.pm
+cp lib/Date/Manip/TZ/n00.pm blib/lib/Date/Manip/TZ/n00.pm
+cp lib/Date/Manip/TZ/etgmtp07.pm blib/lib/Date/Manip/TZ/etgmtp07.pm
+cp lib/Date/Manip/Offset/off376.pm blib/lib/Date/Manip/Offset/off376.pm
+cp lib/Date/Manip/Offset/off155.pm blib/lib/Date/Manip/Offset/off155.pm
+cp lib/Date/Manip/TZ/eubuda00.pm blib/lib/Date/Manip/TZ/eubuda00.pm
+cp lib/Date/Manip/TZ/afasma00.pm blib/lib/Date/Manip/TZ/afasma00.pm
+cp lib/Date/Manip/TZ/amcara00.pm blib/lib/Date/Manip/TZ/amcara00.pm
+cp lib/Date/Manip/TZ/affree00.pm blib/lib/Date/Manip/TZ/affree00.pm
+cp lib/Date/Manip/Offset/off131.pm blib/lib/Date/Manip/Offset/off131.pm
+cp lib/Date/Manip/TZ/pamaju00.pm blib/lib/Date/Manip/TZ/pamaju00.pm
+cp lib/Date/Manip/TZ/aminuv00.pm blib/lib/Date/Manip/TZ/aminuv00.pm
+cp lib/Date/Manip/Offset/off469.pm blib/lib/Date/Manip/Offset/off469.pm
+cp lib/Date/Manip/Offset/off096.pm blib/lib/Date/Manip/Offset/off096.pm
+cp lib/Date/Manip/Offset/off053.pm blib/lib/Date/Manip/Offset/off053.pm
+cp lib/Date/Manip/Offset/off340.pm blib/lib/Date/Manip/Offset/off340.pm
+cp lib/Date/Manip/Offset/off367.pm blib/lib/Date/Manip/Offset/off367.pm
+cp lib/Date/Manip/TZ/paguam00.pm blib/lib/Date/Manip/TZ/paguam00.pm
+cp lib/Date/Manip/Offset/off433.pm blib/lib/Date/Manip/Offset/off433.pm
+cp lib/Date/Manip/Offset/off219.pm blib/lib/Date/Manip/Offset/off219.pm
+cp lib/Date/Manip/TZ/anpalm00.pm blib/lib/Date/Manip/TZ/anpalm00.pm
+cp lib/Date/Manip/TZ/aftuni00.pm blib/lib/Date/Manip/TZ/aftuni00.pm
+cp lib/Date/Manip/TZ/eumona00.pm blib/lib/Date/Manip/TZ/eumona00.pm
+cp lib/Date/Manip/TZ/etgmtp05.pm blib/lib/Date/Manip/TZ/etgmtp05.pm
+cp lib/Date/Manip/Offset/off280.pm blib/lib/Date/Manip/Offset/off280.pm
+cp lib/Date/Manip/TZ/ampara00.pm blib/lib/Date/Manip/TZ/ampara00.pm
+cp lib/Date/Manip/TZ/pagamb00.pm blib/lib/Date/Manip/TZ/pagamb00.pm
+cp lib/Date/Manip/TZ/amst_t00.pm blib/lib/Date/Manip/TZ/amst_t00.pm
+cp lib/Date/Manip/Offset/off346.pm blib/lib/Date/Manip/Offset/off346.pm
+cp lib/Date/Manip/Offset/off125.pm blib/lib/Date/Manip/Offset/off125.pm
+cp lib/Date/Manip/Offset/off164.pm blib/lib/Date/Manip/Offset/off164.pm
+cp lib/Date/Manip/TZ/ammont02.pm blib/lib/Date/Manip/TZ/ammont02.pm
+cp lib/Date/Manip/Offset/off225.pm blib/lib/Date/Manip/Offset/off225.pm
+cp lib/Date/Manip/TZ/papala00.pm blib/lib/Date/Manip/TZ/papala00.pm
+cp lib/Date/Manip/TZ/amasun00.pm blib/lib/Date/Manip/TZ/amasun00.pm
+cp lib/Date/Manip/TZ/aubrok00.pm blib/lib/Date/Manip/TZ/aubrok00.pm
+cp lib/Date/Manip/TZ/asvlad00.pm blib/lib/Date/Manip/TZ/asvlad00.pm
+cp lib/Date/Manip/Offset/off101.pm blib/lib/Date/Manip/Offset/off101.pm
+cp lib/Date/Manip/Offset/off336.pm blib/lib/Date/Manip/Offset/off336.pm
+cp lib/Date/Manip/Zones.pm blib/lib/Date/Manip/Zones.pm
+cp lib/Date/Manip/TZ/anmaws00.pm blib/lib/Date/Manip/TZ/anmaws00.pm
+cp lib/Date/Manip/TZdata.pod blib/lib/Date/Manip/TZdata.pod
+cp lib/Date/Manip/TZ/aflibr00.pm blib/lib/Date/Manip/TZ/aflibr00.pm
+cp lib/Date/Manip/Offset/off231.pm blib/lib/Date/Manip/Offset/off231.pm
+cp lib/Date/Manip/Offset/off034.pm blib/lib/Date/Manip/Offset/off034.pm
+cp lib/Date/Manip/Offset/off402.pm blib/lib/Date/Manip/Offset/off402.pm
+cp lib/Date/Manip/Offset/off270.pm blib/lib/Date/Manip/Offset/off270.pm
+cp lib/Date/Manip/Offset/off383.pm blib/lib/Date/Manip/Offset/off383.pm
+cp lib/Date/Manip/Offset/off369.pm blib/lib/Date/Manip/Offset/off369.pm
+cp lib/Date/Manip/TZ/audarw00.pm blib/lib/Date/Manip/TZ/audarw00.pm
+cp lib/Date/Manip/Offset/off434.pm blib/lib/Date/Manip/Offset/off434.pm
+cp lib/Date/Manip/TZ/amgren00.pm blib/lib/Date/Manip/TZ/amgren00.pm
+cp lib/Date/Manip/Offset/off362.pm blib/lib/Date/Manip/Offset/off362.pm
+cp lib/Date/Manip/Offset/off361.pm blib/lib/Date/Manip/Offset/off361.pm
+cp lib/Date/Manip/Offset/off285.pm blib/lib/Date/Manip/Offset/off285.pm
+cp lib/Date/Manip/TZ/ammata00.pm blib/lib/Date/Manip/TZ/ammata00.pm
+cp lib/Date/Manip/TZ/amtegu00.pm blib/lib/Date/Manip/TZ/amtegu00.pm
+cp lib/Date/Manip/Offset/off104.pm blib/lib/Date/Manip/Offset/off104.pm
+cp lib/Date/Manip/TZ/asyere00.pm blib/lib/Date/Manip/TZ/asyere00.pm
+cp lib/Date/Manip/Lang/index.pm blib/lib/Date/Manip/Lang/index.pm
+cp lib/Date/Manip/TZ/amrank00.pm blib/lib/Date/Manip/TZ/amrank00.pm
+cp lib/Date/Manip/Offset/off062.pm blib/lib/Date/Manip/Offset/off062.pm
+cp lib/Date/Manip/Offset/off167.pm blib/lib/Date/Manip/Offset/off167.pm
+cp lib/Date/Manip/Offset/off221.pm blib/lib/Date/Manip/Offset/off221.pm
+cp lib/Date/Manip/TZ/pagala00.pm blib/lib/Date/Manip/TZ/pagala00.pm
+cp lib/Date/Manip/Offset/off128.pm blib/lib/Date/Manip/Offset/off128.pm
+cp lib/Date/Manip/TZ/amtoro00.pm blib/lib/Date/Manip/TZ/amtoro00.pm
+cp lib/Date/Manip/Offset/off423.pm blib/lib/Date/Manip/Offset/off423.pm
+cp lib/Date/Manip/Offset/off035.pm blib/lib/Date/Manip/Offset/off035.pm
+cp lib/Date/Manip/TZ/amlima00.pm blib/lib/Date/Manip/TZ/amlima00.pm
+cp lib/Date/Manip/Offset/off073.pm blib/lib/Date/Manip/Offset/off073.pm
+cp lib/Date/Manip/Offset/off005.pm blib/lib/Date/Manip/Offset/off005.pm
+cp lib/Date/Manip/Offset/off399.pm blib/lib/Date/Manip/Offset/off399.pm
+cp lib/Date/Manip/Offset/off415.pm blib/lib/Date/Manip/Offset/off415.pm
+cp lib/Date/Manip/Offset/off449.pm blib/lib/Date/Manip/Offset/off449.pm
+cp lib/Date/Manip/Lang/swedish.pod blib/lib/Date/Manip/Lang/swedish.pod
+cp lib/Date/Manip/Offset/off089.pm blib/lib/Date/Manip/Offset/off089.pm
+cp lib/Date/Manip/TZ/afkins00.pm blib/lib/Date/Manip/TZ/afkins00.pm
+cp lib/Date/Manip/TZ/atcana00.pm blib/lib/Date/Manip/TZ/atcana00.pm
+cp lib/Date/Manip/Offset/off323.pm blib/lib/Date/Manip/Offset/off323.pm
+cp lib/Date/Manip/Offset/off397.pm blib/lib/Date/Manip/Offset/off397.pm
+cp lib/Date/Manip/TZ/askash00.pm blib/lib/Date/Manip/TZ/askash00.pm
+cp lib/Date/Manip/TZ/asnico00.pm blib/lib/Date/Manip/TZ/asnico00.pm
+cp lib/Date/Manip/TZ/asjeru00.pm blib/lib/Date/Manip/TZ/asjeru00.pm
+cp lib/Date/Manip/Offset/off120.pm blib/lib/Date/Manip/Offset/off120.pm
+cp lib/Date/Manip/Offset/off190.pm blib/lib/Date/Manip/Offset/off190.pm
+cp lib/Date/Manip/TZ/q00.pm blib/lib/Date/Manip/TZ/q00.pm
+cp lib/Date/Manip/TZ/etgmtp01.pm blib/lib/Date/Manip/TZ/etgmtp01.pm
+cp lib/Date/Manip/TZ/amanch00.pm blib/lib/Date/Manip/TZ/amanch00.pm
+cp lib/Date/Manip/Offset/off238.pm blib/lib/Date/Manip/Offset/off238.pm
+cp lib/Date/Manip/Offset/off389.pm blib/lib/Date/Manip/Offset/off389.pm
+cp lib/Date/Manip/TZ/asphno00.pm blib/lib/Date/Manip/TZ/asphno00.pm
+cp lib/Date/Manip/TZ/afdaka00.pm blib/lib/Date/Manip/TZ/afdaka00.pm
+cp lib/Date/Manip/TZ/amloui00.pm blib/lib/Date/Manip/TZ/amloui00.pm
+cp lib/Date/Manip/Offset/off482.pm blib/lib/Date/Manip/Offset/off482.pm
+cp lib/Date/Manip/Offset/off339.pm blib/lib/Date/Manip/Offset/off339.pm
+cp lib/Date/Manip/TZ/asyeka00.pm blib/lib/Date/Manip/TZ/asyeka00.pm
+cp lib/Date/Manip/TZ/amthul00.pm blib/lib/Date/Manip/TZ/amthul00.pm
+cp lib/Date/Manip/Offset/off112.pm blib/lib/Date/Manip/Offset/off112.pm
+cp lib/Date/Manip/TZ/amushu00.pm blib/lib/Date/Manip/TZ/amushu00.pm
+cp lib/Date/Manip/TZ/atazor00.pm blib/lib/Date/Manip/TZ/atazor00.pm
+cp lib/Date/Manip/TZ/euista00.pm blib/lib/Date/Manip/TZ/euista00.pm
+cp lib/Date/Manip/Offset/off159.pm blib/lib/Date/Manip/Offset/off159.pm
+cp lib/Date/Manip/Offset/off292.pm blib/lib/Date/Manip/Offset/off292.pm
+cp lib/Date/Manip/TZ/aflubu00.pm blib/lib/Date/Manip/TZ/aflubu00.pm
+cp lib/Date/Manip/Offset/off220.pm blib/lib/Date/Manip/Offset/off220.pm
+cp lib/Date/Manip/TZ/asanad00.pm blib/lib/Date/Manip/TZ/asanad00.pm
+cp lib/Date/Manip/Offset/off429.pm blib/lib/Date/Manip/Offset/off429.pm
+cp lib/Date/Manip/TZ/asjaka00.pm blib/lib/Date/Manip/TZ/asjaka00.pm
+cp lib/Date/Manip/Offset/off093.pm blib/lib/Date/Manip/Offset/off093.pm
+cp lib/Date/Manip/Offset/off313.pm blib/lib/Date/Manip/Offset/off313.pm
+cp lib/Date/Manip/Offset/off049.pm blib/lib/Date/Manip/Offset/off049.pm
+cp lib/Date/Manip/Offset/off268.pm blib/lib/Date/Manip/Offset/off268.pm
+cp lib/Date/Manip/Offset/off203.pm blib/lib/Date/Manip/Offset/off203.pm
+cp lib/Date/Manip/Offset/off014.pm blib/lib/Date/Manip/Offset/off014.pm
+cp lib/Date/Manip/Offset/off169.pm blib/lib/Date/Manip/Offset/off169.pm
+cp lib/Date/Manip/Offset/off409.pm blib/lib/Date/Manip/Offset/off409.pm
+cp lib/Date/Manip/Offset/off228.pm blib/lib/Date/Manip/Offset/off228.pm
+cp lib/Date/Manip/TZ/eulisb00.pm blib/lib/Date/Manip/TZ/eulisb00.pm
+cp lib/Date/Manip/Offset/off412.pm blib/lib/Date/Manip/Offset/off412.pm
+cp lib/Date/Manip/Offset/off013.pm blib/lib/Date/Manip/Offset/off013.pm
+cp lib/Date/Manip/Lang/norwegian.pm blib/lib/Date/Manip/Lang/norwegian.pm
+cp lib/Date/Manip/TZ/amarag00.pm blib/lib/Date/Manip/TZ/amarag00.pm
+cp lib/Date/Manip/TZ/c00.pm blib/lib/Date/Manip/TZ/c00.pm
+cp lib/Date/Manip/TZ/pawall00.pm blib/lib/Date/Manip/TZ/pawall00.pm
+cp lib/Date/Manip/TZ/asmaca00.pm blib/lib/Date/Manip/TZ/asmaca00.pm
+cp lib/Date/Manip/Offset/off095.pm blib/lib/Date/Manip/Offset/off095.pm
+cp lib/Date/Manip/Obj.pm blib/lib/Date/Manip/Obj.pm
+cp lib/Date/Manip/Offset/off347.pm blib/lib/Date/Manip/Offset/off347.pm
+cp lib/Date/Manip/Offset/off210.pm blib/lib/Date/Manip/Offset/off210.pm
+cp lib/Date/Manip/Base.pod blib/lib/Date/Manip/Base.pod
+cp lib/Date/Manip/TZ/asriya00.pm blib/lib/Date/Manip/TZ/asriya00.pm
+cp lib/Date/Manip/TZ/utc00.pm blib/lib/Date/Manip/TZ/utc00.pm
+cp lib/Date/Manip/Offset/off256.pm blib/lib/Date/Manip/Offset/off256.pm
+cp lib/Date/Manip/Offset/off186.pm blib/lib/Date/Manip/Offset/off186.pm
+cp lib/Date/Manip/Offset/off018.pm blib/lib/Date/Manip/Offset/off018.pm
+cp lib/Date/Manip/TZ/ameiru00.pm blib/lib/Date/Manip/TZ/ameiru00.pm
+cp lib/Date/Manip/TZ/patahi00.pm blib/lib/Date/Manip/TZ/patahi00.pm
+cp lib/Date/Manip/Lang/norwegian.pod blib/lib/Date/Manip/Lang/norwegian.pod
+cp lib/Date/Manip/TZ/eumadr00.pm blib/lib/Date/Manip/TZ/eumadr00.pm
+cp lib/Date/Manip/TZ/amblan00.pm blib/lib/Date/Manip/TZ/amblan00.pm
+cp lib/Date/Manip/Changes5to6.pod blib/lib/Date/Manip/Changes5to6.pod
+cp lib/Date/Manip/Lang/finnish.pod blib/lib/Date/Manip/Lang/finnish.pod
+cp lib/Date/Manip/TZ/h00.pm blib/lib/Date/Manip/TZ/h00.pm
+cp lib/Date/Manip/TZ/amport02.pm blib/lib/Date/Manip/TZ/amport02.pm
+cp lib/Date/Manip/Offset/off355.pm blib/lib/Date/Manip/Offset/off355.pm
+cp lib/Date/Manip/TZ/e00.pm blib/lib/Date/Manip/TZ/e00.pm
+cp lib/Date/Manip/TZ/amyell00.pm blib/lib/Date/Manip/TZ/amyell00.pm
+cp lib/Date/Manip/Offset/off478.pm blib/lib/Date/Manip/Offset/off478.pm
+cp lib/Date/Manip/TZ/aflago00.pm blib/lib/Date/Manip/TZ/aflago00.pm
+cp lib/Date/Manip/Offset/off368.pm blib/lib/Date/Manip/Offset/off368.pm
+cp lib/Date/Manip/Offset/off446.pm blib/lib/Date/Manip/Offset/off446.pm
+cp lib/Date/Manip/TZ/eubrus00.pm blib/lib/Date/Manip/TZ/eubrus00.pm
+cp lib/Date/Manip/Offset/off400.pm blib/lib/Date/Manip/Offset/off400.pm
+cp lib/Date/Manip/TZ/eutira00.pm blib/lib/Date/Manip/TZ/eutira00.pm
+cp lib/Date/Manip/TZ/amfort00.pm blib/lib/Date/Manip/TZ/amfort00.pm
+cp lib/Date/Manip/TZ/amcamb00.pm blib/lib/Date/Manip/TZ/amcamb00.pm
+cp lib/Date/Manip/Offset/off381.pm blib/lib/Date/Manip/Offset/off381.pm
+cp lib/Date/Manip/Offset/off420.pm blib/lib/Date/Manip/Offset/off420.pm
+cp lib/Date/Manip/Offset/off222.pm blib/lib/Date/Manip/Offset/off222.pm
+cp lib/Date/Manip/TZ/afwind00.pm blib/lib/Date/Manip/TZ/afwind00.pm
+cp lib/Date/Manip/Offset/off241.pm blib/lib/Date/Manip/Offset/off241.pm
+cp lib/Date/Manip/TZ/etgmtm11.pm blib/lib/Date/Manip/TZ/etgmtm11.pm
+cp lib/Date/Manip/Lang/german.pod blib/lib/Date/Manip/Lang/german.pod
+cp lib/Date/Manip/TZ/afsao_00.pm blib/lib/Date/Manip/TZ/afsao_00.pm
+cp lib/Date/Manip/Offset/off451.pm blib/lib/Date/Manip/Offset/off451.pm
+cp lib/Date/Manip/Offset/off218.pm blib/lib/Date/Manip/Offset/off218.pm
+cp lib/Date/Manip/Offset/off032.pm blib/lib/Date/Manip/Offset/off032.pm
+cp lib/Date/Manip/Offset/off378.pm blib/lib/Date/Manip/Offset/off378.pm
+cp lib/Date/Manip/Offset/off229.pm blib/lib/Date/Manip/Offset/off229.pm
+cp lib/Date/Manip/Offset/off098.pm blib/lib/Date/Manip/Offset/off098.pm
+cp lib/Date/Manip/Offset/off403.pm blib/lib/Date/Manip/Offset/off403.pm
+cp lib/Date/Manip/TZ/etgmtm09.pm blib/lib/Date/Manip/TZ/etgmtm09.pm
+cp lib/Date/Manip/Lang/finnish.pm blib/lib/Date/Manip/Lang/finnish.pm
+cp lib/Date/Manip/Offset/off082.pm blib/lib/Date/Manip/Offset/off082.pm
+cp lib/Date/Manip/Offset/off343.pm blib/lib/Date/Manip/Offset/off343.pm
+cp lib/Date/Manip/Offset/off182.pm blib/lib/Date/Manip/Offset/off182.pm
+cp lib/Date/Manip/Offset/off258.pm blib/lib/Date/Manip/Offset/off258.pm
+cp lib/Date/Manip/Problems.pod blib/lib/Date/Manip/Problems.pod
+cp lib/Date/Manip/TZ/amcuia00.pm blib/lib/Date/Manip/TZ/amcuia00.pm
+cp lib/Date/Manip/TZ/amangu00.pm blib/lib/Date/Manip/TZ/amangu00.pm
+cp lib/Date/Manip/TZ/s00.pm blib/lib/Date/Manip/TZ/s00.pm
+cp lib/Date/Manip/Offset/off421.pm blib/lib/Date/Manip/Offset/off421.pm
+cp lib/Date/Manip/Offset/off099.pm blib/lib/Date/Manip/Offset/off099.pm
+cp lib/Date/Manip/TZ/asashg00.pm blib/lib/Date/Manip/TZ/asashg00.pm
+cp lib/Date/Manip/TZ/inmahe00.pm blib/lib/Date/Manip/TZ/inmahe00.pm
+cp lib/Date/Manip/Lang/portugue.pm blib/lib/Date/Manip/Lang/portugue.pm
+cp lib/Date/Manip/TZ/etgmtm02.pm blib/lib/Date/Manip/TZ/etgmtm02.pm
+cp lib/Date/Manip/TZ/aspont00.pm blib/lib/Date/Manip/TZ/aspont00.pm
+cp lib/Date/Manip/Offset/off080.pm blib/lib/Date/Manip/Offset/off080.pm
+cp lib/Date/Manip/TZ/afport00.pm blib/lib/Date/Manip/TZ/afport00.pm
+cp lib/Date/Manip/TZ/euberl00.pm blib/lib/Date/Manip/TZ/euberl00.pm
+cp lib/Date/Manip/Offset/off342.pm blib/lib/Date/Manip/Offset/off342.pm
+cp lib/Date/Manip/TZ/afouag00.pm blib/lib/Date/Manip/TZ/afouag00.pm
+cp lib/Date/Manip/Offset/off465.pm blib/lib/Date/Manip/Offset/off465.pm
+cp lib/Date/Manip/Offset/off045.pm blib/lib/Date/Manip/Offset/off045.pm
+cp lib/Date/Manip/Offset/off114.pm blib/lib/Date/Manip/Offset/off114.pm
+cp lib/Date/Manip/Lang/dutch.pm blib/lib/Date/Manip/Lang/dutch.pm
+cp lib/Date/Manip/Offset/off007.pm blib/lib/Date/Manip/Offset/off007.pm
+cp lib/Date/Manip/Offset/off214.pm blib/lib/Date/Manip/Offset/off214.pm
+cp lib/Date/Manip/TZ/amtucu00.pm blib/lib/Date/Manip/TZ/amtucu00.pm
+cp lib/Date/Manip/Offset/off201.pm blib/lib/Date/Manip/Offset/off201.pm
+cp lib/Date/Manip/TZ/ammexi00.pm blib/lib/Date/Manip/TZ/ammexi00.pm
+cp lib/Date/Manip/Offset/off305.pm blib/lib/Date/Manip/Offset/off305.pm
+cp lib/Date/Manip/TZ/asbaku00.pm blib/lib/Date/Manip/TZ/asbaku00.pm
+cp lib/Date/Manip/TZ/inchri00.pm blib/lib/Date/Manip/TZ/inchri00.pm
+cp lib/Date/Manip/Offset/off416.pm blib/lib/Date/Manip/Offset/off416.pm
+cp lib/Date/Manip/Lang/german.pm blib/lib/Date/Manip/Lang/german.pm
+cp lib/Date/Manip/Offset/off265.pm blib/lib/Date/Manip/Offset/off265.pm
+cp lib/Date/Manip/TZ/amcura00.pm blib/lib/Date/Manip/TZ/amcura00.pm
+cp lib/Date/Manip/TZ/amglac00.pm blib/lib/Date/Manip/TZ/amglac00.pm
+cp lib/Date/Manip/TZ/ambeul00.pm blib/lib/Date/Manip/TZ/ambeul00.pm
+cp lib/Date/Manip/TZ/ammetl00.pm blib/lib/Date/Manip/TZ/ammetl00.pm
+cp lib/Date/Manip/TZ/amgodt00.pm blib/lib/Date/Manip/TZ/amgodt00.pm
+cp lib/Date/Manip/TZ/anmcmu00.pm blib/lib/Date/Manip/TZ/anmcmu00.pm
+cp lib/Date/Manip/TZ/patong00.pm blib/lib/Date/Manip/TZ/patong00.pm
+cp lib/Date/Manip/TZ/eukiev00.pm blib/lib/Date/Manip/TZ/eukiev00.pm
+cp lib/Date/Manip/TZ/asbagh00.pm blib/lib/Date/Manip/TZ/asbagh00.pm
+cp lib/Date/Manip/Offset/off444.pm blib/lib/Date/Manip/Offset/off444.pm
+cp lib/Date/Manip/TZ/asbeir00.pm blib/lib/Date/Manip/TZ/asbeir00.pm
+cp lib/Date/Manip/Lang/romanian.pod blib/lib/Date/Manip/Lang/romanian.pod
+cp lib/Date/Manip/Offset/off326.pm blib/lib/Date/Manip/Offset/off326.pm
+cp lib/Date/Manip/TZ/pafiji00.pm blib/lib/Date/Manip/TZ/pafiji00.pm
+cp lib/Date/Manip/Offset/off172.pm blib/lib/Date/Manip/Offset/off172.pm
+cp lib/Date/Manip/Offset/off039.pm blib/lib/Date/Manip/Offset/off039.pm
+cp lib/Date/Manip/Offset/off296.pm blib/lib/Date/Manip/Offset/off296.pm
+cp lib/Date/Manip/Lang/turkish.pod blib/lib/Date/Manip/Lang/turkish.pod
+cp lib/Date/Manip/Offset/off286.pm blib/lib/Date/Manip/Offset/off286.pm
+cp lib/Date/Manip/TZ/amguya00.pm blib/lib/Date/Manip/TZ/amguya00.pm
+cp lib/Date/Manip/TZ/aucurr00.pm blib/lib/Date/Manip/TZ/aucurr00.pm
+cp lib/Date/Manip/TZ/m00.pm blib/lib/Date/Manip/TZ/m00.pm
+cp lib/Date/Manip/Offset/off350.pm blib/lib/Date/Manip/Offset/off350.pm
+cp lib/Date/Manip/Offset/off015.pm blib/lib/Date/Manip/Offset/off015.pm
+cp lib/Date/Manip/DM6.pm blib/lib/Date/Manip/DM6.pm
+cp lib/Date/Manip/Offset/off208.pm blib/lib/Date/Manip/Offset/off208.pm
+cp lib/Date/Manip/Offset/off295.pm blib/lib/Date/Manip/Offset/off295.pm
+cp lib/Date/Manip/Date.pod blib/lib/Date/Manip/Date.pod
+cp lib/Date/Manip/Lang/dutch.pod blib/lib/Date/Manip/Lang/dutch.pod
+cp lib/Date/Manip/TZ/panaur00.pm blib/lib/Date/Manip/TZ/panaur00.pm
+cp lib/Date/Manip/Offset/off380.pm blib/lib/Date/Manip/Offset/off380.pm
+cp lib/Date/Manip/TZ/afkhar00.pm blib/lib/Date/Manip/TZ/afkhar00.pm
+cp lib/Date/Manip/Offset/off004.pm blib/lib/Date/Manip/Offset/off004.pm
+cp lib/Date/Manip/Offset/off475.pm blib/lib/Date/Manip/Offset/off475.pm
+cp lib/Date/Manip/Offset/off050.pm blib/lib/Date/Manip/Offset/off050.pm
+cp lib/Date/Manip/Offset/off023.pm blib/lib/Date/Manip/Offset/off023.pm
+cp lib/Date/Manip/Offset/off372.pm blib/lib/Date/Manip/Offset/off372.pm
+cp lib/Date/Manip/TZ/andavi00.pm blib/lib/Date/Manip/TZ/andavi00.pm
+cp lib/Date/Manip/Offset/off234.pm blib/lib/Date/Manip/Offset/off234.pm
+cp lib/Date/Manip/TZ/amthun00.pm blib/lib/Date/Manip/TZ/amthun00.pm
+cp lib/Date/Manip/TZ/amcaym00.pm blib/lib/Date/Manip/TZ/amcaym00.pm
+cp lib/Date/Manip/Offset/off315.pm blib/lib/Date/Manip/Offset/off315.pm
+cp lib/Date/Manip/TZ/eumins00.pm blib/lib/Date/Manip/TZ/eumins00.pm
+cp lib/Date/Manip/Lang/english.pod blib/lib/Date/Manip/Lang/english.pod
+cp lib/Date/Manip/TZ/amla_r00.pm blib/lib/Date/Manip/TZ/amla_r00.pm
+cp lib/Date/Manip/Offset/off202.pm blib/lib/Date/Manip/Offset/off202.pm
+cp lib/Date/Manip/Offset/off239.pm blib/lib/Date/Manip/Offset/off239.pm
+cp lib/Date/Manip/TZ/astehr00.pm blib/lib/Date/Manip/TZ/astehr00.pm
+cp lib/Date/Manip/TZ/amst_l00.pm blib/lib/Date/Manip/TZ/amst_l00.pm
+cp lib/Date/Manip/TZ/amport00.pm blib/lib/Date/Manip/TZ/amport00.pm
+cp lib/Date/Manip/Base.pm blib/lib/Date/Manip/Base.pm
+cp lib/Date/Manip/Offset/off288.pm blib/lib/Date/Manip/Offset/off288.pm
+cp lib/Date/Manip/TZ/asomsk00.pm blib/lib/Date/Manip/TZ/asomsk00.pm
+cp lib/Date/Manip/TZ/asqyzy00.pm blib/lib/Date/Manip/TZ/asqyzy00.pm
+cp lib/Date/Manip/TZ/afbang00.pm blib/lib/Date/Manip/TZ/afbang00.pm
+cp lib/Date/Manip/Offset/off037.pm blib/lib/Date/Manip/Offset/off037.pm
+cp lib/Date/Manip/Offset/off224.pm blib/lib/Date/Manip/Offset/off224.pm
+cp lib/Date/Manip/Offset/off091.pm blib/lib/Date/Manip/Offset/off091.pm
+cp lib/Date/Manip/Offset/off391.pm blib/lib/Date/Manip/Offset/off391.pm
+cp lib/Date/Manip/Offset/off008.pm blib/lib/Date/Manip/Offset/off008.pm
+cp lib/Date/Manip/TZ/afjuba00.pm blib/lib/Date/Manip/TZ/afjuba00.pm
+cp lib/Date/Manip/Offset/off471.pm blib/lib/Date/Manip/Offset/off471.pm
+cp lib/Date/Manip/TZ/amchic00.pm blib/lib/Date/Manip/TZ/amchic00.pm
+cp lib/Date/Manip/TZ/askath00.pm blib/lib/Date/Manip/TZ/askath00.pm
+cp lib/Date/Manip/Offset/off126.pm blib/lib/Date/Manip/Offset/off126.pm
+cp lib/Date/Manip/Offset/off308.pm blib/lib/Date/Manip/Offset/off308.pm
+cp lib/Date/Manip/TZ/pawake00.pm blib/lib/Date/Manip/TZ/pawake00.pm
+cp lib/Date/Manip/Offset/off066.pm blib/lib/Date/Manip/Offset/off066.pm
+cp lib/Date/Manip/TZ/p00.pm blib/lib/Date/Manip/TZ/p00.pm
+cp lib/Date/Manip/Offset/off387.pm blib/lib/Date/Manip/Offset/off387.pm
+cp lib/Date/Manip/Lang.pod blib/lib/Date/Manip/Lang.pod
+cp lib/Date/Manip/Offset/off467.pm blib/lib/Date/Manip/Offset/off467.pm
+cp lib/Date/Manip/Offset/off244.pm blib/lib/Date/Manip/Offset/off244.pm
+cp lib/Date/Manip.pod blib/lib/Date/Manip.pod
+cp lib/Date/Manip/Offset/off284.pm blib/lib/Date/Manip/Offset/off284.pm
+cp lib/Date/Manip/TZ/ammart00.pm blib/lib/Date/Manip/TZ/ammart00.pm
+cp lib/Date/Manip/Offset/off311.pm blib/lib/Date/Manip/Offset/off311.pm
+cp lib/Date/Manip/Offset/off121.pm blib/lib/Date/Manip/Offset/off121.pm
+cp lib/Date/Manip/Offset/off300.pm blib/lib/Date/Manip/Offset/off300.pm
+cp lib/Date/Manip/Offset/off461.pm blib/lib/Date/Manip/Offset/off461.pm
+cp lib/Date/Manip/TZ_Base.pod blib/lib/Date/Manip/TZ_Base.pod
+cp lib/Date/Manip/TZ/paauck00.pm blib/lib/Date/Manip/TZ/paauck00.pm
+cp lib/Date/Manip/TZ/aschoi00.pm blib/lib/Date/Manip/TZ/aschoi00.pm
+cp lib/Date/Manip/DM5.pod blib/lib/Date/Manip/DM5.pod
+cp lib/Date/Manip/TZ/amst_k00.pm blib/lib/Date/Manip/TZ/amst_k00.pm
+cp lib/Date/Manip/Offset/off398.pm blib/lib/Date/Manip/Offset/off398.pm
+cp lib/Date/Manip/TZ/afluan00.pm blib/lib/Date/Manip/TZ/afluan00.pm
+cp lib/Date/Manip/TZ/i00.pm blib/lib/Date/Manip/TZ/i00.pm
+cp lib/Date/Manip/TZ/asaden00.pm blib/lib/Date/Manip/TZ/asaden00.pm
+cp lib/Date/Manip/TZ/amsant03.pm blib/lib/Date/Manip/TZ/amsant03.pm
+cp lib/Date/Manip/Offset/off289.pm blib/lib/Date/Manip/Offset/off289.pm
+cp lib/Date/Manip/TZ/amknox00.pm blib/lib/Date/Manip/TZ/amknox00.pm
+cp lib/Date/Manip/TZ/asgaza00.pm blib/lib/Date/Manip/TZ/asgaza00.pm
+cp lib/Date/Manip/TZ/amst_j00.pm blib/lib/Date/Manip/TZ/amst_j00.pm
+cp lib/Date/Manip/Offset/off055.pm blib/lib/Date/Manip/Offset/off055.pm
+cp lib/Date/Manip/TZ/amel_s00.pm blib/lib/Date/Manip/TZ/amel_s00.pm
+cp lib/Date/Manip/Offset/off111.pm blib/lib/Date/Manip/Offset/off111.pm
+cp lib/Date/Manip/TZ/askamc00.pm blib/lib/Date/Manip/TZ/askamc00.pm
+cp lib/Date/Manip/TZ/asamma00.pm blib/lib/Date/Manip/TZ/asamma00.pm
+cp lib/Date/Manip/TZ/g00.pm blib/lib/Date/Manip/TZ/g00.pm
+cp lib/Date/Manip/TZ/b00.pm blib/lib/Date/Manip/TZ/b00.pm
+cp lib/Date/Manip/Offset/off457.pm blib/lib/Date/Manip/Offset/off457.pm
+cp lib/Date/Manip/Offset/off146.pm blib/lib/Date/Manip/Offset/off146.pm
+cp lib/Date/Manip/Offset/off058.pm blib/lib/Date/Manip/Offset/off058.pm
+cp lib/Date/Manip/Offset/off119.pm blib/lib/Date/Manip/Offset/off119.pm
+cp lib/Date/Manip/TZ/amjama00.pm blib/lib/Date/Manip/TZ/amjama00.pm
+cp lib/Date/Manip/Offset/off282.pm blib/lib/Date/Manip/Offset/off282.pm
+cp lib/Date/Manip/TZ/afbanj00.pm blib/lib/Date/Manip/TZ/afbanj00.pm
+cp lib/Date/Manip/Offset/off044.pm blib/lib/Date/Manip/Offset/off044.pm
+cp lib/Date/Manip/TZ/amcanc00.pm blib/lib/Date/Manip/TZ/amcanc00.pm
+cp lib/Date/Manip/Offset/off319.pm blib/lib/Date/Manip/Offset/off319.pm
+cp lib/Date/Manip/Offset/off075.pm blib/lib/Date/Manip/Offset/off075.pm
+cp lib/Date/Manip/Offset/off309.pm blib/lib/Date/Manip/Offset/off309.pm
+cp lib/Date/Manip/Offset/off040.pm blib/lib/Date/Manip/Offset/off040.pm
+cp lib/Date/Manip/Offset/off175.pm blib/lib/Date/Manip/Offset/off175.pm
+cp lib/Date/Manip/TZ/aflusa00.pm blib/lib/Date/Manip/TZ/aflusa00.pm
+cp lib/Date/Manip/TZ/ammeno00.pm blib/lib/Date/Manip/TZ/ammeno00.pm
+cp lib/Date/Manip/TZ/papitc00.pm blib/lib/Date/Manip/TZ/papitc00.pm
+cp lib/Date/Manip/Offset/off227.pm blib/lib/Date/Manip/Offset/off227.pm
+cp lib/Date/Manip/Offset/off211.pm blib/lib/Date/Manip/Offset/off211.pm
+cp lib/Date/Manip/TZ/etgmtm12.pm blib/lib/Date/Manip/TZ/etgmtm12.pm
+cp lib/Date/Manip/Offset/off019.pm blib/lib/Date/Manip/Offset/off019.pm
+cp lib/Date/Manip/Offset/off149.pm blib/lib/Date/Manip/Offset/off149.pm
+cp lib/Date/Manip/Offset/off191.pm blib/lib/Date/Manip/Offset/off191.pm
+cp lib/Date/Manip/TZ/ashebr00.pm blib/lib/Date/Manip/TZ/ashebr00.pm
+cp lib/Date/Manip/TZ/ausydn00.pm blib/lib/Date/Manip/TZ/ausydn00.pm
+cp lib/Date/Manip/Offset/off152.pm blib/lib/Date/Manip/Offset/off152.pm
+cp lib/Date/Manip/Lang/spanish.pm blib/lib/Date/Manip/Lang/spanish.pm
+cp lib/Date/Manip/TZ/z00.pm blib/lib/Date/Manip/TZ/z00.pm
+cp lib/Date/Manip/Lang/portugue.pod blib/lib/Date/Manip/Lang/portugue.pod
+cp lib/Date/Manip/Offset/off477.pm blib/lib/Date/Manip/Offset/off477.pm
+cp lib/Date/Manip/Offset/off349.pm blib/lib/Date/Manip/Offset/off349.pm
+cp lib/Date/Manip/TZ/asbahr00.pm blib/lib/Date/Manip/TZ/asbahr00.pm
+cp lib/Date/Manip/TZ/amrain00.pm blib/lib/Date/Manip/TZ/amrain00.pm
+cp lib/Date/Manip/ConfigFile.pod blib/lib/Date/Manip/ConfigFile.pod
+cp lib/Date/Manip/TZ/afaccr00.pm blib/lib/Date/Manip/TZ/afaccr00.pm
+cp lib/Date/Manip/Offset/off413.pm blib/lib/Date/Manip/Offset/off413.pm
+cp lib/Date/Manip/Offset/off281.pm blib/lib/Date/Manip/Offset/off281.pm
+cp lib/Date/Manip/Offset/off236.pm blib/lib/Date/Manip/Offset/off236.pm
+cp lib/Date/Manip/TZ/amdaws01.pm blib/lib/Date/Manip/TZ/amdaws01.pm
+cp lib/Date/Manip/TZ/euzuri00.pm blib/lib/Date/Manip/TZ/euzuri00.pm
+cp lib/Date/Manip/Offset/off385.pm blib/lib/Date/Manip/Offset/off385.pm
+cp lib/Date/Manip/Offset/off171.pm blib/lib/Date/Manip/Offset/off171.pm
+cp lib/Date/Manip/Offset/off143.pm blib/lib/Date/Manip/Offset/off143.pm
+cp lib/Date/Manip/Offset/off436.pm blib/lib/Date/Manip/Offset/off436.pm
+cp lib/Date/Manip/Offset/off396.pm blib/lib/Date/Manip/Offset/off396.pm
+cp lib/Date/Manip/Offset/off141.pm blib/lib/Date/Manip/Offset/off141.pm
+cp lib/Date/Manip/Offset/off122.pm blib/lib/Date/Manip/Offset/off122.pm
+cp lib/Date/Manip/Offset/off331.pm blib/lib/Date/Manip/Offset/off331.pm
+cp lib/Date/Manip/Offset/off000.pm blib/lib/Date/Manip/Offset/off000.pm
+cp lib/Date/Manip/TZ/asirku00.pm blib/lib/Date/Manip/TZ/asirku00.pm
+cp lib/Date/Manip/TZ/amport01.pm blib/lib/Date/Manip/TZ/amport01.pm
+cp lib/Date/Manip/Offset/off365.pm blib/lib/Date/Manip/Offset/off365.pm
+cp lib/Date/Manip/Offset/off443.pm blib/lib/Date/Manip/Offset/off443.pm
+cp lib/Date/Manip/TZ/etgmtp09.pm blib/lib/Date/Manip/TZ/etgmtp09.pm
+cp lib/Date/Manip/Offset/off274.pm blib/lib/Date/Manip/Offset/off274.pm
+cp lib/Date/Manip/TZ/papago00.pm blib/lib/Date/Manip/TZ/papago00.pm
+cp lib/Date/Manip/Offset/off103.pm blib/lib/Date/Manip/Offset/off103.pm
+cp lib/Date/Manip/TZ/ambahi01.pm blib/lib/Date/Manip/TZ/ambahi01.pm
+cp lib/Date/Manip/Offset/off197.pm blib/lib/Date/Manip/Offset/off197.pm
+cp lib/Date/Manip/TZ/afmbab00.pm blib/lib/Date/Manip/TZ/afmbab00.pm
+cp lib/Date/Manip/Offset/off382.pm blib/lib/Date/Manip/Offset/off382.pm
+cp lib/Date/Manip/Offset/off124.pm blib/lib/Date/Manip/Offset/off124.pm
+cp lib/Date/Manip/Offset/off486.pm blib/lib/Date/Manip/Offset/off486.pm
+cp lib/Date/Manip/TZ/f00.pm blib/lib/Date/Manip/TZ/f00.pm
+cp lib/Date/Manip/TZ/asvien00.pm blib/lib/Date/Manip/TZ/asvien00.pm
+cp lib/Date/Manip/TZ/asseou00.pm blib/lib/Date/Manip/TZ/asseou00.pm
+cp lib/Date/Manip/Offset/off325.pm blib/lib/Date/Manip/Offset/off325.pm
+cp lib/Date/Manip/TZ/amherm00.pm blib/lib/Date/Manip/TZ/amherm00.pm
+cp lib/Date/Manip/TZ/eusama00.pm blib/lib/Date/Manip/TZ/eusama00.pm
+cp lib/Date/Manip/TZ/euchis00.pm blib/lib/Date/Manip/TZ/euchis00.pm
+cp lib/Date/Manip/Offset/off216.pm blib/lib/Date/Manip/Offset/off216.pm
+cp lib/Date/Manip/TZ/amchih00.pm blib/lib/Date/Manip/TZ/amchih00.pm
+cp lib/Date/Manip/Offset/off110.pm blib/lib/Date/Manip/Offset/off110.pm
+cp lib/Date/Manip/TZ/atmade00.pm blib/lib/Date/Manip/TZ/atmade00.pm
+cp lib/Date/Manip/TZ/asurum00.pm blib/lib/Date/Manip/TZ/asurum00.pm
+cp lib/Date/Manip/Offset/off266.pm blib/lib/Date/Manip/Offset/off266.pm
+cp lib/Date/Manip/Lang/danish.pm blib/lib/Date/Manip/Lang/danish.pm
+cp lib/Date/Manip/TZ/asduba00.pm blib/lib/Date/Manip/TZ/asduba00.pm
+cp lib/Date/Manip/TZ/asalma00.pm blib/lib/Date/Manip/TZ/asalma00.pm
+cp lib/Date/Manip/Offset/off109.pm blib/lib/Date/Manip/Offset/off109.pm
+cp lib/Date/Manip/Offset/off426.pm blib/lib/Date/Manip/Offset/off426.pm
+cp lib/Date/Manip/Lang/romanian.pm blib/lib/Date/Manip/Lang/romanian.pm
+cp lib/Date/Manip/Offset/off153.pm blib/lib/Date/Manip/Offset/off153.pm
+cp lib/Date/Manip/TZ/pamidw00.pm blib/lib/Date/Manip/TZ/pamidw00.pm
+cp lib/Date/Manip/Lang/danish.pod blib/lib/Date/Manip/Lang/danish.pod
+cp lib/Date/Manip/Offset/off452.pm blib/lib/Date/Manip/Offset/off452.pm
+cp lib/Date/Manip/Offset/off065.pm blib/lib/Date/Manip/Offset/off065.pm
+cp lib/Date/Manip/Offset/off410.pm blib/lib/Date/Manip/Offset/off410.pm
+cp lib/Date/Manip/TZ/afaddi00.pm blib/lib/Date/Manip/TZ/afaddi00.pm
+cp lib/Date/Manip/TZ/amrio_00.pm blib/lib/Date/Manip/TZ/amrio_00.pm
+cp lib/Date/Manip/Offset/off359.pm blib/lib/Date/Manip/Offset/off359.pm
+cp lib/Date/Manip/TZ/ut00.pm blib/lib/Date/Manip/TZ/ut00.pm
+cp lib/Date/Manip/Offset/off137.pm blib/lib/Date/Manip/Offset/off137.pm
+cp lib/Date/Manip/TZ/pachat00.pm blib/lib/Date/Manip/TZ/pachat00.pm
+cp lib/Date/Manip/Offset/off417.pm blib/lib/Date/Manip/Offset/off417.pm
+cp lib/Date/Manip/TZ/etgmt00.pm blib/lib/Date/Manip/TZ/etgmt00.pm
+cp lib/Date/Manip/Lang/spanish.pod blib/lib/Date/Manip/Lang/spanish.pod
+cp lib/Date/Manip/Offset/off335.pm blib/lib/Date/Manip/Offset/off335.pm
+cp lib/Date/Manip/Lang/catalan.pm blib/lib/Date/Manip/Lang/catalan.pm
+cp lib/Date/Manip/TZ/asshan00.pm blib/lib/Date/Manip/TZ/asshan00.pm
+cp lib/Date/Manip/Offset/off090.pm blib/lib/Date/Manip/Offset/off090.pm
+cp lib/Date/Manip/Offset/off354.pm blib/lib/Date/Manip/Offset/off354.pm
+cp lib/Date/Manip/TZ/incomo00.pm blib/lib/Date/Manip/TZ/incomo00.pm
+cp lib/Date/Manip/TZ/amsan_00.pm blib/lib/Date/Manip/TZ/amsan_00.pm
+cp lib/Date/Manip/TZ_Base.pm blib/lib/Date/Manip/TZ_Base.pm
+cp lib/Date/Manip/Offset/off030.pm blib/lib/Date/Manip/Offset/off030.pm
+cp lib/Date/Manip/TZ/askara00.pm blib/lib/Date/Manip/TZ/askara00.pm
+cp lib/Date/Manip/TZ/amedmo00.pm blib/lib/Date/Manip/TZ/amedmo00.pm
+cp lib/Date/Manip/Offset/off148.pm blib/lib/Date/Manip/Offset/off148.pm
+cp lib/Date/Manip/Offset/off026.pm blib/lib/Date/Manip/Offset/off026.pm
+cp lib/Date/Manip/TZ/afkamp00.pm blib/lib/Date/Manip/TZ/afkamp00.pm
+cp lib/Date/Manip/TZ/ammare00.pm blib/lib/Date/Manip/TZ/ammare00.pm
+cp lib/Date/Manip/Offset/off481.pm blib/lib/Date/Manip/Offset/off481.pm
+cp lib/Date/Manip/Offset/off087.pm blib/lib/Date/Manip/Offset/off087.pm
+cp lib/Date/Manip/Offset/off129.pm blib/lib/Date/Manip/Offset/off129.pm
+cp lib/Date/Manip/Offset/off377.pm blib/lib/Date/Manip/Offset/off377.pm
+cp lib/Date/Manip/Offset/off411.pm blib/lib/Date/Manip/Offset/off411.pm
+cp lib/Date/Manip/Offset/off057.pm blib/lib/Date/Manip/Offset/off057.pm
+cp lib/Date/Manip/Offset/off264.pm blib/lib/Date/Manip/Offset/off264.pm
+cp lib/Date/Manip/TZ/ampuer00.pm blib/lib/Date/Manip/TZ/ampuer00.pm
+cp lib/Date/Manip/TZ/amst_v00.pm blib/lib/Date/Manip/TZ/amst_v00.pm
+cp lib/Date/Manip/Obj.pod blib/lib/Date/Manip/Obj.pod
+cp lib/Date/Manip/TZ/amdenv00.pm blib/lib/Date/Manip/TZ/amdenv00.pm
+cp lib/Date/Manip/TZ/euzapo00.pm blib/lib/Date/Manip/TZ/euzapo00.pm
+cp lib/Date/Manip/Offset/off157.pm blib/lib/Date/Manip/Offset/off157.pm
+cp lib/Date/Manip/Offset/off042.pm blib/lib/Date/Manip/Offset/off042.pm
+cp lib/Date/Manip/TZ/ammaza00.pm blib/lib/Date/Manip/TZ/ammaza00.pm
+cp lib/Date/Manip/Offset/off253.pm blib/lib/Date/Manip/Offset/off253.pm
+cp lib/Date/Manip/Offset/off438.pm blib/lib/Date/Manip/Offset/off438.pm
+cp lib/Date/Manip/TZ/afbuju00.pm blib/lib/Date/Manip/TZ/afbuju00.pm
+cp lib/Date/Manip/Offset/off195.pm blib/lib/Date/Manip/Offset/off195.pm
+cp lib/Date/Manip/TZ/ammace00.pm blib/lib/Date/Manip/TZ/ammace00.pm
+cp lib/Date/Manip/TZ/amlos_00.pm blib/lib/Date/Manip/TZ/amlos_00.pm
+cp lib/Date/Manip/Offset/off003.pm blib/lib/Date/Manip/Offset/off003.pm
+cp lib/Date/Manip/TZ/afcasa00.pm blib/lib/Date/Manip/TZ/afcasa00.pm
+cp lib/Date/Manip/Offset/off009.pm blib/lib/Date/Manip/Offset/off009.pm
+cp lib/Date/Manip/Offset/off156.pm blib/lib/Date/Manip/Offset/off156.pm
+cp lib/Date/Manip/Offset/off321.pm blib/lib/Date/Manip/Offset/off321.pm
+cp lib/Date/Manip/DM5.pm blib/lib/Date/Manip/DM5.pm
+cp lib/Date/Manip/Offset/off154.pm blib/lib/Date/Manip/Offset/off154.pm
+cp lib/Date/Manip/TZ/asqata00.pm blib/lib/Date/Manip/TZ/asqata00.pm
+cp lib/Date/Manip/Offset/off084.pm blib/lib/Date/Manip/Offset/off084.pm
+cp lib/Date/Manip/Offset/off063.pm blib/lib/Date/Manip/Offset/off063.pm
+cp lib/Date/Manip/TZ/eustoc00.pm blib/lib/Date/Manip/TZ/eustoc00.pm
+cp lib/Date/Manip/TZ/amguat00.pm blib/lib/Date/Manip/TZ/amguat00.pm
+cp lib/Date/Manip/TZ/paport00.pm blib/lib/Date/Manip/TZ/paport00.pm
+cp lib/Date/Manip/Offset/off237.pm blib/lib/Date/Manip/Offset/off237.pm
+cp lib/Date/Manip/Offset/off088.pm blib/lib/Date/Manip/Offset/off088.pm
+cp lib/Date/Manip/Offset/off333.pm blib/lib/Date/Manip/Offset/off333.pm
+cp lib/Date/Manip/Offset/off291.pm blib/lib/Date/Manip/Offset/off291.pm
+cp lib/Date/Manip/TZ/atreyk00.pm blib/lib/Date/Manip/TZ/atreyk00.pm
+cp lib/Date/Manip/Offset/off196.pm blib/lib/Date/Manip/Offset/off196.pm
+cp lib/Date/Manip/Calc.pod blib/lib/Date/Manip/Calc.pod
+cp lib/Date/Manip/Offset/off447.pm blib/lib/Date/Manip/Offset/off447.pm
+cp lib/Date/Manip/TZ/amhava00.pm blib/lib/Date/Manip/TZ/amhava00.pm
+cp lib/Date/Manip/TZ/eupari00.pm blib/lib/Date/Manip/TZ/eupari00.pm
+cp lib/Date/Manip/Offset/off207.pm blib/lib/Date/Manip/Offset/off207.pm
+cp lib/Date/Manip/Offset/off485.pm blib/lib/Date/Manip/Offset/off485.pm
+cp lib/Date/Manip/Offset/off425.pm blib/lib/Date/Manip/Offset/off425.pm
+cp lib/Date/Manip/Offset/off247.pm blib/lib/Date/Manip/Offset/off247.pm
+cp lib/Date/Manip/TZ/asdili00.pm blib/lib/Date/Manip/TZ/asdili00.pm
+cp lib/Date/Manip/Offset/off418.pm blib/lib/Date/Manip/Offset/off418.pm
+cp lib/Date/Manip/Lang/french.pod blib/lib/Date/Manip/Lang/french.pod
+cp lib/Date/Manip/Offset/off440.pm blib/lib/Date/Manip/Offset/off440.pm
+cp lib/Date/Manip/Offset/off303.pm blib/lib/Date/Manip/Offset/off303.pm
+cp lib/Date/Manip/Offset/off204.pm blib/lib/Date/Manip/Offset/off204.pm
+cp lib/Date/Manip/Lang/polish.pod blib/lib/Date/Manip/Lang/polish.pod
+cp lib/Date/Manip/Offset/off267.pm blib/lib/Date/Manip/Offset/off267.pm
+cp lib/Date/Manip/Offset/off456.pm blib/lib/Date/Manip/Offset/off456.pm
+cp lib/Date/Manip/DM5abbrevs.pm blib/lib/Date/Manip/DM5abbrevs.pm
+cp lib/Date/Manip/Offset/off405.pm blib/lib/Date/Manip/Offset/off405.pm
+cp lib/Date/Manip/Lang/italian.pm blib/lib/Date/Manip/Lang/italian.pm
+cp lib/Date/Manip/Offset/off068.pm blib/lib/Date/Manip/Offset/off068.pm
+cp lib/Date/Manip/Offset/off177.pm blib/lib/Date/Manip/Offset/off177.pm
+cp lib/Date/Manip/Offset/off123.pm blib/lib/Date/Manip/Offset/off123.pm
+cp lib/Date/Manip/Offset/off419.pm blib/lib/Date/Manip/Offset/off419.pm
+cp lib/Date/Manip/TZ/amsao_00.pm blib/lib/Date/Manip/TZ/amsao_00.pm
+cp lib/Date/Manip/Offset/off248.pm blib/lib/Date/Manip/Offset/off248.pm
+cp lib/Date/Manip/TZ/auadel00.pm blib/lib/Date/Manip/TZ/auadel00.pm
+cp lib/Date/Manip/TZ/amindi00.pm blib/lib/Date/Manip/TZ/amindi00.pm
+cp lib/Date/Manip/TZ/ammont03.pm blib/lib/Date/Manip/TZ/ammont03.pm
+cp lib/Date/Manip/Holidays.pod blib/lib/Date/Manip/Holidays.pod
+cp lib/Date/Manip/Offset/off184.pm blib/lib/Date/Manip/Offset/off184.pm
+cp lib/Date/Manip/Offset/off115.pm blib/lib/Date/Manip/Offset/off115.pm
+cp lib/Date/Manip/TZ/ambois00.pm blib/lib/Date/Manip/TZ/ambois00.pm
+cp lib/Date/Manip/TZ.pm blib/lib/Date/Manip/TZ.pm
+cp lib/Date/Manip/TZ/panorf00.pm blib/lib/Date/Manip/TZ/panorf00.pm
+cp lib/Date/Manip/TZ/askras00.pm blib/lib/Date/Manip/TZ/askras00.pm
+cp lib/Date/Manip/Offset/off293.pm blib/lib/Date/Manip/Offset/off293.pm
+cp lib/Date/Manip/Offset/off279.pm blib/lib/Date/Manip/Offset/off279.pm
+cp lib/Date/Manip/TZ/etgmtp08.pm blib/lib/Date/Manip/TZ/etgmtp08.pm
+cp lib/Date/Manip/TZ/eet00.pm blib/lib/Date/Manip/TZ/eet00.pm
+cp lib/Date/Manip/TZ/amdomi00.pm blib/lib/Date/Manip/TZ/amdomi00.pm
+cp lib/Date/Manip/Offset/off138.pm blib/lib/Date/Manip/Offset/off138.pm
+cp lib/Date/Manip/Offset/off316.pm blib/lib/Date/Manip/Offset/off316.pm
+cp lib/Date/Manip/Offset/off370.pm blib/lib/Date/Manip/Offset/off370.pm
+cp lib/Date/Manip/Offset/off150.pm blib/lib/Date/Manip/Offset/off150.pm
+cp lib/Date/Manip/TZ/etgmtp10.pm blib/lib/Date/Manip/TZ/etgmtp10.pm
+cp lib/Date/Manip/TZ/afmapu00.pm blib/lib/Date/Manip/TZ/afmapu00.pm
+cp lib/Date/Manip/Offset/off193.pm blib/lib/Date/Manip/Offset/off193.pm
+cp lib/Date/Manip/TZ/amnipi00.pm blib/lib/Date/Manip/TZ/amnipi00.pm
+cp lib/Date/Manip/TZ/amsant01.pm blib/lib/Date/Manip/TZ/amsant01.pm
+cp lib/Date/Manip/TZ/amreci00.pm blib/lib/Date/Manip/TZ/amreci00.pm
+cp lib/Date/Manip/Offset/off052.pm blib/lib/Date/Manip/Offset/off052.pm
+cp lib/Date/Manip/Offset/off318.pm blib/lib/Date/Manip/Offset/off318.pm
+cp lib/Date/Manip/TZ/ambele00.pm blib/lib/Date/Manip/TZ/ambele00.pm
+cp lib/Date/Manip/Offset/off393.pm blib/lib/Date/Manip/Offset/off393.pm
+cp lib/Date/Manip/Offset/off151.pm blib/lib/Date/Manip/Offset/off151.pm
+cp lib/Date/Manip/TZ/asjaya00.pm blib/lib/Date/Manip/TZ/asjaya00.pm
+cp lib/Date/Manip/TZ/askuch00.pm blib/lib/Date/Manip/TZ/askuch00.pm
+cp lib/Date/Manip/Offset/off406.pm blib/lib/Date/Manip/Offset/off406.pm
+cp lib/Date/Manip/Misc.pod blib/lib/Date/Manip/Misc.pod
+cp lib/Date/Manip/TZ/ammont00.pm blib/lib/Date/Manip/TZ/ammont00.pm
+cp lib/Date/Manip/TZ/patara00.pm blib/lib/Date/Manip/TZ/patara00.pm
+cp lib/Date/Manip/Offset/off025.pm blib/lib/Date/Manip/Offset/off025.pm
+cp lib/Date/Manip/Offset/off294.pm blib/lib/Date/Manip/Offset/off294.pm
+cp lib/Date/Manip/Offset/off145.pm blib/lib/Date/Manip/Offset/off145.pm
+cp lib/Date/Manip/Offset/off302.pm blib/lib/Date/Manip/Offset/off302.pm
+cp lib/Date/Manip/TZ/inmayo00.pm blib/lib/Date/Manip/TZ/inmayo00.pm
+cp lib/Date/Manip/Offset/off081.pm blib/lib/Date/Manip/Offset/off081.pm
+cp lib/Date/Manip/Delta.pod blib/lib/Date/Manip/Delta.pod
+cp lib/Date/Manip/Offset/off317.pm blib/lib/Date/Manip/Offset/off317.pm
+cp lib/Date/Manip/Lang/turkish.pm blib/lib/Date/Manip/Lang/turkish.pm
+cp lib/Date/Manip/Offset/off320.pm blib/lib/Date/Manip/Offset/off320.pm
+cp lib/Date/Manip/Offset/off116.pm blib/lib/Date/Manip/Offset/off116.pm
+cp lib/Date/Manip/Offset/off038.pm blib/lib/Date/Manip/Offset/off038.pm
+cp lib/Date/Manip/Offset/off168.pm blib/lib/Date/Manip/Offset/off168.pm
+cp lib/Date/Manip/Offset/off375.pm blib/lib/Date/Manip/Offset/off375.pm
+cp lib/Date/Manip/Offset/off453.pm blib/lib/Date/Manip/Offset/off453.pm
+cp lib/Date/Manip/TZ/ambarb00.pm blib/lib/Date/Manip/TZ/ambarb00.pm
+cp lib/Date/Manip/TZ/askabu00.pm blib/lib/Date/Manip/TZ/askabu00.pm
+cp lib/Date/Manip/TZ/amsant00.pm blib/lib/Date/Manip/TZ/amsant00.pm
+cp lib/Date/Manip/TZ/eumalt00.pm blib/lib/Date/Manip/TZ/eumalt00.pm
+cp lib/Date/Manip/Offset/off021.pm blib/lib/Date/Manip/Offset/off021.pm
+cp lib/Date/Manip/Offset/off344.pm blib/lib/Date/Manip/Offset/off344.pm
+cp lib/Date/Manip/Offset/off373.pm blib/lib/Date/Manip/Offset/off373.pm
+cp lib/Date/Manip/Offset/off161.pm blib/lib/Date/Manip/Offset/off161.pm
+cp lib/Date/Manip/TZ/asulaa00.pm blib/lib/Date/Manip/TZ/asulaa00.pm
+cp lib/Date/Manip/TZ/amnew_00.pm blib/lib/Date/Manip/TZ/amnew_00.pm
+cp lib/Date/Manip/TZ/amcamp00.pm blib/lib/Date/Manip/TZ/amcamp00.pm
+cp lib/Date/Manip/TZ/etgmtm01.pm blib/lib/Date/Manip/TZ/etgmtm01.pm
+cp lib/Date/Manip/TZ/afndja00.pm blib/lib/Date/Manip/TZ/afndja00.pm
+cp lib/Date/Manip/TZ/amcata00.pm blib/lib/Date/Manip/TZ/amcata00.pm
+cp lib/Date/Manip/Offset/off180.pm blib/lib/Date/Manip/Offset/off180.pm
+cp lib/Date/Manip/TZ/amyaku00.pm blib/lib/Date/Manip/TZ/amyaku00.pm
+cp lib/Date/Manip/Offset/off002.pm blib/lib/Date/Manip/Offset/off002.pm
+cp lib/Date/Manip/Offset/off067.pm blib/lib/Date/Manip/Offset/off067.pm
+cp lib/Date/Manip/TZ/etgmtm00.pm blib/lib/Date/Manip/TZ/etgmtm00.pm
+cp lib/Date/Manip/Offset/off357.pm blib/lib/Date/Manip/Offset/off357.pm
+cp lib/Date/Manip/TZ/amdanm00.pm blib/lib/Date/Manip/TZ/amdanm00.pm
+cp lib/Date/Manip/Offset/off445.pm blib/lib/Date/Manip/Offset/off445.pm
+cp lib/Date/Manip/Offset/off017.pm blib/lib/Date/Manip/Offset/off017.pm
+cp lib/Date/Manip/Offset/off290.pm blib/lib/Date/Manip/Offset/off290.pm
+cp lib/Date/Manip/TZ/eulond00.pm blib/lib/Date/Manip/TZ/eulond00.pm
+cp lib/Date/Manip/Offset/off459.pm blib/lib/Date/Manip/Offset/off459.pm
+cp lib/Date/Manip/Offset/off430.pm blib/lib/Date/Manip/Offset/off430.pm
+cp lib/Date/Manip/Offset/off113.pm blib/lib/Date/Manip/Offset/off113.pm
+cp lib/Date/Manip/Offset/off250.pm blib/lib/Date/Manip/Offset/off250.pm
+cp lib/Date/Manip/Offset/off085.pm blib/lib/Date/Manip/Offset/off085.pm
+cp lib/Date/Manip/Offset/off462.pm blib/lib/Date/Manip/Offset/off462.pm
+cp lib/Date/Manip/Offset/off132.pm blib/lib/Date/Manip/Offset/off132.pm
+cp lib/Date/Manip/TZ/askolk00.pm blib/lib/Date/Manip/TZ/askolk00.pm
+cp lib/Date/Manip/Offset/off473.pm blib/lib/Date/Manip/Offset/off473.pm
+cp lib/Date/Manip/Migration5to6.pod blib/lib/Date/Manip/Migration5to6.pod
+cp lib/Date/Manip/TZ/amtell00.pm blib/lib/Date/Manip/TZ/amtell00.pm
+cp lib/Date/Manip/Offset/off454.pm blib/lib/Date/Manip/Offset/off454.pm
+cp lib/Date/Manip/TZ/asdhak00.pm blib/lib/Date/Manip/TZ/asdhak00.pm
+cp lib/Date/Manip/Examples.pod blib/lib/Date/Manip/Examples.pod
+cp lib/Date/Manip/Offset/off249.pm blib/lib/Date/Manip/Offset/off249.pm
+cp lib/Date/Manip/TZ/afmonr00.pm blib/lib/Date/Manip/TZ/afmonr00.pm
+cp lib/Date/Manip/TZ/asmaga00.pm blib/lib/Date/Manip/TZ/asmaga00.pm
+cp lib/Date/Manip/Offset/off209.pm blib/lib/Date/Manip/Offset/off209.pm
+cp lib/Date/Manip/TZ/afkiga00.pm blib/lib/Date/Manip/TZ/afkiga00.pm
+cp lib/Date/Manip/TZdata.pm blib/lib/Date/Manip/TZdata.pm
+cp lib/Date/Manip/TZ/amgoos00.pm blib/lib/Date/Manip/TZ/amgoos00.pm
+cp lib/Date/Manip/Offset/off139.pm blib/lib/Date/Manip/Offset/off139.pm
+cp lib/Date/Manip/TZ/pakiri00.pm blib/lib/Date/Manip/TZ/pakiri00.pm
+cp lib/Date/Manip/TZ/euprag00.pm blib/lib/Date/Manip/TZ/euprag00.pm
+cp lib/Date/Manip/Offset/off390.pm blib/lib/Date/Manip/Offset/off390.pm
+cp lib/Date/Manip/Offset/off484.pm blib/lib/Date/Manip/Offset/off484.pm
+cp lib/Date/Manip/Offset/off392.pm blib/lib/Date/Manip/Offset/off392.pm
+cp lib/Date/Manip/TZ/euathe00.pm blib/lib/Date/Manip/TZ/euathe00.pm
+cp lib/Date/Manip/TZ/astash00.pm blib/lib/Date/Manip/TZ/astash00.pm
+cp lib/Date/Manip/Offset/off407.pm blib/lib/Date/Manip/Offset/off407.pm
+cp lib/Date/Manip/TZ/etgmtm03.pm blib/lib/Date/Manip/TZ/etgmtm03.pm
+cp lib/Date/Manip/Offset/off275.pm blib/lib/Date/Manip/Offset/off275.pm
+cp lib/Date/Manip/TZ/aumelb00.pm blib/lib/Date/Manip/TZ/aumelb00.pm
+cp lib/Date/Manip/Offset/off134.pm blib/lib/Date/Manip/Offset/off134.pm
+cp lib/Date/Manip/Offset/off127.pm blib/lib/Date/Manip/Offset/off127.pm
+cp lib/Date/Manip/Objects.pod blib/lib/Date/Manip/Objects.pod
+cp lib/Date/Manip/TZ/amvanc00.pm blib/lib/Date/Manip/TZ/amvanc00.pm
+cp lib/Date/Manip/TZ/ancase00.pm blib/lib/Date/Manip/TZ/ancase00.pm
+cp lib/Date/Manip/TZ/eudubl00.pm blib/lib/Date/Manip/TZ/eudubl00.pm
+cp lib/Date/Manip/Offset/off199.pm blib/lib/Date/Manip/Offset/off199.pm
+cp lib/Date/Manip/TZ/amwinn00.pm blib/lib/Date/Manip/TZ/amwinn00.pm
+cp lib/Date/Manip/Recur.pod blib/lib/Date/Manip/Recur.pod
+cp lib/Date/Manip/TZ/amcent00.pm blib/lib/Date/Manip/TZ/amcent00.pm
+cp lib/Date/Manip/Offset/off170.pm blib/lib/Date/Manip/Offset/off170.pm
+cp lib/Date/Manip/Offset/off255.pm blib/lib/Date/Manip/Offset/off255.pm
+cp lib/Date/Manip/TZ/amguay00.pm blib/lib/Date/Manip/TZ/amguay00.pm
+cp lib/Date/Manip/TZ/asnovo01.pm blib/lib/Date/Manip/TZ/asnovo01.pm
+cp lib/Date/Manip/TZ/k00.pm blib/lib/Date/Manip/TZ/k00.pm
+cp lib/Date/Manip/Offset/off140.pm blib/lib/Date/Manip/Offset/off140.pm
+cp lib/Date/Manip/TZ/etgmtm07.pm blib/lib/Date/Manip/TZ/etgmtm07.pm
+cp lib/Date/Manip/Offset/off200.pm blib/lib/Date/Manip/Offset/off200.pm
+cp lib/Date/Manip/Offset/off024.pm blib/lib/Date/Manip/Offset/off024.pm
+cp lib/Date/Manip/Offset/off173.pm blib/lib/Date/Manip/Offset/off173.pm
+cp lib/Date/Manip/TZ/v00.pm blib/lib/Date/Manip/TZ/v00.pm
+cp lib/Date/Manip/TZ/amcost00.pm blib/lib/Date/Manip/TZ/amcost00.pm
+cp lib/Date/Manip/Date.pm blib/lib/Date/Manip/Date.pm
+cp lib/Date/Manip/Offset/off476.pm blib/lib/Date/Manip/Offset/off476.pm
+cp lib/Date/Manip/Offset/off118.pm blib/lib/Date/Manip/Offset/off118.pm
+cp lib/Date/Manip/Offset/off297.pm blib/lib/Date/Manip/Offset/off297.pm
+cp lib/Date/Manip/Offset/off060.pm blib/lib/Date/Manip/Offset/off060.pm
+cp lib/Date/Manip/TZ/inmaur00.pm blib/lib/Date/Manip/TZ/inmaur00.pm
+cp lib/Date/Manip/Lang/polish.pm blib/lib/Date/Manip/Lang/polish.pm
+cp lib/Date/Manip/Lang/russian.pm blib/lib/Date/Manip/Lang/russian.pm
+cp lib/Date/Manip/TZ/euhels00.pm blib/lib/Date/Manip/TZ/euhels00.pm
+cp lib/Date/Manip/Offset/off020.pm blib/lib/Date/Manip/Offset/off020.pm
+cp lib/Date/Manip/Offset/off441.pm blib/lib/Date/Manip/Offset/off441.pm
+cp lib/Date/Manip/TZ/asoral00.pm blib/lib/Date/Manip/TZ/asoral00.pm
+cp lib/Date/Manip/Offset/off240.pm blib/lib/Date/Manip/Offset/off240.pm
+cp lib/Date/Manip/Config.pod blib/lib/Date/Manip/Config.pod
+cp lib/Date/Manip/Offset/off427.pm blib/lib/Date/Manip/Offset/off427.pm
+cp lib/Date/Manip/Offset/off027.pm blib/lib/Date/Manip/Offset/off027.pm
+cp lib/Date/Manip/Offset/off435.pm blib/lib/Date/Manip/Offset/off435.pm
+cp lib/Date/Manip/Offset/off028.pm blib/lib/Date/Manip/Offset/off028.pm
+cp lib/Date/Manip/TZ/afabid00.pm blib/lib/Date/Manip/TZ/afabid00.pm
+cp lib/Date/Manip/Offset/off424.pm blib/lib/Date/Manip/Offset/off424.pm
+cp lib/Date/Manip/Offset/off070.pm blib/lib/Date/Manip/Offset/off070.pm
+cp lib/Date/Manip/TZ/amdetr00.pm blib/lib/Date/Manip/TZ/amdetr00.pm
+cp lib/Date/Manip/Offset/off031.pm blib/lib/Date/Manip/Offset/off031.pm
+cp lib/Date/Manip/Offset/off086.pm blib/lib/Date/Manip/Offset/off086.pm
+cp lib/Date/Manip/Offset/off230.pm blib/lib/Date/Manip/Offset/off230.pm
+cp lib/Date/Manip/Offset/off133.pm blib/lib/Date/Manip/Offset/off133.pm
+cp lib/Date/Manip/TZ/euando00.pm blib/lib/Date/Manip/TZ/euando00.pm
+cp lib/Date/Manip/Zones.pod blib/lib/Date/Manip/Zones.pod
+cp lib/Date/Manip/TZ/afmase00.pm blib/lib/Date/Manip/TZ/afmase00.pm
+cp lib/Date/Manip/Offset/off226.pm blib/lib/Date/Manip/Offset/off226.pm
+cp lib/Date/Manip/Offset/off356.pm blib/lib/Date/Manip/Offset/off356.pm
+cp lib/Date/Manip/TZ/amguad00.pm blib/lib/Date/Manip/TZ/amguad00.pm
+cp lib/Date/Manip/Offset/off147.pm blib/lib/Date/Manip/Offset/off147.pm
+cp lib/Date/Manip/Offset/off272.pm blib/lib/Date/Manip/Offset/off272.pm
+cp lib/Date/Manip/TZ/atberm00.pm blib/lib/Date/Manip/TZ/atberm00.pm
+cp lib/Date/Manip/Offset/off277.pm blib/lib/Date/Manip/Offset/off277.pm
+cp lib/Date/Manip/Offset/off395.pm blib/lib/Date/Manip/Offset/off395.pm
+cp lib/Date/Manip/Offset/off092.pm blib/lib/Date/Manip/Offset/off092.pm
+cp lib/Date/Manip/TZ/asharb00.pm blib/lib/Date/Manip/TZ/asharb00.pm
+cp lib/Date/Manip/TZ/pamarq00.pm blib/lib/Date/Manip/TZ/pamarq00.pm
+cp lib/Date/Manip/TZ/amwina00.pm blib/lib/Date/Manip/TZ/amwina00.pm
+cp lib/Date/Manip/TZ/afgabo00.pm blib/lib/Date/Manip/TZ/afgabo00.pm
+cp lib/Date/Manip/TZ/eubelg00.pm blib/lib/Date/Manip/TZ/eubelg00.pm
+cp lib/Date/Manip/TZ/u00.pm blib/lib/Date/Manip/TZ/u00.pm
+cp lib/Date/Manip/TZ/d00.pm blib/lib/Date/Manip/TZ/d00.pm
+cp lib/Date/Manip/Offset/off046.pm blib/lib/Date/Manip/Offset/off046.pm
+cp lib/Date/Manip/Offset/off206.pm blib/lib/Date/Manip/Offset/off206.pm
+cp lib/Date/Manip/TZ/ammana01.pm blib/lib/Date/Manip/TZ/ammana01.pm
+cp lib/Date/Manip/Offset/off334.pm blib/lib/Date/Manip/Offset/off334.pm
+cp lib/Date/Manip/TZ/atfaro00.pm blib/lib/Date/Manip/TZ/atfaro00.pm
+cp lib/Date/Manip/Offset/off353.pm blib/lib/Date/Manip/Offset/off353.pm
+cp lib/Date/Manip/Offset/off422.pm blib/lib/Date/Manip/Offset/off422.pm
+cp lib/Date/Manip/Offset/off188.pm blib/lib/Date/Manip/Offset/off188.pm
+cp lib/Date/Manip/Offset/off071.pm blib/lib/Date/Manip/Offset/off071.pm
+cp lib/Date/Manip/Offset/off069.pm blib/lib/Date/Manip/Offset/off069.pm
+cp lib/Date/Manip/TZ/afmala00.pm blib/lib/Date/Manip/TZ/afmala00.pm
+cp lib/Date/Manip/TZ/afblan00.pm blib/lib/Date/Manip/TZ/afblan00.pm
+cp lib/Date/Manip/Offset/off166.pm blib/lib/Date/Manip/Offset/off166.pm
+cp lib/Date/Manip/TZ/ammana00.pm blib/lib/Date/Manip/TZ/ammana00.pm
+cp lib/Date/Manip/TZ/afcona00.pm blib/lib/Date/Manip/TZ/afcona00.pm
+cp lib/Date/Manip/TZ/panoum00.pm blib/lib/Date/Manip/TZ/panoum00.pm
+cp lib/Date/Manip/TZ/amarub00.pm blib/lib/Date/Manip/TZ/amarub00.pm
+cp lib/Date/Manip/Offset/off243.pm blib/lib/Date/Manip/Offset/off243.pm
+cp lib/Date/Manip/TZ/asnovo00.pm blib/lib/Date/Manip/TZ/asnovo00.pm
+cp lib/Date/Manip/TZ/paguad00.pm blib/lib/Date/Manip/TZ/paguad00.pm
+cp lib/Date/Manip/TZ/amvinc00.pm blib/lib/Date/Manip/TZ/amvinc00.pm
+cp lib/Date/Manip/Offset/off235.pm blib/lib/Date/Manip/Offset/off235.pm
+cp lib/Date/Manip/TZ/assakh00.pm blib/lib/Date/Manip/TZ/assakh00.pm
+cp lib/Date/Manip/TZ/inmald00.pm blib/lib/Date/Manip/TZ/inmald00.pm
+cp lib/Date/Manip/TZ/asmani00.pm blib/lib/Date/Manip/TZ/asmani00.pm
+cp lib/Date/Manip/Offset/off330.pm blib/lib/Date/Manip/Offset/off330.pm
+cp lib/Date/Manip/Offset/off483.pm blib/lib/Date/Manip/Offset/off483.pm
+cp lib/Date/Manip/TZ/eubuch00.pm blib/lib/Date/Manip/TZ/eubuch00.pm
+cp lib/Date/Manip/TZ/amiqal00.pm blib/lib/Date/Manip/TZ/amiqal00.pm
+cp lib/Date/Manip/TZ/andumo00.pm blib/lib/Date/Manip/TZ/andumo00.pm
+cp lib/Date/Manip/Offset/off212.pm blib/lib/Date/Manip/Offset/off212.pm
+cp lib/Date/Manip/Offset/off054.pm blib/lib/Date/Manip/Offset/off054.pm
+cp lib/Date/Manip/Offset/off029.pm blib/lib/Date/Manip/Offset/off029.pm
+cp lib/Date/Manip/Offset/off299.pm blib/lib/Date/Manip/Offset/off299.pm
+cp lib/Date/Manip/Lang/french.pm blib/lib/Date/Manip/Lang/french.pm
+cp lib/Date/Manip/TZ/eutall00.pm blib/lib/Date/Manip/TZ/eutall00.pm
+cp lib/Date/Manip/TZ/amscor00.pm blib/lib/Date/Manip/TZ/amscor00.pm
+cp lib/Date/Manip/TZ/afcair00.pm blib/lib/Date/Manip/TZ/afcair00.pm
+cp lib/Date/Manip/Offset/off287.pm blib/lib/Date/Manip/Offset/off287.pm
+cp lib/Date/Manip/TZ/atstan00.pm blib/lib/Date/Manip/TZ/atstan00.pm
+cp lib/Date/Manip/TZ/afbama00.pm blib/lib/Date/Manip/TZ/afbama00.pm
+cp lib/Date/Manip/TZ/pakwaj00.pm blib/lib/Date/Manip/TZ/pakwaj00.pm
+cp lib/Date/Manip/TZ/aulord00.pm blib/lib/Date/Manip/TZ/aulord00.pm
+cp lib/Date/Manip/Offset/off450.pm blib/lib/Date/Manip/Offset/off450.pm
+cp lib/Date/Manip/TZ/asbang00.pm blib/lib/Date/Manip/TZ/asbang00.pm
+cp lib/Date/Manip/TZ/ambogo00.pm blib/lib/Date/Manip/TZ/ambogo00.pm
+cp lib/Date/Manip/Offset/off307.pm blib/lib/Date/Manip/Offset/off307.pm
+cp lib/Date/Manip/TZ/amrio_01.pm blib/lib/Date/Manip/TZ/amrio_01.pm
+cp lib/Date/Manip/Offset/off162.pm blib/lib/Date/Manip/Offset/off162.pm
+cp lib/Date/Manip/TZ/amnass00.pm blib/lib/Date/Manip/TZ/amnass00.pm
+cp lib/Date/Manip/Offset/off257.pm blib/lib/Date/Manip/Offset/off257.pm
+cp lib/Date/Manip/TZ/askuwa00.pm blib/lib/Date/Manip/TZ/askuwa00.pm
+cp lib/Date/Manip/TZ/x00.pm blib/lib/Date/Manip/TZ/x00.pm
+cp lib/Date/Manip/Lang/russian.pod blib/lib/Date/Manip/Lang/russian.pod
+cp lib/Date/Manip/Offset/off163.pm blib/lib/Date/Manip/Offset/off163.pm
+cp lib/Date/Manip/Offset/off474.pm blib/lib/Date/Manip/Offset/off474.pm
+cp lib/Date/Manip/TZ/afhara00.pm blib/lib/Date/Manip/TZ/afhara00.pm
+cp lib/Date/Manip/TZ/met00.pm blib/lib/Date/Manip/TZ/met00.pm
+cp lib/Date/Manip/Lang/italian.pod blib/lib/Date/Manip/Lang/italian.pod
+cp lib/Date/Manip/Offset/off351.pm blib/lib/Date/Manip/Offset/off351.pm
+cp lib/Date/Manip/Lang/catalan.pod blib/lib/Date/Manip/Lang/catalan.pod
+cp lib/Date/Manip/Offset/off269.pm blib/lib/Date/Manip/Offset/off269.pm
+cp lib/Date/Manip/TZ/amla_p00.pm blib/lib/Date/Manip/TZ/amla_p00.pm
+cp lib/Date/Manip/TZ/euuzhg00.pm blib/lib/Date/Manip/TZ/euuzhg00.pm
+cp lib/Date/Manip/Offset/off437.pm blib/lib/Date/Manip/Offset/off437.pm
+cp lib/Date/Manip/Offset/off097.pm blib/lib/Date/Manip/Offset/off097.pm
+cp lib/Date/Manip/TZ/aueucl00.pm blib/lib/Date/Manip/TZ/aueucl00.pm
+cp lib/Date/Manip/TZ/anroth00.pm blib/lib/Date/Manip/TZ/anroth00.pm
+cp lib/Date/Manip/TZ/amgran00.pm blib/lib/Date/Manip/TZ/amgran00.pm
+cp lib/Date/Manip/Offset/off047.pm blib/lib/Date/Manip/Offset/off047.pm
+cp lib/Date/Manip/TZ/paefat00.pm blib/lib/Date/Manip/TZ/paefat00.pm
+cp lib/Date/Manip/Offset/off079.pm blib/lib/Date/Manip/Offset/off079.pm
+cp lib/Date/Manip/Offset/off051.pm blib/lib/Date/Manip/Offset/off051.pm
+cp lib/Date/Manip/TZ/t00.pm blib/lib/Date/Manip/TZ/t00.pm
+cp lib/Date/Manip/TZ/ammiqu00.pm blib/lib/Date/Manip/TZ/ammiqu00.pm
+cp lib/Date/Manip/Offset/off262.pm blib/lib/Date/Manip/Offset/off262.pm
+cp lib/Date/Manip/Offset/off135.pm blib/lib/Date/Manip/Offset/off135.pm
+cp lib/Date/Manip/Offset/off439.pm blib/lib/Date/Manip/Offset/off439.pm
+cp lib/Date/Manip/Offset/off428.pm blib/lib/Date/Manip/Offset/off428.pm
+cp lib/Date/Manip/TZ/ashovd00.pm blib/lib/Date/Manip/TZ/ashovd00.pm
+cp lib/Date/Manip/Delta.pm blib/lib/Date/Manip/Delta.pm
+cp lib/Date/Manip/Offset/off363.pm blib/lib/Date/Manip/Offset/off363.pm
+cp lib/Date/Manip/TZ/asthim00.pm blib/lib/Date/Manip/TZ/asthim00.pm
+cp lib/Date/Manip/Changes6.pod blib/lib/Date/Manip/Changes6.pod
+cp lib/Date/Manip/Offset/off345.pm blib/lib/Date/Manip/Offset/off345.pm
+cp lib/Date/Manip/TZ/aflome00.pm blib/lib/Date/Manip/TZ/aflome00.pm
+cp lib/Date/Manip/TZ/aschon00.pm blib/lib/Date/Manip/TZ/aschon00.pm
+cp lib/Date/Manip/TZ/auhoba00.pm blib/lib/Date/Manip/TZ/auhoba00.pm
+cp lib/Date/Manip/Offset/off192.pm blib/lib/Date/Manip/Offset/off192.pm
+cp lib/Date/Manip/TZ/amtiju00.pm blib/lib/Date/Manip/TZ/amtiju00.pm
+cp lib/Date/Manip/Offset/off165.pm blib/lib/Date/Manip/Offset/off165.pm
+cp lib/Date/Manip/TZ/amtort00.pm blib/lib/Date/Manip/TZ/amtort00.pm
+cp lib/Date/Manip/Offset/off252.pm blib/lib/Date/Manip/Offset/off252.pm
+cp lib/Date/Manip/TZ/afbraz00.pm blib/lib/Date/Manip/TZ/afbraz00.pm
+cp lib/Date/Manip/Offset/off178.pm blib/lib/Date/Manip/Offset/off178.pm
+cp lib/Date/Manip/TZ/inkerg00.pm blib/lib/Date/Manip/TZ/inkerg00.pm
+cp lib/Date/Manip/Offset/off263.pm blib/lib/Date/Manip/Offset/off263.pm
+cp lib/Date/Manip/Offset/off404.pm blib/lib/Date/Manip/Offset/off404.pm
+cp lib/Date/Manip/TZ/asbish00.pm blib/lib/Date/Manip/TZ/asbish00.pm
+cp lib/Date/Manip/TZ/euriga00.pm blib/lib/Date/Manip/TZ/euriga00.pm
+cp lib/Date/Manip/TZ/euoslo00.pm blib/lib/Date/Manip/TZ/euoslo00.pm
+cp lib/Date/Manip/Offset/off194.pm blib/lib/Date/Manip/Offset/off194.pm
+cp lib/Date/Manip/Offset/off100.pm blib/lib/Date/Manip/Offset/off100.pm
+cp lib/Date/Manip/TZ/ansyow00.pm blib/lib/Date/Manip/TZ/ansyow00.pm
+cp lib/Date/Manip/Offset/off185.pm blib/lib/Date/Manip/Offset/off185.pm
+cp lib/Date/Manip/TZ/amwhit00.pm blib/lib/Date/Manip/TZ/amwhit00.pm
+cp lib/Date/Manip/TZ/euvadu00.pm blib/lib/Date/Manip/TZ/euvadu00.pm
+cp lib/Date/Manip/TZ/paapia00.pm blib/lib/Date/Manip/TZ/paapia00.pm
+cp lib/Date/Manip/TZ/amphoe00.pm blib/lib/Date/Manip/TZ/amphoe00.pm
+cp lib/Date/Manip/TZ/euamst00.pm blib/lib/Date/Manip/TZ/euamst00.pm
+cp lib/Date/Manip/Offset/off183.pm blib/lib/Date/Manip/Offset/off183.pm
+cp lib/Date/Manip/TZ/eugibr00.pm blib/lib/Date/Manip/TZ/eugibr00.pm
+cp lib/Date/Manip/Offset/off043.pm blib/lib/Date/Manip/Offset/off043.pm
+cp lib/Date/Manip/TZ/o00.pm blib/lib/Date/Manip/TZ/o00.pm
+cp lib/Date/Manip/TZ/cet00.pm blib/lib/Date/Manip/TZ/cet00.pm
+cp lib/Date/Manip/TZ/etgmtp11.pm blib/lib/Date/Manip/TZ/etgmtp11.pm
+cp lib/Date/Manip/Offset/off487.pm blib/lib/Date/Manip/Offset/off487.pm
+cp lib/Date/Manip/TZ/afdjib00.pm blib/lib/Date/Manip/TZ/afdjib00.pm
+cp lib/Date/Manip/TZ.pod blib/lib/Date/Manip/TZ.pod
+cp lib/Date/Manip/TZ/amcaye00.pm blib/lib/Date/Manip/TZ/amcaye00.pm
+cp lib/Date/Manip/Offset/off107.pm blib/lib/Date/Manip/Offset/off107.pm
+cp lib/Date/Manip/TZ/etgmtp00.pm blib/lib/Date/Manip/TZ/etgmtp00.pm
+cp lib/Date/Manip/TZ/eurome00.pm blib/lib/Date/Manip/TZ/eurome00.pm
+cp lib/Date/Manip/Offset/off348.pm blib/lib/Date/Manip/Offset/off348.pm
+cp lib/Date/Manip/TZ/etgmtp06.pm blib/lib/Date/Manip/TZ/etgmtp06.pm
+cp lib/Date/Manip/TZ/paniue00.pm blib/lib/Date/Manip/TZ/paniue00.pm
+cp lib/Date/Manip/TZ/anvost00.pm blib/lib/Date/Manip/TZ/anvost00.pm
+cp lib/Date/Manip/TZ/afnair00.pm blib/lib/Date/Manip/TZ/afnair00.pm
+cp lib/Date/Manip/TZ/astbil00.pm blib/lib/Date/Manip/TZ/astbil00.pm
+cp lib/Date/Manip/TZ/amsan_01.pm blib/lib/Date/Manip/TZ/amsan_01.pm
+cp lib/Date/Manip/Offset/off460.pm blib/lib/Date/Manip/Offset/off460.pm
+cp lib/Date/Manip/Offset/off176.pm blib/lib/Date/Manip/Offset/off176.pm
+cp lib/Date/Manip/TZ/paeast00.pm blib/lib/Date/Manip/TZ/paeast00.pm
+cp lib/Date/Manip/TZ/euviln00.pm blib/lib/Date/Manip/TZ/euviln00.pm
+cp lib/Date/Manip/Offset/off328.pm blib/lib/Date/Manip/Offset/off328.pm
+cp lib/Date/Manip/Offset/off056.pm blib/lib/Date/Manip/Offset/off056.pm
+cp lib/Date/Manip/Offset/off283.pm blib/lib/Date/Manip/Offset/off283.pm
+cp lib/Date/Manip/TZ/ambeli00.pm blib/lib/Date/Manip/TZ/ambeli00.pm
+cp lib/Date/Manip/Offset/off432.pm blib/lib/Date/Manip/Offset/off432.pm
+cp lib/Date/Manip/TZ/etgmtm13.pm blib/lib/Date/Manip/TZ/etgmtm13.pm
+cp lib/Date/Manip/Offset/off458.pm blib/lib/Date/Manip/Offset/off458.pm
+cp lib/Date/Manip/Offset/off006.pm blib/lib/Date/Manip/Offset/off006.pm
+cp lib/Date/Manip/Offset/off158.pm blib/lib/Date/Manip/Offset/off158.pm
+cp lib/Date/Manip/Offset/off072.pm blib/lib/Date/Manip/Offset/off072.pm
+Manifying blib/man3/Date::Manip::Offset::off401.3pm
+Manifying blib/man3/Date::Manip::Offset::off245.3pm
+Manifying blib/man3/Date::Manip::TZ::ammend00.3pm
+Manifying blib/man3/Date::Manip::TZ::inanta00.3pm
+Manifying blib/man3/Date::Manip::Offset::off136.3pm
+Manifying blib/man3/Date::Manip::TZ::aftrip00.3pm
+Manifying blib/man3/Date::Manip::TZ::amboa_00.3pm
+Manifying blib/man3/Date::Manip::Offset::off213.3pm
+Manifying blib/man3/Date::Manip::TZ::etgmtp04.3pm
+Manifying blib/man3/Date::Manip::Offset::off463.3pm
+Manifying blib/man3/Date::Manip::Offset::off388.3pm
+Manifying blib/man3/Date::Manip::Offset::off341.3pm
+Manifying blib/man3/Date::Manip::Offset::off142.3pm
+Manifying blib/man3/Date::Manip::TZ::wet00.3pm
+Manifying blib/man3/Date::Manip::Offset::off455.3pm
+Manifying blib/man3/Date::Manip::Offset::off078.3pm
+Manifying blib/man3/Date::Manip::Offset::off337.3pm
+Manifying blib/man3/Date::Manip::Changes5.3pm
+Manifying blib/man3/Date::Manip::Offset::off064.3pm
+Manifying blib/man3/Date::Manip::Offset::off102.3pm
+Manifying blib/man3/Date::Manip::TZ::l00.3pm
+Manifying blib/man3/Date::Manip::Offset::off083.3pm
+Manifying blib/man3/Date::Manip::Offset::off386.3pm
+Manifying blib/man3/Date::Manip::TZ::etgmtm05.3pm
+Manifying blib/man3/Date::Manip::TZ::ammont04.3pm
+Manifying blib/man3/Date::Manip::Offset::off205.3pm
+Manifying blib/man3/Date::Manip::TZ::afnoua00.3pm
+Manifying blib/man3/Date::Manip::Offset::off324.3pm
+Manifying blib/man3/Date::Manip::Offset::off217.3pm
+Manifying blib/man3/Date::Manip::Offset::off076.3pm
+Manifying blib/man3/Date::Manip::TZ::eumosc00.3pm
+Manifying blib/man3/Date::Manip::TZ::eusimf00.3pm
+Manifying blib/man3/Date::Manip::TZ::pafuna00.3pm
+Manifying blib/man3/Date::Manip::Offset::off414.3pm
+Manifying blib/man3/Date::Manip::Offset::off394.3pm
+Manifying blib/man3/Date::Manip::Offset::off223.3pm
+Manifying blib/man3/Date::Manip::TZ::amnoro00.3pm
+Manifying blib/man3/Date::Manip::Offset::off332.3pm
+Manifying blib/man3/Date::Manip::Offset::off273.3pm
+Manifying blib/man3/Date::Manip::TZ::pasaip00.3pm
+Manifying blib/man3/Date::Manip::TZ::afjoha00.3pm
+Manifying blib/man3/Date::Manip::Offset::off160.3pm
+Manifying blib/man3/Date::Manip::TZ::ampang00.3pm
+Manifying blib/man3/Date::Manip::TZ::ammonc00.3pm
+Manifying blib/man3/Date::Manip::TZ::asbrun00.3pm
+Manifying blib/man3/Date::Manip::TZ::etgmtp03.3pm
+Manifying blib/man3/Date::Manip::Offset::off012.3pm
+Manifying blib/man3/Date::Manip::TZ::afmoga00.3pm
+Manifying blib/man3/Date::Manip::Offset::off329.3pm
+Manifying blib/man3/Date::Manip::TZ::aspyon00.3pm
+Manifying blib/man3/Date::Manip::TZ::euluxe00.3pm
+Manifying blib/man3/Date::Manip::TZ::euvien00.3pm
+Manifying blib/man3/Date::Manip::Offset::off259.3pm
+Manifying blib/man3/Date::Manip::Offset::off314.3pm
+Manifying blib/man3/Date::Manip::Offset::off358.3pm
+Manifying blib/man3/Date::Manip::Offset::off242.3pm
+Manifying blib/man3/Date::Manip::TZ::afel_a00.3pm
+Manifying blib/man3/Date::Manip::Offset::off174.3pm
+Manifying blib/man3/Date::Manip::Offset::off442.3pm
+Manifying blib/man3/Date::Manip::Offset::off464.3pm
+Manifying blib/man3/Date::Manip::TZ::pafaka00.3pm
+Manifying blib/man3/Date::Manip::TZ::amjuju00.3pm
+Manifying blib/man3/Date::Manip::TZ::amjune00.3pm
+Manifying blib/man3/Date::Manip::TZ::euwars00.3pm
+Manifying blib/man3/Date::Manip::TZ::inchag00.3pm
+Manifying blib/man3/Date::Manip::TZ::eusofi00.3pm
+Manifying blib/man3/Date::Manip::Offset::off011.3pm
+Manifying blib/man3/Date::Manip::Offset::off312.3pm
+Manifying blib/man3/Date::Manip::TZ::a00.3pm
+Manifying blib/man3/Date::Manip::TZ::atcape00.3pm
+Manifying blib/man3/Date::Manip::TZ::pahono00.3pm
+Manifying blib/man3/Date::Manip::Offset::off117.3pm
+Manifying blib/man3/Date::Manip::Offset::off379.3pm
+Manifying blib/man3/Date::Manip::Offset::off466.3pm
+Manifying blib/man3/Date::Manip::Offset::off106.3pm
+Manifying blib/man3/Date::Manip::TZ::ashong00.3pm
+Manifying blib/man3/Date::Manip::Offset::off187.3pm
+Manifying blib/man3/Date::Manip::Offset::off468.3pm
+Manifying blib/man3/Date::Manip::Offset::off251.3pm
+Manifying blib/man3/Date::Manip::TZ::asyaku00.3pm
+Manifying blib/man3/Date::Manip::Offset::off261.3pm
+Manifying blib/man3/Date::Manip::TZ::assama00.3pm
+Manifying blib/man3/Date::Manip::Offset::off304.3pm
+Manifying blib/man3/Date::Manip::Offset::off470.3pm
+Manifying blib/man3/Date::Manip::Offset::off108.3pm
+Manifying blib/man3/Date::Manip::Offset::off041.3pm
+Manifying blib/man3/Date::Manip::Offset::off181.3pm
+Manifying blib/man3/Date::Manip::TZ::atsout00.3pm
+Manifying blib/man3/Date::Manip::Offset::off105.3pm
+Manifying blib/man3/Date::Manip::TZ::amdaws00.3pm
+Manifying blib/man3/Date::Manip::Offset::off074.3pm
+Manifying blib/man3/Date::Manip::TZ::anmacq00.3pm
+Manifying blib/man3/Date::Manip::Offset::off384.3pm
+Manifying blib/man3/Date::Manip::TZ::ammeri00.3pm
+Manifying blib/man3/Date::Manip::Offset::off033.3pm
+Manifying blib/man3/Date::Manip::DM6.3pm
+Manifying blib/man3/Date::Manip::Offset::off364.3pm
+Manifying blib/man3/Date::Manip::TZ::amhali00.3pm
+Manifying blib/man3/Date::Manip::Offset::off144.3pm
+Manifying blib/man3/Date::Manip::TZ::ascolo00.3pm
+Manifying blib/man3/Date::Manip::Offset::off408.3pm
+Manifying blib/man3/Date::Manip::Offset::off322.3pm
+Manifying blib/man3/Date::Manip::Offset::off301.3pm
+Manifying blib/man3/Date::Manip::Offset::off327.3pm
+Manifying blib/man3/Date::Manip::TZ::assing00.3pm
+Manifying blib/man3/Date::Manip::TZ::amreso00.3pm
+Manifying blib/man3/Date::Manip::TZ::amojin00.3pm
+Manifying blib/man3/Date::Manip::Offset::off260.3pm
+Manifying blib/man3/Date::Manip::Offset::off233.3pm
+Manifying blib/man3/Date::Manip::Offset::off276.3pm
+Manifying blib/man3/Date::Manip::TZ::afniam00.3pm
+Manifying blib/man3/Date::Manip::TZ::afbiss00.3pm
+Manifying blib/man3/Date::Manip::TZ::astoky00.3pm
+Manifying blib/man3/Date::Manip::Offset::off338.3pm
+Manifying blib/man3/Date::Manip::TZ::paende00.3pm
+Manifying blib/man3/Date::Manip::Offset::off448.3pm
+Manifying blib/man3/Date::Manip::TZ::ambahi00.3pm
+Manifying blib/man3/Date::Manip::TZ::aulind00.3pm
+Manifying blib/man3/Date::Manip::TZ::aubris00.3pm
+Manifying blib/man3/Date::Manip::TZ::pakosr00.3pm
+Manifying blib/man3/Date::Manip::Offset::off130.3pm
+Manifying blib/man3/Date::Manip::Offset::off198.3pm
+Manifying blib/man3/Date::Manip::TZ::etgmtp02.3pm
+Manifying blib/man3/Date::Manip::Offset::off306.3pm
+Manifying blib/man3/Date::Manip::TZ::amsalt00.3pm
+Manifying blib/man3/Date::Manip::Offset::off298.3pm
+Manifying blib/man3/Date::Manip::TZ::ampana00.3pm
+Manifying blib/man3/Date::Manip::Offset::off232.3pm
+Manifying blib/man3/Date::Manip::Offset::off189.3pm
+Manifying blib/man3/Date::Manip::Offset::off246.3pm
+Manifying blib/man3/Date::Manip::TZ::amswif00.3pm
+Manifying blib/man3/Date::Manip::Offset::off271.3pm
+Manifying blib/man3/Date::Manip::TZ::incoco00.3pm
+Manifying blib/man3/Date::Manip::TZ::y00.3pm
+Manifying blib/man3/Date::Manip::TZ::ammont01.3pm
+Manifying blib/man3/Date::Manip::TZ::astaip00.3pm
+Manifying blib/man3/Date::Manip::Offset::off048.3pm
+Manifying blib/man3/Date::Manip::Offset::off480.3pm
+Manifying blib/man3/Date::Manip::Offset::off061.3pm
+Manifying blib/man3/Date::Manip::TZ::amatik00.3pm
+Manifying blib/man3/Date::Manip::TZ::pachuu00.3pm
+Manifying blib/man3/Date::Manip::TZ::amsant02.3pm
+Manifying blib/man3/Date::Manip::TZ::asaqto00.3pm
+Manifying blib/man3/Date::Manip::TZ::afdoua00.3pm
+Manifying blib/man3/Date::Manip::TZ::asmusc00.3pm
+Manifying blib/man3/Date::Manip::TZ::amcord00.3pm
+Manifying blib/man3/Date::Manip::Offset::off077.3pm
+Manifying blib/man3/Date::Manip::Offset::off215.3pm
+Manifying blib/man3/Date::Manip::TZ::w00.3pm
+Manifying blib/man3/Date::Manip::TZ::atst_h00.3pm
+Manifying blib/man3/Date::Manip::TZ::pararo00.3pm
+Manifying blib/man3/Date::Manip::Offset::off431.3pm
+Manifying blib/man3/Date::Manip::Offset::off036.3pm
+Manifying blib/man3/Date::Manip::TZ::asaqta00.3pm
+Manifying blib/man3/Date::Manip::TZ::etgmtm08.3pm
+Manifying blib/man3/Date::Manip::Offset::off022.3pm
+Manifying blib/man3/Date::Manip::Offset::off179.3pm
+Manifying blib/man3/Date::Manip::Offset::off010.3pm
+Manifying blib/man3/Date::Manip::TZ::afalgi00.3pm
+Manifying blib/man3/Date::Manip::Offset::off059.3pm
+Manifying blib/man3/Date::Manip::TZ::amveva00.3pm
+Manifying blib/man3/Date::Manip::Offset::off371.3pm
+Manifying blib/man3/Date::Manip::Offset::off278.3pm
+Manifying blib/man3/Date::Manip::TZ::amregi00.3pm
+Manifying blib/man3/Date::Manip::TZ::aupert00.3pm
+Manifying blib/man3/Date::Manip::TZ::amsitk00.3pm
+Manifying blib/man3/Date::Manip::TZ::r00.3pm
+Manifying blib/man3/Date::Manip::TZ::euvolg00.3pm
+Manifying blib/man3/Date::Manip::TZ::inreun00.3pm
+Manifying blib/man3/Date::Manip::Offset::off310.3pm
+Manifying blib/man3/Date::Manip::TZ::askual00.3pm
+Manifying blib/man3/Date::Manip::Offset::off001.3pm
+Manifying blib/man3/Date::Manip::TZ::afceut00.3pm
+Manifying blib/man3/Date::Manip::TZ::afdar_00.3pm
+Manifying blib/man3/Date::Manip::Offset::off366.3pm
+Manifying blib/man3/Date::Manip::Offset::off352.3pm
+Manifying blib/man3/Date::Manip::Offset::off360.3pm
+Manifying blib/man3/Date::Manip::TZ::etgmtm04.3pm
+Manifying blib/man3/Date::Manip::TZ::ambuen00.3pm
+Manifying blib/man3/Date::Manip::TZ::ampete00.3pm
+Manifying blib/man3/Date::Manip::Offset::off472.3pm
+Manifying blib/man3/Date::Manip::Offset::off254.3pm
+Manifying blib/man3/Date::Manip::TZ::amnome00.3pm
+Manifying blib/man3/Date::Manip::TZ::asdama00.3pm
+Manifying blib/man3/Date::Manip::TZ::asrang00.3pm
+Manifying blib/man3/Date::Manip::TZ::etgmtm06.3pm
+Manifying blib/man3/Date::Manip::TZ::asmaka00.3pm
+Manifying blib/man3/Date::Manip::TZ::etgmtm10.3pm
+Manifying blib/man3/Date::Manip::Offset::off479.3pm
+Manifying blib/man3/Date::Manip::TZ::eucope00.3pm
+Manifying blib/man3/Date::Manip::TZ::pagamb00.3pm
+Manifying blib/man3/Date::Manip::TZ::amst_t00.3pm
+Manifying blib/man3/Date::Manip::Offset::off346.3pm
+Manifying blib/man3/Date::Manip::TZ::asdush00.3pm
+Manifying blib/man3/Date::Manip::TZ::amnew_01.3pm
+Manifying blib/man3/Date::Manip::TZ::asho_c00.3pm
+Manifying blib/man3/Date::Manip::TZ::eukali00.3pm
+Manifying blib/man3/Date::Manip::Offset::off094.3pm
+Manifying blib/man3/Date::Manip::Offset::off374.3pm
+Manifying blib/man3/Date::Manip::TZ::papohn00.3pm
+Manifying blib/man3/Date::Manip::Offset::off016.3pm
+Manifying blib/man3/Date::Manip::TZ::etgmtp07.3pm
+Manifying blib/man3/Date::Manip::TZ::n00.3pm
+Manifying blib/man3/Date::Manip::TZ::amanti00.3pm
+Manifying blib/man3/Date::Manip::TZ::amadak00.3pm
+Manifying blib/man3/Date::Manip::Offset::off155.3pm
+Manifying blib/man3/Date::Manip::Offset::off376.3pm
+Manifying blib/man3/Date::Manip::TZ::eubuda00.3pm
+Manifying blib/man3/Date::Manip::TZ::afasma00.3pm
+Manifying blib/man3/Date::Manip::TZ::amcara00.3pm
+Manifying blib/man3/Date::Manip::Offset::off131.3pm
+Manifying blib/man3/Date::Manip::TZ::affree00.3pm
+Manifying blib/man3/Date::Manip::TZ::aminuv00.3pm
+Manifying blib/man3/Date::Manip::TZ::pamaju00.3pm
+Manifying blib/man3/Date::Manip::Offset::off053.3pm
+Manifying blib/man3/Date::Manip::Offset::off096.3pm
+Manifying blib/man3/Date::Manip::Offset::off469.3pm
+Manifying blib/man3/Date::Manip::Offset::off340.3pm
+Manifying blib/man3/Date::Manip::Offset::off367.3pm
+Manifying blib/man3/Date::Manip::TZ::paguam00.3pm
+Manifying blib/man3/Date::Manip::Offset::off433.3pm
+Manifying blib/man3/Date::Manip::Offset::off219.3pm
+Manifying blib/man3/Date::Manip::TZ::anpalm00.3pm
+Manifying blib/man3/Date::Manip::TZ::eumona00.3pm
+Manifying blib/man3/Date::Manip::TZ::aftuni00.3pm
+Manifying blib/man3/Date::Manip::Offset::off280.3pm
+Manifying blib/man3/Date::Manip::TZ::etgmtp05.3pm
+Manifying blib/man3/Date::Manip::TZ::ampara00.3pm
+Manifying blib/man3/Date::Manip::Offset::off270.3pm
+Manifying blib/man3/Date::Manip::Offset::off369.3pm
+Manifying blib/man3/Date::Manip::Offset::off383.3pm
+Manifying blib/man3/Date::Manip::Offset::off434.3pm
+Manifying blib/man3/Date::Manip::TZ::audarw00.3pm
+Manifying blib/man3/Date::Manip::TZ::amgren00.3pm
+Manifying blib/man3/Date::Manip::Offset::off361.3pm
+Manifying blib/man3/Date::Manip::Offset::off362.3pm
+Manifying blib/man3/Date::Manip::Offset::off285.3pm
+Manifying blib/man3/Date::Manip::TZ::ammata00.3pm
+Manifying blib/man3/Date::Manip::TZ::amtegu00.3pm
+Manifying blib/man3/Date::Manip::Offset::off104.3pm
+Manifying blib/man3/Date::Manip::TZ::asyere00.3pm
+Manifying blib/man3/Date::Manip::TZ::amrank00.3pm
+Manifying blib/man3/Date::Manip::Lang::index.3pm
+Manifying blib/man3/Date::Manip::Offset::off062.3pm
+Manifying blib/man3/Date::Manip::Offset::off167.3pm
+Manifying blib/man3/Date::Manip::Offset::off221.3pm
+Manifying blib/man3/Date::Manip::TZ::pagala00.3pm
+Manifying blib/man3/Date::Manip::Offset::off128.3pm
+Manifying blib/man3/Date::Manip::TZ::amtoro00.3pm
+Manifying blib/man3/Date::Manip::Offset::off164.3pm
+Manifying blib/man3/Date::Manip::Offset::off125.3pm
+Manifying blib/man3/Date::Manip::TZ::ammont02.3pm
+Manifying blib/man3/Date::Manip::Offset::off225.3pm
+Manifying blib/man3/Date::Manip::TZ::papala00.3pm
+Manifying blib/man3/Date::Manip::TZ::amasun00.3pm
+Manifying blib/man3/Date::Manip::TZ::aubrok00.3pm
+Manifying blib/man3/Date::Manip::TZ::asvlad00.3pm
+Manifying blib/man3/Date::Manip::Offset::off336.3pm
+Manifying blib/man3/Date::Manip::Offset::off101.3pm
+Manifying blib/man3/Date::Manip::TZ::anmaws00.3pm
+Manifying blib/man3/Date::Manip::TZdata.3pm
+Manifying blib/man3/Date::Manip::Offset::off231.3pm
+Manifying blib/man3/Date::Manip::TZ::aflibr00.3pm
+Manifying blib/man3/Date::Manip::Offset::off034.3pm
+Manifying blib/man3/Date::Manip::Offset::off402.3pm
+Manifying blib/man3/Date::Manip::Offset::off423.3pm
+Manifying blib/man3/Date::Manip::Offset::off035.3pm
+Manifying blib/man3/Date::Manip::TZ::amlima00.3pm
+Manifying blib/man3/Date::Manip::Offset::off073.3pm
+Manifying blib/man3/Date::Manip::Offset::off005.3pm
+Manifying blib/man3/Date::Manip::Offset::off399.3pm
+Manifying blib/man3/Date::Manip::Offset::off415.3pm
+Manifying blib/man3/Date::Manip::Offset::off449.3pm
+Manifying blib/man3/Date::Manip::Lang::swedish.3pm
+Manifying blib/man3/Date::Manip::Offset::off089.3pm
+Manifying blib/man3/Date::Manip::TZ::afkins00.3pm
+Manifying blib/man3/Date::Manip::TZ::atcana00.3pm
+Manifying blib/man3/Date::Manip::Offset::off323.3pm
+Manifying blib/man3/Date::Manip::Offset::off397.3pm
+Manifying blib/man3/Date::Manip::TZ::askash00.3pm
+Manifying blib/man3/Date::Manip::TZ::asnico00.3pm
+Manifying blib/man3/Date::Manip::TZ::asjeru00.3pm
+Manifying blib/man3/Date::Manip::Offset::off120.3pm
+Manifying blib/man3/Date::Manip::Offset::off190.3pm
+Manifying blib/man3/Date::Manip::TZ::q00.3pm
+Manifying blib/man3/Date::Manip::TZ::etgmtp01.3pm
+Manifying blib/man3/Date::Manip::TZ::amanch00.3pm
+Manifying blib/man3/Date::Manip::Offset::off238.3pm
+Manifying blib/man3/Date::Manip::Offset::off389.3pm
+Manifying blib/man3/Date::Manip::TZ::asphno00.3pm
+Manifying blib/man3/Date::Manip::TZ::afdaka00.3pm
+Manifying blib/man3/Date::Manip::TZ::amloui00.3pm
+Manifying blib/man3/Date::Manip::Offset::off482.3pm
+Manifying blib/man3/Date::Manip::Offset::off339.3pm
+Manifying blib/man3/Date::Manip::TZ::asyeka00.3pm
+Manifying blib/man3/Date::Manip::TZ::amthul00.3pm
+Manifying blib/man3/Date::Manip::Offset::off112.3pm
+Manifying blib/man3/Date::Manip::TZ::amushu00.3pm
+Manifying blib/man3/Date::Manip::TZ::euista00.3pm
+Manifying blib/man3/Date::Manip::TZ::atazor00.3pm
+Manifying blib/man3/Date::Manip::Offset::off292.3pm
+Manifying blib/man3/Date::Manip::Offset::off159.3pm
+Manifying blib/man3/Date::Manip::TZ::aflubu00.3pm
+Manifying blib/man3/Date::Manip::Offset::off220.3pm
+Manifying blib/man3/Date::Manip::Offset::off429.3pm
+Manifying blib/man3/Date::Manip::TZ::asanad00.3pm
+Manifying blib/man3/Date::Manip::Offset::off093.3pm
+Manifying blib/man3/Date::Manip::TZ::asjaka00.3pm
+Manifying blib/man3/Date::Manip::Offset::off313.3pm
+Manifying blib/man3/Date::Manip::Offset::off049.3pm
+Manifying blib/man3/Date::Manip::Offset::off268.3pm
+Manifying blib/man3/Date::Manip::Offset::off203.3pm
+Manifying blib/man3/Date::Manip::Offset::off014.3pm
+Manifying blib/man3/Date::Manip::Offset::off169.3pm
+Manifying blib/man3/Date::Manip::Offset::off409.3pm
+Manifying blib/man3/Date::Manip::Offset::off228.3pm
+Manifying blib/man3/Date::Manip::Offset::off412.3pm
+Manifying blib/man3/Date::Manip::Offset::off013.3pm
+Manifying blib/man3/Date::Manip::TZ::eulisb00.3pm
+Manifying blib/man3/Date::Manip::TZ::amarag00.3pm
+Manifying blib/man3/Date::Manip::TZ::c00.3pm
+Manifying blib/man3/Date::Manip::TZ::pawall00.3pm
+Manifying blib/man3/Date::Manip::Offset::off095.3pm
+Manifying blib/man3/Date::Manip::TZ::asmaca00.3pm
+Manifying blib/man3/Date::Manip::Offset::off347.3pm
+Manifying blib/man3/Date::Manip::Offset::off210.3pm
+Manifying blib/man3/Date::Manip::Offset::off186.3pm
+Manifying blib/man3/Date::Manip::Offset::off256.3pm
+Manifying blib/man3/Date::Manip::TZ::utc00.3pm
+Manifying blib/man3/Date::Manip::TZ::asriya00.3pm
+Manifying blib/man3/Date::Manip::Base.3pm
+Manifying blib/man3/Date::Manip::Offset::off018.3pm
+Manifying blib/man3/Date::Manip::TZ::patahi00.3pm
+Manifying blib/man3/Date::Manip::TZ::ameiru00.3pm
+Manifying blib/man3/Date::Manip::Lang::norwegian.3pm
+Manifying blib/man3/Date::Manip::TZ::eumadr00.3pm
+Manifying blib/man3/Date::Manip::TZ::amblan00.3pm
+Manifying blib/man3/Date::Manip::Lang::finnish.3pm
+Manifying blib/man3/Date::Manip::Changes5to6.3pm
+Manifying blib/man3/Date::Manip::Offset::off381.3pm
+Manifying blib/man3/Date::Manip::Offset::off420.3pm
+Manifying blib/man3/Date::Manip::Offset::off222.3pm
+Manifying blib/man3/Date::Manip::TZ::afwind00.3pm
+Manifying blib/man3/Date::Manip::Offset::off241.3pm
+Manifying blib/man3/Date::Manip::TZ::etgmtm11.3pm
+Manifying blib/man3/Date::Manip::Lang::german.3pm
+Manifying blib/man3/Date::Manip::TZ::afsao_00.3pm
+Manifying blib/man3/Date::Manip::Offset::off218.3pm
+Manifying blib/man3/Date::Manip::Offset::off451.3pm
+Manifying blib/man3/Date::Manip::Offset::off032.3pm
+Manifying blib/man3/Date::Manip::Offset::off229.3pm
+Manifying blib/man3/Date::Manip::Offset::off378.3pm
+Manifying blib/man3/Date::Manip::Offset::off098.3pm
+Manifying blib/man3/Date::Manip::Offset::off403.3pm
+Manifying blib/man3/Date::Manip::TZ::etgmtm09.3pm
+Manifying blib/man3/Date::Manip::Offset::off082.3pm
+Manifying blib/man3/Date::Manip::Offset::off343.3pm
+Manifying blib/man3/Date::Manip::Offset::off182.3pm
+Manifying blib/man3/Date::Manip::Offset::off258.3pm
+Manifying blib/man3/Date::Manip::Problems.3pm
+Manifying blib/man3/Date::Manip::TZ::amcuia00.3pm
+Manifying blib/man3/Date::Manip::TZ::amangu00.3pm
+Manifying blib/man3/Date::Manip::TZ::s00.3pm
+Manifying blib/man3/Date::Manip::TZ::h00.3pm
+Manifying blib/man3/Date::Manip::Offset::off355.3pm
+Manifying blib/man3/Date::Manip::TZ::amport02.3pm
+Manifying blib/man3/Date::Manip::Offset::off478.3pm
+Manifying blib/man3/Date::Manip::TZ::amyell00.3pm
+Manifying blib/man3/Date::Manip::TZ::e00.3pm
+Manifying blib/man3/Date::Manip::Offset::off446.3pm
+Manifying blib/man3/Date::Manip::Offset::off368.3pm
+Manifying blib/man3/Date::Manip::TZ::aflago00.3pm
+Manifying blib/man3/Date::Manip::Offset::off400.3pm
+Manifying blib/man3/Date::Manip::TZ::eubrus00.3pm
+Manifying blib/man3/Date::Manip::TZ::eutira00.3pm
+Manifying blib/man3/Date::Manip::TZ::amcamb00.3pm
+Manifying blib/man3/Date::Manip::TZ::amfort00.3pm
+Manifying blib/man3/Date::Manip::Offset::off421.3pm
+Manifying blib/man3/Date::Manip::Offset::off099.3pm
+Manifying blib/man3/Date::Manip::TZ::asashg00.3pm
+Manifying blib/man3/Date::Manip::TZ::inmahe00.3pm
+Manifying blib/man3/Date::Manip::TZ::etgmtm02.3pm
+Manifying blib/man3/Date::Manip::TZ::aspont00.3pm
+Manifying blib/man3/Date::Manip::Offset::off080.3pm
+Manifying blib/man3/Date::Manip::TZ::afport00.3pm
+Manifying blib/man3/Date::Manip::TZ::euberl00.3pm
+Manifying blib/man3/Date::Manip::Offset::off342.3pm
+Manifying blib/man3/Date::Manip::TZ::afouag00.3pm
+Manifying blib/man3/Date::Manip::Offset::off465.3pm
+Manifying blib/man3/Date::Manip::Offset::off045.3pm
+Manifying blib/man3/Date::Manip::Offset::off114.3pm
+Manifying blib/man3/Date::Manip::Offset::off007.3pm
+Manifying blib/man3/Date::Manip::Offset::off214.3pm
+Manifying blib/man3/Date::Manip::Offset::off201.3pm
+Manifying blib/man3/Date::Manip::TZ::amtucu00.3pm
+Manifying blib/man3/Date::Manip::TZ::ammexi00.3pm
+Manifying blib/man3/Date::Manip::Offset::off305.3pm
+Manifying blib/man3/Date::Manip::TZ::asbaku00.3pm
+Manifying blib/man3/Date::Manip::TZ::inchri00.3pm
+Manifying blib/man3/Date::Manip::Offset::off416.3pm
+Manifying blib/man3/Date::Manip::Offset::off265.3pm
+Manifying blib/man3/Date::Manip::TZ::amcura00.3pm
+Manifying blib/man3/Date::Manip::TZ::amglac00.3pm
+Manifying blib/man3/Date::Manip::TZ::ambeul00.3pm
+Manifying blib/man3/Date::Manip::TZ::ammetl00.3pm
+Manifying blib/man3/Date::Manip::TZ::amgodt00.3pm
+Manifying blib/man3/Date::Manip::TZ::anmcmu00.3pm
+Manifying blib/man3/Date::Manip::TZ::asbagh00.3pm
+Manifying blib/man3/Date::Manip::TZ::eukiev00.3pm
+Manifying blib/man3/Date::Manip::TZ::patong00.3pm
+Manifying blib/man3/Date::Manip::Offset::off444.3pm
+Manifying blib/man3/Date::Manip::TZ::asbeir00.3pm
+Manifying blib/man3/Date::Manip::Lang::dutch.3pm
+Manifying blib/man3/Date::Manip::Date.3pm
+Manifying blib/man3/Date::Manip::Offset::off380.3pm
+Manifying blib/man3/Date::Manip::TZ::panaur00.3pm
+Manifying blib/man3/Date::Manip::TZ::afkhar00.3pm
+Manifying blib/man3/Date::Manip::Offset::off004.3pm
+Manifying blib/man3/Date::Manip::Offset::off475.3pm
+Manifying blib/man3/Date::Manip::Offset::off050.3pm
+Manifying blib/man3/Date::Manip::Offset::off372.3pm
+Manifying blib/man3/Date::Manip::Offset::off023.3pm
+Manifying blib/man3/Date::Manip::Offset::off234.3pm
+Manifying blib/man3/Date::Manip::TZ::andavi00.3pm
+Manifying blib/man3/Date::Manip::Offset::off315.3pm
+Manifying blib/man3/Date::Manip::TZ::amcaym00.3pm
+Manifying blib/man3/Date::Manip::TZ::amthun00.3pm
+Manifying blib/man3/Date::Manip::TZ::eumins00.3pm
+Manifying blib/man3/Date::Manip::TZ::amla_r00.3pm
+Manifying blib/man3/Date::Manip::Lang::english.3pm
+Manifying blib/man3/Date::Manip::Offset::off202.3pm
+Manifying blib/man3/Date::Manip::Offset::off239.3pm
+Manifying blib/man3/Date::Manip::TZ::astehr00.3pm
+Manifying blib/man3/Date::Manip::TZ::amst_l00.3pm
+Manifying blib/man3/Date::Manip::TZ::amport00.3pm
+Manifying blib/man3/Date::Manip::Offset::off326.3pm
+Manifying blib/man3/Date::Manip::Lang::romanian.3pm
+Manifying blib/man3/Date::Manip::Offset::off172.3pm
+Manifying blib/man3/Date::Manip::TZ::pafiji00.3pm
+Manifying blib/man3/Date::Manip::Offset::off039.3pm
+Manifying blib/man3/Date::Manip::Offset::off296.3pm
+Manifying blib/man3/Date::Manip::Offset::off286.3pm
+Manifying blib/man3/Date::Manip::Lang::turkish.3pm
+Manifying blib/man3/Date::Manip::TZ::amguya00.3pm
+Manifying blib/man3/Date::Manip::TZ::aucurr00.3pm
+Manifying blib/man3/Date::Manip::TZ::m00.3pm
+Manifying blib/man3/Date::Manip::Offset::off350.3pm
+Manifying blib/man3/Date::Manip::Offset::off015.3pm
+Manifying blib/man3/Date::Manip::Offset::off208.3pm
+Manifying blib/man3/Date::Manip::Offset::off295.3pm
+Manifying blib/man3/Date::Manip::Offset::off288.3pm
+Manifying blib/man3/Date::Manip::TZ::asomsk00.3pm
+Manifying blib/man3/Date::Manip::TZ::asqyzy00.3pm
+Manifying blib/man3/Date::Manip::TZ::afbang00.3pm
+Manifying blib/man3/Date::Manip::Offset::off037.3pm
+Manifying blib/man3/Date::Manip::Offset::off224.3pm
+Manifying blib/man3/Date::Manip::Offset::off091.3pm
+Manifying blib/man3/Date::Manip::Offset::off391.3pm
+Manifying blib/man3/Date::Manip::Offset::off008.3pm
+Manifying blib/man3/Date::Manip::TZ::afjuba00.3pm
+Manifying blib/man3/Date::Manip::Offset::off471.3pm
+Manifying blib/man3/Date::Manip::TZ::amchic00.3pm
+Manifying blib/man3/Date::Manip::TZ::askath00.3pm
+Manifying blib/man3/Date::Manip::Offset::off126.3pm
+Manifying blib/man3/Date::Manip::Offset::off308.3pm
+Manifying blib/man3/Date::Manip::TZ::pawake00.3pm
+Manifying blib/man3/Date::Manip::Offset::off066.3pm
+Manifying blib/man3/Date::Manip::TZ::p00.3pm
+Manifying blib/man3/Date::Manip::Offset::off387.3pm
+Manifying blib/man3/Date::Manip::Lang.3pm
+Manifying blib/man3/Date::Manip::Offset::off467.3pm
+Manifying blib/man3/Date::Manip::Offset::off244.3pm
+Manifying blib/man3/Date::Manip.3pm
+Manifying blib/man3/Date::Manip::Offset::off284.3pm
+Manifying blib/man3/Date::Manip::TZ::ammart00.3pm
+Manifying blib/man3/Date::Manip::Offset::off311.3pm
+Manifying blib/man3/Date::Manip::Offset::off121.3pm
+Manifying blib/man3/Date::Manip::Offset::off300.3pm
+Manifying blib/man3/Date::Manip::Offset::off461.3pm
+Manifying blib/man3/Date::Manip::TZ_Base.3pm
+Manifying blib/man3/Date::Manip::TZ::paauck00.3pm
+Manifying blib/man3/Date::Manip::TZ::aschoi00.3pm
+Manifying blib/man3/Date::Manip::TZ::amst_k00.3pm
+Manifying blib/man3/Date::Manip::DM5.3pm
+Manifying blib/man3/Date::Manip::Offset::off398.3pm
+Manifying blib/man3/Date::Manip::TZ::afluan00.3pm
+Manifying blib/man3/Date::Manip::TZ::asaden00.3pm
+Manifying blib/man3/Date::Manip::TZ::i00.3pm
+Manifying blib/man3/Date::Manip::TZ::ausydn00.3pm
+Manifying blib/man3/Date::Manip::Offset::off152.3pm
+Manifying blib/man3/Date::Manip::Offset::off289.3pm
+Manifying blib/man3/Date::Manip::TZ::amsant03.3pm
+Manifying blib/man3/Date::Manip::TZ::amknox00.3pm
+Manifying blib/man3/Date::Manip::TZ::asgaza00.3pm
+Manifying blib/man3/Date::Manip::Offset::off055.3pm
+Manifying blib/man3/Date::Manip::TZ::amst_j00.3pm
+Manifying blib/man3/Date::Manip::TZ::amel_s00.3pm
+Manifying blib/man3/Date::Manip::Offset::off111.3pm
+Manifying blib/man3/Date::Manip::TZ::g00.3pm
+Manifying blib/man3/Date::Manip::TZ::asamma00.3pm
+Manifying blib/man3/Date::Manip::TZ::askamc00.3pm
+Manifying blib/man3/Date::Manip::Offset::off146.3pm
+Manifying blib/man3/Date::Manip::Offset::off457.3pm
+Manifying blib/man3/Date::Manip::TZ::b00.3pm
+Manifying blib/man3/Date::Manip::Offset::off058.3pm
+Manifying blib/man3/Date::Manip::Offset::off119.3pm
+Manifying blib/man3/Date::Manip::Offset::off282.3pm
+Manifying blib/man3/Date::Manip::TZ::amjama00.3pm
+Manifying blib/man3/Date::Manip::Offset::off044.3pm
+Manifying blib/man3/Date::Manip::TZ::afbanj00.3pm
+Manifying blib/man3/Date::Manip::TZ::amcanc00.3pm
+Manifying blib/man3/Date::Manip::Offset::off319.3pm
+Manifying blib/man3/Date::Manip::Offset::off075.3pm
+Manifying blib/man3/Date::Manip::Offset::off309.3pm
+Manifying blib/man3/Date::Manip::Offset::off175.3pm
+Manifying blib/man3/Date::Manip::Offset::off040.3pm
+Manifying blib/man3/Date::Manip::TZ::aflusa00.3pm
+Manifying blib/man3/Date::Manip::TZ::ammeno00.3pm
+Manifying blib/man3/Date::Manip::TZ::papitc00.3pm
+Manifying blib/man3/Date::Manip::Offset::off227.3pm
+Manifying blib/man3/Date::Manip::Offset::off211.3pm
+Manifying blib/man3/Date::Manip::Offset::off019.3pm
+Manifying blib/man3/Date::Manip::TZ::etgmtm12.3pm
+Manifying blib/man3/Date::Manip::Offset::off191.3pm
+Manifying blib/man3/Date::Manip::Offset::off149.3pm
+Manifying blib/man3/Date::Manip::TZ::ashebr00.3pm
+Manifying blib/man3/Date::Manip::Offset::off281.3pm
+Manifying blib/man3/Date::Manip::Offset::off236.3pm
+Manifying blib/man3/Date::Manip::TZ::amdaws01.3pm
+Manifying blib/man3/Date::Manip::TZ::euzuri00.3pm
+Manifying blib/man3/Date::Manip::Offset::off385.3pm
+Manifying blib/man3/Date::Manip::Offset::off171.3pm
+Manifying blib/man3/Date::Manip::Offset::off143.3pm
+Manifying blib/man3/Date::Manip::Offset::off436.3pm
+Manifying blib/man3/Date::Manip::Offset::off396.3pm
+Manifying blib/man3/Date::Manip::Offset::off141.3pm
+Manifying blib/man3/Date::Manip::Offset::off122.3pm
+Manifying blib/man3/Date::Manip::Offset::off000.3pm
+Manifying blib/man3/Date::Manip::Offset::off331.3pm
+Manifying blib/man3/Date::Manip::TZ::asirku00.3pm
+Manifying blib/man3/Date::Manip::Offset::off365.3pm
+Manifying blib/man3/Date::Manip::TZ::amport01.3pm
+Manifying blib/man3/Date::Manip::Offset::off443.3pm
+Manifying blib/man3/Date::Manip::TZ::etgmtp09.3pm
+Manifying blib/man3/Date::Manip::Offset::off274.3pm
+Manifying blib/man3/Date::Manip::TZ::papago00.3pm
+Manifying blib/man3/Date::Manip::Offset::off103.3pm
+Manifying blib/man3/Date::Manip::TZ::ambahi01.3pm
+Manifying blib/man3/Date::Manip::Offset::off197.3pm
+Manifying blib/man3/Date::Manip::TZ::afmbab00.3pm
+Manifying blib/man3/Date::Manip::Offset::off382.3pm
+Manifying blib/man3/Date::Manip::Offset::off124.3pm
+Manifying blib/man3/Date::Manip::Offset::off486.3pm
+Manifying blib/man3/Date::Manip::TZ::f00.3pm
+Manifying blib/man3/Date::Manip::TZ::z00.3pm
+Manifying blib/man3/Date::Manip::Lang::portugue.3pm
+Manifying blib/man3/Date::Manip::Offset::off349.3pm
+Manifying blib/man3/Date::Manip::Offset::off477.3pm
+Manifying blib/man3/Date::Manip::TZ::asbahr00.3pm
+Manifying blib/man3/Date::Manip::TZ::amrain00.3pm
+Manifying blib/man3/Date::Manip::ConfigFile.3pm
+Manifying blib/man3/Date::Manip::Offset::off413.3pm
+Manifying blib/man3/Date::Manip::TZ::afaccr00.3pm
+Manifying blib/man3/Date::Manip::TZ::asvien00.3pm
+Manifying blib/man3/Date::Manip::TZ::asseou00.3pm
+Manifying blib/man3/Date::Manip::Offset::off325.3pm
+Manifying blib/man3/Date::Manip::TZ::amherm00.3pm
+Manifying blib/man3/Date::Manip::TZ::eusama00.3pm
+Manifying blib/man3/Date::Manip::TZ::euchis00.3pm
+Manifying blib/man3/Date::Manip::Offset::off216.3pm
+Manifying blib/man3/Date::Manip::TZ::amchih00.3pm
+Manifying blib/man3/Date::Manip::Offset::off110.3pm
+Manifying blib/man3/Date::Manip::TZ::atmade00.3pm
+Manifying blib/man3/Date::Manip::TZ::asurum00.3pm
+Manifying blib/man3/Date::Manip::Offset::off266.3pm
+Manifying blib/man3/Date::Manip::TZ::asduba00.3pm
+Manifying blib/man3/Date::Manip::Offset::off109.3pm
+Manifying blib/man3/Date::Manip::Offset::off426.3pm
+Manifying blib/man3/Date::Manip::TZ::asalma00.3pm
+Manifying blib/man3/Date::Manip::Offset::off153.3pm
+Manifying blib/man3/Date::Manip::TZ::pamidw00.3pm
+Manifying blib/man3/Date::Manip::Lang::danish.3pm
+Manifying blib/man3/Date::Manip::Offset::off452.3pm
+Manifying blib/man3/Date::Manip::Offset::off065.3pm
+Manifying blib/man3/Date::Manip::Offset::off410.3pm
+Manifying blib/man3/Date::Manip::TZ::afaddi00.3pm
+Manifying blib/man3/Date::Manip::TZ::amrio_00.3pm
+Manifying blib/man3/Date::Manip::Offset::off359.3pm
+Manifying blib/man3/Date::Manip::TZ::ut00.3pm
+Manifying blib/man3/Date::Manip::Offset::off137.3pm
+Manifying blib/man3/Date::Manip::TZ::pachat00.3pm
+Manifying blib/man3/Date::Manip::Offset::off417.3pm
+Manifying blib/man3/Date::Manip::Lang::spanish.3pm
+Manifying blib/man3/Date::Manip::TZ::etgmt00.3pm
+Manifying blib/man3/Date::Manip::Offset::off335.3pm
+Manifying blib/man3/Date::Manip::Offset::off354.3pm
+Manifying blib/man3/Date::Manip::Offset::off090.3pm
+Manifying blib/man3/Date::Manip::TZ::asshan00.3pm
+Manifying blib/man3/Date::Manip::Offset::off154.3pm
+Manifying blib/man3/Date::Manip::TZ::asqata00.3pm
+Manifying blib/man3/Date::Manip::Offset::off030.3pm
+Manifying blib/man3/Date::Manip::TZ::amsan_00.3pm
+Manifying blib/man3/Date::Manip::TZ::incomo00.3pm
+Manifying blib/man3/Date::Manip::Offset::off026.3pm
+Manifying blib/man3/Date::Manip::Offset::off148.3pm
+Manifying blib/man3/Date::Manip::TZ::amedmo00.3pm
+Manifying blib/man3/Date::Manip::TZ::askara00.3pm
+Manifying blib/man3/Date::Manip::Offset::off481.3pm
+Manifying blib/man3/Date::Manip::TZ::ammare00.3pm
+Manifying blib/man3/Date::Manip::TZ::afkamp00.3pm
+Manifying blib/man3/Date::Manip::Offset::off129.3pm
+Manifying blib/man3/Date::Manip::Offset::off087.3pm
+Manifying blib/man3/Date::Manip::Offset::off377.3pm
+Manifying blib/man3/Date::Manip::Offset::off411.3pm
+Manifying blib/man3/Date::Manip::Offset::off057.3pm
+Manifying blib/man3/Date::Manip::Offset::off264.3pm
+Manifying blib/man3/Date::Manip::TZ::amst_v00.3pm
+Manifying blib/man3/Date::Manip::TZ::ampuer00.3pm
+Manifying blib/man3/Date::Manip::Obj.3pm
+Manifying blib/man3/Date::Manip::TZ::amdenv00.3pm
+Manifying blib/man3/Date::Manip::TZ::euzapo00.3pm
+Manifying blib/man3/Date::Manip::Offset::off042.3pm
+Manifying blib/man3/Date::Manip::Offset::off157.3pm
+Manifying blib/man3/Date::Manip::Offset::off438.3pm
+Manifying blib/man3/Date::Manip::Offset::off253.3pm
+Manifying blib/man3/Date::Manip::TZ::ammaza00.3pm
+Manifying blib/man3/Date::Manip::Offset::off195.3pm
+Manifying blib/man3/Date::Manip::TZ::afbuju00.3pm
+Manifying blib/man3/Date::Manip::TZ::amlos_00.3pm
+Manifying blib/man3/Date::Manip::TZ::ammace00.3pm
+Manifying blib/man3/Date::Manip::Offset::off003.3pm
+Manifying blib/man3/Date::Manip::Offset::off009.3pm
+Manifying blib/man3/Date::Manip::TZ::afcasa00.3pm
+Manifying blib/man3/Date::Manip::Offset::off321.3pm
+Manifying blib/man3/Date::Manip::Offset::off156.3pm
+Manifying blib/man3/Date::Manip::Offset::off291.3pm
+Manifying blib/man3/Date::Manip::TZ::atreyk00.3pm
+Manifying blib/man3/Date::Manip::Offset::off196.3pm
+Manifying blib/man3/Date::Manip::Calc.3pm
+Manifying blib/man3/Date::Manip::Offset::off447.3pm
+Manifying blib/man3/Date::Manip::TZ::amhava00.3pm
+Manifying blib/man3/Date::Manip::TZ::eupari00.3pm
+Manifying blib/man3/Date::Manip::Offset::off207.3pm
+Manifying blib/man3/Date::Manip::Offset::off485.3pm
+Manifying blib/man3/Date::Manip::Offset::off425.3pm
+Manifying blib/man3/Date::Manip::Offset::off247.3pm
+Manifying blib/man3/Date::Manip::TZ::asdili00.3pm
+Manifying blib/man3/Date::Manip::Offset::off418.3pm
+Manifying blib/man3/Date::Manip::Lang::french.3pm
+Manifying blib/man3/Date::Manip::Offset::off440.3pm
+Manifying blib/man3/Date::Manip::Offset::off303.3pm
+Manifying blib/man3/Date::Manip::Offset::off204.3pm
+Manifying blib/man3/Date::Manip::Lang::polish.3pm
+Manifying blib/man3/Date::Manip::Offset::off267.3pm
+Manifying blib/man3/Date::Manip::Offset::off456.3pm
+Manifying blib/man3/Date::Manip::DM5abbrevs.3pm
+Manifying blib/man3/Date::Manip::Offset::off405.3pm
+Manifying blib/man3/Date::Manip::Offset::off068.3pm
+Manifying blib/man3/Date::Manip::Offset::off177.3pm
+Manifying blib/man3/Date::Manip::Offset::off123.3pm
+Manifying blib/man3/Date::Manip::Offset::off419.3pm
+Manifying blib/man3/Date::Manip::TZ::amsao_00.3pm
+Manifying blib/man3/Date::Manip::Offset::off248.3pm
+Manifying blib/man3/Date::Manip::TZ::auadel00.3pm
+Manifying blib/man3/Date::Manip::Offset::off063.3pm
+Manifying blib/man3/Date::Manip::Offset::off084.3pm
+Manifying blib/man3/Date::Manip::TZ::paport00.3pm
+Manifying blib/man3/Date::Manip::TZ::amguat00.3pm
+Manifying blib/man3/Date::Manip::TZ::eustoc00.3pm
+Manifying blib/man3/Date::Manip::Offset::off237.3pm
+Manifying blib/man3/Date::Manip::Offset::off088.3pm
+Manifying blib/man3/Date::Manip::Offset::off333.3pm
+Manifying blib/man3/Date::Manip::TZ::ammont03.3pm
+Manifying blib/man3/Date::Manip::TZ::amindi00.3pm
+Manifying blib/man3/Date::Manip::Offset::off184.3pm
+Manifying blib/man3/Date::Manip::Holidays.3pm
+Manifying blib/man3/Date::Manip::Offset::off115.3pm
+Manifying blib/man3/Date::Manip::TZ::ambois00.3pm
+Manifying blib/man3/Date::Manip::TZ::panorf00.3pm
+Manifying blib/man3/Date::Manip::Offset::off293.3pm
+Manifying blib/man3/Date::Manip::Offset::off279.3pm
+Manifying blib/man3/Date::Manip::TZ::askras00.3pm
+Manifying blib/man3/Date::Manip::TZ::etgmtp08.3pm
+Manifying blib/man3/Date::Manip::TZ::eet00.3pm
+Manifying blib/man3/Date::Manip::TZ::amdomi00.3pm
+Manifying blib/man3/Date::Manip::Offset::off316.3pm
+Manifying blib/man3/Date::Manip::Offset::off370.3pm
+Manifying blib/man3/Date::Manip::Offset::off138.3pm
+Manifying blib/man3/Date::Manip::Offset::off150.3pm
+Manifying blib/man3/Date::Manip::Offset::off193.3pm
+Manifying blib/man3/Date::Manip::TZ::afmapu00.3pm
+Manifying blib/man3/Date::Manip::TZ::etgmtp10.3pm
+Manifying blib/man3/Date::Manip::TZ::amnipi00.3pm
+Manifying blib/man3/Date::Manip::TZ::amsant01.3pm
+Manifying blib/man3/Date::Manip::Offset::off052.3pm
+Manifying blib/man3/Date::Manip::TZ::amreci00.3pm
+Manifying blib/man3/Date::Manip::Offset::off318.3pm
+Manifying blib/man3/Date::Manip::TZ::ambele00.3pm
+Manifying blib/man3/Date::Manip::Offset::off393.3pm
+Manifying blib/man3/Date::Manip::Offset::off151.3pm
+Manifying blib/man3/Date::Manip::TZ::asjaya00.3pm
+Manifying blib/man3/Date::Manip::Offset::off406.3pm
+Manifying blib/man3/Date::Manip::Misc.3pm
+Manifying blib/man3/Date::Manip::TZ::askuch00.3pm
+Manifying blib/man3/Date::Manip::Offset::off302.3pm
+Manifying blib/man3/Date::Manip::Offset::off145.3pm
+Manifying blib/man3/Date::Manip::Offset::off294.3pm
+Manifying blib/man3/Date::Manip::Offset::off025.3pm
+Manifying blib/man3/Date::Manip::TZ::patara00.3pm
+Manifying blib/man3/Date::Manip::TZ::ammont00.3pm
+Manifying blib/man3/Date::Manip::Offset::off375.3pm
+Manifying blib/man3/Date::Manip::Offset::off453.3pm
+Manifying blib/man3/Date::Manip::TZ::ambarb00.3pm
+Manifying blib/man3/Date::Manip::TZ::askabu00.3pm
+Manifying blib/man3/Date::Manip::TZ::amsant00.3pm
+Manifying blib/man3/Date::Manip::TZ::eumalt00.3pm
+Manifying blib/man3/Date::Manip::Offset::off344.3pm
+Manifying blib/man3/Date::Manip::Offset::off021.3pm
+Manifying blib/man3/Date::Manip::Offset::off373.3pm
+Manifying blib/man3/Date::Manip::Offset::off161.3pm
+Manifying blib/man3/Date::Manip::TZ::asulaa00.3pm
+Manifying blib/man3/Date::Manip::TZ::amnew_00.3pm
+Manifying blib/man3/Date::Manip::TZ::amcamp00.3pm
+Manifying blib/man3/Date::Manip::TZ::etgmtm01.3pm
+Manifying blib/man3/Date::Manip::TZ::afndja00.3pm
+Manifying blib/man3/Date::Manip::TZ::amcata00.3pm
+Manifying blib/man3/Date::Manip::Offset::off180.3pm
+Manifying blib/man3/Date::Manip::TZ::amyaku00.3pm
+Manifying blib/man3/Date::Manip::Offset::off002.3pm
+Manifying blib/man3/Date::Manip::Offset::off067.3pm
+Manifying blib/man3/Date::Manip::TZ::etgmtm00.3pm
+Manifying blib/man3/Date::Manip::Offset::off357.3pm
+Manifying blib/man3/Date::Manip::TZ::amdanm00.3pm
+Manifying blib/man3/Date::Manip::Offset::off445.3pm
+Manifying blib/man3/Date::Manip::Offset::off017.3pm
+Manifying blib/man3/Date::Manip::Offset::off290.3pm
+Manifying blib/man3/Date::Manip::TZ::eulond00.3pm
+Manifying blib/man3/Date::Manip::Offset::off459.3pm
+Manifying blib/man3/Date::Manip::Offset::off430.3pm
+Manifying blib/man3/Date::Manip::Offset::off081.3pm
+Manifying blib/man3/Date::Manip::TZ::inmayo00.3pm
+Manifying blib/man3/Date::Manip::Offset::off317.3pm
+Manifying blib/man3/Date::Manip::Delta.3pm
+Manifying blib/man3/Date::Manip::Offset::off320.3pm
+Manifying blib/man3/Date::Manip::Offset::off116.3pm
+Manifying blib/man3/Date::Manip::Offset::off168.3pm
+Manifying blib/man3/Date::Manip::Offset::off038.3pm
+Manifying blib/man3/Date::Manip::Offset::off113.3pm
+Manifying blib/man3/Date::Manip::Offset::off250.3pm
+Manifying blib/man3/Date::Manip::Offset::off085.3pm
+Manifying blib/man3/Date::Manip::Offset::off462.3pm
+Manifying blib/man3/Date::Manip::Offset::off132.3pm
+Manifying blib/man3/Date::Manip::TZ::askolk00.3pm
+Manifying blib/man3/Date::Manip::Offset::off473.3pm
+Manifying blib/man3/Date::Manip::Migration5to6.3pm
+Manifying blib/man3/Date::Manip::TZ::amtell00.3pm
+Manifying blib/man3/Date::Manip::Offset::off454.3pm
+Manifying blib/man3/Date::Manip::TZ::asdhak00.3pm
+Manifying blib/man3/Date::Manip::Examples.3pm
+Manifying blib/man3/Date::Manip::Offset::off249.3pm
+Manifying blib/man3/Date::Manip::TZ::afmonr00.3pm
+Manifying blib/man3/Date::Manip::TZ::asmaga00.3pm
+Manifying blib/man3/Date::Manip::Offset::off209.3pm
+Manifying blib/man3/Date::Manip::TZ::amgoos00.3pm
+Manifying blib/man3/Date::Manip::TZ::afkiga00.3pm
+Manifying blib/man3/Date::Manip::Offset::off139.3pm
+Manifying blib/man3/Date::Manip::Offset::off390.3pm
+Manifying blib/man3/Date::Manip::TZ::euprag00.3pm
+Manifying blib/man3/Date::Manip::TZ::pakiri00.3pm
+Manifying blib/man3/Date::Manip::Offset::off392.3pm
+Manifying blib/man3/Date::Manip::Offset::off484.3pm
+Manifying blib/man3/Date::Manip::TZ::euathe00.3pm
+Manifying blib/man3/Date::Manip::TZ::astash00.3pm
+Manifying blib/man3/Date::Manip::Offset::off407.3pm
+Manifying blib/man3/Date::Manip::TZ::etgmtm03.3pm
+Manifying blib/man3/Date::Manip::Offset::off275.3pm
+Manifying blib/man3/Date::Manip::TZ::aumelb00.3pm
+Manifying blib/man3/Date::Manip::Offset::off134.3pm
+Manifying blib/man3/Date::Manip::Offset::off127.3pm
+Manifying blib/man3/Date::Manip::Objects.3pm
+Manifying blib/man3/Date::Manip::TZ::amvanc00.3pm
+Manifying blib/man3/Date::Manip::TZ::ancase00.3pm
+Manifying blib/man3/Date::Manip::Offset::off199.3pm
+Manifying blib/man3/Date::Manip::TZ::eudubl00.3pm
+Manifying blib/man3/Date::Manip::TZ::inmaur00.3pm
+Manifying blib/man3/Date::Manip::Offset::off020.3pm
+Manifying blib/man3/Date::Manip::TZ::euhels00.3pm
+Manifying blib/man3/Date::Manip::Offset::off441.3pm
+Manifying blib/man3/Date::Manip::Offset::off240.3pm
+Manifying blib/man3/Date::Manip::TZ::asoral00.3pm
+Manifying blib/man3/Date::Manip::Config.3pm
+Manifying blib/man3/Date::Manip::Offset::off027.3pm
+Manifying blib/man3/Date::Manip::Offset::off427.3pm
+Manifying blib/man3/Date::Manip::Offset::off435.3pm
+Manifying blib/man3/Date::Manip::Offset::off028.3pm
+Manifying blib/man3/Date::Manip::Offset::off424.3pm
+Manifying blib/man3/Date::Manip::TZ::afabid00.3pm
+Manifying blib/man3/Date::Manip::Offset::off070.3pm
+Manifying blib/man3/Date::Manip::TZ::amdetr00.3pm
+Manifying blib/man3/Date::Manip::Offset::off031.3pm
+Manifying blib/man3/Date::Manip::Offset::off086.3pm
+Manifying blib/man3/Date::Manip::TZ::amwinn00.3pm
+Manifying blib/man3/Date::Manip::Offset::off170.3pm
+Manifying blib/man3/Date::Manip::TZ::amcent00.3pm
+Manifying blib/man3/Date::Manip::Recur.3pm
+Manifying blib/man3/Date::Manip::Offset::off255.3pm
+Manifying blib/man3/Date::Manip::TZ::amguay00.3pm
+Manifying blib/man3/Date::Manip::TZ::asnovo01.3pm
+Manifying blib/man3/Date::Manip::TZ::k00.3pm
+Manifying blib/man3/Date::Manip::Offset::off140.3pm
+Manifying blib/man3/Date::Manip::TZ::etgmtm07.3pm
+Manifying blib/man3/Date::Manip::Offset::off173.3pm
+Manifying blib/man3/Date::Manip::Offset::off024.3pm
+Manifying blib/man3/Date::Manip::Offset::off200.3pm
+Manifying blib/man3/Date::Manip::TZ::amcost00.3pm
+Manifying blib/man3/Date::Manip::TZ::v00.3pm
+Manifying blib/man3/Date::Manip::Offset::off476.3pm
+Manifying blib/man3/Date::Manip::Offset::off297.3pm
+Manifying blib/man3/Date::Manip::Offset::off118.3pm
+Manifying blib/man3/Date::Manip::Offset::off060.3pm
+Manifying blib/man3/Date::Manip::Offset::off133.3pm
+Manifying blib/man3/Date::Manip::TZ::euando00.3pm
+Manifying blib/man3/Date::Manip::Zones.3pm
+Manifying blib/man3/Date::Manip::TZ::afmase00.3pm
+Manifying blib/man3/Date::Manip::Offset::off356.3pm
+Manifying blib/man3/Date::Manip::Offset::off226.3pm
+Manifying blib/man3/Date::Manip::Offset::off147.3pm
+Manifying blib/man3/Date::Manip::TZ::amguad00.3pm
+Manifying blib/man3/Date::Manip::Offset::off272.3pm
+Manifying blib/man3/Date::Manip::TZ::atberm00.3pm
+Manifying blib/man3/Date::Manip::Offset::off277.3pm
+Manifying blib/man3/Date::Manip::Offset::off395.3pm
+Manifying blib/man3/Date::Manip::Offset::off092.3pm
+Manifying blib/man3/Date::Manip::TZ::asharb00.3pm
+Manifying blib/man3/Date::Manip::TZ::pamarq00.3pm
+Manifying blib/man3/Date::Manip::TZ::amwina00.3pm
+Manifying blib/man3/Date::Manip::TZ::afgabo00.3pm
+Manifying blib/man3/Date::Manip::TZ::eubelg00.3pm
+Manifying blib/man3/Date::Manip::TZ::u00.3pm
+Manifying blib/man3/Date::Manip::TZ::d00.3pm
+Manifying blib/man3/Date::Manip::Offset::off046.3pm
+Manifying blib/man3/Date::Manip::Offset::off206.3pm
+Manifying blib/man3/Date::Manip::TZ::ammana01.3pm
+Manifying blib/man3/Date::Manip::Offset::off334.3pm
+Manifying blib/man3/Date::Manip::TZ::atfaro00.3pm
+Manifying blib/man3/Date::Manip::Offset::off353.3pm
+Manifying blib/man3/Date::Manip::Offset::off422.3pm
+Manifying blib/man3/Date::Manip::Offset::off188.3pm
+Manifying blib/man3/Date::Manip::Offset::off071.3pm
+Manifying blib/man3/Date::Manip::Offset::off069.3pm
+Manifying blib/man3/Date::Manip::TZ::afmala00.3pm
+Manifying blib/man3/Date::Manip::TZ::afblan00.3pm
+Manifying blib/man3/Date::Manip::Offset::off166.3pm
+Manifying blib/man3/Date::Manip::TZ::panoum00.3pm
+Manifying blib/man3/Date::Manip::TZ::afcona00.3pm
+Manifying blib/man3/Date::Manip::TZ::ammana00.3pm
+Manifying blib/man3/Date::Manip::TZ::amarub00.3pm
+Manifying blib/man3/Date::Manip::Offset::off243.3pm
+Manifying blib/man3/Date::Manip::Offset::off230.3pm
+Manifying blib/man3/Date::Manip::TZ::asnovo00.3pm
+Manifying blib/man3/Date::Manip::TZ::paguad00.3pm
+Manifying blib/man3/Date::Manip::Offset::off235.3pm
+Manifying blib/man3/Date::Manip::TZ::amvinc00.3pm
+Manifying blib/man3/Date::Manip::TZ::assakh00.3pm
+Manifying blib/man3/Date::Manip::TZ::inmald00.3pm
+Manifying blib/man3/Date::Manip::TZ::asmani00.3pm
+Manifying blib/man3/Date::Manip::Offset::off330.3pm
+Manifying blib/man3/Date::Manip::Offset::off483.3pm
+Manifying blib/man3/Date::Manip::TZ::eubuch00.3pm
+Manifying blib/man3/Date::Manip::TZ::amiqal00.3pm
+Manifying blib/man3/Date::Manip::Offset::off212.3pm
+Manifying blib/man3/Date::Manip::TZ::andumo00.3pm
+Manifying blib/man3/Date::Manip::Offset::off054.3pm
+Manifying blib/man3/Date::Manip::Offset::off029.3pm
+Manifying blib/man3/Date::Manip::Offset::off299.3pm
+Manifying blib/man3/Date::Manip::TZ::eutall00.3pm
+Manifying blib/man3/Date::Manip::TZ::amscor00.3pm
+Manifying blib/man3/Date::Manip::TZ::afcair00.3pm
+Manifying blib/man3/Date::Manip::Offset::off287.3pm
+Manifying blib/man3/Date::Manip::TZ::atstan00.3pm
+Manifying blib/man3/Date::Manip::TZ::pakwaj00.3pm
+Manifying blib/man3/Date::Manip::TZ::afbama00.3pm
+Manifying blib/man3/Date::Manip::Offset::off450.3pm
+Manifying blib/man3/Date::Manip::TZ::aulord00.3pm
+Manifying blib/man3/Date::Manip::TZ::ambogo00.3pm
+Manifying blib/man3/Date::Manip::TZ::asbang00.3pm
+Manifying blib/man3/Date::Manip::Offset::off307.3pm
+Manifying blib/man3/Date::Manip::TZ::amrio_01.3pm
+Manifying blib/man3/Date::Manip::Offset::off162.3pm
+Manifying blib/man3/Date::Manip::TZ::amnass00.3pm
+Manifying blib/man3/Date::Manip::Offset::off257.3pm
+Manifying blib/man3/Date::Manip::TZ::askuwa00.3pm
+Manifying blib/man3/Date::Manip::TZ::x00.3pm
+Manifying blib/man3/Date::Manip::Lang::russian.3pm
+Manifying blib/man3/Date::Manip::Offset::off474.3pm
+Manifying blib/man3/Date::Manip::Offset::off163.3pm
+Manifying blib/man3/Date::Manip::TZ::afhara00.3pm
+Manifying blib/man3/Date::Manip::TZ::paefat00.3pm
+Manifying blib/man3/Date::Manip::Offset::off079.3pm
+Manifying blib/man3/Date::Manip::Offset::off051.3pm
+Manifying blib/man3/Date::Manip::Offset::off439.3pm
+Manifying blib/man3/Date::Manip::Offset::off135.3pm
+Manifying blib/man3/Date::Manip::Offset::off262.3pm
+Manifying blib/man3/Date::Manip::TZ::ammiqu00.3pm
+Manifying blib/man3/Date::Manip::TZ::t00.3pm
+Manifying blib/man3/Date::Manip::Offset::off428.3pm
+Manifying blib/man3/Date::Manip::TZ::ashovd00.3pm
+Manifying blib/man3/Date::Manip::Offset::off363.3pm
+Manifying blib/man3/Date::Manip::Offset::off345.3pm
+Manifying blib/man3/Date::Manip::Changes6.3pm
+Manifying blib/man3/Date::Manip::TZ::asthim00.3pm
+Manifying blib/man3/Date::Manip::TZ::aflome00.3pm
+Manifying blib/man3/Date::Manip::TZ::auhoba00.3pm
+Manifying blib/man3/Date::Manip::TZ::aschon00.3pm
+Manifying blib/man3/Date::Manip::Offset::off192.3pm
+Manifying blib/man3/Date::Manip::TZ::amtiju00.3pm
+Manifying blib/man3/Date::Manip::Offset::off165.3pm
+Manifying blib/man3/Date::Manip::TZ::amtort00.3pm
+Manifying blib/man3/Date::Manip::Offset::off252.3pm
+Manifying blib/man3/Date::Manip::TZ::afbraz00.3pm
+Manifying blib/man3/Date::Manip::Offset::off178.3pm
+Manifying blib/man3/Date::Manip::TZ::inkerg00.3pm
+Manifying blib/man3/Date::Manip::TZ::met00.3pm
+Manifying blib/man3/Date::Manip::Offset::off351.3pm
+Manifying blib/man3/Date::Manip::Lang::italian.3pm
+Manifying blib/man3/Date::Manip::Lang::catalan.3pm
+Manifying blib/man3/Date::Manip::Offset::off269.3pm
+Manifying blib/man3/Date::Manip::TZ::amla_p00.3pm
+Manifying blib/man3/Date::Manip::TZ::euuzhg00.3pm
+Manifying blib/man3/Date::Manip::Offset::off097.3pm
+Manifying blib/man3/Date::Manip::Offset::off437.3pm
+Manifying blib/man3/Date::Manip::TZ::anroth00.3pm
+Manifying blib/man3/Date::Manip::TZ::aueucl00.3pm
+Manifying blib/man3/Date::Manip::TZ::amgran00.3pm
+Manifying blib/man3/Date::Manip::Offset::off047.3pm
+Manifying blib/man3/Date::Manip::Offset::off263.3pm
+Manifying blib/man3/Date::Manip::Offset::off404.3pm
+Manifying blib/man3/Date::Manip::TZ::asbish00.3pm
+Manifying blib/man3/Date::Manip::TZ::euriga00.3pm
+Manifying blib/man3/Date::Manip::TZ::euoslo00.3pm
+Manifying blib/man3/Date::Manip::Offset::off194.3pm
+Manifying blib/man3/Date::Manip::Offset::off100.3pm
+Manifying blib/man3/Date::Manip::TZ::ansyow00.3pm
+Manifying blib/man3/Date::Manip::Offset::off185.3pm
+Manifying blib/man3/Date::Manip::TZ::amwhit00.3pm
+Manifying blib/man3/Date::Manip::TZ::euvadu00.3pm
+Manifying blib/man3/Date::Manip::TZ::paapia00.3pm
+Manifying blib/man3/Date::Manip::TZ::amphoe00.3pm
+Manifying blib/man3/Date::Manip::TZ::euamst00.3pm
+Manifying blib/man3/Date::Manip::Offset::off183.3pm
+Manifying blib/man3/Date::Manip::TZ::eugibr00.3pm
+Manifying blib/man3/Date::Manip::Offset::off043.3pm
+Manifying blib/man3/Date::Manip::TZ::o00.3pm
+Manifying blib/man3/Date::Manip::TZ::cet00.3pm
+Manifying blib/man3/Date::Manip::TZ::etgmtp11.3pm
+Manifying blib/man3/Date::Manip::Offset::off487.3pm
+Manifying blib/man3/Date::Manip::TZ::afdjib00.3pm
+Manifying blib/man3/Date::Manip::TZ.3pm
+Manifying blib/man3/Date::Manip::TZ::amcaye00.3pm
+Manifying blib/man3/Date::Manip::Offset::off107.3pm
+Manifying blib/man3/Date::Manip::TZ::etgmtp00.3pm
+Manifying blib/man3/Date::Manip::TZ::eurome00.3pm
+Manifying blib/man3/Date::Manip::Offset::off348.3pm
+Manifying blib/man3/Date::Manip::TZ::etgmtp06.3pm
+Manifying blib/man3/Date::Manip::TZ::paniue00.3pm
+Manifying blib/man3/Date::Manip::TZ::anvost00.3pm
+Manifying blib/man3/Date::Manip::TZ::afnair00.3pm
+Manifying blib/man3/Date::Manip::TZ::astbil00.3pm
+Manifying blib/man3/Date::Manip::Offset::off176.3pm
+Manifying blib/man3/Date::Manip::Offset::off460.3pm
+Manifying blib/man3/Date::Manip::TZ::amsan_01.3pm
+Manifying blib/man3/Date::Manip::Offset::off328.3pm
+Manifying blib/man3/Date::Manip::TZ::euviln00.3pm
+Manifying blib/man3/Date::Manip::TZ::paeast00.3pm
+Manifying blib/man3/Date::Manip::Offset::off056.3pm
+Manifying blib/man3/Date::Manip::Offset::off283.3pm
+Manifying blib/man3/Date::Manip::TZ::ambeli00.3pm
+Manifying blib/man3/Date::Manip::Offset::off432.3pm
+Manifying blib/man3/Date::Manip::TZ::etgmtm13.3pm
+Manifying blib/man3/Date::Manip::Offset::off458.3pm
+Manifying blib/man3/Date::Manip::Offset::off006.3pm
+Manifying blib/man3/Date::Manip::Offset::off158.3pm
+Manifying blib/man3/Date::Manip::Offset::off072.3pm
+# running Build.PL --install_base /home/einar/meran/intranet/modules/externos
+/usr/bin/perl Build.PL --install_base /home/einar/meran/intranet/modules/externos
+Checking whether your kit is complete...
+Looks good
+
+Checking prerequisites...
+Creating new 'Build' script for 'DateTime-Format-DateManip' version '0.04'
+/usr/bin/perl Build --makefile_env_macros 1
+Copying lib/DateTime/Format/DateManip.pm -> blib/lib/DateTime/Format/DateManip.pm
+Manifying blib/lib/DateTime/Format/DateManip.pm -> blib/libdoc/DateTime::Format::DateManip.3pm
+# running Build.PL --install_base /home/einar/meran/intranet/modules/externos
+/usr/bin/perl Build.PL --install_base /home/einar/meran/intranet/modules/externos
+Checking whether your kit is complete...
+Looks good
+
+Checking prerequisites...
+Creating new 'Build' script for 'DateTime-Format-MySQL' version '0.04'
+/usr/bin/perl Build --makefile_env_macros 1
+Copying lib/DateTime/Format/MySQL.pm -> blib/lib/DateTime/Format/MySQL.pm
+Manifying blib/lib/DateTime/Format/MySQL.pm -> blib/libdoc/DateTime::Format::MySQL.3pm
+Checking if your kit is complete...
+Looks good
+Writing Makefile for Digest::SHA
+Writing MYMETA.yml and MYMETA.json
+cp lib/Digest/SHA.pm blib/lib/Digest/SHA.pm
+/usr/bin/perl /usr/share/perl/5.10/ExtUtils/xsubpp  -typemap /usr/share/perl/5.10/ExtUtils/typemap -typemap typemap  SHA.xs > SHA.xsc && mv SHA.xsc SHA.c
+cc -c  -I. -D_REENTRANT -D_GNU_SOURCE -DDEBIAN -fno-strict-aliasing -pipe -fstack-protector -I/usr/local/include -D_LARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64 -O2 -g   -DVERSION=\"5.71\" -DXS_VERSION=\"5.71\" -fPIC "-I/usr/lib/perl/5.10/CORE"  -DSHA_PERL_MODULE -DSHA_STO_CLASS=static SHA.c
+Running Mkbootstrap for Digest::SHA ()
+chmod 644 SHA.bs
+rm -f blib/arch/auto/Digest/SHA/SHA.so
+cc  -shared -O2 -g -L/usr/local/lib -fstack-protector SHA.o  -o blib/arch/auto/Digest/SHA/SHA.so 	\
+	     	\
+	  
+chmod 755 blib/arch/auto/Digest/SHA/SHA.so
+cp SHA.bs blib/arch/auto/Digest/SHA/SHA.bs
+chmod 644 blib/arch/auto/Digest/SHA/SHA.bs
+cp shasum blib/script/shasum
+/usr/bin/perl -MExtUtils::MY -e 'MY->fixin(shift)' -- blib/script/shasum
+Manifying blib/man1/shasum.1p
+Manifying blib/man3/Digest::SHA.3pm
+Checking if your kit is complete...
+Looks good
+Writing Makefile for HTTP::BrowserDetect
+Writing MYMETA.yml and MYMETA.json
+cp lib/HTTP/BrowserDetect.pm blib/lib/HTTP/BrowserDetect.pm
+Manifying blib/man3/HTTP::BrowserDetect.3pm
+Checking if your kit is complete...
+Looks good
+Writing Makefile for Image::Size
+Writing MYMETA.yml and MYMETA.json
+cp lib/Image/Size.pm blib/lib/Image/Size.pm
+AutoSplitting blib/lib/Image/Size.pm (blib/lib/auto/Image/Size)
+cp imgsize blib/script/imgsize
+/usr/bin/perl -MExtUtils::MY -e 'MY->fixin(shift)' -- blib/script/imgsize
+Manifying blib/man1/imgsize.1p
+Manifying blib/man3/Image::Size.3pm
+Welcome to JSON (v.2.53)
+=============================
+If you install JSON::XS v.2.27, it makes JSON faster.
+
+ ************************** CAUTION **************************
+ * This is 'JSON version 2' and there are many differences   *
+ * to version 1.xx                                           *
+ * Please check your applications useing old version.        *
+ *   See to 'INCOMPATIBLE CHANGES TO OLD VERSION' and 'TIPS' *
+ *************************************************************
+
+
+Checking if your kit is complete...
+Looks good
+Writing Makefile for JSON
+Writing MYMETA.yml and MYMETA.json
+cp lib/JSON.pm blib/lib/JSON.pm
+cp lib/JSON/backportPP/Compat5005.pm blib/lib/JSON/backportPP/Compat5005.pm
+cp lib/JSON/backportPP/Boolean.pm blib/lib/JSON/backportPP/Boolean.pm
+cp lib/JSON/backportPP/Compat5006.pm blib/lib/JSON/backportPP/Compat5006.pm
+cp lib/JSON/backportPP.pm blib/lib/JSON/backportPP.pm
+Manifying blib/man3/JSON::backportPP::Compat5005.3pm
+Manifying blib/man3/JSON.3pm
+Manifying blib/man3/JSON::backportPP::Compat5006.3pm
+Manifying blib/man3/JSON::backportPP::Boolean.3pm
+Manifying blib/man3/JSON::backportPP.3pm
+Checking if your kit is complete...
+Looks good
+Writing Makefile for JSON::XS
+Writing MYMETA.yml and MYMETA.json
+cp XS/Boolean.pm blib/lib/JSON/XS/Boolean.pm
+cp XS.pm blib/lib/JSON/XS.pm
+/usr/bin/perl /usr/share/perl/5.10/ExtUtils/xsubpp  -typemap /usr/share/perl/5.10/ExtUtils/typemap -typemap typemap  XS.xs > XS.xsc && mv XS.xsc XS.c
+cc -c   -D_REENTRANT -D_GNU_SOURCE -DDEBIAN -fno-strict-aliasing -pipe -fstack-protector -I/usr/local/include -D_LARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64 -O2 -g   -DVERSION=\"2.32\" -DXS_VERSION=\"2.32\" -fPIC "-I/usr/lib/perl/5.10/CORE"   XS.c
+Running Mkbootstrap for JSON::XS ()
+chmod 644 XS.bs
+rm -f blib/arch/auto/JSON/XS/XS.so
+cc  -shared -O2 -g -L/usr/local/lib -fstack-protector XS.o  -o blib/arch/auto/JSON/XS/XS.so 	\
+	     	\
+	  
+chmod 755 blib/arch/auto/JSON/XS/XS.so
+cp XS.bs blib/arch/auto/JSON/XS/XS.bs
+chmod 644 blib/arch/auto/JSON/XS/XS.bs
+cp bin/json_xs blib/script/json_xs
+/usr/bin/perl -MExtUtils::MY -e 'MY->fixin(shift)' -- blib/script/json_xs
+Manifying blib/man1/json_xs.1p
+Manifying blib/man3/JSON::XS::Boolean.3pm
+Manifying blib/man3/JSON::XS.3pm
+Checking for Socket...ok
+Checking for IO::Socket...ok
+Checking if your kit is complete...
+Looks good
+
+Ah, I see you already have installed libnet before.
+
+Do you want to modify/update your configuration (y|n) ? [no] 
+This script will prompt you to enter hostnames that can be used as
+defaults for some of the modules in the libnet distribution.
+
+To ensure that you do not enter an invalid hostname, I can perform a
+lookup on each hostname you enter. If your internet connection is via
+a dialup line then you may not want me to perform these lookups, as
+it will require you to be on-line.
+
+Do you want me to perform hostname lookups (y|n) ? [yes]
+
+The following questions all require a list of host names, separated
+with spaces. If you do not have a host available for any of the
+services, then enter a single space, followed by <CR>. To accept the
+default, hit <CR>
+
+Enter a list of available NNTP hosts : []
+Enter a list of available SMTP hosts : []
+Enter a list of available POP3 hosts : []
+Enter a list of available SNPP hosts : []
+Enter a list of available PH Hosts   : []
+Enter a list of available TIME Hosts   : []
+Enter a list of available DAYTIME Hosts   : []
+
+Do you have a firewall/ftp proxy  between your machine and the internet 
+
+If you use a SOCKS firewall answer no
+
+(y|n) ? [no]
+
+Normally when FTP needs a data connection the client tells the server
+a port to connect to, and the server initiates a connection to the client.
+
+Some setups, in particular firewall setups, can/do not work using this
+protocol. In these situations the client must make the connection to the
+server, this is called a passive transfer.
+
+Should all FTP connections be passive (y|n) ? [no]
+
+What is your local internet domain name : []
+
+If you specified some default hosts above, it is possible for me to
+do some basic tests when you run `make test'
+
+This will cause `make test' to be quite a bit slower and, if your
+internet connection is via dialup, will require you to be on-line
+unless the hosts are local.
+
+Do you want me to run these tests (y|n) ? [yes]
+
+To allow Net::FTP to be tested I will need a hostname. This host
+should allow anonymous access and have a /pub directory
+
+What host can I use : []
+
+Writing libnet.cfg
+Writing Makefile for Net
+Writing MYMETA.yml and MYMETA.json
+cp Net/POP3.pm blib/lib/Net/POP3.pm
+cp Net/FTP/dataconn.pm blib/lib/Net/FTP/dataconn.pm
+cp Net/SMTP.pm blib/lib/Net/SMTP.pm
+cp Net/Config.pm blib/lib/Net/Config.pm
+cp Net/libnetFAQ.pod blib/lib/Net/libnetFAQ.pod
+cp Net/FTP/E.pm blib/lib/Net/FTP/E.pm
+cp Net/Domain.pm blib/lib/Net/Domain.pm
+cp Net/Cmd.pm blib/lib/Net/Cmd.pm
+cp Net/FTP.pm blib/lib/Net/FTP.pm
+cp libnet.cfg blib/lib/Net/libnet.cfg
+cp Net/FTP/A.pm blib/lib/Net/FTP/A.pm
+cp Net/FTP/L.pm blib/lib/Net/FTP/L.pm
+cp Net/Netrc.pm blib/lib/Net/Netrc.pm
+cp Net/NNTP.pm blib/lib/Net/NNTP.pm
+cp Net/Time.pm blib/lib/Net/Time.pm
+cp Net/FTP/I.pm blib/lib/Net/FTP/I.pm
+Manifying blib/man3/Net::POP3.3pm
+Manifying blib/man3/Net::Config.3pm
+Manifying blib/man3/Net::SMTP.3pm
+Manifying blib/man3/Net::libnetFAQ.3pm
+Manifying blib/man3/Net::Domain.3pm
+Manifying blib/man3/Net::Cmd.3pm
+Manifying blib/man3/Net::FTP.3pm
+Manifying blib/man3/Net::Netrc.3pm
+Manifying blib/man3/Net::NNTP.3pm
+Manifying blib/man3/Net::Time.3pm
+Checking if your kit is complete...
+Looks good
+Writing Makefile for Locale-Maketext-Gettext
+Writing MYMETA.yml and MYMETA.json
+cp lib/Locale/Maketext/Gettext.pm blib/lib/Locale/Maketext/Gettext.pm
+cp lib/Locale/Maketext/Gettext/Functions.pm blib/lib/Locale/Maketext/Gettext/Functions.pm
+cp script/maketext blib/script/maketext
+/usr/bin/perl -MExtUtils::MY -e 'MY->fixin(shift)' -- blib/script/maketext
+Manifying blib/man1/maketext.1p
+Manifying blib/man3/Locale::Maketext::Gettext.3pm
+Manifying blib/man3/Locale::Maketext::Gettext::Functions.3pm
+Checking if your kit is complete...
+Looks good
+Writing Makefile for Mail::Sendmail
+Writing MYMETA.yml and MYMETA.json
+**********************************************************************
+
+NOTE
+----
+
+The test (test.pl) is a real test for this module: it sends an e-mail.
+
+You may want to edit test.pl before running it (directly or through
+make test), so the mail is sent to you. If you also leave my address,
+the mail goes into a database from which I can get statistics.
+
+Read the docs, and have fun...
+
+**********************************************************************
+cp Sendmail.pm blib/lib/Mail/Sendmail.pm
+Manifying blib/man3/Mail::Sendmail.3pm
+Checking if your kit is complete...
+Looks good
+Writing Makefile for MARC::Crosswalk::DublinCore
+Writing MYMETA.yml and MYMETA.json
+cp lib/MARC/Crosswalk/DublinCore.pm blib/lib/MARC/Crosswalk/DublinCore.pm
+cp bin/marc2dc blib/script/marc2dc
+/usr/bin/perl -MExtUtils::MY -e 'MY->fixin(shift)' -- blib/script/marc2dc
+Manifying blib/man1/marc2dc.1p
+Manifying blib/man3/MARC::Crosswalk::DublinCore.3pm
+Checking if your kit is complete...
+Looks good
+Writing Makefile for marc::moose
+Writing MYMETA.yml and MYMETA.json
+cp lib/MARC/Moose/Field/Std.pm blib/lib/MARC/Moose/Field/Std.pm
+cp lib/MARC/Moose/Reader/String/Iso2709.pm blib/lib/MARC/Moose/Reader/String/Iso2709.pm
+cp lib/MARC/Moose/Reader/File/Marcxml.pm blib/lib/MARC/Moose/Reader/File/Marcxml.pm
+cp lib/MARC/Moose/Formater/Text.pm blib/lib/MARC/Moose/Formater/Text.pm
+cp lib/MARC/Moose/Formater/Marcxml.pm blib/lib/MARC/Moose/Formater/Marcxml.pm
+cp lib/MARC/Moose/Reader/File/Iso2709.pm blib/lib/MARC/Moose/Reader/File/Iso2709.pm
+cp lib/MARC/Moose/Formater.pm blib/lib/MARC/Moose/Formater.pm
+cp lib/MARC/Moose/Parser/Legacy.pm blib/lib/MARC/Moose/Parser/Legacy.pm
+cp lib/MARC/Moose/Parser/Yaml.pm blib/lib/MARC/Moose/Parser/Yaml.pm
+cp lib/MARC/Moose/Reader/File.pm blib/lib/MARC/Moose/Reader/File.pm
+cp lib/MARC/Moose/Formater/Legacy.pm blib/lib/MARC/Moose/Formater/Legacy.pm
+cp lib/MARC/Moose/Field.pm blib/lib/MARC/Moose/Field.pm
+cp lib/MARC/Moose/Parser/Iso2709.pm blib/lib/MARC/Moose/Parser/Iso2709.pm
+cp lib/MARC/Moose/Parser/Marcxml.pm blib/lib/MARC/Moose/Parser/Marcxml.pm
+cp lib/MARC/Moose/Parser/MarcxmlSax.pm blib/lib/MARC/Moose/Parser/MarcxmlSax.pm
+cp lib/MARC/Moose/Formater/Json.pm blib/lib/MARC/Moose/Formater/Json.pm
+cp lib/MARC/Moose/Parser/MarcxmlSaxSimple.pm blib/lib/MARC/Moose/Parser/MarcxmlSaxSimple.pm
+cp lib/MARC/Moose/Writer.pm blib/lib/MARC/Moose/Writer.pm
+cp lib/MARC/Moose/Reader/File/Isis.pm blib/lib/MARC/Moose/Reader/File/Isis.pm
+cp lib/MARC/Moose/Formater/UnimarcToMarc21.pm blib/lib/MARC/Moose/Formater/UnimarcToMarc21.pm
+cp lib/MARC/Moose/Formater/Yaml.pm blib/lib/MARC/Moose/Formater/Yaml.pm
+cp lib/MARC/Moose/Parser/Isis.pm blib/lib/MARC/Moose/Parser/Isis.pm
+cp lib/MARC/Moose/Reader.pm blib/lib/MARC/Moose/Reader.pm
+cp lib/MARC/Moose/Formater/Iso2709.pm blib/lib/MARC/Moose/Formater/Iso2709.pm
+cp lib/MARC/Moose/Parser/MarcxmlSaxHandler.pm blib/lib/MARC/Moose/Parser/MarcxmlSaxHandler.pm
+cp lib/MARC/Moose.pm blib/lib/MARC/Moose.pm
+cp lib/MARC/Moose/Record.pm blib/lib/MARC/Moose/Record.pm
+cp lib/MARC/Moose/Reader/String.pm blib/lib/MARC/Moose/Reader/String.pm
+cp lib/MARC/Moose/Parser/Json.pm blib/lib/MARC/Moose/Parser/Json.pm
+cp lib/MARC/Moose/Field/Control.pm blib/lib/MARC/Moose/Field/Control.pm
+cp lib/MARC/Moose/Parser.pm blib/lib/MARC/Moose/Parser.pm
+cp bin/marcmoose blib/script/marcmoose
+/usr/bin/perl -MExtUtils::MY -e 'MY->fixin(shift)' -- blib/script/marcmoose
+Manifying blib/man1/marcmoose.1p
+Manifying blib/man3/MARC::Moose::Reader::File::Marcxml.3pm
+Manifying blib/man3/MARC::Moose::Reader::String::Iso2709.3pm
+Manifying blib/man3/MARC::Moose::Field::Std.3pm
+Manifying blib/man3/MARC::Moose::Formater::Marcxml.3pm
+Manifying blib/man3/MARC::Moose::Formater::Text.3pm
+Manifying blib/man3/MARC::Moose::Reader::File::Iso2709.3pm
+Manifying blib/man3/MARC::Moose::Formater.3pm
+Manifying blib/man3/MARC::Moose::Formater::Legacy.3pm
+Manifying blib/man3/MARC::Moose::Reader::File.3pm
+Manifying blib/man3/MARC::Moose::Parser::Yaml.3pm
+Manifying blib/man3/MARC::Moose::Parser::Legacy.3pm
+Manifying blib/man3/MARC::Moose::Parser::Iso2709.3pm
+Manifying blib/man3/MARC::Moose::Field.3pm
+Manifying blib/man3/MARC::Moose::Parser::Marcxml.3pm
+Manifying blib/man3/MARC::Moose::Parser::MarcxmlSax.3pm
+Manifying blib/man3/MARC::Moose::Formater::Json.3pm
+Manifying blib/man3/MARC::Moose::Parser::MarcxmlSaxSimple.3pm
+Manifying blib/man3/MARC::Moose::Formater::UnimarcToMarc21.3pm
+Manifying blib/man3/MARC::Moose::Reader::File::Isis.3pm
+Manifying blib/man3/MARC::Moose::Writer.3pm
+Manifying blib/man3/MARC::Moose::Formater::Yaml.3pm
+Manifying blib/man3/MARC::Moose::Formater::Iso2709.3pm
+Manifying blib/man3/MARC::Moose::Reader.3pm
+Manifying blib/man3/MARC::Moose::Parser::Isis.3pm
+Manifying blib/man3/MARC::Moose.3pm
+Manifying blib/man3/MARC::Moose::Parser::MarcxmlSaxHandler.3pm
+Manifying blib/man3/MARC::Moose::Reader::String.3pm
+Manifying blib/man3/MARC::Moose::Record.3pm
+Manifying blib/man3/MARC::Moose::Field::Control.3pm
+Manifying blib/man3/MARC::Moose::Parser::Json.3pm
+Manifying blib/man3/MARC::Moose::Parser.3pm
+Checking if your kit is complete...
+Looks good
+Writing Makefile for MARC::Record
+Writing MYMETA.yml and MYMETA.json
+cp lib/MARC/Batch.pm blib/lib/MARC/Batch.pm
+cp lib/MARC/Record.pm blib/lib/MARC/Record.pm
+cp lib/MARC/Field.pm blib/lib/MARC/Field.pm
+cp lib/MARC/File/USMARC.pm blib/lib/MARC/File/USMARC.pm
+cp lib/MARC/File/Encode.pm blib/lib/MARC/File/Encode.pm
+cp lib/MARC/File.pm blib/lib/MARC/File.pm
+cp lib/MARC/File/MicroLIF.pm blib/lib/MARC/File/MicroLIF.pm
+cp lib/MARC/Doc/Tutorial.pod blib/lib/MARC/Doc/Tutorial.pod
+cp bin/marcdump blib/script/marcdump
+/usr/bin/perl -MExtUtils::MY -e 'MY->fixin(shift)' -- blib/script/marcdump
+Manifying blib/man1/marcdump.1p
+Manifying blib/man3/MARC::Batch.3pm
+Manifying blib/man3/MARC::Field.3pm
+Manifying blib/man3/MARC::Record.3pm
+Manifying blib/man3/MARC::File.3pm
+Manifying blib/man3/MARC::File::Encode.3pm
+Manifying blib/man3/MARC::File::USMARC.3pm
+Manifying blib/man3/MARC::File::MicroLIF.3pm
+Manifying blib/man3/MARC::Doc::Tutorial.3pm
+Checking if your kit is complete...
+Looks good
+Writing Makefile for MARC-XML
+Writing MYMETA.yml and MYMETA.json
+cp lib/MARC/File/XML.pm blib/lib/MARC/File/XML.pm
+cp lib/MARC/File/SAX.pm blib/lib/MARC/File/SAX.pm
+cp bin/xml2marc blib/script/xml2marc
+/usr/bin/perl -MExtUtils::MY -e 'MY->fixin(shift)' -- blib/script/xml2marc
+cp bin/marc2xml blib/script/marc2xml
+/usr/bin/perl -MExtUtils::MY -e 'MY->fixin(shift)' -- blib/script/marc2xml
+Manifying blib/man1/xml2marc.1p
+Manifying blib/man1/marc2xml.1p
+Manifying blib/man3/MARC::File::XML.3pm
+Manifying blib/man3/MARC::File::SAX.3pm
+# running Build.PL --install_base /home/einar/meran/intranet/modules/externos
+/usr/bin/perl Build.PL --install_base /home/einar/meran/intranet/modules/externos
+Checking whether your kit is complete...
+Looks good
+
+Checking prerequisites...
+Creating new 'Build' script for 'MIME-Lite-TT-HTML' version '0.04'
+/usr/bin/perl Build --makefile_env_macros 1
+Copying lib/MIME/Lite/TT/HTML.pm -> blib/lib/MIME/Lite/TT/HTML.pm
+Manifying blib/lib/MIME/Lite/TT/HTML.pm -> blib/libdoc/MIME::Lite::TT::HTML.3pm
+Checking if your kit is complete...
+Looks good
+Writing Makefile for Net::SMTP::SSL
+Writing MYMETA.yml and MYMETA.json
+cp lib/Net/SMTP/SSL.pm blib/lib/Net/SMTP/SSL.pm
+Manifying blib/man3/Net::SMTP::SSL.3pm
+Checking if your kit is complete...
+Looks good
+Writing Makefile for Net::SMTP::TLS
+Writing MYMETA.yml and MYMETA.json
+cp lib/Net/SMTP/TLS.pm blib/lib/Net/SMTP/TLS.pm
+Manifying blib/man3/Net::SMTP::TLS.3pm
+*** Module::AutoInstall version 1.06
+*** Checking for Perl dependencies...
+[Core Features]
+- Test::Fatal                 ...missing.
+- Test::More                  ...loaded. (0.92 >= 0.88)
+- Carp                        ...loaded. (1.11)
+- Digest::SHA                 ...loaded. (5.47)
+- File::Spec                  ...loaded. (3.30)
+- List::Util                  ...loaded. (1.21)
+- Net::Netrc                  ...loaded. (2.12)
+- Scalar::Util                ...loaded. (1.21)
+- Crypt::SSLeay               ...loaded. (0.57 >= 0.5)
+- Data::Visitor::Callback     ...missing.
+- DateTime                    ...missing. (would need 0.51)
+- DateTime::Format::Strptime  ...missing. (would need 1.09)
+- Devel::StackTrace           ...missing. (would need 1.21)
+- Digest::HMAC_SHA1           ...missing.
+- Encode                      ...loaded. (2.35)
+- HTML::Entities              ...loaded. (3.64)
+- HTTP::Request::Common       ...loaded. (5.824)
+- JSON                        ...missing.
+- LWP::UserAgent              ...loaded. (5.835 >= 2.032)
+- Moose                       ...missing. (would need 0.9)
+- Moose::Exporter             ...missing.
+- Moose::Role                 ...missing.
+- MooseX::Aliases             ...missing.
+- MooseX::Role::Parameterized ...missing.
+- namespace::autoclean        ...missing. (would need 0.09)
+- Net::OAuth                  ...missing. (would need 0.25)
+- Scalar::Util                ...loaded. (1.21)
+- Time::HiRes                 ...loaded. (1.9719)
+- URI                         ...loaded. (1.54 >= 1.4)
+- URI::Escape                 ...loaded. (3.30)
+- Try::Tiny                   ...missing. (would need 0.03)
+==> Auto-install the 15 mandatory module(s) from CPAN? [y] *** Dependencies will be installed the next time you type 'make'.
+    (You may need to do that as the 'root' user.)
+*** Module::AutoInstall configuration finished.
+Checking if your kit is complete...
+Looks good
+Writing Makefile for Net::Twitter
+Writing MYMETA.yml and MYMETA.json
+/usr/bin/perl "-Iinc" Makefile.PL --config= --installdeps=Test::Fatal,0,Data::Visitor::Callback,0,DateTime,0.51,DateTime::Format::Strptime,1.09,Devel::StackTrace,1.21,Digest::HMAC_SHA1,0,JSON,0,Moose,0.9,Moose::Exporter,0,Moose::Role,0,MooseX::Aliases,0,MooseX::Role::Parameterized,0,namespace::autoclean,0.09,Net::OAuth,0.25,Try::Tiny,0.03
+*** Installing dependencies...
+[MSG] No '/home/einar/.cpanplus/custom-sources' dir, skipping custom sources
+[MSG] No '/home/einar/.cpanplus/custom-sources' dir, skipping custom sources
+[MSG] No '/home/einar/.cpanplus/custom-sources' dir, skipping custom sources
+*** Installing Test::Fatal...
+Running [/usr/bin/perl /usr/bin/cpanp-run-perl /home/einar/.cpanplus/5.10.1/build/Test-Fatal-0.010/Makefile.PL INSTALLDIRS=site]...
+Checking if your kit is complete...
+Looks good
+Writing Makefile for Test::Fatal
+Writing MYMETA.yml and MYMETA.json
+Running [/usr/bin/perl /usr/bin/cpanp-run-perl /home/einar/.cpanplus/5.10.1/build/Try-Tiny-0.11/Makefile.PL INSTALLDIRS=site]...
+Checking if your kit is complete...
+Looks good
+Writing Makefile for Try::Tiny
+Writing MYMETA.yml and MYMETA.json
+Running [/usr/bin/make test]...
+make[1]: se ingresa al directorio `/home/einar/.cpanplus/5.10.1/build/Try-Tiny-0.11'
+PERL_DL_NONLAZY=1 /usr/bin/perl "-MExtUtils::Command::MM" "-e" "test_harness(0, 'blib/lib', 'blib/arch')" t/*.t
+t/basic.t ....... ok
+t/context.t ..... ok
+t/finally.t ..... ok
+t/given_when.t .. ok
+t/when.t ........ ok
+All tests successful.
+Files=5, Tests=85,  1 wallclock secs ( 0.04 usr  0.01 sys +  0.11 cusr  0.03 csys =  0.19 CPU)
+Result: PASS
+make[1]: se sale del directorio `/home/einar/.cpanplus/5.10.1/build/Try-Tiny-0.11'
+*** Test::Fatal installation cancelled.
+*** Installing Data::Visitor::Callback...
+Running [/usr/bin/perl /usr/bin/cpanp-run-perl /home/einar/.cpanplus/5.10.1/build/Data-Visitor-0.28/Makefile.PL INSTALLDIRS=site]...
+Checking if your kit is complete...
+Looks good
+Writing Makefile for Data::Visitor
+Writing MYMETA.yml and MYMETA.json
+Running [/usr/bin/perl /usr/bin/cpanp-run-perl /home/einar/.cpanplus/5.10.1/build/Class-Load-0.19/Makefile.PL INSTALLDIRS=site]...
+Checking if your kit is complete...
+Looks good
+Writing Makefile for Class::Load
+Writing MYMETA.yml and MYMETA.json
+Running [/usr/bin/perl /usr/bin/cpanp-run-perl /home/einar/.cpanplus/5.10.1/build/Data-OptList-0.107/Makefile.PL INSTALLDIRS=site]...
+Checking if your kit is complete...
+Looks good
+Writing Makefile for Data::OptList
+Writing MYMETA.yml and MYMETA.json
+Running [/usr/bin/perl /usr/bin/cpanp-run-perl /home/einar/.cpanplus/5.10.1/build/ExtUtils-CBuilder-0.280205/Makefile.PL INSTALLDIRS=site]...
+Checking if your kit is complete...
+Looks good
+Writing Makefile for ExtUtils::CBuilder
+Writing MYMETA.yml and MYMETA.json
+Running [/usr/bin/perl /usr/bin/cpanp-run-perl /home/einar/.cpanplus/5.10.1/build/Perl-OSType-1.002/Makefile.PL INSTALLDIRS=site]...
+Checking if your kit is complete...
+Looks good
+Writing Makefile for Perl::OSType
+Writing MYMETA.yml and MYMETA.json
+Running [/usr/bin/make test]...
+make[1]: se ingresa al directorio `/home/einar/.cpanplus/5.10.1/build/Perl-OSType-1.002'
+PERL_DL_NONLAZY=1 /usr/bin/perl "-MExtUtils::Command::MM" "-e" "test_harness(0, 'blib/lib', 'blib/arch')" t/*.t
+t/00-compile.t .. ok
+t/OSType.t ...... ok
+All tests successful.
+Files=2, Tests=20,  0 wallclock secs ( 0.02 usr  0.00 sys +  0.08 cusr  0.01 csys =  0.11 CPU)
+Result: PASS
+make[1]: se sale del directorio `/home/einar/.cpanplus/5.10.1/build/Perl-OSType-1.002'
+CPAN: File::HomeDir loaded ok (v0.99)
+CPAN: Storable loaded ok (v2.20)
+Reading '/root/.cpan/Metadata'
+  Database was generated on Mon, 18 Jun 2012 15:35:04 GMT
+Running install for module 'Apache::Session'
+Running make for C/CH/CHORNY/Apache-Session-1.89.tar.gz
+CPAN: Digest::SHA loaded ok (v5.71)
+CPAN: Compress::Zlib loaded ok (v2.052)
+Checksum for /root/.cpan/sources/authors/id/C/CH/CHORNY/Apache-Session-1.89.tar.gz ok
+CPAN: Archive::Tar loaded ok (v1.88)
+Apache-Session-1.89
+Apache-Session-1.89/Build.PL
+Apache-Session-1.89/CHANGES
+Apache-Session-1.89/Contributing.txt
+Apache-Session-1.89/INSTALL
+Apache-Session-1.89/Makefile.PL
+Apache-Session-1.89/MANIFEST
+Apache-Session-1.89/META.yml
+Apache-Session-1.89/README
+Apache-Session-1.89/TODO
+Apache-Session-1.89/b
+Apache-Session-1.89/b/dbi.b
+Apache-Session-1.89/b/dbinew.b
+Apache-Session-1.89/b/dbipop.b
+Apache-Session-1.89/b/dbstore.b
+Apache-Session-1.89/b/flexpop.b
+Apache-Session-1.89/b/gdbm.b
+Apache-Session-1.89/b/mysqllock.b
+Apache-Session-1.89/b/uuevsmime.b
+Apache-Session-1.89/eg
+Apache-Session-1.89/eg/example.perl
+Apache-Session-1.89/lib
+Apache-Session-1.89/lib/Apache
+Apache-Session-1.89/lib/Apache/Session.pm
+Apache-Session-1.89/lib/Apache/Session
+Apache-Session-1.89/lib/Apache/Session/DB_File.pm
+Apache-Session-1.89/lib/Apache/Session/File.pm
+Apache-Session-1.89/lib/Apache/Session/Flex.pm
+Apache-Session-1.89/lib/Apache/Session/Informix.pm
+Apache-Session-1.89/lib/Apache/Session/MySQL.pm
+Apache-Session-1.89/lib/Apache/Session/Oracle.pm
+Apache-Session-1.89/lib/Apache/Session/Postgres.pm
+Apache-Session-1.89/lib/Apache/Session/Sybase.pm
+Apache-Session-1.89/lib/Apache/Session/Generate
+Apache-Session-1.89/lib/Apache/Session/Generate/MD5.pm
+Apache-Session-1.89/lib/Apache/Session/Generate/ModUniqueId.pm
+Apache-Session-1.89/lib/Apache/Session/Generate/ModUsertrack.pm
+Apache-Session-1.89/lib/Apache/Session/Lock
+Apache-Session-1.89/lib/Apache/Session/Lock/File.pm
+Apache-Session-1.89/lib/Apache/Session/Lock/MySQL.pm
+Apache-Session-1.89/lib/Apache/Session/Lock/Null.pm
+Apache-Session-1.89/lib/Apache/Session/Lock/Semaphore.pm
+Apache-Session-1.89/lib/Apache/Session/Lock/Sybase.pm
+Apache-Session-1.89/lib/Apache/Session/Serialize
+Apache-Session-1.89/lib/Apache/Session/Serialize/Base64.pm
+Apache-Session-1.89/lib/Apache/Session/Serialize/Storable.pm
+Apache-Session-1.89/lib/Apache/Session/Serialize/Sybase.pm
+Apache-Session-1.89/lib/Apache/Session/Serialize/UUEncode.pm
+Apache-Session-1.89/lib/Apache/Session/Store
+Apache-Session-1.89/lib/Apache/Session/Store/DBI.pm
+Apache-Session-1.89/lib/Apache/Session/Store/DB_File.pm
+Apache-Session-1.89/lib/Apache/Session/Store/File.pm
+Apache-Session-1.89/lib/Apache/Session/Store/Informix.pm
+Apache-Session-1.89/lib/Apache/Session/Store/MySQL.pm
+Apache-Session-1.89/lib/Apache/Session/Store/Oracle.pm
+Apache-Session-1.89/lib/Apache/Session/Store/Postgres.pm
+Apache-Session-1.89/lib/Apache/Session/Store/Sybase.pm
+Apache-Session-1.89/t
+Apache-Session-1.89/t/99base64.t
+Apache-Session-1.89/t/99dbfile.t
+Apache-Session-1.89/t/99dbfilestore.t
+Apache-Session-1.89/t/99file.t
+Apache-Session-1.89/t/99filelock.t
+Apache-Session-1.89/t/99filestore.t
+Apache-Session-1.89/t/99flex.t
+Apache-Session-1.89/t/99md5gen.t
+Apache-Session-1.89/t/99moduniqgen.t
+Apache-Session-1.89/t/99mysql.t
+Apache-Session-1.89/t/99mysqllock.t
+Apache-Session-1.89/t/99mysqlstore.t
+Apache-Session-1.89/t/99nulllock.t
+Apache-Session-1.89/t/99oracle.t
+Apache-Session-1.89/t/99postgres.t
+Apache-Session-1.89/t/99semaphore.t
+Apache-Session-1.89/t/99storable.t
+Apache-Session-1.89/t/99uue.t
+Apache-Session-1.89/t/pod.t
+CPAN: File::Temp loaded ok (v0.22)
+CPAN: Parse::CPAN::Meta loaded ok (v1.4404)
+CPAN: CPAN::Meta loaded ok (v2.112150)
+CPAN: Module::Build loaded ok (v0.4)
+
+  CPAN.pm: Building C/CH/CHORNY/Apache-Session-1.89.tar.gz
+
+
+*** REQUEST ***
+Please use Test::Reporter to report test results - it's the only way to measure
+popularity of distribution.
+
+Created MYMETA.yml and MYMETA.json
+Creating new 'Build' script for 'Apache-Session' version '1.89'
+CPAN: Module::CoreList loaded ok (v2.18)
+---- Unsatisfied dependencies detected during ----
+----     CHORNY/Apache-Session-1.89.tar.gz    ----
+    Test::Deep [build_requires]
+Shall I follow them and prepend them to the queue
+of modules we are processing right now? [yes] Building Apache-Session
+  CHORNY/Apache-Session-1.89.tar.gz
+  ./Build -- OK
+CPAN: YAML loaded ok (v0.81)
+Running Build test
+t/99base64.t ....... 
+Dubious, test returned 2 (wstat 512, 0x200)
+No subtests run 
+t/99dbfile.t ....... 
+Dubious, test returned 2 (wstat 512, 0x200)
+No subtests run 
+t/99dbfilestore.t .. ok
+t/99file.t ......... 
+Dubious, test returned 2 (wstat 512, 0x200)
+No subtests run 
+t/99filelock.t ..... ok
+t/99filestore.t .... ok
+t/99flex.t ......... ok
+t/99md5gen.t ....... ok
+t/99moduniqgen.t ... ok
+t/99mysql.t ........ 
+Dubious, test returned 2 (wstat 512, 0x200)
+No subtests run 
+t/99mysqllock.t .... skipped: Not running RDBM tests without APACHE_SESSION_MAINTAINER=1
+t/99mysqlstore.t ... skipped: Not running RDBM tests without APACHE_SESSION_MAINTAINER=1
+t/99nulllock.t ..... ok
+t/99oracle.t ....... 
+Dubious, test returned 2 (wstat 512, 0x200)
+No subtests run 
+t/99postgres.t ..... 
+Dubious, test returned 2 (wstat 512, 0x200)
+No subtests run 
+t/99semaphore.t .... skipped: Can't tune this test. Help needed.
+t/99storable.t ..... 
+Dubious, test returned 2 (wstat 512, 0x200)
+No subtests run 
+t/99uue.t .......... 
+Dubious, test returned 2 (wstat 512, 0x200)
+No subtests run 
+t/pod.t ............ skipped: Test::Pod 1.14 required for testing POD
+
+Test Summary Report
+-------------------
+t/99base64.t     (Wstat: 512 Tests: 0 Failed: 0)
+  Non-zero exit status: 2
+  Parse errors: No plan found in TAP output
+t/99dbfile.t     (Wstat: 512 Tests: 0 Failed: 0)
+  Non-zero exit status: 2
+  Parse errors: No plan found in TAP output
+t/99file.t       (Wstat: 512 Tests: 0 Failed: 0)
+  Non-zero exit status: 2
+  Parse errors: No plan found in TAP output
+t/99mysql.t      (Wstat: 512 Tests: 0 Failed: 0)
+  Non-zero exit status: 2
+  Parse errors: No plan found in TAP output
+t/99oracle.t     (Wstat: 512 Tests: 0 Failed: 0)
+  Non-zero exit status: 2
+  Parse errors: No plan found in TAP output
+t/99postgres.t   (Wstat: 512 Tests: 0 Failed: 0)
+  Non-zero exit status: 2
+  Parse errors: No plan found in TAP output
+t/99storable.t   (Wstat: 512 Tests: 0 Failed: 0)
+  Non-zero exit status: 2
+  Parse errors: No plan found in TAP output
+t/99uue.t        (Wstat: 512 Tests: 0 Failed: 0)
+  Non-zero exit status: 2
+  Parse errors: No plan found in TAP output
+Files=19, Tests=72,  3 wallclock secs ( 0.13 usr  0.26 sys +  0.71 cusr  0.94 csys =  2.04 CPU)
+Result: FAIL
+  CHORNY/Apache-Session-1.89.tar.gz
+one dependency not OK (Test::Deep); additionally test harness failed
+  ./Build test -- NOT OK
+//hint// to see the cpan-testers results for installing this module, try:
+  reports CHORNY/Apache-Session-1.89.tar.gz
+Running Build install
+  make test had returned bad status, won't install without force

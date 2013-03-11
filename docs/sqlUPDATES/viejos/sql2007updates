@@ -1,0 +1,143 @@
+--Estas sentencias se aplican a instalaciones de koha de la version 2007 version posterior a septiembre de 2007
+-- Son necesarias para normalizar los temas en el catalogo
+
+
+-- REPORTES GENERICOS ---
+
+CREATE TABLE `generic_report_joins` (
+  `table1` varchar(50) NOT NULL,
+  `field1` varchar(50) NOT NULL,
+  `table2` varchar(50) NOT NULL,
+  `field2` varchar(50) NOT NULL,
+  `unionjoin` varchar(10) NOT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+-- 
+-- Volcar la base de datos para la tabla `generic_report_joins`
+-- 
+
+INSERT INTO `generic_report_joins` (`table1`, `field1`, `table2`, `field2`, `unionjoin`) VALUES 
+('biblio', 'author', 'autores', 'id', 'INNER'),
+('biblio', 'biblionumber', 'biblioitems', 'biblionumber', 'LEFT'),
+('biblio', 'biblionumber', 'items', 'biblionumber', 'LEFT'),
+('biblioitems', 'biblioitemnumber', 'items', 'biblioitemnumber', 'LEFT'),
+('biblio', 'biblionumber', 'biblioanalysis', 'biblionumber', 'LEFT'),
+('biblio', 'biblionumber', 'bibliosubject', 'biblionumber', 'LEFT'),
+('biblio', 'biblionumber', 'bibliosubtitle', 'biblionumber', 'LEFT'),
+('biblioitems', 'itemtype', 'itemtypes', 'itemtype', 'LEFT'),
+('biblio', 'biblionumber', 'additionalauthors', 'biblionumber', 'LEFT'),
+('biblioitems', 'biblioitemnumber', 'isbns', 'biblioitemnumber', 'LEFT'),
+('bookshelf', 'shelfnumber', 'shelfcontents', 'shelfnumber', 'LEFT'),
+('shelfcontents', 'biblioitemnumber', 'biblioitems', 'biblioitemnumber', 'INNER');
+
+-- --------------------------------------------------------
+
+-- 
+-- Estructura de tabla para la tabla `generic_report_tables`
+-- 
+
+CREATE TABLE `generic_report_tables` (
+  `tabla` varchar(50) NOT NULL,
+  `campo` varchar(50) NOT NULL,
+  `nombre` varchar(100) default NULL
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+-- 
+-- Volcar la base de datos para la tabla `generic_report_tables`
+-- 
+
+INSERT INTO `generic_report_tables` (`tabla`, `campo`, `nombre`) VALUES 
+('biblio', 'title', 'Título'),
+('biblio', 'unititle', 'Título informativo'),
+('biblio', 'notes', 'Notas'),
+('biblio', 'seriestitle', 'CDU'),
+('biblio', 'abstract', 'Resumen'),
+('biblioitems', 'volume', 'Volumen'),
+('biblioitems', 'number', 'Número de Edición'),
+('shelfcontents', 'biblioitemnumber', 'bbi'),
+('isbns', 'isbn', 'ISBN'),
+('biblioitems', 'publicationyear', 'Año de Edición'),
+('biblioitems', 'volumeddesc', 'Descripción'),
+('biblioitems', 'pages', 'Descripción Física'),
+('biblioitems', 'notes', 'Notas del Grupo'),
+('biblioitems', 'size', 'Tamaño'),
+('biblioitems', 'place', 'Lugar'),
+('biblioitems', 'seriestitle', 'Serie'),
+('items', 'barcode', 'Código de barras'),
+('items', 'bulk', 'Signatura topográfica'),
+('items', 'notforloan', 'Sala'),
+('items', 'itemnotes', 'Notas del ejemplar'),
+('itemtypes', 'description', 'Tipo de Documento'),
+('autores', 'completo', 'Autor'),
+('bibliosubject', 'subject', 'Tema'),
+('bibliosubtitle', 'subtitle', 'Otros Títulos'),
+('bookshelf', 'shelfname', 'Estante Virtual'),
+('additionalauthors', 'author', 'Autores Adicionales');
+
+
+
+
+-------------------------
+--
+-- Table structure for table `autores`
+--
+--Creo una tabla de referencia de temas
+DROP TABLE IF EXISTS `temas`;
+CREATE TABLE `temas` (
+  `id` int(11) NOT NULL auto_increment,
+  `nombre` varchar(250) NOT NULL,
+  PRIMARY KEY  (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+
+delete from temas;
+--Inserto todos los temas en una tabla de referencias
+insert into temas (nombre) select distinct subject from bibliosubject;
+--Actualizo la tabla de referencia nXn entre biblioitem y temas  
+update bibliosubject set subject = (select id from temas where nombre=subject);
+
+-- --------------------------------------------------------
+--Agrego los datos necesarios para manejarlo desde la interfaz de manejo generica de tabla de referencia
+INSERT INTO `tablasDeReferencias` (`referencia`, `nomcamporeferencia`, `camporeferencia`, `referente`, `camporeferente`) VALUES ('temas', 'id', 0, 'bibliosubject', 'subject');
+INSERT INTO `tablasDeReferenciasInfo` (`orden`, `referencia`, `similares`) VALUES ('nombre', 'temas', 'nombre');
+
+
+
+-----------------------------------------------------------
+--Cambio en Sanciones-
+
+ ALTER TABLE `sanctiontypesrules` CHANGE `order` `orden` INT( 11 ) NOT NULL DEFAULT '1';
+-- Modifico el bit 10 que va a permitir eliminar sanciones
+ UPDATE `userflags` SET `flag` = 'updatesanctions',`flagdesc` = 'Actualizar sanciones' WHERE `userflags`.`bit` =10 ;
+
+
+----------------------------------------------------------
+--Tablas agregadas para el logueo de las busquedas
+-- 
+-- Estructura de tabla para la tabla `busquedas`
+-- 
+
+CREATE TABLE `busquedas` (
+  `idBusqueda` int(11) NOT NULL auto_increment,
+  `borrower` int(11) default NULL,
+  `fecha` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
+  PRIMARY KEY  (`idBusqueda`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=74 ;
+
+
+- 
+-- Estructura de tabla para la tabla `historialBusqueda`
+-- 
+
+CREATE TABLE `historialBusqueda` (
+  `idHistorial` int(11) NOT NULL auto_increment,
+  `idBusqueda` int(11) NOT NULL,
+  `campo` varchar(100) NOT NULL,
+  `valor` varchar(100) NOT NULL,
+  PRIMARY KEY  (`idHistorial`),
+  KEY `FK_idBusqueda` (`idBusqueda`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=49 ;
+
+
+
+

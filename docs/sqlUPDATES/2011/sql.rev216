@@ -1,0 +1,19 @@
+TRUNCATE TABLE usr_estado;
+ALTER TABLE usr_estado DROP  regular;
+ALTER TABLE  usr_estado CHANGE  categoria  nombre VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL;
+INSERT INTO  usr_estado ( id_estado , nombre , fuente) VALUES (1 ,  'ACTIVO REGULAR',  'GUARANI'), (2 ,  'ACTIVO IRREGULAR',  'GUARANI'),  (3, 'INACTIVO REGULAR', 'GUARANI'), (4, 'INACTIVO IRREGULAR', 'GUARANI'),(5, 'INDIFERENTE', 'MERAN'), (6, 'HABILITADO', 'MERAN'), (7, 'DESHABILITADO', 'MERAN'), (8, 'EGRESADO REGULAR', 'GUARANI'), (9, 'EGRESADO IRREGULAR', 'GUARANI');
+CREATE TABLE IF NOT EXISTS  usr_regularidad  (
+   id  int(11) NOT NULL AUTO_INCREMENT,
+   usr_estado_id  int(11) NOT NULL,
+   usr_ref_categoria_id  int(11) NOT NULL,
+   condicion  int(11) NOT NULL DEFAULT '1',
+  PRIMARY KEY ( id )
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=19 ;
+TRUNCATE usr_regularidad;
+INSERT INTO usr_regularidad (id, usr_estado_id, usr_ref_categoria_id, condicion) VALUES (NULL, '1', '1', '1'), (NULL, '2', '1', '0'), (NULL, '3', '1', '0'), (NULL, '4', '1', '0'),(NULL, '8', '1', '1'), (NULL, '9', '1', '1'),(NULL, '1', '3', '1'), (NULL, '2', '3', '0'), (NULL, '3', '3', '0'), (NULL, '4', '3', '0'),(NULL, '8', '3', '1'), (NULL, '9', '3', '1'),(NULL, '1', '5', '1'), (NULL, '2', '5', '0'), (NULL, '3', '5', '0'), (NULL, '4', '5', '0'),(NULL, '8', '5', '1'), (NULL, '9', '5', '1');
+ALTER TABLE  usr_socio CHANGE  is_super_user  is_super_user INT( 11 ) NOT NULL DEFAULT  '0';
+ALTER TABLE  usr_socio ADD  id_estado INT NOT NULL;
+ALTER TABLE usr_persona DROP id_estado, DROP id_categoria;
+ALTER TABLE  `usr_socio` ADD  `id_categoria` INT NOT NULL, ADD  `id_estado` INT NOT NULL;
+INSERT INTO usr_regularidad (id, usr_estado_id, usr_ref_categoria_id, condicion) VALUES  (NULL,'1','2',0), (NULL,'1','4',0), (NULL,'1','6',0), (NULL,'1','7',0), (NULL,'1','8',0), (NULL,'1','9',0), (NULL,'2','2',0), (NULL,'2','4',0), (NULL,'2','6',0), (NULL,'2','7',0), (NULL,'2','8',0), (NULL,'2','9',0), (NULL,'3','2',0), (NULL,'3','4',0), (NULL,'3','6',0),  (NULL,'3','7',0), (NULL,'3','8',0), (NULL,'3','9',0), (NULL,'4','2',0), (NULL,'4','4',0),  (NULL,'4','6',0), (NULL,'4','7',0), (NULL,'4','8',0),  (NULL,'4','9',0), (NULL,'5','1',0), (NULL,'5','2',0),(NULL,'5','3',0),(NULL,'5','4',0), (NULL,'5','5',0), (NULL,'5','6',0), (NULL,'5','7',0),(NULL,'5','8',0),(NULL,'5','9',0),(NULL,'6','1',0),(NULL,'6','2',0),(NULL,'6','3',0),(NULL,'6','4',0),(NULL,'6','5',0),(NULL,'6','6',0),(NULL,'6','7',0),(NULL,'6','8',0),(NULL,'6','9',0),(NULL,'7','1',0),(NULL,'7','2',0),(NULL,'7','3',0),(NULL,'7','4',0),(NULL,'7','5',0),(NULL,'7','6',0),(NULL,'7','7',0),(NULL,'7','8',0),(NULL,'7','9',0),(NULL,'8','2',0),(NULL,'8','4',0),(NULL,'8','6',0),(NULL,'8','7',0), (NULL,'8','8',0),(NULL,'8','9',0),(NULL,'9','2',0),(NULL,'9','4',0),(NULL,'9','6',0),(NULL,'9','7',0),(NULL,'9','8',0),(NULL,'9','9',0),(NULL,'10','1',0),(NULL,'10','2',0),(NULL,'10','3',0),(NULL,'10','4',0),(NULL,'10','5',0),(NULL,'10','6',0),(NULL,'10','7',0),(NULL,'10','8',0),(NULL,'10','9',0),(NULL,'11','1',0),(NULL,'11','2',0),(NULL,'11','3',0),(NULL,'11','4',0),(NULL,'11','5',0),(NULL,'11','6',0),(NULL,'11','7',0),(NULL,'11','8',0),(NULL,'11','9',0);
+

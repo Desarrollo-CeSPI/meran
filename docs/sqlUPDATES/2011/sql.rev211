@@ -1,0 +1,1 @@
+ALTER TABLE  `io_importacion_iso_esquema_detalle` CHANGE  `orden`  `orden` INT( 11 ) NULL DEFAULT  '0';

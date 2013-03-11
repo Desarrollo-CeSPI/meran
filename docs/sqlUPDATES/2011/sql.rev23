@@ -1,0 +1,1 @@
+ALTER TABLE `adq_presupuesto` ADD `ref_pedido_cotizacion_id` INT( 11 ) NOT NULL AFTER `ref_estado_presupuesto_id` ;

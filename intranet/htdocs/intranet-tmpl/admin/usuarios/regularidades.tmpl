@@ -1,0 +1,44 @@
+[% INCLUDE "intranet-top.inc" %]
+<script src="/includes/jquery/jquery.jeditable.js"></script>
+
+<fieldset>
+    <legend><span class="titulos">[% 'Administraci&oacute;n de regularidades de usuarios' | i18n %]</span></legend>
+  
+    <p>
+          [% "Aqu&iacute; podr&aacute; configurar los distintos casos de regularidad para tipos de usuario y estados" | i18n %]
+    </p>
+          
+     [% PERL %]
+         print C4::AR::Filtros::tableHeader(   
+                                                 id              => "tablaResult",
+                                                 class           => "",
+                                                 columns         => ['[% "Estado"|i18n %]','[% "Fuente"|i18n %]','[% "Categor&iacute;a de usuario"|i18n %]', '[% "Condici&oacute;n"|i18n %]',
+                                                                    ]
+                                                 
+                     ) ;
+     [% END %]
+    
+	    [% FOREACH R IN regularidades %]
+	        <tr>
+                <td>[% R.estado.getNombre %]</td>
+                <td>[% R.estado.getFuente %]</td>
+	            <td>[% R.categoria.getDescription %]</td>
+	            <td id="regularidad_[% R.id %]" class="click">[% R.getRegularidad %]</td>
+                <script>
+                    $('#regularidad_[% R.id %]').editable('[% url_prefix %]/admin/usuarios/regularidadesDB.pl', { 
+                        data   : " {'[% 'No' | i18n %]':'[% 'No' | i18n %]','[% 'Si' | i18n %]':'[% 'Si' | i18n %]','selected':'[% 'R.getRegularidad' %]'}",
+                        type      : 'select',
+                        submit    : 'OK',
+                        style   : 'display: inline',
+                        submitdata : {token: "[% token %]", edit: '1'},
+                        indicator : loaderPath,
+                   }); 
+                </script>
+	            
+	        </tr>
+	    [% END %]
+    </table>
+    
+</fieldset>                      
+
+[% INCLUDE "intranet-bottom.inc" %]

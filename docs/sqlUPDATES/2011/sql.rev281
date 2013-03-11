@@ -1,0 +1,10 @@
+CREATE TABLE  `cat_registro_marc_n2_cover` (
+    `id` INT( 11 ) NOT NULL AUTO_INCREMENT PRIMARY KEY ,
+    `id2` INT( 11 ) NOT NULL ,
+    `image_name` VARCHAR( 256 ) NOT NULL ,
+    INDEX (  `id2` )
+) ENGINE = INNODB;
+
+ALTER TABLE  `cat_registro_marc_n2_cover` ADD FOREIGN KEY (  `id2` ) REFERENCES  `cat_registro_marc_n2` (
+    `id`
+) ON DELETE NO ACTION ON UPDATE NO ACTION ;

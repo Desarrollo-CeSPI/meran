@@ -1,0 +1,11 @@
+CREATE TABLE `imagenes_novedades_opac` (
+`id` INT NOT NULL ,
+`image_name` VARCHAR( 255 ) NOT NULL ,
+`id_novedad` INT NOT NULL ,
+PRIMARY KEY ( `id` ) ,
+UNIQUE (
+`image_name`
+)
+) ENGINE = MYISAM ;
+
+ALTER TABLE `imagenes_novedades_opac` CHANGE `id` `id` INT( 11 ) NOT NULL AUTO_INCREMENT 

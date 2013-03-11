@@ -1,0 +1,185 @@
+[% INCLUDE "intranet-top.inc" %]
+
+<script type="text/javascript">
+
+var objAH;//Objeto AjaxHelper.
+
+/*
+ * updateInfoConsultaJSON
+ * Actualizacion de los datos despues de una consulta ajax que trae un string json.
+ * El resultado se procesa, para mostrar lo que corresponda.
+ */
+function updateInfoConsultaJSON(responseText){
+    procesarJSON(responseText,objAH.idComp,objAH.funcionChange,objAH.tipo);
+}
+
+/*
+ * borrarDiv
+ * Borra el div que contiene la parte de agregado de variables.
+ */
+function borrarDiv(){$("#divResultado").html("");}
+
+
+/*
+ * agregarTipoPrestamo
+ * Muestra la parte de agregado de una preferencia
+ */
+function agregarTipoPrestamo(){
+    objAH=new AjaxHelper(updateAgregarTipoPrestamo);
+    objAH.url=URL_PREFIX+"/admin/circulacion/tipos_de_prestamosDB.pl";
+    objAH.showOverlay   = true;
+    objAH.tipoAccion= "NUEVO_TIPO_PRESTAMO";
+    objAH.sendToServer();
+}
+
+function updateAgregarTipoPrestamo(responseText){
+    $("#divResultado").html(responseText);
+}
+
+/*
+ *  eliminarTipoPrestamo
+ */
+// TODO falta validar que el tipo de prestamo no tenga referencias antes de eliminar
+// function eliminarTipoPrestamo(tipo){
+//     if( window.confirm(ESTA_SEGURO_QUE_DESEA_BORRARLO) ){
+//     objAH=new AjaxHelper(updateEliminarTipoPrestamo);
+//     objAH.debug= true;
+//     objAH.showOverlay   = true;
+//     objAH.url=URL_PREFIX+"/admin/circulacion/tipos_de_prestamosDB.pl";
+//     objAH.tipo_prestamo=tipo;
+//     objAH.tipoAccion= "BORRAR";
+//     borrarDiv();
+//     objAH.sendToServer();
+//     }
+// }
+// 
+// function updateEliminarTipoPrestamo(responseText){
+//     borrarDiv();
+//     respuesta(responseText);
+//     buscarTiposPrestamos();
+// }
+
+/*
+ * respuesta
+ * Cuando se guarda una variable nueva se verifica si esta ya exite, si es asi se devuelve un error y se muestra
+ * en la pantalla, de lo contrario se guarda la variable.
+ */
+function respuesta(responseText){
+    var Messages=JSONstring.toObject(responseText);
+    setMessages(Messages);
+}
+
+/*
+ * buscarTiposPrestamos
+ */
+
+function buscarTiposPrestamos(){
+    objAH=new AjaxHelper(updateTiposPrestamos);
+    objAH.debug= true;
+    objAH.showOverlay   = true;
+    objAH.url=URL_PREFIX+"/admin/circulacion/tipos_de_prestamosDB.pl";
+    objAH.tipoAccion= "TIPOS_PRESTAMOS";
+    objAH.sendToServer();
+}
+
+function updateTiposPrestamos(responseText){
+    $("#divResultado").html(responseText);
+    zebra('datos_tabla');
+}
+
+/*
+ * modificarTipoPrestamo
+ * Hace el llamado ajax para poder modificar y mostrar la parte de modificacion
+ */
+
+function modificarTipoPrestamo(tipo){
+    objAH=new AjaxHelper(updateModificarTipoPrestamo);
+    objAH.debug= true;
+    objAH.showOverlay   = true;
+    objAH.url=URL_PREFIX+"/admin/circulacion/tipos_de_prestamosDB.pl";
+    objAH.tipo_prestamo=tipo;
+    objAH.tipoAccion= "MODIFICAR_TIPO_PRESTAMO";
+    objAH.sendToServer();
+}
+
+function updateModificarTipoPrestamo(responseText){
+    $("#divResultado").html(responseText);
+}
+
+
+/*
+ * modificarTipoPrestamo
+ * Hace el llamado ajax para poder modificar y mostrar la parte de modificacion
+ */
+
+function guardarModificacionTipoPrestamo(){
+
+    objAH=new AjaxHelper(updateGuardarModificacionTipoPrestamo);
+    objAH.debug= true;
+    objAH.showOverlay   = true;
+    objAH.url=URL_PREFIX+"/admin/circulacion/tipos_de_prestamosDB.pl";
+    objAH.tipo_prestamo=$("#id_tipo_prestamo").val();
+    objAH.descripcion=$("#descripcion").val();
+    if ($("#disponibilidad:checked").val()){objAH.disponibilidad=1;}else{objAH.disponibilidad=0;}
+    if ($("#habilitado:checked").val()){objAH.habilitado=1;}else{objAH.habilitado=0;}
+    objAH.prestamos=$("#prestamos").val();
+    objAH.dias_prestamo=$("#dias_prestamo").val();
+    objAH.renovaciones=$("#renovaciones").val();
+    objAH.dias_renovacion=$("#dias_renovacion").val();
+    objAH.dias_antes_renovacion=$("#dias_antes_renovacion").val();
+
+    objAH.tipoAccion= "GUARDAR_MODIFICACION_TIPO_PRESTAMO";
+    objAH.sendToServer();
+}
+
+function updateGuardarModificacionTipoPrestamo(responseText){
+    borrarDiv();
+    respuesta(responseText);
+    buscarTiposPrestamos();
+}
+
+/*
+ * modificarTipoPrestamo
+ * Hace el llamado ajax para poder modificar y mostrar la parte de modificacion
+ */
+
+function guardarNuevoTipoPrestamo(){
+
+    objAH=new AjaxHelper(updateGuardarNuevoTipoPrestamo);
+    objAH.debug= true;
+    objAH.showOverlay   = true;
+    objAH.url=URL_PREFIX+"/admin/circulacion/tipos_de_prestamosDB.pl";
+    objAH.tipo_prestamo=$("#id_tipo_prestamo").val();
+    objAH.descripcion=$("#descripcion").val();
+    if ($("#disponibilidad:checked").val()){objAH.disponibilidad=1;}else{objAH.disponibilidad=0;}
+    if ($("#habilitado:checked").val()){objAH.habilitado=1;}else{objAH.habilitado=0;}
+    objAH.prestamos=$("#prestamos").val();
+    objAH.dias_prestamo=$("#dias_prestamo").val();
+    objAH.renovaciones=$("#renovaciones").val();
+    objAH.dias_renovacion=$("#dias_renovacion").val();
+    objAH.dias_antes_renovacion=$("#dias_antes_renovacion").val();
+
+    objAH.tipoAccion= "AGREGAR_TIPO_PRESTAMO";
+    objAH.sendToServer();
+
+    return false;
+}
+
+function updateGuardarNuevoTipoPrestamo(responseText){
+    borrarDiv();
+    respuesta(responseText);
+    buscarTiposPrestamos();
+}
+
+$(document).ready( function() {
+    buscarTiposPrestamos();
+});
+
+</script>
+
+<fieldset class="resultados_busqueda">
+    <legend class="titulo_legend">[% "Administraci&oacute;n de Tipos de Pr&eacute;stamo" | i18n %]</legend>
+    <div id="divResultado"></div>
+</fieldset>
+
+[% INCLUDE "intranet-bottom.inc" %]

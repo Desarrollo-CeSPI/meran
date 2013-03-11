@@ -1,0 +1,1 @@
+UPDATE `pref_preferencia_sistema` SET `type` = 'text' WHERE `pref_preferencia_sistema`.`variable` ='re_captcha_private_key';

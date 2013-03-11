@@ -1,0 +1,5 @@
+UPDATE  `pref_estructura_subcampo_marc` SET  `nivel` =  '2' WHERE  `pref_estructura_subcampo_marc`.`campo` =  '245' AND  `pref_estructura_subcampo_marc`.`subcampo` =  'h';
+
+
+UPDATE  `pref_estructura_subcampo_marc` SET  `repetible` =  '0' WHERE  `pref_estructura_subcampo_marc`.`campo` =  '995' AND  `pref_estructura_subcampo_marc`.`subcampo` =  'o';
+

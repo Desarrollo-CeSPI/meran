@@ -1,0 +1,75 @@
+[% INCLUDE "intranet-top.inc" %]
+<script type="text/javascript"src="/intranet-tmpl/includes/adquisiciones/generatePresupuesto.js"></script>
+<script type="text/javascript">
+    $(document).ready(function() {
+        $('#presupuesto').hide() 
+        $('#links').hide() 
+    });
+</script>
+    <fieldset id="datos_proveedor">
+    <legend class="titulo_legend">[% "Pedidos De Cotizaci&oacute;n" | i18n %]</legend>
+      <table id="tablaEjemplaresCompra" name="tabla" class="datos_tabla" border=0 cellspacing=0 cellpadding=0 >
+      <thead>
+          <tr class="titulo_tabla_resultado">
+              <th>
+                  [% "Pedido de Cotizacion" | i18n %]
+              </th>
+              <th>
+                  [% "Fecha" | i18n %]
+              </th>
+              <th>
+                  [% "Acciones" | i18n %]
+              </th>
+          </tr>
+      </thead>
+      <tbody>
+            [% i = 1 %]
+            [% FOREACH resultsloop %]  
+            <tr align="center" 
+            [% IF i % 2 == 0 %] 
+                [% "class='par'" %]
+            [% ELSE %]
+                [% "class='impar'" %]
+            [% END %]
+            >
+                <td align="right" >
+                    <p id="pedidoCotizacion[% pedido_cotizacion.getId %]">[% i %]</p> 
+                <td align="right" >
+                    <p>[% pedido_cotizacion.fecha %]</p>  
+                </td>
+                <td align="right" >
+                    <div class="click horizontal icon_mas">
+                              [% PERL %]
+                                            print C4::AR::Filtros::link_to(   
+                                                                            text =>     C4::AR::Filtros::to_Icon( boton   => "icon_mas" ),
+                                                                            url=>"[% url_prefix %]/adquisiciones/datosPedidoCotizacion.pl", 
+                                                                            params =>   ["id_pedido_cotizacion=[% pedido_cotizacion.getId %]",
+                                                                                        "href=DETALLE"],
+                                                                            title =>    "[% 'Ver Detalles' | i18n %]"
+                                                                        );
+                              [% END %]
+                    </div>
+                              [% PERL %]
+                              print C4::AR::Filtros::to_Button( 
+                                                text    =>  "[% 'Presupuestar Pedido' | i18n %]",
+                                                boton   =>  "boton_buscar",
+                                                onClick =>  "presupuestar([% pedido_cotizacion.getId %])",
+                    ) ;
+                             [% END %]
+                  </td>
+            </tr>  
+            [% i = i + 1 %]  
+            <input type="hidden" value="[% pedido_cotizacion.getId %]" id="pedido_cotizacion_id[% pedido_cotizacion.getId %]" />    
+            [% END %]   
+            [% PERL %]
+                [% IF cant_pedidos == 0 %]  
+                    print C4::AR::Filtros::setHelp(text => "[% 'No se encontraron pedidos de cotizacion en el sistema.' | i18n %]", );
+                [% END %] 
+            [% END %] 
+    </tbody>   
+    </table>
+</fieldset>
+<input type="hidden" value="" id="pedido_cotizacion_selected" />
+<div id="presupuesto"></div>
+<div id="links"></div>
+[% INCLUDE "intranet-bottom.inc" %]

@@ -1,0 +1,12 @@
+UPDATE `pref_preferencia_sistema` SET `type` = 'texta' WHERE `pref_preferencia_sistema`.`variable` = 'reserveMessage';
+UPDATE `pref_preferencia_sistema` SET `categoria` = 'circulacion' WHERE `pref_preferencia_sistema`.`variable` = 'reminderDays';
+UPDATE `pref_preferencia_sistema` SET `categoria` = 'circulacion' WHERE `pref_preferencia_sistema`.`variable` = 'remindUser';
+UPDATE `pref_preferencia_sistema` SET `type`='texta' WHERE `variable`='reminderMessage';
+UPDATE `pref_preferencia_sistema` SET `type`='texta' WHERE `variable`='mensaje_mail_cambio_disponibilidad_cancelacion';
+UPDATE `pref_preferencia_sistema` SET `type`='texta' WHERE `variable`='mensaje_mail_cambio_disponibilidad_espera';
+UPDATE `pref_preferencia_sistema` SET `type`='texta' WHERE `variable`='twitter_follow_button';
+UPDATE `pref_preferencia_sistema` SET `type`='texta' WHERE `variable`='libreDeudaMensaje';
+UPDATE `pref_preferencia_sistema` SET `type`='texta' WHERE `variable`='mailMessageForgotPass';
+UPDATE `pref_preferencia_sistema` SET `type`='texta' WHERE `variable`='mailMessageForgotPassUnactive';
+UPDATE `pref_preferencia_sistema` SET `type`='texta' WHERE `variable`='vencidoMessage';
+

@@ -1,0 +1,69 @@
+<script type="text/javascript">
+    $(document).ready(function() {
+        $('.fancy_link').fancybox();
+    });
+</script>
+<fieldset>
+    <legend>[% "Tipo de documento" | i18n %]</legend>
+        [% IF cant %]
+                [% PERL %]
+                    print C4::AR::Filtros::tableHeader(   
+                                           id              => "tipo_documento",
+                                           class           => "",
+                                           columns         => ['[% "Foto"|i18n %]','[% "Nombre"|i18n %]','[% "Tipo de documento"|i18n %]','[% "Acciones"|i18n %]',]
+                                ) ;
+                [% END %]
+                
+                <tbody id="portada_opac_result_sortable">
+
+                <tr>
+                    <td class="tipoDocImage">
+                        <a class="fancy_link" href="/uploads/covers/DEFAULT.png">
+                          <img border="0" src="/uploads/covers/DEFAULT.png" alt="[% p.getNombre %]" style>
+                        </a>
+                    </td>
+                    <td>Default</td>
+                    <td>Default</td>
+                    <td></td>
+                </tr> 
+                [% FOREACH d IN tiposDocumento %]
+                    <tr id="[% d.id %]">
+                        <td class="tipoDocImage">
+                            <a class="fancy_link" href="/uploads/covers/[% d.getId_tipo_doc %].png">
+                              <img border="0" src="/uploads/covers/[% d.getId_tipo_doc %].png" alt="[% p.getNombre %]" style>
+                            </a>
+                        </td>
+                        <td>[% d.getNombre %]</td>
+                        <td>[% d.getId_tipo_doc %]</td>
+                        <td>
+                            [% PERL %]
+                                      print C4::AR::Filtros::action_set_button(    
+
+                                            title           => "Modificar", 
+                                            action          => 'modificarTipoDocumento("[% d.getId_tipo_doc %]")', 
+                                            icon            => "icon-white icon-edit",
+                                            button          => 'btn btn-primary',
+                                            actions         => [
+                                                                    {title    => "Eliminar", 
+                                                                     action   => 'eliminarTipoDocumento("[% d.getId_tipo_doc %]")', 
+                                                                     icon     => "icon-trash"
+                                                                    },
+                                                                ],
+                                              ) ;
+                            [% END %]
+                        </td>
+                    </tr>    
+                [% END %]
+                </tbody>
+             </table>
+        [% ELSE %]
+            <div class="alert alert-info">[% 'No hay nigun tipo de documento' | i18n %]</div>
+        [% END %]
+</fieldset>
+
+<div class="form-actions">
+    <a class="btn btn-success click" onclick="agregarTipoDeDocumento()">
+        <i class="icon-plus-sign icon-white"></i> 
+        [% 'Agregar' | i18n %]
+    </a>
+</div>

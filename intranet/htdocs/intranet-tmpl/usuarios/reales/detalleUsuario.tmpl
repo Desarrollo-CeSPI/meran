@@ -1,0 +1,359 @@
+<link rel="stylesheet" type="text/css" href="[% temas %]/[% user_theme_intra %]/includes/fileuploader.css">
+<script>
+var user_picture_name = "[% foto_name %]";
+</script>
+<script type="text/javascript" src="/includes/jquery/fileuploader.js"></script>
+<script src="/includes/jquery/jquery.jeditable.js"></script>
+
+<script type="text/javascript">
+var loaderPath= "";
+    $(document).ready(function(){
+
+        makeToggle('toggle_container_datos_sec','trigger',null,true);
+        
+        [% IF notas %]
+            makeToggle('toggle_container_nota','trigger',null,false);
+        [% ELSE %]
+            makeToggle('toggle_container_nota','trigger',null,true);
+        [% END %]
+
+        [% IF socio.tieneAutorizado %]
+            makeToggle('toggle_container_autorizado','trigger',null,false);
+        [% ELSE %]
+            makeToggle('toggle_container_autorizado','trigger',null,true);
+        [% END %]
+
+
+
+        loaderPath = '<img src="'+imagesForJS+'/loaders/loader_facebook.gif"'+'>';
+        $('.nota').editable('[% url_prefix %]/usuarios/reales/usuariosRealesDB.pl', { 
+              type      : 'textarea',
+              cancel    : CANCELAR,
+              submit    : OK,
+              tooltip   : EDITABLE_MSG,
+              placeholder: EDITABLE_MSG,
+              style   : 'display: inline',
+              height: '50px',
+              width: '400px',
+              submitdata : {token: "[% token %]", edit: '1', id: 'nota', nro_socio:'[% nro_socio %]' },
+              indicator : loaderPath,
+        });
+
+
+
+        [% IF !foto_name %] 
+            $('#div_uploader').show();
+        [% ELSE %]
+            $('#div_boton_eliminar_foto').show();
+        [% END %]
+
+        $('.fancylink').fancybox();
+
+        //Inicializacion del FileUploader
+        [% IF !foto_name %]  
+            $('#label-file-uploader').show();
+	        var uploader = new qq.FileUploader({
+	            element: document.getElementById('file-uploader'),
+	            action: '[% url_prefix %]/usuarios/reales/uploadPicture.pl',
+	            params: {
+	            	nro_socio: '[% nro_socio %]',
+	            	token:    '[% token %]',
+	            },
+	            allowedExtensions: ["bmp","jpg","gif","png","jpeg"],
+	            onComplete: function(id, fileName){detalleUsuario();clearMessages();},
+	            debug: true,
+	            multiple: false,
+	            showMessage: function(message){ jAlert(message); }
+	        });
+        [% ELSE %]
+            $('#label-file-uploader').html('');
+        [% END %]
+        
+    });
+</script>
+
+[% IF needsDataValidation %]
+    <div class="alert alert-block">
+            <a class="close" data-dismiss="alert">×</a>
+            <h4 class="alert-heading" >[% "Atenci&oacute;n" | i18n %]!</h4>
+            <p>[% "Los datos censales del socio necesitan ser validados" | i18n %]</p>
+            <p>
+              <a class="btn btn-danger click" onclick="validarDatosCensales();" >[% "Validar datos censales" | i18n %]</a>
+            </p>            
+    </div>
+[% END %]
+
+
+
+<fieldset>
+    <legend class="titulo_legend_resaltado">[% 'Datos del Usuario' | i18n %]</legend>
+	<div id="acciones_usuario" class="right" style="margin-right: 60px;">
+	        [% PERL %]
+	         print C4::AR::Filtros::action_set_button(    
+	                                             title           => "[% socio.persona.getNombre %], [% socio.persona.getApellido %]",
+	                                             button          => 'btn btn-primary',
+	                                             action 		 => 'modificarDatosDeUsuario()', 
+                                                 modifier        => "btn-large",
+	                                             icon 			 => "icon-white icon-pencil",
+	                                             actions         => [  [% IF needsDataValidation %]
+	                                                                       {title => "Validar datos Censales", action=>'validarDatosCensales();',icon=>"icon-share-alt"},
+	                                                                   [% END %]
+	                                                                   {title => "Deshabilitar Usuario", action=>'eliminarUsuario()', icon=>"icon-trash"},
+	                                                                   [% IF !socio.tieneAutorizado %]
+	                                                                         {title => "Agregar Usuario Adicional", action=>'agregarAutorizado()', icon=>"icon-plus-sign"},
+	                                                                   [% ELSE %]
+	                                                                         {title => "Eliminar Usuario Adicional", action=>'desautorizarTercero()', icon=>"icon-eye-close"},
+	                                                                   [% END %]
+	                                                                   [% IF socio_data.usr_nro_socio != nro_socio %]
+	                                                                         {title => "Reestablecer contrase&ntilde;a", action=>'resetPassword()', icon=>"icon-warning-sign"},
+	                                                                   [% ELSE %]
+	                                                                         {title => "Cambio de Contrase&ntilde;a", action=>'cambiarPassword()', icon=>"icon-warning-sign"},
+	                                                                   [% END %]
+                                                                       {title => "Generar carnet", action=>'formCarnet.submit();', icon=>"icon-barcode"},
+                                                                       {title => "Libre Deuda", action=>'generarLibreDeuda()', icon=>"icon-asterisk"},
+	                                                                   {title => "Prest. Interbibliotecario", action=>'prestamosInterBibliotecarios()', icon=>"icon-shopping-cart"},
+	                                                                   [% IF socio_data.usr_credential_type == "superLibrarian" %]
+	                                                                  	  {title => "Cambiar Credenciales", action=>'cambiarCredencial()', icon=>"icon-flag"},
+	                                                                   [% END %]
+	                                                                   [% IF foto_name %]
+	                                                                       {title => 'Eliminar Foto', action=>'eliminarFoto()', icon=>'icon-picture'},
+	                                                                   [% END %]
+	                                                                 ]
+	
+	                           );
+	         [% END %]
+	
+	
+	                      [% IF mensaje_error_foto %] 
+                                <div class="alert alert-error">[% mensaje_error_foto %]</div>
+	                      [% END %]
+	
+	                        <dl id="div_uploader" style="display:none;">
+	                             <dt>
+		                            <div id="file-uploader">
+		                                <noscript>          
+		                                    <p>[% 'Please enable JavaScript to use file uploader.' | i18n %]</p>
+		                                    <!-- or put a simple form for upload here -->
+		                                </noscript>                          
+		                         </dt>
+	                        </dl>
+	
+	</div>
+
+    <form id="formCambioPassword" method="get" action="[% url_prefix %]/usuarios/change_password.pl">
+               <input type="hidden" value="[% token %]" name="token">
+    </form>
+                         
+	<form action="[% url_prefix %]/usuarios/cardGenerator.pl" method=get name="formCarnet">
+	    <input type=hidden name="nro_socio" value="[% socio.getNro_socio %]" >
+	    <input type=hidden name="token" value="[% token %]" >
+	</form>
+
+     <div class="_span96">
+                <dl>
+                      <dt id="foto"> 
+                        [% IF foto_name %]  
+                            <a class="fancylink" rel="group" href="/uploads/pictures/[% foto_name %]">
+                                <img border="0" src="/uploads/pictures/[% foto_name %]"
+                                      style="height: 60%; width: 60%; max-width: 120px; max-height: 120px;" 
+                                      alt="[% socio.persona.getApellido %], [% socio.persona.getNombre %] ([% socio.getNro_socio %])"
+                                      title="[% socio.persona.getApellido %], [% socio.persona.getNombre %] ([% socio.getNro_socio %])"
+                                >
+                            </a>
+                        [% ELSE %]
+		                    [% IF socio.persona.sexo == 'F' %]
+		                         <img border="0" src="/includes/css/images/no_foto_female.gif"
+		                               style="height: 120px; width: 120x;" 
+		                               alt='[% "Usuario sin foto" | i18n %]'
+		                         >
+		                    [% ELSE %]
+		                         <img border="0" src="/includes/css/images/no_foto_male.gif"
+		                               style="height: 120px; width: 120x;" 
+		                               alt='[% "Usuario sin foto" | i18n %]'
+		                         >
+		                    [% END %]
+                        [% END %]
+                      </dt>
+                      <dt class="inline left rightMargin">[% "Apellido:" | i18n %]</dt>
+                      <dd>[% socio.persona.getApellido %] </dd>
+
+                      <dt class="inline left rightMargin">[% "Nombre:" | i18n %]</dt>
+                      <dd>[% socio.persona.getNombre %] </dd>
+
+                      <dt class="inline left rightMargin">[% "Documento:" | i18n %]</dt>
+                      <dd>[% socio.persona.getVersion_documento %]&nbsp; [% socio.persona.getNro_documento %]</dd>
+
+                      [% IF !(socio.getNro_socio == socio.getNro_documento) %]
+                          <dt class="inline left rightMargin">
+                            [% "Nro. de Socio:" | i18n %]</dt>
+                        	[% IF socio_data.usr_nro_socio != nro_socio %]
+                          		<dd><span class="label label-info click" onclick="showModalCambiarNroSocio();" >[% socio.getNro_socio %]</span></dd>
+                          	[% ELSE %]
+                          		<dd><span class="label label-info"  >[% socio.getNro_socio %]</span></dd>
+                          	[% END %]
+                      [% END %]
+
+                      <dt class="inline left rightMargin">[% "Categor&iacute;a:" | i18n %] </dt>
+                      <dd>
+                          [% TRY %]
+                            [% socio.getCategoria.toString %]
+                          [% CATCH %]
+                            [% 'Sin categor&iacute;a' | i18n %]
+                          [% END %] 
+                      </dd>
+                      
+                      <dt class="inline left rightMargin">[% "Estado:" | i18n %] </dt>
+                      <dd><span class="label [% IF socio.esRegular %]label-success[% ELSE %]label-important[% END %]">[% socio.esRegularToString %]</span></dd>
+                      
+                      
+
+                      <dt class="inline left rightMargin">[% "Credenciales" | i18n %]:</dt>
+                      <dd>[% PERL %] print C4::AR::Utilidades::translateTipoCredencial('[% socio.getCredentialType %]') [% END %]</dd>
+                </dl>
+
+
+                [% IF (!socio.cumpleRequisito) && (requisitoNecesario_pref) %]
+                	<div class="alert alert-error">
+                			<strong>[% "Atenci&oacute;n" | i18n %]:</strong> [% "el usuario no cumple con la condici&oacute;n impuesta por la Biblioteca, y no puede hacer uso del sistema." | i18n %]
+                	</div>
+                [% END %]
+
+                    <div class="accordion" id="datos_Secundarios">
+                        <div class="accordion-group">
+	                        <div class="accordion-heading">
+	                            <a class="accordion-toggle" data-toggle="collapse" data-parent="#datos_Secundarios" href="#data_user">[% "Datos secundarios" | i18n %]</a>
+	                         </div>
+		                     <div id="data_user" class="accordion-body collapse">
+		                        <div class="accordion-inner">
+			                        <dl>
+			                            <dt class="inline left rightMargin">[% "Fecha de nacimiento:" | i18n %]</dt>
+			                            <dd>[% socio.persona.getNacimiento %]</dd>
+			                            <dt class="inline left rightMargin">[% "Sexo:" | i18n %]</dt>
+			                            <dd>[% socio.persona.getSexoPrint %]</dd>
+			                            
+			                            [% IF socio.persona.getTelefono %]
+			                                <dt class="inline left rightMargin">[% "Tel&eacute;fono:" | i18n %]</dt>
+			                                <dd>[% socio.persona.getTelefono %]</dd>  
+			                            [% END %]
+			                            
+			                            [% IF socio.persona.getAlt_telefono %]
+			                                <dt class="inline left rightMargin">[% "Tel&eacute;fono Alt:" | i18n %]</dt>
+			                                <dd>[% socio.persona.getAlt_telefono %]</dd>  
+			                            [% END %]
+			                            
+			                            [% IF socio.persona.getEmail %]
+			                                <dt class="inline left rightMargin">[% "E-mail:" | i18n %]</dt>
+			                                <dd><a href="mailto:[% socio.persona.getEmail %]" target="_blank">[% socio.persona.getEmail %]</a></dd>
+			                            [% END %]
+			                            
+			                            <dt class="inline left rightMargin">[% "Legajo :" | i18n %]</dt>
+			                            <dd>[%  socio.persona.getLegajo %]</dd>
+			
+			                            <dt class="inline left rightMargin">[% "Ciudad :" | i18n %]</dt>
+			                            [% TRY %] 
+			                                <dd>[%  socio.persona.ciudad_ref.getNombre %]</dd>
+			                            [% CATCH %] 
+			                                <dd class="alert alert-error clear">[% 'Ciudad inv&aacute;lida - Actualizar' | i18n %]</dd> 
+			                            [% END %]
+			
+			                            <dt class="inline left rightMargin">[% "Calle :" | i18n %]</dt>
+			                            <dd>[%  socio.persona.getCalle %]</dd>
+			
+			                            <dt class="inline left rightMargin">[% "ID de usuario:" | i18n %]</dt>
+			                            <dd>[%  socio.nro_socio %]</dd>
+			
+			                            <dt class="inline left rightMargin">[% "Incorporaci&oacute;n a Biblioteca:" | i18n %]</dt>
+			                            <dd>[%  socio.ui.nombre %]</dd>
+			                            
+		          						[%IF  socio.persona.getInstitucion %]
+				                            <dt class="inline left rightMargin">[% "Instituci&oacute;n :" | i18n %]</dt>
+				                            <dd>[% socio.persona.getInstitucion %]</dd>
+	                                        <br />          
+                                        [% END %]
+
+                                        [% IF socio.persona.getCarrera %]
+				                            <dt class="inline left rightMargin">[% "Carrera :" | i18n %] </dt>
+				                            <dd>[% socio.persona.getCarrera %]</dd>
+	                                        <br />			
+                                        [% END %]
+
+                                    	[% IF socio.persona.getAnio %]
+				                            <dt class="inline left rightMargin">[% "A&ntilde;o :" | i18n %] </dt>
+				                            <dd>[% socio.persona.getAnio %]</dd>
+	                                        <br />          
+										[% END %]
+
+										[% IF socio.persona.getDivision %]
+				                            <dt class="inline left rightMargin">[% "Divisi&oacute;n :" | i18n %] </dt>
+				                            <dd>[% socio.persona.getDivision %]</dd>
+				                        [% END %]
+			                        </dl>
+			                    </div>
+		                    </div>
+                        </div>
+                    </div>
+	                [% IF socio.tieneAutorizado %]
+	                    <div class="accordion" id="usuario_adicional">
+			                <div class="accordion-group">
+		                        <div class="accordion-heading">
+		                            <a class="accordion-toggle" data-toggle="collapse" data-parent="#usuario_adicional" href="#user_add">[% "Usuario adicional" | i18n %]</a>
+		                         </div>
+		                          <div id="user_add" class="accordion-body collapse">
+		                              <div class="accordion-inner">
+			                             <dl>
+			                                 <dt class="inline left rightMargin">[% "Nombre y Apellido: " | i18n %]</dt>
+			                                 <dd>[% socio.getNombre_apellido_autorizado%]</dd>
+			
+			                                 <dt class="inline left rightMargin">[% "DNI: " | i18n %]</dt>
+			                                 <dd>[% socio.getDni_autorizado %]</dd>
+			
+			                                 <dt class="inline left rightMargin">[% "Tel&eacute;fono: " | i18n %]</dt>
+			                                 <dd>[% socio.getTelefono_autorizado %]</dd>
+			                             </dl>
+		                           </div>
+		                         </div>
+	                        </div>
+	                     </div>
+	                [% END %]
+	                <div class="accordion" id="notas_usuario">
+	                    <div class="accordion-group">
+	                        <div class="accordion-heading">
+	                            <a class="accordion-toggle" data-toggle="collapse" data-parent="#notas_usuario" href="#notas_div">[% "Notas" | i18n %]</a>
+	                        </div>
+	                         <div id="notas_div" class="accordion-body collapse [% IF notas %] in [% END %] ">
+	                             <div class="accordion-inner">
+						                <span class="nota">[% notas %]</span>
+	                             </div>
+	                        </div>
+	                    </div>
+                    </div>
+          </div>
+</div><!--columna izq -->
+
+<div id="modificar-datos-usuario" class="modal hide fade bigModal"></div>
+
+
+<div id="modificar-nro-socio" class="modal hide fade">
+
+	<div class="modal-header">
+		<a class="close" data-dismiss="modal">×</a>
+		<h3>[% 'Modificar Nro. de socio' | i18n %]</h3>
+	</div>
+	<div class="modal-body">
+		<div class="form-horizontal">
+			<div class="control-group">
+				<label class="control-label" for="nuevo_nro_socio">[% 'Nuevo Nro. de socio' | i18n %]</label>
+				<div class="controls">
+					<input type="text" id="nuevo_nro_socio" name="nuevo_nro_socio" value=""/>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="modal-footer">
+		<a class="btn" data-dismiss="modal">[% 'Cancelar' | i18n %]</a>
+		<a onclick="cambiarNroSocio();" class="btn btn-primary">[% 'Aceptar' | i18n %]</a>
+	</div>
+
+</div>
+
+

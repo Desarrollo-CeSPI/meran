@@ -1,0 +1,20 @@
+<!ELEMENT DBI (RESULTSET)>
+<!ELEMENT RESULTSET (ROW*)>
+<!ELEMENT ROW (campo?, subcampo?, itemtype?, liblibrarian?, tipo?, referencia, nivel, obligatorio, intranet_habilitado?, visible, edicion_grupal, idinforef?, idCompCliente?, fijo, repetible, rules?, grupo)>
+<!ELEMENT campo (#PCDATA)>
+<!ELEMENT subcampo (#PCDATA)>
+<!ELEMENT itemtype (#PCDATA)>
+<!ELEMENT liblibrarian (#PCDATA)>
+<!ELEMENT tipo (#PCDATA)>
+<!ELEMENT referencia (#PCDATA)>
+<!ELEMENT nivel (#PCDATA)>
+<!ELEMENT obligatorio (#PCDATA)>
+<!ELEMENT intranet_habilitado (#PCDATA)>
+<!ELEMENT visible (#PCDATA)>
+<!ELEMENT edicion_grupal (#PCDATA)>
+<!ELEMENT idinforef (#PCDATA)>
+<!ELEMENT idCompCliente (#PCDATA)>
+<!ELEMENT fijo (#PCDATA)>
+<!ELEMENT repetible (#PCDATA)>
+<!ELEMENT rules (#PCDATA)>
+<!ELEMENT grupo (#PCDATA)>

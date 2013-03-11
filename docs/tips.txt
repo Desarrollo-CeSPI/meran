@@ -1,0 +1,28 @@
+El archivo intranet/cgi-bin/reports/estadistica_AnualResult.pl parece deprecated.
+Habria que hacer ofuscacion de javascript para TODOS LOS JS cuando MERAN este en produccion definitiva.
+Cuando se agrega un usuario, habria que capitalizar el nombre y apellido, entre otros procesamientos a los demas strings!!!!!!!!!!!!!!!!!!!!!!!!!
+
+
+BAJAR, INSTALAR y PASAR TODO KOHA A http://search.cpan.org/dist/PDF-API2/lib/PDF/API2.pm (nuevo PDF), y hacer un PDFManager.pm como adapter por
+posibles cambios.
+
+Terrble BUG en /busquedas/adminEjemplares.pl, anda mal el result!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+Cuando funcionalmente este todo terminado, tener en cuenta la insuficiencia de datos, para que no haya un error 500 (hacer algo si lo buscado no existe en la base)
+
+Filtro en Historial de prestamos de usuario
+
+Los pedidos por AJAX, que se hacen siempre, que sean informativos si hubo o no resultados. Por ejemplo, en circulacion rapida, cuando se pone devolucion y el usuario no tiene nada prestado, que diga abajo: "Este usuario no tiene ejemplares en su poder", por ejemplo.
+
+El chat sera como este???? http://anantgarg.com/2009/05/13/gmail-facebook-style-jquery-chat/
+
+Problemas de focus (javascript) en devoluciones (circulacion rapida)
+
+En modifcar docuemtno (datosDocumento.pl), algunos campos hidden no se completan, por ejemplo, se completa el nombre del autor pero el id hidden no.
+
+En el OPAC se puede reservar mas de una vez sobre el mismo grupo (cuando queda en espera) - 08/02/2010
+
+Ver porqué en algunos servidores no se puede loggear con otro browser que no sea Firefox - 08/02/2010
+
+
+

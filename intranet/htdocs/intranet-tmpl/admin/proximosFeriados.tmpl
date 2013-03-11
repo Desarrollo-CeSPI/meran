@@ -1,0 +1,12 @@
+<div>
+    <fieldset>
+    <div style="max-height:300px; overflow-y:auto;">
+	    <dl class="dl-horizontal">
+	        [% FOREACH fecha IN proximos_feriados %]
+	            <dt>[% fecha.getFecha %]:</dt>
+	            <dd>[% fecha.getFeriado %]</dd>
+	        [% END %]
+	    </dl>
+	</div>
+    </fieldset>
+</div>

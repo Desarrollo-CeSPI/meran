@@ -1,0 +1,46 @@
+<fieldset>
+<legend class="titulo_legend">[% 'Seud&oacute;nimos existentes'| i18n %]</legend>
+<table id="tablaSeudonimos" class="tablesorter datos_tabla" border=0 cellspacing=0 cellpadding=0 width="100%" align="center">
+	<thead>
+ 	<tr class="titulo_tabla_resultado">
+	
+		<th>Seud&oacute;nimo</th>
+		<th>Eliminar</th>
+	
+	</tr>
+
+	</thead>
+
+	<tbody>
+[% FOREACH seudonimo IN RESULTSLOOP %]
+	<tr align='center'>
+
+		<td class="[% clase %]"> 
+            [% IF seudonimo.seudonimo.getApellido %]
+			    [% seudonimo.seudonimo.getApellido %], [% seudonimo.seudonimo.getNombre %] <!-- PARA AUTOR -->
+            [% END %]
+            [% seudonimo.seudonimo.getNombre %] <!-- PARA TEMA -->
+            [% seudonimo.seudonimo.getEditorial %] <!-- PARA EDITORIAL -->
+		</td>
+		<td class="[% clase %]" align="center">
+            <div>
+                [% PERL %]
+                                print C4::AR::Filtros::to_Button( 
+                                                                    text    =>  "[% 'Eliminar' | i18n %]",
+                                                                    boton   =>  "boton_buscar",
+                                                                    onClick =>  "deleteSeudonimo('[% seudonimo.getIdAutorSeudonimo %]'+'[% seudonimo.getIdTemaSeudonimo %]'+'[% seudonimo.getIdEditorialSeudonimo %]');",
+                                                                    title   =>  "[% 'Eliminar' | i18n %]",
+                                        ) ;
+                [% END %]
+            </div>
+
+		</td>
+
+	</tr>
+[% END %] 
+    <tr valign=bottom>
+       <td class="lineafinaltabla"  align="left" colspan="9"></td>
+    </tr>
+	</tbody>
+</table>
+</fieldset>

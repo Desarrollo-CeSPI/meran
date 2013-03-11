@@ -1,0 +1,425 @@
+---------------------------------------------------------------
+--Se agrega preferencia de logueo de busquedas para OPAC y para INTRA
+insert into systempreferences (variable,value,explanation) 
+values ('logSearchOPAC','0','Habilita (1) o no (0) loguea busquedas en el OPAC');
+
+ insert into systempreferences (variable,value,explanation) 
+values ('logSearchINTRA','0','Habilita (1) o no (0) loguea busquedas en la INTRA');
+
+
+--Se agrega la columna tipo que dira (INTRAu OPAC)
+ALTER TABLE historialBusqueda ADD COLUMN tipo VARCHAR(10);
+
+
+-- se agrega la columna itemnumber a sanctions para poder informar desde que registro se produjo la sancion
+ALTER TABLE `sanctions` ADD COLUMN `itemnumber` INTEGER  AFTER `delaydays`;
+
+
+--Se agrega la columna id, responsable y nota a historicCirculation para poder saber quien fue el usuario que realizo la operacion, identificar a la tupla para poder agregarle una nota si es necesario.
+
+ALTER TABLE `historicCirculation` ADD `responsable` VARCHAR( 20 ) NOT NULL AFTER `borrowernumber` ;
+ALTER TABLE `historicCirculation` ADD `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY FIRST ;
+ALTER TABLE `historicCirculation` ADD `nota` VARCHAR( 50 ) NULL AFTER `date` ;
+ALTER TABLE `historicCirculation` ADD `issuetype` CHAR( 2 );
+
+
+--Se agraga la variable libreDeuda al las preferencias del sistema. Por defecto esta seteada para no permitir la impresion cuando el usuario tiene prestamos vencidos.
+
+INSERT INTO `systempreferences` ( `variable` , `value` , `explanation` , `options` , `type` )
+VALUES (
+'libreDeuda', '00100', 'variable que limita la impresion del documento de libre deuda', NULL , NULL
+);
+
+-- Preferencias para mail de recordatorio de prestamo a vencer
+
+INSERT INTO systempreferences (value,variable) VALUES ('0','reminderMail');
+
+insert into  systempreferences (value,explanation,variable) VALUES ('Sr./Sra. FIRSTNAME SURNAME : \r\n\r\nSe le recuerda que el d�a VENCIMIENTO debe reintegrar el ejemplar que posee del libro  \r\nTITLE:UNITITLE - AUTHOR (EDICION) \r\na la BRANCH.\r\n\r\nMuchas gracias\r\n','Mensaje del mail de recordatorio de prestamo a vencer', 'reminderMessage');
+
+insert into  systempreferences   (value,explanation,variable) VALUES ('Recordatorio de vencimiento de pr�stamos','Subject del mail de recodatorio de prestamo a vencer','reminderSubject');
+
+--Se agrega campo 'enabled' en la tabla issuetypes para habilitar/deshabilitar tipos de prestamos 
+--por ej: prestamos de verano para V2 y V3
+
+ALTER TABLE issuetypes ADD COLUMN enabled tinyint default 1;
+
+
+--La fecha de inicio y fin de las sanciones puede ser nulas por las sanciones que son pendientes
+
+ALTER TABLE `sanctions` CHANGE `startdate` `startdate` DATE NULL DEFAULT '0000-00-00';
+ALTER TABLE `sanctions` CHANGE `enddate` `enddate` DATE NULL DEFAULT '0000-00-00';
+
+--QUIEN ROMPIO LOS PRESTAMOS ESPECIALES??????????????????----------
+
+ insert into systempreferences (variable,value,explanation) values ('beginESissue','60','Cantidad de minutos antes del cierre de la biblioteca que se puede realizar un prestamo ESPECIAL.');
+
+  insert into systempreferences (variable,value,explanation) values ('endESissue','60','Cantidad de minutos luego de la apertura de la biblioteca  en que se puede devolver un prestamo ESPECIAL.');
+
+
+
+--Para saber si se puede o no seleccionar las bibliotecas
+
+insert into systempreferences (variable,value,explanation) values ('selectHomeBranch','1','1 para poder seleccionar otra biblioteca, 0 para que la biblioteca sea la de defecto');
+
+
+--Se crea una nueva tabla para loguear las sanciones
+
+CREATE TABLE `historicSanctions` (
+  `id` int(11) NOT NULL auto_increment,
+  `type` varchar(15) NOT NULL default '',
+  `borrowernumber` int(11) NOT NULL default '0',
+  `responsable` varchar(20) NOT NULL,
+  `timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
+  `date` date NOT NULL default '0000-00-00',
+  `end_date` date default NULL,
+  `sanctiontypecode` int(11) NOT NULL default '0',
+  PRIMARY KEY  (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+
+-- este es el campo q se modifico, es para el mono
+ALTER TABLE `historicSanctions` CHANGE `issuetype` `sanctiontypecode` INT( 11 ) NULL DEFAULT NULL 
+
+--  Curso de usuarios
+
+ALTER TABLE `borrowers` ADD COLUMN `usercourse` date  DEFAULT NULL AFTER 'changepassword';
+
+insert into systempreferences (variable,value,explanation)  values ('usercourse' ,'0','habilita o no que el curso de usuario sea necesario para utilizar el opac. ');
+
+--Branch por defecto
+INSERT INTO `systempreferences` ( `variable` , `value` , `explanation` , `options` , `type` )
+VALUES ('defaultbranch', 'DIF', 'Unidad de informacion por defecto', NULL , NULL);
+
+-- Se agrega campo indice para guardar el indice del libro
+
+ALTER TABLE `biblioitems` ADD `indice` TEXT NOT NULL AFTER `number` ;
+
+ALTER TABLE `biblioitems` ADD FULLTEXT (`indice`);
+
+-- Se agrega preferencia para mostrar o no el historico de reservas en el OPAC
+
+INSERT INTO `systempreferences` ( `variable` , `value` , `explanation` , `options` , `type` )
+
+VALUES ('showHistoricReserves', '1', 'Muestra (valor = 1) o no el historico de reservas en el OPAC', NULL , NULL);
+
+-- el campo sanctiotypecode puede ser NULL si se hace una reservar y no se retirada y luego 
+-- se sanciona al usuario
+
+ALTER TABLE `historicSanctions` CHANGE `sanctiontypecode` `sanctiontypecode` INT( 11 ) NULL DEFAULT '0';
+
+
+-- Se agrega una preferencia y se actualiza otra para el aviso de prestamos vencidos
+
+update systempreferences set value='Sr./Sra.  FIRSTNAME SURNAME :\r\n\r\nMENSAJEVENCIDO\r\n\r\nBRANCH\r\n',explanation='Mensaje del mail' where variable='mailMessage';
+
+
+Insert into systempreferences (variable,value,explanation) values ('mailMensajeVencido',' Debe un ejemplar de\r\n        TITLE:UNITITLE\r\n desde la fecha DATE.','Como se envia el vencimiento de un ejemplar por mail');
+
+
+--se agrego la siguente tabla:
+
+CREATE TABLE `keyword` (
+`idkeyword` INT( 11 ) NOT NULL AUTO_INCREMENT PRIMARY KEY ,
+`keyword` VARCHAR( 150 ) NOT NULL
+) ENGINE = MYISAM ;
+
+
+--se agrega tabla (N a N) entre keyword y biblioanalysis
+
+CREATE TABLE `analyticalkeyword` (
+`idkeyword` INT( 11 ) NOT NULL ,
+`analyticalnumber` VARCHAR( 11 ) NOT NULL ,
+PRIMARY KEY ( `idkeyword` , `analyticalnumber` )
+) ENGINE = MYISAM ;
+
+
+--se agregaron los siguientes campos a la tabla biblioanalysis
+
+ALTER TABLE `biblioanalysis` ADD `resumen` TEXT NULL AFTER `classification` ,
+ADD `url` VARCHAR( 100 ) NULL AFTER `resumen` ;
+
+ALTER TABLE `biblioanalysis` ADD FULLTEXT (`resumen`);
+
+-- Reservas desde la Intranet!!!
+
+Insert into systempreferences (variable,value,explanation) values ('intranetGroupReserve','0','Indica que  si al realizar un prestamo desde la intranet y no se encuentra ningun ejemplar libre, se realiza o no (1 o 0) una reserva sobre el grupo desde la intranet.');
+--
+
+
+--Se agrego una nueva variable para parametrizar la vista de las paginas que muestra el nuevo paginador.
+
+INSERT INTO systempreferences (variable,value,explanation,type,options) VALUES ('paginas','10','Cantidad de paginas que va a  mostrar el paginador.','text','');
+
+
+--Se modifca el campo constrainttype por estado (P='Prestado', E='Reserva Ejemplar', G='Reserva de Grupo')
+
+ALTER TABLE `reserves` CHANGE `constrainttype` `estado` CHAR( 1 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL 
+
+--Se eliminan los siguiente campos de la tabla reservas para V3
+
+ALTER TABLE `reserves` DROP `biblioitemnumber` ,
+DROP `priority` ,
+DROP `found` ,
+DROP `itemnumber` ;
+
+--Se agregan los siguientes campos en reservas para V3
+
+ALTER TABLE `reserves` ADD `id2` INT( 11 ) NOT NULL FIRST ,
+ADD `id3` INT( 11 ) NULL AFTER `id2` ;
+
+
+--Se modifico el siguiente campo en la tabla issues para V3
+
+ALTER TABLE `issues` CHANGE `itemnumber` `id3` INT( 11 ) NOT NULL DEFAULT '0';
+
+--Se modifco los siguientes campos en historicCirculation
+
+ALTER TABLE `historicCirculation` CHANGE `biblionumber` `id1` INT( 11 ) NOT NULL DEFAULT '0',
+CHANGE `biblioitemnumber` `id2` INT( 11 ) NOT NULL DEFAULT '0',
+CHANGE `itemnumber` `id3` INT( 11 ) NULL DEFAULT NULL 
+
+--Se saco el indice unico que habia quedado al cambiar el nombre del campo biblioitemnumber por id2
+ALTER TABLE `reserves` DROP INDEX `IdUnico` 
+
+--Se agrego una fila en la tabla unavailable para la V3, porque es necesario para el componente que se crean dinamicamente, de disponibilidad.
+
+INSERT INTO `unavailable` ( `code` , `description` )
+VALUES (
+'0', 'Disponible'
+);
+
+
+--Se modifico el campo itemnumber de la tabla sanctions
+
+ALTER TABLE `sanctions` CHANGE `itemnumber` `id3` INT( 11 ) NULL DEFAULT NULL 
+--Se modifco el siguiente campo
+
+ALTER TABLE `shelfcontents` CHANGE `biblioitemnumber` `id2` INT( 11 ) NOT NULL DEFAULT '0'
+
+
+*************SE MODIFICO EL PATH DE LOGEO DEL ARCHIVO /etc/koha/koha.conf A kohalogdir=/var/log/koha***************
+SE TIENE QUE CREAR UN ARCHIVO CON NOMBRE debugErrorDBA.txt CON PERMISOS DE ESCRITURA PARA TODOS LOS USUARIOS. 
+
+
+
+-- Se eliminaron las siguientes tablas
+
+DROP TABLE `additionalauthors`, `aqbookfund`, `aqbooksellers`, `aqbudget`, `aqorderbreakdown`, `aqorderdelivery`, `aqorders`, `biblio`, `biblioitems`, `bibliosubject`, `bibliosubtitle`, `bibliothesaurus`, `borexp`, `branchtransfers`, `catalogueentry`, `categoryitem`, `currency`, `defaultbiblioitem`, `deletedbiblio`, `deletedbiblioitems`, `deleteditems`, `ethnicity`, `isbns`, `isomarc`, `items`, `itemsprices`, `printers`, `publisher`, `reserveconstraints`, `statistics`, `virtual_itemtypes`, `virtual_request`, `marc_subfield_table`;
+
+
+--Se agrega preferencia para controlar la longitud minima de la password
+insert into systempreferences (variable,value,explanation) 
+values ('minPassLength','8','Longitud minima de la password');
+
+
+-- TIPOS DE DOCUMENTOS
+CREATE TABLE `tipo_documento` (
+`idTipoDoc` INT NOT NULL AUTO_INCREMENT PRIMARY KEY ,
+`nombre` VARCHAR( 50 ) NOT NULL ,
+`descripcion` VARCHAR( 250 ) NOT NULL
+) ENGINE = innodb CHARACTER SET latin1 COLLATE latin1_spanish_ci;
+");
+
+INSERT INTO `tipo_documento` ( `nombre` , `descripcion` ) 
+VALUES ('DNI', 'DNI'), ('LC', 'LC'), ('LE', 'LE'), ('CI', 'CI'), ('PAS', 'PAS') ;
+
+
+
+-- Se agregaron preferencias para validar el password, todas en 0 (cero)
+
+INSERT INTO systempreferences(variable, value, explanation)
+VALUES ("minPassAlpha",0,"Longitud Minina de Caracteres alfabétios");
+
+##########################################################################
+
+INSERT INTO systempreferences(variable, value, explanation)
+VALUES ("minPassAlphaNum",0,"Longitud Minina de Caracteres alfanuméricos");
+
+##########################################################################
+
+INSERT INTO systempreferences(variable, value, explanation)
+VALUES ("minPassLower",0,"Longitud Minina de Caracteres alfabétios minúsculos");
+
+##########################################################################
+
+INSERT INTO systempreferences(variable, value, explanation)
+VALUES ("minPassNUmeric",0,"Longitud Minina de Caracteres numericos");
+
+##########################################################################
+
+INSERT INTO systempreferences(variable, value, explanation)
+VALUES ("minPassSymbol",0,"Longitud Minina de Caracteres alfabétios");
+
+##########################################################################
+
+INSERT INTO systempreferences(variable, value, explanation)
+VALUES ("minPassUpper",0,"Longitud Minina de Caracteres alfabétios");
+
+##########################################################################
+
+INSERT INTO systempreferences(variable, value, explanation)
+VALUE ("maxPassWhite",0,"Longitud Maxima de Espacios permitidos");
+
+(((((((((( ACTUALIZAR LOS COMENTARIOS EN LA TABLA :S)
+
+
+############################## AMAZON COVERS #################################
+
+INSERT INTO systempreferences(variable, value, explanation)
+VALUE ("amazon-token","09RZQDPDWPQK1WWVSH02","Token para conectarse a Amazon");
+
+##############################################################################
+
+#Se modifico nombre de campo de la tabla availability
+
+ALTER TABLE `availability` CHANGE `item` `id3` VARCHAR( 10 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL ;
+
+#Se elimino la tabla historicIssues
+
+DROP TABLE `historicIssues`
+
+
+##Nuevas tablas que reemplazaran a Borrowers y Person
+#####################################################################################################
+
+CREATE TABLE `usr_estado` (                      
+              `id_persona` int(11) NOT NULL,                 
+              `regular` tinyint(1) NOT NULL default '0',     
+              `categoria` char(2) NOT NULL,                  
+              `fuente` varchar(255) NOT NULL default 'koha'  
+            ) ENGINE=InnoDB DEFAULT CHARSET=latin1
+
+
+
+CREATE TABLE `usr_persona` (                           
+               `id_persona` int(11) NOT NULL auto_increment,        
+               `id_socio` int(11) default NULL,                     
+               `vesion_documento` char(1) NOT NULL default 'P',     
+               `nro_documento` varchar(16) NOT NULL,                
+               `tipo_documento` char(3) NOT NULL,                   
+               `apellido` varchar(255) NOT NULL,                    
+               `nombre` varchar(255) NOT NULL,                      
+               `titulo` varchar(255) default NULL,                  
+               `otros_nombres` varchar(255) default NULL,           
+               `iniciales` varchar(255) NOT NULL,                   
+               `calle` varchar(255) NOT NULL,                       
+               `barrio` varchar(255) default NULL,                  
+               `ciudad` varchar(255) default NULL,                  
+               `telefono` varchar(255) default NULL,                
+               `email` varchar(255) default NULL,                   
+               `fax` varchar(255) default NULL,                     
+               `msg_texto` varchar(255) default NULL,               
+               `alt_calle` varchar(255) default NULL,               
+               `alt_barrio` varchar(255) default NULL,              
+               `alt_ciudad` varchar(255) default NULL,              
+               `alt_telefono` varchar(255) default NULL,            
+               `nacimiento` date default NULL,                      
+               `fecha_alta` date default NULL,                      
+               `sexo` char(1) default NULL,                         
+               `telefono_laboral` varchar(50) default NULL,         
+               `cumple_condicion` tinyint(1) NOT NULL default '0',  
+               PRIMARY KEY  (`id_persona`),                         
+               KEY `personnumber` (`id_persona`)                    
+             ) ENGINE=InnoDB DEFAULT CHARSET=latin1       
+
+
+
+
+ CREATE TABLE `usr_ref_estados` (                
+                   `id_estado` int(11) NOT NULL auto_increment,  
+                   `descripcion` varchar(255) NOT NULL,          
+                   PRIMARY KEY  (`id_estado`)                    
+                 ) ENGINE=InnoDB DEFAULT CHARSET=latin1          
+
+
+
+
+CREATE TABLE `usr_ref_tipo_documento` (                                              
+                          `id_tipo_documento` int(11) NOT NULL auto_increment,                               
+                          `nombre` varchar(50) collate latin1_spanish_ci NOT NULL,                           
+                          `descripcion` varchar(250) collate latin1_spanish_ci NOT NULL,                     
+                          PRIMARY KEY  (`id_tipo_documento`)                                                 
+                        ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci ROW_FORMAT=DYNAMIC  
+
+
+usr_socios  CREATE TABLE `usr_socio` (                          
+              `id_persona` int(11) NOT NULL,                     
+              `id_socio` int(11) NOT NULL auto_increment,        
+              `nro_socio` varchar(16) NOT NULL,                  
+              `id_ui` varchar(4) NOT NULL,                       
+              `cod_categoria` char(2) NOT NULL,                  
+              `fecha_alta` date default NULL,                    
+              `expira` date default NULL,                        
+              `flags` int(11) default NULL,                      
+              `password` varchar(30) default NULL,               
+              `lastlogin` datetime default NULL,                 
+              `lastchangepassword` date default NULL,            
+              `changepassword` tinyint(1) NOT NULL default '0',  
+              `cumple_requisito` date default NULL,              
+              `id_estado` int(11) NOT NULL,                      
+              PRIMARY KEY  (`id_socio`),                         
+              UNIQUE KEY `cardnumber` (`nro_socio`),             
+              KEY `borrowernumber` (`id_socio`)                  
+            ) ENGINE=InnoDB DEFAULT CHARSET=latin1           
+
+CREATE TABLE `usr_socios_relacionados` (  
+                           `id_socio` int(11) NOT NULL,            
+                           `id_persona` int(11) NOT NULL,          
+                           `id_estado` int(11) NOT NULL,           
+                           `fecha_alta` date NOT NULL              
+                         ) ENGINE=InnoDB DEFAULT CHARSET=latin1    
+
+
+
+
+CREATE TABLE `ref_dptos_partidos` (                
+                      `DPTO_PARTIDO` varchar(11) NOT NULL default '',  
+                      `NOMBRE` varchar(60) default NULL,               
+                      `PROVINCIA` varchar(11) default NULL,            
+                      `ESTADO` char(1) default NULL,                   
+                      PRIMARY KEY  (`DPTO_PARTIDO`)                    
+                    ) ENGINE=MyISAM DEFAULT CHARSET=latin1             
+
+
+
+CREATE TABLE `ref_paises` (             
+              `iso` char(2) NOT NULL default '',    
+              `iso3` char(3) NOT NULL default '',   
+              `nombre` varchar(80) NOT NULL,        
+              `nombre_largo` varchar(80) NOT NULL,  
+              `codigo` varchar(11) NOT NULL,        
+              PRIMARY KEY  (`iso`)                  
+            ) ENGINE=MyISAM DEFAULT CHARSET=latin1  
+
+
+
+CREATE TABLE `ref_provincias` (                  
+                  `PROVINCIA` varchar(11) NOT NULL default '0',  
+                  `NOMBRE` varchar(60) default NULL,             
+                  `PAIS` varchar(11) default '0',                
+                  PRIMARY KEY  (`PROVINCIA`)                     
+                ) ENGINE=MyISAM DEFAULT CHARSET=latin1      
+
+
+
+ALTER TABLE `usr_persona` ADD `activo` TINYINT( 1 ) UNSIGNED NOT NULL DEFAULT '1' COMMENT '1 = activo ; 0 = desactivado (dado de baja)';
+
+ALTER TABLE `usr_persona` CHANGE `ciudad` `ciudad` VARCHAR( 11 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL COMMENT 'foránea de LOCALIDADES'
+
+
+
+-- Se agrego en la tabla sessions el campo nroRandom para guardar el numero enviado al cliente y no usar mas el nro
+-- que se enviaba desde el cliente, ahora con el sessionID se recupera este numero
+ALTER TABLE `sessions` ADD `nroRandom` VARCHAR( 255 ) NOT NULL ;
+=======
+
+
+--Sa agrega el siguiente campo para loguear tb el browser, y saber si es una peticion de un browser o del robot de google
+ALTER TABLE `historialBusqueda` ADD `HTTP_USER_AGENT` VARCHAR( 255 ) NOT NULL AFTER `tipo` ;
+
+--Se agrego el siguiente campo para poder manejar "sesiones duplicadas", solo se permite un usuario conectado por vez
+
+ALTER TABLE `sessions` ADD `flag` VARCHAR( 255 ) NULL ;
+
+--Se creo una preferencia para permitir o no relizar busquedas desde el OPAC sin estar logueado
+
+  insert into systempreferences (variable,value,explanation) values ('opacSearchAnonymous','1','Esta preferencia permite (=1) realizar bùsquedas desde el OPAC sin haber iniciado sesiòn')

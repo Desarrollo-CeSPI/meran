@@ -1,0 +1,116 @@
+<fieldset>
+    <legend class="titulo_legend">[% "Esquema de sanciones" | i18n %] 
+      
+                  <div class="alert alert-info">
+                      <h4>[% tipo_sancion.ref_tipo_prestamo.descripcion %]</h4>
+                      <h6>[% tipo_sancion.ref_categoria_socio.getDescription %]</h6>
+
+                      [% IF tipos_prestamo_aplica %]
+                        <h4>[% "Aplica a" | i18n %]:</h4>
+                          [% FOREACH aplica IN tipos_prestamo_aplica %]
+                              <span class="label label-inverse">
+                                [% TRY %]
+                                  [% aplica.ref_tipo_prestamo.getDescripcion %]
+                                [% CATCH %]
+                                [% END %]
+                              </span>&nbsp;
+                          [% END %]
+                      
+                      [% END %]
+
+                      <div class="">
+                          [% PERL %]
+                                      print C4::AR::Filtros::action_button(   
+                                              button   => "btn btn-success",
+                                              action   => 'agregarSancion_show();',
+                                              title   => " Editar",
+                                              icon    => "icon-white icon-pencil",
+                                          ) ;
+                          [% END %]
+                      </div>
+
+                  </div>
+  </legend>
+
+[% IF cantidad %]
+
+    [% PERL %]
+        print C4::AR::Filtros::tableHeader(   
+                          id              => "sanciones_reglas_tabla",
+                          class           => "",
+                          selectAll_id    => "",
+                          columns         => ['[% "Orden" | i18n %]',
+                                              '[% 'D&iacute;as de demora' | i18n %]',
+                                              '[% "D&iacute;as de sanci&oacute;n" | i18n %]','[% "Cantidad" | i18n %]',
+                                              '[% "Acciones" | i18n %]',
+                                              ],
+                                                          
+                                ) ;
+    [% END %]
+
+      <tbody>
+            [% FOREACH regla_tipo IN REGLAS_TIPOS_SANCIONES %]
+            <tr>
+
+                <td>[% regla_tipo.getOrden %]</td>
+                <td>[% regla_tipo.ref_regla.getDias_demora %]</td>
+                <td>[% regla_tipo.ref_regla.getDias_sancion %]</td>
+                <td>[% IF regla_tipo.getCantidad %] [% regla_tipo.getCantidad %]  [% ELSE %] <i class="icon-refresh" title="[% 'Infinito' | i18n %]"></i> [% END %]</td>
+                <td>
+                [% PERL %]
+                        print C4::AR::Filtros::action_button(  
+                                                            button  => "btn btn-danger",
+                                                            action  => "eliminarReglaTipoSancion([% regla_tipo.getTipo_sancion %],[% regla_tipo.getRegla_sancion %]);",
+                                                            icon    => "icon-white icon-remove",
+                                ) ;
+                [% END %]
+                </td>
+
+            </tr>
+        [% END %]
+      </tbody>
+      </table>
+
+[% ELSE %]
+  <div class="alert alert-warning"><strong>[% 'No se han definido reglas'| i18n %].</strong></div>
+[% END %]
+      [% PERL %]
+          print C4::AR::Filtros::tableHeader(   
+                          id              => "agregar_tabla_reglas_tabla",
+                          class           => "",
+                          selectAll_id    => "",
+                          columns         => ['[% "Orden" | i18n %]','[% 'Regla' | i18n %]',
+                                              '[% 'Cantidad' | i18n %]',
+                                              '[% "Agregar" | i18n %]',
+                                              ],
+                                                          
+                                ) ;
+      [% END %]
+
+        <tbody>
+          <tr>
+                  <td>[% ordenes %]</td>
+                  <td>
+                    [% reglas_de_sancion %]
+                    [% PERL %]
+                          print C4::AR::Filtros::action_button(  
+                                                              button   => "btn btn-info",
+                                                              action => "editarReglas();",
+                                                              icon  => "icon-white icon-pencil",
+                                  ) ;
+                      [% END %]
+                  </td>
+                  <td>[% cantidades %]</td>
+                  <td style="width: 120px;">
+                    [% PERL %]
+                            print C4::AR::Filtros::action_button(  
+                                                                button   => "btn btn-primary",
+                                                                action => "agregarReglaTipoSancion();",
+                                                                icon  => "icon-white icon-plus",
+                                    ) ;
+                    [% END %]
+                  </td>
+          </tr>
+        </tbody>
+    </table>
+</fieldset>

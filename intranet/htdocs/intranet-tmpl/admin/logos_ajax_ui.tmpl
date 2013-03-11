@@ -1,0 +1,89 @@
+[% USE HTML %]
+
+<script type="text/javascript">
+    $(document).ready(function() {
+        $('.fancy_link').fancybox();
+    });
+</script>
+
+<fieldset>
+    <legend>[% "Listado de logos de la UI" | i18n %]:</legend>
+
+            <div class="datos_tabla_div_user">
+                
+                    [% PERL %]
+                        print C4::AR::Filtros::tableHeader(   
+                                          id              => "logosTable",
+                                          class           => "",
+                                          selectAll_id    => "",
+                                          columns         => ['[% "Logo"|i18n %]','[% "Nombre"|i18n %]','[% "Acciones"|i18n %]',
+                                                             ]
+             
+                                                ) ;
+                    [% END %]
+
+                    <tbody>
+                        <tr>
+                            <td class="logoImage">
+                              <a class="fancy_link" href="http://[% SERVER_ADDRESS_OPAC %][% opac_htdocs %]/[% opac_theme %]/imagenes/logo_ui_opac_menu.png">
+                                <img border="0" src="http://[% SERVER_ADDRESS_OPAC %][% opac_htdocs %]/[% opac_theme %]/imagenes/logo_ui_opac_menu.png" alt="logo_ui_opac_menu.png" >
+                              </a>
+                            </td>
+                            <td>
+                                Logo Meran
+                            </td>
+                            <td></td>
+                        </tr>
+                        [% FOREACH logo IN logos %]
+                            <tr>
+                                <td class="logoImage">
+                                    <a class="fancy_link" href="http://[% SERVER_ADDRESS_OPAC %][% opac_htdocs %]/[% opac_theme %]/imagenes/[% logo.getImagenPath %]">
+                                          <img border="0" src="http://[% SERVER_ADDRESS_OPAC %][% opac_htdocs %]/[% opac_theme %]/imagenes/[% logo.getImagenPath %]" alt="[% logo.getNombre %]" >
+				                    </a>
+                                </td>
+                                <td>
+                                    [% logo.nombre %]
+                                </td>
+                                <td style="width:150px">
+                                
+                                    [% PERL %]
+                                        print C4::AR::Filtros::action_set_button(    
+                                              title   => " [% 'Eliminar' | i18n %]",
+                                              button  => 'btn btn-danger',
+                                              action  => "eliminarLogoUI([% logo.id %])", 
+                                              icon    => "icon-white icon-remove",
+
+                     
+                                                ) ;
+                                    [% END %]
+                            
+                                </td>
+                            </tr>
+                        [% END %]
+                    </tbody>
+                </table>
+            </div>
+</fieldset>
+
+<div class="form-actions">	                
+	[% PERL %]
+        print C4::AR::Filtros::action_button(   
+            button   => "btn btn-primary",
+            action   => 'agregarPortada_showUI();',
+            title   => "[% 'Agregar Logo' | i18n %]",
+        ) ;
+	[% END %]
+</div>
+
+<div id="agregarLogoUI" class="modal hide fade" >
+    [% INCLUDE 'formAgregarLogoUI.inc' %]
+</div>
+
+<div class="alert alert-block">
+  <h4 class="alert-heading">Atención</h4>
+  <p>
+  Cargue fotos exactamente del mismo tamaño, de lo contrario, los logos va a sufrir cambios de tamaño, provocando molestia visual.
+  <br>
+  El tamaño óptimo para un logo correcto es de 147x32 px (manteniendo el aspecto).
+  </p>
+</div>

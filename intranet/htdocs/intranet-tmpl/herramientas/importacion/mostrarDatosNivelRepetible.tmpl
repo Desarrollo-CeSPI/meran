@@ -1,0 +1,77 @@
+
+
+<script type="text/javascript">
+      $(document).ready(function() {
+          makeToggle('datos_tabla_div','trigger',null,false);
+          checkedAll('checkAllNivelesRepetibles','checkNivelesRepetibles');
+      });
+</script>
+
+<legend class="titulo_legend trigger click">[% "Resultados de chequeo de la importaci&oacute;n (cat&aacute;logo)" | i18n %]:</legend>
+    <div class="resultados_consulta">[% "Total de registros" | i18n %]: [% cantidad %] </div>
+    <div class="contenedor_paginador">[% paginador %]</div>
+
+
+<fieldset class="resultados_busqueda">
+    <legend class="titulo_legend trigger click">[% "CAMPOS MARC SIN ESTRUCTURA DE CATALOGACION DEL NIVEL" | i18n %]:</legend>
+        <div class="datos_tabla_div" id="datos_tabla_div">
+        <table id="tablaCamposMod" class="tabla_datos" width="100%" cellspacing="0" cellpadding="0" border="0">
+
+	        <tr class="titulo_tabla_resultado">
+            <td width="1%">
+              <input type="image" id="checkAllNivelesRepetibles" class="icon_seleccionar" title="[% 'Seleccionar todos' | i18n %]">
+            </td>
+		    <td width="20%">[% 'Campo, subcampo MARC' | i18n %]</td>
+		    <td width="60%">[% 'Dato' | i18n %]</td>
+            <td width="5%">[% 'Acciones' | i18n %]</td>
+            <td width="5%">[% 'Acciones' | i18n %]</td>
+	        </tr>
+        [% FOREACH datos_nivel_repetible IN datos_nivel_repetible_array %]
+	        <tr align="center">
+            <td>
+                <input  type="checkbox" id="checkNivelesRepetibles" name="checkNivelesRepetibles" class="icon_seleccionar" 
+                        value="[% datos_nivel_repetible.getId_rep %]">
+            </td>
+		        <td>
+			        ([% datos_nivel_repetible.getId_rep %]) <b>[% datos_nivel_repetible.getCampo %]</b>, 
+                                                            <b>[% datos_nivel_repetible.getSubcampo %]</b>
+		        </td>
+            <td>
+              <b>[% datos_nivel_repetible.getDato %]</b>
+            </td>
+            <td>
+                  [% PERL %]
+                            print C4::AR::Filtros::to_Icon(    
+                                                                boton   => "icon_borrar",
+                                                                onClick => "eliminarCampo('[% datos_nivel_repetible.getId_rep %]');",
+                                                                title   => "[% 'Eliminar campo' | i18n %]",
+                                                                alternClass => "botonCentradoTabla"
+                                    ) ;
+                  [% END %] 
+            </td>
+            <td>
+ 
+                  [% PERL %]
+                            print C4::AR::Filtros::to_Icon(    
+                                                                boton   => "icon_buscar",
+                                                                onClick => "crearEstructura('[% datos_nivel_repetible.getId_rep %]');",
+                                                                title   => "[% 'Crear Estructura para el campo' | i18n %]",
+                                                                alternClass => "botonCentradoTabla"
+                                    ) ;
+                  [% END %]  
+		        </td>
+	        </tr>
+        [% END %]
+            
+        </table>
+  </div>    
+</fieldset>
+<div class="horizontal">[% "Para los elementos que est&aacute;n marcados:" | i18n %]</div>
+
+    [% PERL %]
+            print C4::AR::Filtros::to_Icon(   
+                                                boton   => "icon_borrar",
+                                                onClick => "eliminarCampos();",
+                                                title   => "[% 'Eliminar campos seleccionados' | i18n %]",
+                    ) ;
+    [% END %]

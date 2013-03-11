@@ -1,0 +1,7 @@
+
+
+
+ALTER TABLE  `cat_registro_marc_n2_analitica` ADD UNIQUE (
+`cat_registro_marc_n2_id` ,
+`cat_registro_marc_n1_id`
+);

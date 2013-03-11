@@ -1,0 +1,1 @@
+ALTER TABLE `usr_socio` CHANGE `foto` `foto` VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL 

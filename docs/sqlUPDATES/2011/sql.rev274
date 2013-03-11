@@ -1,0 +1,7 @@
+ALTER TABLE cat_rating DROP PRIMARY KEY;
+ALTER TABLE  `cat_rating` ADD UNIQUE (
+`nro_socio` ,
+`id2`
+);
+
+ALTER TABLE  `cat_rating` ADD  `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY FIRST;

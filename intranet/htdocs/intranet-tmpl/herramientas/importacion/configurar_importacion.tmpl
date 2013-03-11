@@ -1,0 +1,193 @@
+[% INCLUDE "intranet-top.inc" %]
+<script type="text/javascript" src="/intranet-tmpl/includes/importacion/detalleImportacion.js"></script>
+<script src="/intranet-tmpl/includes/visualizacionINTRA-min.js"></script>
+
+
+[% INCLUDE "FormValidateHelper.inc" %]
+
+<script type="text/javascript">
+
+    $(document).ready(function() {
+         $("#campo1").hide();
+         $("#subcampo1").hide();
+         $("#campo2").hide();
+         $("#subcampo2").hide();
+
+         cargarCampoReglasMatcheo();
+
+    });
+
+
+function eleccionSubCampo(){
+
+    if ($('#subcampo').val() != -1){
+        $('#nombre_subcampo').html(SUBCAMPOS_ARRAY[$('#subcampo').val()].liblibrarian);
+    }
+    else
+        enable_disableSelects();
+}
+
+</script>
+
+
+<div class="right ">
+         [% PERL %]
+             print C4::AR::Filtros::action_link_button( 
+                                                 button   => "btn btn-warning",
+                                                 url=>"[% url_prefix %]/herramientas/importacion/detalle_importacion.pl",
+                                                 params =>   ["id_importacion=[% importacion.getId %]"],
+                                                 icon => "icon-white icon-search",
+                                                 title   => " [% 'Detalle Importaci&oacute;n' | i18n %]",
+                     ) ;
+         [% END %]
+
+</div>
+
+
+    [% PERL %]
+    print C4::AR::Filtros::tabbedPane( titulo    => "[% 'Configuraci&oacute;n de la Importaci&oacute;n' | i18n %] ([% importacion.getNombre %])",
+                                 subtitulo => "[% 'Navegue por las pesta&ntilde;as para acceder a las distintas configuraciones' | i18n %]",
+                                 content   => [ {id => 'base_conf', text=> "[% 'Acciones B&aacute;sicas' | i18n %]" },
+                                                {id => 'matching_conf', text => "[% 'B&uacute;squeda de registros en el Cat&aacute;logo' | i18n %]"},
+                                                {id => 'relacion_conf', text => "[% 'Relacion Registro/Ejemplar' | i18n %]"},
+                                                {id => 'referencias_conf', text => "[% 'Buscar Referencias' | i18n %]"},
+                                              ],
+                                 content_id=> ['configuracion_importacion'],
+                                 active_id => 'base_conf',
+
+    
+    );
+	[% END %]
+	
+  
+    <div class="tab-pane fade in active" id="base_conf">
+		    <label>[% 'Configurar Acciones' | i18n %]</label>
+     <ol>
+          <li class="sub_item">
+          <label>[% 'Accion si se encuentra el registro en el Cat&aacute;logo' | i18n %]</label>
+            <select name="matching_rule" id="matching_rule">
+                <option value="I">[% 'Ignorar' | i18n %]</option>
+                <option value="U">[% 'Actualizar' | i18n %]</option>
+                <option value="D">[% 'Duplicar' | i18n %]</option>
+                <option value="P">[% 'Pisar' | i18n %]</option>
+            </select>
+          </li>
+
+          <li class="sub_item">
+          <label>[% 'Accion si NO se encuentra el registro en el Cat&aacute;logo' | i18n %]</label>
+            <select name="no_matching_rule" id="no_matching_rule">
+                <option value="A">[% 'Agregar' | i18n %]</option>
+                <option value="I">[% 'Ignorar' | i18n %]</option>
+            </select>
+          </li>
+
+          <li class="sub_item">
+          <label>[% 'Manejo de ejemplares' | i18n %]</label>
+            <select name="matching_rule" id="matching_rule">
+                <option value="A">[% 'Agregar' | i18n %]</option>
+                <option value="I">[% 'Ignorar' | i18n %]</option>
+            </select>
+          </li>
+     </ol>
+
+            [% PERL %]
+                                print C4::AR::Filtros::to_Button(   text    => "[% 'Procesar' | i18n %]",
+                                                                    onClick => "guardarAcciones('[% importacion.getId %]');",
+                                        ) ;
+            [% END %]
+
+    </div>
+    <div class="tab-pane fade" id="matching_conf">
+	<label>[% 'Configurar la b&uacute;squeda de registros en el Cat&aacute;logo' | i18n %]</label>		
+       <ol>
+            <li class="sub_item">
+                <label for="campo">[% 'Campo a Matchear' | i18n %]:</label>
+                 [% selectCampoX %]
+              <select name="campo" id="campo" onChange="eleccionCampo()" disabled>
+                  <option value="-1">[% 'Seleccionar CampoX' | i18n %]</option>
+              </select>
+              <select name="subcampo" id="subcampo" onChange="eleccionSubCampo()" disabled>
+                        <option value="-1">[% 'Seleccionar SubCampo' | i18n %]</option>
+              </select>
+              <strong><span id="nombre_subcampo"></span></strong>
+
+         [% PERL %]
+                             print C4::AR::Filtros::action_button( 
+                                                                 button   => "btn btn-primary",
+                                                                 icon	  => "icon-plus icon-white",
+                                                                 action => 'agregarCampoReglasMatcheo();',
+                                     ) ;
+         [% END %]
+         
+           </li>
+           </ol>
+           <input type='hidden'name="lista_reglas_matcheo" id="lista_reglas_matcheo" value="[% importacion.getReglasMatcheo %]">
+          <div class="datos_tabla_div_importacion">
+            <table id="tablaResult" class="datos_tabla" border=0 cellspacing=0 cellpadding=0 width=100%>
+                <thead>
+                    <tr class="titulo_tabla_resultado">
+                        <th>
+                            [% "Campo" | i18n %]
+                        </th>
+                        <th>
+                            [% "Subcampo" | i18n %]
+                        </th>
+                        <th>
+                            [% "Detalle" | i18n %]
+                        </th>
+                        <th>
+                            [% "Acciones" | i18n %]
+                        </th>
+                    </tr>
+                </thead>
+            <tbody id='reglas_matcheo'>
+            </tbody>
+            </table>
+
+            [% PERL %]
+                                print C4::AR::Filtros::to_Button(   text    => "[% 'Procesar' | i18n %]",
+                                                                    onClick => "procesarReglasMatcheo('[% importacion.getId %]');",
+                                        ) ;
+            [% END %]
+    </div>
+ </div>
+    <div class="tab-pane fade" id="relacion_conf">
+	<label>[% 'Relaci&oacute;n Registro/Ejemplares' | i18n %]</label>
+     <ol>
+          <li class="sub_item">
+          <label>[% 'Campo de Identificaci&oacute;n' | i18n %] </label>
+            [% selectCampoX1 %]
+            <select name="campo1" id="campo1" onChange="eleccionCampoOrigen('1','[% importacion.getIdImportacionEsquema %]')">
+                <option value="-1">[% 'Seleccionar CampoX' | i18n %]</option>
+            </select>
+            <select name="subcampo1" id="subcampo1">
+                <option value="-1">[% 'Seleccionar SubCampo' | i18n %]</option>
+            </select>
+          </li>
+
+          <li class="sub_item">
+            <label>[% 'Campo de Relaci&oacute;n Ejemplares' | i18n %]: </label>
+            [% selectCampoX2 %]
+            <select name="campo2" id="campo2" onChange="eleccionCampoOrigen('2','[% importacion.getIdImportacionEsquema %]')">
+                <option value="-1">[% 'Seleccionar CampoX' | i18n %]</option>
+            </select>
+            <select name="subcampo2" id="subcampo2">
+                <option value="-1">[% 'Seleccionar SubCampo' | i18n %]</option>
+            </select>
+          </li>
+
+          <li class="sub_item">
+            <label>[% 'Pre&aacute;mbulo Campo de Relaci&oacute;n' | i18n %]: </label>
+            <input type='text'name="preambulo" id="preambulo">
+          </li>
+     </ol>
+
+            [% PERL %]
+                                print C4::AR::Filtros::to_Button(   text    => "[% 'Procesar' | i18n %]",
+                                                                    onClick => "procesarRelacionRegistroEjemplares('[% importacion.getId %]');",
+                                        ) ;
+            [% END %]
+    </div>
+</section>
+
+[% INCLUDE "intranet-bottom.inc" %]

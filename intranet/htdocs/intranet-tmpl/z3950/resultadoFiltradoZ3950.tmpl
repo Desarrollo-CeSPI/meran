@@ -1,0 +1,81 @@
+
+<fieldset class="resultados_busqueda">
+<legend class="titulo_legend trigger click">[% "Resultado de b&uacute;squeda" | i18n %] : [% RESULTADO.getBusqueda %] ([% cant_resultados %])</legend>
+[% IF cant_resultados %] 
+    <script type="text/javascript">
+                $(document).ready(function() {
+                makeToggle('datos_tabla_div','trigger',null,false);
+
+               });
+    </script>
+
+    <div class="datos_tabla_div" id="datos_tabla_div">
+
+              <div class="well">
+                    
+                  [% IF cantidad %]
+                    
+                      [% "La cantidad de registros es" | i18n %]: <strong>[% cant_resultados %]</strong>
+              </div>
+
+
+                                  [% PERL %]
+                                        print C4::AR::Filtros::tableHeader(   
+                                                                  id              => "tablaResult",
+                                                                  class           => "",
+                                                                  selectAll_id    => "",
+                                                                  columns         => ['[% "Servidor" | i18n %]','[% "T&iacute;tulo" | i18n %]',
+                                                                                      '[% "Portada" | i18n %]','[% "Autor" | i18n %]',
+                                                                                      '[% "Edici&oacute;n" | i18n %]','[% "A&ntilde;o" | i18n %]',
+                                                                                      '[% "Detalle" | i18n %]',
+                                                                                    ]
+                                                                                                    
+                                                                        ) ;
+                                  [% END %]
+                          <tbody>
+                              [% FOREACH resultado IN RESULTADO.resultados %]
+                              <tr>
+                                  <td> 
+                                        [% resultado.servidor.nombre %]
+                                  </td>
+                                  <td>
+                                        [% resultado.getRegistroMARC.title %]
+                                  </td>
+                                  <td>
+                                      [% IF resultado.getPortada %]
+                                          <img name="cover"  VALUE="" BORDER=0 src="/uploads/covers/[% resultado.getPortada.getSmall %]" title="Portada">
+                                      [% ELSE %]
+                                          <img src="/uploads/covers/no_image.jpg" alt="[% 'Sin Portada' | i18n %]" title="[% 'Sin Portada' | i18n %]" />
+                                      [% END %]
+                                  </td>
+                                  <td>
+                                      [% resultado.getRegistroMARC.author %] 
+                                  </td>
+                                  <td>
+                                      [% resultado.getRegistroMARC.edition %] 
+                                  </td>
+                                  <td>
+                                      [% resultado.getRegistroMARC.publication_date %] 
+                                  </td>
+                                  <td>
+                                  [% PERL %]
+                                          print C4::AR::Filtros::to_Icon(
+                                                                              boton   => "icon_ayuda_marc",
+                                                                              onClick => "mostrarDetalleMARC('[% resultado.getId %]')",
+                                                                              title   => "[% 'MARC' | i18n %]",
+                                                  ) ;
+                                  [% END %]
+                                  </td>
+                              </tr>
+                              [% END %]
+                          </tbody>
+                      </table>
+            [% ELSE %]
+                <div class="alert alert-info">[% 'No hay resultados para mostrar'| i18n %]</div>
+
+            [% END %]
+
+        </div>
+</fieldset>
+
+<div id="detalleMARC"></div>

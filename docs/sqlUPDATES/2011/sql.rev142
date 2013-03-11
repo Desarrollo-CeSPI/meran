@@ -1,0 +1,2 @@
+UPDATE rep_historial_sancion SET tipo_operacion ='Borrado' WHERE tipo_operacion ='Delete';
+UPDATE rep_historial_sancion SET tipo_operacion ='Insercion' WHERE tipo_operacion ='Insert';

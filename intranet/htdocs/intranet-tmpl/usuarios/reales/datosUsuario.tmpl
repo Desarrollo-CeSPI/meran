@@ -1,0 +1,396 @@
+[% INCLUDE "intranet-top.inc" %] 
+
+<script type="text/javascript">
+      TYPE_FILE= "picture";
+</script>
+
+<script type="text/javascript" src="/intranet-tmpl/includes/circulacion-min.js"></script>
+<script type="text/javascript" src="/intranet-tmpl/includes/usuarios/usuariosReales-min.js"></script>
+<script type="text/javascript" src="/includes/jquery/jquery.fileUploader-min.js"></script>
+<script type="text/javascript" src="/includes/jquery/jquery.livequery-min.js"></script>
+<script type="text/javascript" src="/includes/jquery/jquery.jPrintElement.js"></script>
+
+[% INCLUDE "ChangePasswordHelper.inc"  %]
+
+<script type="text/javascript">
+
+//muchos objetos AJAX para que funcionen los paginadores a la vez en el mismo tmpl
+var objAH,objAHSanciones,objAHPrestamos,objAHReservas;
+NRO_SOCIO_AUTH = '[% nro_socio %]';
+
+//*************************************Para manejar el historial de prestamos***********************************
+function ordenar(orden){
+	objAH.sort(orden);
+}
+
+function changePage(ini){
+	objAH.changePage(ini);
+}
+
+function ordenarHistorialSanciones(orden){
+    objAHSanciones.sort(orden);
+}
+
+function ordenarHistorialPrestamos(orden){
+    objAHPrestamos.sort(orden);
+}
+
+//lo mismo con los changePage, uno por cada objeto
+function changePagePrestamos(ini){
+	objAHPrestamos.changePage(ini);
+}
+
+function changePageReservas(ini){
+	objAHReservas.changePage(ini);
+}
+
+function changePageSanciones(ini){
+	objAHSanciones.changePage(ini);
+}
+
+
+function mostrarHistorialDePrestamos(){
+	objAHPrestamos               = new AjaxHelper(updateMostrarHistorialDePrestamos);
+	objAHPrestamos.debug         = true;
+    objAHPrestamos.cache         = false;
+    objAHPrestamos.showOverlay   = true;
+	objAHPrestamos.url           = URL_PREFIX+'/usuarios/reales/historialPrestamos.pl';
+	objAHPrestamos.nro_socio     = USUARIO.ID;
+	objAHPrestamos.funcion       = 'changePagePrestamos';
+	objAHPrestamos.sendToServer();
+}
+
+function updateMostrarHistorialDePrestamos(responseText){
+	$('#historialPrestamos').html(responseText);
+	scrollTo('historialPrestamos');
+}
+
+function mostrarHistorialDeReservas(){
+    objAHReservas               = new AjaxHelper(updateMostrarHistorialDeReservas);
+    objAHReservas.debug         = true;
+    objAHReservas.cache         = false;
+    objAHReservas.showOverlay   = true;
+    objAHReservas.url           = URL_PREFIX+'/usuarios/reales/historialReservas.pl';
+    objAHReservas.nro_socio     = USUARIO.ID;
+    objAHReservas.funcion       = 'changePageReservas';
+    objAHReservas.sendToServer();
+}
+
+function updateMostrarHistorialDeReservas(responseText){
+    $('#historialReservas').html(responseText);
+    scrollTo('historialReseravs');
+}
+
+//*******************************Fin Para manejar el historial de prestamos************************************
+
+//*************************************Para manejar el historial de sanciones***********************************
+
+function mostrarHistorialDeSanciones(){
+    objAHSanciones               = new AjaxHelper(updateMostrarHistorialDeSanciones);
+    objAHSanciones.debug         = true;
+    objAHSanciones.cache         = false;
+    objAHSanciones.showOverlay   = true;
+    objAHSanciones.url           = URL_PREFIX+'/usuarios/reales/historialSanciones.pl';
+    objAHSanciones.nro_socio     = USUARIO.ID;
+    objAHSanciones.funcion       = 'changePageSanciones';
+    objAHSanciones.sendToServer();
+}
+
+function updateMostrarHistorialDeSanciones(responseText){
+    $('#historialSanciones').html(responseText);
+    scrollTo('historialSanciones');
+}
+
+
+//*******************************Fin Para manejar el historial de sanciones************************************
+var AUTO_GENERAR_COMPROBANTE = '[% auto_generar_comprobante_prestamo %]';
+//************************************Para manejar la circulacion**********************************************
+//REDEFINIDO, se encuentra en circulacion.js
+function updateInfoRenovar(responseText){
+	//jAlert("ejecuto updateInfoRenovar LOCAL!!!");
+	cancelarDiv();
+
+	var infoHash= JSONstring.toObject(responseText);
+	var messageArray= infoHash.messages; 
+	var ticketsArray= infoHash.tickets;
+    var hayError=0;
+
+    setMessages(messageArray);
+    
+   for(i=0; i<messageArray.length;i++){
+//         imprimirTicket(ticketsArray[i].ticket,i);
+        setMessages(messageArray[i]);
+    }
+     
+    for(i=0; i<messageArray.length;i++){
+       if  (messageArray[i].error){
+           hayError= 1;
+       }
+    }
+    
+    if (!hayError){
+         imprimirTicket(ticketsArray);
+    }
+
+	detallePrestamos(USUARIO.ID);
+	//puede que llegue al  max de prestamos y se cancelen las reservas
+	detalleReservas(USUARIO.ID);
+	//puede que luego de devolver el usuario sea sancionado
+	detalleSanciones(USUARIO.ID);
+}
+
+//REDEFINIDO, se encuentra en circulacion.js, se llama luego de realizar un prestamo
+function updateInfoPrestarReserva(responseText){
+// 	jAlert("ejecuto updateInfoPrestarReserva LOCAL!!!");
+	cancelarDiv();
+// 	/*clearMessages*/();
+
+	var infoHash       = JSONstring.toObject(responseText);
+	var messageArray   = infoHash.messages;
+	var ticketsArray   = infoHash.tickets;
+	var mensajes       = '';
+	var hayError       = 0;
+
+    // setMessages(messageArray);
+    var messageHash;
+    messageHash = { "error":"", "tipo": "intranet", "messages": []};  
+    for(i=0; i<messageArray.length;i++){
+            messageHash.error= messageArray[i].error;
+            messageHash.messages[i]= {"message": messageArray[i].messages[0].message};
+          
+//         imprimirTicket(ticketsArray[i].ticket,i);
+           
+    }
+    
+    setMessages(messageHash);
+    
+    for(i=0; i<messageArray.length;i++){
+       if  (messageArray[i].error){
+           hayError= 1;
+       }
+    }
+    
+    if (!hayError){
+         imprimirTicket(ticketsArray);
+    }
+
+	detalleReservas(USUARIO.ID);
+	detallePrestamos(USUARIO.ID);
+    //puede que el usuario este sancionado
+    detalleSanciones(USUARIO.ID);
+}
+
+
+//REDEFINIDO, se ejecuta cancelarReserva de circulacion.js y luego se ejecuta esta funcion
+function updateInfoCancelacion(responseText){
+
+	var Messages=JSONstring.toObject(responseText);
+	setMessages(Messages);
+	detalleReservas(USUARIO.ID);
+}
+
+function detalleUsuario(){
+	objAH               = new AjaxHelper(updateDetalleUsuario);
+	objAH.url           = URL_PREFIX+'/usuarios/reales/detalleUsuario.pl';
+	objAH.debug         = true;
+    objAH.showOverlay   = true;
+	objAH.nro_socio     = USUARIO.ID;
+	objAH.sendToServer();
+}
+
+function updateDetalleUsuario(responseText){
+    if (!verificarRespuesta(responseText))
+            return(0);
+    $('#detalleUsuario').html(responseText);
+    detalleReservas(USUARIO.ID);
+}
+
+function prestamosInterBibliotecarios(){
+    objAH               = new AjaxHelper(updatePrestamosInterBibliotecarios);
+    objAH.url           = URL_PREFIX+'/usuarios/reales/usuariosRealesDB.pl';
+    objAH.debug         = true;
+    objAH.showOverlay   = true;
+    objAH.nro_socio     = USUARIO.ID;
+    objAH.tipoAccion    = 'PRESTAMO_INTER_BIBLIO';
+    objAH.sendToServer();
+}
+
+function updatePrestamosInterBibliotecarios(responseText){
+//se crea el objeto que maneja la ventana para modificar los datos del usuario
+    if (!verificarRespuesta(responseText))
+        return(0);
+
+    $('#basic-modal-content').html(responseText);
+    $('#basic-modal-content').modal();
+}
+
+
+function generarLibreDeuda(){
+    objAH               = new AjaxHelper(updateGenerarLibreDeuda);
+    objAH.url           = URL_PREFIX+'/usuarios/reales/usuariosRealesDB.pl';
+    objAH.debug         = true;
+    objAH.showOverlay   = true;
+    objAH.nro_socio     = USUARIO.ID;
+    objAH.tipoAccion    = 'GENERAR_LIBRE_DEUDA';
+    objAH.sendToServer();
+}
+
+function updateGenerarLibreDeuda(responseText){
+    if (!verificarRespuesta(responseText))
+        return(0);
+    var Messages=JSONstring.toObject(responseText);   
+    if(Messages){
+        setMessages(Messages);
+    }
+}
+
+function detallePrestamos(socio){
+
+	objAH               = new AjaxHelper(updateDetallePrestamos);
+	objAH.url           = URL_PREFIX+'/usuarios/reales/detallePrestamos.pl';
+    objAH.showOverlay   = true;
+	objAH.nro_socio     = socio;
+	objAH.sendToServer();
+}
+
+function updateDetallePrestamos(responseText){
+	$('#prestamos').html(responseText);
+	zebra('prestamosResult');
+	checkedAll('checkAllPrestamos','chkboxPrestamos');	
+	detalleSanciones(USUARIO.ID);
+}
+
+function detalleReservas(socio){
+
+	objAH               = new AjaxHelper(updateDetalleReservas);
+	objAH.url           = URL_PREFIX+'/usuarios/reales/detalleReservas.pl';
+    objAH.showOverlay   = true;
+	objAH.nro_socio     = socio;
+	objAH.sendToServer();
+}
+
+
+function updateDetalleReservas(responseText){
+	$('#reservas').html(responseText);
+	zebra('reseravsAsignadasResult');
+	zebra('reservasEnEsperaResult');
+	checkedAll('checkAllReservas','chkboxReservas');
+	detallePrestamos(USUARIO.ID);
+}
+
+function updateInfoDevolver(responseText){
+	cancelarDiv();
+    if (!verificarRespuesta(responseText))
+        return(0);
+
+	var infoHash= JSONstring.toObject(responseText);
+	var messageArray= infoHash.Messages_arrayref;
+	setMessages(messageArray);
+
+	detallePrestamos(USUARIO.ID);
+	detalleReservas(USUARIO.ID);
+	//puede que luego de devolver el usuario sea sancionado
+	detalleSanciones(USUARIO.ID);
+}
+
+
+function detalleSanciones(socio){
+
+    objAH               = new AjaxHelper(updateDetalleSanciones);
+    objAH.showOverlay   = true;
+    objAH.url           = URL_PREFIX+'/usuarios/reales/detalleSanciones.pl';
+    objAH.nro_socio     = socio;
+    objAH.sendToServer();
+}
+
+function updateDetalleSanciones(responseText){
+    $('#sanciones').html(responseText);
+}
+//**********************************Fin**Para manejar la circulacion********************************************
+
+$(document).ready(function(){
+	
+	//definido en circulacion.js
+	USUARIO         = new objeto_usuario();
+	USUARIO.text    = "[% socio_modificar.persona.getApeYNom %]";
+    USUARIO.ID      = '[% socio_modificar.getNro_socio %]';
+	detalleUsuario();
+
+    
+    $('#historico_prestamos_usuario').on('show', function () {
+        mostrarHistorialDePrestamos();
+    })
+
+
+    $('#historico_reservas_usuario').on('show', function () {
+    	mostrarHistorialDeReservas();
+    })
+    
+
+    $('#historico_sanciones_usuario').on('show', function () {
+    	mostrarHistorialDeSanciones();
+    })
+
+});
+
+</script>
+
+    <div id="confirmar_div"></div>
+
+    <div id="datos_usuario">
+    	<!-- 	DETALLE USUARIO -->
+    	<section id="detalleUsuario"></section>
+    		
+    	<!--DETALLE DE PRESTAMOS-->
+    	<section id="prestamos"></section>
+    	
+    	<!-- DETALLE DE RESERVAS -->
+    	<section id="reservas"></section>
+    	
+    	<!-- DETALLE DE SANCIONES -->
+    	<section id="sanciones"></section>
+
+
+        <div class="accordion" id="historico_prestamos_usuario">
+            <div class="accordion-group">
+                <div class="accordion-heading">
+                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#historico_prestamos_usuario" href="#prestamos_div">[% "Historial de Pr&eacute;stamos" | i18n %]</a>
+                </div>
+                 <div id="prestamos_div" class="accordion-body collapse">
+                     <div class="accordion-inner">
+                            <span id="historialPrestamos"></span>
+                     </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="accordion" id="historico_reservas_usuario">
+            <div class="accordion-group">
+                <div class="accordion-heading">
+                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#historico_prestamos_usuario" href="#reservas_div">[% "Historial de reservas" | i18n %]</a>
+                </div>
+                 <div id="reservas_div" class="accordion-body collapse">
+                     <div class="accordion-inner">
+                            <span id="historialReservas"></span>
+                     </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="accordion" id="historico_sanciones_usuario">
+            <div class="accordion-group">
+                <div class="accordion-heading">
+                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#historico_prestamos_usuario" href="#sanciones_div">[% "Historial de sanciones" | i18n %]</a>
+                </div>
+                 <div id="sanciones_div" class="accordion-body collapse">
+                     <div class="accordion-inner">
+                            <span id="historialSanciones"></span>
+                     </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="ticket" id="ticket" ></div>
+</div>
+
+[% INCLUDE "intranet-bottom.inc" %]

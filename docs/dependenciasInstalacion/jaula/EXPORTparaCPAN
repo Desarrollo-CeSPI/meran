@@ -1,0 +1,2 @@
+export PERL5LIB=/usr/share/meran/intranet/modules/C4/Share/share/perl/5.10.1/:/usr/share/meran/intranet/modules/C4/Share/lib/perl/5.10.1/:/usr/share/meran/intranet/modules/C4/Share/share/perl/5.10/:/usr/share/meran/intranet/modules/C4/Share/share/perl/5.10.1/
+

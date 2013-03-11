@@ -1,0 +1,119 @@
+[% INCLUDE 'intranet-top.inc' %]
+
+[% INCLUDE  'AutocompleteHelper.inc'  %]
+
+[% USE HTML %]
+
+<script src="/includes/jquery/jquery.charCount.js"></script>
+<script type="text/javascript" src="/includes/jquery/jquery.wysiwyg.js"></script>
+<script type="text/javascript" src="/includes/jquery/jquery.livetwitter.js"></script>
+<link rel="stylesheet" href="/includes/css/wysiwyg.css" type="text/css" media="screen"/>
+
+<script type="text/javascript">
+var jobID = 0;
+
+	function test(){
+		    objAH                   = new AjaxHelper(updateTest);
+		    objAH.url               = URL_PREFIX+'/start_job.pl';
+		    objAH.debug             = true;
+		    objAH.showOverlay       = false;
+		    objAH.accion            = "START_DEMO"; 
+		    objAH.sendToServer();
+
+	}
+
+	function updateTest(responseText){
+		jobID = responseText;
+		checkProgress();
+	}
+	
+		
+</script>
+
+
+<script type="text/javascript">
+
+    
+    $(document).ready(function() {
+        CrearAutocompleteCatalogo({ 
+            IdInput: 'catalogo_search', 
+            IdInputHidden: 'catalogo_search_hidden', 
+        });
+
+        
+        mostrarNovedades();
+
+        [% IF socio_data.usr_credential_type == "superLibrarian" %]
+          mensajesContacto();
+          revisionesPendientes();
+        [% END %]
+
+        mensajes_interval_id = setInterval(mensajesContacto,20000);
+        [% IF twitter_username_to_search %]
+            $('#tweets').liveTwitter('[% twitter_username_to_search %]', {limit: 5, imageSize: 32}, function(){
+                $('#tweets .loading').remove();
+            });
+        [% END %]
+        $("#post_twitter").charCount({
+            limit: 0,        
+            warning: 10,
+            counterElement: 'p',
+            cssExceeded: 'label label-important',
+            counterText: "[% 'Caracteres restantes' | i18n %]: ",    
+        });        
+        
+      });
+  
+
+</script>
+
+<h2>[% 'Principal' | i18n %] <small>[% 'Novedades, Mensajes, Twitter' | i18n %]</small></h2>
+
+<div id="revisiones_pendientes_alert" class="clear"></div>
+
+<div id="mensajes_contacto" class="clear"></div>
+
+<div id="resultNovedades" class="clear"></div>
+
+[% IF socio_data.usr_credential_type == "superLibrarian" %]
+  [% IF twitter_enabled %]
+  	<div id="twitter_container" class="clear">
+  	    <div id="twitter_result" class="alert alert-success" style="display:none;">
+  	        
+  	    </div>
+  	    [% IF twitter_username_to_search %]
+<!--         FIXME
+  		   <div id="tweets" class="tweets">
+  		       <div class="loading">[% 'Cargando tweets...' | i18n %]</div>
+  	       </div>
+  		   <br /> 
+-->
+  	    [% END %]
+  	    <br />
+  	    <a class="btn btn-inverse" onclick="showTwitter();" > 
+  	        <i class="icon-white icon-retweet"></i> [% 'Twitter' | i18n %]
+  	    </a>
+  	    
+  	</div>
+  [% END %]
+[% END %]
+[% INCLUDE 'partials/_percent_bar.inc' %]
+
+
+<div class="modal hide fade" id="show_twitter">
+      <div class="modal-header">
+        <a href="#" class="close" data-dismiss="modal">×</a>
+        <h3>[% 'Nuevo tweet' | i18n %]<h3>
+      </div>
+
+      <div class="modal-body">
+         <textarea id="post_twitter" name="textarea_twitter" class="input-xxlarge" onkeyup="enableDisableButton();" autofocus="autofocus"></textarea>
+         <p class="help-block">[% 'Sea breve, no m&aacute;s de 140 caracteres' | i18n %].</p>
+      </div>
+
+      <div class="modal-footer">
+          <button type="submit" id="publicar_twitter" class="btn btn-primary" onclick="publicar_twitter();"><i class="icon-white icon-ok"></i> [% 'Tweetear' | i18n %]</button>
+      </div>
+</div>   
+
+[% INCLUDE 'intranet-bottom.inc' %]

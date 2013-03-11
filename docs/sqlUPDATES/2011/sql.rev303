@@ -1,0 +1,1 @@
+INSERT INTO `pref_preferencia_sistema` (`id`, `variable`, `value`, `explanation`, `options`, `type`, `categoria`, `label`, `explicacion_interna`, `revisado`) VALUES (NULL, 'problem_catalog_opac', '0', 'Habilita que un socio avise a la Biblioteca de un problema con el detalle de un registro', NULL, 'bool', 'catalogo', 'Informe de errores de registro en OPAC', NULL, '0');

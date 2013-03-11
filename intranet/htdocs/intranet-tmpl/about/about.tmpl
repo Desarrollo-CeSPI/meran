@@ -1,0 +1,62 @@
+[% INCLUDE "intranet-top.inc" %]
+[% USE HTML %]
+<script type="text/javascript">
+
+function edit(){
+
+      objAH                     = new AjaxHelper(updateEdit);
+      objAH.url                 = URL_PREFIX+'/about/aboutDB.pl';
+      objAH.debug               = true;
+      objAH.showOverlay         = true;
+      
+      objAH.tipoAccion          = 'EDIT_ABOUT';
+      objAH.sendToServer();
+}
+
+function updateEdit(responseText){
+    $('#edicion_about').html(responseText)
+}
+</script>
+
+
+
+<fieldset>
+    <legend class="titulo_legend">Datos de la Biblioteca</legend>
+    <form onsubmit="return false" class="well form-search">
+        [% info_about.descripcion %]+
+        <div class="form-actions">
+	        [% PERL %]
+		    print C4::AR::Filtros::action_button(                 text    => "[% 'Editar informaci&oacute;n' | i18n %]",
+		                                                          button   => "btn btn-primary",
+		                                                          action => "edit()",
+		                                                          icon => "icon-white icon-pencil",
+		                                                          title   => "[% 'Editar informaci&oacute;n' | i18n %]",
+		                                                          id      => "[% 'edit_about' %]",
+		                                                                ) ;
+		    [% END %]
+	    </div>
+    
+    </form>
+</fieldset>
+
+<div id="edicion_about"></div>
+
+<fieldset>
+    <legend class="titulo_legend">[% 'Equipo de desarrollo' | i18n %]</legend>
+    <div>
+         <dt><a href="http://www.cespi.unlp.edu.ar" target="_blank">CESPI</a> - <a href="http://www.linti.unlp.edu.ar" target="_blank">LINTI</a></dt> 
+         <dd>Javier D&iacute;az</dd>
+         <dd>Einar Lanfranco</dd>
+         <dd>Mat&iacute;as Pagano</dd>
+         <dd>Augusto Perez</dd>
+         <dd>Miguel Carbone</dd>
+         <dd>Gaspar Rajoy</dd>
+         <dd>Magal&iacute; Defalco</dd>
+         <dd>J. Francisco Raposeiras</dd>
+         <dd>Mar&iacute;a Fernanda Pietroboni</dd>
+         <dd>Mar&iacute;a Laura Asenjo</dd>
+         <dd>Paula Gabriela Gonzalez</dd>
+    </div>
+</fieldset>
+    
+[% INCLUDE "intranet-bottom.inc" %]

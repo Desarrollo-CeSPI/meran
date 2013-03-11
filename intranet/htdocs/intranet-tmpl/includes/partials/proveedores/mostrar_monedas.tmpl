@@ -1,0 +1,5 @@
+  <ul>
+  [% FOREACH moneda IN monedas %] 
+         <input name="options" class="monedas" type="checkbox" value="[% moneda.moneda_ref.id %]"/>[% moneda.moneda_ref.nombre %]
+  [% END %]
+  </ul>

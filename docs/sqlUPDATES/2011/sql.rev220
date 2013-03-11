@@ -1,0 +1,9 @@
+TRUNCATE TABLE `usr_ref_tipo_documento`;
+INSERT INTO `usr_ref_tipo_documento` (`id`, `nombre`, `descripcion`) VALUES
+(1, 'DNI', 'DNI'),
+(2, 'LC', 'LC'),
+(3, 'LE', 'LE'),
+(4, 'PAS', 'PAS'),
+(5, 'INDEFINIDO', 'Indefinido'),
+(6, 'CI', 'Cédula de Identidad'),
+(7, 'DNT', 'DNT');

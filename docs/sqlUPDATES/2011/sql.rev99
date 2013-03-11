@@ -1,0 +1,8 @@
+INSERT INTO `pref_preferencia_sistema` (`id`, `variable`, `value`, `explanation`, `options`, `type`, `categoria`) VALUES
+(NULL, 'twitter_consumer_key', 'ee4q1gf165jmFQTObJVY2w', 'Consumer key', NULL, 'text', 'sistema'),
+(NULL, 'twitter_consumer_secret', 'F4TEnfC1SjYm3XG6vHZ0aJmsYQIFysyu9bwjG9BDdQ', 'Consumer secret', NULL, 'text', 'sistema'),
+(NULL, 'twitter_token', '148446079-IL4MsMqXzKU24xMr32No58H5meHmsqLMZHk4qZ0', 'Token', NULL, 'text', 'sistema'),
+(NULL, 'twitter_token_secret', 'fSCpzZELbLFYQPJtP7nRJFQjgfGXvR0538a0i0AIcj0', 'Token secret', NULL, 'text', 'sistema'),
+(NULL, 'prefijo_twitter', '[NOVEDAD]', 'prefijo para post de twitter', NULL, 'text', 'sistema'),
+(NULL, 'twitter_enabled', '1', 'Habilita la publicacion en twitter', NULL, 'bool', 'sistema'),
+(NULL, 'google_shortener_api_key', 'AIzaSyDJCr_F49vYtCXI_Ypa4mf8T_iV66mRybA', 'Google shortener api key', NULL, 'text', 'sistema');

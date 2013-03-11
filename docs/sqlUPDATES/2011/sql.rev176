@@ -1,0 +1,7 @@
+ALTER TABLE  `usr_persona` ADD  `id_estado` INT( 11 ) NOT NULL;
+
+UPDATE usr_persona UP
+SET id_estado = (SELECT id_estado FROM usr_socio US WHERE US.id_persona = UP.id_persona);
+
+ALTER TABLE `usr_socio` DROP `id_estado`;
+

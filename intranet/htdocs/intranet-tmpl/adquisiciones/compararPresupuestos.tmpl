@@ -1,0 +1,67 @@
+[% INCLUDE "intranet-top.inc" %]
+
+<script type="text/javascript" src="/includes/jquery/jquery.livequery-min.js"></script>
+<script type="text/javascript" src="/intranet-tmpl/includes/adquisiciones/datosPedidoCotizacion.js"> </script>
+<script type="text/javascript" src="/intranet-tmpl/includes/adquisiciones/tabletojson.js"> </script>
+<script type="text/javascript" src="/intranet-tmpl/includes/adquisiciones/datosPresupuesto.js"> </script>
+
+<script type="text/javascript">
+ 
+          
+    $(document).ready(function() {
+
+            makeToggle('toggle_container','trigger',null,true);
+            $('#combo_pedidos').change(function(){
+                   if($('#combo_pedidos').val() != 0){
+                    presupuestosParaPedidoCotizacion()
+                  }
+        })
+    });
+ 
+
+    function exportarMejorPresupuesto(){
+
+            $("#mejor_pres").tabletojson({
+                    headers: "Renglon, Proveedor, Datos Editoriales,Precio Unitario, Cantidad, Total",
+                    attribHeaders: "{}",
+                    returnElement: "#table",
+                    complete: function(x){
+                        objAH                     = new AjaxHelper(updateExportarMejorPresupuesto);
+                        objAH.url=URL_PREFIX+'/adquisiciones/mostrarComparacion.pl';
+                        objAH.debug               = true;
+                        objAH.showOverlay         = true;
+                        objAH.table               = JSONstring.toObject(x);
+                        objAH.tipoAccion          = 'EXPORTAR_MEJOR_PRESUPUESTO';
+                        objAH.sendToServer();
+                    }
+              })
+      }
+
+
+     function updateExportarMejorPresupuesto(responseText){
+            $('#ediciones').html(responseText)
+     }
+      
+        
+    // se genera la orden de compra a partir del cuadro comparativo, FIXME incluirlo en algun js
+    function generateOrdenCompra(form){
+        $('#' + form).append("<input type='hidden' name='exportDOC' value='doc' />")
+        $('#' + form).append("<input type='hidden' name='operationDOC' value='ordenCompra' />")
+        $('#' + form).submit()  
+    }
+ 
+</script>
+
+<fieldset>
+    <legend class="titulos">    [% "Comparacion de presupuestos" | i18n %] </legend>
+     <p>Seleccione el pedido de cotizacion que desea cargar </p>
+                    [% combo_pedidos %]      
+
+   <div id="comparacion" >
+                        
+   </div>
+    
+</fieldset>          
+
+
+[% INCLUDE "intranet-bottom.inc" %]

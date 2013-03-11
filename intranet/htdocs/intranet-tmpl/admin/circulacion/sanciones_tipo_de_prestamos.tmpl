@@ -1,0 +1,25 @@
+[% IF tipo_sancion %]
+		<div class="form-horitonzal">
+        <div class="control-group">
+           <div class="controls">
+              [% FOREACH tipo_prestamo IN TIPOS_PRESTAMOS %]
+                       <label class="checkbox inline">
+                             <input type="checkbox" name="chkTP" id="chkTP_[% tipo_prestamo.getId_tipo_prestamo %]" 
+                                       value="[% tipo_prestamo.getId_tipo_prestamo %]" 
+                                       [% IF tipo_sancion.aplicaAlTipoDePrestamo(tipo_prestamo.getId_tipo_prestamo()) %] checked="checked" [% END %] 
+                             > 
+                             [% tipo_prestamo.getDescripcion %]
+                      </label>
+                      <br />
+               [% END %]
+          </div>
+    </div>
+[% END %]
+    [% PERL %]
+                        print C4::AR::Filtros::action_button(   
+                                                            title    => "[% 'Guardar' | i18n %]",
+                                                            button   => "btn btn-primary",
+                                                            action   => "guardarTiposQueAplica();",
+                                                            icon     => "icon-white icon-ok",
+                                ) ;
+    [% END %]

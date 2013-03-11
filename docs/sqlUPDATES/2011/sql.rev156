@@ -1,0 +1,1 @@
+INSERT INTO `pref_preferencia_sistema` (`id`, `variable`, `value`, `explanation`, `options`, `type`, `categoria`) VALUES (NULL, 'cancelar_reservas_intranet', '1', 'Habilita/Deshabilita la posibilidad de cancelar reservas de usuario desde intranet', NULL, 'bool', 'circulacion');

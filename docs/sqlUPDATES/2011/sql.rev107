@@ -1,0 +1,3 @@
+ALTER TABLE  `usr_socio` DROP  `login_attempts` ;
+ALTER TABLE  `sys_metodo_auth` ADD  `enabled` INT NOT NULL DEFAULT  '0';
+ALTER TABLE  `usr_socio` ADD  `last_auth_method` VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT  'mysql';

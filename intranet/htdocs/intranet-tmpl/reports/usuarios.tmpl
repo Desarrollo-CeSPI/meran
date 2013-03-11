@@ -1,0 +1,98 @@
+
+[% INCLUDE 'intranet-top.inc' %] 
+[% INCLUDE 'BootstrapToolkit.inc' %]
+
+[% USE HTML %]
+
+<script>
+    var objAH;
+
+    function changePage(ini){
+        objAH.changePage(ini);
+    }
+
+    function ordenar(orden){
+        objAH.orden=orden;
+        objAH.sendToServer();
+    }
+
+    function consultar(op,orden){
+         var sur1=$("#surname1").val();
+         var sur2=$("#surname2").val();
+         var leg1=$("#legajo1").val();
+         var leg2=$("#legajo2").val();
+         var cat=$("#categoria_socio_id").val();
+         var reg=$("#regular").val();
+         var ui=$("#ui_id").val();
+         var regularidad = $("#estado_id").val();
+
+         var params="surname1="+sur1+"&surname2="+sur2+"&legajo1="+leg1+"&legajo2="+leg2+"&categoria_socio="+cat+
+         "&regular="+reg+"&ui="+ui+"&op="+op+"&orden="+orden+"&regularidad="+regularidad;
+
+         if(op == "pdf"){
+             var url= "[% url_prefix %]/usuarios/reales/users-cards.pl";
+             crearForm(url,params);//Funcion en util.js
+         }
+         else{
+              objAH=new AjaxHelper(updateInfo);
+
+              objAH.debug= true;
+              objAH.showOverlay       = true;
+              objAH.url=URL_PREFIX+"/usuarios/reales/users-cardsResult.pl";
+              objAH.surname1= sur1;
+              objAH.surname2= sur2;
+              objAH.legajo1= leg1;
+              objAH.legajo2= leg2;
+              objAH.categoria_socio=cat;
+              objAH.ui=ui;
+              objAH.funcion = 'changePage';
+              objAH.op=op;
+
+              objAH.regularidad=regularidad;            
+            //se envia la consulta
+              objAH.sendToServer();
+         }
+     }
+
+
+    function updateInfo(responseText){
+        $("#result").html(responseText);
+        zebra("datos_tabla");
+    }
+
+    $(document).ready(function() {
+        onEnter('surname1',consultar);
+        onEnter('surname2',consultar);
+        onEnter('legajo1',consultar);
+        onEnter('legajo2',consultar);
+    });
+</script>
+
+<script>
+
+    $(document).ready(function(){
+    });
+
+</script>
+
+
+[% PERL %]
+    print C4::AR::Filtros::tabbedPane( titulo    => "[% 'Reportes de usuarios' | i18n %]",
+                                 subtitulo => "[% 'Navegue por las pesta&ntilde;as para acceder a los distintos reportes' | i18n %]",
+                                 content   => [ {id => 'labels', text=> "[% 'Generar carnets' | i18n %]" },
+                                              ],
+                                 content_id=> 'reportes_usuarios',
+                                 active_id => 'labels',
+    
+    );
+
+[% END %]
+
+        <div class="tab-pane fade in active" id="labels">
+            [% INCLUDE 'usuarios/reales/users-cards.tmpl' %]
+        </div>
+      </div>
+</section>
+
+[% INCLUDE 'intranet-bottom.inc' %]
+

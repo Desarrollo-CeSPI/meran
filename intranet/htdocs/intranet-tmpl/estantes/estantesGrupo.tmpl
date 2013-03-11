@@ -1,0 +1,48 @@
+
+<fieldset class="resultados_busqueda">
+         
+            <div class="contenedor_paginador">[% paginador %]</div>
+
+            [% PERL %]
+                      print C4::AR::Filtros::tableHeader(   
+                                        id              => "tablaResult",
+                                        class           => "",
+                                        selectAll_id    => "",
+                                        columns         => ['']                                  
+                      ) ;
+            [% END %]
+
+              <tbody>
+                      [% FOREACH estante IN SEARCH_RESULTS %]
+                          <tr class="datos_tabla_estantes">
+                              <td>
+                                    [% auxEstante = estante %]
+                [% listaEstantes = [] %]
+                [% WHILE auxEstante > 0 %]
+                      [% listaEstantes.unshift(auxEstante) %]
+                      [% IF auxEstante.getPadre %]
+                          [% auxEstante = auxEstante.estante_padre %]
+                      [% ELSE %]
+                          [% auxEstante = 0 %]
+                      [% END %]
+                [% END %]
+                [% FOREACH auxEstante IN listaEstantes %]
+                    [% PERL %]
+                      print C4::AR::Filtros::link_to( text =>     "[% auxEstante.getEstante %]",
+                                     url=>"[% url_prefix %]/estantes/estante.pl", 
+                                      params =>   ["id_estante=[% auxEstante.getId %]"],
+                                      title =>    "[% 'Mostrar Detalle del Estante' | i18n %]",
+                                      class => "link_to_detail"
+                                  ) ;
+                    [% END %]
+                     <span class="divider">/</span>  
+                [% END %]
+                              </td>
+                          </tr>
+                      [% END %]
+              </tbody>
+            </table>
+        </div>
+        
+        
+</fieldset>

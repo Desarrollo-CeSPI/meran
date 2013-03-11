@@ -1,0 +1,38 @@
+[% INCLUDE 'intranet-top.inc' %] 
+[% USE HTML %]
+
+[% PERL %]
+    print C4::AR::Filtros::tabbedPane( titulo   => "[% 'Reportes de Circulaci&oacute;n' | i18n %]",
+                             subtitulo          => "[% 'Navegue por las pesta&ntilde;as para acceder a los distintos reportes' | i18n %]",
+                             content            => [  {id => 'general', text => "[% 'General' | i18n %]" },
+                                                      {id => 'reservas', text=> "[% 'Reservas' | i18n %]" },
+                                                     
+                                                  ] ,
+                             active_id => 'general',
+    
+    );
+
+[% END %]
+        <div class="tab-pane fade in active" id="general">
+            [% INCLUDE 'partials/reportes/_reporte_circulacion_general.inc' %]
+        </div>
+        <div class="tab-pane fade " id="reservas">
+            [% INCLUDE 'partials/reportes/_reporte_circulacion.inc' %]
+        </div>
+    
+      </div>
+</section>
+
+<div id="modal_report_long_call" class="modal hide fade">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h3>[% 'Alerta de reporte' | i18n %]</h3>
+    </div>
+    <div class="modal-body">
+        <p>[% 'Este reporte puede llevar un tiempo considerable. Aunque este mensaje desaparezca, espere hasta que aparezca el archivo por favor...' | i18n %]</p>
+    </div>
+    <div class="modal-footer">
+    </div>
+</div>
+
+[% INCLUDE 'intranet-bottom.inc' %]

@@ -1,0 +1,256 @@
+  <script type="text/javascript">
+
+    $(document).ready(function() {
+          onEnter('search_importacion',detalleImportacion,'[% id_importacion %]');
+          [% IF jobID %]
+            jobID = "[% jobID %]";
+            checkProgress();
+            scrollTo('import-footer');
+          [% END %]
+          $('.popup').popover();
+    });
+
+function cambiarFiltro (filtro){
+	$('#record_filter').val(filtro);
+	 detalleImportacion([% id_importacion %]);
+	}
+	
+</script>
+<div class="right ">
+
+        [% PERL %]
+                            print C4::AR::Filtros::action_link_button(   
+                                                                button   => "btn btn-warning",
+                                                                url => "[% url_prefix %]/herramientas/importacion/esquemas_importacion.pl",
+                                                                icon => "icon-white  icon-list-alt",
+                                                                params => ["token=[% token %]","id_esquema=[% id_esquema %]",],
+                                                                title   => " [% 'Esquema' | i18n %]",
+                                    ) ;
+        [% END %]
+
+         [% PERL %]
+                             print C4::AR::Filtros::action_link_button( 
+                                                                 button   => "btn btn-primary",
+                                                                 url=>"[% url_prefix %]/herramientas/importacion/configurar_importacion.pl",
+                                                                 params =>   ["id_importacion=[% id_importacion %]"],
+                                                                 icon => "icon-white icon-cog",
+                                                                 title   => " [% 'Configurar Importaci&oacute;n' | i18n %]",
+                                     ) ;
+         [% END %]
+
+</div>
+
+    <h2>[% "Registros de la Importaci&oacute;n:" | i18n %]</h2>
+
+    	 <input type="hidden" name="record_filter" id="record_filter" value="[% IF !record_filter %]MAIN[% ELSE %][% record_filter %][% END %]" >
+        <div class="tabbable">
+            <ul class="nav nav-tabs">
+            
+                <li [% IF record_filter == 'MAIN' or !record_filter %] class="active" [% END %]>
+				<a href="#A" onClick="cambiarFiltro('MAIN');">Registros Principales</a>
+				</li>
+				
+                <li [% IF record_filter == 'ALL' %] class="active" [% END %]>
+				<a href="#B" onClick="cambiarFiltro('ALL');">Todos</a>
+				</li>
+                
+                <li [% IF record_filter == 'UNIDENTIFIED' %] class="active" [% END %]>
+				<a href="#C" onClick="cambiarFiltro('UNIDENTIFIED');">Registros Sin Identificar</a>
+				</li>
+                
+                <li [% IF record_filter == 'MATCH' %] class="active" [% END %]>
+				<a href="#D" onClick="cambiarFiltro('MATCH');">Registros Encontrados</a>
+				</li>
+			    
+			    <li [% IF record_filter == 'IGNORED' %] class="active" [% END %]>
+				<a href="#E" onClick="cambiarFiltro('IGNORED');">Registros Ignorados o Err&oacute;neos</a>
+				</li>
+            </ul>
+            
+            <div class="tab-content">
+			</div>
+        </div>
+
+       [% IF resultsloop %]
+
+    		<div class="well form-search">
+    		        <input type="text" class="input-medium search-query" id="search_importacion">
+    		        <button type="submit" class="btn" onclick="detalleImportacion([% id_importacion %]);">[% "Buscar" | i18n %]</button>
+    		</div>        
+    		
+            <div class="contenedor_paginador">[% paginador %]</div>
+            <div class="datos_tabla_div_importacion">
+                <div class="well">
+                    <div class="resultados_consulta">[% "La cantidad de registros es" | i18n %]: [% cantidad %]</div>
+                </div>
+            
+                [% PERL %]
+                    print C4::AR::Filtros::tableHeader(   
+                                      id              => "tablaResult",
+                                      columns         => ['[% "T&iacute;itulo"|i18n %]',
+    													  '[% "Autor"|i18n %]',
+    													  '[% "Identificaci&oacute;n"|i18n %]',
+    													  '[% "Tipo"|i18n %]',
+    													  '[% "Encontrado"|i18n %]',
+    													  '[% "Estado"|i18n %]',
+    													  '[% "Acciones"|i18n %]',
+                                                         ]
+                                            );
+                [% END %]
+                  <tbody>
+
+                  [% FOREACH detalle_importacion IN resultsloop %]
+                      <tr>
+                            <td>
+                                  [% FOREACH titulo IN detalle_importacion.getTitulo %]
+                                    [% titulo %]<br>
+                                  [% END %]
+                            </td>
+                            <td>
+                                  [% FOREACH autor IN detalle_importacion.getAutor %]
+                                    [% autor %]<br>
+                                  [% END %]
+                            </td>
+                            <td>
+                                 [% detalle_importacion.getIdentificacion %]
+                            </td>
+                            <td>
+                                 [% detalle_importacion.getTipo %]
+                                [% IF detalle_importacion.getTipo == "Registro" %] ([% detalle_importacion.getCantidadDeRegistrosHijo %] registros)[% END %]
+                            </td>
+
+                            <td>
+                              [% IF detalle_importacion.getMatching %]
+                              <span class="label label-success">
+      							Si
+      						</span>
+                              [% ELSE %]
+                              <span class="label label-info">No</span>
+                              [% END %]
+                            </td>
+                            
+                            <td>
+                              [% IF detalle_importacion.getEstado == "IGNORADO" %]
+                                  <span class="label label-warning popup" 
+                                        rel="popover" 
+                                        data-content="[% detalle_importacion.getDetalle %]" 
+                                        data-placement="left" 
+                                        data-original-title="[% 'Ignorado' | i18n %]" >
+                                  [% 'Ignorado' | i18n %]</span>
+                              [% ELSIF detalle_importacion.getEstado == "IMPORTADO" %]
+                                  <span class="label label-success popup"
+                                        rel="popover" 
+                                        data-content="[% detalle_importacion.getDetalle %]" 
+                                        data-placement="left" 
+                                        data-original-title="[% 'Importado' | i18n %]" >
+                                  [% 'Importado' | i18n %]</span>
+                              [% ELSIF detalle_importacion.getEstado == "ERROR" %]
+                                  <span class="label label-warning popover_button popup" 
+                                        rel="popover"
+                                        data-placement="left" 
+                                        data-content="[% detalle_importacion.getDetalle %]" 
+                                        data-original-title="[% 'Error' | i18n %]" >
+                                  [% 'Error' | i18n %]
+                                  </span>
+                              [% ELSE %]
+      						    <span class="label label-info">[% 'Procesar' | i18n %]</span>
+                              [% END %]
+                              
+                            </td>
+
+                            <!--  BOTONES ACCIONES (Editar, Borrar, Ver detalle) -->
+                            <td style="width: 100px;">
+      							   [% IF detalle_importacion.getEstado != "IGNORADO" %]
+      							   	   [% IF detalle_importacion.getMatching %]
+      	                                 [% PERL %]
+      									   print C4::AR::Filtros::action_set_button(    
+      											title           => "[% 'Registro' | i18n %]",
+      											button          => 'btn btn-primary',
+      											action			=> 'detalleRegistroMARC("[% detalle_importacion.getId %]")',
+      											actions         => [
+      												{title => "Detalle", action=>'detalleRegistroMARC("[% detalle_importacion.getId %]");',icon=>"icon-search"},
+      												{title => "Ignorar", action=>'cambiarEstadoRegistro("[% detalle_importacion.getIdImportacionIso %]","[% detalle_importacion.getId %]","IGNORADO")', icon=>"icon-ban-circle"},
+      												{title => "Ver Registro",  url=>"[% url_prefix %]/catalogacion/estructura/detalle.pl",  params =>   ["id1=[% detalle_importacion.getIdMatching %]"], icon=>"icon-search"},
+      												{title => "No es el mismo Registro",  action=>'quitarMatcheoRegistro("[% detalle_importacion.getIdImportacionIso %]","[% detalle_importacion.getId %]");', icon=>"icon-minus-sign"},
+      															   ],
+      										);
+      									  [% END %]
+      	                              [% ELSE %]
+      									  [% PERL %]
+      									   print C4::AR::Filtros::action_set_button(    
+      											title           => "[% 'Registro' | i18n %]",
+      											button          => 'btn btn-primary',
+      											action			=> 'detalleRegistroMARC("[% detalle_importacion.getId %]")',
+      											actions         => [
+      												{title => "Detalle", action=>'detalleRegistroMARC("[% detalle_importacion.getId %]")',icon=>"icon-search"},
+      												{title => "Ignorar", action=>'cambiarEstadoRegistro("[% detalle_importacion.getIdImportacionIso %]","[% detalle_importacion.getId %]","IGNORADO")', icon=>"icon-ban-circle"},
+      															   ],
+      										);
+      									  [% END %]
+      	                              [% END %]
+      	                           [% ELSE %]
+      	                             [% IF detalle_importacion.getMatching %]
+      	                                 [% PERL %]
+      									   print C4::AR::Filtros::action_set_button(    
+      											title           => "[% 'Registro' | i18n %]",
+      											button          => 'btn btn-primary',
+      											action			=> 'detalleRegistroMARC("[% detalle_importacion.getId %]")',
+      											actions         => [
+      												{title => "Detalle", action=>'detalleRegistroMARC("[% detalle_importacion.getId %]");',icon=>"icon-search"},
+      												{title => "Procesar", action=>'cambiarEstadoRegistro("[% detalle_importacion.getIdImportacionIso %]","[% detalle_importacion.getId %]","PROCESAR");', icon=>"icon-ok-circle"},
+      												{title => "Ver Registro",  url=>"[% url_prefix %]/catalogacion/estructura/detalle.pl",  params =>   ["id1=[% detalle_importacion.getIdMatching %]"], icon=>"icon-search"},
+      												{title => "No es el mismo Registro",  action=>'quitarMatcheoRegistro("[% detalle_importacion.getIdImportacionIso %]","[% detalle_importacion.getId %]");', icon=>"icon-minus-sign"},
+      															   ],
+      										);
+      									  [% END %]
+      	                              [% ELSE %]
+      									  [% PERL %]
+      									   print C4::AR::Filtros::action_set_button(    
+      											title           => "[% 'Registro' | i18n %]",
+      											button          => 'btn btn-primary',
+      											action			=> 'detalleRegistroMARC("[% detalle_importacion.getId %]")',
+      											actions         => [
+      												{title => "Detalle", action=>'detalleRegistroMARC("[% detalle_importacion.getId %]");',icon=>"icon-search"},
+      												{title => "Procesar", action=>'cambiarEstadoRegistro("[% detalle_importacion.getIdImportacionIso %]","[% detalle_importacion.getId %]","PROCESAR");', icon=>"icon-ok-circle"},
+      															   ],
+      										);
+      									  [% END %]
+      								 [% END %]
+      							   [% END %]
+                            </td>
+                      </tr>
+                  [% END %]
+                  </tbody>
+                </table>
+            </div>
+          [% ELSE %]
+            <div class="alert alert-info fade in">
+               <strong>[% 'No hay registros identificados' | i18n %]</strong>
+            </div>           
+          [% END %]
+
+
+<div id="detalleRegistroMARC"></div>
+
+[% INCLUDE 'partials/_percent_bar.inc' %]
+
+<div class="form-actions" id="import-footer">
+  [% IF !jobID %]
+         [% PERL %]
+                             print C4::AR::Filtros::action_button( 
+                                                                 button   => "btn btn-danger",
+                                                                 action => 'comenzarImportacion("[% id_importacion %]");',
+                                                                 title   => "[% 'Comenzar Importaci&oacute;n' | i18n %]",
+                                     ) ;
+         [% END %]
+  [% ELSE %]
+         [% PERL %]
+                             print C4::AR::Filtros::action_button( 
+                                                                 button   => "btn btn-danger disabled",
+                                                                 action => 'cancelarImportacion([% id_importacion %]);',
+                                                                 icon    => 'icon-white icon-remove',
+                                                                 title   => " [% 'Importando' | i18n %]...",
+                                     ) ;
+         [% END %]
+  [% END %]
+</div>

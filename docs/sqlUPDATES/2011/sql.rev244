@@ -1,0 +1,10 @@
+ALTER TABLE cat_estructura_catalogacion DROP INDEX campo;
+ALTER TABLE  `cat_estructura_catalogacion` DROP INDEX  `subcampo`;
+ALTER TABLE  `cat_estructura_catalogacion` DROP INDEX  `itemtype`;
+
+ALTER TABLE  `cat_estructura_catalogacion` ADD UNIQUE (
+`campo` ,
+`subcampo` ,
+`itemtype` ,
+`nivel`
+);

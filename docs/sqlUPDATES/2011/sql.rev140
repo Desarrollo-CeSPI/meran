@@ -1,0 +1,1 @@
+INSERT INTO `pref_preferencia_sistema` (`id`, `variable`, `value`, `explanation`, `options`, `type`, `categoria`) VALUES (NULL, 'se_permite_repetir_signatura', '0', 'Permite especificar si la signatura puede repetirse solamente en le registro comprendido (Nivel1) o en todo el catalogo', NULL, 'bool', 'catalogo');

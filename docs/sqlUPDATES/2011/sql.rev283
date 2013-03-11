@@ -1,0 +1,3 @@
+UPDATE `pref_preferencia_sistema` 
+SET type ="text", categoria="circulacion"
+WHERE variable LIKE "%_dia_semana";

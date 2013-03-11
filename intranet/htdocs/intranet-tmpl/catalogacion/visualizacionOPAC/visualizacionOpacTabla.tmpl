@@ -1,0 +1,65 @@
+
+
+<table id="tablaVisualizacion" class="tabla_datos" border=0 cellspacing=0 cellpadding=0 width="100%" align="center">
+	<thead>
+ 	<tr class="titulo_tabla_resultado">	
+		<th>[% 'Campo' | i18n %]</th>
+		<th>[% 'Subcampo' | i18n %]</th>
+		<th>[% 'Texto Pred' | i18n %]</th>
+		<th>[% 'Texto Succ' | i18n %]</th>
+		<th>[% 'Separador' | i18n %]</th>
+		<th>[% 'Visible' | i18n %]</th>
+		<th>[% 'Editar' | i18n %]</th>
+		<th>[% 'Eliminar' | i18n %]</th>
+	</tr>
+	</thead>
+	<tbody>
+[% FOREACH RESULTSLOOP %]
+	<tr align='center'>
+
+		<td>[% campo %]</td>
+		<td>[% subcampo %]</td>
+		<td>[% textpred %]</td>
+		<td>[% textsucc %]</td>
+		<td>[% separador %]</td>
+		<td> 
+			<input type='checkbox' id="[% idestcatopac %]" value="[% visible %]" onChange="cambiarVisibilidad('[% idestcatopac %]');" 
+			title="[% 'Cambiar la visibilidad' | i18n %]"
+			[% IF visible %] 
+				checked	
+			[% END %] >
+		</td>
+		<td>
+
+                    [% PERL %]
+                        print C4::AR::Filtros::to_Icon(  
+                                                            boton   => "icon_edicion",
+                                                            onClick => "modificarVisualizacion([% idestcatopac %]);",
+                                                            title   => "[% 'Editar' | i18n %]",
+                                                            alternClass => "botonCentradoTabla"
+                                ) ;
+                    [% END %]
+
+		</td>
+		<td>
+
+                    [% PERL %]
+                        print C4::AR::Filtros::to_Icon(  
+                                                            boton   => "icon_borrar",
+                                                            onClick => "deleteRowVisualizacion([% idestcatopac %]);",
+                                                            title   => "[% 'Eliminar' | i18n %]",
+                                                            alternClass => "botonCentradoTabla"
+                                ) ;
+                    [% END %]
+
+		</td>
+
+	</tr>
+[% END %]
+	</tbody>
+
+	<tr valign=bottom>
+	        <td class="lineafinaltabla"  align="left" colspan="10"></td>
+    </tr>
+	
+</table>

@@ -1,0 +1,73 @@
+.calendar .nav { background: url("../menuarrow.gif") no-repeat 100% 100%; }
+
+.calendar tfoot .ttip .error { color: #c20; }
+
+.calendar tfoot tr.time td { padding: 0; border-top: 1px solid; }
+.calendar tfoot tr.time td.timetext { text-align: center; }
+.calendar tfoot tr.time table td,
+.calendar tfoot tr.time td.hilite,
+.calendar tfoot tr.time td.active { border: 0; padding: 0; }
+.calendar tfoot tr.time td.hour,
+.calendar tfoot tr.time td.minute {
+  text-align: right; font-weight: bold;
+  border-right: 1px solid; padding: 0 1px 0 3px;
+}
+.calendar tfoot tr.time td.colon { text-align: center; font-weight: bold; background: transparent; }
+.calendar tfoot tr.time td.ampm { text-align: center; }
+
+/*
+.calendar tfoot tr.time td.parent-hour table { position: relative; left: .7em; z-index: 10; empty-cells: visible; }
+.calendar tfoot tr.time td.parent-minute table { position: relative; left: -.7em; z-index: 10; }
+*/
+
+.calendar-time-scroller { border-left: 1px solid; border-right: 1px solid; }
+
+.calendar-time-scroller .up {
+  width: 11px;
+  background: transparent url("../scroller-up.gif") no-repeat 50% 50%;
+  height: 0.5em;
+/*  font-size: 1px; */
+}
+
+.calendar-time-scroller .down {
+  width: 11px;
+  background: transparent url("../scroller-down.gif") no-repeat 50% 50%;
+  height: 0.5em;
+/*  font-size: 1px; */
+}
+
+.calendar .combo {
+  position: absolute;
+  display: none;
+  top: 0px;
+  left: 0px;
+  width: 4em;
+  cursor: default;
+  border: 1px solid;
+  font-size: 90%;
+}
+
+/* This is what makes the calendar pop up of the page
+   If you are using items with z-index greater than 100
+	 you will need to increase this to make the calendar
+	 display in front of them.
+	 */
+.calendar {
+  z-index: 100;
+}
+
+.calendar .combo .label,
+.calendar .combo .label-IEfix {
+  text-align: center;
+  padding: 1px;
+}
+
+.calendar .combo .label-IEfix {
+  width: 4em;
+}
+
+.calendar .combo .disabled { color: #888; }
+
+.calendar .history { width: 18em; }
+.calendar .history .label { text-align: center; }
+.calendar .history .label-IEfix { width: 18em; }

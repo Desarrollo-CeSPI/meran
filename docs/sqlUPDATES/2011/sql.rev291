@@ -1,0 +1,1 @@
+INSERT INTO `pref_tabla_referencia_rel_catalogo` (`id`, `alias_tabla`, `tabla_referente`, `campo_referente`, `sub_campo_referente`) VALUES (NULL, 'usr_estado', 'usr_regularidad', 'usr_estado_id', NULL);

@@ -1,0 +1,17 @@
+INSERT INTO `pref_ldap` (
+`id` ,
+`variable` ,
+`value` ,
+`explanation`
+)
+VALUES 
+(NULL , 'ldap_port', '389' , 'Indique el numero de puerto del servidor'
+), 
+(NULL , 'ldap_type', 'PLAIN' , 'Indica como sera la comunicacion, SSL, TLS o PLAIN, por defecto es PLAIN'
+),
+(NULL , 'ldap_user_prefijo', NULL , 'Prefijo que va antes del identificador del usuario, ej uid. Esto se completara luego con el userid y el sufijo.'
+), 
+(NULL , 'ldap_prefijo_base', NULL , 'Sufijo de la Base de Datos Ldap que se usa para completar el usuario. Ej: dc=unlp,dc=edu,dc=ar.'
+),
+(NULL , 'ldap_agregar_user', NULL , 'Indica si se agrega automaticamente a la base de MERAN un usuario valido en el LDAP cuando se autentica positivamente. 0 o 1'
+);

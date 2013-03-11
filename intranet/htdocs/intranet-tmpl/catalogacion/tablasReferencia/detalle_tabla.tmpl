@@ -1,0 +1,68 @@
+<script type="text/javascript" language="javascript">
+    loaderPath = '<img src="'+imagesForJS+'/loaders/loader_facebook.gif"'+'>';
+    $('.edit_nombre').editable(URL_PREFIX+'/catalogacion/tablasReferencia/tablasReferenciaDB.pl', { 
+          type      : 'text',
+          cancel    : CANCELAR,
+          submit    : OK,
+          tooltip   : EDITABLE_MSG,
+          placeholder: EDITABLE_MSG,
+          style   : 'display: inline',
+          submitdata : {token: '[% token %]', edit: 1, type: 'nombre'},
+          indicator : loaderPath,
+
+    });
+</script>
+
+<div class="datos_tabla_div" id="datos_tabla_div">
+        
+
+      
+              [% PERL %]
+                  print C4::AR::Filtros::tableHeader(   
+                            id              => "tablaResult",
+                            columns         => ['[% "Campo"|i18n %]','[% "Visible"|i18n %]',
+                                                  '[% "Nombre"|i18n %]', '[% "Cambiar Visibilidad"|i18n %]',
+                                              ]
+
+                                                          
+                              ) ;
+              [% END %]
+
+        <tbody>
+            [% FOREACH dato IN data %]
+            <tr>
+                <td>[% dato.getCampo %]</td>
+
+                <td>[% IF dato.getVisible == 1 %] Si [% ELSE %] No [% END %]</td>
+
+                <td class="edit_nombre" id="[% dato.getCampo %],[% dato.getTabla %]">[% dato.getCampoAlias %]</td>
+                
+                <td>
+                [% IF dato.getVisible == 1 %]
+                    [% PERL %]
+                          print C4::AR::Filtros::action_button( 
+                                                          button    => "btn btn-success",
+                                                          action    => 'cambiarVisibilidad("[% dato.getCampo %]","[% dato.getTabla %]");', 
+                                                          icon      => "icon-eye-open icon-white",
+                                                      ) ;
+
+
+                    [% END %]
+                [% ELSE %]
+                    [% PERL %]
+                          print C4::AR::Filtros::action_button( 
+                                                          button    => "btn btn-inverse",
+                                                          action    => 'cambiarVisibilidad("[% dato.getCampo %]","[% dato.getTabla %]");', 
+                                                          icon      => "icon-white icon-eye-close",
+                                                      ) ;
+
+
+                    [% END %]
+                [% END %]
+                </td>
+            </tr>
+            [% END %]
+        </tbody>
+    </table>
+  
+</div>

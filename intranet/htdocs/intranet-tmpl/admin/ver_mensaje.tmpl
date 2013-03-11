@@ -1,0 +1,53 @@
+[% USE HTML %]
+
+<script type="text/javascript" src="/includes/jquery/jquery.wysiwyg.js"></script>
+<link rel="stylesheet" href="/includes/css/wysiwyg.css" type="text/css" media="screen"/>
+
+
+<div class="modal-header">
+  <a href="#" class="close" data-dismiss="modal">×</a>
+  <h5>[% HTML.escape(mensaje.getAsunto) %]</h5>
+</div>
+<div class="modal-body">
+  <p>[% HTML.escape(mensaje.getMensaje) %]</p>
+  <input type="hidden" name="email" id="email" value="[% HTML.escape(mensaje.getEmail) %]">
+  <input type="hidden" name="asunto" id="asunto" value="[% HTML.escape(mensaje.asunto) %]">
+	
+
+  <div class="responder" style="display:none; padding-top:10px;">
+      <textarea id="respuesta" name="respuesta" class="self_review" style="width: 377px"></textarea>
+  </div>
+
+
+
+</div>
+<div class="modal-footer">
+  <div id="btn_enviar"  class="left" style="display: none;">
+           [% PERL %]
+                   print C4::AR::Filtros::action_button( 
+                                                   button       => "btn btn-primary click",
+                                                   action       => "responderMail()", 
+                                                   icon         => "icon-white icon-ok",
+                                                   title        => "[% 'Enviar' | i18n %]",
+                                               ) ;
+           
+           [% END %]
+  </div>
+  <div id="btn_responder" class="left">
+    [% PERL %]
+                print C4::AR::Filtros::action_button( 
+                                                button         => "btn btn-success click",
+                                                action       => "responder()", 
+                                                icon         => "icon-white icon-share-alt",
+                                                title        => "[% 'Responder' | i18n %]",
+                                            ) ;
+        
+        [% END %]
+  </div>
+  <h5>[% 'De' | i18n %]: [% HTML.escape(mensaje.getApellido) %], [% HTML.escape(mensaje.getNombre) %] ([% HTML.escape(mensaje.getEmail) %])</h5>
+  <h6>[% mensaje.getFecha %]</h6>
+  <h6>[% mensaje.getHora %]</h6>
+</div>
+
+
+                  

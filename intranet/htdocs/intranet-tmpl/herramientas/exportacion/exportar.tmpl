@@ -1,0 +1,71 @@
+[% INCLUDE 'intranet-top.inc' %]
+
+<script type="text/javascript"> 
+
+    function exportar(){
+        $('#fExportacion').submit();
+    }
+  
+
+    $(document).ready(function() {
+
+
+    });
+
+</script>
+<fieldset>
+  <legend><strong>[% "Herramientas de Exportaci&oacute;n:" | i18n %]</strong></legend>
+
+    <form class="form-horizontal"  id="fExportacion" method="post" action="exportarDB.pl">
+        <div class="control-group">
+            <label class="control-label" for="recordLimit">Limitar registros</label>
+            <div class="controls">
+                <input class="input-large" id="registro_ini" name="registro_ini" type="text" placeholder="Registro Inicial">  a  <input class="input-large" type="text"  name="registro_fin" id="registro_fin" placeholder="Registro Final">
+            </div>
+        </div>
+        
+        <div class="control-group">
+            <label class="control-label" for="inputTipoDocumento">Limitar a los primeros</label>
+            <div class="controls">
+                <input class="input-large" id="limit" name="limit" type="text" placeholder="Registros">
+            </div>
+        </div>
+        
+        
+        <div class="control-group">
+            <label class="control-label" for="inputTipoDocumento">Tipo de documento</label>
+            <div class="controls">
+                [% combo_tipo_documento %]
+            </div>
+        </div>
+        
+        
+        <div class="control-group">
+            <div class="controls">
+                <label class="checkbox">
+                <input type="checkbox" name="exportar_ejemplares" value="1" checked > Exportar Ejemplares
+                </label>
+               
+                    <div style="text-align:center;">
+                    <input type="hidden" id="tipoAccion" name="tipoAccion" value="EXPORTAR">
+
+                      [% PERL %]
+                                 print C4::AR::Filtros::to_Button(   
+                                                                      text          => "[% 'Exportar' | i18n %]",
+                                                                      boton         => "boton_exportar_marc",
+                                                                      width         => "auto",
+                                                                      onClick       => "exportar();",
+                                                                      alternClass   => "botonCentrado",
+                                                                      title         => "[% 'Exportar' | i18n %]",
+                                         ) ;
+                      [% END %]
+                    </div>
+    
+            </div>
+        </div>
+    </form>
+    
+
+</fieldset>
+
+[% INCLUDE 'intranet-bottom.inc' %]

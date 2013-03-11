@@ -1,0 +1,1 @@
+ALTER TABLE  `rep_historial_circulacion` ADD  `agregacion_temp` VARCHAR( 255 ) NULL;

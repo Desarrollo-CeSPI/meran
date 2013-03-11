@@ -1,0 +1,1 @@
+ALTER TABLE `cat_ref_tipo_nivel3` ADD `disponible` TINYINT( 1 ) NOT NULL DEFAULT '1'

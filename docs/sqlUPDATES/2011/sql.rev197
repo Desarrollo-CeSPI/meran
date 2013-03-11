@@ -1,0 +1,1 @@
+ALTER TABLE  `usr_persona` ADD  `codigo_postal` VARCHAR( 32 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL AFTER  `alt_telefono`;

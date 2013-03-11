@@ -1,0 +1,54 @@
+UPDATE `pref_preferencia_sistema` SET `categoria`='sistema errors' WHERE `id`='86';
+UPDATE `pref_preferencia_sistema` SET `categoria`='sistema erros' WHERE `id`='87';
+UPDATE `pref_preferencia_sistema` SET `categoria`='circulacion', `label`='Menú loco' WHERE `id`='112';
+UPDATE `pref_preferencia_sistema` SET `categoria`='sistema password' WHERE `id`='319';
+UPDATE `pref_preferencia_sistema` SET `categoria`='sistema password' WHERE `id`='318';
+UPDATE `pref_preferencia_sistema` SET `categoria`='circulacion mail' WHERE `id`='143';
+UPDATE `pref_preferencia_sistema` SET `categoria`='circulacion mail' WHERE `id`='145';
+UPDATE `pref_preferencia_sistema` SET `categoria`='circulacion mail' WHERE `id`='296';
+UPDATE `pref_preferencia_sistema` SET `categoria`='sistema users' WHERE `id`='98';
+UPDATE `pref_preferencia_sistema` SET `categoria`='sistema users' WHERE `id`='97';
+UPDATE `pref_preferencia_sistema` SET `categoria`='sistema users' WHERE `id`='109';
+UPDATE `pref_preferencia_sistema` SET `categoria`='sistema searches' WHERE `id`='117';
+UPDATE `pref_preferencia_sistema` SET `categoria`='sistema password' WHERE `id`='316';
+UPDATE `pref_preferencia_sistema` SET `categoria`='sistema users' WHERE `id`='101';
+UPDATE `pref_preferencia_sistema` SET `categoria`='sistema users' WHERE `id`='249';
+UPDATE `pref_preferencia_sistema` SET `categoria`='sistema api' WHERE `id`='247';
+UPDATE `pref_preferencia_sistema` SET `categoria`='sistema searches' WHERE `id`='268';
+UPDATE `pref_preferencia_sistema` SET `categoria`='sistema api' WHERE `id`='298';
+UPDATE `pref_preferencia_sistema` SET `categoria`='circulacion users' WHERE `id`='299';
+UPDATE `pref_preferencia_sistema` SET `categoria`='sistema searches' WHERE `id`='240';
+UPDATE `pref_preferencia_sistema` SET `categoria`='sistema password' WHERE `id`='322';
+UPDATE `pref_preferencia_sistema` SET `categoria`='circulacion mail' WHERE `id`='144';
+UPDATE `pref_preferencia_sistema` SET `categoria`='circulacion mail' WHERE `id`='146';
+UPDATE `pref_preferencia_sistema` SET `categoria`='sistema mail' WHERE `id`='290';
+UPDATE `pref_preferencia_sistema` SET `categoria`='sistema mail' WHERE `id`='289';
+UPDATE `pref_preferencia_sistema` SET `categoria`='circulacion mail' WHERE `id`='295';
+UPDATE `pref_preferencia_sistema` SET `categoria`='circulacion' WHERE `id`='111';
+UPDATE `pref_preferencia_sistema` SET `categoria`='sistema password' WHERE `id`='321';
+UPDATE `pref_preferencia_sistema` SET `categoria`='sistema password' WHERE `id`='320';
+UPDATE `pref_preferencia_sistema` SET `categoria`='sistema twitter' WHERE `id`='245';
+UPDATE `pref_preferencia_sistema` SET `categoria`='sistema api' WHERE `id`='239';
+UPDATE `pref_preferencia_sistema` SET `categoria`='sistema api' WHERE `id`='301';
+UPDATE `pref_preferencia_sistema` SET `categoria`='sistema searches' WHERE `id`='115';
+UPDATE `pref_preferencia_sistema` SET `categoria`='sistema password' WHERE `id`='317';
+UPDATE `pref_preferencia_sistema` SET `categoria`='sistemas searches' WHERE `id`='108';
+UPDATE `pref_preferencia_sistema` SET `categoria`='circulacion' WHERE `id`='103';
+UPDATE `pref_preferencia_sistema` SET `categoria`='sistema ui' WHERE `id`='114';
+UPDATE `pref_preferencia_sistema` SET `categoria`='sistema twitter' WHERE `id`='241';
+UPDATE `pref_preferencia_sistema` SET `categoria`='sistema twitter' WHERE `id`='250';
+UPDATE `pref_preferencia_sistema` SET `categoria`='sistema twitter' WHERE `id`='246';
+UPDATE `pref_preferencia_sistema` SET `categoria`='sistema twitter' WHERE `id`='243';
+UPDATE `pref_preferencia_sistema` SET `categoria`='sistema twitter' WHERE `id`='244';
+UPDATE `pref_preferencia_sistema` SET `categoria`='sistema twitter' WHERE `id`='294';
+
+
+UPDATE `pref_preferencia_sistema` SET `categoria`='circulacion mail' WHERE `id`='272';
+UPDATE `pref_preferencia_sistema` SET `categoria`='circulacion mail' WHERE `id`='273';
+UPDATE `pref_preferencia_sistema` SET `categoria`='circulacion users' WHERE `id`='281';
+
+
+
+
+
+

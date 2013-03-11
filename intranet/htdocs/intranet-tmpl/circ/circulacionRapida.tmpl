@@ -1,0 +1,441 @@
+[% INCLUDE 'intranet-top.inc' %]
+
+[% INCLUDE  'AutocompleteHelper.inc'  %]
+
+<script type="text/javascript" src="/intranet-tmpl/includes/circulacion-min.js"></script>
+<script type="text/javascript" src="/intranet-tmpl/includes/usuarios/usuariosReales-min.js"></script>
+<script type="text/javascript" src="/includes/jquery/jquery.jPrintElement.js"></script>
+
+<script type="text/javascript">
+// para la ventana de Agregar Autorizado
+var AUTO_GENERAR_COMPROBANTE = '[% auto_generar_comprobante_prestamo %]';
+
+var NRO_SOCIO_AUTH=0;
+var objAH;
+
+function clear_usuario(){
+    $('#usuario').val('');
+    $('#datosAutorizado').html('');
+    $('#detalleUsuario').slideUp('slow');
+    $('#tablaPrestamos').slideUp('slow');
+    $('#sanciones').slideUp('slow');
+    $('#acciones').hide();
+    $('#cambo_tipo_prestamo').hide();
+}
+
+
+function init_barcode(){
+    $('#barcode').val('');
+    $('#barcode_hidden').val('');
+}
+
+function verificarBarcode(){
+
+	objAH               = new AjaxHelper(updateVerificarBarcode);
+	objAH.debug         = true;
+    objAH.showOverlay   = true;
+	objAH.url=URL_PREFIX+"/cir/circulacionDB.pl";
+	objAH.id1           = id1;
+	objAH.id2           = id2;
+	objAH.tipoAccion    = "VERIFICAR_BARCODE";
+	//se envia la consulta
+	objAH.sendToServer();
+}
+
+function updateVerificarBarcode(responseText){
+	var Messages    = JSONstring.toObject(responseText);
+	setMessages(Messages);
+}
+
+
+function obtenerTiposDePrestamos(){
+
+	objAH               = new AjaxHelper(updateObtenerTiposDePrestamos);
+	objAH.debug         = true;
+    objAH.showOverlay   = true;
+//     objAH.cache         = true;
+	objAH.url=URL_PREFIX+"/circ/circulacionDB.pl";
+	objAH.nro_socio     = NRO_SOCIO_AUTH;
+	objAH.barcode       = $('#barcode_hidden').val();
+	objAH.tipoAccion    = "CIRCULACION_RAPIDA_OBTENER_TIPOS_DE_PRESTAMO";
+	//se envia la consulta
+	objAH.sendToServer();
+}
+
+function obtenerDatosDelEjemplar(){
+    var barcode         = $('#barcode_hidden').val();
+
+    if(($('#operacion').val() == 'devolver')||($('#operacion').val() == 'renovar')){
+        barcode = $('#barcodePrestado').val();
+    }
+
+    objAH               = new AjaxHelper(updateObtenerDatosDelEjemplar);
+    objAH.debug         = true;
+    objAH.showOverlay   = true;
+//     objAH.cache         = true;
+    objAH.url=URL_PREFIX+"/circ/circulacionDB.pl";
+    objAH.barcode       = barcode;
+    objAH.tipoAccion    = "CIRCULACION_RAPIDA_OBTENER_DATOS_EJEMPLAR";
+    //se envia la consulta
+    objAH.sendToServer();
+}
+
+function updateObtenerDatosDelEjemplar(responseText){
+    $('#datos_ejemplar').html(responseText);
+    $('#datos_ejemplar').show();
+    if (responseText == ""){
+    	alert ('[% "Hubo un problema con el ejemplar" | i18n %]');
+    }
+}
+
+function updateObtenerTiposDePrestamos(responseText){
+	var infoHash                    = JSONstring.toObject(responseText);
+	var tipoPrestamo_array_hash_ref = infoHash.tipoPrestamo;
+	var tieneSancion                = infoHash.tieneSancion;
+
+    var comboTipoPrestamo_html      = crearComboDeItems(tipoPrestamo_array_hash_ref, 'comboTipoPrestamo');
+    
+    //dependiendo si tiene sanciones o no, mostramos el combo de prestamos o un mensaje
+    $('#cambo_tipo_prestamo').show();
+    
+    if(( tieneSancion != 0 ) &&( tipoPrestamo_array_hash_ref.length == 0 )){
+        $('#spanComboTipoPrestamo').html("<div class='alert alert-danger'>[% 'El usuario tiene una sanci&oacute;n del sistema. No puede realizar ning&uacute;n tipo de pr&eacute;stamo para este ejemplar' | i18n %].</div>");
+        $('#cambo_tipo_prestamo label').fadeOut(0);
+        $('#acciones').hide();
+    }else{
+        $('#spanComboTipoPrestamo').html(comboTipoPrestamo_html);
+        $('#cambo_tipo_prestamo label').fadeIn(0);
+        mostrarBotonAceptar();
+    }
+}
+
+function realizarAccionCircRapida(){
+	
+	
+    objAH                       = new AjaxHelper(updateRealizarAccion);
+    objAH.debug                 = true;
+    objAH.showOverlay           = true;
+    objAH.url=URL_PREFIX+"/circ/circulacionDB.pl";
+    objAH.nro_socio             = $('#nro_socio_hidden').val();
+    objAH.adicional_selected    = $('#auth_selected').is(':checked'); 
+    objAH.barcode               = $('#barcode_hidden').val();
+
+	
+	
+
+    if(($('#operacion').val() == 'devolver')||($('#operacion').val() == 'renovar')){
+        var prestamos_array = new Array();
+// 		prestamos_array     = prestamos_array.push($('#barcode_hidden').val());
+        prestamos_array.push($('#barcode_hidden').val());
+        objAH.datosArray    = prestamos_array;
+    }
+
+    objAH.operacion         = $('#operacion').val();
+    objAH.tipoPrestamo      = $('#comboTipoPrestamo').val();
+    objAH.tipoAccion        = "CIRCULACION_RAPIDA";
+    //se envia la consulta
+    objAH.sendToServer();
+}
+
+function updateRealizarAccion(responseText){
+	if((objAH.operacion == 'prestar')||(objAH.operacion == 'renovar')){
+		var infoHash        = JSONstring.toObject(responseText);
+		var messageArray    = infoHash.messages;
+		var ticketsArray    = infoHash.tickets;
+		var mensajes        = '';
+        var hayError=0;
+
+    
+        for(i=0; i<messageArray.length;i++){
+            if (setMessages(messageArray[i]))
+            	hayError = 1;
+        }
+     
+        if (!hayError){
+              imprimirTicket(ticketsArray);
+        }
+
+
+		//borro la cache del autocomplete
+		$('#barcode').flushCache();
+	}else{
+		var Messages        = JSONstring.toObject(responseText);
+		setMessages(Messages);
+		//borro la cache del autocomplete
+		$('#barcodePrestado').flushCache();
+	}
+    
+	//Limpio los datos del ejemplar
+    onChangeOperacion();
+    
+    detallePrestamos(NRO_SOCIO_AUTH, updateInfoPrestamos);
+    detalleSanciones(NRO_SOCIO_AUTH);
+	$('#operacion').focus();
+}
+
+function tieneApoderado(){
+	//fijo el nro_socio global para la ventana de agregarAutorizado
+	NRO_SOCIO_AUTH  = $('#nro_socio_hidden').val(); 
+	var nro_socio   = NRO_SOCIO_AUTH;
+	USUARIO         = new objeto_usuario();
+	USUARIO.text    = $('#usuarioAutocomplete').val();
+	USUARIO.ID      = nro_socio;
+
+	var objAH               = new AjaxHelper(updateTieneAutorizado);
+	objAH.debug             = true;
+    objAH.showOverlay       = true;
+//     objAH.cache             = true;
+	objAH.url=URL_PREFIX+"/circ/circulacionDB.pl";
+	objAH.nro_socio         = NRO_SOCIO_AUTH;
+	objAH.tipoAccion        = "CIRCULACION_RAPIDA_TIENE_AUTORIZADO";
+	//se envia la consulta
+	objAH.sendToServer();
+}
+
+function updateTieneAutorizado(responseText){
+    $('#datosAutorizado').html(responseText);
+	$('#aceptar').focus();
+	refreshTipoPrestamo();
+}
+
+function onChangeOperacion(){
+	var operacion = $('#operacion').val();
+//     $("#form_circulacion_rapida").autoAdvance();
+
+	if(operacion == 'prestar'){		
+	//busco sobre el conj. de todos los barcodes
+		$('#barcode').show();
+		$('#barcode').val('');
+		$('#barcode').focus();
+		$('#barcodePrestado').hide();
+		$('#spanComboTipoPrestamo').html("<select><option value='-1'>[% 'SIN SELECCIONAR' | i18n %]</option></select>");
+		$('#spanComboTipoPrestamo').show();
+        $('#cambo_tipo_prestamo').show();
+		$('#tablaPrestamos').hide();
+		mostrarBotonAceptar();
+
+	}else if( (operacion == 'devolver') || (operacion == 'renovar') ){
+	//busco sobre el conj. de los barcodes prestados
+		$('#barcode').hide();
+		$('#barcodePrestado').show();
+		$('#barcodePrestado').val('');
+		$('#barcodePrestado').focus();
+        $('#cambo_tipo_prestamo').hide();
+		$('#spanComboTipoPrestamo').hide();
+		$('#tablaPrestamos').show();
+		$('#acciones').hide();
+    
+		
+
+		if( $('#usuario').val() !='' ){
+			//se va a devolver algo, se muestra la info de los prestamos del usuario
+			detallePrestamos(NRO_SOCIO_AUTH, updateInfoPrestamos);
+            detalleSanciones(NRO_SOCIO_AUTH);
+		}
+	}
+    
+    $('#datos_ejemplar').hide();
+    
+}
+
+function updateAutocompleteBarcodes(){
+	refreshTipoPrestamo();
+    obtenerDatosDelEjemplar();
+    $('#usuario').focus();
+}
+
+function updateAutocompleteBarcodesPrestados(){
+	mostrarBotonAceptar();
+    obtenerDatosDelEjemplar();
+}
+
+function refreshTipoPrestamo(){
+	if( ($('#usuario').val() != '')&&($('#barcode').val() != '')){
+		obtenerTiposDePrestamos();
+	}
+}
+
+function mostrarBotonAceptar(){
+	//si se va a devolver y tengo el barcode, muetro el boton para devolver
+	if( ($('#operacion').val() == 'devolver' || $('#operacion').val() == 'renovar') && $('#barcodeprestado').val() != '' ){
+		$('#acciones').show();
+        $('#cambo_tipo_prestamo').hide();
+	}
+
+	if( $('#operacion').val() == 'prestar' && $('#barcode').val() != '' && $('#usuario').val() != '' && $('#comboTipoPrestamo').val() != '' ){
+		$('#acciones').show();
+        $('#cambo_tipo_prestamo').show();
+	}
+}
+
+
+function onCompleteUsuarios(){
+	tieneApoderado();
+    detalleUsuario(NRO_SOCIO_AUTH);
+//     $("input[name='usuario']").moveNext(); //para evitar q se llame otra vez al autocomplete
+	if (($('#operacion').val() == 'devolver') || ($('#operacion').val() == 'renovar')) {
+	//se va a devolver algo, se muestra la info de los prestamos del usuario
+// 		detallePrestamos(NRO_SOCIO_AUTH, updateInfoPrestamos);
+		
+	}else if($('#operacion').val() == 'prestar'){
+// 		esRegular(NRO_SOCIO_AUTH);
+	}
+
+    detallePrestamos(NRO_SOCIO_AUTH, updateInfoPrestamos);
+    detalleSanciones(NRO_SOCIO_AUTH);
+    startOverlay();
+}
+
+// FIXME croe q no lo vamos a usar mas, el resultado del autocomplete trae la info del usuario y si es REGULAR o NO
+function esRegular(NRO_SOCIO_AUTH){
+	objAH                   = new AjaxHelper(updateEsRegular);
+	objAH.debug             = true;
+    objAH.showOverlay       = true;
+	objAH.url=URL_PREFIX+"/circ/circulacionDB.pl";
+	objAH.nro_socio         = NRO_SOCIO_AUTH;
+	objAH.tipoAccion        = "CIRCULACION_RAPIDA_ES_REGULAR";
+	//se envia la consulta
+	objAH.sendToServer();
+}
+
+// FIXME croe q no lo vamos a usar mas, el resultado del autocomplete trae la info del usuario y si es REGULAR o NO
+function updateEsRegular(responseText){
+    var esRegular= "REGULAR";
+
+    if(responseText == '0'){
+        esRegular= "IRREGULAR";
+    }
+
+    $('#estadoUsuario').html(esRegular);
+}
+
+function updateInfoDevolver(responseText){
+	cancelarDiv();
+
+	var infoHash        = JSONstring.toObject(responseText);
+	var messageArray    = infoHash.Messages_arrayref;
+	setMessages(messageArray);
+    init_barcode();    
+
+	detallePrestamos(USUARIO.ID,updateInfoPrestamos);
+    detalleSanciones(USUARIO.ID);
+}
+
+$(document).ready(function() {
+   
+	CrearAutocompleteUsuarios({	
+                                                IdInput: 'usuario', 
+								                IdInputHidden: 'nro_socio_hidden', 
+								                callBackFunction: onCompleteUsuarios,
+				             });
+
+	CrearAutocompleteBarcodes({	
+                                IdInput: 'barcode', 
+								IdInputHidden: 'barcode_hidden', 
+								callBackFunction: updateAutocompleteBarcodes
+						});
+
+	CrearAutocompleteBarcodesPrestados({	
+                                            IdInput: 'barcodePrestado', 
+											IdInputHidden: 'barcode_hidden', 
+											callBackFunction: updateAutocompleteBarcodesPrestados
+									});
+
+	onChangeOperacion();
+	
+	$('#acciones').hide();
+    $('#cambo_tipo_prestamo').hide();
+	$('#divAutorizado').hide();
+	$('#divAgregarAutorizado').hide();
+   
+
+});
+
+</script>
+
+<div id="confirmar_div" ></div>
+<section class="center-section-form"> 
+	<form id="form_circulacion_rapida" class="classform form-horizontal" onsubmit="return false;">
+		<fieldset>
+		    <legend class="titulo_legend"><span class="titulos">[% 'Circulaci&oacute;n R&aacute;pida' | i18n %]</span></legend>
+
+		            <div class="control-group">
+		                  <label for="operacion" class="control-label">[% 'Operaci&oacute;n' | i18n %]</label>
+		                  <div class="controls">
+		                  <select id='operacion' tabindex='-1' onChange='onChangeOperacion()'>	
+		                      <option value="prestar">[% 'Pr&eacute;stamo' | i18n %]</option>
+		                      <option value="devolver">[% 'Devoluci&oacute;n' | i18n %]</option>
+		                      <option value="renovar">[% 'Renovaci&oacute;n' | i18n %]</option> 
+		                  </select>
+		                  </div>
+
+		            </div>
+
+			        <div id="divInfoEjemplar" class="control-group">
+			                <label for="barcode"  class="control-label">[% 'C&oacute;digo de Barras' | i18n %]
+			                 [% PERL %]
+			                     print C4::AR::Filtros::setHelpIcon( text => "[% 'Campo autocompletable, ingrese el nro. de inventario, por ej. DEO-LIB-0' | i18n %]",);
+			                 [% END %]
+			                </label>
+		                    <div class="controls">
+		                        <input type="text" id="barcode" name="barcode" value="" tabindex='1' style="display: none;" autofocus>
+		                        <input type='hidden' id='barcode_hidden' value='' tabindex='-1'>
+		                        <input type="text" id="barcodePrestado" value='' tabindex='2' style="display: none;">
+		                        <!-- para guardar el nro_socio del usuario al que se le realizo el prestamo -->
+		                        <input type='hidden' id='nro_socio_hidden' value='' tabindex='-1'>
+		                    </div>
+		            </div>
+
+		            <div id="datos_ejemplar"></div>
+		            <div id="divInfoUsuario" class="control-group" >
+		                <label for="usuario" class="control-label">[% 'Usuario' | i18n %]
+		                    [% PERL %]
+		                        print C4::AR::Filtros::setHelpIcon( text => "[% 'Campo autocompletable, b&uacute;squeda por nombre, apellido, nro. de documento, legajo, nro. socio' | i18n %]",);
+		                    [% END %]
+		                </label>
+		                <div class="controls">
+		                    <input type='text' id='usuario' name='usuario' value='' size=32 tabindex='3' style="float: left" onclick="clear_usuario();">
+		                    <div id="estadoUsuario"></div>
+		                    <input type='hidden' id='nro_socio_hidden' value='' tabindex='-1'>
+		                </div>
+		            </div>
+		                <div id="datosAutorizado"></div>
+		                <div id="detalleUsuario"></div>
+		            <div id="divInfoUsuario">
+		                  <div id="cambo_tipo_prestamo" class="control-group">
+		                      <label for="operacion">[% 'Tipo de Pr&eacute;stamo' | i18n %]</label>
+		                      <div class="controls">
+		                          <div id="spanComboTipoPrestamo"></div>
+		                      </div>
+		                  </div>
+		             
+		        <div class="form-actions" id="acciones">
+		        [% PERL %]
+		        
+		                            print C4::AR::Filtros::to_Button(     text    => "[% 'Cancelar' | i18n %]",
+		                                                                  id      => "cancelar",
+		                                                                  boton   => "btn",
+		                                                                  onClick => "",
+		                                                                  inline  => "1",
+		                                                                  title   => "[% 'cancelar operaci&oacute;n' | i18n %]",
+		                                    ) ;
+		
+		                            print C4::AR::Filtros::to_Button(     text    => "[% 'Aceptar' | i18n %]",
+		                                                                  id      => "aceptar",
+		                                                                  boton   => "btn btn-primary",
+		                                                                  onClick => "realizarAccionCircRapida();",
+		                                                                  inline  => "1",
+		                                                                  title   => "[% 'realizar operaci&oacute;n' | i18n %]",
+		                                    ) ;
+		        [% END %]
+		        </div>
+		</fieldset>
+    </form>
+	
+    <!-- DETALLE DE SANCIONES -->
+    <div id="sanciones"></div>
+	<!-- DETALLE DE PRESTAMOS -->
+	<div id="tablaPrestamos" style="clear: both;"></div>
+	<div class="ticket" id="ticket" ></div>
+</section>
+[% INCLUDE 'intranet-bottom.inc' %]

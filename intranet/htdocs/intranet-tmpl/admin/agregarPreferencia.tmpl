@@ -1,0 +1,30 @@
+[% USE HTML %]
+<p id="error" class="fontmsg"></p>
+<p>
+	<label for="variable" style="float: left; width:25%" >
+		[% "Variable" | i18n %]:
+	</label>
+		<input type="text" id="variable" size="60">
+</p>
+<p>
+	<label for="valor" style="float: left; width:25%" >
+		[% "Valor" | i18n %]:
+	</label>
+	[% valor %]
+
+</p>
+<p>
+	<label for="explicacion" style="float: left; width:25%" >
+		[% "Explicaci&oacute;n" | i18n %]:
+	</label>
+	<textarea id="explicacion" cols="58" rows="2"></textarea>
+</p>
+<p align="center">
+	<input type="image" 
+	src="[% themelang %]/images/guardar.png" 
+	ALT="Guardar" border="0" onClick="guardarNuevaVariable()" Title="Guardar Nueva Preferencia">
+</p>
+<p>
+[% "NOTA: Para las variables que representan una hora o minutos, solo ingresar la hora en numeros (hh:mm) o los minutos (mm). Ej: la variable close = 18:30, beginESissue = 60." | i18n %]
+</p>
+

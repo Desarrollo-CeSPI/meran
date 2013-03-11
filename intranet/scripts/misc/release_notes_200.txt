@@ -1,0 +1,73 @@
+RELEASE NOTES
+=============
+
+INSTALLATION
+
+* Download the package
+* tar xvfz koha-version.tar.gz
+* cd koha-version
+* ./installer.pl
+* Follow the instructions
+
+
+UPGRADE from previous 2.0.0preX or RCx version
+
+* Download the package
+* tar xvfz koha-version.tar.gz
+* cd koha-version
+* ./koha.upgrade
+* Follow the instructions
+
+
+UPGRADE from previous 1.2.x version
+Please take backups and be sure that you can go back to your previous version if needed.
+
+* Download the package
+* tar xvfz koha-version.tar.gz
+* cd koha-version
+* ./koha.upgrade
+* Follow the instructions
+* Open a browser to Koha
+* Go to Parameters >> Marc structure option and Koha-MARC links option.
+* Modify default MARC structure to fit your needs
+* Open a command-line on the koha server
+* Enter :
+cd /path/to/koha/misc
+export PERL5LIB=/path/to/koha/modules
+./koha2marc.pl
+This "copies" the old DB to the new MARC one.
+Now Koha 2.0.0 is ready for you to test.
+
+BUGS FIXED:
+major :
+* #662 : missed prepare(?) in supplier.pl
+* french only : fixed total cost calculation bug in order line (due to translation error)
+* #436 : circulation.pl partially templated
+* #679 : OPAC doesn't allow linking of subject headings
+* #763 : Location will not change
+* #761 : Breeding Farm (reservoir) can not handle 2 MARC records with the same ISBN
+* #727 : Cannot edit information attached to an order
+* z3950 client search : some bugfixes. Seems stable now, even when z3950 server dies or answer never arrives.
+
+minor :
+* isbnsearch now shows correctly the total number of books in DB
+* value_builder textarea dropped to 5 lines instead of 10
+* 20 values in authorised_value admin screen instead of only 5
+* opac, css template : inputs now in light blue, to see them better. Added 5px bottom margin & fixed a bug in IE.
+* fixed bad management of ' in supplier title
+* request link not shown if item is notforloan
+* branchcode field max size set to 4 in editor , as in the DB (was 3)
+* #719 : input box too short for Library name in syspreferences
+* new acquisition in  css opac now show more than 20 books.
+* scrollbar missing in z3950 result screen
+* deletion of a z3950 server does not work
+* user not limited to 80 char in MARC editor.
+* Recent acquisition show only last 20 acquisitions
+
+
+IMPROVEMENTS :
+FEATURES HERE ARE CONSIDERED AS "NEW". They work, but are for the 1st time in a public release.
+* printing the biblio is now possible from the item screen
+* POLISH translation (pl)
+* CHINESE translation (zh-TW)
+* Inventory / stock taking. Feature avaible in "reports" menu. Work if your callnumber if mapped to items.bulk field.

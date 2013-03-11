@@ -1,0 +1,7 @@
+ALTER TABLE `io_importacion_iso` CHANGE `cant_biblios` `cant_registros_n1` INT( 11 ) NOT NULL ,
+CHANGE `cant_biblioitems` `cant_registros_n2` INT( 11 ) NOT NULL ,
+CHANGE `cant_items` `cant_registros_n3` INT( 11 ) NOT NULL ;
+
+ALTER TABLE `io_importacion_iso_registro` CHANGE `biblionumber` `id1` INT( 11 ) NOT NULL ,
+CHANGE `biblioitemnumber` `id2` INT( 11 ) NOT NULL ,
+CHANGE `itemnumber` `id3` INT( 11 ) NOT NULL ;

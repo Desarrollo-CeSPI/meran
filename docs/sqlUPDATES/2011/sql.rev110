@@ -1,0 +1,5 @@
+UPDATE `rep_historial_circulacion` SET `tipo_operacion` = 'notificacion' WHERE `rep_historial_circulacion`.`tipo_operacion` = 'notification';
+UPDATE `rep_historial_circulacion` SET `tipo_operacion` = 'cancelacion' WHERE `rep_historial_circulacion`.`tipo_operacion` = 'cancelation';
+UPDATE `rep_historial_circulacion` SET `tipo_operacion` = 'renovacion' WHERE `rep_historial_circulacion`.`tipo_operacion` = 'renew';
+UPDATE `rep_historial_circulacion` SET `tipo_operacion` = 'devolucion' WHERE `rep_historial_circulacion`.`tipo_operacion` = 'return';
+UPDATE `rep_historial_circulacion` SET `tipo_operacion` = 'prestamo' WHERE `rep_historial_circulacion`.`tipo_operacion` = 'issue';

@@ -1,0 +1,2 @@
+ALTER TABLE `io_importacion_iso` ADD `campo_identificacion` VARCHAR( 255 ) NULL AFTER `fecha_import` ,
+ADD `campo_relacion` VARCHAR( 255 ) NULL AFTER `campo_identificacion` ;

@@ -1,0 +1,63 @@
+<script type="text/javascript">
+
+    $(document).ready(function() {
+        zebra('detalle_recom');         
+     });
+
+</script>
+
+<div id="detalle_recom" class="detalle_recom">
+  <fieldset id="datos_recomendacion">
+      <div class="contenedor_paginador">[% paginador %]</div>
+      <legend class="titulo_legend">[% "Detalle de Recomendacion" | i18n %]</legend>
+          <table id="tablaDetalleRecomendacion" name="tabla" class="datos_tabla" border=0 cellspacing=0 cellpadding=0 >
+          <thead>
+              <tr class="titulo_tabla_resultado">
+                  <!--<th>
+                      [% "Cat Nivel 2" | i18n %]
+                  </th>-->
+                  <th>
+                      [% "Autor" | i18n %]
+                  </th>
+                  <th>
+                      [% "Titulo" | i18n %]
+                  </th>
+                
+                  <th>
+                      [% "Editorial" | i18n %]
+                  </th>
+                  <th>
+                      [% "Acciones" | i18n %]
+                  </th>
+              </tr>
+             
+                 
+              
+          </thead>
+          <tbody> 
+          [% FOREACH recomendacion IN recomendaciones %]
+              <tr align="center">
+                <!--  <td align="right" >
+                      [% recomendacion.getId %]    
+                  </td>-->
+                  <td align="left" >
+                     [% recomendacion.getAutor %]
+                               
+                  </td>
+                  <td align="left" >
+                      [% recomendacion.getTitulo %]
+                  </td>
+                 
+                  <td align="left" >
+                      [% recomendacion.getEditorial %]
+                  </td>
+                  <td align="center" >
+                       <div style="font-weight:bold; cursor:pointer; color:#7E94AF;" onclick="detalleRecom([% recomendacion.getId %]);">Ver mas</div>
+                  </td>
+               </tr>
+      
+          [% END %]
+          </tbody>   
+          </table>
+</div>
+<div class="div_detalle_recom" id="div_detalle_recom"></div>

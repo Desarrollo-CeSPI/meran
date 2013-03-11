@@ -1,0 +1,634 @@
+[% INCLUDE "intranet-top.inc" %]
+
+[% INCLUDE  'AutocompleteHelper.inc'  %] 
+
+<!-- para manejar la ventana de campos MARC -->
+<script src="/intranet-tmpl/includes/popups/helpCamposMARC.js"></script>
+
+<script>
+var objAH;
+//Arreglos globales de objetos
+//arreglo de objetos campo
+CAMPOS_ARRAY        = new Array();
+//arreglo de objetos subcampo
+SUBCAMPOS_ARRAY     = new Array();
+
+function inicializar(){
+    //arreglo de objetos campo
+    CAMPOS_ARRAY        = new Array();
+    //arreglo de objetos subcampo
+    SUBCAMPOS_ARRAY     = new Array();
+    $("#resultAgregarCampo").html('');
+    $("#resultModificarCampo").html('');
+}
+
+function ordenar(orden){
+    objAH.sort(orden);
+}
+
+function changePage(ini){
+    objAH.changePage(ini);
+}
+
+/*
+ * Exporta la visualizacion a un XML
+*/
+function exportarCreacionCatalogo(){
+
+    bootbox.confirm(EXPORTACION_VISUALIZACION, function (ok){ 
+
+        if(ok){
+            $('#formExportarCreacionCatalogo').submit();
+        }
+
+    });
+}
+
+/*
+ * Importa la visualizacion desde un XML
+*/
+function showImportarCreacionCatalogo(){
+
+    $('#importarCreacionCatalogo').modal();
+}
+
+/*
+ * Hace el submit del form para importar
+*/
+function realizarImportacion(){
+
+    if ($('#fileImported').val() != "") {
+
+        $('#importarCreacionCatalogo').modal('hide');
+        startOverlay();
+        $('#formImportarVisualizacion').submit();
+
+    }
+}
+
+//Muestra lo catalogado seguen el nivel y el tipo de item seleccionado (nivel > 1)
+function eleccionDeNivel(){
+	var nivel           = $("#niveles_id").val();
+	var tipo_ejemplar   = $("#tipo_nivel3_id").val()
+
+	if(nivel == 'SIN SELECCIONAR'){
+        jAlert("Seleccione el nivel",CATALOGO_ALERT_TITLE);
+    } else if(tipo_ejemplar == 'SIN SELECCIONAR'){
+        jAlert(SELECCIONE_EL_ESQUEMA,CATALOGO_ALERT_TITLE);
+    } else {
+	
+        objAH               = new AjaxHelper(updateEleccionDeNivel);
+        objAH.debug         = true;
+        objAH.showOverlay   = true;
+        objAH.url           = URL_PREFIX+"/catalogacion/estructura/estructuraCataloDB.pl";
+        objAH.nivel         = nivel;
+        objAH.tipoAccion    = 'MOSTRAR_CAMPOS';
+        objAH.itemtype      = $('#tipo_nivel3_id').val();  
+
+        objAH.sendToServer();
+    }
+}
+
+function updateEleccionDeNivel(responseText){
+    inicializar();
+    $("#resultCatalogacion").html(responseText);
+    zebra("tabla_datos");
+}
+
+function visibilidad(id){
+    objAH               = new AjaxHelper(eleccionDeNivel);
+    objAH.debug         = true;
+    objAH.url           = URL_PREFIX+"/catalogacion/estructura/estructuraCataloDB.pl";
+    objAH.id            = id;
+    objAH.showOverlay   = true;
+    objAH.tipoAccion    = 'CAMBIAR_VISIBILIDAD';
+    objAH.sendToServer();
+}
+
+function edicionGrupal(id){
+    objAH               = new AjaxHelper(eleccionDeNivel);
+    objAH.debug         = true;
+    objAH.url           = URL_PREFIX+"/catalogacion/estructura/estructuraCataloDB.pl";
+    objAH.id            = id;
+    objAH.showOverlay   = true;
+    objAH.tipoAccion    = 'CAMBIAR_EDICION_GRUPAL';
+    objAH.sendToServer();
+}
+
+function habilitado(id){
+    objAH               = new AjaxHelper(eleccionDeNivel);
+    objAH.debug         = true;
+    objAH.showOverlay   = true;
+    objAH.url           = URL_PREFIX+"/catalogacion/estructura/estructuraCataloDB.pl";
+    objAH.id            = id;
+    objAH.tipoAccion    = 'CAMBIAR_HABILITADO';
+    objAH.sendToServer();
+}
+
+//Elimina el campo en la estructura inicial del catalogo
+function eliminarCampo(id){
+    bootbox.confirm(ESTA_SEGURO_QUE_DESEA_BORRARLO, function(confirmStatus){
+        if (confirmStatus){
+            objAH               = new AjaxHelper(eleccionDeNivel);
+            objAH.debug         = true;
+            objAH.showOverlay   = true;
+            objAH.url           = URL_PREFIX+"/catalogacion/estructura/estructuraCataloDB.pl";
+            objAH.id            = id;
+            objAH.tipoAccion    = 'ELIMINAR_CAMPO';
+            objAH.sendToServer();
+        }
+    });
+}
+
+function mostrarAgregarCampo(id){
+    objAH               = new AjaxHelper(updateMostrarAgregarCampo);
+    objAH.debug         = true;
+    objAH.showOverlay   = true;
+    objAH.url           = URL_PREFIX+"/catalogacion/estructura/estructuraCataloDB.pl";
+    objAH.tipoAccion    = "MOSTRAR_FORM_AGREGAR_CAMPOS";
+    objAH.sendToServer();
+}
+
+function updateMostrarAgregarCampo(responseText){
+    inicializar();
+    $("#resultAgregarCampo").html(responseText);
+    $("#resultAgregarCampo").modal();
+    enable_disableSelects();
+}
+
+
+function mostrarModificarCampo(id){
+    objAH               = new AjaxHelper(updateMostrarModificarCampo);
+    objAH.debug         = true;
+    objAH.showOverlay   = true;
+    objAH.url           = URL_PREFIX+"/catalogacion/estructura/estructuraCataloDB.pl";
+    objAH.tipoAccion    = "MOSTRAR_FORM_MODIFICAR_CAMPOS";
+    objAH.id            = id;
+    objAH.sendToServer();
+}
+
+function updateMostrarModificarCampo(responseText){
+    inicializar();
+    $("#resultModificarCampo").html(responseText);
+    $("#resultModificarCampo").modal();
+    scrollTo('resultModificarCampo');
+
+//     enable_disableSelects();
+    $("#campo").attr('disabled',true);
+    $("#subcampo").attr('disabled',true);
+    $("#tipoInput").removeAttr('disabled');
+    eleccionTablaRef();
+}
+
+function cancelarEstructuraCatalogacion(){
+    $("#resultAgregarCampo").modal('hide');
+    //y borrar variables, objetos y arrays
+    inicializar();
+}   
+
+function mostrarTablaRef(){
+    objAH               = new AjaxHelper(updateMostrarTablaRef);
+    objAH.debug         = true;
+    objAH.showOverlay   = true;
+    objAH.url           = URL_PREFIX+"/utils/utilsDB.pl";
+    objAH.tipoAccion    = "GENERAR_ARREGLO_TABLA_REF";
+    objAH.sendToServer();
+}
+
+function updateMostrarTablaRef(responseText){
+    var tablaRef_array=JSONstring.toObject(responseText);
+    //se inicializa el combo
+    $("#tablas_ref").html('');
+    var options = "<option value='-1'>Seleccionar Tabla Ref</option>";
+    
+    for (x=0;x < tablaRef_array.length;x++){
+            options+= "<option value=" + tablaRef_array[x] +" >" + tablaRef_array[x] + "</option>";
+    }
+    $("#tablas_ref").append(options);
+    enable_disableSelects();
+}
+
+/*
+ * eleccionCampoX
+ * Funcion que se ejecuta cuando se selecciona un valor del combo campoX (ej. 1xx), y hace un llamado a la 
+ * funcion que ejecuta el ajax, con los parametros correspondiente a la accion realizada.
+ */
+function eleccionCampoX(){
+    if ( $("#campoX").val() != -1){
+        objAH                   = new AjaxHelper(updateEleccionCampoX);
+		objAH.debug             = true;
+        objAH.showOverlay       = true;
+        objAH.url               = URL_PREFIX+"/catalogacion/estructura/estructuraCataloDB.pl";
+        objAH.campoX            = $('#campoX').val();
+        objAH.nivel             = $('#niveles_id').val();
+        objAH.tipoAccion        = "GENERAR_ARREGLO_CAMPOS";
+        objAH.sendToServer();
+    }
+    else
+        enable_disableSelects();
+
+}
+
+//se genera el combo en el cliente
+function updateEleccionCampoX(responseText){
+    //Arreglo de Objetos Global
+    var campos_array=JSONstring.toObject(responseText);
+    //se inicializa el combo
+    $("#campo").html('')
+    var options = "<option value='-1'>Seleccionar CampoX</option>";
+    
+    for (x=0;x < campos_array.length;x++){
+         CAMPOS_ARRAY[campos_array[x].campo]= $.trim(campos_array[x].liblibrarian);   
+         options+= "<option value=" + campos_array[x].campo +" >" + campos_array[x].campo + "</option>";
+    }
+    $("#campo").append(options);
+    //se agrega la info al combo
+    enable_disableSelects();
+
+}
+
+function eleccionCampo(){
+    if ($("#campo").val() != -1){
+        objAH               = new AjaxHelper(updateEleccionCampo);
+        objAH.debug         = true;
+        objAH.showOverlay   = true;
+        objAH.url           = URL_PREFIX+"/catalogacion/estructura/estructuraCataloDB.pl";
+        objAH.campo         = $('#campo').val();
+        objAH.nivel         = $('#niveles_id').val();
+        objAH.tipoAccion    = "GENERAR_ARREGLO_SUBCAMPOS";
+        objAH.sendToServer();
+    }
+    else
+        enable_disableSelects();
+
+}
+
+
+//se genera el combo en el cliente
+function updateEleccionCampo(responseText){
+    $('#nombre_campo').html(CAMPOS_ARRAY[$("#campo").val()]);
+    var subcampos_array = JSONstring.toObject(responseText);
+    //se inicializa el combo
+    $("#subcampo").html('');
+    var options = "<option value='-1'>SIN SELECCIONAR</option>";
+    
+    for (x=0;x < subcampos_array.length;x++){
+        var subcampo_string                             = $.trim(subcampos_array[x].subcampo)
+        var subcampo                                    = new Object;    
+        
+        subcampo.liblibrarian                           = '';
+        subcampo.obligatorio                            = '';
+        subcampo.liblibrarian                           = $.trim(subcampos_array[x].liblibrarian);
+        subcampo.obligatorio                            = $.trim(subcampos_array[x].obligatorio); 
+        
+        SUBCAMPOS_ARRAY[ subcampo_string ]  = subcampo;
+
+        options+= "<option value=" + subcampo_string +" >" + subcampo_string + "</option>";
+    }
+    //se agrega la info al combo
+    $("#subcampo").append(options);
+    enable_disableSelects();
+}
+
+
+function enable_disableSelects(){
+    $("#campo").removeAttr('disabled');
+    $("#subcampo").removeAttr('disabled');
+    $("#tablas_ref").removeAttr('disabled');
+    $("#tipoInput").removeAttr('disabled');
+    $("#divCamposRef").show();
+    if ( $('#campoX').val() == -1){
+         $("#campo").attr('disabled',true);
+         $("#subcampo").attr('disabled',true);
+         $("#tablas_ref").attr('disabled',true);
+         $("#tipoInput").attr('disabled',true);
+         $("#divCamposRef").hide();
+    }
+    else
+      if ( $('#campo').val() == -1){
+         $("#subcampo").attr('disabled',true);
+         $("#tablas_ref").attr('disabled',true);
+         $("#tipoInput").attr('disabled',true);
+         $("#divCamposRef").hide();
+      }
+    else
+       if ( $('#subcampo').val() == -1){
+         $("#tablas_ref").attr('disabled',true);
+         $("#tipoInput").attr('disabled',true);
+         $("#divCamposRef").hide();
+        }
+    else
+      if ( $('#tablas_ref').val() == -1){
+//          $("#tipoInput").attr('disabled',true);
+         $("#divCamposRef").hide();
+       }
+}
+
+//esta funcion genera el combo de los campos segun la tabla de referencia seleccionada
+function armarComboCampos(){
+
+    objAH               = new AjaxHelper(updateArmarComboCampos);
+    objAH.debug         = true;
+    objAH.showOverlay   = true;
+    objAH.url           = URL_PREFIX+"/catalogacion/estructura/estructuraCataloDB.pl";
+    objAH.tableAlias    = $('#tablas_ref').val();
+    objAH.tipoAccion    = "GENERAR_ARREGLO_CAMPOS_REFERENCIA";
+    objAH.sendToServer();
+}
+
+function updateArmarComboCampos(responseText){
+    //Arreglo de Objetos Global
+    var camposSelect_array=JSONstring.toObject(responseText);
+    //se inicializa el combo
+    $("#camposSelect").html(""); //orden
+    $("#camposRef").html("");   //campos tabla
+    var options = "";
+    var joinedFields = "";
+
+    for (x=0;x < camposSelect_array.length;x++){
+        if (x == (camposSelect_array.length-1) ) //SI ES EL FINAL
+         joinedFields+= camposSelect_array[x].key;
+        else
+         joinedFields+= camposSelect_array[x].key+", ";
+         options+= "<option value='" + camposSelect_array[x].key +"' selected='selected'>" + camposSelect_array[x].value + "</option>";
+    }
+
+    //se agrega la info al combo
+    $("#camposSelect").append(options);
+	$("#camposRef").append(options);
+
+    $("#divCamposRef").show();
+    enable_disableSelects();
+}
+
+function eleccionTablaRef(){
+
+	if($('#tablas_ref').val() != '-1'){
+
+    	armarComboCampos();
+	}
+	
+	enable_disableSelects();
+}
+
+function eleccionSubCampo(){
+
+    if ($('#subcampo').val() != -1){
+        $('#liblibrarian').val(SUBCAMPOS_ARRAY[$('#subcampo').val()].liblibrarian);
+        if(SUBCAMPOS_ARRAY[$('#subcampo').val()].obligatorio == '1'){
+        //si es obligatorio, no se pude cambiar
+            $('#obligatorio_si')[0].checked = true;
+            $('#obligatorio_si').attr('disabled', true);
+            $('#obligatorio_no').attr('disabled', true);
+        } else {
+            $('#obligatorio_no')[0].checked = true;
+            $('#obligatorio_si').attr('disabled', false);
+            $('#obligatorio_no').attr('disabled', false);
+        }
+        mostrarTablaRef();
+    }
+    else 
+        enable_disableSelects();
+}
+
+
+function verificarCamposParaReferencia(){
+	var ok= true;
+	if($('#camposSelect').val() == '-1' || $('#camposRef').val() == '-1'){
+		jAlert(FALTA_PARAMETRO_PARA_REFERENCIA,CATALOGO_ALERT_TITLE);
+		ok= false;
+	}
+
+	return ok;
+}
+
+function comboSeleccionado(jQueryElem){
+  return (jQueryElem.val() != '-1');
+}
+
+function checkEstructuraCatalogacion(){
+
+    ok = true;
+    objAH.obligatorio = ($('#obligatorio_si')[0].checked)?1:0;
+
+    if (!isNaN(objAH.nivel)) {
+//       if (objAH.nivel == 1)
+//         objAH.itemtype= 'ALL';
+//       else
+        objAH.itemtype= $('#tipo_nivel3_id').val();
+
+      if (comboSeleccionado($('#campo')) && ok)
+        objAH.campo= $('#campo').val();
+      else
+        ok = false;
+
+      if (comboSeleccionado($('#subcampo')) && ok)
+        objAH.subcampo= $('#subcampo').val();
+      else
+        ok = false;
+
+      if (comboSeleccionado($('#subcampo')) && ok)
+        objAH.liblibrarian= $('#liblibrarian').val();
+      else
+        ok = false;
+
+      if (comboSeleccionado($('#tipoInput')) && ok)
+        objAH.tipoInput= $('#tipoInput').val();
+      else
+        ok = false;
+
+      if (comboSeleccionado($('#combo_validate')) && ok)
+        objAH.combo_validate= $('#combo_validate').val();
+      else
+        ok = false;
+
+      if (comboSeleccionado($('#tablas_ref')) && ok)
+        objAH.tabla= $('#tablas_ref').val();
+          
+      if (comboSeleccionado($('#tipoInput'))){
+          if ( ($('#tipoInput').val() == "auto") || ($('#tipoInput').val() == "combo") ){
+            if (comboSeleccionado($('#tablas_ref'))){
+                objAH.referencia=1;
+                objAH.orden= $('#camposSelect').val();
+                objAH.campos= $('#camposRef').val();
+                objAH.separador= $('#separador').val();
+                ok= verificarCamposParaReferencia();
+            }else{
+                ok = false;
+                objAH.referencia=0;
+                jAlert(DEBE_SELECCIONAR_UNA_TABLA_DE_REFERENCIA,CATALOGO_ALERT_TITLE);
+            }
+          }
+      }
+    }else
+    {
+      ok = false;
+      jAlert("Debe seleccionar todos los campos requeridos",CATALOGO_ALERT_TITLE);
+    }
+    return (ok);
+}
+
+/*
+ * agregarEstructuraCatalogacion
+ */
+function agregarEstructuraCatalogacion(){ 
+	var ok              = true;
+
+    objAH               = new AjaxHelper(updateAgregarEstructuraCatalogacion);
+    objAH.debug         = true;
+    objAH.showOverlay   = true;
+    objAH.url           = URL_PREFIX+"/catalogacion/estructura/estructuraCataloDB.pl";
+    objAH.nivel         = $('#niveles_id').val();
+
+    ok                  = checkEstructuraCatalogacion();
+	if(ok){
+    	objAH.tipoAccion= "GUARDAR_ESTRUCTURA_CATALOGACION";
+    	$('#resultAgregarCampo').modal('hide');
+    	objAH.sendToServer();
+	}else{
+      jAlert(DEBE_SELECCIONAR_TODOS_LOS_CAMPOS_REQUERIDOS,CATALOGO_ALERT_TITLE);
+  }
+}
+
+function updateAgregarEstructuraCatalogacion(responseText){
+    var Messages=JSONstring.toObject(responseText);
+    setMessages(Messages);
+    if (! (hayError(Messages) ) ){
+        eleccionDeNivel();
+        inicializar();
+    }
+}
+
+
+/*
+ * modificarEstructuraCatalogacion
+ */
+function modificarEstructuraCatalogacion(id){ 
+    objAH                   = new AjaxHelper(updateModificarEstructuraCatalogacion);
+    objAH.debug             = true;
+    objAH.showOverlay       = true;
+    objAH.url               = URL_PREFIX+"/catalogacion/estructura/estructuraCataloDB.pl";
+    objAH.nivel             = $('#niveles_id').val();
+    objAH.id                = id;
+    objAH.obligatorio       = ($('#obligatorio_si')[0].checked)?1:0;
+    objAH.itemtype          = $('#tipo_nivel3_id_nuevo').val();
+    objAH.liblibrarian      = $('#liblibrarian').val();
+    objAH.tipoInput         = $('#tipoInput').val();
+    objAH.combo_validate    = $('#combo_validate').val();
+
+    if( ( $('#tablas_ref').val() != -1)&&($('#tablas_ref').val()) ){
+        objAH.referencia    = 1;
+        objAH.orden         = $('#camposSelect').val();
+        objAH.campos        = $('#camposRef').val();
+        objAH.separador     = $('#separador').val();
+        objAH.tabla         = $('#tablas_ref').val();
+    }else{
+         objAH.referencia   = 0;
+    }
+
+    objAH.tipoAccion        = "MODIFICAR_ESTRUCTURA_CATALOGACION";
+    $('#resultAgregarCampo').modal('hide');
+    objAH.sendToServer();
+}
+
+function updateModificarEstructuraCatalogacion(responseText){
+	$("#resultModificarCampo").modal('hide');
+    var Messages = JSONstring.toObject(responseText);
+    setMessages(Messages);
+    if (! (hayError(Messages) ) ){
+        eleccionDeNivel();
+        inicializar();
+    }
+}
+
+</script>
+
+[% PERL %]
+    print C4::AR::Filtros::ayuda_marc() ;
+[% END %]
+
+<div class="right">
+    <a class="btn btn-warning" onclick="exportarCreacionCatalogo()"><i class="icon-white icon-share"></i> Exportar</a>
+
+    <a class="btn btn-success" onclick="showImportarCreacionCatalogo()"><i class="icon-white icon-download-alt"></i> Importar</a>
+</div>
+
+<fieldset>
+    <legend>Configuraci&oacute;n del formulario de carga</legend>
+
+    <section class="center-section-form">
+    	<form class="form-horizontal">
+    		    <div class="control-group">
+    		        <label class="control-label" for="tipo_nivel3_id"> [% "Esquema" | i18n %]: </label>
+    		        <div class="controls">
+    		            [% selectItemType %]
+    		        </div>
+    		    </div>
+
+                <div class="control-group">
+                    <label class="control-label" for="niveles_id"> [% "Nivel" | i18n %]: </label>
+                    <div class="controls">
+                        [% selectNivel %]
+                    </div>
+                </div>
+                
+                <div class="form-actions">
+                        [% PERL %]
+                                print C4::AR::Filtros::action_button(   
+                                                                    button   => "btn btn-primary",
+                                                                    action  => "eleccionDeNivel();",
+                                                                    title   => "[% 'Buscar' | i18n %]",
+                                        ) ;
+                        [% END %]
+                </div>
+    	</form>
+    </section>
+</fieldset>
+
+<!-- PARA MOSTRAR TEMPLATE PARA MODIFICAR CAMPOS -->
+<div id="resultModificarCampo" class="modal hide fade"></div>
+<!-- PARA MOSTRAR TEMPLATE PARA AGREGAR CAMPOS -->
+<div id= "resultAgregarCampo" class="modal hide fade"></div>
+<!-- PARA MOSTRAR LO CATALOGADO -->
+<div id= "resultCatalogacion"></div>
+
+<div id="divFormExportarCreacionCatalogo" style="display:none;">
+    <form id="formExportarCreacionCatalogo" action="[% url_prefix %]/herramientas/exportacion/exportarCreacionCatalogo.pl" method="POST">
+    </form>
+</div>
+
+<div id="importarCreacionCatalogo" class="modal hide fade" >
+    <div class="modal-header">
+         <a href="#" class="close" data-dismiss="modal">×</a>
+        <h3>[% "Importar archivo de creaci&oacute;n de cat&aacute;logo" | i18n %]: </h3>
+    </div>
+
+    <div class="modal-body">
+        <form id="formImportarVisualizacion" class="form-horizontal" action="[% url_prefix %]/herramientas/importacion/importarCreacionCatalogo.pl" method="POST" enctype="multipart/form-data">
+            <div class="control-group">
+                <label class="control-label" for="campoX"> [% "Archivo" | i18n %]: </label>
+                <div class="controls">
+                    <input class="input-file" id="fileImported" name="fileImported" required type="file">
+                    <input type="hidden" id="tipoAccion" name="tipoAccion" value="IMPORT">
+                    <input type="hidden" id="context" name="context" value="opac">
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <div class="modal-footer">
+        [% PERL %]
+                print C4::AR::Filtros::to_Button(   text    => "[% 'Aceptar' | i18n %]",
+                                                    boton   => "btn btn-primary",
+                                                    onClick => "realizarImportacion()",
+                                                    title   => "[% 'Aceptar' | i18n %]",
+                                                    width => "auto",
+                                                    alternClass => "botonCentrado",
+                                                    inline => "1"
+                        ) ;
+        [% END %]
+
+    </div>
+</div>
+
+[% INCLUDE "intranet-bottom.inc" %]

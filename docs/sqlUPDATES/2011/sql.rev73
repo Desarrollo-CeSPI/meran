@@ -1,0 +1,11 @@
+ALTER TABLE `ref_disponibilidad` DROP PRIMARY KEY;
+ALTER TABLE `ref_disponibilidad` DROP `id`;
+ALTER TABLE `ref_disponibilidad` ADD PRIMARY KEY ( `codigo` );
+ALTER TABLE `ref_estado` ADD UNIQUE (`nombre`);
+
+ALTER TABLE `ref_estado` DROP INDEX `nombre_2`;
+ALTER TABLE `ref_estado` DROP INDEX `nombre`;
+ALTER TABLE `ref_estado` DROP PRIMARY KEY;
+ALTER TABLE `ref_estado` DROP `id`;
+ALTER TABLE `ref_estado` ADD PRIMARY KEY ( `codigo` );
+ALTER TABLE `ref_estado` ADD UNIQUE (`nombre`);

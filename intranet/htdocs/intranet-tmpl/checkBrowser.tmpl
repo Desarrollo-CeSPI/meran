@@ -1,0 +1,26 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <META HTTP-EQUIV="cache-control" content="public">  
+    <link rel="stylesheet" type="text/css" href="[% temas %]/[% user_theme_intra %]/includes/check_browser.css">
+    <title>Meran::UNLP - Navegador no Soportado</title>
+</head>
+<body>
+<div id="navegador_no_soportado">
+    <form action="[% url_prefix %]/checkBrowser.pl?[% token %]" method="post">
+        <h3>Navegador no Soportado</h3>
+        <p>Usted esta navegando <strong>MERAN</strong> con una version de navegador vieja.</p>
+        <p>Le recomendamos instale los siguientes navegadores:</p>
+        <a href="http://www.mozilla.com/es-AR/firefox/" target="_blank"><img alt="Firefox" src="[% temas %]/[% user_theme_intra %]/includes/images/firefox_logo.png" border="0"/></a>
+        <a href="http://www.opera.com/" target="_blank"><img alt="Opera" src="[% temas %]/[% user_theme_intra %]/includes/images/opera_logo.png" border="0"/></a>
+        <a href="http://www.google.com/Chrome" target="_blank"><img alt="Google Chrome" src="[% temas %]/[% user_theme_intra %]/includes/images/google_chrome_logo.png" border="0"/></a>
+        <a href="http://www.apple.com/es/safari/download/" target="_blank"><img alt="Safari" src="[% temas %]/[% user_theme_intra %]/includes/images/safari_logo.png" border="0"/></a>
+        <a href="http://windows.microsoft.com/es-XL/internet-explorer/downloads/ie" target="_blank"><img alt="Internet Explorer" src="[% temas %]/[% user_theme_intra %]/includes/images/internet_explorer_logo.png" border="0"/></a>
+        <input type="hidden" name="acepto_browser" value="1" />
+        <p>Si no quiere actualizar su navegador en este momento, puede continuar navegando MERAN.</p>
+        <p><input type="submit" value="[% 'Continuar hacia el cat&aacute;logo' | i18n %]" /></p>
+    </form>
+</div>
+</body>
+</html>

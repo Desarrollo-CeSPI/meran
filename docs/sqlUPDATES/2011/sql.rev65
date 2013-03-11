@@ -1,0 +1,4 @@
+DELETE FROM `pref_preferencia_sistema` 
+WHERE variable = "barcodeFormat";
+
+INSERT INTO pref_preferencia_sistema VALUES(NULL,"barcodeFormat","UI,-,tipo_ejemplar,-","Formato del Barcode para la generacióutomáca es un campo de item seguido de un separador",NULL, "text", "catalogo");

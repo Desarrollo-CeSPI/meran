@@ -1,0 +1,7 @@
+alter table circ_prestamo engine= innodb;
+alter table circ_reserva engine= innodb;
+alter table circ_sancion engine= innodb;
+alter table rep_registro_modificacion engine= innodb;
+alter table rep_historial_sancion engine= innodb;
+alter table rep_historial_prestamo engine= innodb;
+alter table rep_historial_circulacion engine= innodb;

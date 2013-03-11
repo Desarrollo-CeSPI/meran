@@ -1,0 +1,43 @@
+CREATE  TABLE `ref_signatura` (
+  `id` INT NOT NULL AUTO_INCREMENT ,
+  `signatura` VARCHAR(255) NULL ,
+  `descripcion` VARCHAR(255) NULL ,
+  PRIMARY KEY (`id`) ,
+  UNIQUE INDEX `signatura_UNIQUE` (`signatura` ASC) )
+ENGINE = MyISAM
+DEFAULT CHARACTER SET = utf8
+COLLATE = utf8_general_ci;
+
+
+CREATE  TABLE `ref_acm` (
+  `id` INT NOT NULL AUTO_INCREMENT ,
+  `codigo` VARCHAR(45) NULL ,
+  `descripcion` VARCHAR(255) NULL ,
+  PRIMARY KEY (`id`) ,
+  UNIQUE INDEX `codigo_UNIQUE` (`codigo` ASC) )
+ENGINE = MyISAM
+DEFAULT CHARACTER SET = utf8
+COLLATE = utf8_general_ci;
+
+
+INSERT INTO `pref_tabla_referencia` (
+`id` ,
+`nombre_tabla` ,
+`alias_tabla` ,
+`campo_busqueda` ,
+`client_title`
+)
+VALUES (
+NULL ,  'ref_signatura',  'signatura',  'signatura',  'Signatura Topográfica'
+), (
+NULL ,  'ref_acm',  'cdu',  'codigo',  'Códigos CDU'
+);
+
+
+INSERT INTO `pref_tabla_referencia_conf` (`id`, `tabla`, `campo`, `campo_alias`, `visible`) 
+VALUES (NULL, 'ref_acm', 'codigo', 'Código CDU', '1'), 
+(NULL, 'ref_signatura', 'signatura', 'Signatura topográfica', '1');
+
+INSERT INTO `pref_tabla_referencia_conf` (`id`, `tabla`, `campo`, `campo_alias`, `visible`) 
+VALUES (NULL, 'ref_acm', 'id', 'id', '0'), 
+(NULL, 'ref_signatura', 'id', 'id', '0');

@@ -1,0 +1,103 @@
+[% INCLUDE "intranet-top.inc" %]
+
+<script type="text/javascript">
+    
+    function agregar_servidor() {
+        objAH               = new AjaxHelper(update_agregar_servidor);
+        objAH.debug         = true;
+        objAH.url           = URL_PREFIX+"/admin/global/sys_externos_meranDB.pl";
+        objAH.showOverlay   = true;
+        objAH.tipoAccion    = "MOSTRAR_AGREGAR_SERVIDOR";
+        objAH.sendToServer();
+    }
+    
+    function update_agregar_servidor(responseText) { 
+        $('#listado_servidores').fadeOut(function(){
+            $('#agregar_servidor').html(responseText);
+            $('#end_top').fadeOut();
+        });
+    }
+
+    function mostrar_listado() {
+        $('#listado_servidores').fadeIn();
+        $('#agregar_servidor').html('');
+    }
+
+    function eliminar_servidor(id_server) {
+        objAH               = new AjaxHelper(update_eliminar_servidor);
+        objAH.debug         = true;
+        objAH.url           = URL_PREFIX+"/admin/global/sys_externos_meranDB.pl";
+        objAH.showOverlay   = true;
+        objAH.id_server     = id_server
+        objAH.tipoAccion    = "ELIMINAR_SERVIDOR";
+        objAH.sendToServer();
+    }
+
+    function update_eliminar_servidor() {
+        location.reload();
+    }
+</script>
+
+<div id="listado_servidores">
+    <fieldset>
+        <legend> [% "Listado de servidores" | i18n %]</legend>
+
+            [% IF sys_externos_meran_count %]
+        
+                [% PERL %]
+                    print C4::AR::Filtros::tableHeader(   
+                                      id              => "sys_externos_meran",
+                                      class           => "",
+                                      selectAll_id    => "",
+                                      columns         => ['[% "URL"|i18n %]','[% "Unidad de informaci&oacute;n"|i18n %]',
+                                                         '[% "Acciones"|i18n %]'
+                                                         ]
+
+                                                                        
+                                            ) ;
+                [% END %]
+
+                <tbody>
+                    [% FOREACH sys_externo_meran IN sys_externos_meran %]
+                        <tr id="[% sys_externo_meran.id %]">
+                            <td>[% sys_externo_meran.getUrl %]</td>                       
+                            <td>[% sys_externo_meran.getId_ui %]</td>
+                            <td style="width:150px">
+                                [% PERL %]
+                                    print C4::AR::Filtros::action_set_button(    
+                                        title   => " [% 'Editar' | i18n %]",
+                                        button  => 'btn btn-primary',
+                                        url     => "[% url_prefix %]/admin/global/editar_sys_externo_meran.pl",
+                                        icon    => "icon-white icon-edit",
+                                        params  => ["id=[% sys_externo_meran.id %]"],
+                                        actions => [
+                                                       { title   => "Eliminar", 
+                                                        action  => 'eliminar_servidor("[% sys_externo_meran.id %]")', 
+                                                        icon    => "icon-remove",
+                                                       },
+                                                    ],
+                                            ) ;
+                                [% END %]
+                            </td>
+                        </tr>
+                    [% END %]
+                </tbody>
+            </table>
+
+            [% ELSE %]
+                <div class="alert alert-info">[% 'No hay nig&uacute;n servidor configurado' | i18n %]</div>
+            [% END %]
+    </fieldset>
+    <div class="form-actions">
+    [% PERL %]
+        print C4::AR::Filtros::to_Button(   text    => "[% 'Agregar servidor' | i18n %]",
+                                            boton   => "boton_buscar",
+                                            onClick => "agregar_servidor()",
+                                            title   => "[% 'Agregar servidor' | i18n %]"
+        ) ;
+    [% END %]
+    </div>
+</div>
+<div id="agregar_servidor"></div>
+
+[% INCLUDE "intranet-bottom.inc" %]

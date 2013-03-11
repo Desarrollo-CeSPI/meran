@@ -1,0 +1,2378 @@
+010 - LIBRARY OF CONGRESS CONTROL NUMBER (NR)
+   Indicators
+      First - Undefined
+         # - Undefined
+      Second - Undefined
+         # - Undefined
+   Subfield Codes
+      $a - LC control number (NR)
+      $z - Canceled/invalid LC control number (R)
+      $8 - Field link and sequence number (R)
+
+014 - LINK TO BIBLIOGRAPHIC RECORD FOR SERIAL OR MULTIPART ITEM (R)
+   Indicators
+      First - Undefined
+         # - Undefined
+      Second - Undefined
+         # -Undefined
+   Subfield Codes
+      $a - Control number of related bibliographic record (NR)
+      $6 - Linkage (NR)
+      $8 - Field link and sequence number (R)
+
+016 - NATIONAL BIBLIOGRAPHIC AGENCY CONTROL NUMBER (R)
+   Indicators
+      First - National bibliographic agency
+         # - Library and Archives Canada
+         7 - Agency identified in subfield $2
+      Second - Undefined
+         # - Undefined
+   Subfield Codes
+      $a - Record control number (NR)
+      $z - Canceled/invalid record control number (R)
+      $2 - Source (NR)
+      $8 - Field link and sequence number (R)   
+
+020 - INTERNATIONAL STANDARD BOOK NUMBER (R)
+   Indicators
+      First - Undefined
+         # - Undefined
+      Second - Undefined
+         # - Undefined
+   Subfield Codes
+      $a - International Standard Book Number (NR)
+      $c - Terms of availability (NR)
+      $z - Canceled/invalid ISBN (R)
+      $6 - Linkage (NR)
+      $8 - Field link and sequence number (R)
+
+022 - INTERNATIONAL STANDARD SERIAL NUMBER (R)
+   Indicators
+      First - Undefined
+         # - Undefined
+      Second - Undefined
+         # - Undefined
+   Subfield Codes
+      $a - International Standard Serial Number (NR)
+      $l - ISSN-L (NR)
+      $m - Canceled ISSN-L (R)
+      $y - Incorrect ISSN (R)
+      $z - Canceled ISSN (R)
+      $6 - Linkage (NR)
+      $8 - Field link and sequence number (R)
+
+024 - OTHER STANDARD IDENTIFIER (R) 
+   Indicators   
+      First - Type of standard number or code
+         7 - Source specified in subfield $2
+         8 - Unspecified type of standard number or code
+      Second - Undefined
+         # - Undefined 
+   Subfield Codes
+      $a - Standard number or code (NR)
+      $c - Terms of availability (NR)
+      $d - Additional codes following the standard number or code (NR)
+      $z - Canceled/invalid standard number or code (R)
+      $2 - Source of number or code (NR)
+      $6 - Linkage (NR)
+      $8 - Field link and sequence number (R)
+
+031 - MUSICAL INCIPITS INFORMATION (R) 
+   Indicators
+      First - Undefined
+         # - Undefined
+      Second - Undefined
+         # - Undefined
+   Subfield Codes
+      $a - Number of work (NR)
+      $b - Number of movement (NR)
+      $c - Number of excerpt (NR)
+      $d - Caption or heading (R)
+      $e - Role  (NR)
+      $g - Clef  (NR)
+      $m - Voice/instrument (NR)
+      $n - Key signature (NR)
+      $o - Time signature (NR)
+      $p - Musical notation (NR)
+      $q - General note (R)
+      $r - Key or mode (NR)
+      $s - Coded validity note (R)
+      $t - Text incipit (R)
+      $u - Uniform Resource Identifier (R)
+      $y - Link text (R)
+      $z - Public note (R)
+      $2 - System code (NR)
+      $6 - Linkage (NR)
+      $8 - Field link and sequence number (R)
+
+034 - CODED CARTOGRAPHIC MATHEMATICAL DATA  (R)
+   Indicators
+      First - Undefined
+         # - Undefined
+      Second - Type of ring
+         # - Not applicable
+         0 - Outer ring
+         1 - Exclusion ring
+   Subfield Codes
+      $d - Coordinates - westernmost longitude (NR)
+      $e - Coordinates - easternmost longitude (NR)
+      $f - Coordinates - northernmost latitude (NR)
+      $g - Coordinates - southernmost latitude (NR)
+      $j - Declination - northern limit (NR)
+      $k - Declination - southern limit (NR)
+      $m - Right ascension - eastern limit (NR)
+      $n - Right ascension - western limit  (NR)
+      $p - Equinox  (NR)
+      $r - Distance from earth  (R)
+      $s - G-ring latitude (R)
+      $t - G-ring longitude (R)
+      $x - Beginning date  (NR)
+      $y - Ending date (NR)
+      $z - Name of extraterrestrial body  (NR)
+      $2 - Source  (NR)
+      $6 - Linkage (NR)
+      $8 - Field link and sequence number (R)
+
+035 - SYSTEM CONTROL NUMBER  (R)
+   Indicators
+      First - Undefined
+         # - Undefined
+      Second - Undefined
+         # - Undefined
+   Subfield Codes
+      $a - System control number (NR)
+      $z - Canceled/invalid system control number (R)
+      $6 - Linkage (NR)
+      $8 - Field link and sequence number (R)
+
+040 - CATALOGING SOURCE (NR)
+   Indicators
+      First - Undefined
+         # - Undefined
+      Second - Undefined
+         # - Undefined
+   Subfield Codes
+      $a - Original cataloging agency (NR)
+      $b - Language of cataloging (NR)
+      $c - Transcribing agency (NR)
+      $d - Modifying agency (R)
+      $e - Description conventions (NR)
+      $f - Subject heading or thesaurus conventions (NR)
+      $6 - Linkage (NR)
+      $8 - Field link and sequence number (R)
+
+042 - AUTHENTICATION CODE  (NR)
+   Indicators
+      First - Undefined
+         # - Undefined
+      Second - Undefined
+         # - Undefined
+   Subfield Code
+      $a - Authentication code (R)
+         sanb - South African National Bibliography Project
+
+043 - GEOGRAPHIC AREA CODE (NR)
+   Indicators
+      First - Undefined
+         # - Undefined
+      Second - Undefined
+         # - Undefined
+   Subfield Codes
+      $a - Geographic area code (R)
+      $b - Local GAC code (R)
+      $c - ISO code (R)
+      $2 - Source of local code (R)
+      $6 - Linkage (NR)
+      $8 - Field link and sequence number (R)
+      
+045 - TIME PERIOD OF HEADING (NR)
+   Indicators
+      First - Type of time period in subfield $b or $c
+         # - Subfield $b or $c not present
+         0 - Single date/time
+         1 - Multiple single dates/times
+         2 - Range of dates/times
+      Second - Undefined
+         # - Undefined
+   Subfield Codes
+      $a - Time period code (R)
+      $b - Formatted 9999 B.C. through C.E. time period (R)
+      $c - Formatted pre-9999 B.C. time period (R)
+      $6 - Linkage (NR)
+      $8 - Field link and sequence number (R)
+	  
+046 - SPECIAL CODED DATES (R)
+   Indicators
+       First - Undefined
+         # - Undefined
+      Second - Undefined
+         # - Undefined
+   Subfield Codes
+      $f - Birth date(NR) 
+      $g - Death date (NR)
+      $s - Start period (NR) 
+      $t - End period (NR)
+      $u - Uniform Resource Identifier (R)
+      $v - Source of information (R)
+      $2 - Source of date scheme (NR)
+      $6 - Linkage (NR)
+      $8 - Field link and sequence number (R)
+	  
+050 - LIBRARY OF CONGRESS CALL NUMBER  (R)
+    Indicators
+      First - Undefined
+         # - Undefined
+      Second - Source of call number
+         0 - Assigned by LC
+         4 - Assigned by agency other than LC
+   Subfield Codes
+      $a - Classification number (NR)
+      $b - Item number (NR)
+      $d - Volumes/dates to which call number applies (NR)
+      $5 - Institution to which field applies (R)
+      $6 - Linkage (NR)
+      $8 - Field link and sequence number (R)
+
+052 - GEOGRAPHIC CLASSIFICATION (R)
+   Indicators
+      First - Code source
+         # - Library of Congress Classification
+         0 - U.S. Dept. of Defense Classification [OBSOLETE]
+         1 - U.S. Dept. of Defense Classification
+         7 - Source specified in subfield $2
+      Second - Undefined
+         # - Undefined
+   Subfield Codes
+      $a - Geographic classification area code (NR)
+      $b - Geographic classification subarea code (R)
+      $d - Populated place name (R)
+      $2 - Code source (NR)
+      $6 - Linkage (NR)
+      $8 - Field link and sequence number (R)
+
+053 - LC CLASSIFICATION NUMBER (R)
+   Indicators
+      First - Undefined
+         # - Undefined
+      Second - Source of classification number
+         0 - Assigned by LC
+         4 - Assigned by agency other than LC
+   Subfield Codes
+      $a - Classification number element--single number or beginning number of span (NR)
+      $b - Classification number element--ending number of span (NR)
+      $c - Explanatory term (NR)
+      $5 - Institution to which field applies (R)
+      $6 - Linkage (NR)
+      $8 - Field link and sequence number (R)
+
+055 - LIBRARY AND ARCHIVES CANADA CALL NUMBER  (R)
+   Indicators
+      First - Undefined
+         # - Undefined
+      Second - Source of call number
+         0 - Assigned by LAC
+         4 - Assigned by agency other than LAC
+   Subfield Codes
+      $a - Classification number (NR)
+      $b - Item number (NR)
+      $d - Volumes/dates to which call number applies (NR)
+      $5 - Institution to which field applies (R)
+      $6 - Linkage (NR)
+      $8 - Field link and sequence number (R)
+
+060 - NATIONAL LIBRARY OF MEDICINE CALL NUMBER (R)
+   Indicators
+      First - Undefined
+         # - Undefined
+      Second - Source of call number
+         0 - Assigned by NLM
+         4 - Assigned by agency other than NLM
+   Subfield Codes
+      $a - Classification number (NR)
+      $b - Item number (NR)
+      $d - Volumes/dates to which call number applies (NR)
+      $5 - Institution to which field applies (R)
+      $6 - Linkage (NR)
+      $8 - Field link and sequence number (R)
+
+065 - OTHER CLASSIFICATION NUMBER (R)
+   Indicators
+       First - Undefined
+         # - Undefined
+      Second - Undefined
+         # - Undefined
+   Subfield Codes
+      $a - Classification number element-single number or beginning of span (NR) 
+      $b - Classification number element-ending number of span (NR)
+      $c - Explanatory term (NR) 
+      $2 - Number source (NR)
+      $5 - Institution to which field applies (R)
+      $6 - Linkage (NR)
+      $8 - Field link and sequence number (R)
+
+066 - CHARACTER SETS PRESENT (NR)
+   Indicators
+      First - Undefined
+         # - Undefined
+      Second - Undefined
+         # - Undefined
+   Subfield Codes
+      $a - Primary G0 character set (NR)
+      $b - Primary G1 character set (NR)
+      $c - Alternate G0 or G1 character set (R)
+
+070 - NATIONAL AGRICULTURAL LIBRARY CALL NUMBER (R)
+   Indicators
+      First - Undefined
+         # - Undefined
+      Second - Undefined
+         # - Undefined
+   Subfield Codes
+      $a - Classification number (NR)
+      $b - Item number (NR)
+      $d - Volume/dates to which call number applies (NR)
+      $6 - Linkage (NR)
+      $8 - Field link and sequence number (R)
+
+072 - SUBJECT CATEGORY CODE  (R)
+   Indicators
+      First - Undefined
+         # - Undefined
+      Second - Code source
+         # - No information provided
+         0 - NAL subject category code list
+         7 - Source specified in subfield $2
+   Subfield Codes
+      $a - Subject category code (NR)
+      $x - Subject category code subdivision (R)
+      $2 - Code source (NR)
+      $6 - Linkage (NR)
+      $8 - Field link and sequence number (R)
+
+ 073 - SUBDIVISION USAGE (NR)
+   Indicators
+      First - Undefined
+         # - Undefined
+      Second - Undefined
+         # - Undefined
+   Subfield Codes
+      $a - Subdivision usage (R)
+      $z - Code source (NR)
+      $6 - Linkage (NR)
+      $8 - Field link and sequence number (R)
+	  
+080 - UNIVERSAL DECIMAL CLASSIFICATION NUMBER (R)
+   Indicators
+      First - Type of edition
+         # - No information provided
+         0 - Full
+         1 - Abridged
+      Second - Undefined
+         # - Undefined
+   Subfield Codes
+      $a - Universal Decimal Classification number (NR)
+      $b - Item number (NR)
+      $x - Common auxiliary subdivision (R)
+      $2 - Edition identifier (NR)
+      $6 - Linkage (NR)
+      $8 - Field link and sequence number (R)  
+	  
+082 - DEWEY DECIMAL CALL NUMBER (R)
+   Indicators
+      First - Type of edition
+         0 - Full
+         1 - Abridged
+      Second - Source of call number
+         # - No information provided
+         0 - Assigned by LC
+         4 - Assigned by agency other than LC
+   Subfield Codes
+      $a - Classification number (NR)
+      $b - Item number (NR)
+      $d - Volumes/dates to which call number applies (NR)
+      $2 - Edition number (NR)
+      $5 - Institution to which field applies (R)
+      $6 - Linkage (NR)
+      $8 - Field link and sequence number (R)   
+
+083 - DEWEY DECIMAL CLASSIFICATION NUMBER (R)
+   Indicators
+      First - Type of edition
+         0 - Full
+         1 - Abridged
+      Second - Source of classification number
+         0 - Assigned by LC
+         4 - Assigned by agency other than LC
+   Subfield Codes
+      $a - Classification number element--single number or beginning number of span (NR)
+      $b - Classification number element--ending number of span (NR)
+      $c - Explanatory term (NR)
+      $y - Table sequence number for internal subarrangement or add table (R)
+      $z - Table identification--table number (NR)
+      $2 - Edition number (NR)
+      $5 - Institution to which field applies (R)
+      $6 - Linkage (NR)
+      $8 - Field link and sequence number (R)
+
+086 - GOVERNMENT DOCUMENT CALL NUMBER (R)
+   Indicators
+      First - Number source
+         # - Source specified in subfield $2
+         0 - Superintendent of Documents Classification System
+         1 - Government of Canada Publications: Outline of Classification
+      Second - Undefined
+         # - Undefined
+   Subfield Codes
+      $a - Call number (NR)
+      $d - Volumes/dates to which call number applies (NR)
+      $z - Canceled/invalid call number (NR)
+      $2 - Number source (NR)
+      $5 - Institution to which field applies (R)
+      $6 - Linkage (NR)
+      $8 - Field link and sequence number (R)
+
+087 - GOVERNMENT DOCUMENT CLASSIFICATION NUMBER (R)
+   Indicators
+      First - Number source
+         # - Source specified in subfield $2
+         0 - Superintendent of Documents Classification System
+         1 - Government of Canada Publications: Outline of Classification
+      Second - Undefined
+         # - Undefined
+   Subfield Codes
+      $a - Classification number element--Single number or beginning number of span (NR)
+      $b - Classification number element--Ending number of span (NR)
+      $c - Explanatory information (NR)
+      $2 - Number source (NR)
+      $6 - Linkage (NR)
+      $8 - Field link and sequence number (R)
+
+
+--09X - LOCAL CALL NUMBERS--
+090 - LOCAL CALL NUMBER (SERIES)[OBSOLETE]
+   Indicators
+      First - Undefined
+         # - Undefined
+      Second - Undefined
+         # - Undefined
+   Subfield Codes
+      $a - Classification number (NR)
+      $b - Item number (NR)
+      $d - Volume/dates to which call number applies (NR)
+
+
+--Heading Information Fields (1XX, 3XX)--
+HEADINGS--GENERAL INFORMATION 
+100 - HEADING--PERSONAL NAME(NR)
+   Indicators
+      First - Type of personal name entry element
+         0 - Forename
+         1 - Surname
+         1 - Single surname [OBSOLETE]
+         2 - Multiple surname [OBSOLETE]
+         3 - Family name
+      Second - Undefined
+         # - Undefined
+      Second - Nonfiling characters [OBSOLETE]
+         0-9 - Number of nonfiling characters present [OBSOLETE]
+   Subfield Codes
+      $a - Personal name (NR)
+      $b - Numeration (NR)
+      $c - Titles and other words associated with a name (R)
+      $d - Dates associated with a name (NR)
+      $e - Relator term (R)
+      $f - Date of a work (NR)
+      $g - Miscellaneous information (NR)
+      $h - Medium (NR)
+      $j - Attribution qualifier (R)
+      $k - Form subheading (R)
+      $l - Language of a work (NR)
+      $m - Medium of performance for music (R)
+      $n - Number of part/section of a work (R)
+      $o - Arranged statement for music (NR)
+      $p - Name of part/section of a work (R)
+      $q - Fuller form of name (NR)
+      $r - Key for music (NR)
+      $s - Version (NR)
+      $t - Title of a work (NR)
+      $v - Form subdivision (R)
+      $x - General subdivision (R)
+      $y - Chronological subdivision (R)
+      $z - Geographic subdivision (R)
+      $6 - Linkage (NR)
+      $8 - Field link and sequence number (R)
+
+110 - HEADING--CORPORATE NAME (NR)
+   Indicators
+      First - Type of corporate name entry element
+         0 - Inverted name
+         1 - Jurisdiction name
+         2 - Name in direct order
+      Second - Undefined
+         # - Undefined
+      Second - Nonfiling characters [OBSOLETE]
+         0-9 - Number of nonfiling characters present [OBSOLETE]
+   Subfield Codes
+      $a - Corporate name or jurisdiction name as entry element (NR)
+      $b - Subordinate unit (R)
+      $c - Location of meeting (NR)
+      $d - Date of meeting or treaty signing (R)
+      $e - Relator term (R)
+      $f - Date of a work (NR)
+      $g - Miscellaneous information (NR)
+      $h - Medium (NR)
+      $k - Form subheading (R)
+      $l - Language of a work (NR)
+      $m - Medium of performance for music (R)
+      $n - Number of part/section/meeting (R)
+      $o - Arranged statement for music (NR)
+      $p - Name of part/section of a work (R)
+      $r - Key for music (NR)
+      $s - Version (NR)
+      $t - Title of a work (NR)
+      $v - Form subdivision (R)
+      $x - General subdivision (R)
+      $y - Chronological subdivision (R)
+      $z - Geographic subdivision (R)
+      $6 - Linkage (NR)
+      $8 - Field link and sequence number (R)
+
+111 - HEADING--MEETING NAME(NR)
+   Indicators
+      First - Type of meeting name entry element
+         0 - Inverted name
+         1 - Jurisdiction name
+         2 - Name in direct order
+      Second - Undefined
+         # - Undefined
+      Second - Nonfiling characters [OBSOLETE]
+         0-9 - Number of nonfiling characters present [OBSOLETE]
+   Subfield Codes
+      $a - Meeting name or jurisdiction name as entry element (NR)
+      $b - Number (NR) [OBSOLETE]
+      $c - Location of meeting (NR)
+      $d - Date of meeting (NR)
+      $e - Subordinate unit (R)
+      $f - Date of a work (NR)
+      $g - Miscellaneous information (NR)
+      $h - Medium (NR)
+      $j - Relator term  (R)
+      $k - Form subheading (R)
+      $l - Language of a work (NR)
+      $n - Number of part/section/meeting (R)
+      $p - Name of part/section of a work (R)
+      $q - Name of meeting following jurisdiction name entry element (NR)
+      $s - Version (NR)
+      $t - Title of a work (NR)
+      $v - Form subdivision (R)
+      $x - General subdivision (R)
+      $y - Chronological subdivision (R)
+      $z - Geographic subdivision (R)
+      $6 - Linkage (NR)
+      $8 - Field link and sequence number (R)
+
+130 - HEADING--UNIFORM TITLE (NR)
+   Indicators
+      First - Undefined
+         # - Undefined
+      Nonfiling characters
+         0-9 - Number of nonfiling characters
+   Subfield Codes
+      $a - Uniform title (NR)
+      $d - Date of treaty signing (R)
+      $f - Date of a work (NR)
+      $g - Miscellaneous information (NR)
+      $h - Medium (NR)
+      $k - Form subheading (R)
+      $l - Language of a work (NR)
+      $m - Medium of performance for music (R)
+      $n - Number of part/section of a work (R)
+      $o - Arranged statement for music (NR)
+      $p - Name of part/section of a work (R)
+      $r - Key for music (NR)
+      $s - Version (NR)
+      $t - Title of a work (NR)
+      $v - Form subdivision (R)
+      $x - General subdivision (R)
+      $y - Chronological subdivision (R)
+      $z - Geographic subdivision (R)
+      $6 - Linkage (NR)
+      $8 - Field link and sequence number (R)
+
+148 - HEADING--CHRONOLOGICAL TERM (NR)
+   Indicators
+      First - Undefined
+         # - Undefined
+      Second - Undefined
+         # - Undefined
+   Subfield Codes
+      $a - Chronological term (NR)
+      $v - Form subdivision (R)
+      $x - General subdivision (R)
+      $y - Chronological subdivision (R)
+      $z - Geographic subdivision (R)
+      $6 - Linkage (NR)
+      $8 - Field link and sequence number (R)      
+
+150 - HEADING--TOPICAL TERM (NR)
+   Indicators
+      First - Undefined
+         # - Undefined
+      Second - Undefined
+         # - Undefined
+      Second - Nonfiling characters [OBSOLETE]
+         0-9 - Number of nonfiling characters present [OBSOLETE]
+   Subfield Codes
+      $a - Topical term or geographic name entry element (NR)
+      $b - Topical term following geographic name entry element (NR)
+      $v - Form subdivision (R)
+      $x - General subdivision (R)
+      $y - Chronological subdivision (R)
+      $z - Geographic subdivision (R)
+      $6 - Linkage (NR)
+      $8 - Field link and sequence number (R)   
+
+151 - HEADING--GEOGRAPHIC NAME (NR)
+   Indicators
+      First - Undefined
+         # - Undefined
+      Second - Undefined
+         # - Undefined
+      Second - Nonfiling characters [OBSOLETE]
+         0-9 - Number of nonfiling characters present [OBSOLETE]
+   Subfield Codes
+      $a - Geographic name (NR)
+      $b - Name following place as entry element (NR) [OBSOLETE]
+      $v - Form subdivision (R)
+      $x - General subdivision (R)
+      $y - Chronological subdivision (R)
+      $z - Geographic subdivision (R)
+      $6 - Linkage (NR)
+      $8 - Field link and sequence number (R)   
+
+155 - HEADING--GENRE/FORM TERM (NR)
+   Indicators
+      First - Undefined
+         # - Undefined
+      Second - Undefined
+         # - Undefined
+   Subfield Codes
+      $a - Genre/form term (NR)
+      $v - Form subdivision (R)
+      $x - General subdivision (R)
+      $y - Chronological subdivision (R)
+      $z - Geographic subdivision (R)
+      $6 - Linkage (NR)
+      $8 - Field link and sequence number (R)   
+
+180 - HEADING--GENERAL SUBDIVISION (NR)
+   Indicators
+      First - Undefined
+         # - Undefined
+      Second - Undefined
+         # - Undefined
+   Subfield Codes
+      $v - Form subdivision (R)
+      $x - General subdivision (R)
+      $y - Chronological subdivision (R)
+      $z - Geographic subdivision (R)
+      $6 - Linkage (NR)
+      $8 - Field link and sequence number (R)   
+
+181 - HEADING--GEOGRAPHIC SUBDIVISION (NR)
+   Indicators
+      First - Undefined
+         # - Undefined
+      Second - Undefined
+         # - Undefined
+   Subfield Codes
+      $v - Form subdivision (R)
+      $x - General subdivision (R)
+      $y - Chronological subdivision (R)
+      $z - Geographic subdivision (R)
+      $6 - Linkage (NR)
+      $8 - Field link and sequence number (R)   
+
+182 - HEADING--CHRONOLOGICAL SUBDIVISION (NR)
+   Indicators
+      First - Undefined
+         # - Undefined
+      Second - Undefined
+         # - Undefined
+   Subfield Codes
+      $v - Form subdivision (R)
+      $x - General subdivision (R)
+      $y - Chronological subdivision (R)
+      $z - Geographic subdivision (R)
+      $6 - Linkage (NR)
+      $8 - Field link and sequence number (R)
+	  
+185 - HEADING--FORM SUBDIVISION (NR)
+   Indicators
+      First - Undefined
+         # - Undefined
+      Second - Undefined
+         # - Undefined
+   Subfield Codes
+      $v - Form subdivision (R)
+      $x - General subdivision (R)
+      $y - Chronological subdivision (R)
+      $z - Geographic subdivision (R)
+      $6 - Linkage (NR)
+      $8 - Field link and sequence number (R)
+	  
+336 - CONTENT TYPE (R)
+   Indicators
+      First - Undefined
+         # - Undefined
+      Second - Undefined
+         # - Undefined
+   Subfield Codes
+      $a - Content type term (R)
+      $b - Content type code (R)
+      $2 - Source (NR)
+      $3 - Materials specified (NR)
+      $6 - Linkage (NR)
+      $8 - Field link and sequence number (R)
+	  
+370 - ASSOCIATED PLACE (R)
+   Indicators
+      First - Undefined
+         # - Undefined
+      Second - Undefined
+         # - Undefined
+   Subfield Codes
+      $a - Place of birth (NR)
+      $b - Place of death (NR)
+      $c - Associated country (R)
+      $e - Place of residence/headquarters (R)
+      $f - Other associated place (R)
+      $g - Place of origin of work (R)
+      $s - Start period (NR)
+      $t - End period (NR)
+      $u - Uniform Resource Identifier (R)
+      $0 - Record control number (R)
+      $2 - Source of term (R)
+      $6 - Linkage (NR)
+      $8 - Field link and sequence number (R)
+	  
+371 - ADDRESS (R)
+   Indicators
+      First - Undefined
+         # - Undefined
+      Second - Undefined
+         # - Undefined
+   Subfield Codes
+      $a - Address (R)
+      $b - City (NR)
+      $c - Intermediate jurisdiction (NR)
+      $d - Country (NR)
+      $e - Postal code (NR)
+      $m - Electronic mail address (R)
+      $s - Start period (NR)
+      $t - End period (NR)
+      $u - Uniform Resource Identifier (R)
+      $v - Source of information (R)
+      $z - Public note (R)
+      $4 - Relator code (R)
+      $6 - Linkage (NR)
+      $8 - Field link and sequence number (R)
+	  
+372 - FIELD OF ACTIVITY (R)
+   Indicators
+      First - Undefined
+         # - Undefined
+      Second - Undefined
+         # - Undefined
+   Subfield Codes
+      $a - Field of activity (R)
+      $s - Start period (NR)
+      $t - End period (NR)
+      $u - Uniform Resource Identifier (R)
+      $v - Source of information (R)
+      $0 - Record control number (R)
+      $2 - Source of term (NR)
+      $6 - Linkage (NR)
+      $8 - Field link and sequence number (R)
+	  
+373 - AFFILIATION (R)
+   Indicators
+      First - Undefined
+         # - Undefined
+      Second - Undefined
+         # - Undefined
+   Subfield Codes
+      $a - Affiliation (R)
+      $s - Start period (NR)
+      $t - End period (NR)
+      $u - Uniform Resource Identifier (R)
+      $v - Source of information (R)
+      $0 - Record control number (R)
+      $2 - Source of term (NR)
+      $6 - Linkage (NR)
+      $8 - Field link and sequence number (R)	
+	  
+374 - OCCUPATION (R)
+   Indicators
+      First - Undefined
+         # - Undefined
+      Second - Undefined
+         # - Undefined
+   Subfield Codes
+      $a - Occupation (R)
+      $s - Start period (NR)
+      $t - End period (NR)
+      $u - Uniform Resource Identifier (R)
+      $v - Source of information (R)
+      $0 - Record control number (R)
+      $2 - Source of term (NR)
+      $6 - Linkage (NR)
+      $8 - Field link and sequence number (R)
+	  
+375 - GENDER (R)
+   Indicators
+      First - Undefined
+         # - Undefined
+      Second - Undefined
+         # - Undefined
+   Subfield Codes
+      $a - Gender (R)
+      $s - Start period (NR)
+      $t - End period (NR)
+      $u - Uniform Resource Identifier (R)
+      $v - Source of information (R)
+      $2 - Source of term (NR)
+      $6 - Linkage (NR)
+      $8 - Field link and sequence number (R)
+	  
+376 - FAMILY INFORMATION (R)
+   Indicators
+      First - Undefined
+         # - Undefined
+      Second - Undefined
+         # - Undefined
+   Subfield Codes
+      $a - Type of family (R)
+      $b - Name of prominent member (R)
+      $c - Hereditary title (R)
+      $s - Start period (NR)
+      $t - End period (NR)
+      $u - Uniform Resource Identifier (R)
+      $v - Source of information (R)
+      $0 - Record control number (R)
+      $2 - Source of term (NR)
+      $6 - Linkage (NR)
+      $8 - Field link and sequence number (R)
+	  	  	  	    	  	  	  	  
+377 - ASSOCIATED LANGUAGE (R)
+   Indicators
+      First - Undefined
+         # - Undefined
+      Second - Source of code
+         # - MARC language code
+         7 - Source specified in $2
+   Subfield Codes
+      $a - Language code (R)
+      $2 - Source of term (NR)
+      $6 - Linkage (NR)
+      $8 - Field link and sequence number (R)
+
+
+--Complex Subject References (260, 360)--
+260 - COMPLEX SEE REFERENCE--SUBJECT (R)
+   Indicators
+      First - Undefined
+         # - Undefined
+      Second - Undefined
+         # - Undefined
+   Subfield Codes
+      $a - Heading referred to (R)
+      $i - Explanatory text (R)
+      $0 - Authority record control number (R)
+      $6 - Linkage (NR)
+      $8 - Field link and sequence number (R)
+
+360 - COMPLEX SEE ALSO REFERENCE--SUBJECT  (R)
+   Indicators
+      First - Undefined
+         # - Undefined
+      Second - Undefined
+         # - Undefined
+   Subfield Codes
+      $a - Heading referred to (R)
+      $i - Explanatory text (R)
+      $0 - Authority record control number (R)
+      $6 - Linkage (NR)
+      $8 - Field link and sequence number (R)
+
+
+--See From Tracing Fields (4XX)--
+400 - SEE FROM TRACING--PERSONAL NAME (R)
+   Indicators
+      First - Type of personal name entry element
+         0 - Forename
+         1 - Surname
+         1 - Single surname [OBSOLETE]
+         2 - Multiple surname [OBSOLETE]
+         3 - Family name
+      Second - Undefined
+         # - Undefined
+      Second - Nonfiling characters [OBSOLETE]
+         0-9 - Number of nonfiling characters present [OBSOLETE]
+   Subfield Codes
+      $a - Personal name (NR)
+      $b - Numeration (NR)
+      $c - Titles and other words associated with a name (R)
+      $d - Dates associated with a name (NR)
+      $e - Relator term (R)
+      $f - Date of a work (NR)
+      $g - Miscellaneous information (NR)
+      $h - Medium (NR)
+      $i - Relationship information (R)
+      $j - Attribution qualifier (R)
+      $k - Form subheading (R)
+      $l - Language of a work (NR)
+      $m - Medium of performance for music (R)
+      $n - Number of part/section of a work (R)
+      $o - Arranged statement for music (NR)
+      $p - Name of part/section of a work (R)
+      $q - Fuller form of name (NR)
+      $r - Key for music (NR)
+      $s - Version (NR)
+      $t - Title of a work (NR)
+      $v - Form subdivision (R)
+      $w - Control subfield (NR)
+         0 - Special relationship
+         1 - Tracing use restriction
+         2 - Earlier form of heading
+         3 - Reference display
+      $x - General subdivision (R)
+      $y - Chronological subdivision (R)
+      $z - Geographic subdivision (R)
+      $4 - Relationship code (R)
+      $5 - Institution to which field applies (R)
+      $6 - Linkage (NR)
+      $8 - Field link and sequence number (R)
+
+410 - SEE FROM TRACING--CORPORATE NAME (R)
+   Indicators
+      First - Type of corporate name entry element
+         0 - Inverted name
+         1 - Jurisdiction name
+         2 - Name in direct order
+      Second - Undefined
+         # - Undefined
+      Second - Nonfiling characters [OBSOLETE]
+         0-9 - Number of nonfiling characters present [OBSOLETE]
+   Subfield Codes
+      $a - Corporate name or jurisdiction name as entry element (NR)
+      $b - Subordinate unit (R)
+      $c - Location of meeting (NR)
+      $d - Date of meeting or treaty signing (R)
+      $e - Relator term (R)
+      $f - Date of a work (NR)
+      $g - Miscellaneous information (NR)
+      $h - Medium (NR)
+      $i - Relationship information (R)
+      $k - Form subheading (R)
+      $l - Language of a work (NR)
+      $m - Medium of performance for music (R)
+      $n - Number of part/section/meeting (R)
+      $o - Arranged statement for music (NR)
+      $p - Name of part/section of a work (R)
+      $r - Key for music (NR)
+      $s - Version (NR)
+      $t - Title of a work (NR)
+      $v - Form subdivision (R)
+      $w - Control subfield (NR)
+         0 - Special relationship
+         1 - Tracing use restriction
+         2 - Earlier form of heading
+         3 - Reference display
+      $x - General subdivision (R)
+      $y - Chronological subdivision (R)
+      $z - Geographic subdivision (R)
+      $4 - Relationship code (R)
+      $5 - Institution to which field applies (R)
+      $6 - Linkage (NR)
+      $8 - Field link and sequence number (R)
+
+411 - SEE FROM TRACING--MEETING NAME (R)
+   Indicators
+      First - Type of meeting name entry element
+         0 - Inverted name
+         1 - Jurisdiction name
+         2 - Name in direct order
+      Second - Undefined
+         # - Undefined
+      Second - Nonfiling characters [OBSOLETE]
+         0-9 - Number of nonfiling characters present [OBSOLETE]
+   Subfield Codes
+      $a - Meeting name or jurisdiction name as entry element (NR)
+      $b - Number (NR) [OBSOLETE]
+      $c - Location of meeting (NR)
+      $d - Date of meeting (NR)
+      $e - Subordinate unit (R)
+      $f - Date of a work (NR)
+      $g - Miscellaneous information (NR)
+      $h - Medium (NR)
+      $i - Relationship information (R)
+      $j - Relator term  (R)
+      $k - Form subheading (R)
+      $l - Language of a work (NR)
+      $n - Number of part/section/meeting (R)
+      $p - Name of part/section of a work (R)
+      $q - Name of meeting following jurisdiction name entry element (NR)
+      $s - Version (NR)
+      $t - Title of a work (NR)
+      $v - Form subdivision (R)
+      $w - Control subfield (NR)
+         0 - Special relationship
+         1 - Tracing use restriction
+         2 - Earlier form of heading
+         3 - Reference display
+      $x - General subdivision (R)
+      $y - Chronological subdivision (R)
+      $z - Geographic subdivision (R)
+      $4 - Relationship code (R)
+      $5 - Institution to which field applies (R)
+      $6 - Linkage (NR)
+      $8 - Field link and sequence number (R)
+
+430 - SEE FROM TRACING--UNIFORM TITLE (R)
+   Indicators
+      First - Undefined
+         # - Undefined
+      Second - Nonfiling characters
+         0-9 Number of nonfiling characters
+   Subfield Codes
+      $a - Uniform title (NR)
+      $d - Date of treaty signing (R)
+      $f - Date of a work (NR)
+      $g - Miscellaneous information (NR)
+      $h - Medium (NR)
+      $i - Relationship information (R)
+      $k - Form subheading (R)
+      $l - Language of a work (NR)
+      $m - Medium of performance for music (R)
+      $n - Number of part/section of a work (R)
+      $o - Arranged statement for music (NR)
+      $p - Name of part/section of a work (R)
+      $r - Key for music (NR)
+      $s - Version (NR)
+      $t - Title of a work (NR)
+      $v - Form subdivision (R)
+      $w - Control subfield (NR)
+         0 - Special relationship
+         1 - Tracing use restriction
+         2 - Earlier form of heading
+         3 - Reference display
+      $x - General subdivision (R)
+      $y - Chronological subdivision (R)
+      $z - Geographic subdivision (R)
+      $4 - Relationship code (R)
+      $5 - Institution to which field applies (R)
+      $6 - Linkage (NR)
+      $8 - Field link and sequence number (R)
+
+448 - SEE FROM TRACING--CHRONOLOGICAL TERM (R)
+   Indicators
+      First - Undefined
+         # - Undefined
+      Second - Undefined
+         # - Undefined
+   Subfield Codes
+      $a - Chronological term (NR)
+      $i - Relationship information (R)
+      $v - Form subdivision (R)
+      $w - Control subfield (NR)
+          0 - Special relationship
+          1 - Tracing use restriction
+          2 - Earlier form of heading
+          3 - Reference display
+      $x - General subdivision (R)
+      $y - Chronological subdivision (R)
+      $z - Geographic subdivision (R)
+      $4 - Relationship code (R)
+      $5 - Institution to which field applies (R)
+      $6 - Linkage (NR)
+      $8 - Field link and sequence number (R)
+
+450 - SEE FROM TRACING--TOPICAL TERM  (R)
+   Indicators
+      First - Undefined
+         # - Undefined
+      Second - Undefined
+         # - Undefined
+      Second - Nonfiling characters [OBSOLETE]
+         0-9 - Number of nonfiling characters present [OBSOLETE]
+   Subfield Codes
+      $a - Topical term or geographic name entry element (NR)
+      $b - Topical term following geographic name entry element (NR)
+      $i - Relationship information (R)
+      $v - Form subdivision (R)
+      $w - Control subfield (NR)
+         0 - Special relationship
+         1 - Tracing use restriction
+         2 - Earlier form of heading
+         3 - Reference display
+      $x - General subdivision (R)
+      $y - Chronological subdivision (R)
+      $z - Geographic subdivision (R)
+      $4 - Relationship code (R)
+      $5 - Institution to which field applies (R)
+      $6 - Linkage (NR)
+      $8 - Field link and sequence number (R)
+
+451 - SEE FROM TRACING--GEOGRAPHIC NAME (R)
+   Indicators
+      First - Undefined
+         # - Undefined
+      Second - Undefined
+         # - Undefined
+      Second - Nonfiling characters [OBSOLETE]
+         0-9 - Number of nonfiling characters present [OBSOLETE]
+   Subfield Codes
+      $a - Geographic name (NR)
+      $b - Name following place as entry element (NR) [OBSOLETE]
+      $i - Relationship information (R)
+      $v - Form subdivision (R)
+      $w - Control subfield (NR)
+         0 - Special relationship
+         1 - Tracing use restriction
+         2 - Earlier form of heading
+         3 - Reference display
+      $x - General subdivision (R)
+      $y - Chronological subdivision (R)
+      $z - Geographic subdivision (R)
+      $4 - Relationship code (R)
+      $5 - Institution to which field applies (R)
+      $6 - Linkage (NR)
+      $8 - Field link and sequence number (R)
+
+455 - SEE FROM TRACING--GENRE/FORM TERM (R)
+   Indicators
+      First - Undefined
+         # - Undefined
+      Second - Undefined
+         # - Undefined
+   Subfield Codes
+      $a - Genre/form term (NR)
+      $i - Relationship information (R)
+      $v - Form subdivision (R)
+      $w - Control subfield (NR)
+         0 - Special relationship
+         1 - Tracing use restriction
+         2 - Earlier form of heading
+         3 - Reference display
+      $x - General subdivision (R)
+      $y - Chronological subdivision (R)
+      $z - Geographic subdivision (R)
+      $4 - Relationship code (R)
+      $5 - Institution to which field applies (R)
+      $6 - Linkage (NR)
+      $8 - Field link and sequence number (R)
+
+480 - SEE FROM TRACING--GENERAL SUBDIVISION (R)
+   Indicators
+      First - Undefined
+         # - Undefined
+      Second - Undefined
+         # - Undefined
+   Subfield Codes
+      $i - Relationship information (R)
+      $v - Form subdivision (R)
+      $w - Control subfield (NR)
+         0 - Special relationship
+         1 - Tracing use restriction
+         2 - Earlier form of heading
+         3 - Reference display
+      $x - General subdivision (R)
+      $y - Chronological subdivision (R)
+      $z - Geographic subdivision (R)
+      $4 - Relationship code (R)
+      $5 - Institution to which field applies (R)
+      $6 - Linkage (NR)
+      $8 - Field link and sequence number (R)
+
+481 - SEE FROM TRACING--GEOGRAPHIC SUBDIVISION  (R)
+   Indicators
+      First - Undefined
+         # - Undefined
+      Second - Undefined
+         # - Undefined
+   Subfield Codes
+      $i - Relationship information (R)
+      $v - Form subdivision (R)
+      $w - Control subfield (NR)
+         0 - Special relationship
+         1 - Tracing use restriction
+         2 - Earlier form of heading
+         3 - Reference display
+      $x - General subdivision (R)
+      $y - Chronological subdivision (R)
+      $z - Geographic subdivision (R)
+      $4 - Relationship code (R)
+      $5 - Institution to which field applies (R)
+      $6 - Linkage (NR)
+      $8 - Field link and sequence number (R)
+
+482 - SEE FROM TRACING--CHRONOLOGICAL SUBDIVISION  (R)
+   Indicators
+      First - Undefined
+         # - Undefined
+      Second - Undefined
+         # - Undefined
+   Subfield Codes
+      $i - Relationship information (R)
+      $v - Form subdivision (R)
+      $w - Control subfield (NR)
+         0 - Special relationship
+         1 - Tracing use restriction
+         2 - Earlier form of heading
+         3 - Reference display
+      $x - General subdivision (R)
+      $y - Chronological subdivision (R)
+      $z - Geographic subdivision (R)
+      $4 - Relationship code (R)
+      $5 - Institution to which field applies (R)
+      $6 - Linkage (NR)
+      $8 - Field link and sequence number (R)
+
+485 - SEE FROM TRACING--FORM SUBDIVISION (R)
+   Indicators
+      First - Undefined
+         # - Undefined
+      Second - Undefined
+         # - Undefined
+   Subfield Codes
+      $i - Relationship information (R)
+      $v - Form subdivision (R)
+      $w - Control subfield (NR)
+         0 - Special relationship
+         1 - Tracing use restriction
+         2 - Earlier form of heading
+         3 - Reference display
+      $x - General subdivision (R)
+      $y - Chronological subdivision (R)
+      $z - Geographic subdivision (R)
+      $4 - Relationship code (R)
+      $5 - Institution to which field applies (R)
+      $6 - Linkage (NR)
+      $8 - Field link and sequence number (R)
+
+
+--See Also From Tracing Fields (5XX)--
+500 - SEE ALSO FROM TRACING--PERSONAL NAME (R)
+   Indicators
+      First - Type of personal name entry element
+         0 - Forename
+         1 - Surname
+         1 - Single surname [OBSOLETE]
+         2 - Multiple surname [OBSOLETE]
+         3 - Family name 
+      Second - Undefined
+         # - Undefined
+      Second - Nonfiling characters [OBSOLETE]
+         0-9 - Number of nonfiling characters present [OBSOLETE]
+   Subfield Codes
+      $a - Personal name (NR)
+      $b - Numeration (NR)
+      $c - Titles and other words associated with a name (R)
+      $d - Dates associated with a name (NR)
+      $e - Relator term (R)
+      $f - Date of a work (NR)
+      $g - Miscellaneous information (NR)
+      $h - Medium (NR)
+      $i - Relationship information (R)
+      $j - Attribution qualifier(R)
+      $k - Form subheading (R)
+      $l - Language of a work (NR)
+      $m - Medium of performance for music (R)
+      $n - Number of part/section of a work (R)
+      $o - Arranged statement for music (NR)
+      $p - Name of part/section of a work (R)
+      $q - Fuller form of name (NR)
+      $r - Key for music (NR)
+      $s - Version (NR)
+      $t - Title of a work (NR)
+      $v - Form subdivision (R)
+      $w - Control subfield (NR)
+         0 - Special relationship
+         1 - Tracing use restriction
+         2 - Earlier form of heading
+         3 - Reference display
+      $x - General subdivision (R)
+      $y - Chronological subdivision (R)
+      $z - Geographic subdivision (R)
+      $0 - Record control number (R)
+      $4 - Relationship code (R)
+      $5 - Institution to which field applies (R)
+      $6 - Linkage (NR)
+      $8 - Field link and sequence number (R)
+
+510 - SEE ALSO FROM TRACING--CORPORATE NAME  (R)
+   Indicators
+      First - Type of corporate name entry element
+         0 - Inverted name
+         1 - Jurisdiction name
+         2 - Name in direct order
+      Second - Undefined
+         # - Undefined
+      Second - Nonfiling characters [OBSOLETE]
+         0-9 - Number of nonfiling characters present [OBSOLETE]
+   Subfield Codes
+      $a - Corporate name or jurisdiction name as entry element (NR)
+      $b - Subordinate unit (R)
+      $c - Location of meeting (NR)
+      $d - Date of meeting or treaty signing (R)
+      $e - Relator term (R)
+      $f - Date of a work (NR)
+      $g - Miscellaneous information (NR)
+      $h - Medium (NR)
+      $i - Relationship information (R)
+      $k - Form subheading (R)
+      $l - Language of a work (NR)
+      $m - Medium of performance for music (R)
+      $n - Number of part/section/meeting (R)
+      $o - Arranged statement for music (NR)
+      $p - Name of part/section of a work (R)
+      $r - Key for music (NR)
+      $s - Version (NR)
+      $t - Title of a work (NR)
+      $v - Form subdivision (R)
+      $w - Control subfield (NR)
+         0 - Special relationship
+         1 - Tracing use restriction
+         2 - Earlier form of heading
+         3 - Reference display
+      $x - General subdivision (R)
+      $y - Chronological subdivision (R)
+      $z - Geographic subdivision (R)
+      $0 - Record control number (R)
+      $4 - Relationship code (R)
+      $5 - Institution to which field applies (R)
+      $6 - Linkage (NR)
+      $8 - Field link and sequence number (R)
+
+511 - SEE ALSO FROM TRACING--MEETING NAME  (R)
+   Indicators
+      First - Type of meeting name entry element
+         0 - Inverted name
+         1 - Jurisdiction name
+         2 - Name in direct order
+      Second - Undefined
+         # - Undefined
+      Second - Nonfiling characters [OBSOLETE]
+         0-9 - Number of nonfiling characters present [OBSOLETE]
+   Subfield Codes
+      $a - Meeting name or jurisdiction name as entry element (NR)
+      $b - Number (NR) [OBSOLETE]
+      $c - Location of meeting (NR)
+      $d - Date of meeting (NR)
+      $e - Subordinate unit (R)
+      $f - Date of a work (NR)
+      $g - Miscellaneous information (NR)
+      $h - Medium (NR)
+      $i - Relationship information (R)
+      $j - Relator term  (R)
+      $k - Form subheading (R)
+      $l - Language of a work (NR)
+      $n - Number of part/section/meeting (R)
+      $p - Name of part/section of a work (R)
+      $q - Name of meeting following jurisdiction name entry element (NR)
+      $s - Version (NR)
+      $t - Title of a work (NR)
+      $v - Form subdivision (R)
+      $w - Control subfield (NR)
+         0 - Special relationship
+         1 - Tracing use restriction
+         2 - Earlier form of heading
+         3 - Reference display
+      $x - General subdivision (R)
+      $y - Chronological subdivision (R)
+      $z - Geographic subdivision (R)
+      $0 - Record control number (R)
+      $4 - Relationship code (R)
+      $5 - Institution to which field applies (R)
+      $6 - Linkage (NR)
+      $8 - Field link and sequence number (R)
+
+530 - SEE ALSO FROM TRACING--UNIFORM TITLE  (R)
+   Indicators
+      First - Undefined
+         # - Undefined
+      Second - Nonfiling characters
+         0-9  Number of nonfiling characters
+   Subfield Codes
+      $a - Uniform title (NR)
+      $d - Date of treaty signing (R)
+      $f - Date of a work (NR)
+      $g - Miscellaneous information (NR)
+      $h - Medium (NR)
+      $i - Relationship information (R)
+      $k - Form subheading (R)
+      $l - Language of a work (NR)
+      $m - Medium of performance for music (R)
+      $n - Number of part/section of a work (R)
+      $o - Arranged statement for music (NR)
+      $p - Name of part/section of a work (R)
+      $r - Key for music (NR)
+      $s - Version (NR)
+      $t - Title of a work (NR)
+      $v - Form subdivision (R)
+      $w - Control subfield (NR)
+         0 - Special relationship
+         1 - Tracing use restriction
+         2 - Earlier form of heading
+         3 - Reference display
+      $x - General subdivision (R)
+      $y - Chronological subdivision (R)
+      $z - Geographic subdivision (R)
+      $0 - Record control number (R)
+      $4 - Relationship code (R)
+      $5 - Institution to which field applies (R)
+      $6 - Linkage (NR)
+      $8 - Field link and sequence number (R)  
+
+548 - SEE ALSO FROM TRACING--CHRONOLOGICAL TERM  (R)
+   Indicators
+      First - Undefined
+         # - Undefined
+      Second - Undefined
+         # - Undefined
+   Subfield Codes
+      $a - Chronological term (NR)
+      $i - Relationship information (R)
+      $v - Form subdivision (R)
+      $w - Control subfield (NR)
+         0 - Special relationship
+         1 - Tracing use restriction
+         2 - Earlier form of heading
+         3 - Reference display
+      $x - General subdivision (R)
+      $y - Chronological subdivision (R)
+      $z - Geographic subdivision (R)
+      $0 - Record control number (R)
+      $4 - Relationship code (R)
+      $5 - Institution to which field applies (R)
+      $6 - Linkage (NR)
+      $8 - Field link and sequence number (R)
+
+550 - SEE ALSO FROM TRACING--TOPICAL TERM  (R)
+   Indicators
+      First - Undefined
+         # - Undefined
+      Second - Undefined
+         # - Undefined
+      Second - Nonfiling characters [OBSOLETE]
+         0-9 - Number of nonfiling characters present [OBSOLETE]
+   Subfield Codes
+      $a - Topical term or geographic name entry element (NR)
+      $b - Topical term following geographic name entry element (NR)
+      $i - Relationship information (R)
+      $v - Form subdivision (R)
+      $w - Control subfield (NR)
+         0 - Special relationship
+         1 - Tracing use restriction
+         2 - Earlier form of heading
+         3 - Reference display
+      $x - General subdivision (R)
+      $y - Chronological subdivision (R)
+      $z - Geographic subdivision (R)
+      $0 - Record control number (R)
+      $4 - Relationship code (R)
+      $5 - Institution to which field applies (R)
+      $6 - Linkage (NR)
+      $8 - Field link and sequence number (R)
+
+551 - SEE ALSO FROM TRACING--GEOGRAPHIC NAME  (R)
+   Indicators
+      First - Undefined
+         # - Undefined
+      Second - Undefined
+         # - Undefined
+      Second - Nonfiling characters [OBSOLETE]
+         0-9 - Number of nonfiling characters present [OBSOLETE]
+   Subfield Codes
+      $a - Geographic name (NR)
+      $b - Name following place as entry element (NR) [OBSOLETE]
+      $i - Relationship information (R)
+      $v - Form subdivision (R)
+      $w - Control subfield (NR)
+         0 - Special relationship
+         1 - Tracing use restriction
+         2 - Earlier form of heading
+         3 - Reference display
+      $x - General subdivision (R)
+      $y - Chronological subdivision (R)
+      $z - Geographic subdivision (R)
+      $0 - Record control number (R)
+      $4 - Relationship code (R)
+      $5 - Institution to which field applies (R)
+      $6 - Linkage (NR)
+      $8 - Field link and sequence number (R)
+
+555 - SEE ALSO FROM TRACING--GENRE/FORM TERM (R)
+   Indicators
+      First - Undefined
+         # - Undefined
+      Second - Undefined
+         # - Undefined
+   Subfield Codes
+      $a - Genre/form term (NR)
+      $i - Relationship information (R)
+      $v - Form subdivision (R)
+      $w - Control subfield (NR)
+         0 - Special relationship
+         1 - Tracing use restriction
+         2 - Earlier form of heading
+         3 - Reference display
+      $x - General subdivision (R)
+      $y - Chronological subdivision (R)
+      $z - Geographic subdivision (R)
+      $0 - Record control number (R)
+      $4 - Relationship code (R)
+      $5 - Institution to which field applies (R)
+      $6 - Linkage (NR)
+      $8 - Field link and sequence number (R)
+
+580 - SEE ALSO FROM TRACING--GENERAL SUBDIVISION  (R)
+   Indicators
+      First - Undefined
+         # - Undefined
+      Second - Undefined
+         # - Undefined
+   Subfield Codes
+      $i - Relationship information (R)
+      $v - Form subdivision (R)
+      $w - Control subfield (NR)
+         0 - Special relationship
+         1 - Tracing use restriction
+         2 - Earlier form of heading
+         3 - Reference display
+      $x - General subdivision (R)
+      $y - Chronological subdivision (R)
+      $z - Geographic subdivision (R)
+      $0 - Record control number (R)
+      $4 - Relationship code (R)
+      $5 - Institution to which field applies (R)
+      $6 - Linkage (NR)
+      $8 - Field link and sequence number (R)
+
+581 - SEE ALSO FROM TRACING--GEOGRAPHIC SUBDIVISION  (R)
+   Indicators
+      First - Undefined
+         # - Undefined
+      Second - Undefined
+         # - Undefined
+   Subfield Codes
+      $i - Relationship information (R)
+      $v - Form subdivision (R)
+      $w - Control subfield (NR)
+         0 - Special relationship
+         1 - Tracing use restriction
+         2 - Earlier form of heading
+         3 - Reference display
+      $x - General subdivision (R)
+      $y - Chronological subdivision (R)
+      $z - Geographic subdivision (R)
+      $0 - Record control number (R)
+      $4 - Relationship code (R)
+      $5 - Institution to which field applies (R)
+      $6 - Linkage (NR)
+      $8 - Field link and sequence number (R)
+
+582 - SEE ALSO FROM TRACING--CHRONOLOGICAL SUBDIVISION (R)
+   Indicators
+      First - Undefined
+         # - Undefined
+      Second - Undefined
+         # - Undefined
+   Subfield Codes
+      $i - Relationship information (R)
+      $v - Form subdivision (R)
+      $w - Control subfield (NR)
+         0 - Special relationship
+         1 - Tracing use restriction
+         2 - Earlier form of heading
+         3 - Reference display
+      $x - General subdivision (R)
+      $y - Chronological subdivision (R)
+      $z - Geographic subdivision (R)
+      $0 - Record control number (R)
+      $4 - Relationship code (R)
+      $5 - Institution to which field applies (R)
+      $6 - Linkage (NR)
+      $8 - Field link and sequence number (R)
+
+585 - SEE ALSO FROM TRACING--FORM SUBDIVISION (R)
+   Indicators
+      First - Undefined
+         # - Undefined
+      Second - Undefined
+         # - Undefined
+   Subfield Codes
+      $i - Relationship information (R)
+      $v - Form subdivision (R)
+      $w - Control subfield (NR)
+         0 - Special relationship
+         1 - Tracing use restriction
+         2 - Earlier form of heading
+         3 - Reference display
+      $x - General subdivision (R)
+      $y - Chronological subdivision (R)
+      $z - Geographic subdivision (R)
+      $0 - Record control number (R)
+      $4 - Relationship code (R)
+      $5 - Institution to which field applies (R)
+      $6 - Linkage (NR)
+      $8 - Field link and sequence number (R)
+
+
+--Series Treatment Fields (64X)--
+  640 - SERIES DATES OF PUBLICATION AND/OR SEQUENTIAL DESIGNATION  (R)
+   Indicators
+      First - Note format style
+         0 - Formatted style
+         1 - Unformatted style
+      Second - Undefined
+         # - Undefined
+   Subfield Codes
+      $a - Dates of publication and/or sequential designation (NR)
+      $z - Source of information (NR)
+      $6 - Linkage (NR)
+      $8 - Field link and sequence number (R)
+
+641 - SERIES NUMBERING PECULIARITIES  (R)
+   Indicators
+      First - Undefined
+         # - Undefined
+      Second - Undefined
+         # - Undefined
+   Subfield Codes
+      $a - Numbering peculiarities note (NR)
+      $z - Source of information (NR)
+      $6 - Linkage (NR)
+      $8 - Field link and sequence number (R)
+
+642 - SERIES NUMBERING EXAMPLE  (R)
+   Indicators
+      First - Undefined
+         # - Undefined
+      Second - Undefined
+         # - Undefined
+   Subfield Codes
+      $a - Series numbering example (NR)
+      $d - Volumes/dates to which series numbering example applies (NR)
+      $5 - Institution/copy to which field applies (R)
+      $6 - Linkage (NR)
+      $8 - Field link and sequence number (R)
+
+643 - SERIES PLACE AND PUBLISHER/ISSUING BODY  (R)
+   Indicators
+      First - Undefined
+         # - Undefined
+      Second - Undefined
+         # - Undefined
+   Subfield Codes
+      $a - Place (R)
+      $b - Publisher/issuing body (R)
+      $d - Volumes/dates to which place and publisher/issuing body apply (NR)
+      $6 - Linkage (NR)
+      $8 - Field link and sequence number (R)
+
+644 - SERIES ANALYSIS PRACTICE  (R)
+   Indicators
+      First - Undefined
+         # - Undefined
+      Second - Undefined
+         # - Undefined
+   Subfield Codes
+      $a - Series analysis practice (NR)
+         f - Analyzed in full
+         p - Analyzed in part
+         n - Not analyzed
+      $b - Exceptions to analysis practice (NR)
+      $d - Volumes/dates to which analysis practice applies (NR)
+      $5 - Institution/copy to which field applies (R)
+      $6 - Linkage (NR)
+      $8 - Field link and sequence number (R)
+
+645 - SERIES TRACING PRACTICE (R)
+   Indicators
+      First - Undefined
+         # - Undefined
+      Second - Undefined
+         # - Undefined
+   Subfield Codes
+      $a - Series tracing practice (NR)
+         t - Traced as a series added entry
+         n - Not traced as a series added entry
+      $d - Volumes/dates to which tracing practice applies (NR)
+      $5 - Institution/copy to which field applies (R)
+      $6 - Linkage (NR)
+      $8 - Field link and sequence number (R)
+
+646 - SERIES CLASSIFICATION PRACTICE  (R)
+   Indicators
+      First - Undefined
+         # - Undefined
+      Second - Undefined
+         # - Undefined
+   Subfield Codes
+      $a - Series classification practice (NR)
+         c - Volumes are classified as a collection
+         m - Volumes are classified with main or other series
+         s - Volumes are classified separately
+      $d - Volumes/dates to which classification practice applies (NR)
+      $5 - Institution to which field applies (R)
+      $6 - Linkage (NR)
+      $8 - Field link and sequence number (R)
+
+
+--Complex Name References (663-666)--
+663 - COMPLEX SEE ALSO REFERENCE--NAME (NR)
+   Indicators
+      First - Undefined
+         # - Undefined
+      Second - Undefined
+         # - Undefined
+   Subfield Codes
+      $a - Explanatory text (R)
+      $b - Heading referred to (R)
+      $t - Title referred to (R)
+      $6 - Linkage (NR)
+      $8 - Field link and sequence number (R)
+
+664 - COMPLEX SEE REFERENCE--NAME  (NR)
+   Indicators
+      First - Undefined
+         # - Undefined
+      Second - Undefined
+         # - Undefined
+   Subfield Codes
+      $a - Explanatory text (R)
+      $b - Heading referred to (R)
+      $t - Title referred to (R)
+      $6 - Linkage (NR)
+      $8 - Field link and sequence number (R)
+
+665 - HISTORY REFERENCE (NR)
+   Indicators
+      First - Undefined
+         # - Undefined
+      Second - Undefined
+         # - Undefined
+   Subfield Codes
+      $a - History reference (R)
+      $6 - Linkage (NR)
+      $8 - Field link and sequence number (R)
+
+666 - GENERAL EXPLANATORY REFERENCE--NAME  (NR)
+   Indicators
+      First - Undefined
+         # - Undefined
+      Second - Undefined
+         # - Undefined
+   Subfield Codes
+      $a - General explanatory reference (R)
+      $6 - Linkage (NR)
+      $8 - Field link and sequence number (R)
+
+
+--Note Fields (667-68X)--
+667 - NONPUBLIC GENERAL NOTE (R)
+   Indicators
+      First - Undefined
+         # - Undefined
+      Second - Undefined
+         # - Undefined
+   Subfield Codes
+      $a - Nonpublic general note (NR)
+      $5 - Institution to which field applies (R)
+      $6 - Linkage (NR)
+      $8 - Field link and sequence number (R)
+
+668 - CHARACTERS IN NONROMAN ALPHABETS (R) [OBSOLETE]
+   Indicators
+      First - Undefined
+         # - Undefined
+      Second - Undefined
+         # - Undefined
+   Subfield Codes
+      $a - Characters in nonroman alphabet (NR)
+
+670 - SOURCE DATA FOUND (R)
+   Indicators
+      First - Undefined
+         # - Undefined
+      Second - Undefined
+         # - Undefined
+   Subfield Codes
+      $a - Source citation (NR)
+      $b - Information found (NR)
+      $u - Uniform Resource Identifier (R)
+      $6 - Linkage (NR)
+      $8 - Field link and sequence number (R)
+
+675 - SOURCE DATA NOT FOUND (NR)
+   Indicators
+      First - Undefined
+         # - Undefined
+      Second - Undefined
+         # - Undefined
+   Subfield Codes
+      $a - Source citation (R)
+      $6 - Linkage (NR)
+      $8 - Field link and sequence number (R)
+
+678 - BIOGRAPHICAL OR HISTORICAL DATA (R)
+   Indicators
+      First - Type of data
+         # - No information provided
+         0 - Biographical sketch
+         1 - Administrative history
+      Second - Undefined
+         # - Undefined
+   Subfield Codes
+      $a - Biographical or historical data (R)
+      $b - Expansion (NR)
+      $u - Uniform Resource Identifier (R)
+      $6 - Linkage (NR)
+      $8 - Field link and sequence number (R)
+
+680 - PUBLIC GENERAL NOTE (R)
+   Indicators
+      First - Undefined
+         # - Undefined
+      Second - Undefined
+         # - Undefined
+   Subfield Codes
+      $a - Heading or subdivision term (R)
+      $i - Explanatory text (R)
+      $5 - Institution to which field applies (R)
+      $6 - Linkage (NR)
+      $8 - Field link and sequence number (R)
+
+681 - SUBJECT EXAMPLE TRACING NOTE (R)
+   Indicators
+      First - Undefined
+         # - Undefined
+      Second - Undefined
+         # - Undefined
+   Subfield Codes
+      $a - Subject heading or subdivision term (R)
+      $i - Explanatory text (R)
+      $6 - Linkage (NR)
+      $8 - Field link and sequence number (R)
+
+682 - DELETED HEADING INFORMATION  (NR)
+   Indicators
+      First - Undefined
+         # - Undefined
+      Second - Undefined
+         # - Undefined
+   Subfield Codes
+      $a - Replacement heading (R)
+      $i - Explanatory text (R)
+      $0 - Replacement authority record control number (R)
+      $6 - Linkage (NR)
+      $8 - Field link and sequence number (R)
+
+688 - APPLICATION HISTORY NOTE (R)
+   Indicators
+      First - Undefined
+         # - Undefined
+      Second - Undefined
+         # - Undefined
+   Subfield Codes
+      $a - Application history note (NR)
+      $5 - Institution to which field applies (R)
+      $6 - Linkage (NR)
+      $8 - Field link and sequence number (R)
+
+
+--Heading Linking Entry Fields (7XX)--
+HEADING LINKING ENTRIES--GENERAL INFORMATION
+700 - ESTABLISHED HEADING LINKING ENTRY--PERSONAL NAME  (R)
+   Indicators
+      First - Type of personal name entry element
+         0 - Forename
+         1 - Surname
+         1 - Single surname [OBSOLETE]
+         2 - Multiple surname [OBSOLETE]
+         3 - Family name
+      Second - Thesaurus
+         0 - Library of Congress Subject Headings/Name authority file
+         1 - LC subject headings for children's literature
+         2 - Medical Subject Headings/NLM name authority file
+         3 - National Agricultural Library subject authority file
+         4 - Source not specified
+         5 - Canadian Subject Headings/LAC name authority file
+         6 - Répertoire de vedettes-matière
+         7 - Source specified in subfield $2
+   Subfield Codes
+      $a - Personal name (NR)
+      $b - Numeration (NR)
+      $c - Titles and other words associated with a name (R)
+      $d - Dates associated with a name (NR)
+      $e - Relator term (R)
+      $f - Date of a work (NR)
+      $g - Miscellaneous information (NR)
+      $h - Medium (NR)
+      $j - Attribution qualifier (R)
+      $k - Form subheading (R)
+      $l - Language of a work (NR)
+      $m - Medium of performance for music (R)
+      $n - Number of part/section of a work (R)
+      $o - Arranged statement for music (NR)
+      $p - Name of part/section of a work (R)
+      $q - Fuller form of name (NR)
+      $r - Key for music (NR)
+      $s - Version (NR)
+      $t - Title of a work (NR)
+      $v - Form subdivision (R)
+      $w - Control subfield (NR)
+         /0 - Link display
+         /1 - Replacement complexity
+      $x - General subdivision (R)
+      $y - Chronological subdivision (R)
+      $z - Geographic subdivision (R)
+      $0 - Record control number (R)
+      $2 - Source of heading or term (NR)
+      $5 - Institution to which field applies (R)
+      $6 - Linkage (NR)
+      $8 - Field link and sequence number (R)
+
+710 - ESTABLISHED HEADING LINKING ENTRY--CORPORATE NAME  (R)
+   Indicators
+      First - Type of corporate name entry element
+         0 - Inverted name
+         1 - Jurisdiction name
+         2 - Name in direct order
+      Second - Thesaurus
+         0 - Library of Congress Subject Headings/Name authority file
+         1 - LC subject headings for children's literature
+         2 - Medical Subject Headings/NLM name authority file
+         3 - National Agricultural Library subject authority file
+         4 - Source not specified
+         5 - Canadian Subject Headings/LAC name authority file
+         6 - Répertoire de vedettes-matière
+         7 - Source specified in subfield $2
+   Subfield Codes
+      $a - Corporate name or jurisdiction name as entry element (NR)
+      $b - Subordinate unit (R)
+      $c - Location of meeting (NR)
+      $d - Date of meeting or treaty signing (R)
+      $e - Relator term (R)
+      $f - Date of a work (NR)
+      $g - Miscellaneous information (NR)
+      $h - Medium (NR)
+      $k - Form subheading (R)
+      $l - Language of a work (NR)
+      $m - Medium of performance for music (R)
+      $n - Number of part/section/meeting (R)
+      $o - Arranged statement for music (NR)
+      $p - Name of part/section of a work (R)
+      $r - Key for music (NR)
+      $s - Version (NR)
+      $t - Title of a work (NR)
+      $v - Form subdivision (R)
+      $w - Control subfield (NR)
+         /0 - Link display
+         /1 - Replacement complexity
+      $x - General subdivision (R)
+      $y - Chronological subdivision (R)
+      $z - Geographic subdivision (R)
+      $0 - Record control number (R)
+      $2 - Source of heading or term (NR)
+      $5 - Institution to which field applies (R)
+      $6 - Linkage (NR)
+      $8 - Field link and sequence number (R)
+
+711 - ESTABLISHED HEADING LINKING ENTRY--MEETING NAME  (R)
+   Indicators
+      First - Type of meeting name entry element
+         0 - Inverted name
+         1 - Jurisdiction name
+         2 - Name in direct order
+      Second - Thesaurus
+         0 - Library of Congress Subject Headings/Name authority file
+         1 - LC subject headings for children's literature
+         2 - Medical Subject Headings/NLM name authority file
+         3 - National Agricultural Library subject authority file
+         4 - Source not specified
+         5 - Canadian Subject Headings/LAC name authority file
+         6 - Répertoire de vedettes-matière
+         7 - Source specified in subfield $2
+   Subfield Codes
+      $a - Meeting name or jurisdiction name as entry element (NR)
+      $c - Location of meeting  (NR)
+      $d - Date of meeting  (NR)
+      $e - Subordinate unit  (R)
+      $f - Date of a work  (NR)
+      $g - Miscellaneous information  (NR)
+      $h - Medium  (NR)
+      $j - Relator term  (R)
+      $k - Form subheading  (R)
+      $l - Language of a work  (NR)
+      $n - Number of part/section/meeting  (R)
+      $p - Name of part/section of a work  (R)
+      $q - Name of meeting following jurisdiction name entry element  (NR)
+      $s - Version (NR)
+      $t - Title of a work  (NR)
+      $v - Form subdivision (R)
+      $w - Control subfield (NR)
+         /0 - Link display
+         /1 - Replacement complexity
+      $x - General subdivision (R)
+      $y - Chronological subdivision  (R)
+      $z - Geographic subdivision  (R)
+      $0 - Record control number  (R)
+      $2 - Source of heading or term  (NR)
+      $5 - Institution to which field applies  (R)
+      $6 - Linkage  (NR)
+      $8 - Field link and sequence number  (R)
+
+730 - ESTABLISHED HEADING LINKING ENTRY--UNIFORM TITLE  (R)
+   Indicators
+      First - Undefined
+         # - Undefined
+      Second - Thesaurus
+         0 - Library of Congress Subject Headings/Name authority file
+         1 - LC subject headings for children's literature
+         2 - Medical Subject Headings/NLM name authority file
+         3 - National Agricultural Library subject authority file
+         4 - Source not specified
+         5 - Canadian Subject Headings/LAC name authority file
+         6 - Répertoire de vedettes-matière
+         7 - Source specified in subfield $2
+   Subfield Codes
+      $a - Uniform title  (NR)
+      $d - Date of treaty signing  (R)
+      $f - Date of a work  (NR)
+      $g - Miscellaneous information  (NR)
+      $h - Medium  (NR)
+      $k - Form subheading  (R)
+      $l - Language of a work  (NR)
+      $m - Medium of performance for music  (R)
+      $n - Number of part/section of a work  (R)
+      $o - Arranged statement for music  (NR)
+      $p - Name of part/section of a work (R)
+      $r - Key for music (NR)
+      $s - Version  (NR)
+      $t - Title of a work  (NR)
+      $v - Form subdivision (R)
+      $w - Control subfield (NR)
+         /0 - Link display
+         /1 - Replacement complexity
+      $x - General subdivision  (R)
+      $y - Chronological subdivision  (R)
+      $z - Geographic subdivision  (R)
+      $0 - Record control number  (R)
+      $2 - Source of heading or term  (NR)
+      $5 - Institution to which field applies (R)
+      $6 - Linkage (NR)
+      $8 - Field link and sequence number  (R)
+
+748 - ESTABLISHED HEADING LINKING ENTRY--CHRONOLOGICAL TERM  (R)
+   Indicators
+      First - Undefined
+         # - Undefined
+      Second - Thesaurus
+         0 - Library of Congress Subject Headings/Name authority file
+         1 - LC subject headings for children's literature
+         2 - Medical Subject Headings/NLM name authority file
+         3 - National Agricultural Library subject authority file
+         4 - Source not specified
+         5 - Canadian Subject Headings/LAC name authority file
+         6 - Répertoire de vedettes-matière
+         7 - Source specified in subfield $2
+   Subfield Codes
+      $a - Chronological term (NR)
+      $v - Form subdivision (R)
+      $w - Control subfield (NR)
+         /0 - Link display
+         /1 - Replacement complexity 
+      $x - General subdivision  (R)
+      $y - Chronological subdivision  (R)
+      $z - Geographic subdivision  (R)
+      $0 - Record control number (R)
+      $2 - Source of heading or term  (NR)
+      $5 - Institution to which field applies  (R)
+      $6 - Linkage  (NR)
+      $8 - Field link and sequence number (R)   
+
+750 - ESTABLISHED HEADING LINKING ENTRY--TOPICAL TERM   (R)
+   Indicators
+      First - Undefined
+         # - Undefined
+      Second - Thesaurus
+         0 - Library of Congress Subject Headings/Name authority file
+         1 - LC subject headings for children's literature
+         2 - Medical Subject Headings/NLM name authority file
+         3 - National Agricultural Library subject authority file
+         4 - Source not specified
+         5 - Canadian Subject Headings/LAC name authority file
+         6 - Répertoire de vedettes-matière
+         7 - Source specified in subfield $2
+   Subfield Codes
+      $a - Topical term or geographic name entry element (NR)
+      $b - Topical term following geographic name as entry element (NR)
+      $v - Form subdivision (R)
+      $w - Control subfield (NR)
+         /0 - Link display
+         /1 - Replacement complexity
+      $x - General subdivision  (R)
+      $y - Chronological subdivision  (R)
+      $z - Geographic subdivision  (R)
+      $0 - Record control number (R)
+      $2 - Source of heading or term  (NR)
+      $5 - Institution to which field applies  (R)
+      $6 - Linkage  (NR)
+      $8 - Field link and sequence number (R)   
+
+751 - ESTABLISHED HEADING LINKING ENTRY--GEOGRAPHIC NAME  (R)
+   Indicators
+      First - Undefined
+         # - Undefined
+      Second - Thesaurus
+         0 - Library of Congress Subject Headings/Name authority file
+         1 - LC subject headings for children's literature
+         2 - Medical Subject Headings/NLM name authority file
+         3 - National Agricultural Library subject authority file
+         4 - Source not specified
+         5 - Canadian Subject Headings/LAC name authority file
+         6 - Répertoire de vedettes-matière
+         7 - Source specified in subfield $2
+   Subfield Codes
+      $a - Geographic name (NR)
+      $v - Form subdivision (R)
+      $w - Control subfield (NR)
+         /0 - Link display
+         /1 - Replacement complexity
+      $x - General subdivision (R)
+      $y - Chronological subdivision (R)
+      $z - Geographic subdivision (R)
+      $0 - Record control number  (R)
+      $2 - Source of heading or term (NR)
+      $5 - Institution to which field applies (R)
+      $6 - Linkage (NR)
+      $8 - Field link and sequence number (R)   
+
+755 - ESTABLISHED HEADING LINKING ENTRY--GENRE/FORM TERM  (R)
+   Indicators
+      First - Undefined
+         # - Undefined
+      Second - Thesaurus
+         0 - Library of Congress Subject Headings/Name authority file
+         1 - LC subject headings for children's literature
+         2 - Medical Subject Headings/NLM name authority file
+         3 - National Agricultural Library subject authority file
+         4 - Source not specified
+         5 - Canadian Subject Headings/LAC name authority file
+         6 - Répertoire de vedettes-matière
+         7 - Source specified in subfield $2
+   Subfield Codes
+      $a - Genre/form term as entry element (NR)
+      $v - Form subdivision (R)
+      $w - Control subfield (NR)
+         /0 - Link display
+         /1 - Replacement complexity
+      $x - General subdivision (R)
+      $y - Chronological subdivision (R)
+      $z - Geographic subdivision (R)
+      $0 - Record control number  (R)
+      $2 - Source of heading or term (NR)
+      $5 - Institution to which field applies (R)
+      $6 - Linkage (NR)
+      $8 - Field link and sequence number (R)  
+
+780 - SUBDIVISION LINKING ENTRY--GENERAL SUBDIVISION   (R)
+   Indicators
+      First - Undefined
+         # - Undefined
+      Second - Thesaurus
+         0 - Library of Congress Subject Headings/Name authority file
+         1 - LC subject headings for children's literature
+         2 - Medical Subject Headings/NLM name authority file
+         3 - National Agricultural Library subject authority file
+         4 - Source not specified
+         5 - Canadian Subject Headings/LAC name authority file
+         6 - Répertoire de vedettes-matière
+         7 - Source specified in subfield $2
+   Subfield Codes
+      $v - Form subdivision (R)
+      $w - Control subfield (NR)
+         /0 - Link display
+         /1 - Replacement complexity
+      $x - General subdivision (R)
+      $y - Chronological subdivision (R)
+      $z - Geographic subdivision (R)
+      $0 - Record control number  (R)
+      $2 - Source of heading or term (NR)
+      $5 - Institution to which field applies (R)
+      $6 - Linkage (NR)
+      $8 - Field link and sequence number (R)  
+
+781 - SUBDIVISION LINKING ENTRY--GEOGRAPHIC SUBDIVISION  (R)
+   Indicators
+      First - Undefined
+         # - Undefined
+      Second - Thesaurus
+         0 - Library of Congress Subject Headings/Name authority file
+         1 - LC subject headings for children's literature
+         2 - Medical Subject Headings/NLM name authority file
+         3 - National Agricultural Library subject authority file
+         4 - Source not specified
+         5 - Canadian Subject Headings/LAC name authority file
+         6 - Répertoire de vedettes-matière
+         7 - Source specified in subfield $2
+   Subfield Codes
+      $v - Form subdivision (R)
+      $w - Control subfield (NR)
+         /0 - Link display
+         /1 - Replacement complexity
+      $x - General subdivision  (R)
+      $y - Chronological subdivision  (R)
+      $z - Geographic subdivision  (R)
+      $0 - Record control number (R)
+      $2 - Source of heading or term  (NR)
+      $5 - Institution to which field applies  (R)
+      $6 - Linkage  (NR)
+      $8 - Field link and sequence number (R)   
+
+782 - SUBDIVISION LINKING ENTRY--CHRONOLOGICAL SUBDIVISION   (R)
+   Indicators
+      First - Undefined
+         # - Undefined
+      Second - Thesaurus
+         0 - Library of Congress Subject Headings/Name authority file
+         1 - LC subject headings for children's literature
+         2 - Medical Subject Headings/NLM name authority file
+         3 - National Agricultural Library subject authority file
+         4 - Source not specified
+         5 - Canadian Subject Headings/LAC name authority file
+         6 - Répertoire de vedettes-matière
+         7 - Source specified in subfield $2
+   Subfield Codes
+      $v - Form subdivision (R)
+      $w - Control subfield (NR)
+         /0 - Link display
+         /1 - Replacement complexity
+      $x - General subdivision  (R)
+      $y - Chronological subdivision  (R)
+      $z - Geographic subdivision (R)
+      $0 - Record control number  (R)
+      $2 - Source of heading or term  (NR)
+      $5 - Institution to which field applies (R)
+      $6 - Linkage  (NR)
+      $8 - Field link and sequence number  (R)
+
+785 - SUBDIVISION LINKING ENTRY--FORM SUBDIVISION  (R)
+   Indicators
+      First - Undefined
+         # - Undefined
+      Second - Thesaurus
+         0 - Library of Congress Subject Headings/Name authority file
+         1 - LC subject headings for children's literature
+         2 - Medical Subject Headings/NLM name authority file
+         3 - National Agricultural Library subject authority file
+         4 - Source not specified
+         5 - Canadian Subject Headings/LAC name authority file
+         6 - Répertoire de vedettes-matière
+         7 - Source specified in subfield $2
+   Subfield Codes
+      $v - Form subdivision (R)
+      $w - Control subfield (NR)
+         /0 - Link display
+         /1 - Replacement complexity
+      $x - General subdivision (R)
+      $y - Chronological subdivision (R)
+      $z - Geographic subdivision (R)
+      $0 - Record control number (R)
+      $2 - Source of heading or term (NR)
+      $5 - Institution to which field applies (R)
+      $6 - Linkage (NR)
+      $8 - Field link and sequence number (R)   
+
+788 - COMPLEX LINKING ENTRY DATA   (NR)
+   Indicators
+      First - Undefined
+         # - Undefined
+      Second - Thesaurus 
+         0 - Library of Congress Subject Headings/Name authority file
+         1 - LC subject headings for children's literature
+         2 - Medical Subject Headings/NLM name authority file
+         3 - National Agricultural Library subject authority file
+         4 - Source not specified
+         5 - Canadian Subject Headings/LAC name authority file
+         6 - Répertoire de vedettes-matière
+         7 - Source specified in subfield $2
+   Subfield Codes
+      $a - Heading referred to (R)
+      $i - Explanatory text (R)
+      $2 - Source of heading or term  (NR)
+      $5 - Institution to which field applies (R)
+      $6 - Linkage  (NR)
+      $8 - Field link and sequence number (R)
+
+
+--Location and Alternate Graphics (8XX)--
+856 - ELECTRONIC LOCATION AND ACCESS (R)
+   Indicators
+      First - Access method
+         # - No information provided
+         0 - Email
+         1 - FTP
+         2 - Remote login (Telnet)
+         3 - Dial-up
+         4 - HTTP
+         7 - Method specified in subfield $2
+      Second - Relationship
+         # - No information provided
+         0 - Resource
+         1 - Version of resource
+         2 - Related resource
+         8 - No display constant generated
+   Subfield Codes
+      $a - Host name (R)
+      $b - Access number (R)
+      $c - Compression information (R)
+      $d - Path (R)
+      $f - Electronic name (R)
+      $g - Uniform Resource Name [OBSOLETE](R)
+      $h - Processor of request (NR)
+      $i - Instruction (R)
+      $j - Bits per second (NR)
+      $k - Password (NR)
+      $l - Logon (NR)
+      $m - Contact for access assistance (R)
+      $n - Name of location of host (NR)
+      $o - Operating system (NR)
+      $p - Port (NR)
+      $q - Electronic format type (NR)
+      $r - Settings (NR)
+      $s - File size (R)
+      $t - Terminal emulation (R)
+      $u - Uniform Resource Identifier (R)
+      $v - Hours access method available (R)
+      $w - Record control number (R)
+      $x - Nonpublic note (R)
+      $y - Link text (R)
+      $z - Public note (R)
+      $2 - Access method (NR)
+      $3 - Materials specified (NR)
+      $6 - Linkage (NR)
+      $8 - Field link and sequence number (R)
+
+880 - ALTERNATE GRAPHIC REPRESENTATION  (R)
+   Indicators
+      First - Same as associated field
+      Second - Same as associated field
+   Subfield Codes
+      $6 - Linkage (NR)
+      $a-z - Same as associated field
+      $0-5 - Same as associated field
+      $7-9 - Same as associated field    

@@ -1,0 +1,1 @@
+INSERT INTO `pref_preferencia_sistema` (`id`, `variable`, `value`, `explanation`, `options`, `type`, `categoria`) VALUES (NULL, 'BookLabelPage', 'Normal', 'Dice si las etiquetas se generan en A4 completa o no', NULL, NULL, 'catalogo');

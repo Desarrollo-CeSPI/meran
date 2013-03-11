@@ -1,0 +1,3 @@
+UPDATE usr_persona left join usr_ref_tipo_documento on usr_persona.tipo_documento=usr_ref_tipo_documento.nombre SET usr_persona.tipo_documento=usr_ref_tipo_documento.id;
+UPDATE usr_persona SET tipo_documento=1 WHERE tipo_documento is null;
+ALTER TABLE `usr_persona` CHANGE `tipo_documento` `tipo_documento` INT( 11 ) NOT NULL DEFAULT '1';

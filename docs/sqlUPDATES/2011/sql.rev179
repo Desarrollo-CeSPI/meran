@@ -1,0 +1,1 @@
+UPDATE `pref_preferencia_sistema` SET `variable` = 'auto_generar_comprobante_prestamo' WHERE `pref_preferencia_sistema`.`variable` = 'auto_generar_comprobante_renovacion'

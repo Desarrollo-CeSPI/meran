@@ -1,0 +1,1 @@
+INSERT INTO `pref_preferencia_sistema` (`id`, `variable`, `value`, `explanation`, `options`, `type`, `categoria`) VALUES (NULL, 'auto_generar_comprobante_renovacion', '1', 'Si esta en true imprime directamente el comprobante al efectuarse el prestamo, sino no', NULL, 'text', 'circulacion');

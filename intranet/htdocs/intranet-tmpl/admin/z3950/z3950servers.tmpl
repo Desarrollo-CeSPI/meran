@@ -1,0 +1,17 @@
+[% INCLUDE "intranet-top.inc" %]
+[% INCLUDE "FormValidateHelper.inc" %]
+
+<script type="text/javascript">
+$(document).ready(function() {
+    actualizarTabla();
+    validateAddForm(guardarNewServer);
+    validateEditForm(guardarServer);
+});
+</script>
+
+<script type="text/javascript" src="/intranet-tmpl/includes/admin/servidoresz3950.js"></script>
+
+<div id="result"></div>
+<div id="addServer"></div>
+
+[% INCLUDE "intranet-bottom.inc" %]

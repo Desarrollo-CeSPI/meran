@@ -1,0 +1,1 @@
+DELETE FROM `pref_tabla_referencia` WHERE `pref_tabla_referencia`.`nombre_tabla` = 'cat_ref_tipo_nivel3';

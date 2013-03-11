@@ -1,0 +1,665 @@
+[% IF !ajax %]
+    [% INCLUDE  "intranet-top.inc" %]
+
+    [% INCLUDE 'AutocompleteHelper.inc' %] 
+    
+    <script src="/includes/jquery/jquery.jqpageflow.js" type="text/javascript"></script>
+    
+    <script type="text/javascript"> 
+     var AUTO_GENERAR_COMPROBANTE = '[% auto_generar_comprobante_prestamo %]';
+
+        $(document).ready(function(){
+            $('.nano').nanoScroller();
+            inicializar();
+        });
+            
+        function modificarNivel1(){
+            window.location.href="[% url_prefix %]/catalogacion/estructura/datosDocumento.pl?id1=[% id1 %]&tipoAccion=MODIFICAR_NIVEL_1";
+        }
+
+       function modificarNivel2(id2){
+            window.location.href="[% url_prefix %]/catalogacion/estructura/datosDocumento.pl?id1=[% id1 %]&id2="+id2+"&tipoAccion=MODIFICAR_NIVEL_2";
+        }
+
+        function agregarEdicion(id1){
+            window.location.href="[% url_prefix %]/catalogacion/estructura/datosDocumento.pl?id1=[% id1 %]&tipoAccion=AGREGAR_EDICION";
+        }
+
+        function agregarAnalitica(id2){
+            window.location.href="[% url_prefix %]/catalogacion/estructura/datosDocumento.pl?id1=[% id1 %]&id2="+id2+"&tipoAccion=AGREGAR_ANALITICA";
+        }
+
+        function verAnaliticas(id2){
+//TODO podría abrirse en otra ventana        	
+            window.location.href="[% url_prefix %]/catalogacion/estructura/analiticas.pl?id2="+id2;
+        }
+        
+        function editarEjemplar(id2,id3){
+            window.location.href="[% url_prefix %]/catalogacion/estructura/datosDocumento.pl?id1=[% id1 %]&id2="+id2+"&id3="+id3+"&tipoAccion=MODIFICAR_NIVEL_3";
+        	
+        }
+
+        function asociarRegistroFuente(id1){
+        	$('#div_asociar_registro_fuente').modal('show');
+        	onEnter("buscar_edicion_id",buscarEdicion);
+
+			CrearAutocompleteNivel2(       { 	IdInput: 'buscar_edicion_id', 
+                                                IdInputHidden: 'buscar_edicion_hidden',
+                                                // FIXME no esta funcionando el callback
+                                                // callBackFunction: 'buscarEdicion'
+                                          }
+                                );
+        }
+
+        function cerrarAsociarRegistroFuente(){
+        	$('#div_asociar_registro_fuente').modal('hide');
+        }
+
+	    function buscarEdicion(){
+	        objAH                   = new AjaxHelper(updateBuscarEdicion);
+	        objAH.debug             = true;
+	        objAH.showOverlay       = true;
+	        objAH.url               = URL_PREFIX+'/catalogacion/estructura/estructuraCataloDB.pl';
+	        objAH.tipoAccion        = 'BUSQUEDA_EDICIONES';
+	        objAH.id1               = $('#buscar_edicion_hidden').val();
+	        objAH.sendToServer();
+		}
+
+		function updateBuscarEdicion(responseText){
+		    $('#ediciones_result').html(responseText);
+		}
+
+		function guardarAsociarRegistroFuente(){
+			
+			if($('#buscar_edicion_hidden').val() == ""){
+				jAlert('Debe seleccionar una edici&oacute;n','Advertencia de catalogo');
+			} else {
+
+			  	objAH                   = new AjaxHelper(updateGuardarAsociarRegistroFuente);
+		        objAH.debug             = true;
+		        objAH.showOverlay       = true;
+		        objAH.url               = URL_PREFIX+'/catalogacion/estructura/estructuraCataloDB.pl';
+		        objAH.tipoAccion        = 'ASOCIAR_REGISTRO_FUENTE';
+		        objAH.id1               = '[% id1 %]'; //analitica hija
+		        // FIXME necesito el id2 y me esta devolviendo el ID1!!!!!!!!!!!
+		        objAH.id2 				= $('#buscar_edicion_hidden').val();
+		        objAH.sendToServer();
+
+		        $('#div_asociar_registro_fuente').modal('hide');
+
+			}
+		}
+
+
+		function updateGuardarAsociarRegistroFuente(responseText){
+	        var info        = JSONstring.toObject(responseText);  
+		    var Messages    = info;
+		    setMessages(Messages);
+		}
+        
+      	function ProcessGBSBookInfo(booksInfo) {
+			for (id in booksInfo) {
+			 var element = document.getElementById(id);
+			 var bookInfo = booksInfo[id];
+			 if (bookInfo) {
+			  element.href = bookInfo.preview_url;
+			  element.style.display = '';
+			 }
+		   }
+		}
+
+	    function promote(id2,button){
+	        objAH                   = new AjaxHelper(updateCheckPromotion);
+	        objAH.showOverlay       = false;
+	        objAH.url               = URL_PREFIX+'/catalogacion/estructura/estructuraCataloDB.pl';
+	        objAH.tipoAccion        = 'PROMOTE_GRUPO';
+	        objAH.id2               = id2;
+	        objAH.sendToServer();
+	        $(button).text('[% "Espere....." | i18n %]');
+	        $(button).attr('disabled','disabled');
+		}
+
+		function updatePromote(responseText){
+					   
+		}
+
+	    function unPromote(id2,button){
+	        objAH                   = new AjaxHelper(updateCheckPromotion);
+	        objAH.showOverlay       = false;
+	        objAH.url               = URL_PREFIX+'/catalogacion/estructura/estructuraCataloDB.pl';
+	        objAH.tipoAccion        = 'UNPROMOTE_GRUPO';
+	        objAH.id2               = id2;
+	        objAH.sendToServer();
+	        $(button).text('[% "Espere....." | i18n %]');
+	        $(button).attr('disabled','disabled');
+		}
+
+		function updateUnPromote(responseText){
+
+		}
+
+
+		function checkPromotion(id2){
+	        objAH                   = new AjaxHelper(updateCheckPromotion);
+	        objAH.showOverlay       = false;
+	        objAH.url               = URL_PREFIX+'/catalogacion/estructura/estructuraCataloDB.pl';
+	        objAH.tipoAccion        = 'CHECK_PROMOTION';
+	        objAH.id2               = id2;
+	        objAH.sendToServer();			
+		}
+
+		function updateCheckPromotion(responseText){
+
+			var splitted_response = responseText.split("/////////////////////ID2////////////////////");
+			$('#promotion_'+splitted_response[0]).html(splitted_response[1]);
+		}
+
+
+    </script>
+
+        <script type="text/javascript">
+        
+        function refreshPage(fileName, responseJSON){
+           
+            jAlert(responseJSON.error,fileName);
+            
+        }
+        
+        function closeModalIndice(){
+        	$('#indice_data'+ID2_file).modal('hide');
+        }
+        
+        function uploadCompleteCloseModal(evt) {
+            clearInterval(intervalTimer);
+            $('#'+'progressIndicator' + '_' + ID2_file + ' > div').removeClass('active');
+            $('#'+'progressIndicator' + '_' + ID2_file + ' > div').removeClass('progress-striped');
+            var uploadResponse 				= document.getElementById('uploadResponse' + '_' + ID2_file);
+            uploadResponse.innerHTML 		= evt.target.responseText;
+            uploadResponse.style.display 	= 'block';
+            setTimeout(closeModalIndice, 2000)
+        }
+     
+         function uploadCompleteIndice(evt) {
+            clearInterval(intervalTimer);
+            $('#'+'progressIndicator' + '_' + ID2_file + ' > div').removeClass('active');
+            $('#'+'progressIndicator' + '_' + ID2_file + ' > div').removeClass('progress-striped');
+            var uploadResponse              = document.getElementById('uploadResponseIndice' + '_' + ID2_file);
+            uploadResponse.innerHTML        = evt.target.responseText;
+            uploadResponse.style.display    = 'block';
+            setTimeout(closeModalIndice, 2000)
+        }
+
+        function uploadIndice(id2,url) {
+            previousBytesLoaded = 0;
+            ID2_file = id2;
+            document.getElementById('uploadResponse' + '_' + ID2_file).style.display = 'none';
+            document.getElementById('progressNumber' + '_' + ID2_file).innerHTML = '';
+            var progressBar 			= document.getElementById('progressBar' + '_' + ID2_file);
+            progressBar.style.display 	= 'block';
+            progressBar.style.width 	= '0px';
+
+            /*
+             * If you want to upload only a file along with arbitary data that is not in
+             * the form, use this
+             */
+            var fd = new FormData();
+            fd.append("id2", id2);
+            fd.append("fileToUpload", document.getElementById('indiceToUpload' + '_'
+                    + ID2_file).files[0]);
+
+            /* If you want to simply post the entire form, use this */
+            // var fd = document.getElementById('form1').getFormData();
+            xhr = new XMLHttpRequest();
+            xhr.upload.addEventListener("progress", uploadProgressIndice, false);
+            xhr.addEventListener("load", uploadCompleteIndice, false);
+            xhr.addEventListener("error", uploadFailed, false);
+            xhr.addEventListener("abort", uploadCanceled, false);
+            xhr.open("POST", url);
+            xhr.send(fd);
+
+            intervalTimer = setInterval(updateTransferSpeed, 500);
+        }
+        </script>
+        
+<script type="text/javascript" src="/includes/jquery/jquery.jPrintElement.js"></script>
+	<script src="/intranet-tmpl/includes/circulacion-min.js"></script>
+	<script src="/intranet-tmpl/includes/catalogacion-min.js"></script>
+	<script src="/intranet-tmpl/includes/detalleEjemplar.js"></script>
+	<script src="/intranet-tmpl/includes/estantesVirtuales.js"></script>
+
+	<div id="div_asociar_registro_fuente" class="modal fade hide">
+	    	<div class="modal-header">
+               <h3>[% "Asociar registro fuente" | i18n %]</h3>
+            </div>
+	      	<div class="modal-body">
+                <div class="control-group">
+	            <label for="tipo_nivel3_id">
+	                [% "Buscar edici&oacute;n:" | i18n %]
+	            </label>
+	            <div class="controls">
+	            	<input type="text" 		id="buscar_edicion_id" value="" style="width:90%">
+	            	<input type="hidden" 	id="buscar_edicion_hidden" value="">
+		    	</div>
+	        	</div>
+         	</div>
+
+         	<div id="ediciones_result"></div>
+
+            <div class='modal-footer'>
+	                [% PERL %]
+	                        print C4::AR::Filtros::to_Button(     text   => "[% 'Guardar' | i18n %]",
+                                                                  boton   => "btn btn-primary",
+                                                                  onClick => "guardarAsociarRegistroFuente();",
+                                                                  title   => "[% 'Usar esquema' | i18n %]",
+                                                                  id      => "boton_guardar_asociar_registro_fuente",
+	                                ) ;
+	                [% END %]
+	                
+	                [% PERL %]
+		                    print C4::AR::Filtros::to_Button(   text        => "[% 'Cerrar' | i18n %]",
+		                                                        boton       => "btn btn-primary",
+		                                                        onClick     => "cerrarAsociarRegistroFuente();",
+		                                                        title       => "[% 'Cerrar' | i18n | i18n %]",
+		                                                        id          => "boton_cerrar_asociar_registro_fuente",
+		                            ) ;
+		            [% END %]
+	   		</div>
+	</div>
+
+	<!-- Se incluyen las librerias necesarias para manejar autocomplete -->
+	<div id="confirmar_div" class="pane"></div>
+	<br>
+	
+	
+	<!-- PARA PODER CREAR EL FORMULARIO -->
+	<div id="formulario"></div>
+	
+	<div id="detalleMARC" class="modal hide fade"></div>
+	
+	<div id="detalleComun">
+	
+	
+	<fieldset>
+		   	<div class="page-header">
+        		<h1>[% titulo %] <small>[% tipo_documento %] - #[% id1 %]</small></h1>
+            	<h2>[% autor %]</h2>	
+           	</div>
+    [% IF !indexado %]
+		<div class="alert alert-error">
+			<strong>[% "Atenci&oacute;n" |i18n %]!</strong> [% "El registro no se encuentra en el &iacute;ndice, y no aparece en las b&uacute;squedas" | i18n %].
+			  [% PERL %]
+			          print C4::AR::Filtros::action_button( 
+			                                          button 		=> "btn btn-success",
+			                                          action       	=> "addRegistroAlindice([% id1 %])", 
+			                                          icon         	=> "icon-white icon-eye-open",
+			                                          title        	=> "[% 'Agregar al &iacute;ndice' | i18n %]",
+			                                      ) ;
+
+			  [% END %]
+		</div>
+	[% END %]
+		<div id="detalle1" class="detalle1">
+	        <div class="botones_detalle_nivel1">
+	               
+                [% PERL %]
+                    print C4::AR::Filtros::action_set_button(    
+                                                        title           => "[% 'Registro' | i18n %]",
+                                                        button          => 'btn btn-primary',
+
+                                                        actions         => [
+                                                                            {title => "Modificar", action=>"modificarNivel1()",icon=>"icon-edit"},
+                                                                            {title => "Eliminar", action=>"borrarN1([% id1 %])", icon=>"icon-trash"},
+                                                                            {title => "Agregar Nivel 2", action=>'agregarEdicion("[% id1 %]")', icon=>"icon-plus-sign"},
+	                                                                        [% IF show_asociar_registro_fuente > 0 %]
+	                                                                            {title => "Asociar registro fuente", action=>"asociarRegistroFuente([% id1 %])", icon=>"icon-edit"},
+	                                                                        [% END %]
+                                                                            ],
+
+                            ) ;
+                [% END %]
+	            
+	        </div>
+		   
+		    <dl>
+			    [% FOREACH nivel1 %]
+
+			            [% IF liblibrarian %]
+			                [% IF dato %]
+				                <dt class="inline left rightMargin">[% liblibrarian %]:&nbsp;</dt> 
+				                <dd>[% dato %]&nbsp;</dd>
+			                [% END %]
+			            [% END %]
+			    [% END %]
+		    </dl>
+			
+		[% IF estadoDeColeccion %]
+        <div id="fieldset_estado_coleccion_[% id1 %]">
+	        <fieldset>
+	            <legend class="trigger trigger_estado_coleccion_[% id1 %] click">[% "Estado de Colecci&oacute;n" | i18n %]</legend>
+	                <div id="estado_coleccion[% id1 %]" class="estado_coleccion[% id1 %]">
+	                
+						  <ul class="listado_sin_margen estado_coleccion">
+							[% FOREACH anio IN estadoDeColeccion.keys.sort %]
+							[% IF estadoDeColeccion.$anio.keys %]
+							<li>
+								[% IF anio != '#' %]<b>[% anio %]</b>[% END %]
+								[% FOREACH volumen IN estadoDeColeccion.$anio.keys.sort %]
+									[% IF volumen != '#' %][% volumen  %][% END %]
+									(
+									[% FOREACH fasciculo IN estadoDeColeccion.$anio.$volumen.keys.sort %]
+										 [% PERL %]
+											print C4::AR::Filtros::link_to( text =>     "[% fasciculo %]",
+																			url=>"[% url_prefix %]/catalogacion/estructura/detalle.pl", 
+																			params =>   ["id1=[% id1 %]","id2=[% estadoDeColeccion.$anio.$volumen.$fasciculo %]"],
+																			title =>    "[% 'Mostrar Detalle del Registro' | i18n %]",
+																			class => "link_to_detail"
+																		) ;
+										 [% END %]
+                        
+									[% END %]
+									)
+								[% END %]
+								</li>
+							[% END %]
+							[% END %]
+							</ul>
+							
+									[% IF issn %]
+										<div style="position: relative; float:right;">
+											<div class="google-books">
+												<a id="ISSN:[% issn %]"  style="display:none" target="_blank">
+													<img src="/includes/css/gbs_preview_button1.gif" border="0" style="margin: 0"/>
+												</a>
+											</div>
+											<script src="https://books.google.com/books?jscmd=viewapi&bibkeys=ISSN:[% issn %]&callback=ProcessGBSBookInfo"></script>
+										</div>
+									[% END %]
+									
+					</div>
+			</fieldset>
+		</div>
+	[% END %] <!-- End de If estadoColeccion  -->
+	
+	[% IF template_nivel1 != 'ANA' %]
+         <h4><span class="badge badge-warning" style="cursor: default;">[% cantItemN1 %]</span>&nbsp;&nbsp;[% "Ejemplares" | i18n %]</h4>
+         <br />
+  	[% END %]
+
+		</div>
+	</fieldset>
+	<script type="text/javascript">makeToggle('estado_coleccion[% id1 %]','trigger_estado_coleccion_[% id1 %]',null,false);</script>
+[% END %] <!-- End de If ajax  -->
+[% FOREACH nivel2 %]
+
+        <section id="detalle_grupo_[% id2 %]">
+	        <fieldset>
+	            <legend class="trigger_3_[% id2 %] click">
+	               <div class="group_separator">
+						<div class="page-header">
+	                       <h2> [% IF edicion %] [% edicion %] [% ELSE %] [% 'Datos de la Edici&oacute;n' | i18n %] [% END %]
+	                               <small>[% tipo_documento %] - #[% id2 %]</small>
+                           </h2>
+	                       <!-- <span class="label label-info"> [% tipo_documento %] ([% nivel2_template %])</span> -->
+                        </div>                   
+                   </div>
+                 </legend>
+                    [% IF mensaje_group %]
+                            <div class="alert [% mensaje_class %]">
+                                    <strong>[% 'Info' | i18n %]</strong> [% mensaje_group %]
+                            </div>
+                    [% END %]
+                 
+	                <div id="grupo[% id2 %]" class="grupo[% id2 %]">
+                         [% IF isbn %]
+                             <div class="right">
+                                 <a style="margin-left: 10px;" id="ISBN:[% isbn %]"  style="display:none" target="_blank">
+                                     <img src="/includes/css/gbs_preview_button1.gif" border="0" style="margin: 0"/>
+                                 </a>
+                             </div>
+                           <script src="http://books.google.com/books?jscmd=viewapi&bibkeys=ISBN:[% isbn %]&callback=ProcessGBSBookInfo"></script> 
+                         [% END %]
+
+
+
+					 	<div id="promotion_[% id2 %]" class="right">
+
+					 	</div>
+		                [% PERL %]
+		                    print C4::AR::Filtros::action_set_button(    
+		                                                        title           => "[% 'Nivel 2' | i18n %]",
+		                                                        button          => 'btn btn-primary',
+		                                                        class           => "width_200",
+		                                                        actions         => [
+		                                                                            {title => "Modificar", action=>'modificarNivel2("[% id2 %]")',icon=>"icon-edit"},
+		                                                                            {title => "Eliminar", action=>"borrarN2([% id2 %])", icon=>"icon-trash"},   
+		                                                                      [% IF tiene_indice %]
+                                                                                    {title => "Editar texto &iacute;ndice", action=>'editarIndice([% id2 %])', icon=>"icon-list"},
+                                                                              [% ELSE %]
+                                                                                    {title => "Agregar &iacute;ndice", action=>'agregarIndice([% id2 %])', icon=>"icon-list"},
+                                                                              [% END %]
+                                                                                [% IF show_action == 1 %]
+                                                                                    {title => "Agregar anal&iacute;tica", action=>"agregarAnalitica([% id2 %])", icon=>"icon-edit"},
+                                                                                [% END %]
+                                                                                [% IF show_analiticas > 0 %]
+                                                                                    {title => "Ver anal&iacute;ticas", action=>"verAnaliticas([% id2 %])", icon=>"icon-edit"},
+                                                                                [% END %]
+                                                                                	{title => "Portadas de libro", action=>"showAddPortadaEdicion([% id2 %], [% id1 %])",icon=>"icon-picture"},
+		                                                                            ],
+		
+		                            ) ;
+		                [% END %]
+
+		                <!-- NIVEL 2 -->
+			                <div id="[% id2 %]" style="position: relative; float:right;"></div>
+	                        [% IF tiene_indice %]
+	                               <br />
+                                  [% PERL %]
+                                          print C4::AR::Filtros::action_button( 
+                                                                          button         => "btn btn-info click",
+                                                                          action       => "mostrarIndice([% id2 %])", 
+                                                                          icon         => "icon-white icon-info-sign",
+                                                                          title        => "[% 'Indice' | i18n %]",
+                                                                      ) ;
+
+                                  [% END %]
+                            [% END %]
+		                
+                            <div id="indice_data[% id2 %]" class="modal hide fade">
+								            <div class="modal-header">
+								              <a class="close" data-dismiss="modal">×</a>
+								              <h3>[% 'Indice del grupo' | i18n %]</h3>
+								            </div>
+								            <div class="modal-body">
+									              <pre>[% indice | trim %]</pre>
+				                                    [% IF hay_indice_file %]
+				                                           [% PERL %]
+				                                               print C4::AR::Filtros::link_to( text =>     " [% 'Contenido del &iacute;ndice' |i18n %]",
+				                                                                               url =>      "getIndiceFile.pl", 
+				                                                                               params =>   ["id2=[% id2 %]"],
+				                                                                               title =>    "[% 'Contenido del &iacute;ndice' |i18n %]",
+				                                                                               icon => "icon-file",
+				                                                                           ) ;
+				                                           [% END %]
+				                                           [% PERL %]
+				                                               print C4::AR::Filtros::action_link_button( 
+				                                                                               title =>     "X",
+				                                                                               url =>      "deleteIndice.pl", 
+				                                                                               params =>   ["id2=[% id2 %]","id1=[% id1 %]"],
+				                                                                               button =>    "btn-small btn-danger close",
+				                                                                               
+				                                                                           ) ;
+				                                           [% END %]				                                           
+				                                    [% ELSE %]
+										                    <div id="file-uploader_[% id2 %]" class="form-horizontal">
+										                        <form id="form_file-uploader_[% id2 %]" enctype="multipart/form-data" method="post" 
+										                                action="[% url_prefix %]/catalogacion/estructura/uploadIndice.pl">
+										                               <input type="hidden" name="id2" id="id2" value="[% id2 %]" /><br />
+										                               <div class="control-group">
+										                                <label class="control-label" for="fileToUpload_[% id2 %]">[% "Seleccione un archivo" | i18n %]</label>
+										                                <div class="controls">
+										                                    <input type="file" name="indiceToUpload" id="indiceToUpload_[% id2 %]" onchange="fileSelectedIndice([% id2 %]);"/>
+										                                </div>  
+										                              </div>
+										                              <div id="indiceInfo_[% id2 %]" class="alert alert-info hide">
+										                                <div id="indiceName_[% id2 %]" class="fileName"></div>
+										                                <div id="indiceSize_[% id2 %]" class="fileSize"></div>
+										                                <div id="indiceType_[% id2 %]" class="fileType"></div>
+										                              </div>
+										                              
+										          
+										                              <div class="row"></div>
+										                              <div id="progressIndicatorIndice_[% id2 %]" class="progressIndicator hide" > 
+										
+										                                <div  class="progress progress-success progress-striped active">
+										                                  <div id="progressBarIndice_[% id2 %]" class="bar"></div>
+										                                </div>
+										                                <div id="progressNumberIndice_[% id2 %]" class="floatRight">&nbsp;</div>
+										                                <div class="clear"></div>
+										                                <div>
+										                                  <div id="transferSpeedInfoIndice_[% id2 %]" class="floatLeft" style="width: 80px;">&nbsp;</div>
+										                                  <div id="timeRemainingInfoIndice_[% id2 %]" class="floatLeft" style="margin-left: 10px;">&nbsp;</div>
+										                                  <div id="transferBytesInfoIndice_[% id2 %]" class="floatRight" style="text-align: right;">&nbsp;</div>
+										                                  <div class="clear"></div>
+										                                </div>    
+										                                <div id="uploadResponseIndice_[% id2 %]" class="uploadResponse"></div>
+										                              </div>  
+										                              
+										                              
+										                              <div class="form-actions">
+										                                <div class="controls">
+										                                      [% PERL %]
+										                                              print C4::AR::Filtros::action_button( 
+				                                                                              button         => "btn btn-primary click",
+				                                                                              action       => 'uploadIndice("[% id2 %]","[% url_prefix %]/catalogacion/estructura/uploadIndice.pl")', 
+				                                                                              icon         => "",
+				                                                                              title        => "[% 'Subir archivo' | i18n %]",
+				                                                                          ) ;
+										    
+										                                      [% END %]
+										                                </div>
+										                                    
+										                              </div>
+										                        </form>
+										                    </div>				                                    
+				                                    [% END %]
+								            </div>
+
+                            </div>
+                            <div id="addPortadaEdicion" class="modal hide fade"></div>
+
+                            <div id="datos_indice" class="modal hide fade">
+                                <div class="modal-header">
+                                    <a class="close" data-dismiss="modal">×</a>
+                                    <h3>[% 'Datos del Indice' | i18n %]</h3>
+                                </div>
+                                <div class="modal-body">
+                                    <textarea id="indice_id" style="width:519px; height:202px; max-width:650px">[% indice | trim %]</textarea>
+                                                                    
+                                </div>
+                                <div class="modal-footer">
+                                    [% PERL %]
+                                                print C4::AR::Filtros::to_Button(   text    => "[% 'Guardar Indice' | i18n %]",
+                                                                                    boton   => "boton_guardar",
+                                                                                    onClick => "guardarIndice();",
+                                                                                    title   => "[% 'Guardar el Indice' | i18n %]",
+                                                                                    alternClass => "botonCentrado"
+                                                        ) ;
+                                    [% END %]
+                                </div>
+                            </div>
+
+			                <br>
+			                [% IF portada_edicion_local %]
+
+                                [% FOREACH p IN portada_edicion_local %]
+                                    <div class="item portadaEdicionImage" [% IF !loop.first %]style="display:none;"[% END %]>
+                                        <a class="fancylink" id="imagen_[% imagen.getImageName %]" rel="group_[% id2 %]" href="https://[% SERVER_ADDRESS %]/uploads/covers-added/[% p.getImageName %]">
+                                            <img border="0" src="https://[% SERVER_ADDRESS %]/uploads/covers-added/[% p.getImageName %]" title="Portada" alt="[% 'Portada del ejemplar' | i18n %]" >
+                                        </a>
+                                    </div>
+                                [% END %]
+
+                            [% ELSE %]
+
+    			                [% IF portada_registro or isbn %]
+    			                   <div>
+    				                    [% IF portada_registro %]
+    				                        <a class="fancy_link" href="/uploads/covers/[% portada_registro_big %]">
+    				                            <img style="max-height: 180px; max-width:110px;" src="/uploads/covers/[% portada_registro_medium %]" title="Portada" alt="[% 'Portada del ejemplar' | i18n %]" />
+    				                        </a>
+    				                    [% END %]
+    							   </div>
+    							[% END %]
+
+                            [% END %]
+							
+			                <dl>
+				                [% FOREACH nivel2_array %]
+                                    [% IF liblibrarian %]
+                                        [% IF dato %]
+			                                <dt class="inline left rightMargin">[% liblibrarian %]:&nbsp;</dt> 
+			                                <dd>[% dato %]&nbsp;</dd>
+                                        [% END %]
+                                    [% END %]
+                                [% END %] <!-- END FOREACH nivel2_array -->
+                                <br />
+                            </dl>
+
+                        [% IF esta_en_estante_virtual %]
+                              <div id="estantes_grupo">
+                                    <div class="accordion" id="estantes_del_grupo_[% id2 %]" onclick="mostrarEstantesVirtualesDeGrupo([% id2 %])">
+                                      <div class="accordion-group">
+                                        <div class="accordion-heading">
+                                          <a class="accordion-toggle" data-toggle="collapse" data-parent="#estantes_del_grupo_[% id2 %]" href="#estantes_[% id2 %]">
+                                            [% "Estantes" | i18n %] 
+                                          </a>
+                                        </div>
+                                        <div id="estantes_[% id2 %]" class="accordion-body collapse">
+                                          <div class="accordion-inner">
+                                               
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </div>
+                              </div>
+                          [% END %]
+
+ 				[% IF show_analiticas > 0 %]
+			     	<div class="accordion-heading">
+
+                       [% PERL %]
+                               print C4::AR::Filtros::link_to( text 	=> "[% 'Anal&iacute;ticas' | i18n %] <span class='badge badge-warning' style='cursor: default;'>[% cant_analiticas %]</span>",
+                                                               url 		=> "[% url_prefix %]/catalogacion/estructura/analiticas.pl", 
+                                                               params 	=> ["id2=[% id2 %]"],
+                                                               title 	=> "[% 'Anal&iacute;ticas' | i18n %]",
+                                                               class 	=> "accordion-toggle"
+                                                           ) ;
+                       [% END %]
+	              	</div>
+              	[% END %]
+	
+	                [% INCLUDE  "partials/e-docs_grupo.inc" %]
+
+                        <span id="ejemplaresDelGrupo[% id2 %]">
+                            [% INCLUDE "estructura/ejemplaresDelGrupo.tmpl" %]
+                        </span>
+	                <div class="ticket" id="ticket" ></div>
+	            </div> <!--Fin <div id="grupo[  id2 ]-->
+	        </fieldset>
+	        <script type="text/javascript">makeToggle('grupo[% id2 %]','trigger_3_[% id2 %]',null,false);</script>
+        </section>
+	 	<script type="text/javascript">
+	 		checkPromotion('[% id2 %]');
+	 	</script>
+
+
+
+
+
+[% END %]<!-- END FOREACH Nivel 2-->
+
+</div> <!-- Fin DIV detalleComun -->
+
+[% IF !ajax %]
+	[% INCLUDE  "intranet-bottom.inc" %]
+[% END %]

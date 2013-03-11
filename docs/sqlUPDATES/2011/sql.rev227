@@ -1,0 +1,14 @@
+INSERT INTO `pref_preferencia_sistema` (
+`id` ,
+`variable` ,
+`value` ,
+`explanation` ,
+`options` ,
+`type` ,
+`categoria`
+)
+VALUES (
+NULL ,  'title_search_bar',  'Buscar',  'El titulo de la barra de busqueda de OPAC', NULL ,  'text',  'catalogo'
+);
+
+

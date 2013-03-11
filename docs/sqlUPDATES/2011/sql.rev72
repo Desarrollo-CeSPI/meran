@@ -1,0 +1,5 @@
+CREATE TABLE `sys_novedad_no_mostrar` (
+`id_novedad` INT( 16 ) NOT NULL ,
+`usuario_novedad` VARCHAR( 16 ) NOT NULL ,
+PRIMARY KEY ( `id_novedad` , `usuario_novedad` )
+) ENGINE = MYISAM ;

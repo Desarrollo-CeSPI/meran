@@ -1,0 +1,3 @@
+ALTER TABLE `cat_visualizacion_opac` ADD `vista_campo` VARCHAR( 255 ) NOT NULL AFTER `vista_opac` ;
+
+ALTER TABLE `cat_visualizacion_opac` ADD `orden_subcampo` INT( 11 ) NOT NULL AFTER `orden` ;

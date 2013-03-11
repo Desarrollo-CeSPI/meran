@@ -1,0 +1,1 @@
+UPDATE `pref_estructura_subcampo_marc` SET `nivel` = '2' WHERE `pref_estructura_subcampo_marc`.`campo` = '505' AND `pref_estructura_subcampo_marc`.`subcampo` = 't';

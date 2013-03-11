@@ -1,0 +1,4 @@
+ALTER TABLE `io_importacion_iso_registro` CHANGE `id_matching` `id_matching` INT( 11 ) NULL ,
+CHANGE `id1` `id1` INT( 11 ) NULL ,
+CHANGE `id2` `id2` INT( 11 ) NULL ,
+CHANGE `id3` `id3` INT( 11 ) NULL;

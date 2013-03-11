@@ -1,0 +1,166 @@
+<html>
+	<head>
+
+		<title>Zapatec DHTML Calendar - Choose Multiple Days on a Flat Calendar</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+
+	    <link rel="stylesheet" href="../themes/winter.css" />
+		<link rel="stylesheet" href="../themes/layouts/huge.css" />
+
+		<link href="../doc/css/zpcal.css" rel="stylesheet" type="text/css">
+		<link href="../doc/css/template.css" rel="stylesheet" type="text/css">
+
+		<link rel="SHORTCUT ICON" href="http://www.zapatec.com/website/main/favicon.ico">
+
+
+		<!-- import the calendar script -->
+		<script type="text/javascript" src="../src/utils.js"></script>
+
+		<script type="text/javascript" src="../src/calendar.js"></script>
+
+		<!-- import the language module -->
+		<script type="text/javascript" src="../lang/calendar-es.js"></script>
+
+		<!-- other languages might be available in the lang directory; please check
+		your distribution archive. -->
+
+		<!-- import the calendar setup script -->
+		<script type="text/javascript" src="../src/calendar-setup.js"></script>
+
+		
+
+	</head>
+
+<body>
+<table class='zpStandard' width='800'><tr><td>
+	<div class="topMenuHeader">
+
+		<div class="logo">
+		<a href='http://www.zapatec.com'><img src='../doc/images/logoNew.gif' alt='Zapatec logo' border='0'></a>
+		</div>
+
+		<div class="btn1">
+
+			<a href="https://www.zapatec.com/zadmin/buy.jsp"><img src="../doc/images/buttonBuy.png" alt='My Account' border="0"></a>
+  		</div>
+
+		<div class="btn1">
+		<a href="http://www.zapatec.com/website/main/pricing.jsp"><img src="../doc/images/buttonPricing.png" alt='My Account' border="0"></a>
+		</div>
+	</div>
+
+
+	<div class="pageMain">
+
+	<a href="example92.html" style="float:left; margin-left:2em; margin-top:.5em;" accesskey="P">
+			<img border="0" src="previous.png" alt="Previous Javascript Calendar Example"></a>
+	<a href="example94.html" style="float:right; margin-right:2em; margin-top:.5em;" accesskey="N">
+			<img border="0" src="next.png" alt="Next Javascript Calendar Example"></a>
+
+	<div class='zpCalSubheader' style='text-align:center'>Choose Multiple Days on a Flat Calendar</div>
+		<br/>	
+	<div class='zpCalDemoText'>
+		<ol>
+
+			<li>This demo uses theme <b>yellow</b>.</li>
+			
+	<div id="flatcalMultiDays" style="float: right"></div>
+		<li> This is a flat or "in the page" calendar. It is displayed when
+		the page loads rather than when the user clicks on a button. </li>
+		<li> You can now choose multiple days in the calendar. </li>
+		<li> You can click on a chosen date to remove it from the list of chosen dates. </li>
+
+		<li> The following dates have been programmatically chosen
+		<ul>
+			<li> 2004 April 25 </li>
+			<li> 2004 April 18 </li>
+			<li> 2004 April 22 </li>
+			<li> 2004 April 05 </li>
+
+		</ul>
+		You can uncheck these.
+		</li>
+		<li> Click on Submit. The dates are now displayed in the text area.</li>
+		
+		</ol>
+	</div>
+	</div>
+
+
+<textarea name="date7" id="sel7" rows='15' cols='40'>
+</textarea>
+<input type="button" value="Submit" id='button7' onClick="cal.submitFlatDates();" name="button7">
+<!--<a id='link7' href="javascript:cal.submitFlatDates()">Submit</a>-->
+
+<script type="text/javascript">//<![CDATA[
+	<!--  to hide script contents from old browsers
+	// the default multiple dates selected, first time the calendar is instantiated
+	var MA = [ new Date(2004, 3, 25), new Date(2004, 3, 18), new Date(2004, 3, 22), new Date(2004, 3, 5) ];
+
+	function flatCallback(cal) {
+		// here we'll write the output; this is only for example.  You
+		// will normally fill an input field or something with the dates.
+		var el = document.getElementById("sel7");
+
+		// reset initial content.
+		el.value = "";
+
+		// Reset the "MA", in case one triggers the calendar again.
+		// CAREFUL!  You don't want to do "MA = [];".  We need to modify
+		// the value of the current array, instead of creating a new one.
+		// Zapatec.Calendar.setup is called only once! :-)  So be careful.
+		MA.length = 0;
+		
+		// walk the calendar's multiple dates selection hash
+		for (var i in cal.multiple) {
+			var currentDate = cal.multiple[i];
+			// sometimes the date is not actually selected, that's why we need to check.
+			if (currentDate) {
+				// OK, selected.  Fill an input field.  Or something.  Just for example,
+				// we will display all selected dates in the element having the id "output".
+				el.value += currentDate.print("%B %d %Y\n");
+
+				// and push it in the "MA", in case one triggers the calendar again.
+				MA[MA.length] = currentDate;
+			}
+		}
+	}
+	// end hiding contents from old browsers  -->
+</script>
+
+
+
+
+	<script type="text/javascript">
+		var cal = new Zapatec.Calendar.setup({
+		
+		flat       	   : "flatcalMultiDays", // ID of the parent element
+		flatCallback   : flatCallback,
+		align      	   : "BR",
+		showOthers 	   : true,
+		//sortOrder	   : "desc", //default is "asc"ending; or remove comment to sort in "desc"ending order; or "none" to NOT sort the multiple dates.
+		multiple   	   : MA // pass the initial or computed array of multiple dates to be initially selected
+		
+		});
+		
+	</script>
+	<noscript>
+   	<br/>
+   	This page uses a <a href='http://www.zapatec.com/website/main/products/prod1/'> Javascript Calendar </a>, but
+   	your browser does not support Javascript.
+   	<br/>
+   	Either enable Javascript in your Browser or upgrade to a newer version.
+	</noscript>
+
+	<div class="footer" style='text-align:center; margin-top:2em'>
+		<br/>
+		&copy; 2004 <strong> <a href='http://www.zapatec.com/'>Zapatec, Inc.</a> </strong>
+	</div>
+
+	</td>
+
+	</tr>
+	</table>
+
+</body>
+</html>

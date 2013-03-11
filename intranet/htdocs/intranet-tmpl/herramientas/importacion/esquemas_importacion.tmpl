@@ -1,0 +1,66 @@
+[% INCLUDE "intranet-top.inc" %]
+[% INCLUDE 'BootstrapToolkit.inc' %]
+
+<script type="text/javascript" src="/includes/jquery/jquery-ui-1.8.13.sortable.min.js"></script>
+<script type="text/javascript" src="/intranet-tmpl/herramientas/esquemas_importacion.js"></script>
+
+<script>
+	function nuevoEsquemaImportacion_dialog(){
+	    jPrompt("[% 'Nombre del esquema' | i18n %]:", "[% 'Esquema' | i18n %] X", "[% 'Nuevo esquema de importacion' | i18n %]", function(title) {
+	        if( title )
+	            nuevoEsquemaImportacion(title);
+	    });
+	}
+
+    $(document).ready(function() {
+    	showEsquemaImportacion([% id_esquema %]);
+    });
+</script>
+
+<div class="title">[% "Administraci&oacute;n de esquemas de importaci&oacute;n" | i18n %]</div>
+</br>
+<div>
+    <form class="form-horizontal" onsubmit="return false">
+        <fieldset>
+            <legend>[% "Selecci&oacute;n de esquema de importaci&oacute;n" | i18n %]</legend>
+            
+            [% IF combo_esquemas_importacion %]
+            
+                <div class="control-group">
+                    <label class="control-label" for="id_ui">[% 'Esquema' | i18n %]:</label>
+                    <div class="controls">
+                        [% combo_esquemas_importacion %]
+                    </div>
+                </div>
+                
+            [% END %]
+                    
+            <div class="form-actions">
+                    
+                    [% PERL %]
+                        print C4::AR::Filtros::to_Button(   text    => "[% 'Nuevo esquema' | i18n %]",
+                                                            boton   => "btn",
+                                                            onClick => "nuevoEsquemaImportacion_dialog();",
+                                                            title   => "[% 'Nuevo esquema' | i18n %]",
+                                                            inline  => 1
+                                ) ;
+                    [% END %]
+
+                    [% PERL %]
+                        print C4::AR::Filtros::to_Button(   text    => "[% 'Detalle esquema' | i18n %]",
+                                                            boton   => "btn btn-primary",
+                                                            onClick => "showEsquemaImportacion();",
+                                                            title   => "[% 'Nuevo esquema' | i18n %]",
+                                                            inline  => 1
+                                ) ;
+                    [% END %]
+
+            </div>
+        </fieldset>
+    </form>
+    <div class="esquema_result" id="esquema_result"> </div>
+</div>
+
+
+
+[% INCLUDE "intranet-bottom.inc" %]

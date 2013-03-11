@@ -1,0 +1,82 @@
+INSERT INTO  `pref_preferencia_sistema` (
+`variable` ,
+`id` ,
+`value` ,
+`explanation` ,
+`options` ,
+`type` ,
+`categoria`
+)
+VALUES (
+'defaultEstado', NULL ,  'STATE002',  'Estado del ejemplar por defecto',  'estado|nombre',  'referencia',  'catalogo'
+);
+
+
+INSERT INTO  `pref_preferencia_sistema` (
+`variable` ,
+`id` ,
+`value` ,
+`explanation` ,
+`options` ,
+`type` ,
+`categoria`
+)
+VALUES (
+'defaultDisponibilidad', NULL ,  'CIRC0000',  'Disponibilidad por defecto',  'disponibilidad|nombre',  'referencia',  'catalogo'
+);
+
+
+INSERT INTO  `pref_preferencia_sistema` (
+`variable` ,
+`id` ,
+`value` ,
+`explanation` ,
+`options` ,
+`type` ,
+`categoria`
+)
+VALUES (
+'defaultSoporte', NULL ,  '1',  'Soporte por defecto',  'soporte|description',  'referencia',  'catalogo'
+);
+
+
+INSERT INTO  `pref_preferencia_sistema` (
+`variable` ,
+`id` ,
+`value` ,
+`explanation` ,
+`options` ,
+`type` ,
+`categoria`
+)
+VALUES (
+'defaultCiudad', NULL ,  '2030',  'Ciudad por defecto',  'ciudad|NOMRBE',  'referencia',  'catalogo'
+);
+
+
+INSERT INTO  `pref_preferencia_sistema` (
+`variable` ,
+`id` ,
+`value` ,
+`explanation` ,
+`options` ,
+`type` ,
+`categoria`
+)
+VALUES (
+'defaultPais', NULL ,  '11',  'Pais por defecto',  'pais|nombre_largo',  'referencia',  'catalogo'
+);
+
+
+INSERT INTO  `pref_preferencia_sistema` (
+`variable` ,
+`id` ,
+`value` ,
+`explanation` ,
+`options` ,
+`type` ,
+`categoria`
+)
+VALUES (
+'defaultIdioma', NULL ,  'es',  'Idioma por defecto',  'idioma|description',  'referencia',  'catalogo'
+);

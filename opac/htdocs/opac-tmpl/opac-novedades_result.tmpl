@@ -1,0 +1,37 @@
+[% INCLUDE 'opac-top.inc' %]
+[% USE HTML %]
+
+[% IF cantidad %]
+
+    [% fecha = '' %]
+
+    [% FOREACH novedad IN novedades %]
+    
+        [% IF fecha != novedad.getFechaLegible %]
+        
+            [% fecha = novedad.getFechaLegible %]
+        
+            <fieldset><legend>Enviadas el [% HTML.escape(novedad.getFechaLegible) %]</legend></fieldset>
+
+        [% END %]
+        
+            <div class="alert alert-info">
+                <h4>
+                     <a href='[% url_prefix %]/ver_novedad.pl?id=[% novedad.getId %]&amp;token=[% token %]'>
+                        [% HTML.escape(novedad.getTitulo) %]
+                    </a>
+                
+                <small>
+                  [% HTML.escape(novedad.getResumen) %]
+                  <a href='[% url_prefix %]/ver_novedad.pl?id=[% novedad.getId %]&amp;token=[% token %]'>
+                    [% 'Leer m&aacute;s' | i18n %] &raquo;
+                  </a>
+                </small>
+                </h4>
+            </div>
+        
+    [% END %]
+    
+[% END %]
+
+[% INCLUDE 'opac-bottom.inc' %]

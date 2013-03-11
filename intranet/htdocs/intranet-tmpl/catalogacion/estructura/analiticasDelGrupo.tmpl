@@ -1,0 +1,37 @@
+<!-- TODO creo q no se usa mas!!!!!!!!!!!!! -->
+
+[% IF tiene_analiticas %]
+		<script>
+		
+		    $(document).ready(function(){
+		        checkedAll("select_all"+"[% id2 %]", "checkEjemplares"+"[% id2 %]");
+		    });
+		
+		</script>
+		
+	<div class="accordion" id="analiticas_del_grupo[% id %]">
+	            <div class="accordion-group">
+		              <div class="accordion-heading">
+		                <a class="accordion-toggle" data-toggle="collapse" data-parent="#analiticas_del_grupo[% id %]" href="#analiticas[% id2 %]">
+		                  [% 'Anal&iacute;ticas' | i18n %]
+		                </a>
+		              </div>
+		              <div id="analiticas[% id2 %]" class="accordion-body collapse">
+			                <div class="accordion-inner">
+				                [% FOREACH nivel1_analiticas_array %]
+				                <dl>  
+				                    [% FOREACH nivel1_analitica %]
+				                        [% IF liblibrarian %]
+				                            [% IF dato %]
+				                                  <dt class="inline left rightMargin">[% liblibrarian %]:&nbsp;</dt> 
+				                                  <dd>[% dato %]&nbsp;</dd>
+				                            [% END %]
+				                        [% END %]
+				                    [% END %] <!-- END FOREACH nivel1_analitica -->
+				                </dl>
+				                [% END %]  <!-- END FOREACH nivel1_analiticas_array -->      
+					      </div> <!--end <div id="analiticasDelGrupo -->
+				     </div>
+			     </div>
+	</div>
+[% END %]

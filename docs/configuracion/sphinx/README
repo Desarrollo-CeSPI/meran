@@ -1,0 +1,5 @@
+Instalar sphinxsearch (de squeeze para adelante).
+Hay que copiar el sphinxsearch a /etc/init.d/ .
+El sphinx.conf hay que copiarlo a /etc/sphinxsearch/ para que salga andando.
+Luego haciendo /etc/init.d/sphinx restart funciona el servicio lo mas bien.
+Tener en cuenta que sphinx.conf esta configurado con usuario y contraseña y nombre de la base y utilizando el socket unix para conectarse al mysql si algo cambia modificarlo.

@@ -1,0 +1,79 @@
+[% INCLUDE "intranet-top.inc" %]
+
+<script type="text/javascript">
+
+    $(document).ready(function() {
+          listarRecomendaciones();
+//           makeToggle('datos_tabla_div_recom','trigger',null,false);
+    
+          
+      });
+
+    function listarRecomendaciones(){
+        objAH             = new AjaxHelper(updateListarRecomendaciones);
+        objAH.debug         = true;
+//         objAH.cache         = true;
+        objAH.showOverlay   = true;
+        objAH.url           = URL_PREFIX+'/adquisiciones/recomendacionesDB.pl';
+        objAH.tipoAccion    = 'LISTAR';
+        objAH.sendToServer();
+    }
+
+    function updateListarRecomendaciones(responseText){
+
+        $("#listado_rec").html(responseText);
+        zebra('datos_tabla_div_recom');
+        $('.link_det_rec').fancybox();
+        $('#fancybox-content').css('min-width','717px' );
+        $('#fancybox-outer').css('min-width','730px' );
+    }
+    
+
+    function detalleRecom(rec){
+        objAH               = new AjaxHelper(updateDetalleRec);
+        objAH.debug         = true;
+//         objAH.cache         = true;
+        objAH.showOverlay   = true;
+        objAH.url           = URL_PREFIX+'/adquisiciones/recomendacionesDB.pl';
+        objAH.tipoAccion    = 'MAS_DETALLE';
+        objAH.id_rec        = rec;
+        objAH.sendToServer();
+    }
+        
+    function updateDetalleRec(responseText){
+      $("#div_detalle_recom").html(responseText);
+//         zebra('detalle_recom');
+    }
+
+    function eliminarRecomendacion(rec){
+        objAH               = new AjaxHelper(updateEliminarRecomendacion);
+        objAH.debug         = true;
+//         objAH.cache         = true;
+        objAH.showOverlay   = true;
+        objAH.url           = URL_PREFIX+'/adquisiciones/recomendacionesDB.pl';
+        objAH.tipoAccion    = 'ELIMINAR';
+        objAH.id_rec        = rec;
+        objAH.sendToServer();
+
+    }
+   
+   
+    function updateEliminarRecomendacion(responseText){
+
+        if (!verificarRespuesta(responseText))
+            return(0);
+        var Messages=JSONstring.toObject(responseText);
+        setMessages(Messages);       
+        listarRecomendaciones(); 
+    }
+
+</script>
+
+<!--<script type="text/javascript" src="/intranet-tmpl/includes/adquisiciones/.js"></script>-->
+
+[% INCLUDE "FormValidateHelper.inc" %]
+       
+
+<div class="contenedor_paginador">[% paginador %]</div>
+    
+<div id="listado_rec"></div>

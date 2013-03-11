@@ -1,0 +1,69 @@
+[% INCLUDE 'intranet-top.inc' %]
+
+<script type="text/javascript">
+
+    function showNovedad(id){
+
+		var objAH_novedad      	 		= new AjaxHelper(updateShowNovedad);
+		objAH_novedad.showOverlay       = true;
+		objAH_novedad.debug             = true;
+		objAH_novedad.url               = URL_PREFIX+'/admin/ver_novedad.pl';
+		objAH_novedad.id				= id;
+		objAH_novedad.sendToServer();
+	}
+
+	function updateShowNovedad(responseText){
+	    if (!verificarRespuesta(responseText))
+	        return(0);
+
+	    $('#mostrar_novedad').html(responseText);
+	    $('#mostrar_novedad').modal();
+	}
+
+    function obtenerNovedades(){
+        objAH               = new AjaxHelper(updateObtenerNovedades);
+        objAH.debug         = true;
+        objAH.showOverlay   = true;
+        objAH.url           = URL_PREFIX+'/admin/novedades_opacDB.pl';
+        objAH.funcion       = 'changePage';
+        objAH.tipoAccion    = 'LISTAR';
+        objAH.sendToServer();
+    }
+
+    function updateObtenerNovedades(responseText){
+            if (!verificarRespuesta(responseText))
+                return(0);
+            $('#novedades_opac_ajax').html(responseText);
+    }
+    
+    function eliminarNovedad(id_novedad){
+        bootbox.confirm(ELIMINAR_NOVEDAD, function(confirmStatus){
+            if (confirmStatus){
+                objAH               = new AjaxHelper(updateEliminarNovedad);
+                objAH.debug         = true;
+                objAH.url           = URL_PREFIX+'/admin/novedades_opacDB.pl';
+                objAH.showOverlay   = true;
+                objAH.tipoAccion    = 'ELIMINAR';
+                objAH.id            = id_novedad;
+                objAH.sendToServer();
+            }
+        });
+    }
+
+    function updateEliminarNovedad(responseText){
+            if (!verificarRespuesta(responseText))
+                return(0);
+            $('#novedades_opac_ajax').html(responseText);
+    }
+</script>
+
+<script type="text/javascript">
+      $(document).ready(function() {
+        obtenerNovedades();
+      });
+</script>
+
+<div id="novedades_opac_ajax"></div>
+
+
+[% INCLUDE 'intranet-bottom.inc' %]

@@ -1,0 +1,51 @@
+[% INCLUDE 'opac-top.inc' %]
+
+<script type="text/javascript">
+	$(document).ready(function() {
+	    $("#temas_intra").change(function() {
+            $("link").attr("href","[% temas %]/"+$("#temas_intra").val()+"/includes/intranet.css");
+	        return false;
+	    });
+	});
+</script>	
+
+
+<div class="page-header">
+    <h1>[% "Ajustes personales " | i18n %] <small>[% socio_data.usr_nro_socio %] ([% socio_data.usr_apellido %], [% socio_data.usr_nombre %])</small></h1>
+</div>
+
+<form class="form-horizontal" id="user-settings" method="POST" action="[% url_prefix %]/settings.pl" onsubmit="javascript:startOverlay();">
+        <fieldset>
+
+	          <div class="control-group">
+	              <label class="control-label" for="languages">[% "Idioma" | i18n %]</label>
+	              <div class="controls">
+	                  [% languages %]
+	                  
+	                  [% PERL %]
+	                  
+                          print C4::AR::Filtros::setHelpInput(
+                                    text  => "[% 'Idioma en que se ver&aacute; Meran' | i18n %]",
+                            );
+                    
+                      [% END %]                  
+	              </div>
+	           </div>
+
+	           
+
+	           <div class="control-group">
+		           <label class="control-label" for="email">[% "E-mail" | i18n %]</label>
+		           <div class="controls">
+			            <div class="input-prepend">
+			              <span class="add-on"><i class="icon-envelope"></i></span><input class="span3" type="email" name="email" id="email" value="[% socio_data.usr_email %]">
+			            </div>		               
+		           </div>
+	               <input type="hidden" name="token" value="[% token %]" />
+		       </div>
+			     <div class="form-actions">
+			     	<button type="submit" class="btn btn-large btn-primary" type="button"><i class="icon-white icon-ok"></i> [% 'Guardar' | i18n %]</button>
+			    </div>
+        </fieldset>
+</form>
+[% INCLUDE 'opac-bottom.inc' %]

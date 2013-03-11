@@ -1,0 +1,43 @@
+<fieldset>
+    <legend class="titulo_legend trigger"><strong>[% "Agregar campo al esquema" | i18n %]</strong></legend>
+    <div class="divTablaAgregarVisualizacion" id="divTablaAgregarVisualizacion">
+        <ul>
+            <li class="sub_item">
+                <label for="campoX">[% 'Seleccion' | i18n %]:</label> 
+                [% selectCampoX %]
+            </li>
+            <li class="sub_item">
+                <label for="campo">[% 'Campo' | i18n %]:</label>
+                    <select name="campo" id="campo" onChange="eleccionCampo()">
+                        <option value="-1">[% 'Seleccionar CampoX' | i18n %]</option>
+                    </select>
+                [% 'Nombre' | i18n %]: <strong><span id="nombre_campo"></span></strong>
+            </li>
+            <li class="sub_item">
+                <label for="subcampo">[% 'Subcampo' | i18n %]:</label>
+                <select name="subcampo" id="subcampo" onChange="eleccionSubCampoEsquema()">
+                        <option value="-1">[% 'Seleccionar SubCampo' | i18n %]</option>
+                    </select>
+                   <strong><span id="liblibrarian_esquema"></span></strong>
+            </li>
+            <li class="sub_item" id="li_separador">
+                <label for="separador">[% 'Separador' | i18n %]:</label> 
+                <input id="separador" type="text" value="" size="90">
+            </li> 
+            [% PERL %]
+                    print C4::AR::Filtros::to_Button(   text    => "[% 'Agregar Vista' | i18n %]",
+                                                        boton   => "boton_buscar",
+                                                        onClick => "agregarCampoEsquema('[% id_esquema %]')",
+                                                        title   => "[% 'Agregar campo' | i18n %]",
+                                                        width => "auto",
+                                                        alternClass => "botonCentrado",
+                            ) ;
+            [% END %]
+
+      </ul>
+    </div>
+</fieldset>
+
+<div id="divAgregarModificarVisualizacion"></div>
+<div id="tablaResultCampos"></div>
+<div id="tablaResultSubCampos"></div>

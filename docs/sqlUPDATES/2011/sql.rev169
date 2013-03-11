@@ -1,0 +1,18 @@
+INSERT INTO `pref_preferencia_sistema` (
+`id` ,
+`variable` ,
+`value` ,
+`explanation` ,
+`options` ,
+`type` ,
+`categoria`
+)
+VALUES (
+NULL , 
+'mailMessageForgotPassUnactive',
+'Estimado/a <b>SOCIO</b>, socio de NOMBRE_UI, recientemente Ud. ha solicitado reestablecer su clave.<br /> <br />Para hacerlo, debe dirigirse a la biblioteca, ya que UD. no cumple las condiciones necesarias de regularidad. <br /><br />Puede dirigirse a NOMBRE_UI. <br /> Si UD no ha solicitado un reseteo de su clave, simplemente ignore este mail.  <br />Atte. NOMBRE_UI.', 
+'Cuerpo del mail de reseteo de password. No cambiar las paralbar en mayusculas', 
+NULL , 
+'text', 
+'sistema'
+);

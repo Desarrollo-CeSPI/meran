@@ -1,0 +1,8 @@
+UPDATE `pref_preferencia_sistema` SET `label` = 'Caracteres mínimos' WHERE `pref_preferencia_sistema`.`variable` = 'minPassLength';
+UPDATE `pref_preferencia_sistema` SET `value` = 'Google map' WHERE `pref_preferencia_sistema`.`variable` = 'google_map';
+UPDATE `pref_preferencia_sistema` SET `type` = 'text' WHERE `pref_preferencia_sistema`.`variable` = 'google_map';
+UPDATE `pref_preferencia_sistema` SET `label` = 'Google Map' WHERE `pref_preferencia_sistema`.`variable` = 'google_map';
+UPDATE `pref_preferencia_sistema` SET `explanation` = 'Google Map' WHERE `pref_preferencia_sistema`.`variable` = 'google_map';
+UPDATE `pref_preferencia_sistema` SET `explicacion_interna` = 'Google Map' WHERE `pref_preferencia_sistema`.`variable` = 'google_map';
+UPDATE `pref_preferencia_sistema` SET `value` = '10' WHERE `pref_preferencia_sistema`.`variable` = 'limite_resultados_autocompletables';
+

@@ -1,0 +1,4 @@
+CREATE TABLE `circ_prestamo_vencido_temp` (
+`id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY ,
+`id_prestamo` INT NOT NULL
+) ENGINE = MYISAM ;

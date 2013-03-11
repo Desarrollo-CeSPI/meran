@@ -1,0 +1,35 @@
+[% INCLUDE "intranet-top.inc" %] 
+
+<script src="/intranet-tmpl/includes/usuarios/usuariosPotenciales.js"></script>
+
+
+<script>
+
+
+$(document).ready(function() {
+
+// 	zebra("tablaResult");
+	
+	//definido en circulacion.js
+	usuario= new objeto_usuario();
+	usuario.text= "[% socio.persona.getApeYNom %]";
+	usuario.ID= "[% socio.getNro_socio %]";
+
+	detalleUsuario(usuario.ID);
+
+});
+
+</script>
+
+<br>
+<div id="confirmar_div"></div>
+<br>
+
+<div style="clear:both">
+
+	<!-- 	DETALLE USUARIO -->
+	<div id="detalleUsuario"></div>
+
+</div>
+
+[% INCLUDE "intranet-bottom.inc" %]

@@ -1,0 +1,3 @@
+UPDATE rep_historial_circulacion SET tipo_operacion='cancelacion' WHERE tipo_operacion='cancel';
+UPDATE rep_historial_circulacion SET tipo_operacion='notificacion' WHERE tipo_operacion='notification' or tipo_operacion='reminder';
+UPDATE rep_historial_circulacion SET tipo_operacion='espera' WHERE tipo_operacion='queue';

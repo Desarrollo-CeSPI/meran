@@ -1,0 +1,127 @@
+<script type="text/javascript" >
+        
+      
+
+        $(document).ready(function(){
+        	checkTr();
+                checkedAll('checkAllSanciones','chkboxSanciones');
+        });
+
+
+        function ordenar_result_sanciones(orden){
+
+          if (orden == ORDEN) {
+              SENTIDO_ORDEN= !SENTIDO_ORDEN;
+          } else {
+              SENTIDO_ORDEN= 1;
+              ORDEN = orden;
+          }
+          objAH.sentido_orden = SENTIDO_ORDEN;
+          objAH.sort(orden);        
+        }
+
+        function cambiarSentidoOrd(){
+          if (SENTIDO_ORDEN){
+            $('#icon_'+ ORDEN).attr("class","icon-chevron-up click");
+          } else {
+            $('#icon_'+ ORDEN).attr("class","icon-chevron-down click");
+          }
+        }
+
+</script>
+<div class="contenedor_paginador">[% paginador %]</div>
+[% IF CANT_SANCIONES %]
+    <div class="well">[% "Cantidad de sanciones" | i18n %]: &nbsp;[% cant %]</div> 
+      [% PERL %]
+          print C4::AR::Filtros::tableHeader(   
+                                                  id              => "tablaResult_sanciones",
+                                                  class           => "",
+                                                  selectAll_id    => "checkAllSanciones",
+
+                                                  columns         => ['[% "Id"|i18n %]','[% "Socio"|i18n %]','[% "Legajo"|i18n %]',
+                                                                      '[% "Categoria"|i18n %]','[% "Operaci&oacute;n"|i18n %]', '[% "Inicio"|i18n %]',
+                                                                      '[% "Fin"|i18n %]','[% "Autor"|i18n %]', '[% "T&iacute;tulo"|i18n %]',
+                                                                      
+                                                                     ],
+
+                                                   order            => {  'Id' =>'nro_socio', 
+                                                                          'Socio' => 'apellido',
+                                                                          'Inicio' => 'fecha_inicio',
+                                                                          'Legajo' =>'legajo',
+                                                                        },
+                                                  order_name_function => "result_sanciones"
+                                                  
+                      ) ;
+      [% END %]
+        
+        
+        <tbody>
+              [% FOREACH sancion IN SANCIONES %]
+                  <tr>  
+                    <td>
+                        <input type="checkbox" name="chkboxSanciones" value="[% sancion.getId_sancion %]" 
+                                id="[% sancion.getId_sancion %]">
+                    </td>
+                    <td>
+                        [% PERL %]
+                            print C4::AR::Filtros::link_to(   text =>     "[% sancion.getNro_socio %]",
+                                                            url=>"[% url_prefix %]/usuarios/reales/datosUsuario.pl", 
+                                                            params =>   ["nro_socio=[% sancion.socio.getNro_socio %]"],
+                                                            title =>    "[% 'Mostrar Detalle del Usuario' | i18n %]"
+                                                        );
+                        [% END %]
+                    </td>
+                    <td>
+                        [% PERL %]
+                            print C4::AR::Filtros::link_to(   text =>     "[% sancion.socio.persona.getApeYNom %]",
+                                                            url=>"[% url_prefix %]/usuarios/reales/datosUsuario.pl", 
+                                                            params =>   ["nro_socio=[% sancion.socio.getNro_socio %]"],
+                                                            title =>    "[% 'Mostrar Detalle del Usuario' | i18n %]"
+                                                        );
+                        [% END %]
+                    </td>
+                    <td>[% sancion.socio.persona.getLegajo %]</td>
+                    <td>[% sancion.socio.categoria.getDescription %]</td>
+                    <td>
+                        [% IF sancion.ref_tipo_sancion.ref_tipo_prestamo.id_tipo_prestamo %]
+                            [% sancion.ref_tipo_sancion.ref_tipo_prestamo.getDescripcion %]
+                        [% ELSE %]
+                            Reserva no retirada
+                        [% END %]
+                    </td>
+                    <td>[% sancion.getFecha_comienzo_formateada %]</td>
+                    <td>[% sancion.getFecha_final_formateada %]</td>
+
+                    [% IF sancion.nivel3.getId %]
+                        <td>[% sancion.nivel3.nivel1.getAutor %]</td>
+                        <td style="width:200px;">[% sancion.nivel3.nivel1.getTitulo %]</td>
+                        <td>[% sancion.nivel3.nivel2.getEdicion %]</td>
+                    [% ELSE %]
+                        [% IF sancion.reserva.nivel3.getId %]
+                            <td>[% sancion.reserva.nivel3.nivel1.getAutor %]</td>
+                            <td>[% sancion.reserva.nivel3.nivel1.getTitulo %]</td>
+                            <td>[% sancion.reserva.nivel3.nivel2.getEdicion %]</td>
+                        [% ELSE %]
+                            <td>[% '---' | i18n %]</td>
+                            <td>[% '---' | i18n %]</td>
+                            <td>[% '---' | i18n %]</td>
+                        [% END %]
+                    [% END %]    
+                </tr>
+              [% END %]
+          </tbody>
+       </table>
+       <div class="form-actions">
+                    [% PERL %]
+                                        print C4::AR::Filtros::to_Button(   text    => "[% 'Borrar Sanciones' | i18n %]",
+                                                                            boton   => "btn btn-primary",
+                                                                            onClick => "borrarSanciones('chkboxSanciones');",
+                                                                            title   => "[% 'Borrar Sanciones' | i18n %]",
+                                                                         
+                                                ) ;
+                    [% END %]
+       </div>
+[% ELSE %]
+       <div class="alert alert-info">[% 'No se han registrado sanciones' | i18n %] </div>
+[% END %]
+

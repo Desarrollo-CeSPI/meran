@@ -1,0 +1,126 @@
+[% INCLUDE "intranet-top.inc" %]
+
+<script type="text/javascript" charset="utf-8">
+
+$(document).ready(function() {
+    actualizarTabla();
+    onEnter("buscar",buscarPreferencia);
+});
+
+function actualizarTabla(){
+    objAH               = new AjaxHelper(updateActualizarTabla);
+	objAH.debug         = true;
+	objAH.url           = URL_PREFIX+"/admin/global/preferenciasDB.pl";
+    objAH.showOverlay   = true;
+	objAH.accion        = "ACTUALIZAR_TABLA_CIRCULACION";
+	objAH.sendToServer();
+}
+
+function updateActualizarTabla(responseText){
+    $("#result").html(responseText);
+}
+
+function modificarVariable(variable,tipo){
+
+	objAH                       = new AjaxHelper(updateModificarVariable);
+	objAH.debug                 = true;
+    objAH.showOverlay           = true;
+	objAH.url                   = URL_PREFIX+"/admin/global/preferenciasDB.pl";
+	objAH.variable              = variable;
+	objAH.accion                = "MODIFICAR_VARIABLE";
+	objAH.sendToServer();
+}
+
+function updateModificarVariable(responseText){
+    $("#result").show();
+	$("#result").html(responseText);
+	scrollTo('result');
+}
+
+
+function guardarModificacion(){
+
+	objAH               = new AjaxHelper(updateGuardarModificacion);
+	objAH.debug         = true;
+	objAH.url           = URL_PREFIX+"/admin/global/preferenciasDB.pl";
+    objAH.showOverlay   = true;
+	objAH.variable      = $("#variable").val();
+	objAH.valor         = $("#valor").val();
+    objAH.categoria     = 'circulacion';
+
+	if ($("#tipoVar").val() == 'bool'){
+	    objAH.valor=(getRadioButtonSelectedValue( $("[name=valor]")));
+	}
+
+	objAH.explicacion   = $("#explicacion").val();
+	objAH.accion        = "GUARDAR_MODIFICACION_VARIABLE";
+	objAH.sendToServer();
+
+}
+
+
+function updateGuardarModificacion(responseText){
+    actualizarTabla();
+    $("#result").hide();
+	var Messages=JSONstring.toObject(responseText);
+	setMessages(Messages);
+}
+
+/*
+ * buscarPreferencia
+ * Busca todas las preferencias o las que se corresponden con el string ingresado para filtrar la busqueda.
+ */
+function buscarPreferencia(){
+	objAH               = new AjaxHelper(updateBuscarPreferencia);
+	objAH.debug         = true;
+    objAH.showOverlay   = true;
+	objAH.url=URL_PREFIX+"/admin/global/preferenciasDB.pl";
+	objAH.buscar        = $("#buscar").val();
+	objAH.accion        = "BUSCAR_PREFERENCIAS";
+	objAH.categoria     = 'circulacion';
+	objAH.sendToServer();
+}
+
+function updateBuscarPreferencia(responseText){
+	$("#result").html(responseText);
+}
+
+/*
+ * limpiar
+ * Borra el texto ingresado en el componente de busqueda.
+ */
+function limpiar(){$("#buscar").val("");}
+
+</script>
+
+
+<div class="titulos">
+    <h3> [% "Administraci&oacute;n de preferencias de Circulac&oacute;n" | i18n %]</h3>
+</div>
+
+<form class="well form-search" onsubmit="return false">
+            <input type="text" id="buscar" name="buscar" >
+            
+              [% PERL %]
+	                                print C4::AR::Filtros::to_Button(   text    => "[% 'Limpiar' | i18n %]",
+	                                                                    boton   => "btn",
+	                                                                    onClick => "limpiar();",
+	                                                                    title   => "[% 'Limpiar' | i18n %]",
+	                                                                    inline  => 1,
+	                                        ) ;
+	            [% END %]
+	            
+	            [% PERL %]
+	                                print C4::AR::Filtros::to_Button(   text    => "[% 'Buscar' | i18n %]",
+	                                                                    boton   => "boton_buscar",
+	                                                                    onClick => "buscarPreferencia();",
+	                                                                    title   => "[% 'Buscar' | i18n %]",
+	                                                                    inline  => 1,
+	                                        ) ;
+	            [% END %]
+	            
+</form>
+
+<div id="divResultado"></div>
+
+[% INCLUDE "intranet-bottom.inc" %]

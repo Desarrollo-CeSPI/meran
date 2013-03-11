@@ -1,0 +1,75 @@
+<div class="titulo">[% "Administraci&oacute;n de Tipos de Pr&eacute;stamo" | i18n %]</div>
+            
+<table border='0' cellpadding='0' cellspacing='0' width='100%'>
+    <tr class="titulo_tabla_resultado">
+        <td>[% "C&oacute;digo" | i18n %]</td>
+        <td>[% "Descripci&oacute;n" | i18n %]</td>
+        <td>[% "M&aacute;xima cantidad de pr&eacute;stamos" | i18n %]</td>
+        <td>[% "D&iacute;as de duraci&oacute;n del pr&eacute;stamo" | i18n %]</td>
+        <td>[% "Renovaciones" | i18n %]</td>
+        <td>[% "D&iacute;as de Renovaci&oacute;n" | i18n %]</td>
+        <td>[% "Cantidad de d&iacute;as para renovar" | i18n %]</td>
+        <td>[% "Para Sala" | i18n %]</td>
+        <td>[% "Habilitado" | i18n %]</td>
+        <td width="8%">[% "Editar" | i18n %]</td>
+        <td>[% "Eliminar" | i18n %]</td>
+    </tr>
+[% FOREACH tipo_prestamo IN TIPOS_PRESTAMOS_LOOP %]
+    <tr align="middle">    
+        <td>
+                [% tipo_prestamo.getId_tipo_prestamo %]
+        </td>
+        <td>
+                [% tipo_prestamo.getDescripcion %]
+        </td>
+        <td align="center">
+                [% tipo_prestamo.getPrestamos %]
+        </td>
+        <td align="center">
+                [% tipo_prestamo.getDias_prestamo %]
+        </td>
+        <td align="center">
+                [% tipo_prestamo.getRenovaciones %]
+        </td>
+        <td align="center">
+                [% tipo_prestamo.getDias_renovacion %]
+        </td>
+        <td align="center">
+                [% tipo_prestamo.getDias_antes_renovacion %]
+        </td>
+        <td align="center">
+                [% IF tipo_prestamo.disponibilidad.getCodigo %]
+                        [% "Si" | i18n %]
+                [% ELSE %]
+                        [% "No" | i18n %]
+                [% END %]
+        </td>
+        <td align="center">
+                [% IF tipo_prestamo.getHabilitado %]
+                        [% "Si" | i18n %]
+                [% ELSE %]
+                        [% "No" | i18n %]
+                [% END %]
+        </td>
+        <td   align="center">
+        <input type="image" onclick='modificarTipoPrestamo("[% tipo_prestamo.getId_tipo_prestamo %]")' src="[% themelang  %]images/editar.png" alt="Editar">
+        </td>
+        <td   align="center">
+    <input type="image" onclick='eliminarTipoPrestamo("[% tipo_prestamo.getId_tipo_prestamo %]")' src="[% themelang %]images/borrar.png" alt="Eliminar">
+        </td>
+    </tr>
+[% END %]
+        <tr valign=bottom>
+                <td class="lineafinaltabla"  align="left" colspan="9"></td>
+        </tr>
+</table>
+
+            <center>
+            [% PERL %]
+                                print C4::AR::Filtros::to_Button(   text    => "[% 'Agregar' | i18n %]",
+                                                                    boton   => "boton_buscar",
+                                                                    onClick => "agregarTipoPrestamo();",
+                                                                    title   => "[% 'Agregar Tipo de Pr&eacute;stamo' | i18n %]",
+                                        ) ;
+            [% END %]
+            </center>

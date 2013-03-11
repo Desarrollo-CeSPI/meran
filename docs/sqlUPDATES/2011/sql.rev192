@@ -1,0 +1,1 @@
+INSERT INTO `pref_estructura_subcampo_marc` (`nivel`, `obligatorio`, `campo`, `subcampo`, `liblibrarian`, `libopac`, `descripcion`, `repetible`, `mandatory`, `kohafield`) VALUES ('2', '0', '865', 'a', 'índice', 'índice', 'índice', '0', '0', NULL);

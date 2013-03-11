@@ -1,0 +1,43 @@
+[% INCLUDE 'intranet-top.inc' %]
+
+<script type="text/javascript">
+
+    function listarLogos(){
+        objAH               =new AjaxHelper(updateListarLogos);
+        objAH.debug         = true;
+        objAH.showOverlay   = true;
+        objAH.url           = URL_PREFIX+'/admin/logosDB.pl';
+        objAH.tipoAccion    = 'LISTAR_UI';
+        objAH.sendToServer();
+    }
+
+    function updateListarLogos(responseText){
+        if (!verificarRespuesta(responseText))
+            return(0);
+        $('#logos_ajax').html(responseText);
+    }
+    
+    function eliminarLogoUI(id){
+	    objAH                   = new AjaxHelper(updateEliminarLogo);
+	    objAH.showOverlay       = true;
+	    objAH.url               = URL_PREFIX+'/admin/logosDB.pl';
+	    objAH.idLogo            = id;
+	    objAH.context           = 'intranet';
+	    objAH.tipoAccion        = 'DEL_LOGO_UI';
+	    objAH.sendToServer();
+	}
+	
+	function updateEliminarLogo(responseText){
+	    if (!verificarRespuesta(responseText))
+            return(0);
+        listarLogos();
+	}
+    
+    $(document).ready(function() {
+        listarLogos();
+    });
+</script>
+
+<div id="logos_ajax"></div>
+
+[% INCLUDE 'intranet-bottom.inc' %]

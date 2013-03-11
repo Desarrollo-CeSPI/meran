@@ -1,0 +1,28 @@
+<!-- TMPL_INCLUDE NAME="intranet-top.inc" -->
+
+
+<div class="titulos" >Exportaci&oacute;n MARC</div>
+		
+<table border=0 cellpadding=2 cellspacing=0 width=50% class="tablaresultado" align="center">
+<tr><td class="par" align="left">
+		<h2 class="parameters">Seleccionar los registros a exportar</h2>
+		<form name="form1" method="post">
+			<p>Del registro n&uacute;mero : <input type="text" name="start_bib" size="15">
+			al : <input type="text" name="end_bib" size="15"></p>
+			<p>Tipo de documento : <!--TMPL_VAR Name="CGIitemtype"--></p>
+			<p>Unidad de Informaci&oacute;n :  <select name="branch">
+                        <!-- TMPL_LOOP name="branchloop" -->
+  <option value="<!-- TMPL_VAR name="value" -->" <!-- TMPL_IF name="selected" -->selected<!-- /TMPL_IF -->><!-- TMPL_VAR name="branchname" --></option>
+                        <!-- /TMPL_LOOP -->
+                        </select>
+</p>
+			<p>Limitar a los primeros <input type="text" name="limit"> registros.</p>
+			<p>Nota : los ejemplares NO son exportados por esta herramienta.</p>
+			
+			<p align="center"><input type="hidden" name="op" value="export">
+			<input type="image" value="Exportar"  src="<!-- TMPL_VAR name="interface" -->/<!-- TMPL_VAR name="theme" -->/images/exportar.png" onclick="form1.submit">
+			</p>
+		</form>
+</td></tr>
+</table>
+<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->
