@@ -521,6 +521,7 @@ sub getSysExternoMeran {
 sub editSysExternoMeran {
     my ($id, $url, $id_ui) = @_;
     my @filtros;
+    my $msg_object = C4::AR::Mensajes::create();
 
     use C4::Modelo::SysExternosMeran::Manager; 
     push (@filtros, ('id' => {eq => $id}) );
@@ -528,22 +529,25 @@ sub editSysExternoMeran {
     my $sys_externo_meran = C4::Modelo::SysExternosMeran::Manager::get_sys_externos_meran(query => \@filtros);
 
     $sys_externo_meran = $sys_externo_meran->[0];
-
-    my $db = $sys_externo_meran->db;
-    $db->begin_work;
-    my $msg_object = C4::AR::Mensajes::create();
-    eval{
-        $sys_externo_meran->edit($url, $id_ui);
-        $sys_externo_meran->save();
-        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'SEM03', 'params' => []});
-        $db->commit;
-    };
-    if ($@){
-        # TODO falta definir el mensaje "amigable" para el usuario informando que no se pudo agregar el proveedor
-        &C4::AR::Mensajes::printErrorDB($@, 'B460',"INTRA");
-        $msg_object->{'error'}= 1;
-        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'SEM02', 'params' => []} ) ;
-        $db->rollback;
+    
+    if ($sys_externo_meran) {
+        
+        my $db = $sys_externo_meran->db;
+        $db->begin_work;
+        
+        eval{
+            $sys_externo_meran->edit($url, $id_ui);
+            $sys_externo_meran->save();
+            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'SEM03', 'params' => []});
+            $db->commit;
+        };
+        if ($@){
+            # TODO falta definir el mensaje "amigable" para el usuario informando que no se pudo agregar el proveedor
+            &C4::AR::Mensajes::printErrorDB($@, 'B460',"INTRA");
+            $msg_object->{'error'}= 1;
+            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'SEM02', 'params' => []} ) ;
+            $db->rollback;
+        }
     }
     return ($msg_object);
 }
