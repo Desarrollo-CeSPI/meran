@@ -138,15 +138,14 @@ sub _ceroSize{
     Sube la imagen del tipo de documento
 =cut
 sub uploadTipoDeDocImage{
-
     my ($foto, $file_name) = @_;
 
     use Digest::MD5;
     use C4::AR::Utilidades;
     
     my @whiteList            = qw(
-                                        png
-                                    );
+                                    png
+                                );
 
     my $uploaddir               = C4::Context->config("tipoDocumentoPath");
     my $maxFileSize             = 2048 * 2048; # 1/2mb max file size...
@@ -172,13 +171,9 @@ sub uploadTipoDeDocImage{
             close(WRITEIT);
         
         }
-
-        return ("$file_name.$file_type");
-        
-    }
-    
+        return ("$file_name.$file_type");     
+    }    
     return 0;
-
 }
 
 sub uploadAdjuntoNovedadOpac{

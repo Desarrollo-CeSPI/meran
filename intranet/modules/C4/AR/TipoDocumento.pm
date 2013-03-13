@@ -20,7 +20,6 @@ use vars qw(@EXPORT @ISA);
     Agrega un tipo de documento nuevo
 =cut
 sub agregarTipoDocumento{
-
     my ($params, $postdata) = @_;
 
     my $tipoDoc             = C4::Modelo::CatRefTipoNivel3->new();
@@ -31,7 +30,6 @@ sub agregarTipoDocumento{
     $db->begin_work;
 
     eval{
-
         $tipoDoc->agregar($params);
 
         #subir imagen
@@ -42,13 +40,11 @@ sub agregarTipoDocumento{
             $msg_object = uploadCoverImageDefault($params->{'tipoDocumento'}, $msg_object);
         }
 
-        C4::AR::Debug::debug("error --------------------> - " . $msg_object->{'error'});
         # hubo error subiendo la imagen
         if($msg_object->{'error'}){
             die();
         }
 
-        C4::AR::Debug::debug("ESTO NO LO TIENE QUE EJECUTARRR ");
         $msg_object->{'error'} = 0;
         C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'TD001', 'params' => []});
         $db->commit;
@@ -56,9 +52,6 @@ sub agregarTipoDocumento{
     };
 
     if($@){
-
-        C4::AR::Debug::debug("entro al catch !!!!");
-
         cancelUploadCoverImage($params->{'tipoDocumento'});
 
         # C4::AR::Mensajes::printErrorDB($@, 'AM01',"INTRA");
@@ -67,12 +60,9 @@ sub agregarTipoDocumento{
 
         $db->rollback;
    }
-
    $db->{connect_options}->{AutoCommit} = 1;
 
-
    return ($msg_object);
-
 }
 
 =item
@@ -189,7 +179,6 @@ sub modTipoDocumento{
     Sube la imagen del tipo de doc
 =cut
 sub uploadCoverImage{
-    
     my ($image, $file_name, $msg_object) = @_;
 
     use C4::AR::UploadFile;
@@ -201,7 +190,7 @@ sub uploadCoverImage{
     }else{
         #no lo guardo
         $msg_object->{'error'} = 1;
-        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'TD000', 'params' => []} ) ;
+        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'TD006', 'params' => []} ) ;
     }
 
     return $msg_object;
