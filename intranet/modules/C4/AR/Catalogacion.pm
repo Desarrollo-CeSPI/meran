@@ -414,6 +414,7 @@ sub marc_record_to_opac_view {
 =head2
     sub marc_record_to_intra_view
 =cut
+
 sub marc_record_to_intra_view {
     my ($marc_record, $params,$db) = @_;
 
@@ -422,20 +423,22 @@ sub marc_record_to_intra_view {
     $params->{'tipo'}           = 'INTRA';
     #obtengo los campo, subcampo que se pueden mostrar
     my $MARC_result_array;
-    my ($marc_record_salida)    = filtrarVisualizacion($marc_record, $params,$db);
+    my $marc_record_salida;
+
 
     if(!C4::AR::Preferencias::getValorPreferencia("detalle_INTRA_extendido")){
-    #se procesa el marc_record filtrado
-    ($MARC_result_array)     = marc_record_to_meran_to_detail_view_as_not_extended($marc_record_salida, $params, 'INTRA',$db);
-#       ($MARC_result_array)     = marc_record_to_meran_to_detail_view($marc_record_salida, $params, 'INTRA', $db);
+        #se procesa el marc_record filtrado
+        my ($cant, $catalogaciones_array_ref) = getEstructuraSinDatos($params);
+        agregarCamposVacios($marc_record, $catalogaciones_array_ref);
+        ($marc_record_salida)    = filtrarVisualizacion($marc_record, $params,$db);
+        ($MARC_result_array)     = marc_record_to_meran_to_detail_view_as_not_extended($marc_record_salida, $params, 'INTRA',$db);
     } else {
-    #se procesa el marc_record filtrado
-    ($MARC_result_array) = marc_record_to_meran_to_detail_view($marc_record_salida, $params->{'id_tipo_doc'}, 'INTRA', $db);
+        #se procesa el marc_record filtrado
+        ($MARC_result_array) = marc_record_to_meran_to_detail_view($marc_record_salida, $params->{'id_tipo_doc'}, 'INTRA', $db);
     }
 
     return $MARC_result_array;
-}
-
+} 
 
 =head2
     sub filtrarVisualizacion
