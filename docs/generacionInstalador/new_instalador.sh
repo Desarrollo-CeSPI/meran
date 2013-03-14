@@ -1,7 +1,7 @@
 #!/bin/bash
 rm -fr aux
 mkdir aux
-VERSION="0.9.3"
+VERSION="0.9.4"
 cp -a ../../opac/ ../../intranet/ ../../includes aux/
 cd aux
 for i in $(find -name *.pl); do
