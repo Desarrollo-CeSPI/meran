@@ -1882,12 +1882,12 @@ sub getReporteCirculacionGeneral{
       
                                                         );
     # cantidad para el paginador
-    my ($rep_busqueda_count) = C4::Modelo::RepHistorialCirculacion::Manager->get_rep_historial_circulacion_count(
-                                                                    query               => \@filtros,                                            
-                                                                    require_objects   => [ 'nivel3','socio', 'tipo_prestamo_ref', 'responsable_ref' ],
-                                                                    select            => ['id3','nro_socio','tipo_prestamo', 'responsable'],
-                                                                    distinct          => 1,
-                                                                );
+    # my ($rep_busqueda_count) = C4::Modelo::RepHistorialCirculacion::Manager->get_rep_historial_circulacion_count(
+    #                                                                 query               => \@filtros,                                            
+    #                                                                 require_objects   => [ 'nivel3','socio', 'tipo_prestamo_ref', 'responsable_ref' ],
+    #                                                                 select            => ['id3','nro_socio','tipo_prestamo', 'responsable'],
+    #                                                                 distinct          => 1,
+    #                                                             );
       
     my @resultArray;       
 
@@ -2013,7 +2013,7 @@ sub getReporteCirculacionGeneral{
         $dataHash{'cantidad_domiciliario'}  = $cantidadDomiciliario->[0]->{'agregacion_temp'};
         $dataHash{'cantidad_sala'}          = $cantidadSala->[0]->{'agregacion_temp'};
         $dataHash{'cantidad_especial'}      = $cantidadEspecial->[0]->{'agregacion_temp'};
-        $dataHash{'nivel1'}                 = C4::AR::Nivel1::getNivel1FromId1($objetoRepCirculacion->getId3());
+        $dataHash{'nivel1'}                 = C4::AR::Nivel1::getNivel1FromId3($objetoRepCirculacion->getId3());
         $dataHash{'obj_circulacion'}        = $objetoRepCirculacion;
         $dataHash{'nivel3'}                 = C4::AR::Nivel3::getNivel3FromId3($objetoRepCirculacion->getId3());
 
@@ -2023,7 +2023,7 @@ sub getReporteCirculacionGeneral{
 
     }
 
-    return (\@resultArray, $rep_busqueda_count);
+    return (\@resultArray, scalar(@resultArray));
 
 }
 
@@ -2222,8 +2222,7 @@ sub getReservasCirculacion {
     
     #OK, ver cuando se relaciona con $tipoReserva
     if($estadoReserva eq "asignada"){         
-        push( @filtros,  or => [ 'id3' => { ne => undef },
-                                 'id3' => { ne => '0'} ] ); 
+        push( @filtros,  or => [ 'tipo_operacion' => { eq => 'prestamo' } ]); 
                                 
     }elsif($estadoReserva eq "anulada"){ 
         push( @filtros, and => [ 'tipo_operacion'   => { eq => 'cancelacion' },
