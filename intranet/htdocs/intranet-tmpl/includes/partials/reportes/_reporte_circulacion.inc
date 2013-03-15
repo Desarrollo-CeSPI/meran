@@ -31,7 +31,6 @@
         objAH.tipoAccion        = "BUSQUEDAS";
         objAH.funcion           = "changePageBusquedas";
         objAH.categoriaSocio    = $('#categoriaSocioReservas').val();
-        objAH.tipoReserva       = $('#tipoReserva').val();
         objAH.tipoDoc           = $('#tipo_documento_id').val();
         objAH.titulo            = $('#titulo').val();
         objAH.edicion           = $('#edicion').val();
@@ -80,17 +79,6 @@
 
         <input type="hidden" name="tipoAccion" value="EXPORT_CIRC">
         
-        <div class="control-group" >
-            <label for="tipoReserva" class="control-label">[% 'Tipo de reserva' | i18n %]</label>  
-            <div class="controls">
-                <select name="tipoReserva" id="tipoReserva">
-                    <option value="ejemplar">Ejemplar</option>
-                    <option value="grupo">Grupo</option>
-                    <option value="">TODAS</option>
-                </select>
-            </div>
-        </div>
-
         <div class="control-group">
             <label class="control-label" for="categoria_socio_id">[% 'Categor&iacute;­a del usuario' | i18n %]</label>
             <div class="controls">  
@@ -125,8 +113,9 @@
             <div class="controls">
                 <select name="estadoReserva" id="estadoReserva">
                     <option value="asignada">Asignada</option>
-                    <option value="anulada">Anulada</option>
+                    <option value="cancelada">Cancelada</option>
                     <option value="vencida">Vencida</option>
+                    <option value="TODAS">TODAS</option>
                 </select>
             </div>
         </div>

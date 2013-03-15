@@ -93,7 +93,7 @@
             <label class="control-label"> [% "Rango de Fechas" | i18n %] </label>
             <div class="controls">
                 <input type="text" id="date-from-gen" name="date-from-gen" data-datepicker="datepicker" placeholder="[% 'Desde' | i18n %]" value="" required>
-                <input type="text" id="date-to-gen" name="date-to" data-datepicker="datepicker" placeholder="[% 'Hasta' | i18n %]" value="" required>
+                <input type="text" id="date-to-gen" name="date-to-gen" data-datepicker="datepicker" placeholder="[% 'Hasta' | i18n %]" value="" required>
             </div>
         </div>
 
@@ -106,14 +106,7 @@
             </div>
         </div>
 
-        <!-- se usa? -->
-     <!--    <div class="control-group">
-            <label class="checkbox" for="statistics_check">[% 'Generar estadisticas' | i18n %]
-
-            <input type="checkbox" name="statistics_check" id="statistics_check"/></label>
-
-        </div>        
-           -->
+     
           <div class="form-actions">
             [% PERL %]
                   print C4::AR::Filtros::action_button( 

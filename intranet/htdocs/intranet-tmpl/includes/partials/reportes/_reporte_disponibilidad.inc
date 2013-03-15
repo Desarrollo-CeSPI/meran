@@ -35,8 +35,8 @@
                         print C4::AR::Filtros::action_button( 
                                                             button       => "btn btn-primary",
                                                             action       => "reporteDisponibilidad();", 
-                                                            icon         => "icon-white icon-search",
-                                                            title       =>'[% "Buscar"|i18n %]',
+                                                            icon         => "icon-white icon-inbox",
+                                                            title       =>'[% "Generar reporte"|i18n %]',
                                                         );
                 [% END %]
             </div>

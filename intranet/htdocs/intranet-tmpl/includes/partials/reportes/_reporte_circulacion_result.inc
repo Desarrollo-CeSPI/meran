@@ -10,15 +10,15 @@
     [% PERL %]
             print C4::AR::Filtros::tableHeader(   
                               id              => "tablaResultCirculacion",
-                              columns         => ['[% "Autor" | i18n %]','[% 'T&iacute;tulo' | i18n %]',
+                              columns         => ['[% 'T&iacute;tulo' | i18n %]',
                                                   '[% 'Cantidad de reservas' | i18n %]',
                                                   '[% "C&oacute;digo de barras" | i18n %]',
+                                                  '[% 'Signatura Topogr&aacute;fica' | i18n %]',
                                                   '[% "Responsable" | i18n %]', 
                                                   '[% "Usuario" | i18n %]',
                                                   
                                                   ],
-                              order           => {  'Autor'                 => 'autor', 
-                                                    'T&iacute;tulo'         => 'titulo',
+                              order           => {  'T&iacute;tulo'         => 'titulo',
                                                     'Usuario'               => 'usuario',
                                                     'Cantidad de reservas'  => 'cantidad_reservas',
                                                   } ,   
@@ -30,12 +30,9 @@
               [% FOREACH res IN results %]   
                 <tr>
                   <td>
-                      [% res.objeto.getAutor %]
-                  </td>
-                  <td>
                       [% res.objeto.getTitulo %]
                   </td>
-                  <td>S
+                  <td>
                       [% res.reservas %]
                   </td>
                   <td>  
@@ -43,6 +40,13 @@
                           [% res.nivel3.nivel3.getCodigoBarra %]
                       [% CATCH %]
                           Reserva de grupo
+                      [% END %]
+                  </td>
+                  <td>
+                      [% TRY %]
+                        [% res.nivel3.nivel3.getSignatura %]
+                      [% CATCH %]
+                        [% 'Sin Signatura Topogr&aacute;fica' | i18n %]
                       [% END %]
                   </td>
                   <td>
