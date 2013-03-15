@@ -954,8 +954,17 @@ sub getMarcRecordConDatosForRobleExport{
     my $idioma = $self->getIdiomaObject();
 
     if ($idioma->getId){
+        
+        my $codigo= $idioma->getId;
+        
+        C4::AR::Debug::debug("IDIOMAAAA =>>>>>>>>>>>>>>> ".$idioma->marc_code."=".$idioma->getId);
+        
+        if($idioma->getMarcCode()){
+            $codigo= $idioma->getMarcCode;
+            }
+        
         $marc_record_n2->delete_fields($marc_record_n2->field("041"));
-        my $field_041  = MARC::Field->new("041","","","a" => $idioma->getId);
+        my $field_041  = MARC::Field->new("041","","","a" => $codigo);
         $marc_record_n2->append_fields($field_041);
     }
 
