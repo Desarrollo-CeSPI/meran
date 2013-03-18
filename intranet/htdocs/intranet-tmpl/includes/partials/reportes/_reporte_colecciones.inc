@@ -46,7 +46,7 @@
                                                         button       => "btn btn-primary",
                                                         action       => "consultarColecciones();", 
                                                         icon         => "icon-white icon-inbox",
-                                                        title       =>'[% "Generar reporte"|i18n %]',
+                                                        title       =>'[% "Generar Reporte"|i18n %]',
                                                     );
             [% END %]
         </div>

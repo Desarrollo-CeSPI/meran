@@ -85,17 +85,9 @@
 
 </script>
 
-
-[% PERL %]
-    print C4::AR::Filtros::tabbedPane( titulo    => "[% 'Reportes de usuarios' | i18n %]",
-                                 content   => [ {id => 'labels', text=> "[% 'Usuarios' | i18n %]" },
-                                              ],
-                                 content_id=> 'reportes_usuarios',
-                                 active_id => 'labels',
-    
-    );
-
-[% END %]
+<section>
+        <h2>[% 'Reporte de Usuario' | i18n %]</h2>
+        <hr></hr>
 
         <div class="tab-pane fade in active" id="labels">
             [% INCLUDE 'usuarios/reales/users-cards.tmpl' %]

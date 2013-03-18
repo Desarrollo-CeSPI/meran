@@ -112,7 +112,7 @@
                   print C4::AR::Filtros::action_button( 
                                                   button       => "btn btn-primary",
                                                   action       => "generarReporteCirculacionGeneral();", 
-                                                  icon         => "",
+                                                  icon         => "icon-white icon-inbox",
                                                   title        => "Generar Reporte",
                                               ) ;
             [% END %]

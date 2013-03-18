@@ -37,6 +37,7 @@ function reporteDisponibilidad(){
     objAH.debug= true;
     objAH.showOverlay = true;
     objAH.url= URL_PREFIX+"/estadisticas/disponibilidad.pl";
+    objAH.estado= $('#estado :selected').val(); 
     objAH.fecha_ini= $("#fecha_inicio").val();
     objAH.fecha_fin= $("#fecha_final").val();
  

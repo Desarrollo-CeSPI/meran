@@ -16,6 +16,7 @@ if ($obj){
 }else{ 
     $obj = $input->Vars;
     $obj->{'ui'}= $obj->{'name_ui'};     
+    $obj->{'estado'}= $obj->{'estado'};   
     $obj->{'disponibilidad'}= $obj->{'disponibilidad_name'};  
 }
 

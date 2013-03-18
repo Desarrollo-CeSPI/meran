@@ -1229,47 +1229,55 @@ sub registroDeUsuarios {
 # }
 
 sub reporteDisponibilidad{
-	my ($params) = @_;
+    my ($params) = @_;
 
     C4::AR::Utilidades::printHASH($params);
 
-	my $ui=			$params->{'ui'};
-	my $disponibilidad= 	$params->{'disponibilidad'};
+    my $ui=         $params->{'ui'};
+    my $disponibilidad=     $params->{'disponibilidad'};
+    my $estado=         $params->{'estado'};
 
-	my $ini    = $params->{'ini'} || 0;
-   	my $cantR  = $params->{'cantR'} || 1;
+    C4::AR::Debug::debug("ESTADOOOOOOOOOOO $estado");
 
-	my $fecha_ini = $params->{'fecha_ini'};
-	my $fecha_fin =	$params->{'fecha_fin'};
 
-	my $catRegistroMarcN3   = C4::Modelo::CatRegistroMarcN3->new();  
-   	my $db = $catRegistroMarcN3->db;
-		
-	my @filtros;
+    my $ini    = $params->{'ini'} || 0;
+    my $cantR  = $params->{'cantR'} || 1;
 
-	if ($ui ne ""){
-		push (@filtros, ("t1.marc_record"    => { like   => '%@'.$ui.'%'}));
-	}
+    my $fecha_ini = $params->{'fecha_ini'};
+    my $fecha_fin = $params->{'fecha_fin'};
 
-	if ($disponibilidad ne "" && $disponibilidad ne "SIN SELECCIONAR" ){
-		push (@filtros, ("t1.marc_record"    => { like   => '%oref_disponibilidad@'.$disponibilidad.'%'}));
-	} 
+    my $catRegistroMarcN3   = C4::Modelo::CatRegistroMarcN3->new();  
+    my $db = $catRegistroMarcN3->db;
+        
+    my @filtros;
 
-	if ($fecha_ini ne "" && $fecha_fin ne ""){
-			$fecha_ini= C4::Date::format_date_hour($fecha_ini,"iso");
-			$fecha_fin= C4::Date::format_date_hour($fecha_fin,"iso");
-			push(@filtros, and => [ 'created_at' => { gt => $fecha_ini, eq => $fecha_ini },
-                                	'created_at' => { lt => $fecha_fin, eq => $fecha_fin} ] ); 
-	} elsif($fecha_ini ne ""){
+    if ($ui ne ""){
+        push (@filtros, ("t1.marc_record"    => { like   => '%@'.$ui.'%'}));
+    }
+
+    if ($estado ne ""){
+        push (@filtros, ("t1.marc_record"    => { like   => '%@'.$estado.'%'}));
+    }
+
+    if ($disponibilidad ne "" && $disponibilidad ne "SIN SELECCIONAR" ){
+        push (@filtros, ("t1.marc_record"    => { like   => '%oref_disponibilidad@'.$disponibilidad.'%'}));
+    } 
+
+    if ($fecha_ini ne "" && $fecha_fin ne ""){
             $fecha_ini= C4::Date::format_date_hour($fecha_ini,"iso");
-			push (@filtros, ('created_at' => { gt => $fecha_ini, eq => $fecha_ini }));
-
-	} elsif($fecha_fin ne ""){
             $fecha_fin= C4::Date::format_date_hour($fecha_fin,"iso");
-			push (@filtros, ('created_at' => { lt => $fecha_fin, eq => $fecha_fin }));
-		}
+            push(@filtros, and => [ 'created_at' => { gt => $fecha_ini, eq => $fecha_ini },
+                                    'created_at' => { lt => $fecha_fin, eq => $fecha_fin} ] ); 
+    } elsif($fecha_ini ne ""){
+            $fecha_ini= C4::Date::format_date_hour($fecha_ini,"iso");
+            push (@filtros, ('created_at' => { gt => $fecha_ini, eq => $fecha_ini }));
 
-	my $cant = C4::Modelo::CatRegistroMarcN3::Manager->get_cat_registro_marc_n3_count(   
+    } elsif($fecha_fin ne ""){
+            $fecha_fin= C4::Date::format_date_hour($fecha_fin,"iso");
+            push (@filtros, ('created_at' => { lt => $fecha_fin, eq => $fecha_fin }));
+        }
+
+    my $cant = C4::Modelo::CatRegistroMarcN3::Manager->get_cat_registro_marc_n3_count(   
                                                                         db  => $db,
                                                                         query => \@filtros, 
                                                                         require_objects => ['nivel2'],
@@ -1299,14 +1307,14 @@ sub reporteDisponibilidad{
 
     }
 
-	
-	return ($nivel3_array_ref ,$cant);
+    
+    return ($nivel3_array_ref ,$cant);
 
 
 }
 
 sub reporteColecciones{
- 		my ($params) = @_;
+        my ($params) = @_;
 
         my $tipo_doc=   $params->{'item_type'};
         my $ui=         $params->{'ui'};
@@ -1425,52 +1433,52 @@ sub reporteEstantesVirtuales{
             my %ids1;
             my $contenido = $estante->contenido;
 
-			$cantNiv2 = scalar(@$contenido);
+            $cantNiv2 = scalar(@$contenido);
             if ($contenido){
                 foreach my $c (@$contenido){
 
                     my $niv1= $c->nivel2->nivel1;
                     
                     if($c->nivel2 && $c->nivel2->nivel1){
-						
-						# C4::AR::Nivel1::getNivel1FromId2($c->id2); 
-						if (!$ids1{$niv1->id}){
-							$ids1{$niv1->id}= 1;
-							my $niveles3 = C4::AR::Nivel3::getNivel3FromId1($niv1->id);
+                        
+                        # C4::AR::Nivel1::getNivel1FromId2($c->id2); 
+                        if (!$ids1{$niv1->id}){
+                            $ids1{$niv1->id}= 1;
+                            my $niveles3 = C4::AR::Nivel3::getNivel3FromId1($niv1->id);
 
-							$cantNiv3 = $cantNiv3 + scalar(@$niveles3); 
+                            $cantNiv3 = $cantNiv3 + scalar(@$niveles3); 
                             #C4::AR::Nivel3::cantNiveles3FromId1($niv1->id);
-							
-							foreach my $n3 (@$niveles3){
-								
-								my $prestado  = 0;
-								if($n3->estaPrestado()){
-									$prestado=1;
-								}
-								my $reservado = 0;
+                            
+                            foreach my $n3 (@$niveles3){
+                                
+                                my $prestado  = 0;
+                                if($n3->estaPrestado()){
+                                    $prestado=1;
+                                }
+                                my $reservado = 0;
 
-								if($n3->estaReservado()){
-									$reservado=1;
-								}
+                                if($n3->estaReservado()){
+                                    $reservado=1;
+                                }
 
-								if ( ($prestado + $reservado) ==  0 ) {
-									
-								   
-								
-									if ($n3->esParaSala()) {
-										$cantSala = $cantSala + 1;
+                                if ( ($prestado + $reservado) ==  0 ) {
+                                    
+                                   
+                                
+                                    if ($n3->esParaSala()) {
+                                        $cantSala = $cantSala + 1;
 
-									} else {
-										$cantPrestamo = $cantPrestamo + 1;
-									}
-									
-								} else {
-									$noDisponibles ++;
-								}
-							}						
-						}
+                                    } else {
+                                        $cantPrestamo = $cantPrestamo + 1;
+                                    }
+                                    
+                                } else {
+                                    $noDisponibles ++;
+                                }
+                            }                       
+                        }
                     
-					}
+                    }
                     # my ($detalle_disp,$arreglo) = C4::AR::Nivel3::detalleDisponibilidadNivel3($c->id2);
                     # # $noDisponibles = $noDisponibles + $detalle_disp->{""};
                     # $cantSala = $cantSala + $detalle_disp->{"cantParaSala"};
@@ -2178,7 +2186,7 @@ sub getReservasCirculacion {
     my $estadoReserva   = $datos_busqueda->{'estadoReserva'};
     my $fecha_inicio    = $datos_busqueda->{'fecha_inicio'};
     my $fecha_fin       = $datos_busqueda->{'fecha_fin'};
-    my $statistics      = $datos_busqueda->{'statistics'};
+    my $signatura       = $datos_busqueda->{'signatura'};
     my $orden           = $datos_busqueda->{'orden'};
 
     my @filtros;
@@ -2198,12 +2206,16 @@ sub getReservasCirculacion {
     
     #OK, forkeado el nombre de la tabla
     if ($titulo){
-         push(@filtros,('t6.titulo' =>  { like => '%'.$titulo.'%'} ));
+         push(@filtros, ('t6.titulo' =>  { like => '%'.$titulo.'%'} ));
     }    
     
     if ($edicion){
-         push(@filtros,('nivel2.marc_record' =>  { like => '%'.$edicion.'%'} ));
-    }    
+         push(@filtros, ('nivel2.marc_record' =>  { like => '%'.$edicion.'%'} ));
+    }  
+
+    if ($signatura){
+         push(@filtros, ('t8.signatura' =>  {like => '%'.$signatura.'%'} ));
+    }  
     
     #OK, ver cuando se relaciona con $tipoReserva
     
@@ -2247,7 +2259,8 @@ sub getReservasCirculacion {
                                                                       limit   => $cantR,
                                                                       offset  => $ini,
                                                                       require_objects   => ['socio', 'socio.persona.documento',
-                                                                                            'nivel1', 'nivel1.IndiceBusqueda', 'nivel2'
+                                                                                            'nivel1', 'nivel1.IndiceBusqueda', 'nivel2',
+                                                                                            'nivel3'
                                                                       ],
       
                                                         );
@@ -2255,7 +2268,8 @@ sub getReservasCirculacion {
     my ($rep_busqueda_count) = C4::Modelo::RepHistorialCirculacion::Manager->get_rep_historial_circulacion_count(
                                                                             query   => \@filtros,
                                                                             require_objects => ['socio', 'socio.persona.documento',
-                                                                                                'nivel1', 'nivel1.IndiceBusqueda', 'nivel2'
+                                                                                                'nivel1', 'nivel1.IndiceBusqueda', 'nivel2',
+                                                                                                'nivel3'
                                                                             ],
                                                                               # with_objects => [],                                                           
                                                                             );

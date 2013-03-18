@@ -14,6 +14,9 @@ function changePageBusquedas(ini){
 
 
 [% IF cant %]
+    <div class="well">
+          <div class="resultados_consulta">[% "La cantidad de registros" | i18n %]: <strong>[% cant %]</strong></div>   
+    </div>
     <div class="contenedor_paginador">[% paginador %]</div>
     [% PERL %]
             print C4::AR::Filtros::tableHeader(   
@@ -21,7 +24,7 @@ function changePageBusquedas(ini){
                         class           => "",
                         selectAll_id    => "",
                         columns         => ['[% "T&iacute;tulo"|i18n %]','[% "Autor"|i18n %]','[% "Signatura"|i18n %]',
-                                            '[% "Edici&oacute;n" | i18n %]','[% "C&oacute;digo" | i18n %]','[% "Fecha Cambio de disponibilidad" | i18n %]',
+                                            '[% "Edici&oacute;n" | i18n %]','[% "C&oacute;digo" | i18n %]','[% "Fecha Cambio de disponibilidad" | i18n %]', '[% "Estado"|i18n %]'
                                           ]
                                                         
                               ) ;
@@ -69,6 +72,9 @@ function changePageBusquedas(ini){
               <td>
                   [% res.getFechaUltimoCambioDisp %]
               </td>
+              <td>      
+                  [% res.getEstado %]
+              </td>
               
           </tr>
         <!-- FOREACH PRIMERO -->
@@ -77,9 +83,7 @@ function changePageBusquedas(ini){
     [% END %]
     </tbody>
 </table>
-<div class="well">
-      <div class="resultados_consulta">[% "La cantidad de registros" | i18n %]: <strong>[% cant %]</strong></div>   
-</div>
+
 [% IF !exportar && cant %]
 <div class="form-actions" id="actions_ejemplares" style="margin-bottom: 0;">
    <td>
