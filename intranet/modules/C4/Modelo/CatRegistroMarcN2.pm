@@ -544,7 +544,8 @@ sub getIdiomaObject{
 
 #     C4::AR::Debug::debug("CatRegistroMarcN2 => getIdioma => ".$self->getIdioma());
 #     C4::AR::Debug::debug("CatRegistroMarcN2 => getIdiomaObject()=> ref => ".$ref);
-    my $idioma_object   = C4::Modelo::RefIdioma->getByPk($ref);
+    my ($cant_idiomas_array_ref, $idiomas_array_ref) = C4::Modelo::RefIdioma->getIdiomaById($ref);
+    my $idioma_object   = $idiomas_array_ref->[0];
 
 
     if(!$idioma_object){
@@ -955,9 +956,9 @@ sub getMarcRecordConDatosForRobleExport{
 
     if ($idioma->getId){
         
-        my $codigo= $idioma->getId;
+        my $codigo= $idioma->getIdLanguage;
         
-        C4::AR::Debug::debug("IDIOMAAAA =>>>>>>>>>>>>>>> ".$idioma->marc_code."=".$idioma->getId);
+        C4::AR::Debug::debug("IDIOMAAAA =>>>>>>>>>>>>>>> ".$idioma->getMarcCode ."=".$idioma->getIdLanguage);
         
         if($idioma->getMarcCode()){
             $codigo= $idioma->getMarcCode;

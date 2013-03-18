@@ -8,10 +8,10 @@ __PACKAGE__->meta->setup(
     table   => 'ref_idioma',
 
     columns => [
-        id                    => { type => 'serial', overflow => 'truncate', not_null => 1 },
-        idLanguage   => { type => 'character', overflow => 'truncate',length => 2 ,not_null => 1 },
+        id          => { type => 'serial', overflow => 'truncate', not_null => 1 },
+        idLanguage  => { type => 'character', overflow => 'truncate',length => 2 ,not_null => 1 },
         marc_code   => { type => 'character', overflow => 'truncate',length => 3 },
-        description  => { type => 'varchar', overflow => 'truncate', length => 30, not_null => 1 },
+        description => { type => 'varchar', overflow => 'truncate', length => 30, not_null => 1 },
     ],
 
     primary_key_columns => [ 'id' ],
