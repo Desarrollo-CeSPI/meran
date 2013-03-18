@@ -2528,7 +2528,7 @@ sub moverCampoMarcRecord {
     my ($marc_record,$old_field_tag,$new_field_tag) = @_;
     
     #Muevo el old_field_tag al new_field_tag
-    my $old_field = $marc_record->field("old_field_tag");
+    my $old_field = $marc_record->field($old_field_tag);
     if($old_field){
         my @subcampos_array=();
         foreach my $subfield ($old_field->subfields()) {
@@ -2537,9 +2537,12 @@ sub moverCampoMarcRecord {
              push(@subcampos_array, ($subcampo => $dato));
         }
         
+        #Agregamos el nuevo
         my $new_field = MARC::Field->new($new_field_tag, $old_field->indicator(1), $old_field->indicator(2), @subcampos_array);
         $marc_record->add_fields($new_field);
-    
+        
+        #Borramos el viejo
+        $marc_record->delete_fields($old_field);
     }
 }
 

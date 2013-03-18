@@ -656,6 +656,7 @@ my %mensajesINTRA = (
     'TD003' => 'No se puede eliminar el tipo de documento, ya que se encuentra referenciado',
     'TD004' => 'El tipo de documento fue eliminado con &eacute;xito',
     'TD005' => 'Ocurri&oacute; un error mientras se eliminaba el tipo de documento',
+    'TD006' => 'Error guardando la imagen del tipo de documento. S&oacute;lo se permiten imagenes con extenci&oacute;n .png',
 
     #portadas nivel 2
     'POR00' => 'Error guardando la imagen de la portada, intentelo nuevamente.',

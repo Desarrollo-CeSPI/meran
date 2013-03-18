@@ -114,7 +114,9 @@ sub marc_record_to_ISO_from_range {
                 my $signaturas = $nivel2->getSignaturas();
                 my $primera_signatura = $signaturas->[0];
                 
-                my $field_ident_biblioteca  = MARC::Field->new('910','','','a' => C4::AR::Preferencias::getValorPreferencia("defaultUI") +" "+ $primera_signatura);
+                my $id_biblio = C4::AR::Preferencias::getValorPreferencia("defaultUI")." ".$primera_signatura;
+
+                my $field_ident_biblioteca  = MARC::Field->new("910",'','','a' => $id_biblio);
                 
                 
                 $marc_record_unido->append_fields($field_id );
@@ -127,6 +129,8 @@ sub marc_record_to_ISO_from_range {
                 
                 $marc_record_unido->append_fields($marc_record_n2->fields());
                 
+#                 C4::AR::Debug::debug("marc_record_to_ISO_from_range =>>>>>>>>> \n ". $marc_record_unido->as_formatted );
+                 
                 #Para ROBLE limpio de \n y \r de los campos de notas (520a,534a,500a,995u)
                 $marc_record_unido = C4::AR::ExportacionIsoMARC::limpiar_enter_para_roble($marc_record_unido);
 

@@ -944,16 +944,23 @@ sub getMarcRecordConDatosForRobleExport{
     my $marc_record_n2             = $self->getMarcRecordConDatos();
         
     my $pais = $marc_record_n2->subfield("043","c");    
-    $marc_record_n2->delete_fields($marc_record_n2->field("043"));
-    my $field_044  = MARC::Field->new("044","","","a" => $pais);
-    $marc_record_n2->append_fields($field_044);    
+    if ($pais){
+        $marc_record_n2->delete_fields($marc_record_n2->field("043"));
+        my $field_044  = MARC::Field->new("044","","","a" => $pais);
+        $marc_record_n2->append_fields($field_044);    
+    }
+    
     
     my $idioma = $self->getIdiomaObject();
-    $marc_record_n2->delete_fields($marc_record_n2->field("041"));
-    my $field_041  = MARC::Field->new("041","","","a" => $idioma->idLanguage);
-    $marc_record_n2->append_fields($field_041);
+
+    if ($idioma->getId){
+        $marc_record_n2->delete_fields($marc_record_n2->field("041"));
+        my $field_041  = MARC::Field->new("041","","","a" => $idioma->getId);
+        $marc_record_n2->append_fields($field_041);
+    }
+
+    &C4::AR::Catalogacion::moverCampoMarcRecord($marc_record_n2,'440','490');
     
-    C4::AR::Catalogacion::moverCampoMarcRecord($marc_record_n2,"440","490");
     
     return $marc_record_n2;
 }

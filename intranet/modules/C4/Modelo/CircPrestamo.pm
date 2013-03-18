@@ -913,7 +913,7 @@ sub renovar {
     $data_hash->{'id_ui'}         = $self->getId_ui_prestamo;
     $data_hash->{'tipo'}          = 'renovacion';
 
-    if (C4::AR::CatRegistroMarcN3->esParaPrestamo){
+    if ($self->nivel3->esParaPrestamo){
         use C4::Modelo::RepHistorialCirculacion;
         my ($historial_circulacion) =  C4::Modelo::RepHistorialCirculacion->new( db => $self->db );
         $historial_circulacion->agregar($data_hash);

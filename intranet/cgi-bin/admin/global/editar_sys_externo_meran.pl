@@ -42,7 +42,7 @@ if ($editing) {
 } else {
       my $sys_externo_meran = C4::AR::Preferencias::getSysExternoMeran($input->param('id'));
       my %options_hash;
-      $options_hash{'default'} = $sys_externo_meran->getId_ui;
+      $options_hash{'default'} = $sys_externo_meran->getId_ui if $sys_externo_meran;
       $t_params->{'combo_ui'} = C4::AR::Utilidades::generarComboUI(\%options_hash);
       $t_params->{'sys_externo_meran'} = $sys_externo_meran;
 }

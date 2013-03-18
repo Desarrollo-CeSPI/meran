@@ -22,8 +22,6 @@ my ($template, $session, $t_params) = get_template_and_user({
 #si estamos modificando un tipo de doc, viene el post por aca
 my $obj = $input->Vars; 
 
-C4::AR::Debug::debug("tipo accion !!! - " . $obj->{'tipoAccion'});
-
 if($obj->{'tipoAccion'} eq "MOD"){
 
 	my $msg_object 	= C4::AR::TipoDocumento::modTipoDocumento($obj,$input->upload('imagen'));
