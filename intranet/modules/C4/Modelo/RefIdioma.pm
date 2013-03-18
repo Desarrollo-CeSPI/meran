@@ -8,9 +8,10 @@ __PACKAGE__->meta->setup(
     table   => 'ref_idioma',
 
     columns => [
-        id                    => { type => 'serial', overflow => 'truncate', not_null => 1 },
-        idLanguage   => { type => 'character', overflow => 'truncate',length => 2 ,not_null => 1 },
-        description  => { type => 'varchar', overflow => 'truncate', length => 30, not_null => 1 },
+        id          => { type => 'serial', overflow => 'truncate', not_null => 1 },
+        idLanguage  => { type => 'character', overflow => 'truncate',length => 2 ,not_null => 1 },
+        marc_code   => { type => 'character', overflow => 'truncate',length => 3 },
+        description => { type => 'varchar', overflow => 'truncate', length => 30, not_null => 1 },
     ],
 
     primary_key_columns => [ 'id' ],
@@ -63,13 +64,23 @@ sub setIdLanguage{
     $self->idLanguage($idLanguage);
 }
 
-    
+sub getMarcCode{
+    my ($self) = shift;
+    return (C4::AR::Utilidades::trim($self->marc_code));
+}
+
+sub setMarcCode{
+    my ($self) = shift;
+    my ($marc_code) = @_;
+    $self->marc_code($marc_code);
+}
+
 sub getDescription{
     my ($self) = shift;
 
     return (C4::AR::Utilidades::trim($self->description));
 }
-    
+
 sub setDescription{
     my ($self) = shift;
     my ($description) = @_;
@@ -127,7 +138,8 @@ sub getCampo{
  	if ($campo eq "idLanguage") {return $self->getIdLanguage;}
 #    if ($campo eq "id") {return $self->getId;}
 	if ($campo eq "description") {return $self->getDescription;}
-
+	if ($campo eq "marc_code") {return $self->getMarcCode;}
+    
 	return (0);
 }
 
@@ -172,6 +184,7 @@ sub getAll{
         my @filtros_or;
         push(@filtros_or, (idLanguage => {eq => $filtro }) );
         push(@filtros_or, (description => {like => '%'.$filtro.'%'}) );
+        push(@filtros_or, (marc_code => {eq => $filtro }) );
         push(@filtros, (or => \@filtros_or) );
     }
     my $ref_valores;
@@ -205,4 +218,3 @@ sub getAll{
 }
 
 1;
-
