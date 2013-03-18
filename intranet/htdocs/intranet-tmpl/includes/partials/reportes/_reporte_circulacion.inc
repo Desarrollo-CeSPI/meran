@@ -31,14 +31,13 @@
         objAH.tipoAccion        = "BUSQUEDAS";
         objAH.funcion           = "changePageBusquedas";
         objAH.categoriaSocio    = $('#categoriaSocioReservas').val();
-        objAH.tipoReserva       = $('#tipoReserva').val();
         objAH.tipoDoc           = $('#tipo_documento_id').val();
         objAH.titulo            = $('#titulo').val();
         objAH.edicion           = $('#edicion').val();
         objAH.estadoReserva     = $('#estadoReserva').val();
         objAH.fecha_inicio      = $('#date-from').val();
         objAH.fecha_fin         = $('#date-to').val();
-        objAH.statistics        = $('#statistics_check').val();
+        objAH.signatura         = $('#signatura').val();
         objAH.orden             = ORDEN;
         objAH.asc               = ASC;
         objAH.sendToServer();
@@ -80,17 +79,6 @@
 
         <input type="hidden" name="tipoAccion" value="EXPORT_CIRC">
         
-        <div class="control-group" >
-            <label for="tipoReserva" class="control-label">[% 'Tipo de reserva' | i18n %]</label>  
-            <div class="controls">
-                <select name="tipoReserva" id="tipoReserva">
-                    <option value="ejemplar">Ejemplar</option>
-                    <option value="grupo">Grupo</option>
-                    <option value="">TODAS</option>
-                </select>
-            </div>
-        </div>
-
         <div class="control-group">
             <label class="control-label" for="categoria_socio_id">[% 'Categor&iacute;­a del usuario' | i18n %]</label>
             <div class="controls">  
@@ -125,8 +113,9 @@
             <div class="controls">
                 <select name="estadoReserva" id="estadoReserva">
                     <option value="asignada">Asignada</option>
-                    <option value="anulada">Anulada</option>
+                    <option value="cancelada">Cancelada</option>
                     <option value="vencida">Vencida</option>
+                    <option value="TODAS">TODAS</option>
                 </select>
             </div>
         </div>
@@ -139,26 +128,27 @@
             </div>
         </div>
 
-        <!-- se usa? -->
-        <!-- <div class="control-group">
-            <label class="checkbox" for="statistics_check">[% 'Generar estadisticas' | i18n %]
-
-            <input type="checkbox" name="statistics_check" id="statistics_check"/></label>
-
-        </div>        --> 
+        <div class="control-group">
+            <label class="control-label" for="signatura">
+                [% "Signatura Topogr&aacute;fica" | i18n %]
+            </label>
+            <div class="controls">
+                <input type="text" size="25" id="signatura">
+            </div>
+        </div>
           
-          <div class="form-actions">
+        <div class="form-actions">
             [% PERL %]
                   print C4::AR::Filtros::action_button( 
                                                   button       => "btn btn-primary",
                                                   action       => "generarReporteCirculacion();", 
-                                                  icon         => "",
+                                                  icon         => "icon-white icon-inbox",
                                                   title        => "Generar Reporte",
                                               ) ;
             [% END %]
-          </div>
-      </form>
- </div>
+        </div>
+    </form>
+</div>
 
 
 <div id="reportResultCirc2" style="display:none;"></div>

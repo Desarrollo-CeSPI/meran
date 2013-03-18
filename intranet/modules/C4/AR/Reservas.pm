@@ -397,24 +397,24 @@ sub Enviar_Email_Asignacion_Reserva{
         my ($ok, $msg_error)           = C4::AR::Mail::send_mail(\%mail);
 
 #**********************************Se registra el movimiento en rep_historial_circulacion***************************
-   my $dateformat=C4::Date::get_date_format();
-   $fecha= C4::Date::format_date_in_iso($fecha,$dateformat);
+       # my $dateformat=C4::Date::get_date_format();
+       # $fecha= C4::Date::format_date_in_iso($fecha,$dateformat);
 
-   my $data_hash;
-   $data_hash->{'id1'}=$reserva->nivel2->nivel1->getId1;
-   $data_hash->{'id2'}=$reserva->getId2;
-   $data_hash->{'id3'}=$reserva->getId3;
-   $data_hash->{'nro_socio'}=$reserva->getNro_socio;
-   $data_hash->{'responsable'}=$responsable;
-   $data_hash->{'end_date'}=$fecha;
-   $data_hash->{'issuesType'}='-';
-   $data_hash->{'id_ui'}=$reserva->getId_ui;
-   $data_hash->{'tipo'}='notification';
+       # my $data_hash;
+       # $data_hash->{'id1'}=$reserva->nivel2->nivel1->getId1;
+       # $data_hash->{'id2'}=$reserva->getId2;
+       # $data_hash->{'id3'}=$reserva->getId3;
+       # $data_hash->{'nro_socio'}=$reserva->getNro_socio;
+       # $data_hash->{'responsable'}=$responsable;
+       # $data_hash->{'end_date'}=$fecha;
+       # $data_hash->{'issuesType'}='-';
+       # $data_hash->{'id_ui'}=$reserva->getId_ui;
+       # $data_hash->{'tipo'}='notification';
 
-   use C4::Modelo::RepHistorialCirculacion;
-   my ($historial_circulacion) = C4::Modelo::RepHistorialCirculacion->new(db=>$reserva->db);
-   $historial_circulacion->agregar($data_hash);
-#*******************************Fin***Se registra el movimiento en rep_historial_circulacion*************************
+       # use C4::Modelo::RepHistorialCirculacion;
+       # my ($historial_circulacion) = C4::Modelo::RepHistorialCirculacion->new(db=>$reserva->db);
+       # $historial_circulacion->agregar($data_hash);
+    #*******************************Fin***Se registra el movimiento en rep_historial_circulacion*************************
 
     }#end if (C4::Context->preference("EnabledMailSystem"))
 }
@@ -423,7 +423,6 @@ sub Enviar_Email_Asignacion_Reserva{
 #para enviar un mail cuando al usuario se le cancela una reserva
 sub Enviar_Email_Cancelacion_Reserva{
     my ($reserva,$responsable)=@_;
-
 
    C4::AR::Debug::debug("Reservas => Enviar_Email_Cancelacion_Reserva => EnabledMailSystem => ".C4::AR::Preferencias::getValorPreferencia("EnabledMailSystem"));
    C4::AR::Debug::debug("Reservas => Enviar_Email_Cancelacion_Reserva => enviar_mail_cambio_disponibilidad_cancelacion => ".C4::AR::Preferencias::getValorPreferencia("enviar_mail_cambio_disponibilidad_cancelacion"));
@@ -473,22 +472,23 @@ sub Enviar_Email_Cancelacion_Reserva{
 
 #**********************************Se registra el movimiento en rep_historial_circulacion***************************
    
-   my $fecha= C4::Date::format_date_in_iso(Date::Manip::ParseDate("today"), $dateformat);
+   # my $fecha= C4::Date::format_date_in_iso(Date::Manip::ParseDate("today"), $dateformat);
 
-   my $data_hash;
-   $data_hash->{'id1'}=$reserva->nivel2->nivel1->getId1;
-   $data_hash->{'id2'}=$reserva->getId2;
-   $data_hash->{'id3'}=$reserva->getId3;
-   $data_hash->{'nro_socio'}=$reserva->getNro_socio;
-   $data_hash->{'responsable'}=$responsable;
-   $data_hash->{'end_date'}=$fecha;
-   $data_hash->{'issuesType'}='-';
-   $data_hash->{'id_ui'}=$reserva->getId_ui;
-   $data_hash->{'tipo'}='notification cancelation';
+   # my $data_hash;
+   # $data_hash->{'id1'}=$reserva->nivel2->nivel1->getId1;
+   # $data_hash->{'id2'}=$reserva->getId2;
+   # $data_hash->{'id3'}=$reserva->getId3;
+   # $data_hash->{'nro_socio'}=$reserva->getNro_socio;
+   # $data_hash->{'responsable'}=$responsable;
+   # $data_hash->{'end_date'}=$fecha;
+   # $data_hash->{'issuesType'}='-';
+   # $data_hash->{'id_ui'}=$reserva->getId_ui;
+   # $data_hash->{'tipo'}='notification cancelation';
 
-   use C4::Modelo::RepHistorialCirculacion;
-   my ($historial_circulacion) = C4::Modelo::RepHistorialCirculacion->new(db=>$reserva->db);
-   $historial_circulacion->agregar($data_hash);
+   # use C4::Modelo::RepHistorialCirculacion;
+   # my ($historial_circulacion) = C4::Modelo::RepHistorialCirculacion->new(db=>$reserva->db);
+   # $historial_circulacion->agregar($data_hash);
+
 #*******************************Fin***Se registra el movimiento en rep_historial_circulacion*************************
 
     }#end if (C4::Context->preference("EnabledMailSystem"))
@@ -543,22 +543,22 @@ sub Enviar_Email_Reserva_A_Espera{
         my ($ok, $msg_error)           = C4::AR::Mail::send_mail(\%mail);
 
 #**********************************Se registra el movimiento en rep_historial_circulacion***************************
-  my $fecha= C4::Date::format_date_in_iso(Date::Manip::ParseDate("today"), $dateformat);
+    # my $fecha= C4::Date::format_date_in_iso(Date::Manip::ParseDate("today"), $dateformat);
 
-   my $data_hash;
-   $data_hash->{'id1'}=$reserva->nivel2->nivel1->getId1;
-   $data_hash->{'id2'}=$reserva->getId2;
-   $data_hash->{'id3'}=$reserva->getId3;
-   $data_hash->{'nro_socio'}=$reserva->getNro_socio;
-   $data_hash->{'responsable'}=$responsable;
-   $data_hash->{'end_date'}=$fecha;
-   $data_hash->{'issuesType'}='-';
-   $data_hash->{'id_ui'}=$reserva->getId_ui;
-   $data_hash->{'tipo'}='notification cancelation';
+   # my $data_hash;
+   # $data_hash->{'id1'}=$reserva->nivel2->nivel1->getId1;
+   # $data_hash->{'id2'}=$reserva->getId2;
+   # $data_hash->{'id3'}=$reserva->getId3;
+   # $data_hash->{'nro_socio'}=$reserva->getNro_socio;
+   # $data_hash->{'responsable'}=$responsable;
+   # $data_hash->{'end_date'}=$fecha;
+   # $data_hash->{'issuesType'}='-';
+   # $data_hash->{'id_ui'}=$reserva->getId_ui;
+   # $data_hash->{'tipo'}='notification cancelation';
 
-   use C4::Modelo::RepHistorialCirculacion;
-   my ($historial_circulacion) = C4::Modelo::RepHistorialCirculacion->new(db=>$reserva->db);
-   $historial_circulacion->agregar($data_hash);
+   # use C4::Modelo::RepHistorialCirculacion;
+   # my ($historial_circulacion) = C4::Modelo::RepHistorialCirculacion->new(db=>$reserva->db);
+   # $historial_circulacion->agregar($data_hash);
 #*******************************Fin***Se registra el movimiento en rep_historial_circulacion*************************
 
     }#end if (C4::Context->preference("EnabledMailSystem"))

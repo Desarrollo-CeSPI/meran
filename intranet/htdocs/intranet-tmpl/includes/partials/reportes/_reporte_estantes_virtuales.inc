@@ -18,8 +18,8 @@
                     print C4::AR::Filtros::action_button( 
                                                         button       => "btn btn-primary",
                                                         action       => "reporteEstantesVirtuales();", 
-                                                        icon         => "icon-white icon-search",
-                                                        title       =>'[% "Buscar"|i18n %]',
+                                                        icon         => "icon-white icon-inbox",
+                                                        title       =>'[% "Generar Reporte"|i18n %]',
                                                     );
             [% END %]
         </div>

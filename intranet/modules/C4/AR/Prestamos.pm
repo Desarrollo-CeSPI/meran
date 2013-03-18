@@ -605,7 +605,7 @@ sub t_devolver {
 sub renovarYGenerarTicket{
     my ($params)=@_;
     
-     my ($infoTickets,$msg_object);
+    my ($infoTickets,$msg_object);
      
     #Acomodo la entrada y llamo al renovar 
     my $array_id_prestamos= $params->{'datosArray'};

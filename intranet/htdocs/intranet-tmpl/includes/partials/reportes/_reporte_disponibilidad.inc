@@ -16,6 +16,13 @@
         </div>
 
         <div class="control-group">
+            <label class="control-label"  for="estado"> [% "Estado" | i18n %]</label>
+            <div id="estado" class="controls">  
+                     [% estados_combo %]      
+            </div>            
+        </div>
+
+        <div class="control-group">
             <label class="control-label"  for="ui"> [% "Disponibilidad" | i18n %]</label>
             <div id="disponibilidad" class="controls">  
                      [% disp_combo %]      
@@ -35,8 +42,8 @@
                         print C4::AR::Filtros::action_button( 
                                                             button       => "btn btn-primary",
                                                             action       => "reporteDisponibilidad();", 
-                                                            icon         => "icon-white icon-search",
-                                                            title       =>'[% "Buscar"|i18n %]',
+                                                            icon         => "icon-white icon-inbox",
+                                                            title       =>'[% "Generar Reporte"|i18n %]',
                                                         );
                 [% END %]
             </div>

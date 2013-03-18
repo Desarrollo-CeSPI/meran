@@ -857,6 +857,36 @@ sub BornameSearchForCard {
     my @filtros;
     my $socioTemp = C4::Modelo::UsrSocio->new();
 
+    my $fecha_inicio    = $params->{'from_last_login'} || 0;
+    my $fecha_fin       = $params->{'to_last_login'} || 0;
+
+    my $desde = C4::AR::Filtros::i18n('Desde');
+    my $hasta = C4::AR::Filtros::i18n('Hasta');
+
+    if (($fecha_inicio) && ($fecha_inicio ne $desde) && ($fecha_fin) && ($fecha_fin ne $hasta) ) {
+
+        $fecha_inicio   = C4::Date::format_date($fecha_inicio, "iso");
+        $fecha_fin      = C4::Date::format_date($fecha_fin, "iso");
+
+        push( @filtros, and => ['last_login' => { ge => $fecha_inicio },
+                                'last_login' => { le => $fecha_fin } ] ); 
+
+    }
+
+    my $fecha_inicio_alta    = $params->{'from_alta'} || 0;
+    my $fecha_fin_alta       = $params->{'to_alta'} || 0;
+
+    if (($fecha_inicio_alta) && ($fecha_inicio_alta ne $desde) && ($fecha_fin_alta) && ($fecha_fin_alta ne $hasta) ) {
+
+        $fecha_inicio_alta   = C4::Date::format_date($fecha_inicio_alta, "iso");
+        $fecha_fin_alta      = C4::Date::format_date($fecha_fin_alta, "iso");
+
+        push( @filtros, and => ['fecha_alta' => { ge => $fecha_inicio_alta },
+                                'fecha_alta' => { le => $fecha_fin_alta } ] ); 
+
+    }
+
+
     if ((C4::AR::Utilidades::validateString($params->{'apellido1'})) || (C4::AR::Utilidades::validateString($params->{'apellido2'}))){
         if ((C4::AR::Utilidades::validateString($params->{'apellido1'})) && (C4::AR::Utilidades::validateString($params->{'apellido2'}))){
                 push (@filtros, ('persona.'.apellido => { ge => $params->{'apellido1'}})); # >=
@@ -887,10 +917,16 @@ sub BornameSearchForCard {
             push (@filtros, (id_categoria => { eq => $params->{'categoria_socio'} }) );
     }
 
+    if (C4::AR::Utilidades::validateString($params->{'dni'})) {
+            push (@filtros, ('persona.'.nro_documento => { eq => $params->{'dni'} }) );
+    }
+
     if ( (!C4::AR::Utilidades::isnan($params->{'regularidad'})) && ($params->{'regularidad'})) {
             push (@filtros, (id_estado => { eq => $params->{'regularidad'} }) );
     }
    
+
+
      push (@filtros, ('persona.'.es_socio => { eq => 1}) );
      push (@filtros, (activo => { eq => 1}) );
      $params->{'cantR'} = $params->{'cantR'} || 0;

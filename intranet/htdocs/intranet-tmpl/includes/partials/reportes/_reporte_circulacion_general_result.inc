@@ -1,6 +1,6 @@
 [% IF cantidad %]
     <div class="well">
-        <div class="resultados_consulta">[% "La cantidad de reservas es" | i18n %]: <strong>[% cantidad %]</strong></div>
+        <div class="resultados_consulta">[% "La cantidad de ejemplares prestados en el per&iacute;odo seleccionado es" | i18n %]: <strong>[% cantidad %]</strong></div>
     </div>
 [% END %]
 
@@ -12,6 +12,7 @@
                                 id              => "tablaResultCirculacion",
                                 columns         => ['[% "T&iacute;tulo" | i18n %]',
                                                     '[% "C&oacute;digo de barras" | i18n %]',
+                                                    '[% "Signatura Topogr&aacute;fica" | i18n %]',
                                                     '[% "Tipo de Prestamo" | i18n %]',
                                                     '[% "Responsable" | i18n %]',
                                                     '[% "Cantidad de Renovaciones" | i18n %]',
@@ -29,19 +30,21 @@
             [% FOREACH res IN results %]   
               <tr>
                     <td>
-                        [% IF res.nivel1.getTitulo %]
+                       
                           [% PERL %]
                             print C4::AR::Filtros::link_to( text      =>  "[% res.nivel1.getTitulo%]",
                                                             url       =>  "[% url_prefix %]/catalogacion/estructura/detalle.pl",
                                                             params    =>  ["id1=[% res.nivel1.getId1 %]"], 
                                                         ) ;
                           [% END %]
-                        [% ELSE %]
-                            S/T
-                        [% END %]
+                    
+                        
                     </td>
                     <td>
                         [% res.nivel3.getCodigoBarra %]
+                    </td>
+                    <td>
+                        [% res.nivel3.getSignatura %]
                     </td>
                     <td>
                         [% res.obj_circulacion.getTipo_prestamo %]

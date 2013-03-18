@@ -150,15 +150,6 @@
 
                     </div>
           </div>
-          <div class="control-group">
-                    <label  class="control-label" for="statistics_check">Generar estadisticas</label>
-                    <div class="controls">
-                        <label class="checkbox">
-                          <input type="checkbox" name="statistics_check" id="statistics_check"/>
-                        </label>
-                    </div>
-          </div>        
-          
           <div class="form-actions">
             [% PERL %]
                   print C4::AR::Filtros::action_button( 

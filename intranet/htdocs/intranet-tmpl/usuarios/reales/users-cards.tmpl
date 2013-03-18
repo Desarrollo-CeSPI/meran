@@ -12,12 +12,35 @@
                   </div>
         </div>
         <div class="control-group">
+                  <label class="control-label" for="dni">[% "DNI" | i18n %]</label>
+                  <div class="controls">
+                        <input type='text' id='dni' name='dni' value='[% dni %]'>
+                  </div>
+        </div>
+        <div class="control-group">
                   <label class="control-label" for="legajo">[% "Legajo" | i18n %]</label>
                   <div class="controls">
                         <input type='text' id='legajo1' name='legajo1' value='[% legajo1 %]'>
                         <input type='text' id='legajo2' name='legajo2' value='[% legajo2 %]'>
                   </div>
         </div>
+
+        <div class="control-group">
+            <label class="control-label"> [% "Fechas &uacute;ltimo acceso" | i18n %] </label>
+            <div class="controls">
+                <input type="text" id="from_last_login" name="from_last_login" data-datepicker="datepicker" placeholder="[% 'Desde' | i18n %]" value="" required>
+                <input type="text" id="to_last_login" name="to_last_login" data-datepicker="datepicker" placeholder="[% 'Hasta' | i18n %]" value="" required>
+            </div>
+        </div>
+
+         <div class="control-group">
+            <label class="control-label"> [% "Fecha de alta" | i18n %] </label>
+            <div class="controls">
+                <input type="text" id="from_alta" name="from_alta" data-datepicker="datepicker" placeholder="[% 'Desde' | i18n %]" value="" required>
+                <input type="text" id="to_alta" name="to_alta" data-datepicker="datepicker" placeholder="[% 'Hasta' | i18n %]" value="" required>
+            </div>
+        </div>
+
         <div class="control-group">
                   <label class="control-label" for="UI">[% "Unidad de Informaci&oacute;n" | i18n %]</label>
                   <div class="controls">

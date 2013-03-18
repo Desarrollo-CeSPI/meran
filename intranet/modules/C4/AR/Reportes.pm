@@ -1229,47 +1229,55 @@ sub registroDeUsuarios {
 # }
 
 sub reporteDisponibilidad{
-	my ($params) = @_;
+    my ($params) = @_;
 
     C4::AR::Utilidades::printHASH($params);
 
-	my $ui=			$params->{'ui'};
-	my $disponibilidad= 	$params->{'disponibilidad'};
+    my $ui=         $params->{'ui'};
+    my $disponibilidad=     $params->{'disponibilidad'};
+    my $estado=         $params->{'estado'};
 
-	my $ini    = $params->{'ini'} || 0;
-   	my $cantR  = $params->{'cantR'} || 1;
+    C4::AR::Debug::debug("ESTADOOOOOOOOOOO $estado");
 
-	my $fecha_ini = $params->{'fecha_ini'};
-	my $fecha_fin =	$params->{'fecha_fin'};
 
-	my $catRegistroMarcN3   = C4::Modelo::CatRegistroMarcN3->new();  
-   	my $db = $catRegistroMarcN3->db;
-		
-	my @filtros;
+    my $ini    = $params->{'ini'} || 0;
+    my $cantR  = $params->{'cantR'} || 1;
 
-	if ($ui ne ""){
-		push (@filtros, ("t1.marc_record"    => { like   => '%@'.$ui.'%'}));
-	}
+    my $fecha_ini = $params->{'fecha_ini'};
+    my $fecha_fin = $params->{'fecha_fin'};
 
-	if ($disponibilidad ne "" && $disponibilidad ne "SIN SELECCIONAR" ){
-		push (@filtros, ("t1.marc_record"    => { like   => '%oref_disponibilidad@'.$disponibilidad.'%'}));
-	} 
+    my $catRegistroMarcN3   = C4::Modelo::CatRegistroMarcN3->new();  
+    my $db = $catRegistroMarcN3->db;
+        
+    my @filtros;
 
-	if ($fecha_ini ne "" && $fecha_fin ne ""){
-			$fecha_ini= C4::Date::format_date_hour($fecha_ini,"iso");
-			$fecha_fin= C4::Date::format_date_hour($fecha_fin,"iso");
-			push(@filtros, and => [ 'created_at' => { gt => $fecha_ini, eq => $fecha_ini },
-                                	'created_at' => { lt => $fecha_fin, eq => $fecha_fin} ] ); 
-	} elsif($fecha_ini ne ""){
+    if ($ui ne ""){
+        push (@filtros, ("t1.marc_record"    => { like   => '%@'.$ui.'%'}));
+    }
+
+    if ($estado ne ""){
+        push (@filtros, ("t1.marc_record"    => { like   => '%@'.$estado.'%'}));
+    }
+
+    if ($disponibilidad ne "" && $disponibilidad ne "SIN SELECCIONAR" ){
+        push (@filtros, ("t1.marc_record"    => { like   => '%oref_disponibilidad@'.$disponibilidad.'%'}));
+    } 
+
+    if ($fecha_ini ne "" && $fecha_fin ne ""){
             $fecha_ini= C4::Date::format_date_hour($fecha_ini,"iso");
-			push (@filtros, ('created_at' => { gt => $fecha_ini, eq => $fecha_ini }));
-
-	} elsif($fecha_fin ne ""){
             $fecha_fin= C4::Date::format_date_hour($fecha_fin,"iso");
-			push (@filtros, ('created_at' => { lt => $fecha_fin, eq => $fecha_fin }));
-		}
+            push(@filtros, and => [ 'created_at' => { gt => $fecha_ini, eq => $fecha_ini },
+                                    'created_at' => { lt => $fecha_fin, eq => $fecha_fin} ] ); 
+    } elsif($fecha_ini ne ""){
+            $fecha_ini= C4::Date::format_date_hour($fecha_ini,"iso");
+            push (@filtros, ('created_at' => { gt => $fecha_ini, eq => $fecha_ini }));
 
-	my $cant = C4::Modelo::CatRegistroMarcN3::Manager->get_cat_registro_marc_n3_count(   
+    } elsif($fecha_fin ne ""){
+            $fecha_fin= C4::Date::format_date_hour($fecha_fin,"iso");
+            push (@filtros, ('created_at' => { lt => $fecha_fin, eq => $fecha_fin }));
+        }
+
+    my $cant = C4::Modelo::CatRegistroMarcN3::Manager->get_cat_registro_marc_n3_count(   
                                                                         db  => $db,
                                                                         query => \@filtros, 
                                                                         require_objects => ['nivel2'],
@@ -1299,14 +1307,14 @@ sub reporteDisponibilidad{
 
     }
 
-	
-	return ($nivel3_array_ref ,$cant);
+    
+    return ($nivel3_array_ref ,$cant);
 
 
 }
 
 sub reporteColecciones{
- 		my ($params) = @_;
+        my ($params) = @_;
 
         my $tipo_doc=   $params->{'item_type'};
         my $ui=         $params->{'ui'};
@@ -1425,52 +1433,52 @@ sub reporteEstantesVirtuales{
             my %ids1;
             my $contenido = $estante->contenido;
 
-			$cantNiv2 = scalar(@$contenido);
+            $cantNiv2 = scalar(@$contenido);
             if ($contenido){
                 foreach my $c (@$contenido){
 
                     my $niv1= $c->nivel2->nivel1;
                     
                     if($c->nivel2 && $c->nivel2->nivel1){
-						
-						# C4::AR::Nivel1::getNivel1FromId2($c->id2); 
-						if (!$ids1{$niv1->id}){
-							$ids1{$niv1->id}= 1;
-							my $niveles3 = C4::AR::Nivel3::getNivel3FromId1($niv1->id);
+                        
+                        # C4::AR::Nivel1::getNivel1FromId2($c->id2); 
+                        if (!$ids1{$niv1->id}){
+                            $ids1{$niv1->id}= 1;
+                            my $niveles3 = C4::AR::Nivel3::getNivel3FromId1($niv1->id);
 
-							$cantNiv3 = $cantNiv3 + scalar(@$niveles3); 
+                            $cantNiv3 = $cantNiv3 + scalar(@$niveles3); 
                             #C4::AR::Nivel3::cantNiveles3FromId1($niv1->id);
-							
-							foreach my $n3 (@$niveles3){
-								
-								my $prestado  = 0;
-								if($n3->estaPrestado()){
-									$prestado=1;
-								}
-								my $reservado = 0;
+                            
+                            foreach my $n3 (@$niveles3){
+                                
+                                my $prestado  = 0;
+                                if($n3->estaPrestado()){
+                                    $prestado=1;
+                                }
+                                my $reservado = 0;
 
-								if($n3->estaReservado()){
-									$reservado=1;
-								}
+                                if($n3->estaReservado()){
+                                    $reservado=1;
+                                }
 
-								if ( ($prestado + $reservado) ==  0 ) {
-									
-								   
-								
-									if ($n3->esParaSala()) {
-										$cantSala = $cantSala + 1;
+                                if ( ($prestado + $reservado) ==  0 ) {
+                                    
+                                   
+                                
+                                    if ($n3->esParaSala()) {
+                                        $cantSala = $cantSala + 1;
 
-									} else {
-										$cantPrestamo = $cantPrestamo + 1;
-									}
-									
-								} else {
-									$noDisponibles ++;
-								}
-							}						
-						}
+                                    } else {
+                                        $cantPrestamo = $cantPrestamo + 1;
+                                    }
+                                    
+                                } else {
+                                    $noDisponibles ++;
+                                }
+                            }                       
+                        }
                     
-					}
+                    }
                     # my ($detalle_disp,$arreglo) = C4::AR::Nivel3::detalleDisponibilidadNivel3($c->id2);
                     # # $noDisponibles = $noDisponibles + $detalle_disp->{""};
                     # $cantSala = $cantSala + $detalle_disp->{"cantParaSala"};
@@ -1633,6 +1641,7 @@ sub getBusquedasDeUsuario {
 =item
     Funcion que genera el reporte de circulacion general para el PDF, sin paginar ni nada
 =cut
+
 sub getReporteCirculacionGeneralToExport{
 
     my ($data)          = @_;
@@ -1644,8 +1653,11 @@ sub getReporteCirculacionGeneralToExport{
     my $statistics      = $data->{'statistics'};
     my $orden           = $data->{'orden'};
     my $sentido         = $data->{'asc'};
+    my $responsable     = $data->{'responsable'};
 
     my $tieneFecha      = 0;
+
+    C4::AR::Debug::debug("fecha_fin $fecha_fin");
 
     my @filtros;
     my $resultsarray;
@@ -1659,10 +1671,14 @@ sub getReporteCirculacionGeneralToExport{
         push(@filtros, ('socio.id_categoria' =>  {eq => $categoria} ));
     }
 
+     if ( C4::AR::Utilidades::validateString($responsable) ) {
+        push(@filtros, ('responsable_ref.nro_socio' =>  {eq => $responsable} ));
+    }
+
     my $desde = C4::AR::Filtros::i18n('Desde');
     my $hasta = C4::AR::Filtros::i18n('Hasta');
 
-    if ( ($fecha_inicio) && ($fecha_inicio ne $desde) && ($fecha_fin) && ($fecha_fin ne $hasta) ) {
+    if ($fecha_inicio && ($fecha_inicio ne $desde) && $fecha_fin && ($fecha_fin ne $hasta)) {
 
         $fecha_inicio   = C4::Date::format_date($fecha_inicio, "iso");
         $fecha_fin      = C4::Date::format_date($fecha_fin, "iso");
@@ -1675,19 +1691,19 @@ sub getReporteCirculacionGeneralToExport{
 
     # primero traemos todos los id3 filtrando por los parametros de busqueda
     my $resultsArray = C4::Modelo::RepHistorialCirculacion::Manager->get_rep_historial_circulacion( 
-                                                                      query             => \@filtros,
-                                                                      require_objects   => [ 'socio', 'tipo_prestamo_ref' ],
-                                                                      select            => ['id3'],
-                                                                      distinct          => 1,      
+                                                                    query             => \@filtros,
+                                                                    require_objects   => [ 'nivel3','socio', 'tipo_prestamo_ref', 'responsable_ref' ],
+                                                                    select            => ['id3','nro_socio','tipo_prestamo', 'responsable', 'nivel3.id'],
+                                                                    distinct          => 1,   
                                                         );
 
-    my @resultArray;                                                                      
+    my @resultArray;         
+
+     C4::AR::Debug::debug("cantttt : " . scalar(@$resultsArray));                                                             
 
     foreach my $objetoRepCirculacion (@$resultsArray){
 
         my @filtro;
-
-        my %dataHash;
 
         push(@filtro, ('id3' =>  {eq => $objetoRepCirculacion->getId3()} ));
 
@@ -1700,7 +1716,7 @@ sub getReporteCirculacionGeneralToExport{
         
         my $cantidadUsuarios = C4::Modelo::RepHistorialCirculacion::Manager->get_rep_historial_circulacion( 
                                                                       query   => \@filtro,
-                                                                      select  => ['COUNT(nro_socio) AS agregacion_temp'],
+                                                                      select  => ['COUNT(DISTINCT nro_socio) AS agregacion_temp'],
                                                                 );
 
 
@@ -1803,18 +1819,21 @@ sub getReporteCirculacionGeneralToExport{
 
         $dataHash{'cantidad_usuarios'}      = $cantidadUsuarios->[0]->{'agregacion_temp'};
         $dataHash{'cantidad_devoluciones'}  = $cantidadDevoluciones->[0]->{'agregacion_temp'};
-        $dataHash{'cantidad_renovaciones'}  = $cantidadDevoluciones->[0]->{'agregacion_temp'};
+        $dataHash{'cantidad_renovaciones'}  = $cantidadRenovaciones->[0]->{'agregacion_temp'};
         $dataHash{'cantidad_domiciliario'}  = $cantidadDomiciliario->[0]->{'agregacion_temp'};
         $dataHash{'cantidad_sala'}          = $cantidadSala->[0]->{'agregacion_temp'};
         $dataHash{'cantidad_especial'}      = $cantidadEspecial->[0]->{'agregacion_temp'};
-        $dataHash{'objeto'}                 = C4::AR::Nivel1::getNivel1FromId1($objetoRepCirculacion->getId3());
+        $dataHash{'nivel1'}                 = C4::AR::Nivel1::getNivel1FromId3($objetoRepCirculacion->getId3());
+        $dataHash{'obj_circulacion'}        = $objetoRepCirculacion;
+        $dataHash{'nivel3'}                 = C4::AR::Nivel3::getNivel3FromId3($objetoRepCirculacion->getId3());
+
+        # $dataHash{'responsable'}            = $responsable->[0]->{'responsable'};
         
         push(@resultArray, \%dataHash);
 
     }
 
-    return (\@resultArray, scalar(@$resultsArray));
-
+    return (\@resultArray, scalar(@resultArray));
 }
 
 
@@ -1833,7 +1852,6 @@ sub getReporteCirculacionGeneral{
     my $fecha_inicio    = $data->{'fecha_inicio'};
     my $fecha_fin       = $data->{'fecha_fin'};
     my $statistics      = $data->{'statistics'};
-    # my $tipoOperacion   = $data->{'tipoOperacion'};
     my $orden           = $data->{'orden'};
     my $sentido         = $data->{'asc'};
     my $responsable     = $data->{'nroSocio'};
@@ -1859,7 +1877,7 @@ sub getReporteCirculacionGeneral{
     my $desde = C4::AR::Filtros::i18n('Desde');
     my $hasta = C4::AR::Filtros::i18n('Hasta');
 
-    if ($fecha_inicio ne $desde && $fecha_fin ne $hasta) {
+    if ($fecha_inicio && ($fecha_inicio ne $desde) && $fecha_fin && ($fecha_fin ne $hasta)) {
 
         $fecha_inicio   = C4::Date::format_date($fecha_inicio, "iso");
         $fecha_fin      = C4::Date::format_date($fecha_fin, "iso");
@@ -1881,13 +1899,15 @@ sub getReporteCirculacionGeneral{
                                                           
       
                                                         );
-    # cantidad para el paginador
-    my ($rep_busqueda_count) = C4::Modelo::RepHistorialCirculacion::Manager->get_rep_historial_circulacion_count(
-                                                                    query               => \@filtros,                                            
-                                                                    require_objects   => [ 'nivel3','socio', 'tipo_prestamo_ref', 'responsable_ref' ],
-                                                                    select            => ['id3','nro_socio','tipo_prestamo', 'responsable'],
-                                                                    distinct          => 1,
-                                                                );
+
+     my $resultsArrayCant = C4::Modelo::RepHistorialCirculacion::Manager->get_rep_historial_circulacion_count( 
+                                                                      query             => \@filtros,
+                                                                      require_objects   => [ 'nivel3','socio', 'tipo_prestamo_ref', 'responsable_ref' ],
+                                                                      select            => ['id3','nro_socio','tipo_prestamo', 'responsable', 'nivel3.id'],
+                                                                      distinct          => 1,
+                                                          
+      
+                                                        );
       
     my @resultArray;       
 
@@ -2013,7 +2033,7 @@ sub getReporteCirculacionGeneral{
         $dataHash{'cantidad_domiciliario'}  = $cantidadDomiciliario->[0]->{'agregacion_temp'};
         $dataHash{'cantidad_sala'}          = $cantidadSala->[0]->{'agregacion_temp'};
         $dataHash{'cantidad_especial'}      = $cantidadEspecial->[0]->{'agregacion_temp'};
-        $dataHash{'nivel1'}                 = C4::AR::Nivel1::getNivel1FromId1($objetoRepCirculacion->getId3());
+        $dataHash{'nivel1'}                 = C4::AR::Nivel1::getNivel1FromId3($objetoRepCirculacion->getId3());
         $dataHash{'obj_circulacion'}        = $objetoRepCirculacion;
         $dataHash{'nivel3'}                 = C4::AR::Nivel3::getNivel3FromId3($objetoRepCirculacion->getId3());
 
@@ -2023,8 +2043,7 @@ sub getReporteCirculacionGeneral{
 
     }
 
-    return (\@resultArray, $rep_busqueda_count);
-
+    return (\@resultArray, $resultsArrayCant);
 }
 
 =item
@@ -2161,26 +2180,14 @@ sub getReservasCirculacion {
     $cantR              = $cantR || $limit_pref;
  
     my $categoria       = $datos_busqueda->{'categoriaSocio'};
-    my $tipoReserva     = $datos_busqueda->{'tipoReserva'};
     my $tipoDoc         = $datos_busqueda->{'tipoDoc'};
     my $titulo          = $datos_busqueda->{'titulo'};
     my $edicion         = $datos_busqueda->{'edicion'};
     my $estadoReserva   = $datos_busqueda->{'estadoReserva'};
     my $fecha_inicio    = $datos_busqueda->{'fecha_inicio'};
     my $fecha_fin       = $datos_busqueda->{'fecha_fin'};
-    my $statistics      = $datos_busqueda->{'statistics'};
+    my $signatura       = $datos_busqueda->{'signatura'};
     my $orden           = $datos_busqueda->{'orden'};
-
-
-    C4::AR::Debug::debug($categoria);
-    C4::AR::Debug::debug($tipoReserva);
-    C4::AR::Debug::debug($tipoDoc);
-    C4::AR::Debug::debug($titulo);
-    C4::AR::Debug::debug($edicion);
-    C4::AR::Debug::debug($estadoReserva);
-    C4::AR::Debug::debug($fecha_inicio);
-    C4::AR::Debug::debug($fecha_fin);
-    C4::AR::Debug::debug($orden);
 
     my @filtros;
     my $resultsarray;
@@ -2199,39 +2206,38 @@ sub getReservasCirculacion {
     
     #OK, forkeado el nombre de la tabla
     if ($titulo){
-         push(@filtros,('t6.titulo' =>  { like => '%'.$titulo.'%'} ));
+         push(@filtros, ('t6.titulo' =>  { like => '%'.$titulo.'%'} ));
     }    
     
     if ($edicion){
-         push(@filtros,('nivel2.marc_record' =>  { like => '%'.$edicion.'%'} ));
-    }    
-    
+         push(@filtros, ('nivel2.marc_record' =>  { like => '%'.$edicion.'%'} ));
+    }  
 
-
-    #tipo de reserva se relaciona con estado de reserva
-    #TODAS == ""
-    if($tipoReserva eq "grupo"){         
-        push( @filtros, or => [ 'id3' => { eq => undef },
-                                'id3' => { eq => '0'} ] ); 
-                                
-    }elsif($tipoReserva eq "ejemplar"){ 
-        push( @filtros, or => [ 'id3' => { ne => undef },
-                                'id3' => { ne => '0'} ] ); 
-    }
-    
+    if ($signatura){
+         push(@filtros, ('t8.signatura' =>  {like => '%'.$signatura.'%'} ));
+    }  
     
     #OK, ver cuando se relaciona con $tipoReserva
-    if($estadoReserva eq "asignada"){         
-        push( @filtros,  or => [ 'id3' => { ne => undef },
-                                 'id3' => { ne => '0'} ] ); 
-                                
-    }elsif($estadoReserva eq "anulada"){ 
-        push( @filtros, and => [ 'tipo_operacion'   => { eq => 'cancelacion' },
-                                'responsable'       => { ne => 'sistema'} ] ); 
-                                
-    }elsif($estadoReserva eq "vencida"){ 
-        push( @filtros, and => [ 'tipo_operacion'   => { ne => undef }, #vencida !
-                                  'responsable'     => { eq => 'sistema'} ] ); 
+    
+    if ($estadoReserva ne "TODAS"){
+        if($estadoReserva eq "asignada"){         
+            push( @filtros,  or => [ 'tipo_operacion' => { eq => 'prestamo' } ]); 
+                                    
+        }elsif($estadoReserva eq "cancelada"){ 
+            push( @filtros, or =>   [   and => [    'tipo_operacion'   => { eq => 'cancelacion' },
+                                                'responsable'      => { ne => 'sistema'} 
+                                            ],
+                                        and => [    'tipo_operacion'   => { eq => 'cancel' },
+                                                'responsable'      => { ne => 'sistema'} 
+                                            ]  
+                                    ]
+
+                );
+                                    
+        }elsif($estadoReserva eq "vencida"){ 
+            push( @filtros, and => [ 'tipo_operacion'   => { ne => undef }, #vencida !
+                                      'responsable'     => { eq => 'sistema'} ] ); 
+        }
     }
 
     my $desde = C4::AR::Filtros::i18n('Desde');
@@ -2253,7 +2259,8 @@ sub getReservasCirculacion {
                                                                       limit   => $cantR,
                                                                       offset  => $ini,
                                                                       require_objects   => ['socio', 'socio.persona.documento',
-                                                                                            'nivel1', 'nivel1.IndiceBusqueda', 'nivel2'
+                                                                                            'nivel1', 'nivel1.IndiceBusqueda', 'nivel2',
+                                                                                            'nivel3'
                                                                       ],
       
                                                         );
@@ -2261,7 +2268,8 @@ sub getReservasCirculacion {
     my ($rep_busqueda_count) = C4::Modelo::RepHistorialCirculacion::Manager->get_rep_historial_circulacion_count(
                                                                             query   => \@filtros,
                                                                             require_objects => ['socio', 'socio.persona.documento',
-                                                                                                'nivel1', 'nivel1.IndiceBusqueda', 'nivel2'
+                                                                                                'nivel1', 'nivel1.IndiceBusqueda', 'nivel2',
+                                                                                                'nivel3'
                                                                             ],
                                                                               # with_objects => [],                                                           
                                                                             );

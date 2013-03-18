@@ -131,7 +131,7 @@
                         print C4::AR::Filtros::action_button( 
                                                         button       => "btn btn-primary",
                                                         action       => "generarReporteGenEtiquetas()", 
-                                                        icon         => "icon-white icon-search",
+                                                        icon         => "icon-white icon-inbox",
                                                         title        => '[% "Generar Reporte" | i18n %]',
                                                     ) ;
                   [% END %]

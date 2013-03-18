@@ -4911,6 +4911,52 @@ sub generarComboDeEstados{
 	
 }
 
+sub generarComboEstadoEjemplares{
+
+      my ($params) = @_;
+
+    my @select_estados_array;
+    my %select_estados;
+    my $estados        = &C4::AR::Referencias::obtenerEstadosEjemplares();
+
+    foreach my $estado (@$estados) {
+        push(@select_estados_array, $estado->getCodigo);
+        $select_estados{$estado->getCodigo}  = $estado->getNombre;
+    }
+
+    $select_estados{''}                = 'SIN SELECCIONAR';
+
+    my %options_hash;
+
+    if ( $params->{'onChange'} ){
+        $options_hash{'onChange'}   = $params->{'onChange'};
+    }
+    if ( $params->{'onFocus'} ){
+        $options_hash{'onFocus'}    = $params->{'onFocus'};
+    }
+    if ( $params->{'onBlur'} ){
+        $options_hash{'onBlur'}     = $params->{'onBlur'};
+    }
+
+    $options_hash{'name'}       = $params->{'name'}||'estado';
+    $options_hash{'id'}         = $params->{'id'}||'estado';
+    $options_hash{'size'}       = $params->{'size'}||1;
+    $options_hash{'class'}      = 'required';
+    $options_hash{'multiple'}   = $params->{'multiple'}||0;
+
+    push (@select_estados_array, '');
+    $options_hash{'values'}     = \@select_estados_array;
+    $options_hash{'labels'}     = \%select_estados;
+
+    my $combo_estados = CGI::scrolling_list(\%options_hash);
+
+    return $combo_estados;
+}
+
+
+
+
+
 END { }       # module clean-up code here (global destructor)
 
 1;

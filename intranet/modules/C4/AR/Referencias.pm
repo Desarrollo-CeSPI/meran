@@ -903,6 +903,18 @@ sub obtenerEstados{
     
 }
 
+
+
+sub obtenerEstadosEjemplares{
+    
+    use C4::Modelo::RefEstado::Manager;
+    
+    my $estados = C4::Modelo::RefEstado::Manager->get_ref_estado();
+    
+    return ($estados);
+    
+    
+}
 END { }       # module clean-up code here (global destructor)
 
 1;
