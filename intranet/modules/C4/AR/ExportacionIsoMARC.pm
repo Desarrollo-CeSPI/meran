@@ -107,7 +107,7 @@ sub marc_record_to_ISO_from_range {
                 my $field_id   = MARC::Field->new('001', $nivel2->getId2);
                 
                 if($nivel2->getTipoDocumento() eq "REV") {
-                        $field_id   = MARC::Field->new('100','','','a' => $nivel2->getId2);
+                        $field_id   = MARC::Field->new('100', $nivel2->getId2);
                 }
                 
                 #Sigla de la Biblioteca + Ubicación Geográfica
@@ -129,7 +129,7 @@ sub marc_record_to_ISO_from_range {
                 
                 $marc_record_unido->append_fields($marc_record_n2->fields());
                 
-#                 C4::AR::Debug::debug("marc_record_to_ISO_from_range =>>>>>>>>> \n ". $marc_record_unido->as_formatted );
+                #C4::AR::Debug::debug("marc_record_to_ISO_from_range =>>>>>>>>> \n ". $marc_record_unido->as_formatted );
                  
                 #Para ROBLE limpio de \n y \r de los campos de notas (520a,534a,500a,995u)
                 $marc_record_unido = C4::AR::ExportacionIsoMARC::limpiar_enter_para_roble($marc_record_unido);

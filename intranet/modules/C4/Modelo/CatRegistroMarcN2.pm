@@ -887,6 +887,79 @@ sub getMarcRecordFull{
 }
 
 
+=head2 sub getMarcRecordConDatosForRobleExportRELAP
+    Construye un registro MARC con datos referenciados con el formato pedido por roble para las Revistas (RELAP)
+    
+    ID: 100  << id2
+    
+    Número normalizado-tipo: 15^t << ISSN
+    Número normalizado: 15^n <<  022, a NIVEL 1
+    Título clave: 35 <<  245, a NIVEL 1
+    Título informativo: 36 <<  245, b NIVEL 1
+    Título abreviado: 37 <<  210, a NIVEL 1
+    Dirección web: 88 << 856, u NIVEL 1
+    
+    Idioma: 40 << 041, h NIVEL 1
+    País de edición: 45 << 043, a NIVEL 1
+    
+    Frecuencia: 48 << 310, a NIVEL 2
+    
+    Responsabilidad: 39  AUTOR??? << 110,a NIVEL 1
+    
+    
+    Lugar de edición: 44^l << 260, a NIVEL 2
+    Editor: 44^e << 260, b NIVEL 2
+
+    Suplementos: 82 <<  NIVEL 2?
+    Relaciones con otras publicaciones: 85 (Ej: continuación de, continuada por) ??
+    Notas: 54  << 500, a NIVEL 2
+    
+    Clasificación temática: 60 
+    Término tope: 62
+    Descriptores: 65
+    Indizado en:  50
+    Incluido en: 51
+    
+    Sigla Bca. Cooperante: 80^c << se arma 
+    
+    Disponibilidad: 80^d ????
+    Procedencia: 80^p ????
+    Existencias: 80^e << ESTADO DE COLECCION 
+    Responsable del alta: 90
+    Fecha de alta: 03
+
+
+=cut
+
+sub getMarcRecordConDatosForRobleExportRELAP{
+    my ($self) = shift;
+
+    #obtengo el marc_record del NIVEL 1 con datos
+    my $marc_record_n1             = $self->nivel1->getMarcRecordConDatos();
+        
+    #obtengo el marc_record del NIVEL 2 con datos
+    my $marc_record_n2             = $self->getMarcRecordConDatos();
+    
+    my $marc_record_relap = MARC::Record->new();
+    $marc_record_relap->allow_controlfield_tags('100','035','036','037','039','040','045','048','082','085','054','088','060','062','065','050','051','090');
+    
+    #Nivel1
+    $marc_record_relap->append_fields(MARC::Field->new( '035', $marc_record_n1->subfield('245',"a")));
+    $marc_record_relap->append_fields(MARC::Field->new( '036', $marc_record_n1->subfield('245',"b")));
+    $marc_record_relap->append_fields(MARC::Field->new( '037', $marc_record_n1->subfield('210',"a")));
+    $marc_record_relap->append_fields(MARC::Field->new( '088', $marc_record_n1->subfield('856',"u")));
+    $marc_record_relap->append_fields(MARC::Field->new( '040', $marc_record_n1->subfield('041',"h")));
+    $marc_record_relap->append_fields(MARC::Field->new( '045', $marc_record_n1->subfield('043',"a")));
+    $marc_record_relap->append_fields(MARC::Field->new( '039', $marc_record_n1->subfield('110',"a")));
+    
+    #Nivel2
+    $marc_record_relap->append_fields(MARC::Field->new( '054', $marc_record_n2->subfield('500',"a")));
+
+    return $marc_record_relap;
+    
+}
+
+
 =head2 sub getMarcRecordForExport
     Construye un registro MARC para exportar con su nivel 1 y si es requerido sus ejemplares
 =cut
@@ -894,21 +967,30 @@ sub getMarcRecordForRobleExport {
     my ($self) = shift;
    my ($exportar_ejemplares)=@_;
    
-   #obtengo el marc_record del NIVEL 1
-    my $marc_record = $self->nivel1->getMarcRecordConDatosForRobleExport();
-    #obtengo el marc_record del NIVEL 2
-    my $marc_record_n2 = $self->getMarcRecordConDatosForRobleExport();
-    $marc_record->append_fields($marc_record_n2->fields());
+   
+       
+    if ($self->getTipoDocumento() eq "REV"){
+        return $self->getMarcRecordConDatosForRobleExportRELAP();
+        }
+    else{
+           #obtengo el marc_record del NIVEL 1
+        my $marc_record = $self->nivel1->getMarcRecordConDatosForRobleExport();
+        #obtengo el marc_record del NIVEL 2
+        my $marc_record_n2 = $self->getMarcRecordConDatosForRobleExport();
+        $marc_record->append_fields($marc_record_n2->fields());
 
-    if($exportar_ejemplares){
-        my $ejemplares = $self->getEjemplares();
+        if($exportar_ejemplares){
+            my $ejemplares = $self->getEjemplares();
 
-        foreach my $nivel3 (@$ejemplares){
-            my $marc_record_n3  =$nivel3->getMarcRecordConDatosForRobleExport();
-            $marc_record->append_fields($marc_record_n3->fields());
-            }
-    }
-    return $marc_record;
+            foreach my $nivel3 (@$ejemplares){
+                my $marc_record_n3  =$nivel3->getMarcRecordConDatosForRobleExport();
+                $marc_record->append_fields($marc_record_n3->fields());
+                }
+        }
+        return $marc_record;
+        
+        }
+
 }
 
 
@@ -935,14 +1017,14 @@ sub getMarcRecordForRobleExport {
     Código Bca. Cooperante: 910^a puede ir acompañada de signatura topografica si la hay. Ej. 910 ^aDEO 650.3 ART
     Código Bca. Cooperante: 999 (solo la sigla. Ej. 999:DEO)
 
-
-    
 =cut
+
 sub getMarcRecordConDatosForRobleExport{
     my ($self) = shift;
-
-    #obtengo el marc_record del NIVEL 2 con datos
+    
+     #obtengo el marc_record del NIVEL 2 con datos
     my $marc_record_n2             = $self->getMarcRecordConDatos();
+
         
     my $pais = $marc_record_n2->subfield("043","c");    
     if ($pais){
@@ -973,8 +1055,8 @@ sub getMarcRecordConDatosForRobleExport{
     
     
     return $marc_record_n2;
+    
 }
-
 
 =head2 sub getMarcRecordConDatos
     Construye un registro MARC con datos referenciados
@@ -997,7 +1079,6 @@ sub getMarcRecordConDatos{
         }
     return ($MARC_record);
 }
-
 
 
 =head2 sub getMarcRecordConDatosFull
