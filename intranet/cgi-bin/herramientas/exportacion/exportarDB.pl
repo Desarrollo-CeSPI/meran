@@ -21,8 +21,8 @@ if ($tipoAccion eq 'EXPORTAR') {
     if (!$filename){
         my ($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst)=localtime(time);
         $year       += 1900;
-        my $dt      = "$hour$min-$mday-$mon-$year";
-        $filename   = 'export-'.$dt.'.iso';
+        my $dt      = "$year-$mon-$mday";
+        $filename   = 'exportacion-'.$dt.'.iso';
     }
 
     C4::AR::Debug::debug("Exportar => OP: ".$tipoAccion);
@@ -34,7 +34,6 @@ if ($tipoAccion eq 'EXPORTAR') {
                       );
 
     eval {
-
         C4::AR::ExportacionIsoMARC::marc_record_to_ISO_from_range( $query );
     };
 

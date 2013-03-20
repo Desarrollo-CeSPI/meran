@@ -83,63 +83,71 @@ sub limpiar_enter_para_roble {
 sub marc_record_to_ISO_from_range {
     my ( $query ) = @_;
 
-    use Time::HiRes;
-    my $start = [ Time::HiRes::gettimeofday( ) ];
-
     my $records_array = C4::AR::ExportacionIsoMARC::getRecordsFromRange( $query );
     my $marc_record_array_ref;
     my $field_ident_universidad = MARC::Field->new('040','','','a' => C4::AR::Preferencias::getValorPreferencia("origen_catalogacion"));
     
     foreach my $nivel1 (@$records_array){
         
-        #if($query->param('export_type') eq "isis_marc"){
-                
-            my $grupos = $nivel1->getGrupos();
-            #Se exporta cad nivel2 a un registro para  Roble
-            foreach my $nivel2 (@$grupos){
-
-                my $marc_record_n2 =  $nivel2->getMarcRecordForRobleExport($query->param('exportar_ejemplares'));
-                
-                my $marc_record_unido = MARC::Record->new();
-
-            
-                #Genero el ID par Exportar
-                my $field_id   = MARC::Field->new('001', $nivel2->getId2);
-                
-                if($nivel2->getTipoDocumento() eq "REV") {
-                        $field_id   = MARC::Field->new('100', $nivel2->getId2);
-                }
-                
-                #Sigla de la Biblioteca + Ubicación Geográfica
-                my $signaturas = $nivel2->getSignaturas();
-                my $primera_signatura = $signaturas->[0];
-                
-                my $id_biblio = C4::AR::Preferencias::getValorPreferencia("defaultUI")." ".$primera_signatura;
-
-                my $field_ident_biblioteca  = MARC::Field->new("910",'','','a' => $id_biblio);
-                
-                
-                $marc_record_unido->append_fields($field_id );
-                $marc_record_unido->append_fields($field_ident_biblioteca);
-                $marc_record_unido->append_fields($field_ident_universidad);
-                    
-                    
-                #Borro el tipo de documento
-                $marc_record_n2->delete_fields($marc_record_n2->field("910"));
-                
-                $marc_record_unido->append_fields($marc_record_n2->fields());
-                
-                #C4::AR::Debug::debug("marc_record_to_ISO_from_range =>>>>>>>>> \n ". $marc_record_unido->as_formatted );
+        
+            if($query->param('tipo_nivel3_name') eq "REV") {
+                #REVISTAS!!! Un registro por título (Formato RELAP)
+                 my $marc_record_relap =  $nivel1->getMarcRecordConDatosForRobleExportRELAP();
                  
                 #Para ROBLE limpio de \n y \r de los campos de notas (520a,534a,500a,995u)
-                $marc_record_unido = C4::AR::ExportacionIsoMARC::limpiar_enter_para_roble($marc_record_unido);
-
-                my $registro_final = C4::AR::ExportacionIsoMARC::convertMarcRecordToMoose($marc_record_unido,'iso');
-            
+                $marc_record_relap = C4::AR::ExportacionIsoMARC::limpiar_enter_para_roble($marc_record_relap);
+                my $registro_final = C4::AR::ExportacionIsoMARC::convertMarcRecordToMoose($marc_record_relap,'iso');
                 print $registro_final;
+                
+            }else { 
+                #Formato MARC, un registro por edición
+                
+                my $grupos = $nivel1->getGrupos();
+                #Se exporta cad nivel2 a un registro para  Roble
+                foreach my $nivel2 (@$grupos){
+
+                    my $marc_record_n2 =  $nivel2->getMarcRecordForRobleExport($query->param('exportar_ejemplares'));
+                    
+                    my $marc_record_unido = MARC::Record->new();
+
+                
+                    #Genero el ID par Exportar
+                    my $field_id   = MARC::Field->new('001', $nivel2->getId2);
+                    
+                    if($nivel2->getTipoDocumento() eq "REV") {
+                            $field_id   = MARC::Field->new('100', $nivel2->getId2);
+                    }
+                    
+                    #Sigla de la Biblioteca + Ubicación Geográfica
+                    my $signaturas = $nivel2->getSignaturas();
+                    my $primera_signatura = $signaturas->[0];
+                    
+                    my $id_biblio = C4::AR::Preferencias::getValorPreferencia("defaultUI")." ".$primera_signatura;
+
+                    my $field_ident_biblioteca  = MARC::Field->new("910",'','','a' => $id_biblio);
+                    
+                    
+                    $marc_record_unido->append_fields($field_id );
+                    $marc_record_unido->append_fields($field_ident_biblioteca);
+                    $marc_record_unido->append_fields($field_ident_universidad);
+                        
+                        
+                    #Borro el tipo de documento
+                    $marc_record_n2->delete_fields($marc_record_n2->field("910"));
+                    
+                    $marc_record_unido->append_fields($marc_record_n2->fields());
+                    
+                    #C4::AR::Debug::debug("marc_record_to_ISO_from_range =>>>>>>>>> \n ". $marc_record_unido->as_formatted );
+                    
+                    #Para ROBLE limpio de \n y \r de los campos de notas (520a,534a,500a,995u)
+                    $marc_record_unido = C4::AR::ExportacionIsoMARC::limpiar_enter_para_roble($marc_record_unido);
+
+                    my $registro_final = C4::AR::ExportacionIsoMARC::convertMarcRecordToMoose($marc_record_unido,'iso');
+                
+                    print $registro_final;
+                }
             }
     }
-    my $elapsed             = Time::HiRes::tv_interval( $start );
 }
 
 =item sub getRecordsFromRange
@@ -153,9 +161,11 @@ sub getRecordsFromRange {
 
     
     C4::AR::Debug::debug("getRecordsFromRange => : ".$params->param('registro_ini'));
-    if ($params->param('tipo_nivel3_id') ne "") {
+    
+    if ($params->param('tipo_nivel3_name') ne "") {
         #filtro por tipo de ejemplar
-        push (@filtros, ( template => { eq => $params->param('tipo_nivel3_id')}));
+    C4::AR::Debug::debug("getRecordsFromRange => : TIPO ".$params->param('tipo_nivel3_name'));
+        push (@filtros, ( template => { eq => $params->param('tipo_nivel3_name')}));
     } 
 
 
