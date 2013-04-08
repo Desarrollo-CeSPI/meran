@@ -1,3 +1,22 @@
+#!/usr/bin/perl
+
+use utf8;
+use lib "/usr/share/meran/dev/intranet/modules/";
+#use C4::Output;  
+#use C4::AR::Auth;
+use C4::Context;
+use CGI::Session;
+use CGI;
+
+#use Rose::DB;
+
+use MARC::Record;
+use Digest::SHA  qw(sha1 sha1_hex sha1_base64 sha256_base64 );
+
+#use C4::AR::Sphinx;
+#use C4::AR::PortadasRegistros;
+#use C4::Modelo::UsrSocio;
+#use C4::Modelo::UsrSocio::Manager;
 
 -- No se usa esta tabla
 drop table users;
@@ -1456,6 +1475,3 @@ DELETE FROM  `pref_tabla_referencia_rel_catalogo` WHERE  `pref_tabla_referencia_
 DELETE FROM  `pref_tabla_referencia_rel_catalogo` WHERE  `pref_tabla_referencia_rel_catalogo`.`id` =12 LIMIT 1 ;
 
 DELETE FROM  `pref_tabla_referencia_rel_catalogo` WHERE  `pref_tabla_referencia_rel_catalogo`.`id` =15 LIMIT 1 ;
-
-
-

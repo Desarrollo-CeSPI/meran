@@ -10,7 +10,7 @@ foreach my $nivel2 (@$nivel2_array_ref){
 
     my $tipo_doc = $nivel2->getTipoDocumento();
 
-	if(($nivel2->nivel1->getTemplate eq 'ALL')||($tipo_doc eq 'REV')||($tipo_doc eq 'ANA')||($tipo_doc eq 'ACT')){
+	if(($nivel2->nivel1->getTemplate eq 'ALL')||($tipo_doc eq 'REV')||($tipo_doc eq 'ANA')||($tipo_doc eq 'ACT')||($tipo_doc eq 'MON')||($tipo_doc eq 'TES')){
 		C4::AR::Debug::debug("============== seteando tipo_doc: ".$tipo_doc." al registro: ".$nivel2->nivel1->getId1()." ==============");
 		$nivel2->nivel1->setTemplate($tipo_doc);
 		$nivel2->nivel1->save();

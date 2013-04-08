@@ -658,7 +658,7 @@ sub getMarcRecordConDatos{
 
 =cut
 
-sub getMarcRecordConDatosForRobleExportRELAP{
+sub getMarcRecordConDatosForRobleExportRELAP {
     my ($self) = shift;
 
     #obtengo el marc_record del NIVEL 1 con datos
@@ -690,10 +690,74 @@ sub getMarcRecordConDatosForRobleExportRELAP{
     if($marc_record_n1->subfield('110',"a")){
         $marc_record_relap->append_fields(MARC::Field->new( '039', $marc_record_n1->subfield('110',"a")));
     }
-    
+    #Agregamos el estado de coleccion
+    my $field080 =MARC::Field->new("080","","","e" => $self->getEstadoDeColeccion());
+   $marc_record_relap->append_fields($field080);
+        
     C4::AR::Debug::debug("RELAP => ".$marc_record_relap->as_formatted());
     
     return $marc_record_relap;
+}
+
+=head2 sub getEstadoDeColeccion
+    Arma el estado de colección de un registro 
+=cut
+sub getEstadoDeColeccion{
+    my ($self) = shift;
+
+    use C4::AR::Busquedas;
+    my $estadoDeColeccion = C4::AR::Busquedas::obtenerEstadoDeColeccion($self->getId1);
+    
+=item
+
+    [% FOREACH anio IN estadoDeColeccion.keys.sort %]
+    [% IF estadoDeColeccion.$anio.keys %]
+    <li>
+        [% IF anio != '#' %]<b>[% anio %]</b>[% END %]
+        [% FOREACH volumen IN estadoDeColeccion.$anio.keys.sort %]
+            [% IF volumen != '#' %][% volumen  %][% END %]
+            (
+            [% FOREACH fasciculo IN estadoDeColeccion.$anio.$volumen.keys.sort %]
+
+                 [% PERL %]
+                    print C4::AR::Filtros::link_to( text =>     "[% HTML.escape(fasciculo) %]",
+                                                    url=>"[% url_prefix %]/catalogacion/estructura/detalle.pl", 
+                                                    params =>   ["id1=[% id1 %]","id2=[% estadoDeColeccion.$anio.$volumen.$fasciculo %]"],
+                                                    title =>    "[% 'Mostrar Detalle del Registro' | i18n %]",
+                                                    class => 	"link_to_detail"
+                                                ) ;
+                 [% END %]
+  
+            [% END %]
+            )
+        [% END %]
+       </li>
+    [% END %]
+    [% END %]
+    
+=cut    
+
+    my $estadoResultado="";
+    while (my ($anio, $volumen) = each(%$estadoDeColeccion)){
+        if (($anio ne '#')&&($anio ne '')){
+            if ($estadoResultado ne ""){$estadoResultado.=" ";}
+            $estadoResultado.=$anio;
+        }
+        while (my($vol, $fasciculo) = each(%$volumen)){
+            if (($vol ne '#')&&($vol ne '')){
+                if ($estadoResultado ne ""){$estadoResultado.=" ";}
+                $estadoResultado.=$vol;
+        }
+         if ($estadoResultado ne ""){$estadoResultado.=" ";}
+        $estadoResultado.="( ";
+        foreach my $fasc (sort (keys(%$fasciculo))) {
+            $estadoResultado.=" ".$fasc." ";
+        }
+        $estadoResultado.=" )";
+
+        }
+    }
+    return $estadoResultado;
 }
 
 

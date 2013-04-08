@@ -227,6 +227,7 @@ CREATE TABLE IF NOT EXISTS `cat_pref_mapeo_koha_marc` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 INSERT  INTO `cat_pref_mapeo_koha_marc` (`tabla`, `campoTabla`, `nombre`, `campo`, `subcampo`) VALUES
+( 'colaboradores', 'idColaborador', 'Nombre Personal', '700', 'a'),
 ( 'additionalauthors', 'author', 'Nombre Personal', '700', 'a'),
 ( 'biblio', 'abstract', 'Nota de resumen, etc.', '520', 'a'),
 ( 'biblio', 'author', 'Nombre Personal', '100', 'a'),
@@ -378,9 +379,6 @@ CREATE TABLE IF NOT EXISTS `perm_catalogo` (
   UNIQUE KEY `id_persona` (`ui`,`tipo_documento`,`nro_socio`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 ;
 
-INSERT  INTO `perm_catalogo` (`ui`, `tipo_documento`, `datos_nivel1`, `datos_nivel2`, `datos_nivel3`, `estantes_virtuales`, `estructura_catalogacion_n1`, `estructura_catalogacion_n2`, `estructura_catalogacion_n3`, `tablas_de_refencia`, `control_de_autoridades`, `usuarios`, `sistema`, `undefined`, `id`, `id_persona`, `nro_socio`) VALUES
-('DEO', 'LIB', '00000001', '00000001', '00010000', '00001111', '00000001', '00000001', '00000001', '00000001', '00000001', '00001111', '00000001', '00001111', 1, 21, 'kohaadmin');
-
 DROP TABLE IF EXISTS `perm_circulacion`;
 
 CREATE TABLE IF NOT EXISTS `perm_circulacion` (
@@ -403,9 +401,6 @@ CREATE TABLE IF NOT EXISTS `perm_general` (
   `permisos` varchar(8) NOT NULL default '00000000',
   PRIMARY KEY  (`nro_socio`,`ui`,`tipo_documento`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-INSERT  INTO `perm_general` (`nro_socio`, `ui`, `tipo_documento`, `preferencias`, `reportes`, `permisos`) VALUES
-('kohaadmin', 'DEO', 'ANY', '', '00001111', '00001111');
 
 DROP TABLE IF EXISTS `pref_informacion_referencia`;
 
@@ -738,12 +733,6 @@ CREATE TABLE IF NOT EXISTS `adq_ref_proveedor_moneda` (
   KEY `fk_adq_ref_moneda_has_adq_proveedor_adq_proveedor1` (`adq_proveedor_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-
--- DA ERROR FIXME
-ALTER TABLE `adq_proveedor`
-  ADD CONSTRAINT `fk_adq_proveedor_ref_localidad1` FOREIGN KEY (`ref_localidad_id`) REFERENCES `ref_localidad` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  ADD CONSTRAINT `fk_adq_proveedor_usr_ref_tipo_documento1` FOREIGN KEY (`usr_ref_tipo_documento_id`) REFERENCES `usr_ref_tipo_documento` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
-
 CREATE TABLE  `ref_estado_presupuesto` (
 `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY ,
 `nombre` VARCHAR( 255 ) NOT NULL
@@ -778,3 +767,8 @@ INSERT INTO `usr_ref_categoria_socio` (`id`, `categorycode`, `description`) VALU
 (7, 'EX', 'Usuario externo'),
 (8, 'IB', 'Interbibliotecario'),
 (9, 'BB', 'Bibliotecario');
+
+-- DA ERROR FIXME
+ALTER TABLE `adq_proveedor`
+  ADD CONSTRAINT `fk_adq_proveedor_ref_localidad1` FOREIGN KEY (`ref_localidad_id`) REFERENCES `ref_localidad` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `fk_adq_proveedor_usr_ref_tipo_documento1` FOREIGN KEY (`usr_ref_tipo_documento_id`) REFERENCES `usr_ref_tipo_documento` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
