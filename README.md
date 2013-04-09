@@ -21,7 +21,7 @@ You can install MERAN it three ways:
 3. Combined (Sandbox for modules, and sources)
 
 
-**It's mandatory to install MERAN in Debian Squeeze (6.0), other distributions of Linux are unsupported.**
+*It's mandatory to install MERAN in Debian Squeeze (6.0), other distributions of Linux are unsupported.*
 
 
 1) Installer
