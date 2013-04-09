@@ -887,6 +887,7 @@ sub getMarcRecordFull{
 }
 
 
+
 =head2 sub getMarcRecordForExport
     Construye un registro MARC para exportar con su nivel 1 y si es requerido sus ejemplares
 =cut
@@ -894,21 +895,22 @@ sub getMarcRecordForRobleExport {
     my ($self) = shift;
    my ($exportar_ejemplares)=@_;
    
-   #obtengo el marc_record del NIVEL 1
-    my $marc_record = $self->nivel1->getMarcRecordConDatosForRobleExport();
-    #obtengo el marc_record del NIVEL 2
-    my $marc_record_n2 = $self->getMarcRecordConDatosForRobleExport();
-    $marc_record->append_fields($marc_record_n2->fields());
+           #obtengo el marc_record del NIVEL 1
+        my $marc_record = $self->nivel1->getMarcRecordConDatosForRobleExport();
+        #obtengo el marc_record del NIVEL 2
+        my $marc_record_n2 = $self->getMarcRecordConDatosForRobleExport();
+        $marc_record->append_fields($marc_record_n2->fields());
 
-    if($exportar_ejemplares){
-        my $ejemplares = $self->getEjemplares();
+        if($exportar_ejemplares){
+            my $ejemplares = $self->getEjemplares();
 
-        foreach my $nivel3 (@$ejemplares){
-            my $marc_record_n3  =$nivel3->getMarcRecordConDatosForRobleExport();
-            $marc_record->append_fields($marc_record_n3->fields());
-            }
-    }
-    return $marc_record;
+            foreach my $nivel3 (@$ejemplares){
+                my $marc_record_n3  =$nivel3->getMarcRecordConDatosForRobleExport();
+                $marc_record->append_fields($marc_record_n3->fields());
+                }
+        }
+        return $marc_record;
+        
 }
 
 
@@ -935,14 +937,14 @@ sub getMarcRecordForRobleExport {
     Código Bca. Cooperante: 910^a puede ir acompañada de signatura topografica si la hay. Ej. 910 ^aDEO 650.3 ART
     Código Bca. Cooperante: 999 (solo la sigla. Ej. 999:DEO)
 
-
-    
 =cut
+
 sub getMarcRecordConDatosForRobleExport{
     my ($self) = shift;
-
-    #obtengo el marc_record del NIVEL 2 con datos
+    
+     #obtengo el marc_record del NIVEL 2 con datos
     my $marc_record_n2             = $self->getMarcRecordConDatos();
+
         
     my $pais = $marc_record_n2->subfield("043","c");    
     if ($pais){
@@ -958,7 +960,7 @@ sub getMarcRecordConDatosForRobleExport{
         
         my $codigo= $idioma->getIdLanguage;
         
-        C4::AR::Debug::debug("IDIOMAAAA =>>>>>>>>>>>>>>> ".$idioma->getMarcCode ."=".$idioma->getIdLanguage);
+        #C4::AR::Debug::debug("IDIOMAAAA =>>>>>>>>>>>>>>> ".$idioma->getMarcCode ."=".$idioma->getIdLanguage);
         
         if($idioma->getMarcCode()){
             $codigo= $idioma->getMarcCode;
@@ -971,10 +973,8 @@ sub getMarcRecordConDatosForRobleExport{
 
     &C4::AR::Catalogacion::moverCampoMarcRecord($marc_record_n2,'440','490');
     
-    
     return $marc_record_n2;
 }
-
 
 =head2 sub getMarcRecordConDatos
     Construye un registro MARC con datos referenciados
@@ -997,7 +997,6 @@ sub getMarcRecordConDatos{
         }
     return ($MARC_record);
 }
-
 
 
 =head2 sub getMarcRecordConDatosFull

@@ -1,9 +1,22 @@
 #!/usr/bin/perl
 
-use CGI::Session;
+use utf8;
+use lib "/usr/share/meran/dev/intranet/modules/";
+#use C4::Output;  
+#use C4::AR::Auth;
 use C4::Context;
+use CGI::Session;
+use CGI;
+
+#use Rose::DB;
+
 use MARC::Record;
 use Digest::SHA  qw(sha1 sha1_hex sha1_base64 sha256_base64 );
+
+#use C4::AR::Sphinx;
+#use C4::AR::PortadasRegistros;
+#use C4::Modelo::UsrSocio;
+#use C4::Modelo::UsrSocio::Manager;
 
 my @N1;
 my @N2;
@@ -32,6 +45,7 @@ my $dbh = C4::Context->dbh;
 
 print "INICIO \n";
 my $tt1 = time();
+
  print "Creando tablas necesarias \n";
      crearTablasNecesarias();
  
@@ -78,13 +92,16 @@ my $tt1 = time();
    traduccionEstructuraMarc();
  print "Agregando preferencias del sistema \n";
    agregarPreferenciasDelSistema();
- print "Dando permisos a los usuarios \n";
-   dandoPermisosUsuarios();
-print "Procesando Analíticas \n";
+ #print "Dando permisos a los usuarios \n";
+  # dandoPermisosUsuarios();
+ print "Procesando Analíticas \n";
   procesarAnaliticas();
-print "Cambiar codificación a UTF8 \n";
+ print "Cambiar codificación a UTF8 \n";
   pasarBaseUTF8();
 
+ print "Actualiar hasta el final \n";
+   actualizarMeran();
+   
 print "FIN!!! \n";
 my $tt2 = time();
 print "\n GRACIAS DICO!!! \n";
@@ -132,6 +149,22 @@ print "AL FIN TERMINO TODO!!! Tardo $tardo2 segundos !!! que son $min minutos !!
       }
     }
 
+    sub buscarReferenciaColaborador
+    { my ($tipo) = @_;
+        #No existe aún la tabla de referencias y el campo en Koha no está normalizado!
+        #Se recata los que se pueden
+        if($tipo eq 'rev.') { return 'rev';}
+        if(($tipo eq 'ed.')||($tipo eq 'ed')||($tipo eq 'Editor')) { return 'edt';}
+        if(($tipo eq 'dir.')||($tipo eq 'dir. y  re')||($tipo eq 'director')) { return 'drt';}
+        if($tipo eq 'tr.') { return 'trl';}
+        if($tipo eq 'pref.') { return 'prf';}
+        if($tipo eq 'il.')   { return 'ill';}
+        if(($tipo eq 'com.')||($tipo eq 'comp.')) { return 'com';}
+        #indefinido!!
+        return 'oth';
+    }
+    
+    
 	sub procesarV2_V3 
 	{
 
@@ -195,6 +228,7 @@ print "AL FIN TERMINO TODO!!! Tardo $tardo2 segundos !!! que son $min minutos !!
 	$kohaToMARC5->execute();
 	$isbn=$kohaToMARC5->fetchrow_hashref;
 	$kohaToMARC5->finish();
+
 	###############################################################################
 
 	while (my $biblio=$biblios->fetchrow_hashref ) {
@@ -262,6 +296,34 @@ print "AL FIN TERMINO TODO!!! Tardo $tardo2 segundos !!! que son $min minutos !!
 	  push(@ids1,$dn1add);
 	}
 	$additionalauthors->finish();
+
+
+	# colaboradores
+	
+	my $colaboradores=$dbh->prepare("SELECT * FROM colaboradores where id1= ?;");
+	$colaboradores->execute($biblio->{'biblionumber'});
+	while (my $colabs=$colaboradores->fetchrow_hashref ) {
+	  my $dn1col;
+	  $dn1col->{'campo'}=$additionalauthor->{'campo'};
+	  $dn1col->{'subcampo'}=$additionalauthor->{'subcampo'};
+	  $dn1col->{'simple'}=1;
+	  $dn1col->{'valor'}='cat_autor@'.$colabs->{$additionalauthor->{'campoTabla'}};
+	  push(@ids1,$dn1col);
+    #Y la referencia?? =>> 700 e
+    
+      my $dn1colref;
+	  $dn1colref->{'campo'}='700';
+	  $dn1colref->{'subcampo'}='e';
+	  $dn1colref->{'simple'}=1;
+      my $tipo_colaborador= buscarReferenciaColaborador($colabs->{'tipo'});
+      
+      if ($tipo_colaborador){
+        $dn1colref->{'valor'}='ref_colaborador@'.$tipo_colaborador;
+        push(@ids1,$dn1colref);
+      }
+
+	}
+	$colaboradores->finish();
 
 	#########################################################################
 	my($error,$codMsg);
@@ -406,9 +468,9 @@ print "AL FIN TERMINO TODO!!! Tardo $tardo2 segundos !!! que son $min minutos !!
 #---------------------------------------FIN NIVEL2---------------------------------------#
 	@ids1=();
 	@valores1=();
-	$registro++;
+	$registro++;    
  }
-$biblios->finish();
+    $biblios->finish();
 #---------------------------------------FIN NIVEL1---------------------------------------#
 
 	}
@@ -620,6 +682,15 @@ $biblios->finish();
          $droppr->execute();
 
 
+
+#pasamos a todos a estudiante
+
+ my $estudiantes=$dbh->prepare("UPDATE `usr_socio` SET credential_type ='estudiante'  WHERE credential_type ='';");
+    $estudiantes->execute();
+
+ my $supervacas=$dbh->prepare("UPDATE `usr_socio` SET credential_type ='superLibrarian'  WHERE is_super_user =1;");
+    $supervacas->execute();
+        
 #Agregamos KOHAADMIN!!!
 
  my $kohaadmin_persona="INSERT INTO `usr_persona` (`version_documento`, `nro_documento`, `tipo_documento`, `apellido`, `nombre`, `titulo`, `otros_nombres`, `iniciales`, `calle`, `barrio`, `ciudad`, `telefono`, `email`, `fax`, `msg_texto`, `alt_calle`, `alt_barrio`, `alt_ciudad`, `alt_telefono`, `nacimiento`, `fecha_alta`, `legajo`, `sexo`, `telefono_laboral`, `cumple_condicion`, `es_socio`) VALUES
@@ -631,7 +702,7 @@ $biblios->finish();
  my $id_persona_kohaadmin=$personaka->fetchrow;
 
 my $kohaadmin_socio="INSERT INTO `usr_socio` (`id_persona`, `nro_socio`, `id_ui`, `cod_categoria`, `fecha_alta`, `expira`, `flags`, `password`, `last_login`, `last_change_password`, `change_password`, `cumple_requisito`, `nombre_apellido_autorizado`, `dni_autorizado`, `telefono_autorizado`, `is_super_user`, `credential_type`, `id_estado`, `activo`, `agregacion_temp`) VALUES
-(?, 'kohaadmin', ? , 'ES', NULL, NULL, 1, 'a1q8oyiSjO02w1vpPlwscK+kQdDDbolevtC2ZsZX1Uc', '2010-01-13 00:00:00', '2009-12-13', 0, '0000-00-00', '', '', '', 1, '', 46, '1', 'id_persona');";
+(?, 'kohaadmin', ? , 'ES', NULL, NULL, 1, 'a1q8oyiSjO02w1vpPlwscK+kQdDDbolevtC2ZsZX1Uc', '2010-01-13 00:00:00', '2009-12-13', 0, '0000-00-00', '', '', '', 1, 'superLibrarian', 46, '1', 'id_persona');";
  my $ks=$dbh->prepare($kohaadmin_socio);
     $ks->execute($id_persona_kohaadmin,$ui);
 
@@ -1224,17 +1295,25 @@ sub procesarAnaliticas {
 		
 		my $autores_analiticas=$dbh->prepare("SELECT * FROM cat_autor_analitica where analyticalnumber = ?;");
 		$autores_analiticas->execute($analitica->{'analyticalnumber'});
-
-		my $dn1add;
-		my @ar1;
-		$dn1add->{'campo'}='100';
-		$dn1add->{'subcampo'}='a';
-		my $aauthor=$autores_analiticas->fetchrow_hashref;
-		$dn1add->{'simple'}=1;
-		$dn1add->{'valor'}='cat_autor@'.$aauthor->{'author'};
-		push(@analitica_n1,$dn1add);
+        
+        #Debe ir el primero como autor principal y el resto como autores secundarios
+        my $principal=1;
+        while (my $aauthor=$autores_analiticas->fetchrow_hashref ) {
+            my $dn1add;
+            my @ar1;
+            if ($principal){
+                $dn1add->{'campo'}='100';
+            }else{
+                $dn1add->{'campo'}='700';
+            }
+            $dn1add->{'subcampo'}='a';
+            $dn1add->{'simple'}=1;
+            $dn1add->{'valor'}='cat_autor@'.$aauthor->{'author'};
+            
+            push(@analitica_n1,$dn1add);
+        }
 		$autores_analiticas->finish();
-
+        
 	#########################################################################
 	my($error,$codMsg);
 	my $nuevo_id1 = guardaNuevoNivel1MARC(\@analitica_n1);
@@ -1468,4 +1547,17 @@ foreach my $table (@tables){
 }
 
 
+}
+
+
+sub actualizarMeran {
+    # Aplica TODOS los SQL Updates Hasta llegar a la JAULA!
+    
+     for (my $version = 1; $version <= 313; $version++) {
+        print "Actualizando versión ".$version."\n";
+           aplicarSQL("../sqlUPDATES/2011/sql.rev".$version);
+     }
+
+    print "Actualizando version del paquete \n";
+    aplicarSQL("../instalador/updates.sql");
 }

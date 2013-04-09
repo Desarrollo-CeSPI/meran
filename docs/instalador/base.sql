@@ -3030,7 +3030,7 @@ CREATE TABLE `usr_persona` (
 
 LOCK TABLES `usr_persona` WRITE;
 /*!40000 ALTER TABLE `usr_persona` DISABLE KEYS */;
-INSERT INTO `usr_persona` VALUES (1,'P','1000000',1,'Meran','Meran Unlp',NULL,NULL,NULL,'Calle 50 y 120',NULL,' 1 ','1287423648','gaspo53@gmail.com',NULL,NULL,'',NULL,'','','1900','2009-12-23',NULL,'007','M',NULL,1,'','','','',6,'9f5a7f3d5ab451e20e2538d5beb423a3a2a5957d.jpg');
+INSERT INTO `usr_persona` VALUES (1,'P','1000000',1,'Meran','Meran Unlp',NULL,NULL,NULL,'Calle 50 y 120',NULL,' 1 ','1287423648','soportemeran@cespi.unlp.edu.ar',NULL,NULL,'',NULL,'','','1900','2009-12-23',NULL,'007','M',NULL,1,'','','','',6,'');
 /*!40000 ALTER TABLE `usr_persona` ENABLE KEYS */;
 UNLOCK TABLES;
 
