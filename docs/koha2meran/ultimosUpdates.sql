@@ -197,81 +197,6 @@
           CHANGE `amount` `cantidad` INT( 11 ) NOT NULL DEFAULT '1';
 
           ALTER TABLE `circ_prestamo` ADD `agregacion_temp` VARCHAR( 255 ) NULL ;
-           
-          DROP TABLE IF EXISTS `cat_visualizacion_intra`;
-
-           CREATE TABLE IF NOT EXISTS `cat_visualizacion_intra` (
-            `id` int(11) NOT NULL auto_increment,
-            `campo` char(3) NOT NULL,
-            `subcampo` char(1) NOT NULL,
-            `vista_intra` varchar(255) default NULL,
-            `tipo_ejemplar` CHAR( 3 ) NOT NULL,
-            PRIMARY KEY  (`id`),
-            KEY `campo` (`campo`,`subcampo`)
-            ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;
-            
-  INSERT INTO cat_visualizacion_intra (campo, subcampo, tipo_ejemplar, vista_intra) VALUES
-                ('245', 'a', 'ALL', 'Título'),
-                ('995', 'd', 'ALL', 'Unidad de Información de Origen'),
-                ('995', 'c', 'ALL', 'Unidad de Información'),
-                ('995', 'o', 'ALL', 'Disponibilidad'),
-                ('995', 'e', 'ALL', 'Estado'),
-                ('910', 'a', 'ALL', 'Tipo de Documento'),
-                ('260', 'c', 'ALL', 'Fecha de publicación'),
-                ('043', 'c', 'LIB', 'Código ISO (R)'),
-                ('041', 'h', 'LIB', 'Código de idioma de la versión original y/o traducciones intermedias del texto'),
-                ('900', 'b', 'ALL', 'Nivel Bibliográfico'),
-                ('995', 't', 'ALL', 'Signatura Topográfica'),
-                ('995', 'f', 'ALL', 'Código de Barras'),
-                ('100', 'a', 'ALL', 'Autor'),
-                ('260', 'a', 'ALL', 'Ciudad de publicación'),
-                ('245', 'h', 'ALL', 'Medio'),
-                ('041', 'a', 'MAP', 'Código de Idioma para texto o pista de sonido o título separado'),
-                ('995', 'a', 'LIB', 'Nombre del vendedor'),
-                ('084', 'a', 'ALL', 'Otro Número de Clasificación R'),
-                ('995', 'u', 'LIB', 'Notas del item'),
-                ('022', 'a', 'LIB', 'ISSN'),
-                ('082', '2', 'ALL', 'No. de la edición'),
-                ('440', 'a', 'LIB', 'Serie - título de la serie'),
-                ('020', 'a', 'LIB', 'ISBN'),
-                ('245', 'b', 'ALL', 'Resto del título'),
-                ('072', '2', 'LIB', 'Fuente del código');
-
-            CREATE TABLE IF NOT EXISTS `cat_visualizacion_opac` (
-            `id` int(11) NOT NULL auto_increment,
-            `campo` char(3) NOT NULL,
-            `subcampo` char(1) NOT NULL,
-            `vista_opac` varchar(255) default NULL,
-            `id_perfil` int(11) NOT NULL,
-            PRIMARY KEY  (`id`),
-            KEY `campo` (`campo`,`subcampo`)
-            ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 ;
-
-            INSERT INTO `cat_visualizacion_opac` (`campo`, `subcampo`, `vista_opac`, `id_perfil`) VALUES
-                ( '245', 'a', 'Título', '1'),
-                ( '245', 'b', 'Resto del título', '1'),
-                ( '082', '2', 'No. de la edición', '1'),
-                ( '084', 'a', 'Otro Número de Clasificación R', '1'),
-                ( '245', 'h', 'Medio', '1'),
-                ( '260', 'a', 'Ciudad de publicación', '1'),
-                ( '100', 'a', 'Autor', '1'),
-                ( '995', 'f', 'Código de Barras', '1'),
-                ( '995', 't', 'Signatura Topográfica', '1'),
-                ( '900', 'b', 'Nivel Bibliográfico', '1'),
-                ( '995', 'd', 'Unidad de Información de Origen', '1'),
-                ( '260', 'c', 'Fecha de publicación', '1'),
-                ( '910', 'a', 'Tipo de Documento', '1'),
-                ( '995', 'e', 'Estado', '1'),
-                ( '995', 'o', 'Disponibilidad', '1'),
-                ( '995', 'c', 'Unidad de Información', '1'),
-                ( '041', 'h', 'Código de idioma de la versión original y/o traducciones intermedias del texto', '1'),
-                ( '020', 'a', 'ISBN', '1'),
-                ( '440', 'a', 'Serie - título de la serie', '1'),
-                ( '022', 'a', 'Año', '1'),
-                ( '995', 'u', 'Notas del item', '1'),
-                ( '995', 'a', 'Nombre del vendedor', '1'),
-                ( '043', 'c', 'Código ISO (R)', '1'),
-                ( '072', '2', 'Fuente del código', '1');
 
                 CREATE TABLE IF NOT EXISTS `cat_perfil_opac` (
                 `id` int(11) NOT NULL auto_increment,
@@ -723,4 +648,3 @@ CREATE TABLE IF NOT EXISTS `oai_harvester_server` (
   `resumptionToken` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
-
