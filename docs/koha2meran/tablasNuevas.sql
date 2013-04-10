@@ -4,14 +4,14 @@ UPDATE biblioitems  SET itemtype = 'LIB' WHERE itemtype = 'MON' or itemtype = ''
 UPDATE biblioitems  SET itemtype = 'TES' WHERE itemtype = 'tesi';
 
 
-TRUNCATE TABLE itemtype;
+TRUNCATE TABLE itemtypes;
 INSERT INTO `itemtypes` (`itemtype`, `description`, `notforloan`) VALUES
 ( 'LIB', 'Libro', 0),
 ( 'SOFT', 'Software', 0),
 ( 'REV', 'Revista', 0),
 ( 'TES', 'Tesis', 1),
 ( 'ELE', 'Documento Electrónico', 0),
-( 'CDR', 'CD-ROM', 0, NULL, 1, 1),
+( 'CDR', 'CD-ROM', 0),
 ( 'SEW', 'Publicacion seriada (web)', 0),
 ( 'SER', 'Publicacion seriada', 0),
 ( 'CAT', 'Catálogo', 0),
