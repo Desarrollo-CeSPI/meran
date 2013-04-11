@@ -23,15 +23,15 @@ use C4::Modelo::UsrSocio::Manager;
  print "Dar Permisos a Usuarios \n";
    darPermisosSocios();
 
-
- print "Generar Indice\n";
-   regenerarIndice();
+print "Reparar Templates\n";  
+   repararTemplates();
 
  print "Volver a Bajar las Portadas\n";
    bajarPortadas();
    
- print "Reparar Templates\n";  
-   repararTemplates();
+
+ print "Generar Indice\n";
+   regenerarIndice();
 
 sub darPermisosSocios {
     #Permisos de socios!
