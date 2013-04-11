@@ -273,13 +273,20 @@ DROP TABLE IF EXISTS `cat_visualizacion_intra`;
 CREATE TABLE IF NOT EXISTS `cat_visualizacion_intra` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `campo` char(3) DEFAULT NULL,
+  `pre` varchar(255) DEFAULT NULL,
+  `inter` varchar(255) DEFAULT NULL,
+  `post` varchar(255) DEFAULT NULL,
   `subcampo` char(1) DEFAULT NULL,
   `vista_intra` varchar(255) DEFAULT NULL,
   `tipo_ejemplar` char(3) DEFAULT NULL,
+  `orden` int(11) NOT NULL,
+  `nivel` int(1) DEFAULT NULL,
+  `vista_campo` varchar(255) DEFAULT NULL,
+  `orden_subcampo` int(11) NOT NULL,
   PRIMARY KEY (`id`),
+  UNIQUE KEY `campo_2` (`campo`,`subcampo`,`tipo_ejemplar`,`nivel`),
   KEY `campo` (`campo`,`subcampo`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=26 ;
-
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 --
 -- Estructura de tabla para la tabla `cat_visualizacion_opac`
 --
