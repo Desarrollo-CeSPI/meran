@@ -388,6 +388,8 @@ print "AL FIN TERMINO TODO!!! Tardo $tardo2 segundos !!! que son $min minutos !!
 		$dn2->{'subcampo'}=$publisher->{'subcampo'};
 		$dn2->{'simple'}=1;
 		$dn2->{'valor'}=$pub->{$publisher->{'campoTabla'}};
+        
+        print "EDITOR: ".$dn2->{'valor'}." >> ".$publisher->{'campo'}."-".$publisher->{'subcampo'}." ID".$biblioitem->{'biblioitemnumber'};
 		push(@ids2,$dn2);
 	}
 	$sth15->finish();
@@ -891,6 +893,9 @@ sub guardaNivel2MARC {
         my $campo=$obj->{'campo'};
         my $subcampo=$obj->{'subcampo'};
 
+        if($campo eq '260' && $subcampo eq 'b') {
+            print "EDITOR ".$obj->{'valor'}."\n";
+            }
         if ($obj->{'simple'}){
             my $valor=$obj->{'valor'};
             if ($valor ne ''){
@@ -935,6 +940,7 @@ sub guardaNivel2MARC {
         }
     }
 
+print "NIVEL 2 ".$marc->as_formatted."\n"
     my $reg_marc_2 =$dbh->prepare("INSERT INTO cat_registro_marc_n2 (marc_record,id1,id) VALUES (?,?,?) ");
        $reg_marc_2->execute($marc->as_usmarc,$biblionumber,$biblioitemnumber);
 
