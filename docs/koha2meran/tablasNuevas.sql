@@ -1251,8 +1251,6 @@ INSERT INTO `cat_visualizacion_intra` (`id`, `campo`, `pre`, `inter`, `post`, `s
 (850, '653', ' -', NULL, ' -', 'a', 'Palabras claves (no controlado)', 'ALL', 298, 1, 'Palabras claves', 1),
 (851, '245', ']', NULL, ']', 'h', 'DGM', 'LIB', 188, 1, 'TÍTULO PROPIAMENTE DICHO (NR)', 2),
 (852, '110', NULL, NULL, NULL, 'b', 'Entidad subordinada', 'LIB', 78, 1, 'Autor corporativo', 2),
-(853, '995', NULL, NULL, NULL, 'c', 'Unidad de Información', 'LIB', 309, 3, 'Datos del Ejemplar', 88),
-(854, '995', NULL, NULL, NULL, 'd', 'Unidad de Información de Origen', 'LIB', 309, 3, 'Datos del Ejemplar', 89),
 (855, '995', NULL, NULL, NULL, 'e', 'Estado', 'LIB', 309, 3, 'Datos del Ejemplar', 90),
 (856, '995', NULL, NULL, NULL, 'f', 'Código de Barras', 'LIB', 309, 3, 'Datos del Ejemplar', 91),
 (857, '995', NULL, NULL, NULL, 'o', 'Disponibilidad', 'LIB', 309, 3, 'Datos del Ejemplar', 92),
