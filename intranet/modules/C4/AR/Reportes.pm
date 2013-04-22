@@ -2204,8 +2204,6 @@ sub getReservasCirculacionToExport {
     my @filtros;
     my $resultsarray;
 
-#    my @filtro;
-
     #OK
     if ($categoria){
          push(@filtros,('socio.id_categoria' =>  {eq => $categoria} ));
