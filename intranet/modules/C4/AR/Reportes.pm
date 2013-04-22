@@ -2137,43 +2137,6 @@ sub getReporteCirculacionGeneral{
         #######################################################################################
 
 
-        @filtro = ();
-
-        push(@filtro, ('id3' =>  {eq => $objetoRepCirculacion->getId3()} ));
-        push(@filtro, ('tipo_prestamo' =>  {eq => 'SA'} ));
-
-        if ($tieneFecha) {
-             push( @filtro, and => [ 'fecha' => { ge => $fecha_inicio },
-                                     'fecha' => { le => $fecha_fin } ] ); 
-        }
-
-        my $cantidadSala = C4::Modelo::RepHistorialCirculacion::Manager->get_rep_historial_circulacion( 
-                                                                      query   => \@filtro,
-                                                                      select  => ['COUNT(tipo_prestamo) AS agregacion_temp'],
-                                                                );
-
-
-        #######################################################################################
-
-
-        @filtro = ();
-
-        push(@filtro, ('id3' =>  {eq => $objetoRepCirculacion->getId3()} ));
-        push(@filtro, ('tipo_prestamo' =>  {eq => 'ES'} ));
-
-        if ($tieneFecha) {
-             push( @filtro, and => [ 'fecha' => { ge => $fecha_inicio },
-                                     'fecha' => { le => $fecha_fin } ] ); 
-        }
-
-        my $cantidadEspecial = C4::Modelo::RepHistorialCirculacion::Manager->get_rep_historial_circulacion( 
-                                                                      query   => \@filtro,
-                                                                      select  => ['COUNT(tipo_prestamo) AS agregacion_temp'],
-                                                                );
-
-
-        #######################################################################################
-
         $data_hash{'cantidad_usuarios'}      = $data_hash{'cantidad_usuarios'} + $cantidadUsuarios->[0]->{'agregacion_temp'};
         $data_hash{'cantidad_devoluciones'}  = $data_hash{'cantidad_devoluciones'} + $cantidadDevoluciones->[0]->{'agregacion_temp'};
         $data_hash{'cantidad_renovaciones'}  = $data_hash{'cantidad_renovaciones'} + $cantidadRenovaciones->[0]->{'agregacion_temp'};
