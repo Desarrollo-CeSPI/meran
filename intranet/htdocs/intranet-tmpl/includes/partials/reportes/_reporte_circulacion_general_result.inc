@@ -74,6 +74,27 @@
            [% END %]
         </tbody>
     </table>
+    <br>
+    <hr>
+    <h5>Totales:</h5>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>[% "Cantidad de Renovaciones" | i18n %]</th>
+                <th>[% "Cantidad de Usuarios" | i18n %]</th>
+                <th>[% "Cantidad de Devoluciones" | i18n %]</th>
+                <th>[% "Cantidad de Prestamos Domiciliario" | i18n %]</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>[% totales.cantidad_renovaciones %]</td>
+                <td>[% totales.cantidad_usuarios %]</td>
+                <td>[% totales.cantidad_devoluciones %]</td>
+                <td>[% totales.cantidad_domiciliario %]</td>
+            </tr>
+    </table>   
+
   [% IF !exportar %]
     <div class="form-actions" style="margin-bottom: 0;">
        <td>

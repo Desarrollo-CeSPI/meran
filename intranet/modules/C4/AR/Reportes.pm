@@ -1697,9 +1697,14 @@ sub getReporteCirculacionGeneralToExport{
                                                                     distinct          => 1,   
                                                         );
 
-    my @resultArray;         
+    my @resultArray;
 
-     C4::AR::Debug::debug("cantttt : " . scalar(@$resultsArray));                                                             
+    my %data_hash;
+
+    $data_hash{'cantidad_usuarios'}      = 0;
+    $data_hash{'cantidad_devoluciones'}  = 0;
+    $data_hash{'cantidad_renovaciones'}  = 0;
+    $data_hash{'cantidad_domiciliario'}  = 0;
 
     foreach my $objetoRepCirculacion (@$resultsArray){
 
@@ -1827,13 +1832,17 @@ sub getReporteCirculacionGeneralToExport{
         $dataHash{'obj_circulacion'}        = $objetoRepCirculacion;
         $dataHash{'nivel3'}                 = C4::AR::Nivel3::getNivel3FromId3($objetoRepCirculacion->getId3());
 
-        # $dataHash{'responsable'}            = $responsable->[0]->{'responsable'};
+        $data_hash{'cantidad_usuarios'}      = $data_hash{'cantidad_usuarios'} + $cantidadUsuarios->[0]->{'agregacion_temp'};
+        $data_hash{'cantidad_devoluciones'}  = $data_hash{'cantidad_devoluciones'} + $cantidadDevoluciones->[0]->{'agregacion_temp'};
+        $data_hash{'cantidad_renovaciones'}  = $data_hash{'cantidad_renovaciones'} + $cantidadRenovaciones->[0]->{'agregacion_temp'};
+        $data_hash{'cantidad_domiciliario'}  = $data_hash{'cantidad_domiciliario'} + $cantidadDomiciliario->[0]->{'agregacion_temp'};
+    
         
         push(@resultArray, \%dataHash);
 
     }
 
-    return (\@resultArray, scalar(@resultArray));
+    return (\@resultArray, scalar(@resultArray), \%data_hash);
 }
 
 
@@ -1896,18 +1905,17 @@ sub getReporteCirculacionGeneral{
                                                                       distinct          => 1,
                                                                       limit             => $cantR,   
                                                                       offset            => $ini,
-                                                          
-      
                                                         );
 
-     my $resultsArrayCant = C4::Modelo::RepHistorialCirculacion::Manager->get_rep_historial_circulacion_count( 
+    my $totals_results_array = C4::Modelo::RepHistorialCirculacion::Manager->get_rep_historial_circulacion( 
                                                                       query             => \@filtros,
                                                                       require_objects   => [ 'nivel3','socio', 'tipo_prestamo_ref', 'responsable_ref' ],
                                                                       select            => ['id3','nro_socio','tipo_prestamo', 'responsable', 'nivel3.id'],
                                                                       distinct          => 1,
-                                                          
-      
                                                         );
+
+    # cant for paginator
+    my $resultsArrayCant = scalar(@$totals_results_array);
       
     my @resultArray;       
 
@@ -2043,7 +2051,136 @@ sub getReporteCirculacionGeneral{
 
     }
 
-    return (\@resultArray, $resultsArrayCant);
+    # totals, to be shown at the bottom of the page
+    my @total_result_array;  
+    my %data_hash;   
+
+    $data_hash{'cantidad_usuarios'}      = 0;
+    $data_hash{'cantidad_devoluciones'}  = 0;
+    $data_hash{'cantidad_renovaciones'}  = 0;
+    $data_hash{'cantidad_domiciliario'}  = 0;
+
+    foreach my $objetoRepCirculacion (@$totals_results_array){
+
+        my @filtro;
+
+        push(@filtro, ('id3' =>  {eq => $objetoRepCirculacion->getId3()} ));
+
+        if ($tieneFecha) {
+             push( @filtro, and => [ 'fecha' => { ge => $fecha_inicio },
+                                     'fecha' => { le => $fecha_fin } ] ); 
+        }
+
+        #######################################################################################
+        
+        my $cantidadUsuarios = C4::Modelo::RepHistorialCirculacion::Manager->get_rep_historial_circulacion( 
+                                                                      query   => \@filtro,
+                                                                      select  => ['COUNT(DISTINCT nro_socio) AS agregacion_temp'],
+                                                                );
+
+
+        #######################################################################################
+
+        @filtro = ();
+
+        push(@filtro, ('id3' =>  {eq => $objetoRepCirculacion->getId3()} ));
+        push(@filtro, ('tipo_operacion' =>  {eq => 'devolucion'} ));
+
+        if ($tieneFecha) {
+             push( @filtro, and => [ 'fecha' => { ge => $fecha_inicio },
+                                     'fecha' => { le => $fecha_fin } ] ); 
+        }
+
+        my $cantidadDevoluciones = C4::Modelo::RepHistorialCirculacion::Manager->get_rep_historial_circulacion( 
+                                                                      query   => \@filtro,
+                                                                      select  => ['COUNT(tipo_operacion) AS agregacion_temp'],
+                                                                );
+
+
+        #######################################################################################
+
+
+        @filtro = ();
+
+        push(@filtro, ('id3' =>  {eq => $objetoRepCirculacion->getId3()} ));
+        push(@filtro, ('tipo_operacion' =>  {eq => 'renovacion'} ));
+
+        if ($tieneFecha) {
+             push( @filtro, and => [ 'fecha' => { ge => $fecha_inicio },
+                                     'fecha' => { le => $fecha_fin } ] ); 
+        }
+
+        my $cantidadRenovaciones = C4::Modelo::RepHistorialCirculacion::Manager->get_rep_historial_circulacion( 
+                                                                      query   => \@filtro,
+                                                                      select  => ['COUNT(tipo_operacion) AS agregacion_temp'],
+                                                                );
+
+        #######################################################################################
+
+
+        @filtro = ();
+
+        push(@filtro, ('id3' =>  {eq => $objetoRepCirculacion->getId3()} ));
+        push(@filtro, ('tipo_prestamo' =>  {eq => 'DO'} ));
+
+        if ($tieneFecha) {
+             push( @filtro, and => [ 'fecha' => { ge => $fecha_inicio },
+                                     'fecha' => { le => $fecha_fin } ] ); 
+        }
+
+        my $cantidadDomiciliario = C4::Modelo::RepHistorialCirculacion::Manager->get_rep_historial_circulacion( 
+                                                                      query   => \@filtro,
+                                                                      select  => ['COUNT(tipo_prestamo) AS agregacion_temp'],
+                                                                );
+
+
+        #######################################################################################
+
+
+        @filtro = ();
+
+        push(@filtro, ('id3' =>  {eq => $objetoRepCirculacion->getId3()} ));
+        push(@filtro, ('tipo_prestamo' =>  {eq => 'SA'} ));
+
+        if ($tieneFecha) {
+             push( @filtro, and => [ 'fecha' => { ge => $fecha_inicio },
+                                     'fecha' => { le => $fecha_fin } ] ); 
+        }
+
+        my $cantidadSala = C4::Modelo::RepHistorialCirculacion::Manager->get_rep_historial_circulacion( 
+                                                                      query   => \@filtro,
+                                                                      select  => ['COUNT(tipo_prestamo) AS agregacion_temp'],
+                                                                );
+
+
+        #######################################################################################
+
+
+        @filtro = ();
+
+        push(@filtro, ('id3' =>  {eq => $objetoRepCirculacion->getId3()} ));
+        push(@filtro, ('tipo_prestamo' =>  {eq => 'ES'} ));
+
+        if ($tieneFecha) {
+             push( @filtro, and => [ 'fecha' => { ge => $fecha_inicio },
+                                     'fecha' => { le => $fecha_fin } ] ); 
+        }
+
+        my $cantidadEspecial = C4::Modelo::RepHistorialCirculacion::Manager->get_rep_historial_circulacion( 
+                                                                      query   => \@filtro,
+                                                                      select  => ['COUNT(tipo_prestamo) AS agregacion_temp'],
+                                                                );
+
+
+        #######################################################################################
+
+        $data_hash{'cantidad_usuarios'}      = $data_hash{'cantidad_usuarios'} + $cantidadUsuarios->[0]->{'agregacion_temp'};
+        $data_hash{'cantidad_devoluciones'}  = $data_hash{'cantidad_devoluciones'} + $cantidadDevoluciones->[0]->{'agregacion_temp'};
+        $data_hash{'cantidad_renovaciones'}  = $data_hash{'cantidad_renovaciones'} + $cantidadRenovaciones->[0]->{'agregacion_temp'};
+        $data_hash{'cantidad_domiciliario'}  = $data_hash{'cantidad_domiciliario'} + $cantidadDomiciliario->[0]->{'agregacion_temp'};
+    }
+
+    return (\@resultArray, $resultsArrayCant, \%data_hash);
 }
 
 =item
