@@ -73,10 +73,9 @@ elsif($tipoAccion eq "EXPORT_CIRC_GENERAL"){
     $obj->{'fecha_inicio'}      =  $obj->{'date-from-gen'};
     $obj->{'fecha_fin'}         =  $obj->{'date-to-gen'};
     
-    my ($results, $cantidad, $totales)    = C4::AR::Reportes::getReporteCirculacionGeneralToExport($obj);
+    my ($cantidad, $totales)    = C4::AR::Reportes::getReporteCirculacionGeneralToExport($obj);
 
     $t_params->{'cantidad'}     = $cantidad;
-    $t_params->{'results'}      = $results;
     $t_params->{'exportar'}     = 1;
     $t_params->{'totales'}      = $totales;
 
@@ -146,8 +145,8 @@ elsif ($tipoAccion eq "CIRC_GENERAL") {
        $obj->{'orden'}.= ' DESC';
     }
                            
-    my ($ini,$pageNumber,$cantR)        = C4::AR::Utilidades::InitPaginador($ini);
-    my ($cantidad, $totales)  = C4::AR::Reportes::getReporteCirculacionGeneral($obj,$ini,$cantR);
+    my ($ini,$pageNumber,$cantR)    = C4::AR::Utilidades::InitPaginador($ini);
+    my ($cantidad, $totales)        = C4::AR::Reportes::getReporteCirculacionGeneral($obj,$ini,$cantR);
    
     $t_params->{'paginador'}        = C4::AR::Utilidades::crearPaginador($cantidad,$cantR,$pageNumber,$funcion,$t_params);
     $t_params->{'cantidad'}         = $cantidad;
