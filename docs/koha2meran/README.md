@@ -6,6 +6,8 @@ Dentro de la carpeta docs/koha2meran/ hay 2 scripts que de deben correr en una m
 - koha2meran.pl 
 - koha2meran-2do-paso.pl
 
+Finalmente se tiene un Meran al que se puede acceder como administrador con usuario/password  kohaadmin/kohaadmin
+
 koha2meran.pl:
 --------------
 
