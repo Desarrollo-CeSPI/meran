@@ -5,75 +5,25 @@
 [% END %]
 
 [% IF cantidad %]
-    <div class="contenedor_paginador">[% paginador %]</div>  
-    
-    [% PERL %]
-            print C4::AR::Filtros::tableHeader(   
-                                id              => "tablaResultCirculacion",
-                                columns         => ['[% "T&iacute;tulo" | i18n %]',
-                                                    '[% "C&oacute;digo de barras" | i18n %]',
-                                                    '[% "Signatura Topogr&aacute;fica" | i18n %]',
-                                                    '[% "Tipo de Prestamo" | i18n %]',
-                                                    '[% "Responsable" | i18n %]',
-                                                    '[% "Cantidad de Renovaciones" | i18n %]',
-                                                    '[% "Cantidad de Usuarios" | i18n %]',
-                                                    '[% "Cantidad de Devoluciones" | i18n %]',
-                                                    '[% "Cantidad de Prestamos Domiciliario" | i18n %]',
+    <h5>Totales:</h5>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>[% "Cantidad de Renovaciones" | i18n %]</th>
+                <th>[% "Cantidad de Usuarios" | i18n %]</th>
+                <th>[% "Cantidad de Devoluciones" | i18n %]</th>
+                <th>[% "Cantidad de Prestamos Domiciliario" | i18n %]</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>[% totales.cantidad_renovaciones %]</td>
+                <td>[% totales.cantidad_usuarios %]</td>
+                <td>[% totales.cantidad_devoluciones %]</td>
+                <td>[% totales.cantidad_domiciliario %]</td>
+            </tr>
+    </table>   
 
-                                                    
-                                                    ], 
-                                order_name_function => "reporte_circ",                            
-                            );
-        [% END %]
-
-        <tbody>      
-            [% FOREACH res IN results %]   
-              <tr>
-                    <td>
-                       
-                          [% PERL %]
-                            print C4::AR::Filtros::link_to( text      =>  "[% res.nivel1.getTitulo%]",
-                                                            url       =>  "[% url_prefix %]/catalogacion/estructura/detalle.pl",
-                                                            params    =>  ["id1=[% res.nivel1.getId1 %]"], 
-                                                        ) ;
-                          [% END %]
-                    
-                        
-                    </td>
-                    <td>
-                        [% res.nivel3.getCodigoBarra %]
-                    </td>
-                    <td>
-                        [% res.nivel3.getSignatura %]
-                    </td>
-                    <td>
-                        [% res.obj_circulacion.getTipo_prestamo %]
-                    </td>
-                    <td>
-                        [% PERL %]
-                          print C4::AR::Filtros::link_to(   text    =>  "[% res.obj_circulacion.responsable %]",
-                                                          url       =>  "[% url_prefix %]/usuarios/reales/datosUsuario.pl",
-                                                          params    =>  ["nro_socio=[% res.obj_circulacion.responsable %]"], 
-                                                          blank     =>  1, 
-                                                      ) ;
-                        [% END %]
-                    </td>
-                    <td>
-                        [% res.cantidad_renovaciones %]
-                    </td>
-                    <td>
-                        [% res.cantidad_usuarios %]
-                    </td>
-                    <td>
-                        [% res.cantidad_devoluciones %]
-                    </td>
-                    <td>
-                        [% res.cantidad_domiciliario %]
-                    </td>
-              </tr>
-           [% END %]
-        </tbody>
-    </table>
   [% IF !exportar %]
     <div class="form-actions" style="margin-bottom: 0;">
        <td>
