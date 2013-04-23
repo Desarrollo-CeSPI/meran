@@ -73,14 +73,12 @@ elsif($tipoAccion eq "EXPORT_CIRC_GENERAL"){
     $obj->{'fecha_inicio'}      =  $obj->{'date-from-gen'};
     $obj->{'fecha_fin'}         =  $obj->{'date-to-gen'};
     
-    my ($results, $cantidad)    = C4::AR::Reportes::getReporteCirculacionGeneralToExport($obj);
-
-
-    C4::AR::Debug::debug("CANTIDAD: ".$cantidad);
+    my ($cantidad, $totales)    = C4::AR::Reportes::getReporteCirculacionGeneralToExport($obj);
 
     $t_params->{'cantidad'}     = $cantidad;
-    $t_params->{'results'}      = $results;
     $t_params->{'exportar'}     = 1;
+    $t_params->{'totales'}      = $totales;
+
 
     $obj->{'is_report'}         = "SI";
 
@@ -148,17 +146,11 @@ elsif ($tipoAccion eq "CIRC_GENERAL") {
     }
                            
     my ($ini,$pageNumber,$cantR)    = C4::AR::Utilidades::InitPaginador($ini);
-    my ($results, $cantidad)        = C4::AR::Reportes::getReporteCirculacionGeneral($obj,$ini,$cantR);
-
-   C4::AR::Utilidades::printHASH(($results->[0])->{'nivel3'});
-   C4::AR::Utilidades::printHASH(($results->[0])->{'nivel1'});
+    my ($cantidad, $totales)        = C4::AR::Reportes::getReporteCirculacionGeneral($obj,$ini,$cantR);
    
     $t_params->{'paginador'}        = C4::AR::Utilidades::crearPaginador($cantidad,$cantR,$pageNumber,$funcion,$t_params);
     $t_params->{'cantidad'}         = $cantidad;
-    $t_params->{'results'}          = $results;
+    $t_params->{'totales'}          = $totales;
 
     C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
 }
-# elsif($tipoAccion eq "AGREGAR_AUTORIZADO"){
-# }
-#C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
