@@ -3,8 +3,8 @@ Migrar Koha a Meran:
 
 Los scripts de migración se encuentran en el respositorio de github de meran: https://github.com/Desarrollo-CeSPI/meran
 Dentro de la carpeta docs/koha2meran/ hay 2 scripts que de deben correr en una máquina con Koha para transformar la base a Meran:
-    * koha2meran.pl 
-    * koha2meran-2do-paso.pl
+- koha2meran.pl 
+- koha2meran-2do-paso.pl
 
 koha2meran.pl:
 --------------
