@@ -2633,7 +2633,8 @@ sub generarComboTipoPrestamo{
 
     $options_hash{'defaults'}= $params->{'default'} || C4::AR::Preferencias::getValorPreferencia("defaultissuetype");
 
-    push (@select_tipo_nivel3_array, 'SIN SELECCIONAR');
+    push (@select_tipo_nivel3_array, '');
+    $select_tipo_prestamo_hash{''} = "SIN SELECCIONAR";
     $options_hash{'values'}= \@select_tipo_nivel3_array;
     $options_hash{'labels'}= \%select_tipo_prestamo_hash;
 
