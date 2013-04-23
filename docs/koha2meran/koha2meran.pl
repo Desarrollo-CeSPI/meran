@@ -315,7 +315,7 @@ print "AL FIN TERMINO TODO!!! Tardo $tardo2 segundos !!! que son $min minutos !!
 	  $dn1col->{'simple'}=1;
 	  $dn1col->{'valor'}='cat_autor@'.$colabs->{$colaborador->{'campoTabla'}};
       
-      print "COLABORADOR NUEVO!!! ".$dn1col->{'valor'}."\n";
+      #print "COLABORADOR NUEVO!!! ".$dn1col->{'valor'}."\n";
       
 	  push(@ids1,$dn1col);
     #Y la referencia?? =>> 700 e
@@ -328,7 +328,7 @@ print "AL FIN TERMINO TODO!!! Tardo $tardo2 segundos !!! que son $min minutos !!
       
       if ($tipo_colaborador){
         $dn1colref->{'valor'}='ref_colaborador@'.$tipo_colaborador;
-        print "REFERENCIA COLABORADOR!!! ".$dn1colref->{'valor'}."\n";
+        #print "REFERENCIA COLABORADOR!!! ".$dn1colref->{'valor'}."\n";
         push(@ids1,$dn1colref);
       }
 
