@@ -102,7 +102,7 @@
             <div class="controls">
                 <input type='text' id='usuario' name='usuario' value='' size='32' tabindex='3' style="float: left" onclick="clearUsuario();">
                 <div id="estadoUsuario"></div>
-                <input type='hidden' id='nro_socio_hidden' value='' tabindex='-1'>
+                <input type='hidden' id='nro_socio_hidden' name='nro_socio_hidden'value='' tabindex='-1'>
             </div>
         </div>
 

@@ -68,7 +68,7 @@ elsif($tipoAccion eq "EXPORT_CIRC_GENERAL"){
     });
 
     $obj->{'tipoPrestamo'}      =  $obj->{'tipo_prestamo_name'};
-    $obj->{'responsable'}       =  $obj->{'nro_socio_hidden'};
+    $obj->{'nroSocio'}          =  $obj->{'nro_socio_hidden'};
     $obj->{'categoriaSocio'}    =  $obj->{'categoria_socio_id'};
     $obj->{'fecha_inicio'}      =  $obj->{'date-from-gen'};
     $obj->{'fecha_fin'}         =  $obj->{'date-to-gen'};
@@ -145,10 +145,8 @@ elsif ($tipoAccion eq "CIRC_GENERAL") {
        $obj->{'orden'}.= ' DESC';
     }
                            
-    my ($ini,$pageNumber,$cantR)    = C4::AR::Utilidades::InitPaginador($ini);
-    my ($cantidad, $totales)        = C4::AR::Reportes::getReporteCirculacionGeneral($obj,$ini,$cantR);
+    my ($cantidad, $totales)        = C4::AR::Reportes::getReporteCirculacionGeneral($obj);
    
-    $t_params->{'paginador'}        = C4::AR::Utilidades::crearPaginador($cantidad,$cantR,$pageNumber,$funcion,$t_params);
     $t_params->{'cantidad'}         = $cantidad;
     $t_params->{'totales'}          = $totales;
 

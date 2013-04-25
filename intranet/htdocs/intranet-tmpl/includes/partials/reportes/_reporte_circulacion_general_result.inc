@@ -23,7 +23,6 @@
                 <td>[% totales.cantidad_domiciliario %]</td>
             </tr>
     </table>   
-
   [% IF !exportar %]
     <div class="form-actions" style="margin-bottom: 0;">
        <td>
@@ -42,5 +41,4 @@
     <div class="alert alert-info">
         [% 'No hay resultados para mostrar' | i18n  %]
     </div>
-
 [% END %]
