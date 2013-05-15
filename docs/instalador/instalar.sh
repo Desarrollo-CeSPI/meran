@@ -18,6 +18,80 @@ generarConfSphinx()
   rm /tmp/$ID.sphix*
 
 }
+instalacionNueva(){
+	      echo "Procediendo a la Instalación como Jaula de la aplicación"
+      echo "Este proceso instalará los módulos específicos para la arquitectura de su Kernel que ya vienen precompilados y se distribuyen junto con Meran"
+      echo "Su sistema es de $versionKernel bits"
+      echo "Este instalador automático ubicará todos los archivos en el path por defecto $DESTINO_MERAN utilizando para la configuración del sistema /etc/meran/meran.conf"
+      fecha=$(date +%Y%m%d%H%M)
+      echo $fecha > ./fecha_instalacion
+      if [ -e $CONFIGURACION_MERAN/meran$ID.conf ]; then
+                echo "El archivo de configuración ya existía"
+                mv $CONFIGURACION_MERAN/meran$ID.conf $CONFIGURACION_MERAN/meran$ID.$fecha.conf
+                echo "Se backupeo el archivo original a /etc/meran/meran$ID.$fecha.conf"
+      fi
+      if [ ! -d $CONFIGURACION_MERAN ]; then
+        echo "El directorio de configuración no existía, lo creamos\n"
+        mkdir $CONFIGURACION_MERAN
+      fi
+      generarConfiguracion
+      if [ -d $DESTINO_MERAN/$ID ]; then
+                echo "Ya existe el directorio de archivos, lo backupeamos"
+                mv $DESTINO_MERAN/$ID $DESTINO_MERAN/$ID$fecha
+                echo "Se backupeo el directorio original a $DESTINO_MERAN$fecha"
+      fi
+      mkdir -p $DESTINO_MERAN/$ID
+      descomprimirArchivos
+      echo "Generando Archivos de logs y logrotate"
+      generarLogRotate
+      echo "Copiando configuración de sphinx" 
+      generarConfSphinx
+      echo "Copiando los Virtualhosts"
+      generarJaula 
+      #Crear bdd
+      echo "Generando la Base de datos"
+      if [ -z $ROOT_PASS_BASE ]
+      then
+		stty -echo
+		echo "Necesitamos un password para acceder al motor con el usuario $ROOT_USER_BASE."
+		read -p "Ingreselo:" ROOT_PASS_BASE
+		stty echo
+	  fi
+      generarPermisosBDD
+      actualizarBDD
+      #Configurar cron
+      generarCrons
+      echo "La instalación esta concluida"
+      echo "Reiniciaremos los servicios"
+      #Reiniciar apache 
+      /etc/init.d/apache2 restart
+      #Iniciar sphinx
+      arrancarSphinx
+      cambiarPermisos
+}
+actualizarInstalacion(){
+
+   echo "Se hará una actualización"
+	   if [ -d $DESTINO_MERAN/$ID ]; 
+	   then
+	     descomprimirArchivos
+      	 cambiarPermisos
+         if [ -z $ROOT_PASS_BASE ]
+		 then
+			stty -echo
+			echo "Necesitamos un password para acceder al motor con el usuario $ROOT_USER_BASE."
+			read -p "Ingreselo:" ROOT_PASS_BASE
+			stty echo
+		 fi
+         actualizarBDD
+         /etc/init.d/apache2 restart
+	     break
+	   else
+	     echo "No existe la instalación"
+	    break
+	   fi
+
+	}
 generarLogRotate()
 {
   sed s/reemplazarID/$(escaparVariable $ID)/g logrotate.d-meran > /etc/logrotate.d/logrotate.d-meran$ID
@@ -64,22 +138,23 @@ actualizarBDD()
 
 generarPermisosBDD()
 {
-  head -n3 $sources_MERAN/permisosbdd.sql | sed s/reemplazarDATABASE/$(escaparVariable $BDD_MERAN)/g > /tmp/$ID.permisosbdd
+  sed s/reemplazarDATABASE/$(escaparVariable $BDD_MERAN)/g $sources_MERAN/permisosbdd.sql > /tmp/$ID.permisosbdd
   sed s/reemplazarUSER/$(escaparVariable $USER_BDD_MERAN)/g /tmp/$ID.permisosbdd > /tmp/$ID.permisosbdd2
   sed s/reemplazarPASS/$(escaparVariable $PASS_BDD_MERAN)/g /tmp/$ID.permisosbdd2 > /tmp/$ID.permisosbdd3
-  cat $sources_MERAN/base.sql >>  /tmp/$ID.permisosbdd3
-  tail -n1 $sources_MERAN/permisosbdd.sql | sed s/$(escaparVariable reemplazarDATABASE)/$BDD_MERAN/g > /tmp/$ID.permisosbdd4
-  sed s/reemplazarIUSER/$(escaparVariable $IUSER_BDD_MERAN)/g /tmp/$ID.permisosbdd4 > /tmp/$ID.permisosbdd5
-  sed s/reemplazarIPASS/$(escaparVariable $IPASS_BDD_MERAN)/g /tmp/$ID.permisosbdd5 >> /tmp/$ID.permisosbdd3
-  sed s/reemplazarHOST/$(escaparVariable $DBB_USER_ORIGEN)/g /tmp/$ID.permisosbdd5 >> /tmp/$ID.permisosbdd4  
+  sed s/reemplazarHOST/$(escaparVariable $DBB_USER_ORIGEN)/g /tmp/$ID.permisosbdd3 > /tmp/$ID.permisosbdd2
+  sed s/reemplazarIUSER/$(escaparVariable $IUSER_BDD_MERAN)/g /tmp/$ID.permisosbdd2 > /tmp/$ID.permisosbdd3
+  sed s/reemplazarIPASS/$(escaparVariable $IPASS_BDD_MERAN)/g /tmp/$ID.permisosbdd3 > /tmp/$ID.permisosbdd2
+  head -n3 /tmp/$ID.permisosbdd2 > /tmp/$ID.permisosbdd
+  cat $sources_MERAN/base.sql >>  /tmp/$ID.permisosbdd
+  tail -n1 /tmp/$ID.permisosbdd2 >> /tmp/$ID.permisosbdd
   echo "Creando la base de Datos..."
-  mysql -h$HOST_BDD_MERAN --default-character-set=utf8 -u$ROOT_USER_BASE --password=$ROOT_PASS_BASE < /tmp/$ID.permisosbdd4
+  mysql -h$HOST_BDD_MERAN --default-character-set=utf8 -u$ROOT_USER_BASE --password=$ROOT_PASS_BASE < /tmp/$ID.permisosbdd
   if [ $? -ne 0 ]
 	then
 		echo 'No fue posible conecatarse a la base de datos con los datos suministrados'
 		mkdir ~/pendiente
-		mv /tmp/$ID.permisosbdd4 ~/pendiente/
-		echo 'Luego debe aplicar el sql que esta en ~/pendiente/'$ID'.permisosbdd4 para crear su base de datos'
+		mv /tmp/$ID.permisosbdd ~/pendiente/
+		echo 'Luego debe aplicar el sql que esta en ~/pendiente/'$ID'.permisosbdd3 para crear su base de datos'
 	else
 		echo 'Base de datos creada con exito'
 	fi
@@ -113,7 +188,23 @@ generarCrons()
   crontab /tmp/$ID.crontab
 
 }
-
+instalarDependencias()
+{
+	    echo "Procederemos a instalar todo lo necesario sobre Debian GNU/Linux"
+        echo "Para hacerlo hay q ser superusuario"
+        #Instalar paquetes
+        #su
+        apt-get update
+        apt-get install apache2 mysql-server libapache2-mod-perl2 libgd2-xpm libxpm4 htmldoc libaspell15 ntpdate -y
+        #Configurar apache
+        echo "Procederemos a habilitar en apache los modulos necesarios"
+        a2enmod rewrite
+        a2enmod expires
+        a2enmod ssl
+        a2enmod headers
+        echo "Procederemos a habilitar en apache los sites"
+        a2dissite default
+	}
 generarScriptDeInicio()
 {  
  sed s/reemplazarID/$(escaparVariable $ID)/g $sources_MERAN/iniciando.pl > /tmp/iniciando$ID.pl2
@@ -175,6 +266,8 @@ OPTIONS:
    -c      directorio donde se guardará la configuracion de meran. Por defecto sera /etc/meran y el archivo de configuracion sera meran$ID.conf
    -P	   La pass del usuario para crear la base de datos
    -U	   El usuario para conectarse a la base de datos
+   -N	   Si esta presente Determina si es una instalacion nueva. Por defecto pregunta
+   -B	   Si esta presente Determina que tiene que instalr las dependencias. Por defecto pregunta
 EOF
 }
 
@@ -197,11 +290,20 @@ HOST_BDD_MERAN="localhost"
 ROOT_USER_BASE="root"
 ROOT_PASS_BASE=""
 DBB_USER_ORIGEN="localhost"
-while getopts “?:h:i:d:b:u:p:s:w:c:U:P:” OPTION
+NEW_INSTALACION=0
+BASE_INSTALACION=0
+
+while getopts “?:h:i:d:b:u:p:s:w:c:U:P:NB” OPTION
 do
      case $OPTION in
          U)
 			ROOT_USER_BASE=$OPTARG
+			;;
+		 N)
+			NEW_INSTALACION=1
+			;;
+		 B)
+			BASE_INSTALACION=1
 			;;
 		 P)	
 			ROOT_PASS_BASE=$OPTARG
@@ -261,113 +363,44 @@ if [ $(perl -v|grep 5.10.1|wc -l) -eq 0 ];
 fi
 
 
-echo "¿Quiere proceder a instalar todo el software de base base necesaria para Meran? (Apache/Mysql/perl/etc)"
-select OPCION in Instalar No_instalar 
-do
-    if [ $OPCION = Instalar ]; 
-        then
-        echo "Procederemos a instalar todo lo necesario sobre Debian GNU/Linux"
-        echo "Para hacerlo hay q ser superusuario"
-        #Instalar paquetes
-        #su
-        apt-get update
-        apt-get install apache2 mysql-server libapache2-mod-perl2 libgd2-xpm libxpm4 htmldoc libaspell15 ntpdate -y
-        #Configurar apache
-        echo "Procederemos a habilitar en apache los modulos necesarios"
-        a2enmod rewrite
-        a2enmod expires
-        a2enmod ssl
-        a2enmod headers
-        echo "Procederemos a habilitar en apache los sites"
-        a2dissite default
-        break
-    else
-	    echo "NO se instalará nada base"
-            break
-    fi
-done
+if [ $BASE_INSTALACION -eq 1 ] 
+then
+	instalarDependencias
+else
+	echo "¿Quiere proceder a instalar todo el software de base base necesaria para Meran? (Apache/Mysql/perl/etc)"
+	select OPCION in Instalar No_instalar 
+	do
+		if [ $OPCION = Instalar ]; 
+			then
+			instalarDependencias
+			break
+		else
+			echo "NO se instalará nada base"
+				break
+		fi
+	done
+fi
 
 echo "Ahora si vamos a instalar Meran en el sistema"
 echo "Seleccione el tipo de Operación que quiere realizar"
 
-select OPCION in InstalacionNueva Actualizar
-  do
-  if [ $OPCION = InstalacionNueva ]; 
-    then
-      echo "Procediendo a la Instalación como Jaula de la aplicación"
-      echo "Este proceso instalará los módulos específicos para la arquitectura de su Kernel que ya vienen precompilados y se distribuyen junto con Meran"
-      echo "Su sistema es de $versionKernel bits"
-      echo "Este instalador automático ubicará todos los archivos en el path por defecto $DESTINO_MERAN utilizando para la configuración del sistema /etc/meran/meran.conf"
-      fecha=$(date +%Y%m%d%H%M)
-      echo $fecha > ./fecha_instalacion
-      if [ -e $CONFIGURACION_MERAN/meran$ID.conf ]; then
-                echo "El archivo de configuración ya existía"
-                mv $CONFIGURACION_MERAN/meran$ID.conf $CONFIGURACION_MERAN/meran$ID.$fecha.conf
-                echo "Se backupeo el archivo original a /etc/meran/meran$ID.$fecha.conf"
-      fi
-      if [ ! -d $CONFIGURACION_MERAN ]; then
-        echo "El directorio de configuración no existía, lo creamos\n"
-        mkdir $CONFIGURACION_MERAN
-      fi
-      generarConfiguracion
-      if [ -d $DESTINO_MERAN/$ID ]; then
-                echo "Ya existe el directorio de archivos, lo backupeamos"
-                mv $DESTINO_MERAN/$ID $DESTINO_MERAN/$ID$fecha
-                echo "Se backupeo el directorio original a $DESTINO_MERAN$fecha"
-      fi
-      mkdir -p $DESTINO_MERAN/$ID
-      descomprimirArchivos
-      echo "Generando Archivos de logs y logrotate"
-      generarLogRotate
-      echo "Copiando configuración de sphinx" 
-      generarConfSphinx
-      echo "Copiando los Virtualhosts"
-      generarJaula 
-      #Crear bdd
-      echo "Generando la Base de datos"
-      if [ -z $ROOT_PASS_BASE ]
-      then
-		stty -echo
-		echo "Necesitamos un password para acceder al motor con el usuario $ROOT_USER_BASE."
-		read -p "Ingreselo:" ROOT_PASS_BASE
-		stty echo
+if [ $NEW_INSTALACION -eq 1 ]
+then
+	instalacionNueva
+else
+	select OPCION in InstalacionNueva Actualizar
+	  do
+	  if [ $OPCION = InstalacionNueva ]; 
+		then
+			instalacionNueva
+			break
+		elif [ $OPCION = Actualizar ];
+		then 
+			actualizarInstalacion
+		else
+		  echo "Solicitó una instalación sistemica de Meran, lo que significa que se modificará el sistema base."
+		  echo "Este tipo de instalación no esta disponible por el momento de manera automática, siga los pasos especificados en el Readme si quiere hacerlo de forma manual"
+		  break
 	  fi
-      generarPermisosBDD
-      actualizarBDD
-      #Configurar cron
-      generarCrons
-      echo "La instalación esta concluida"
-      echo "Reiniciaremos los servicios"
-      #Reiniciar apache 
-      /etc/init.d/apache2 restart
-      #Iniciar sphinx
-      arrancarSphinx
-      cambiarPermisos
-      break
-    elif [ $OPCION = Actualizar ];
-	then 
-    	   echo "Se hará una actualización"
-	   if [ -d $DESTINO_MERAN/$ID ]; 
-	   then
-	     descomprimirArchivos
-      	 cambiarPermisos
-         if [ -z $ROOT_PASS_BASE ]
-		 then
-			stty -echo
-			echo "Necesitamos un password para acceder al motor con el usuario $ROOT_USER_BASE."
-			read -p "Ingreselo:" ROOT_PASS_BASE
-			stty echo
-		 fi
-         actualizarBDD
-         /etc/init.d/apache2 restart
-	     break
-	   else
-	     echo "No existe la instalación"
-	    break
-	   fi
-    else
-      echo "Solicitó una instalación sistemica de Meran, lo que significa que se modificará el sistema base."
-      echo "Este tipo de instalación no esta disponible por el momento de manera automática, siga los pasos especificados en el Readme si quiere hacerlo de forma manual"
-      break
-  fi
-done
+	done
+fi
