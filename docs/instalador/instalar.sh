@@ -326,6 +326,7 @@ select OPCION in InstalacionNueva Actualizar
       #Crear bdd
       echo "Generando la Base de datos"
       if [ -z $ROOT_PASS_BASE ]
+      then
 		stty -echo
 		echo "Necesitamos un password para acceder al motor con el usuario $ROOT_USER_BASE."
 		read -p "Ingreselo:" ROOT_PASS_BASE
@@ -351,6 +352,7 @@ select OPCION in InstalacionNueva Actualizar
 	     descomprimirArchivos
       	 cambiarPermisos
          if [ -z $ROOT_PASS_BASE ]
+		 then
 			stty -echo
 			echo "Necesitamos un password para acceder al motor con el usuario $ROOT_USER_BASE."
 			read -p "Ingreselo:" ROOT_PASS_BASE
