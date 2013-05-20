@@ -1,3 +1,25 @@
+/*
+ * Meran - MERAN UNLP is a ILS (Integrated Library System) wich provides Catalog,
+ * Circulation and User's Management. It's written in Perl, and uses Apache2
+ * Web-Server, MySQL database and Sphinx 2 indexing.
+ * Copyright (C) 2009-2013 Grupo de desarrollo de Meran CeSPI-UNLP
+ *
+ * This file is part of Meran.
+ *
+ * Meran is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Meran is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Meran.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 (function(d,f,e){var g,h;h=function(){var c,a,b;a=e.createElement("div");a.style.position="absolute";a.style.width="100px";a.style.height="100px";a.style.overflow="scroll";e.body.appendChild(a);c=a.offsetWidth;b=a.scrollWidth;e.body.removeChild(a);return c-b};g=function(){function c(a){this.el=a;this.generate();this.createEvents();this.addEvents();this.reset()}c.prototype.createEvents=function(){var a=this;this.events={down:function(b){a.isDrag=!0;a.offsetY=b.clientY-a.slider.offset().top;a.pane.addClass("active");
 d(e).bind("mousemove",a.events.drag);d(e).bind("mouseup",a.events.up);return!1},drag:function(b){a.sliderY=b.clientY-a.el.offset().top-a.offsetY;a.scroll();return!1},up:function(){a.isDrag=!1;a.pane.removeClass("active");d(e).unbind("mousemove",a.events.drag);d(e).unbind("mouseup",a.events.up);return!1},resize:function(){a.reset()},panedown:function(b){a.sliderY=b.clientY-a.el.offset().top-0.5*a.sliderH;a.scroll();a.events.down(b)},scroll:function(){var b;!0!==a.isDrag&&(b=a.content[0],a.slider.css({top:b.scrollTop/
 (b.scrollHeight-b.clientHeight)*(a.paneH-a.sliderH)+"px"}))},wheel:function(b){a.sliderY+=-b.wheelDeltaY||-b.delta;a.scroll();return!1}}};c.prototype.addEvents=function(){var a,b;a=this.events;b=this.pane;d(f).bind("resize",a.resize);this.slider.bind("mousedown",a.down);b.bind("mousedown",a.panedown);this.content.bind("scroll",a.scroll);f.addEventListener&&(b=b[0],b.addEventListener("mousewheel",a.wheel,!1),b.addEventListener("DOMMouseScroll",a.wheel,!1))};c.prototype.removeEvents=function(){var a,
