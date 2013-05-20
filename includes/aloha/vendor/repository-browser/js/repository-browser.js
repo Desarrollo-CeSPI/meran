@@ -1,3 +1,25 @@
+/*
+ * Meran - MERAN UNLP is a ILS (Integrated Library System) wich provides Catalog,
+ * Circulation and User's Management. It's written in Perl, and uses Apache2
+ * Web-Server, MySQL database and Sphinx 2 indexing.
+ * Copyright (C) 2009-2013 Grupo de desarrollo de Meran CeSPI-UNLP
+ *
+ * This file is part of Meran.
+ *
+ * Meran is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Meran is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Meran.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 define("RepositoryBrowser",["Class","jQuery","PubSub","repository-browser-i18n-"+(__DEPS__.lang||"en"),"jstree","jqgrid","jquery-layout"],function(m,c,n,o){function p(a){a.each(function(){c(this).attr("unselectable","on").css({"-moz-user-select":"none","-webkit-user-select":"none","user-select":"none"}).each(function(){this.onselectstart=function(){return!1}})})}var j=0,k=[],f=(new Date).getTime(),q={repositoryManager:null,repositoryFilter:[],objectTypeFilter:[],renditionFilter:["cmis:none"],filter:["url"],
 element:null,isFloating:!1,minWidth:800,maxWidth:1200,treeWidth:300,listWidth:"auto",pageSize:8,rootPath:"",rootFolderId:"aloha",columns:{icon:{title:"",width:30,sortable:!1,resizable:!1},name:{title:"Name",width:200,sorttype:"text"},url:{title:"URL",width:220,sorttype:"text"},preview:{title:"Preview",width:150,sorttype:"text"}},i18n:{Browsing:"Browsing",Close:"Close","in":"in","Input search text...":"Input search text...",numerous:"numerous",of:"of","Repository Browser":"Repository Browser",Search:"Search",
 "Searching for":"Searching for",Viewing:"Viewing"}};return m.extend({_cachedRepositoryObjects:{},_searchQuery:null,_orderBy:null,$_grid:null,$_tree:null,$_list:null,_isOpened:!0,_constructor:function(){this.init.apply(this,arguments)},init:function(a){a=c.extend({},q,a,{i18n:o});if(!a.element||0===a.element.length)a.isFloating=!0,a.element=this._createOverlay();if(a.maxWidth<a.minWidth)a.maxWidth=a.minWidth;c.extend(this,a);this._cachedRepositoryObjects={};this._pagingCount=this._orderBy=this._searchQuery=

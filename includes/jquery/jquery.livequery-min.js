@@ -1,3 +1,25 @@
+/*
+ * Meran - MERAN UNLP is a ILS (Integrated Library System) wich provides Catalog,
+ * Circulation and User's Management. It's written in Perl, and uses Apache2
+ * Web-Server, MySQL database and Sphinx 2 indexing.
+ * Copyright (C) 2009-2013 Grupo de desarrollo de Meran CeSPI-UNLP
+ *
+ * This file is part of Meran.
+ *
+ * Meran is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Meran is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Meran.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 (function($){$.extend($.fn,{livequery:function(type,fn,fn2){var self=this,q;if($.isFunction(type))
 fn2=fn,fn=type,type=undefined;$.each($.livequery.queries,function(i,query){if(self.selector==query.selector&&self.context==query.context&&type==query.type&&(!fn||fn.$lqguid==query.fn.$lqguid)&&(!fn2||fn2.$lqguid==query.fn2.$lqguid))
 return(q=query)&&false;});q=q||new $.livequery(this.selector,this.context,type,fn,fn2);q.stopped=false;q.run();return this;},expire:function(type,fn,fn2){var self=this;if($.isFunction(type))

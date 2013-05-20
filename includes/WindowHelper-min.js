@@ -1,3 +1,25 @@
+/*
+ * Meran - MERAN UNLP is a ILS (Integrated Library System) wich provides Catalog,
+ * Circulation and User's Management. It's written in Perl, and uses Apache2
+ * Web-Server, MySQL database and Sphinx 2 indexing.
+ * Copyright (C) 2009-2013 Grupo de desarrollo de Meran CeSPI-UNLP
+ *
+ * This file is part of Meran.
+ *
+ * Meran is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Meran is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Meran.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 function _WinInit(objWin){_WinAddDiv(objWin);}
 function _WinAddDiv(objWin){var contenedor=$('#ventana')[0];var opciones={};var d_height=document.height;var d_width=document.width;var dimmer={height:d_height,width:d_width};if((contenedor==null)&&(objWin.dimmer_On==true)){$('body').append("<div id='dimmer' class='dimmer' style='height:"+dimmer.height+"px; width: "+dimmer.width+"px;top: 0px; visibility: visible; position:absolute'></div>");}
 $('body').append("<div id='ventana' class='dimming' style='display:none; height:85%; width:85%; top:10px;'><div class='winHeader'><img align='right' id='cerrar' src='"+imagesForJS+'/cerrar.png'+"'/><span width=100px>"+objWin.titulo+"</span></div><div id='ventanaContenido' class='ventanaContenido' style='height:90%; width:100%; top:10px;'></div></div>");$('#ventanaContenido').html(objWin.html);if(objWin.opacity==true){opciones.opacity='0.7777';}
