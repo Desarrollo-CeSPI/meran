@@ -1,6 +1,6 @@
 #!/bin/bash
 version=0.4
-if [ $(uname -a|grep amd64|wc -l) -gt 0 ];
+if [ $(uname -a|grep x86_64|wc -l) -gt 0 ];
   then 
      versionKernel=64;
   else
@@ -154,7 +154,7 @@ generarPermisosBDD()
 		echo 'No fue posible conecatarse a la base de datos con los datos suministrados'
 		mkdir ~/pendiente
 		mv /tmp/$ID.permisosbdd ~/pendiente/
-		echo 'Luego debe aplicar el sql que esta en ~/pendiente/'$ID'.permisosbdd3 para crear su base de datos'
+		echo 'Luego debe aplicar el sql que esta en ~/pendiente/'$ID'.permisosbdd para crear su base de datos'
 	else
 		echo 'Base de datos creada con exito'
 	fi
