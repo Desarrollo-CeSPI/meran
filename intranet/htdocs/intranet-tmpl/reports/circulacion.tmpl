@@ -1,12 +1,28 @@
 [% INCLUDE 'intranet-top.inc' %] 
 [% USE HTML %]
 
+<script type="text/javascript">
+    function generarReportePrestamosVencidos(){
+        objAH                   = new AjaxHelper(updateGenerarReportePrestamosVencidos);
+        objAH.debug             = true;
+        objAH.cache             = true;
+        objAH.showOverlay       = true;
+        objAH.url               = URL_PREFIX+'/reports/circulacionDB.pl';
+        objAH.tipoAccion        = "REPORTE_PRESTAMOS_VENCIDOS";
+        objAH.sendToServer();
+    }
+
+    function updateGenerarReportePrestamosVencidos(responseText){
+      $('#reporte_prestamos_vencidos').html(responseText);
+    }
+</script>
+
 [% PERL %]
     print C4::AR::Filtros::tabbedPane( titulo   => "[% 'Reportes de Circulaci&oacute;n' | i18n %]",
                              subtitulo          => "[% 'Navegue por las pesta&ntilde;as para acceder a los distintos reportes' | i18n %]",
                              content            => [  {id => 'general', text => "[% 'Operaciones' | i18n %]" },
                                                       {id => 'reservas', text=> "[% 'Reservas' | i18n %]" },
-                                                     
+                                                      {id => 'prestamos_vencidos_tab', text=> "[% 'Pr&eacute;stamos Vencidos' | i18n %]" },     
                                                   ] ,
                              active_id => 'general',
     
@@ -19,7 +35,19 @@
         <div class="tab-pane fade " id="reservas">
             [% INCLUDE 'partials/reportes/_reporte_circulacion.inc' %]
         </div>
-    
+        <div class="tab-pane fade " id="prestamos_vencidos_tab">
+            <div class="form-actions">
+              [% PERL %]
+                  print C4::AR::Filtros::action_button( 
+                                                  button       => "btn btn-primary",
+                                                  action       => "generarReportePrestamosVencidos();", 
+                                                  icon         => "icon-white icon-inbox",
+                                                  title        => "Generar Reporte",
+                                              ) ;
+              [% END %]
+            </div>
+            <div class="center_fieldset report_form_container" id="reporte_prestamos_vencidos"></div>
+        </div>
       </div>
 </section>
 
