@@ -1,0 +1,1 @@
+for i in $(cat  dependencias.txt); do  echo $i; perl -M$i -e 1 ; done;

@@ -7,6 +7,7 @@ if [ $(uname -a|grep x86_64|wc -l) -gt 0 ];
      versionKernel=32;
 fi;
 echo "Bienvenido al instalador de meran version $version para sistemas de $versionKernel bits" 
+DEBIAN_VERSION=$(cat /etc/debian_version | cut -c1)  
 
 generarConfSphinx()
 {
@@ -102,10 +103,10 @@ generarLogRotate()
 
 generarJaula()
 {
-  sed s/reemplazarPATHBASE/$(escaparVariable $DESTINO_MERAN)/g $sources_MERAN/apache-jaula-ssl > /tmp/$ID-apache-jaula-tmp2
+  sed s/reemplazarPATHBASE/$(escaparVariable $DESTINO_MERAN)/g $sources_MERAN/debian$DEBIAN_VERSION/apache-jaula-ssl > /tmp/$ID-apache-jaula-tmp2
  sed s/reemplazarCONFMERAN/$(escaparVariable $CONFIGURACION_MERAN)/g /tmp/$ID-apache-jaula-tmp2 > /tmp/$ID-apache-jaula-tmp
   sed s/reemplazarID/$(escaparVariable $ID)/g /tmp/$ID-apache-jaula-tmp > /etc/apache2/sites-available/$ID-apache-jaula-ssl
-  sed s/reemplazarPATHBASE/$(escaparVariable $DESTINO_MERAN)/g $sources_MERAN/apache-jaula-opac > /tmp/$ID-apache-jaula-tmp2
+  sed s/reemplazarPATHBASE/$(escaparVariable $DESTINO_MERAN)/g $sources_MERAN/debian$DEBIAN_VERSION/apache-jaula-opac > /tmp/$ID-apache-jaula-tmp2
  sed s/reemplazarCONFMERAN/$(escaparVariable $CONFIGURACION_MERAN)/g /tmp/$ID-apache-jaula-tmp2 > /tmp/$ID-apache-jaula-tmp
   sed s/reemplazarID/$(escaparVariable $ID)/g /tmp/$ID-apache-jaula-tmp > /etc/apache2/sites-available/$ID-apache-jaula-opac
   rm /tmp/$ID-apache-jaula-tmp
@@ -176,15 +177,24 @@ generarConfiguracion()
 
 generarCrons()
 {
- ADONDE=$DESTINO_MERAN/$ID/intranet/modules/C4
-  crontab -l >/tmp/$ID.crontab
-  echo "
-  0 7 * * *      export PERL5LIB=$ADONDE/Share/share/perl/5.10.1/:$ADONDE/Share/lib/perl/5.10.1/:$ADONDE/Share/share/perl/5.10/:$ADONDE/C4/Share/share/perl/5.10.1/:$ADONDE/Share/lib/perl/5.10/:$ADONDE/Share/lib/perl5/; export MERAN_CONF=$CONFIGURACION_MERAN/meran$ID.conf; cd $DESTINO_MERAN/$ID/intranet/modules/ ; perl ../cgi-bin/cron/recordatorio_prestamos_vto.pl 2>&1
-  0 * * * *      export PERL5LIB=$ADONDE/Share/share/perl/5.10.1/:$ADONDE/Share/lib/perl/5.10.1/:$ADONDE/Share/share/perl/5.10/:$ADONDE/C4/Share/share/perl/5.10.1/:$ADONDE/Share/lib/perl/5.10/:$ADONDE/Share/lib/perl5/; export MERAN_CONF=$CONFIGURACION_MERAN/meran$ID.conf; cd $DESTINO_MERAN/$ID/intranet/modules/ ; perl ../cgi-bin/cron/mail_prestamos_vencidos.pl  2>&1
-  * * * * *      export PERL5LIB=$ADONDE/Share/share/perl/5.10.1/:$ADONDE/Share/lib/perl/5.10.1/:$ADONDE/Share/share/perl/5.10/:$ADONDE/C4/Share/share/perl/5.10.1/:$ADONDE/Share/lib/perl/5.10/:$ADONDE/Share/lib/perl5/; export MERAN_CONF=$CONFIGURACION_MERAN/meran$ID.conf; cd $DESTINO_MERAN/$ID/intranet/modules/ ; perl ../cgi-bin/cron/procesarColaZ3950.pl  2>&1
-  * * * * *      export PERL5LIB=$ADONDE/Share/share/perl/5.10.1/:$ADONDE/Share/lib/perl/5.10.1/:$ADONDE/Share/share/perl/5.10/:$ADONDE/C4/Share/share/perl/5.10.1/:$ADONDE/Share/lib/perl/5.10/:$ADONDE/Share/lib/perl5/; export MERAN_CONF=$CONFIGURACION_MERAN/meran$ID.conf; cd $DESTINO_MERAN/$ID/intranet/modules/ ; perl ../cgi-bin/cron/reindexar.pl 2>&1
-  0 0 * * *      export PERL5LIB=$ADONDE/Share/share/perl/5.10.1/:$ADONDE/Share/lib/perl/5.10.1/:$ADONDE/Share/share/perl/5.10/:$ADONDE/C4/Share/share/perl/5.10.1/:$ADONDE/Share/lib/perl/5.10/:$ADONDE/Share/lib/perl5/; export MERAN_CONF=$CONFIGURACION_MERAN/meran$ID.conf; cd $DESTINO_MERAN/$ID/intranet/modules/ ; perl ../cgi-bin/cron/obtener_portadas_de_registros.pl  2>&1
-  0 0 * * 6      export PERL5LIB=$ADONDE/Share/share/perl/5.10.1/:$ADONDE/Share/lib/perl/5.10.1/:$ADONDE/Share/share/perl/5.10/:$ADONDE/C4/Share/share/perl/5.10.1/:$ADONDE/Share/lib/perl/5.10/:$ADONDE/Share/lib/perl5/; export MERAN_CONF=$CONFIGURACION_MERAN/meran$ID.conf; cd $DESTINO_MERAN/$ID/intranet/modules/ ; perl ../cgi-bin/cron/generar_indice.pl  2>&1" >>/tmp/$ID.crontab
+	ADONDE=$DESTINO_MERAN/$ID/intranet/modules/C4
+	crontab -l >/tmp/$ID.crontab
+	if [ $DEBIAN_VERSION == "6" ]
+		then
+		PERL_LIBAUX=$ADONDE/Share/share/perl/5.10.1/:$ADONDE/Share/lib/perl/5.10.1/:$ADONDE/Share/share/perl/5.10/:$ADONDE/C4/Share/share/perl/5.10.1/:$ADONDE/Share/lib/perl/5.10/:$ADONDE/Share/lib/perl5/
+
+	else		
+	PERL_LIBAUX=$ADONDE/Share/share/perl/5.14.2/:$ADONDE/Share/lib/perl/5.14.2/:$ADONDE/Share/share/perl/5.14/:$ADONDE/C4/Share/share/perl/5.14.2/:$ADONDE/Share/lib/perl/5.14/:$ADONDE/Share/lib/perl5/
+	
+		fi
+echo "
+			0 7 * * *      export PERL5LIB=$PERLLIBAUX; export MERAN_CONF=$CONFIGURACION_MERAN/meran$ID.conf; cd $DESTINO_MERAN/$ID/intranet/modules/ ; perl ../cgi-bin/cron/recordatorio_prestamos_vto.pl 2>&1
+			0 * * * *      export PERL5LIB=$PERL_LIBAUX; export MERAN_CONF=$CONFIGURACION_MERAN/meran$ID.conf; cd $DESTINO_MERAN/$ID/intranet/modules/ ; perl ../cgi-bin/cron/mail_prestamos_vencidos.pl  2>&1
+			* * * * *      export PERL5LIB=$PERL_LIBAUX; export MERAN_CONF=$CONFIGURACION_MERAN/meran$ID.conf; cd $DESTINO_MERAN/$ID/intranet/modules/ ; perl ../cgi-bin/cron/procesarColaZ3950.pl  2>&1
+			* * * * *      export PERL5LIB=$PERL_LIBAUX; export MERAN_CONF=$CONFIGURACION_MERAN/meran$ID.conf; cd $DESTINO_MERAN/$ID/intranet/modules/ ; perl ../cgi-bin/cron/reindexar.pl 2>&1
+			0 0 * * *      export PERL5LIB=$PERL_LIBAUX; xport MERAN_CONF=$CONFIGURACION_MERAN/meran$ID.conf; cd $DESTINO_MERAN/$ID/intranet/modules/ ; perl ../cgi-bin/cron/obtener_portadas_de_registros.pl  2>&1
+			0 0 * * 6      export PERL5LIB=$PERL_LIBAUX; export MERAN_CONF=$CONFIGURACION_MERAN/meran$ID.conf; cd $DESTINO_MERAN/$ID/intranet/modules/ ; perl ../cgi-bin/cron/generar_indice.pl  2>&1" >>/tmp/$ID.crontab
+
   crontab /tmp/$ID.crontab
 
 }
@@ -218,10 +228,10 @@ descomprimirArchivos()
 	echo "Procedemos a la instalación"
 	echo "Descomprimiendo Intranet y Opac"
 	tar xzf $sources_MERAN/intranetyopac.tar.gz -C $DESTINO_MERAN/$ID
-	echo "Descomprimiendo las dependencias" 
-	tar xzf $sources_MERAN/jaula$versionKernel.tar.gz -C $DESTINO_MERAN/$ID/intranet/modules/C4/
+	echo "Descomprimiendo las dependencias"
+	tar xzf $sources_MERAN/debian$DEBIAN_VERSION/jaula$versionKernel.tar.gz -C $DESTINO_MERAN/$ID/intranet/modules/C4/
 	echo "Descomprimiendo sphinxsearch" 
-	tar xzf $sources_MERAN/sphinx$versionKernel.tar.gz -C $DESTINO_MERAN/$ID
+	tar xzf $sources_MERAN/debian$DEBIAN_VERSION/sphinx$versionKernel.tar.gz -C $DESTINO_MERAN/$ID
       
 }
 cambiarPermisos()
@@ -358,8 +368,15 @@ if [ $(whoami) = root ];
 fi
 if [ $(perl -v|grep 5.10.1|wc -l) -eq 0 ];
   then
-    echo "No tenes la versión adecuada de perl instalada, se va a interrumpir el proceso, deberías tener la 5.10.1"
-    exit 1
+  	if [ $(perl -v|grep 5.14.2|wc -l) -eq 0 ];
+	then
+    		echo "No tenes la versión adecuada de perl instalada, se va a interrumpir el proceso, deberías tener la 5.10.1"
+		exit 1
+	else
+		echo "Version de PERL 5.14.2";
+	fi
+   else
+	echo "Version de PERL 5.10.1";
 fi
 
 
