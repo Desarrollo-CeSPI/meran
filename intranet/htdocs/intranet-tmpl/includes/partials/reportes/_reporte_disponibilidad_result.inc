@@ -54,7 +54,7 @@ function changePageBusquedas(ini){
                   [% PERL %]
                           print C4::AR::Filtros::link_to(   text =>     "[% res.getCodigoBarra %]",
                                                           url=>"[% url_prefix %]/catalogacion/estructura/detalleEjemplar.pl", 
-                                                          params => ["id3=[% res.id3 %]"],
+                                                          params => ["id3=[% res.getId3 %]"],
                                                           title =>  "[% "Detalle del Ejemplar" | i18n %]"
                                                       ) ;
                   [% END %] 
@@ -104,4 +104,3 @@ function changePageBusquedas(ini){
     </div>
 
 [% END %]
-
