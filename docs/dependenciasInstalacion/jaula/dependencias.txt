@@ -1,3 +1,4 @@
+Module::Runtime
 Data::Dumper
 Version::Requirements
 CPAN::Meta::Requirements
@@ -30,12 +31,10 @@ HTTP::BrowserDetect
 Image::Size
 JSON
 JSON::XS
-Bundle::libnet
 Locale::Maketext::Gettext
 Mail::Sendmail
 MARC::Crosswalk::DublinCore
 MARC::Record
-MARC::XML
 MIME::Lite::TT::HTML
 Net::SMTP::SSL
 Net::SMTP::TLS
@@ -63,7 +62,6 @@ Date::Calc
 File::SearchPath
 Image::Resize
 GD
-XML::Checker
 DBIx::XML_RDB
 DBI
 Template
