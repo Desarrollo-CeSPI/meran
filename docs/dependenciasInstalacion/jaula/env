@@ -1,0 +1,2 @@
+export ADONDE=/usr/share/meran/
+export PERL5LIB=$ADONDE/intranet/modules/C4/Share/share/perl/5.14.2/:$ADONDE/intranet/modules/C4/Share/lib/perl/5.14.2/:$ADONDE/intranet/modules/C4/Share/share/perl/5.14/:$ADONDE/intranet/modules/C4/Share/share
