@@ -1,3 +1,25 @@
+/*
+ * Meran - MERAN UNLP is a ILS (Integrated Library System) wich provides Catalog,
+ * Circulation and User's Management. It's written in Perl, and uses Apache2
+ * Web-Server, MySQL database and Sphinx 2 indexing.
+ * Copyright (C) 2009-2013 Grupo de desarrollo de Meran CeSPI-UNLP
+ *
+ * This file is part of Meran.
+ *
+ * Meran is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Meran is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Meran.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 var ID_N1=0;var ID_N1_PADRE=0;var ID_N2=0;var ID_N2_PADRE=0;var ID_N3=0;var ID_TIPO_EJEMPLAR=0;var TAB_INDEX=0;var MARC_OBJECT_ARRAY=new Array();var MODIFICAR=0;var ACTION="UNDEFINED";var TEMPLATE_ACTUAL=0;var EDICION_N3_GRUPAL=0;var FROM_DETALLE_REGISTRO=0;var ID3_ARRAY=new Array();var BARCODES_ARRAY=new Array();var _NIVEL_ACTUAL=1;var _message=CAMPO_NO_PUEDE_ESTAR_EN_BLANCO;var HASH_RULES=new Array();var HASH_MESSAGES=new Array();var AGREGAR_COMPLETO=1;var ID_COMPONENTE=1;var scroll='N1';var FATAL_ERROR=0;function clear_fatal_error(){$('#nivel1Tabla').html("");$('#nivel2Tabla').html("");$('#nivel3Tabla').html("");$('#nivel1').html("");}
 function agregarAHash(HASH,name,value){HASH[name]=value;}
 function objeto_params(){}

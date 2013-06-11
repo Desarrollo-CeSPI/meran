@@ -1,4 +1,25 @@
 #!/usr/bin/perl
+#
+# Meran - MERAN UNLP is a ILS (Integrated Library System) wich provides Catalog,
+# Circulation and User's Management. It's written in Perl, and uses Apache2
+# Web-Server, MySQL database and Sphinx 2 indexing.
+# Copyright (C) 2009-2013 Grupo de desarrollo de Meran CeSPI-UNLP
+#
+# This file is part of Meran.
+#
+# Meran is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# Meran is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with Meran.  If not, see <http://www.gnu.org/licenses/>.
+#
 
 require Exporter;
 use strict;
@@ -68,7 +89,7 @@ elsif($tipoAccion eq "EXPORT_CIRC_GENERAL"){
     });
 
     $obj->{'tipoPrestamo'}      =  $obj->{'tipo_prestamo_name'};
-    $obj->{'responsable'}       =  $obj->{'nro_socio_hidden'};
+    $obj->{'nroSocio'}          =  $obj->{'nro_socio_hidden'};
     $obj->{'categoriaSocio'}    =  $obj->{'categoria_socio_id'};
     $obj->{'fecha_inicio'}      =  $obj->{'date-from-gen'};
     $obj->{'fecha_fin'}         =  $obj->{'date-to-gen'};
@@ -145,10 +166,8 @@ elsif ($tipoAccion eq "CIRC_GENERAL") {
        $obj->{'orden'}.= ' DESC';
     }
                            
-    my ($ini,$pageNumber,$cantR)    = C4::AR::Utilidades::InitPaginador($ini);
-    my ($cantidad, $totales)        = C4::AR::Reportes::getReporteCirculacionGeneral($obj,$ini,$cantR);
+    my ($cantidad, $totales)        = C4::AR::Reportes::getReporteCirculacionGeneral($obj);
    
-    $t_params->{'paginador'}        = C4::AR::Utilidades::crearPaginador($cantidad,$cantR,$pageNumber,$funcion,$t_params);
     $t_params->{'cantidad'}         = $cantidad;
     $t_params->{'totales'}          = $totales;
 

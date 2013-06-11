@@ -1653,8 +1653,8 @@ sub getReporteCirculacionGeneralToExport{
     my $statistics      = $data->{'statistics'};
     my $orden           = $data->{'orden'};
     my $sentido         = $data->{'asc'};
-    my $responsable     = $data->{'responsable'};
-    my $tieneFecha      = 0;
+    my $responsable     = $data->{'nroSocio'};
+    
     my @filtros;
 
     # tabla circ_ref_tipo_prestamo 
@@ -1666,7 +1666,7 @@ sub getReporteCirculacionGeneralToExport{
         push(@filtros, ('socio.id_categoria' =>  {eq => $categoria} ));
     }
 
-     if ( C4::AR::Utilidades::validateString($responsable) ) {
+    if ( C4::AR::Utilidades::validateString($responsable) ) {
         push(@filtros, ('responsable_ref.nro_socio' =>  {eq => $responsable} ));
     }
 
@@ -1680,22 +1680,20 @@ sub getReporteCirculacionGeneralToExport{
 
         push( @filtros, and => [ 'fecha' => { ge => $fecha_inicio },
                                 'fecha' => { le => $fecha_fin } ] ); 
-
-        $tieneFecha = 1;
     }
 
     my $totals_results_array = C4::Modelo::RepHistorialCirculacion::Manager->get_rep_historial_circulacion( 
-                                                                  query             => \@filtros,
-                                                                  require_objects   => [ 'nivel3','socio', 'tipo_prestamo_ref', 'responsable_ref' ],
-                                                                  select            => ['id3','nro_socio','tipo_prestamo', 'responsable', 'nivel3.id'],
-                                                                  distinct          => 1,
-                                                    );
+                                                                      query             => \@filtros,
+                                                                      require_objects   => [ 'nivel3','socio', 'tipo_prestamo_ref', 'responsable_ref' ],
+                                                                      select            => ['id3','nro_socio','tipo_prestamo', 'responsable', 'nivel3.id'],
+                                                                      distinct          => 1,
+                                                        );
 
     # cantidad de socios
     my $cant_nro_socio = C4::Modelo::RepHistorialCirculacion::Manager->get_rep_historial_circulacion_count( 
                                                                       query             => \@filtros,
                                                                       require_objects   => [ 'nivel3','socio', 'tipo_prestamo_ref', 'responsable_ref' ],
-                                                                      select            => ['COUNT(DISTINCT t5.nro_socio) AS cant_nro_socio'],
+                                                                      select            => ['COUNT(t5.nro_socio) AS cant_nro_socio'],
                                                         );
 
     # cantidad de devoluciones
@@ -1747,11 +1745,7 @@ sub getReporteCirculacionGeneralToExport{
 =cut
 sub getReporteCirculacionGeneral{
 
-    my ($data, $ini, $cantR) = @_;
-
-    my $limit_pref      = C4::AR::Preferencias::getValorPreferencia('renglones') || 20;
-    $cantR              = $cantR || $limit_pref;
-
+    my ($data)          = @_;
     my $categoria       = $data->{'categoriaSocio'};
     my $tipoPrestamo    = C4::AR::Utilidades::trim($data->{'tipoPrestamo'});
     my $fecha_inicio    = $data->{'fecha_inicio'};
@@ -1799,7 +1793,7 @@ sub getReporteCirculacionGeneral{
     my $cant_nro_socio = C4::Modelo::RepHistorialCirculacion::Manager->get_rep_historial_circulacion_count( 
                                                                       query             => \@filtros,
                                                                       require_objects   => [ 'nivel3','socio', 'tipo_prestamo_ref', 'responsable_ref' ],
-                                                                      select            => ['COUNT(DISTINCT t5.nro_socio) AS cant_nro_socio'],
+                                                                      select            => ['COUNT(t5.nro_socio) AS cant_nro_socio'],
                                                         );
 
     # cantidad de devoluciones
