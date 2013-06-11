@@ -31,6 +31,7 @@ use C4::AR::Reportes;
 use C4::Modelo::RepBusqueda;
 use C4::Modelo::RepHistorialBusqueda;
 use C4::AR::PdfGenerator;
+use C4::AR::Prestamos;
 
 my $input       = new CGI;
 my $obj         = $input->param('obj') || 0;
@@ -170,6 +171,32 @@ elsif ($tipoAccion eq "CIRC_GENERAL") {
    
     $t_params->{'cantidad'}         = $cantidad;
     $t_params->{'totales'}          = $totales;
+
+    C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
+}
+elsif ($tipoAccion eq "REPORTE_PRESTAMOS_VENCIDOS") {
+
+    ($template, $session, $t_params) = C4::AR::Auth::get_template_and_user({
+                                        template_name   => "admin/circulacion/prestamos_vencidos.tmpl",
+                                        query           => $input,
+                                        type            => "intranet",
+                                        authnotrequired => 0,
+                                        flagsrequired   => {  ui            => 'ANY', 
+                                                            tipo_documento  => 'ANY', 
+                                                            accion          => 'ALTA', 
+                                                            entorno         => 'undefined'},
+    });
+
+    my $prestamos_array_ref   = C4::AR::Prestamos::getAllPrestamosVencidos();
+    $t_params->{'ini'}  = 0;
+
+    if(C4::AR::Preferencias::getValorPreferencia('enableMailPrestVencidos'))
+    {
+        $t_params->{'mensaje'}  = 'Se enviar&aacute;n los mails de pr&eacute;stamos vencidos a la brevedad';
+    }
+
+    $t_params->{'prestamos'}  = $prestamos_array_ref;
+    $t_params->{'cantidad'}   = $prestamos_array_ref?scalar(@$prestamos_array_ref):0;
 
     C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
 }
