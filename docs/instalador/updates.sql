@@ -200,3 +200,47 @@ INSERT INTO `ref_idioma` (`id`, `idLanguage`, `marc_code`, `description`) VALUES
 (138, 'yo', 'yor', 'Yoruba'),
 (139, 'za', 'zha', 'Zhuang'),
 (140, 'zu', 'zul', 'Zulú');
+
+INSERT IGNORE INTO `cat_ref_tipo_nivel3` (id_tipo_doc, nombre, notforloan, agregacion_temp, disponible, enable_nivel3) 
+VALUES ('LIB','Libro',0,NULL,1,1);
+INSERT IGNORE INTO `cat_ref_tipo_nivel3` (id_tipo_doc, nombre, notforloan, agregacion_temp, disponible, enable_nivel3) 
+VALUES ('SOFT','Software',0,NULL,1,1);
+INSERT IGNORE INTO `cat_ref_tipo_nivel3` (id_tipo_doc, nombre, notforloan, agregacion_temp, disponible, enable_nivel3) 
+VALUES ('REV','Revista',0,NULL,1,1);
+INSERT IGNORE INTO `cat_ref_tipo_nivel3` (id_tipo_doc, nombre, notforloan, agregacion_temp, disponible, enable_nivel3) 
+VALUES ('TES','Tesis',1,NULL,1,1);
+INSERT IGNORE INTO `cat_ref_tipo_nivel3` (id_tipo_doc, nombre, notforloan, agregacion_temp, disponible, enable_nivel3) 
+VALUES ('ELE','Documento Electrónico',0,NULL,1,0);
+INSERT IGNORE INTO `cat_ref_tipo_nivel3` (id_tipo_doc, nombre, notforloan, agregacion_temp, disponible, enable_nivel3) 
+VALUES ('CDR','CD-ROM',0,NULL,1,1);
+INSERT IGNORE INTO `cat_ref_tipo_nivel3` (id_tipo_doc, nombre, notforloan, agregacion_temp, disponible, enable_nivel3) 
+VALUES ('SEW','Publicacion seriada (web)',0,NULL,1,1);
+INSERT IGNORE INTO `cat_ref_tipo_nivel3` (id_tipo_doc, nombre, notforloan, agregacion_temp, disponible, enable_nivel3) 
+VALUES ('SER','Publicacion seriada',0,NULL,1,1);
+INSERT IGNORE INTO `cat_ref_tipo_nivel3` (id_tipo_doc, nombre, notforloan, agregacion_temp, disponible, enable_nivel3) 
+VALUES ('CAT','Catálogo',0,NULL,1,1);
+INSERT IGNORE INTO `cat_ref_tipo_nivel3` (id_tipo_doc, nombre, notforloan, agregacion_temp, disponible, enable_nivel3) 
+VALUES ('ART','Artículo',0,NULL,1,1);
+INSERT IGNORE INTO `cat_ref_tipo_nivel3` (id_tipo_doc, nombre, notforloan, agregacion_temp, disponible, enable_nivel3) 
+VALUES ('LEG','Legislación',0,NULL,1,1);
+INSERT IGNORE INTO `cat_ref_tipo_nivel3` (id_tipo_doc, nombre, notforloan, agregacion_temp, disponible, enable_nivel3) 
+VALUES ('REF','Obra de referencia',0,NULL,1,1);
+INSERT IGNORE INTO `cat_ref_tipo_nivel3` (id_tipo_doc, nombre, notforloan, agregacion_temp, disponible, enable_nivel3) 
+VALUES ('WEB','Sitio web',0,NULL,1,1);
+INSERT IGNORE INTO `cat_ref_tipo_nivel3` (id_tipo_doc, nombre, notforloan, agregacion_temp, disponible, enable_nivel3) 
+VALUES ('VID','Video grabación',0,NULL,1,1);
+INSERT IGNORE INTO `cat_ref_tipo_nivel3` (id_tipo_doc, nombre, notforloan, agregacion_temp, disponible, enable_nivel3) 
+VALUES ('DCD','Documento de cátedra docente',0,NULL,1,1);
+INSERT IGNORE INTO `cat_ref_tipo_nivel3` (id_tipo_doc, nombre, notforloan, agregacion_temp, disponible, enable_nivel3) 
+VALUES ('FOT','Fotocopia',0,NULL,1,1);
+INSERT IGNORE INTO `cat_ref_tipo_nivel3` (id_tipo_doc, nombre, notforloan, agregacion_temp, disponible, enable_nivel3) 
+VALUES ('SEM','Seminarios',1,NULL,1,1);
+INSERT IGNORE INTO `cat_ref_tipo_nivel3` (id_tipo_doc, nombre, notforloan, agregacion_temp, disponible, enable_nivel3) 
+VALUES ('DCA','Documento de cátedra',1,NULL,1,1);
+INSERT IGNORE INTO `cat_ref_tipo_nivel3` (id_tipo_doc, nombre, notforloan, agregacion_temp, disponible, enable_nivel3) 
+VALUES ('ANA','Analítica',1,NULL,1,0);
+INSERT IGNORE INTO `cat_ref_tipo_nivel3` (id_tipo_doc, nombre, notforloan, agregacion_temp, disponible, enable_nivel3) 
+VALUES ('VAL','Documento para valoración',NULL,NULL,1,0);
+INSERT IGNORE INTO `cat_ref_tipo_nivel3` (id_tipo_doc, nombre, notforloan, agregacion_temp, disponible, enable_nivel3) 
+VALUES ('FOL','Folleto',NULL,NULL,1,0);
+
