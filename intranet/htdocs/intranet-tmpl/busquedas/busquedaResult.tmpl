@@ -92,7 +92,7 @@
 
                     <td >
                         [% PERL %]
-                            print C4::AR::Filtros::link_to( text    =>  "[% HTML.escape(titulo) %]",
+                            print C4::AR::Filtros::link_to( text    =>  "[% IF HTML.escape(titulo) %][% HTML.escape(titulo) %][% ELSE %]SIN T&Iacute;TULO[% END %]",
                                                             url     =>  "[% url_prefix %]/catalogacion/estructura/detalle.pl", 
                                                             params  =>  ["id1=[% id1 %]"],
                                                             title   =>  "[% 'Mostrar Detalle del Registro' | i18n %]",

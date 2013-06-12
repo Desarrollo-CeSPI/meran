@@ -228,7 +228,7 @@ if ($to_pdf){
         }else{
                 
             $t_params->{'partial_template'}     = "opac-busquedaResult.inc";
-            $t_params->{'search_term'}          = $obj->{'string'};;
+            $t_params->{'search_term'}          = $obj->{'string'};
         }
 
         $t_params->{'suggested'}                = $suggested;

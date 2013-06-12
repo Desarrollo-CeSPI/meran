@@ -333,8 +333,8 @@
                             [% IF NIVEL.titulo %]
                                 [% IF !NIVEL.estadoDeColeccion %]
                                     [% PERL %]
-                                        print C4::AR::Filtros::link_to( text 		=>     "[% HTML.escape(NIVEL.titulo) %]",
-                                                                        url 		=>     "[% url_prefix %]/opac-detail.pl", 
+                                        print C4::AR::Filtros::link_to( text 		=>   "[% IF HTML.escape(NIVEL.titulo) %][% HTML.escape(NIVEL.titulo) %][% ELSE %]SIN T&Iacute;TULO[% END %]",
+                                                                        url 		=>   "[% url_prefix %]/opac-detail.pl", 
                                                                         params 		=>   ["id1=[% NIVEL.id1 %]"],
                                                                         title 		=>    "[% 'Mostrar Detalle del registro' | i18n %]",
     		                                                            on_click 	=> "startOverlay();"
