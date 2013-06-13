@@ -90,9 +90,9 @@
                      </td>
 
 
-                    <td >
+                    <td [% UNLESS HTML.escape(titulo) %]style="font-weight: bold; font-size: 14px; clear:both;align:center"[% END %]>
                         [% PERL %]
-                            print C4::AR::Filtros::link_to( text    =>  "[% IF HTML.escape(titulo) %][% HTML.escape(titulo) %][% ELSE %]SIN T&Iacute;TULO[% END %]",
+                            print C4::AR::Filtros::link_to( text    =>  "[% IF HTML.escape(titulo) %][% HTML.escape(titulo) %][% ELSE %]REGISTRO SIN T&Iacute;TULO - Ingresar para editarlo.[% END %]",
                                                             url     =>  "[% url_prefix %]/catalogacion/estructura/detalle.pl", 
                                                             params  =>  ["id1=[% id1 %]"],
                                                             title   =>  "[% 'Mostrar Detalle del Registro' | i18n %]",
