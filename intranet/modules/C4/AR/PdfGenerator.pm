@@ -1150,9 +1150,9 @@ sub generateBookLabel{
             C4::Context->config('intrahtdocs') . '/temas/'
           . 'default'
           . '/imagenes/escudo-DEFAULT.jpg';
-        $pdf->addImgScaled($escudo, $x + 85 , 122 + ($y) , 2.5/100);
+        $pdf->addImgScaled($escudo, $x + 105, $y + 40, 2.5/100);
     }else{
-        $pdf->addImgScaled($escudo, $x + 85 , 122 + ($y) , 2.5/100);
+        $pdf->addImgScaled($escudo, $x + 105, $y + 40, 2.5/100);
     }
 
     #Write the borrower data into the pdf file
