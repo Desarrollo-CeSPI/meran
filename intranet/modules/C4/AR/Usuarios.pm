@@ -657,8 +657,7 @@ sub getSocioLike {
                                                 apellido            => { like => '% '.$s.'%'},
                                                 nro_documento       => { like => '%'.$s.'%' }, 
                                                 legajo              => { like => '%'.$s.'%' },
-                                                nro_socio           => { like => '%'.$s.'%' },
-                                                'persona.email'     => { like => '%'.$s.'%'}             
+                                                nro_socio           => { like => '%'.$s.'%' }         
                                             ])
                      );
             }
