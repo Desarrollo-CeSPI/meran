@@ -6,8 +6,8 @@
         <div class="control-group">
                   <label class="control-label" for="apellido">[% "Apellido" | i18n %]</label>
                   <div class="controls">
-                        <input type='text' id='surname1' name='surname1' value='[% surname1 %]'>
-                        <input type='text' id='surname2' name='surname2' value='[% surname2 %]'>
+                        <input type='text' id='surname1' placeholder="[% 'Desde' | i18n %]" name='surname1' value='[% surname1 %]'>
+                        <input type='text' id='surname2' placeholder="[% 'Hasta' | i18n %]" name='surname2' value='[% surname2 %]'>
                     
                   </div>
         </div>
@@ -20,8 +20,8 @@
         <div class="control-group">
                   <label class="control-label" for="legajo">[% "Legajo" | i18n %]</label>
                   <div class="controls">
-                        <input type='text' id='legajo1' name='legajo1' value='[% legajo1 %]'>
-                        <input type='text' id='legajo2' name='legajo2' value='[% legajo2 %]'>
+                        <input type='text' id='legajo1' placeholder="[% 'Desde' | i18n %]" name='legajo1' value='[% legajo1 %]'>
+                        <input type='text' id='legajo2' placeholder="[% 'Hasta' | i18n %]" name='legajo2' value='[% legajo2 %]'>
                   </div>
         </div>
 
@@ -69,8 +69,8 @@
                             print C4::AR::Filtros::action_button( 
                                                             button       => "btn btn-primary click",
                                                             action       => "consultar(search);", 
-                                                            icon         => "icon-search icon-white",
-                                                            title        => "[% 'Buscar' | i18n %]",
+                                                            icon         => "icon-white icon-inbox",
+                                                            title        => "[% 'Generar Reporte' | i18n %]",
                                                         ) ;
                     [% END %]
                 
