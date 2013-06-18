@@ -138,8 +138,13 @@ actualizarBDD()
 		echo 'Luego debe aplicar el sql que esta en ~/pendiente/UPDATES_MERAN_SANDBOX.sql para actualizar su base de datos'
 	else
 		echo 'Base de datos actualizada con exito'
-	fi
-	rm /tmp/UPDATES_MERAN_SANDBOX.sql
+   fi
+   if [ $CONSERVE_SQL -eq 0 ]
+	then
+		rm /tmp/UPDATES_MERAN_SANDBOX.sql
+	else
+		mv /tmp/UPDATES_MERAN_SANDBOX.sql ~/pendiente/
+   fi
 }
 
 
@@ -165,7 +170,11 @@ generarPermisosBDD()
 	else
 		echo 'Base de datos creada con exito'
 	fi
-  rm /tmp/$ID.permisosbdd*
+ if [ $CONSERVE_SQL -eq 1 ]
+	then
+		mv /tmp/$ID.permisosbdd ~/pendiente/base.sql
+	fi
+ rm /tmp/$ID.permisosbdd*
 }
 
 generarConfiguracion()
@@ -278,7 +287,8 @@ OPTIONS:
    -U	   El usuario para conectarse a la base de datos
    -N	   Si esta presente Determina si es una instalacion nueva. Por defecto pregunta
    -B	   Si esta presente en 1 determina que tiene que instalar las dependencias, si esta en 0 no instala y si no esta pregunta.
-   -v	   si esta presente determina la version del kernel que se va a utilizar. Por defecto la descubre de uname -a
+   -v	   Si esta presente determina la version del kernel que se va a utilizar. Por defecto la descubre de uname -a
+   -C	   Si esta presente indica que hay que consevar el sql de la base de datos sin eliminar
 EOF
 }
 
@@ -303,23 +313,24 @@ ROOT_PASS_BASE=""
 DBB_USER_ORIGEN="localhost"
 NEW_INSTALACION=0
 BASE_INSTALACION=2
+CONSERVE_SQL=0
 
-while getopts “?:h:i:d:b:u:p:s:w:c:U:v:P:NB:” OPTION
+while getopts “?:h:i:d:b:u:p:s:w:c:U:v:P:NB:C” OPTION
 do
      case $OPTION in
          U)
 			ROOT_USER_BASE=$OPTARG
 			;;
-		 N)
+	 N)
 			NEW_INSTALACION=1
 			;;
-		 B)
+	 B)
 			BASE_INSTALACION=$OPTARG
 			;;
-		 P)	
+	 P)	
 			ROOT_PASS_BASE=$OPTARG
             ;;
-		 v)	
+	 v)	
 
 			versionKernel=$OPTARG
             ;;
@@ -350,6 +361,9 @@ do
              ;;
          c)
              CONFIGURACION_MERAN=$OPTARG
+             ;;
+         C)
+             CONSERVE_SQL=1
              ;;
          ?)
              usage
