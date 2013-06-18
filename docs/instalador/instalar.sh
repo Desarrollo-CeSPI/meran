@@ -390,6 +390,7 @@ then
 	instalarDependencias
 else
 	if [ $BASE_INSTALACION -eq 2 ] 
+	then
 		echo "¿Quiere proceder a instalar todo el software de base base necesaria para Meran? (Apache/Mysql/perl/etc)"
 		select OPCION in Instalar No_instalar 
 		do
