@@ -39,8 +39,14 @@ Alias /includes/ "reemplazarPATHBASE/reemplazarID/includes/"
   Allow from all
 </Directory>
 
-Alias /uploads/ "reemplazarPATHBASE/reemplazarID/intranet/htdocs/uploads/"
-<Directory reemplazarPATHBASE/reemplazarID/intranet/htdocs/uploads/ >
+Alias /uploads/ "reemplazarPATHBASE/reemplazarID/files/opac/uploads/"
+<Directory reemplazarPATHBASE/reemplazarID/files/opac/uploads/ >
+Order allow,deny
+Allow from all
+</Directory>
+
+Alias /private-uploads/ "reemplazarPATHBASE/reemplazarID/files/intranet/private-uploads/"
+<Directory reemplazarPATHBASE/reemplazarID/files/intranet/private-uploads/ >
 Order allow,deny
 Allow from all
 </Directory>

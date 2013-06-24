@@ -1,8 +1,8 @@
 #!/bin/bash
 rm -fr aux
 mkdir aux
-VERSION="0.9.5"
-cp -a ../../opac/ ../../intranet/ ../../includes aux/
+VERSION="0.9.7"
+cp -a ../../files/ ../../opac/ ../../intranet/ ../../includes aux/
 cd aux
 for i in $(find -name *.pl); do
 	echo "#!/usr/bin/perl" > /tmp/auxiliar
@@ -21,6 +21,6 @@ cp -r ../../instalador/* meranunlp
 rm meranunlp/intranetyopac.tar.gz
 cp ../README ../COPYING licencia.txt meranunlp/
 echo $VERSION > meranunlp/VERSION
-tar -czvf meranunlp/intranetyopac.tar.gz opac/ intranet/ includes/
+tar -czvf meranunlp/intranetyopac.tar.gz opac/ intranet/ includes/ files/
 tar -czvf meranunlp-v$VERSION.tar.gz meranunlp
 rm -fr meranunlp opac intranet includes
