@@ -29,7 +29,7 @@
 			            <div class="carousel-inner">
 			            [% FOREACH p IN portada %]
 			              <div class="item [% IF loop.first %]active[% END %]">
-			                <img src="/opac-tmpl/uploads/portada/[% p.getImagePath %]" alt>
+			                <img src="/uploads/portada/[% p.getImagePath %]" alt>
 			                [% IF p.getFooter %]
 				                <div class="carousel-caption">
 				                  <h4>[% p.getFooterTitle %]</h4>

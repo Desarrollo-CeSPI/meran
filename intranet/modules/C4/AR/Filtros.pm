@@ -708,10 +708,8 @@ sub setFlagsLang {
         $href = C4::AR::Utilidades::getUrlPrefix().'/intra-language.pl?token='.$token.'&amp;';
     }
 
-    my $flags_dir = C4::Context->config('temasOPAC').'/'.$theme.'/imagenes/flags';
-    if ($type eq 'INTRA'){
-        $flags_dir = C4::Context->config('temas').'/'.$theme.'/imagenes/flags';
-    }
+    my $flags_dir = '';
+
     foreach my $hash_temp (@array_lang){
             $html .='<li><a href='."$href"."lang_server=".$hash_temp->{'lang'}.' title="'.$hash_temp->{'title'}.'"><img src='."$flags_dir".'/'.$hash_temp->{'flag'}.' alt="'.i18n("Cambio de lenguaje").'" /></a></li>';
     }

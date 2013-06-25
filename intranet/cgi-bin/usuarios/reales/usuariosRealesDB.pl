@@ -357,7 +357,6 @@ Se elimina el usuario
             $t_params->{'socio_modificar'}  = $socio;
             my $comboDeCredentials          = C4::AR::Utilidades::generarComboDeCredentials($t_params); #llama a getSocioInfoPorNroSocio
             
-            $t_params->{'combo_temas'}      = C4::AR::Utilidades::generarComboTemasINTRA($nro_socio); #llama a getSocioInfoPorNroSocio
             $t_params->{'comboDeCredentials'}   = $comboDeCredentials;
             $t_params->{'combo_tipo_documento'} = $comboDeTipoDeDoc;
             $t_params->{'comboDeEstados'}       = $comboDeEstados;
