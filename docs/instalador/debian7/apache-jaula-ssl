@@ -59,6 +59,18 @@ Alias /includes/ reemplazarPATHBASE/reemplazarID/includes/
 
 ServerSignature Off
 
+Alias /uploads/covers/ "reemplazarPATHBASE/reemplazarID/files/intranet/uploads/covers/"
+<Directory /usr/share/meran/files/intranet/uploads/covers/ >
+  Order allow,deny
+  Allow from all
+</Directory>
+
+Alias /uploads/covers-added/ "reemplazarPATHBASE/reemplazarID/files/intranet/uploads/covers-added/"
+<Directory reemplazarPATHBASE/reemplazarID/files/intranet/uploads/covers-added/ >
+ Order allow,deny
+ Allow from all
+</Directory>
+
 Alias /uploads/ "reemplazarPATHBASE/reemplazarID/files/intranet/uploads/"
 <Directory reemplazarPATHBASE/reemplazarID/files/intranet/uploads/ >
 Order allow,deny
@@ -70,8 +82,6 @@ Alias /private-uploads/ "reemplazarPATHBASE/reemplazarID/files/intranet/private-
 Order allow,deny
 Allow from all
 </Directory>
-
-
 
 Alias /cron "reemplazarPATHBASE/reemplazarID/intranet/cgi-bin/cron/"
 <Directory reemplazarPATHBASE/reemplazarID/intranet/cgi-bin/cron/ >

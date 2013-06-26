@@ -93,7 +93,7 @@
                     <div class="controls">
                         [% IF editing %]
                             [% IF novedad.getAdjunto %]
-                                <a href="http://[% SERVER_ADDRESS %]/opac-tmpl/uploads/novedades/[% novedad.getAdjunto %]">[% 'Click para ver adjunto' | i18n %]</a><br />
+                                <a href="/uploads/novedades/[% novedad.getAdjunto %]">[% 'Click para ver adjunto' | i18n %]</a><br />
                             [% END %]
                         [% END %]
                         <input type="file" name="adjunto" />
@@ -137,8 +137,8 @@
                         <label class="control-label" >[% "Imagen/es a eliminar" | i18n %]</label>
                         <div class="controls">
                             [% FOREACH imagen IN imagenes_hash %]
-	                            <a class="fancylink" id="imagen_[% imagen.getImageName %]" rel="group" href="http://[% SERVER_ADDRESS_OPAC %]/opac-tmpl/uploads/novedades/[% imagen.getImageName %]">
-                                    <img border="0" src="http://[% SERVER_ADDRESS_OPAC %]/opac-tmpl/uploads/novedades/[% imagen.getImageName %]"
+	                            <a class="fancylink" id="imagen_[% imagen.getImageName %]" rel="group" href="/uploads/novedades/[% imagen.getImageName %]">
+                                    <img border="0" src="/uploads/novedades/[% imagen.getImageName %]"
                                           style="width: 60%; max-width: 120px;" 
                                           alt="[% socio.persona.getApellido %], [% socio.persona.getNombre %] ([% socio.getNro_socio %])"
                                           title="[% socio.persona.getApellido %], [% socio.persona.getNombre %] ([% socio.getNro_socio %])"

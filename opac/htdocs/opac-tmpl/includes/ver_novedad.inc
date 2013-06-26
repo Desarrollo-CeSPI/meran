@@ -30,9 +30,9 @@
                 [% IF novedad.getAdjunto %]
                     <dt>[% 'Archivo adjunto' | i18n %]:</dt>
                     [% IF novedad.getNombreAdjunto %]
-                        <dd><a href="/opac-tmpl/uploads/novedades/[% novedad.getAdjunto %]">[% novedad.getNombreAdjunto %]</a></dd>
+                        <dd><a href="/uploads/novedades/[% novedad.getAdjunto %]">[% novedad.getNombreAdjunto %]</a></dd>
                     [% ELSE %]
-                        <dd><a href="/opac-tmpl/uploads/novedades/[% novedad.getAdjunto %]">[% 'Click para ver el adjunto' | i18n %]</a></dd>
+                        <dd><a href="/uploads/novedades/[% novedad.getAdjunto %]">[% 'Click para ver el adjunto' | i18n %]</a></dd>
                     [% END %]
                 [% END %]
                 
@@ -50,8 +50,8 @@
             <div class="well">
 	        
 	            [% FOREACH imagen IN imagenes_hash %]
-	                <a class="fancylink" rel="group" href="/opac-tmpl/uploads/novedades/[% imagen.getImageName %]">
-                        <img border="0" src="/opac-tmpl/uploads/novedades/[% imagen.getImageName %]"
+	                <a class="fancylink" rel="group" href="/uploads/novedades/[% imagen.getImageName %]">
+                        <img border="0" src="/uploads/novedades/[% imagen.getImageName %]"
                               style="width: 60%; max-width: 120px;" 
                               alt="novedad_[% imagen.getIdNovedad %]"
                               title="novedad_[% imagen.getIdNovedad %]"
