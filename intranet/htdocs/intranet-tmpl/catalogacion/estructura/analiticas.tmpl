@@ -83,7 +83,7 @@
           			<div class="alert fade in"></div>
                     <div class="page-header">
                        [% PERL %]
-                               print C4::AR::Filtros::link_to( text   => "<h2>[% nivel1_analitica_titulo %]</h2>",
+                               print C4::AR::Filtros::link_to( text   => "<h2>[% nivel1_analitica_titulo | html %]</h2>",
                                                                url    => "[% url_prefix %]/catalogacion/estructura/detalle.pl", 
                                                                params   => ["id1=[% nivel1_analitica_id1 %]"],
                                                                title  => "[% 'Detalle del registro' | i18n %]",
