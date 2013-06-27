@@ -309,7 +309,7 @@ sub tieneLogoOpacMenu{
     use C4::AR::Logos;
 	
 	my $tema_opac   = C4::AR::Preferencias::getValorPreferencia('tema_opac_default') || $self->getId_ui;
-    my $logo = C4::Context->config('private_path') . '/logos/' . C4::AR::Logos::getNombreLogoUI();
+    my $logo = C4::Context->config('logosIntraPath') . '/' . C4::AR::Logos::getNombreLogoUI();
 
     if ( -e $logo ){
     	return 1;
