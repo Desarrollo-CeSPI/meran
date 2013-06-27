@@ -59,9 +59,7 @@ my $registros_array_ref = C4::AR::Nivel2::getAllNivel2();
                 $field_dest->add_subfields( 'g' => $dato );
                 }
             else {
-                my $indentificador_1        = C4::AR::Utilidades::ASCIItoHEX($field->indicator(1));
-                my $indentificador_2        = C4::AR::Utilidades::ASCIItoHEX($field->indicator(2));
-                my $new_field = new MARC::Field('550',$indentificador_1,$indentificador_2,  'g' => $dato );
+                my $new_field = MARC::Field->new('550','','','g' => $dato);
                 $marc_record->append_fields($new_field);
                 }
               print  $marc_record->as_formatted."\n";
