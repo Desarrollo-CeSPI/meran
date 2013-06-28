@@ -138,26 +138,26 @@ sub tieneArchivoIndice{
     if ($status){
         my $path = $edocsDir."/".$self->getIndiceFilePath;
 
-	    if ( -e $path ){
-	        $status =  $self->getIndiceFilePath;
-	    }else{
-	        $status = undef;
-	    }            
+      if ( -e $path ){
+          $status =  $self->getIndiceFilePath;
+      }else{
+          $status = undef;
+      }            
     }
     
-    return $status;	
+    return $status; 
 }
 
 sub getIndiceFileType{
-	
-	my ($self)      = shift;
-	
-	my $edocsDir = C4::Context->config("edocsdir");
-	my $path = $edocsDir."/".$self->getIndiceFilePath;
-	my $isValidFileType = C4::AR::Utilidades::isValidFile($path);
-	
-	return ($isValidFileType);
-	
+  
+  my ($self)      = shift;
+  
+  my $edocsDir = C4::Context->config("edocsdir");
+  my $path = $edocsDir."/".$self->getIndiceFilePath;
+  my $isValidFileType = C4::AR::Utilidades::isValidFile($path);
+  
+  return ($isValidFileType);
+  
 }
 
 sub tiene_indice {
@@ -216,9 +216,9 @@ sub eliminar{
 
     #elimino las analíticas de "cat_registro_marc_n2_analitica" si es que existen
     if ($cat_registro_marc_n2_analitica){
-	    foreach my $n2_analitica (@$cat_registro_marc_n2_analitica){
-	        $n2_analitica->delete();
-	    }
+      foreach my $n2_analitica (@$cat_registro_marc_n2_analitica){
+          $n2_analitica->delete();
+      }
     }
     
     $self->delete();
@@ -1019,14 +1019,14 @@ sub getMarcRecordConDatosFull{
 }
 
 sub getNavString{
-	my ($self) = shift;
-	my $string = "";
-	my $tipo_doc = $self->getTipoDocumento();
+  my ($self) = shift;
+  my $string = "";
+  my $tipo_doc = $self->getTipoDocumento();
     
     use Switch;
     
     switch ($tipo_doc){
-    	case 'REV' {
+      case 'REV' {
             my $anio = C4::AR::Utilidades::trim($self->getAnioRevista);
             my $vol  = C4::AR::Utilidades::trim($self->getVolumen);
             my $num  = C4::AR::Utilidades::trim($self->getNumeroRevista);
@@ -1093,6 +1093,22 @@ sub getAll{
     my $ref_cant = C4::Modelo::CatRegistroMarcN2::Manager->get_cat_registro_marc_n2_count(query => \@filtros,);
 
     return($ref_cant,$ref_valores);
+}
+
+sub getCountPortadasEdicion{
+    my ($self) = shift;
+
+    use C4::AR::PortadaNivel2;
+
+    return C4::AR::PortadaNivel2::getCountPortadasEdicion($self->id);
+}
+
+sub getPortadasEdicion{
+    my ($self) = shift;
+
+    use C4::AR::PortadaNivel2;
+
+    return C4::AR::PortadaNivel2::getPortadasEdicion($self->id);
 }
 
 1;
