@@ -126,37 +126,37 @@ getLibrarianEstCat
 trae el texto para mostrar (librarian), segun campo y subcampo, sino exite, devuelve 0
 =cut
 sub getLibrarianEstCat{
-	my ($campo, $subcampo,$dato, $itemtype)= @_;
+    my ($campo, $subcampo,$dato, $itemtype)= @_;
 
-	my $dbh = C4::Context->dbh;
-	my $query = "SELECT ec.*,ir.idinforef, ir.referencia as tabla, campos, separador, orden";
-	$query .= " FROM cat_estructura_catalogacion ec LEFT JOIN pref_informacion_referencia ir ";
-	$query .= " ON (ec.id = ir.idestcat) ";
-	$query .= " WHERE(ec.campo = ?)and(ec.subcampo = ?)and(ec.itemtype = ?) ";
+    my $dbh = C4::Context->dbh;
+    my $query = "SELECT ec.*,ir.idinforef, ir.referencia as tabla, campos, separador, orden";
+    $query .= " FROM cat_estructura_catalogacion ec LEFT JOIN pref_informacion_referencia ir ";
+    $query .= " ON (ec.id = ir.idestcat) ";
+    $query .= " WHERE(ec.campo = ?)and(ec.subcampo = ?)and(ec.itemtype = ?) ";
 
-	my $sth=$dbh->prepare($query);
-   	$sth->execute($campo, $subcampo, $itemtype);
-	my $nuevoDato;
-	my $data=$sth->fetchrow_hashref();
+    my $sth=$dbh->prepare($query);
+    $sth->execute($campo, $subcampo, $itemtype);
+    my $nuevoDato;
+    my $data=$sth->fetchrow_hashref();
 
-	if($data && $data->{'visible'}){
-		if($data->{'referencia'} && $dato ne ""){
-		#DA ERROR FIXME	
-		#$nuevoDato=&buscarDatoReferencia($dato,$data->{'tabla'},$data->{'campos'},$data->{'separador'});
-			$data->{'dato'}=$nuevoDato;
-		}
-		else{
-			$data->{'dato'}=$dato;
-		}
-	}
-	else{
-		$data->{'liblibrarian'}=0;
-		$data->{'dato'}="";
-		$data->{'visible'}=0;
-		
-	}
+    if($data && $data->{'visible'}){
+        if($data->{'referencia'} && $dato ne ""){
+        #DA ERROR FIXME 
+        #$nuevoDato=&buscarDatoReferencia($dato,$data->{'tabla'},$data->{'campos'},$data->{'separador'});
+            $data->{'dato'}=$nuevoDato;
+        }
+        else{
+            $data->{'dato'}=$dato;
+        }
+    }
+    else{
+        $data->{'liblibrarian'}=0;
+        $data->{'dato'}="";
+        $data->{'visible'}=0;
+        
+    }
 #0 si no trae nada
-	return $data;
+    return $data;
 }
 
 =item
@@ -164,9 +164,9 @@ getLibrarianEstCatOpac
 trae el texto para mostrar (librarian), segun campo y subcampo, sino exite, devuelve 0
 =cut
 sub getLibrarianEstCatOpac{
-	my ($campo, $subcampo, $dato, $itemtype)= @_;
+    my ($campo, $subcampo, $dato, $itemtype)= @_;
 
-	my $dbh = C4::Context->dbh;
+    my $dbh = C4::Context->dbh;
 
 # open(A, ">>/tmp/debug.txt");
 # print A "\n";
@@ -184,66 +184,66 @@ $query .= " ON (eco.idencabezado = eio.idencabezado) ";
 $query .= " WHERE(eco.campo = ?)and(eco.subcampo = ?) and (visible = 1) ";
 $query .= " and (eio.itemtype = ?)";
 
-	my $sth=$dbh->prepare($query);
-	$sth->execute($campo, $subcampo, $itemtype);
-    	my $data1=$sth->fetchrow_hashref;
+    my $sth=$dbh->prepare($query);
+    $sth->execute($campo, $subcampo, $itemtype);
+        my $data1=$sth->fetchrow_hashref;
 
-	my $data;
-	my $textPred;
-	my $textSucc;
+    my $data;
+    my $textPred;
+    my $textSucc;
 
-	if($data1){
+    if($data1){
 
-		$textPred= $data1->{'textpred'};
-		$textSucc= $data1->{'textsucc'};
+        $textPred= $data1->{'textpred'};
+        $textSucc= $data1->{'textsucc'};
 
-		my $dbh = C4::Context->dbh;
-		my $query = "SELECT ec.*, ir.idinforef, ir.referencia as tabla, campos, separador, orden";
-		$query .= " FROM cat_estructura_catalogacion ec LEFT JOIN pref_informacion_referencia ir ";
-		$query .= " ON (ec.id = ir.idestcat) ";
-		$query .= " WHERE(ec.campo = ?)and(ec.subcampo = ?)and(ec.itemtype = ?) ";
+        my $dbh = C4::Context->dbh;
+        my $query = "SELECT ec.*, ir.idinforef, ir.referencia as tabla, campos, separador, orden";
+        $query .= " FROM cat_estructura_catalogacion ec LEFT JOIN pref_informacion_referencia ir ";
+        $query .= " ON (ec.id = ir.idestcat) ";
+        $query .= " WHERE(ec.campo = ?)and(ec.subcampo = ?)and(ec.itemtype = ?) ";
 
-		my $sth=$dbh->prepare($query);
-   		$sth->execute($campo, $subcampo, $itemtype);
-		my $nuevoDato;
-		$data=$sth->fetchrow_hashref();
+        my $sth=$dbh->prepare($query);
+        $sth->execute($campo, $subcampo, $itemtype);
+        my $nuevoDato;
+        $data=$sth->fetchrow_hashref();
 
-		if($data->{'referencia'} && $dato ne ""){
-		  $nuevoDato=&buscarDatoReferencia($dato,$data->{'tabla'},$data->{'campos'},$data->{'separador'});
+        if($data->{'referencia'} && $dato ne ""){
+          $nuevoDato=&buscarDatoReferencia($dato,$data->{'tabla'},$data->{'campos'},$data->{'separador'});
 # print A "dato nuevo **************************************** $nuevoDato \n";
-		  $data->{'dato'}= $nuevoDato;
-		  $data->{'textPred'}= $textPred;
-		  $data->{'textSucc'}= $textSucc;
-#  		  return $textPred." ".$nuevoDato;
-		  return $data;
-# 		  return $nuevoDato;
+          $data->{'dato'}= $nuevoDato;
+          $data->{'textPred'}= $textPred;
+          $data->{'textSucc'}= $textSucc;
+#         return $textPred." ".$nuevoDato;
+          return $data;
+#         return $nuevoDato;
 
-		}
-		else{
-		  $data->{'dato'}= $dato;
-		  $data->{'textPred'}= $textPred;
-		  $data->{'textSucc'}= $textSucc;
+        }
+        else{
+          $data->{'dato'}= $dato;
+          $data->{'textPred'}= $textPred;
+          $data->{'textSucc'}= $textSucc;
 # print A "dato **************************************** $dato \n";
 # print A "textpred **************************************** $textPred \n";
-# 		  return $textPred." ";
-		  return $data;
-		}
-		
-# 		return $textPred." ".$data->{'dato'}." ".$textSucc;
-#  		return $textPred." ";
+#         return $textPred." ";
+          return $data;
+        }
+        
+#       return $textPred." ".$data->{'dato'}." ".$textSucc;
+#       return $textPred." ";
 
-	}
-	else {
-		$data->{'dato'}= "";
-		$data->{'textPred'}= "";
-		$data->{'textSucc'}= "";
-		return $data;
-# 		return 0;
-	}
+    }
+    else {
+        $data->{'dato'}= "";
+        $data->{'textPred'}= "";
+        $data->{'textSucc'}= "";
+        return $data;
+#       return 0;
+    }
 # close(A);
 
 #0 si no trae nada
-#  	return $sth->fetchrow_hashref; 
+#   return $sth->fetchrow_hashref; 
 }
 
 
@@ -252,17 +252,17 @@ getLibrarianMARCSubField
 trae el texto para mostrar (librarian), segun campo y subcampo, sino exite, devuelve 0
 =cut
 sub getLibrarianMARCSubField{
-	my ($campo, $subcampo)= @_;
-	my $dbh = C4::Context->dbh;
+    my ($campo, $subcampo)= @_;
+    my $dbh = C4::Context->dbh;
 
-	my $query = " SELECT * ";
-	$query .= " FROM pref_estructura_subcampo_marc ";
-	$query .= " WHERE (campo = ? )and(subcampo = ?)";
+    my $query = " SELECT * ";
+    $query .= " FROM pref_estructura_subcampo_marc ";
+    $query .= " WHERE (campo = ? )and(subcampo = ?)";
 
-	my $sth=$dbh->prepare($query);
-   	$sth->execute($campo, $subcampo);
+    my $sth=$dbh->prepare($query);
+    $sth->execute($campo, $subcampo);
 
-	return $sth->fetchrow_hashref;
+    return $sth->fetchrow_hashref;
 }
 
 =item
@@ -270,27 +270,27 @@ getLibrarianIntra
 Busca para un campo y subcampo, dependiendo el itemtype, como esta catalogado para mostrar en el template. Busca en la tabla estructura_catalogacion y sino lo encuentra lo busca en marc_subfield_structure que si o si esta.
 =cut
 sub getLibrarianIntra{
-	my ($campo, $subcampo,$dato, $itemtype,$detalleMARC) = @_;
+    my ($campo, $subcampo,$dato, $itemtype,$detalleMARC) = @_;
 
 #busca librarian segun campo, subcampo e itemtype
-	my $librarian= &getLibrarianEstCat($campo, $subcampo, $dato,$itemtype);
+    my $librarian= &getLibrarianEstCat($campo, $subcampo, $dato,$itemtype);
 
 #si no encuentra, busca para itemtype = 'ALL'
-	if(!$librarian->{'liblibrarian'}){
-		$librarian= &getLibrarianEstCat($campo, $subcampo, $dato,'ALL');
-	}
-	
-	if($librarian->{'liblibrarian'} && !$librarian->{'visible'} && !$detalleMARC){
-		#Si esta catalogado y pero no esta visible retorna 0 para que no se vea el dato
-		$librarian->{'liblibrarian'}=0;
-		$librarian->{'dato'}="";
-		return $librarian;
-	}
-	elsif(!$librarian->{'liblibrarian'}){
-		$librarian= &getLibrarianMARCSubField($campo, $subcampo);
-		$librarian->{'dato'}=$dato;
-	}
-	return $librarian;
+    if(!$librarian->{'liblibrarian'}){
+        $librarian= &getLibrarianEstCat($campo, $subcampo, $dato,'ALL');
+    }
+    
+    if($librarian->{'liblibrarian'} && !$librarian->{'visible'} && !$detalleMARC){
+        #Si esta catalogado y pero no esta visible retorna 0 para que no se vea el dato
+        $librarian->{'liblibrarian'}=0;
+        $librarian->{'dato'}="";
+        return $librarian;
+    }
+    elsif(!$librarian->{'liblibrarian'}){
+        $librarian= &getLibrarianMARCSubField($campo, $subcampo);
+        $librarian->{'dato'}=$dato;
+    }
+    return $librarian;
 }
 
 =item
@@ -298,33 +298,33 @@ getLibrarianOpac
 Busca para un campo y subcampo, dependiendo el itemtype, como esta catalogado para mostrar en el template. Busca en la tabla estructura_catalogacion_opac y sino lo encuentra lo busca en marc_subfield_structure que si o si esta.
 =cut
 sub getLibrarianOpac{
-	my ($campo, $subcampo,$dato, $itemtype,$detalleMARC) = @_;
-	my $textPred;	
-	my $textSucc;
+    my ($campo, $subcampo,$dato, $itemtype,$detalleMARC) = @_;
+    my $textPred;   
+    my $textSucc;
 #busca librarian segun campo, subcampo e itemtype
-	my $librarian= &getLibrarianEstCatOpac($campo, $subcampo, $dato, $itemtype);
+    my $librarian= &getLibrarianEstCatOpac($campo, $subcampo, $dato, $itemtype);
 #si no encuentra, busca para itemtype = 'ALL'
- 	if(!$librarian){
- 		$librarian= &getLibrarianEstCatOpac($campo, $subcampo, $dato, 'ALL');
- 	}
-	elsif($detalleMARC){
-		$librarian= &getLibrarianMARCSubField($campo, $subcampo);
-		$librarian->{'dato'}=$dato;
-	}
+    if(!$librarian){
+        $librarian= &getLibrarianEstCatOpac($campo, $subcampo, $dato, 'ALL');
+    }
+    elsif($detalleMARC){
+        $librarian= &getLibrarianMARCSubField($campo, $subcampo);
+        $librarian->{'dato'}=$dato;
+    }
 
 
-	return $librarian;
+    return $librarian;
 }
 
 sub getLibrarian{
-	my ($campo, $subcampo,$dato,$itemtype,$tipo,$detalleMARC)=@_;
-	my $librarian;
-	if($tipo eq "intra"){
-		$librarian=&getLibrarianIntra($campo, $subcampo,$dato, $itemtype,$detalleMARC);
-	}else{
-		$librarian=&getLibrarianOpac($campo, $subcampo,$dato, $itemtype,$detalleMARC);
-	} 
-	return $librarian;
+    my ($campo, $subcampo,$dato,$itemtype,$tipo,$detalleMARC)=@_;
+    my $librarian;
+    if($tipo eq "intra"){
+        $librarian=&getLibrarianIntra($campo, $subcampo,$dato, $itemtype,$detalleMARC);
+    }else{
+        $librarian=&getLibrarianOpac($campo, $subcampo,$dato, $itemtype,$detalleMARC);
+    } 
+    return $librarian;
 }
 
 =item
@@ -332,22 +332,22 @@ buscarMapeo
 Asocia los campos marc correspondientes con los campos de las tablas de los nivel 1, 2 y 3 (koha) correspondiente al parametro que llega.
 =cut
 sub buscarMapeo{
-	my ($tabla)= @_;
-	my $dbh = C4::Context->dbh;
-	my %mapeo;
-	my $llave;
-	my $query = " SELECT * FROM cat_pref_mapeo_koha_marc WHERE tabla = ? ";
-	
-	my $sth=$dbh->prepare($query);
-	$sth->execute($tabla);
-	while(my $data=$sth->fetchrow_hashref){
-		$llave=$data->{'campo'}.",".$data->{'subcampo'};
-		$mapeo{$llave}->{'campo'}=$data->{'campo'};
-		$mapeo{$llave}->{'subcampo'}=$data->{'subcampo'};
-		$mapeo{$llave}->{'tabla'}=$data->{'tabla'};
-		$mapeo{$llave}->{'campoTabla'}=$data->{'campoTabla'};
-	}
-	return (\%mapeo);
+    my ($tabla)= @_;
+    my $dbh = C4::Context->dbh;
+    my %mapeo;
+    my $llave;
+    my $query = " SELECT * FROM cat_pref_mapeo_koha_marc WHERE tabla = ? ";
+    
+    my $sth=$dbh->prepare($query);
+    $sth->execute($tabla);
+    while(my $data=$sth->fetchrow_hashref){
+        $llave=$data->{'campo'}.",".$data->{'subcampo'};
+        $mapeo{$llave}->{'campo'}=$data->{'campo'};
+        $mapeo{$llave}->{'subcampo'}=$data->{'subcampo'};
+        $mapeo{$llave}->{'tabla'}=$data->{'tabla'};
+        $mapeo{$llave}->{'campoTabla'}=$data->{'campoTabla'};
+    }
+    return (\%mapeo);
 }
 
 =item
@@ -355,36 +355,36 @@ buscarMapeoTotal
 Busca el mapeo de los campos de todas las tablas de niveles y obtiene el nombre de los campos
 =cut
 sub buscarMapeoTotal{
-	my $dbh = C4::Context->dbh;
-	my %mapeo;
-	my $llave;
-	my $query = " SELECT * FROM cat_pref_mapeo_koha_marc WHERE tabla like 'cat_nivel%' ORDER BY tabla";
-	
-	my $sth=$dbh->prepare($query);
-	$sth->execute();
-	while(my $data=$sth->fetchrow_hashref){
-		$llave=$data->{'campo'}.",".$data->{'subcampo'};
-		$mapeo{$llave}->{'campo'}=$data->{'campo'};
-		$mapeo{$llave}->{'subcampo'}=$data->{'subcampo'};
-		$mapeo{$llave}->{'tabla'}=$data->{'tabla'};
-		$mapeo{$llave}->{'campoTabla'}=$data->{'campoTabla'};
-		$mapeo{$llave}->{'nombre'}=$data->{'nombre'};
-	}
-	return (\%mapeo);
+    my $dbh = C4::Context->dbh;
+    my %mapeo;
+    my $llave;
+    my $query = " SELECT * FROM cat_pref_mapeo_koha_marc WHERE tabla like 'cat_nivel%' ORDER BY tabla";
+    
+    my $sth=$dbh->prepare($query);
+    $sth->execute();
+    while(my $data=$sth->fetchrow_hashref){
+        $llave=$data->{'campo'}.",".$data->{'subcampo'};
+        $mapeo{$llave}->{'campo'}=$data->{'campo'};
+        $mapeo{$llave}->{'subcampo'}=$data->{'subcampo'};
+        $mapeo{$llave}->{'tabla'}=$data->{'tabla'};
+        $mapeo{$llave}->{'campoTabla'}=$data->{'campoTabla'};
+        $mapeo{$llave}->{'nombre'}=$data->{'nombre'};
+    }
+    return (\%mapeo);
 }
 
 sub buscarMapeoCampoSubcampo{
-	my ($campo,$subcampo,$nivel)=@_;
-	my $dbh = C4::Context->dbh;
-	my $tabla="nivel".$nivel;
-	my $campoTabla=0;
-	my $query = " SELECT campoTabla FROM cat_pref_mapeo_koha_marc WHERE tabla =? AND campo=? AND subcampo=?";
-	my $sth=$dbh->prepare($query);
-	$sth->execute($tabla,$campo,$subcampo);
-	if(my $data=$sth->fetchrow_hashref){
-		$campoTabla=$data->{'campoTabla'};
-	}
-	return $campoTabla;
+    my ($campo,$subcampo,$nivel)=@_;
+    my $dbh = C4::Context->dbh;
+    my $tabla="nivel".$nivel;
+    my $campoTabla=0;
+    my $query = " SELECT campoTabla FROM cat_pref_mapeo_koha_marc WHERE tabla =? AND campo=? AND subcampo=?";
+    my $sth=$dbh->prepare($query);
+    $sth->execute($tabla,$campo,$subcampo);
+    if(my $data=$sth->fetchrow_hashref){
+        $campoTabla=$data->{'campoTabla'};
+    }
+    return $campoTabla;
 }
 
 =item
@@ -392,20 +392,20 @@ buscarSubCamposMapeo
 Busca el mapeo para el subcampo perteneciente al campo que se pasa por parametro.
 =cut
 sub buscarSubCamposMapeo{
-	my ($campo)=@_;
-	my $dbh = C4::Context->dbh;
-	my %mapeo;
-	my $llave;
-	my $query = " SELECT * FROM cat_pref_mapeo_koha_marc WHERE tabla like 'cat_nivel%' AND campo = ?";
-	
-	my $sth=$dbh->prepare($query);
-	$sth->execute($campo);
-	while(my $data=$sth->fetchrow_hashref){
-		$llave=$data->{'campo'}.",".$data->{'subcampo'};
-		$mapeo{$llave}->{'subcampo'}=$data->{'subcampo'};
-		$mapeo{$llave}->{'tabla'}=$data->{'tabla'};
-	}
-	return (\%mapeo);
+    my ($campo)=@_;
+    my $dbh = C4::Context->dbh;
+    my %mapeo;
+    my $llave;
+    my $query = " SELECT * FROM cat_pref_mapeo_koha_marc WHERE tabla like 'cat_nivel%' AND campo = ?";
+    
+    my $sth=$dbh->prepare($query);
+    $sth->execute($campo);
+    while(my $data=$sth->fetchrow_hashref){
+        $llave=$data->{'campo'}.",".$data->{'subcampo'};
+        $mapeo{$llave}->{'subcampo'}=$data->{'subcampo'};
+        $mapeo{$llave}->{'tabla'}=$data->{'tabla'};
+    }
+    return (\%mapeo);
 }
 
 
@@ -417,23 +417,23 @@ obtenerEdiciones
 obtiene las ediciones que pose un id de nivel 1.
 =cut
 sub obtenerEdiciones{
-	my ($id1,$itemtype)=@_;
-	my @ediciones;
-	my $dbh = C4::Context->dbh;
-	my $query="SELECT * FROM cat_nivel2 WHERE id1=? ";
+    my ($id1,$itemtype)=@_;
+    my @ediciones;
+    my $dbh = C4::Context->dbh;
+    my $query="SELECT * FROM cat_nivel2 WHERE id1=? ";
 
-	if($itemtype != -1 && $itemtype ne "" && $itemtype ne "ALL"){
-		$query .=" and tipo_documento = '".$itemtype."'";
-	}
+    if($itemtype != -1 && $itemtype ne "" && $itemtype ne "ALL"){
+        $query .=" and tipo_documento = '".$itemtype."'";
+    }
 
-	my $sth=$dbh->prepare($query);
-	$sth->execute($id1);
-	my $i=0;
-	while(my $data=$sth->fetchrow_hashref){
-		$ediciones[$i]->{'anio_publicacion'}=$data->{'anio_publicacion'};
-		$i++;
-	}
-	return(@ediciones);
+    my $sth=$dbh->prepare($query);
+    $sth->execute($id1);
+    my $i=0;
+    while(my $data=$sth->fetchrow_hashref){
+        $ediciones[$i]->{'anio_publicacion'}=$data->{'anio_publicacion'};
+        $i++;
+    }
+    return(@ediciones);
 }
 
 =item
@@ -441,23 +441,23 @@ obtenerGrupos
 Esta funcion devuelve los datos de los grupos a mostrar en una busaqueda dado un id1. Se puede filtrar por tipo de documento.
 =cut
 sub obtenerGrupos {
-	my ($id1,$itemtype,$type,$niveles2)=@_;
-	
-	#Obtenemos los niveles 2
-	if (!$niveles2){
+    my ($id1,$itemtype,$type,$niveles2)=@_;
+    
+    #Obtenemos los niveles 2
+    if (!$niveles2){
         $niveles2 = C4::AR::Nivel2::getNivel2FromId1($id1);
     }
-	
-	my @result;
-	my $res=0;
-	foreach my $nivel2 (@$niveles2){
-	    $result[$res]->{'id2'}=$nivel2->getId2;
+    
+    my @result;
+    my $res=0;
+    foreach my $nivel2 (@$niveles2){
+        $result[$res]->{'id2'}=$nivel2->getId2;
         $result[$res]->{'edicion'}= $nivel2->getEdicion;
-	    $result[$res]->{'anio_publicacion'}=$nivel2->getAnio_publicacion;
-	    $res++;
-	}
+        $result[$res]->{'anio_publicacion'}=$nivel2->getAnio_publicacion;
+        $res++;
+    }
 
-	return (\@result);
+    return (\@result);
 }
 
 =item
@@ -465,27 +465,27 @@ obtenerEstadoDeColeccion
 Esta funcion devuelve los datos de los fasciculos agrupados para años .
 =cut
 sub obtenerEstadoDeColeccion {
-	my ($id1,$itemtype,$type, $niveles2)=@_;
-	
-	my $cant_revistas=0;
-	#Obtenemos los niveles 2
+    my ($id1,$itemtype,$type, $niveles2)=@_;
+    
+    my $cant_revistas=0;
+    #Obtenemos los niveles 2
 
     if (!$niveles2){
-	   $niveles2 = C4::AR::Nivel2::getNivel2FromId1($id1);
+       $niveles2 = C4::AR::Nivel2::getNivel2FromId1($id1);
     }
-	
-	my %HoH = {}; 
-	foreach my $nivel2 (@$niveles2){
-		
-		if($nivel2->getTipoDocumento eq 'REV'){
-			$cant_revistas++;
+    
+    my %HoH = {}; 
+    foreach my $nivel2 (@$niveles2){
+        
+        if($nivel2->getTipoDocumento eq 'REV'){
+            $cant_revistas++;
             
-			my $anio='#';
+            my $anio='#';
             if($nivel2->getAnioRevista ne undef){
                 $anio = $nivel2->getAnioRevista;
             }
             
-			my $volumen='#';
+            my $volumen='#';
             if($nivel2->getVolumenRevista ne undef){
                 $volumen = C4::AR::Utilidades::trim($nivel2->getVolumenRevista);
             }
@@ -494,25 +494,25 @@ sub obtenerEstadoDeColeccion {
             if($nivel2->getNumeroRevista ne undef){
                 $numero = $nivel2->getNumeroRevista;
             }
-			
-			$HoH{$anio}->{$volumen}->{$numero}=$nivel2->getId2;
-			
-		}
-	}
+            
+            $HoH{$anio}->{$volumen}->{$numero}=$nivel2->getId2;
+            
+        }
+    }
 
 return ($cant_revistas,\%HoH);
 }
 
 
 sub obtenerDisponibilidadTotal{
-	my ($id1, $itemtype) = @_;
+    my ($id1, $itemtype) = @_;
 
-	my @disponibilidad;
+    my @disponibilidad;
 
     my ($cat_ref_tipo_nivel3_array_ref) = C4::AR::Nivel3::getNivel3FromId1($id1);
 
-	
-	my $cant_para_domicilio     = 0;
+    
+    my $cant_para_domicilio     = 0;
     my $cant_para_sala          = 0;
     my $cant_no_disponible      = 0;
     my $i                       = 0;
@@ -534,7 +534,7 @@ sub obtenerDisponibilidadTotal{
             C4::AR::Debug::debug("Busquedas => obtenerDisponibilidadTotal => NO DISPONIBLE ");
             $cant_no_disponible++;
         }
-	}
+    }
 
     $disponibilidad[$i]->{'tipoPrestamo'}   = "Domicilio";
     $disponibilidad[$i]->{'domicilio'}      = 1;
@@ -549,7 +549,7 @@ sub obtenerDisponibilidadTotal{
     $disponibilidad[$i]->{'prestados'}      = "Prestados: ".C4::AR::Prestamos::getCountPrestamosDelRegistro($id1);
     $disponibilidad[$i]->{'reservados'}     = "Reservados: ".C4::AR::Reservas::cantReservasPorNivel1($id1);
 
-	return(@disponibilidad);
+    return(@disponibilidad);
 }
 
 
@@ -561,23 +561,23 @@ buscarSubCamposMARC
 Busca los subcampos correspondiente al parametro de campo y que no sean propios de una tabla de nivel, solo los que estan en tablas de nivel repetibles.
 =cut
 sub buscarSubCamposMARC{
-	my ($campo) =@_;
-	my $dbh = C4::Context->dbh;
-	my $query="SELECT subcampo FROM pref_estructura_subcampo_marc ";
-	$query .=" WHERE nivel > 0 AND campo = ? ";
-	my $mapeo=&buscarSubCamposMapeo($campo);
-	foreach my $llave (keys %$mapeo){
-		$query.=" AND (subcampo <> '".$mapeo->{$llave}->{'subcampo'}."' ) ";
-	}
-	my $sth=$dbh->prepare($query);
+    my ($campo) =@_;
+    my $dbh = C4::Context->dbh;
+    my $query="SELECT subcampo FROM pref_estructura_subcampo_marc ";
+    $query .=" WHERE nivel > 0 AND campo = ? ";
+    my $mapeo=&buscarSubCamposMapeo($campo);
+    foreach my $llave (keys %$mapeo){
+        $query.=" AND (subcampo <> '".$mapeo->{$llave}->{'subcampo'}."' ) ";
+    }
+    my $sth=$dbh->prepare($query);
         $sth->execute($campo);
-	my @results;
-	while(my $data=$sth->fetchrow_hashref){
-		push (@results, $data->{'subcampo'});
-	}
+    my @results;
+    while(my $data=$sth->fetchrow_hashref){
+        push (@results, $data->{'subcampo'});
+    }
 
-	$sth->finish;
-	return (@results);
+    $sth->finish;
+    return (@results);
 }
 
 
@@ -587,74 +587,74 @@ buscarNivel2EnMARC
 Busca los datos de la tabla nivel2 y nivel2_repetibles y los devuelve en formato MARC (campo,subcampo,dato).
 =cut
 sub buscarNivel2EnMARC{
-	my ($id1)=@_;
+    my ($id1)=@_;
 # open(A, ">>/tmp/debug.txt");
 # print A "\n";
 # print A "desde buscarNivel2EnMARC \n";
-	my $dbh = C4::Context->dbh;
-	my @nivel2=&buscarNivel2PorId1($id1);
-	my $mapeo=&buscarMapeo('cat_nivel2');
-	my $id2;
-	my $itemtype;
-	my $llave;
-	my $i=0;
-	my $dato;
-	my @nivel2Comp;
-	foreach my $row(@nivel2){
-		$id2=$row->{'id2'};
-		$itemtype=$row->{'itemtype'};
-		$nivel2Comp[$i]->{'id2'}=$id2;
-# print A "			fila: ".$i."\n";
-# print A "			id2: ".$id2."\n";
-# print A "			itemtype: ".$itemtype."\n";
-		$nivel2Comp[$i]->{'itemtype'}=$itemtype;
-		foreach my $llave (keys %$mapeo){
-			$dato= $row->{$mapeo->{$llave}->{'campoTabla'}};
-			$nivel2Comp[$i]->{$llave}=$dato;
+    my $dbh = C4::Context->dbh;
+    my @nivel2=&buscarNivel2PorId1($id1);
+    my $mapeo=&buscarMapeo('cat_nivel2');
+    my $id2;
+    my $itemtype;
+    my $llave;
+    my $i=0;
+    my $dato;
+    my @nivel2Comp;
+    foreach my $row(@nivel2){
+        $id2=$row->{'id2'};
+        $itemtype=$row->{'itemtype'};
+        $nivel2Comp[$i]->{'id2'}=$id2;
+# print A "         fila: ".$i."\n";
+# print A "         id2: ".$id2."\n";
+# print A "         itemtype: ".$itemtype."\n";
+        $nivel2Comp[$i]->{'itemtype'}=$itemtype;
+        foreach my $llave (keys %$mapeo){
+            $dato= $row->{$mapeo->{$llave}->{'campoTabla'}};
+            $nivel2Comp[$i]->{$llave}=$dato;
 # print A "llave ".$llave."\n";
 # print A "dato ".$dato."\n";
-			$nivel2Comp[$i]->{'campo'}= $mapeo->{$llave}->{'campo'};
-			$nivel2Comp[$i]->{'subcampo'}= $mapeo->{$llave}->{'subcampo'};
-# 			$i++;
-		}
-		my $query="SELECT * FROM cat_nivel2_repetible WHERE id2=?";
-		my $sth=$dbh->prepare($query);
-        	$sth->execute($id2);
-		while (my $data=$sth->fetchrow_hashref){
-			$llave=$data->{'campo'}.",".$data->{'subcampo'};
+            $nivel2Comp[$i]->{'campo'}= $mapeo->{$llave}->{'campo'};
+            $nivel2Comp[$i]->{'subcampo'}= $mapeo->{$llave}->{'subcampo'};
+#           $i++;
+        }
+        my $query="SELECT * FROM cat_nivel2_repetible WHERE id2=?";
+        my $sth=$dbh->prepare($query);
+            $sth->execute($id2);
+        while (my $data=$sth->fetchrow_hashref){
+            $llave=$data->{'campo'}.",".$data->{'subcampo'};
 
-			$nivel2Comp[$i]->{'campo'}= $data->{'campo'};
-			$nivel2Comp[$i]->{'subcampo'}= $data->{'subcampo'};
+            $nivel2Comp[$i]->{'campo'}= $data->{'campo'};
+            $nivel2Comp[$i]->{'subcampo'}= $data->{'subcampo'};
 
-			if(not exists($nivel2Comp[$i]->{$llave})){
-				$nivel2Comp[$i]->{$llave}= $data->{'dato'};#FALTA BUSCAR REFERENCIA SI ES QUE TIENE!!!!
-			}
-			else{
-				$nivel2Comp[$i]->{$llave}.= " *?* ".$data->{'dato'};
-			}
-# 			$i++;
+            if(not exists($nivel2Comp[$i]->{$llave})){
+                $nivel2Comp[$i]->{$llave}= $data->{'dato'};#FALTA BUSCAR REFERENCIA SI ES QUE TIENE!!!!
+            }
+            else{
+                $nivel2Comp[$i]->{$llave}.= " *?* ".$data->{'dato'};
+            }
+#           $i++;
 # print A "llave ".$llave."\n";
 # print A "dato ".$data->{'dato'}."\n";
-		}
- 		$i++;
+        }
+        $i++;
 # print A "*****************************************Otra HASH********************************************** \n"
-	}
-	return \@nivel2Comp;
+    }
+    return \@nivel2Comp;
 }
 
 sub buscarDatoDeCampoRepetible {
-	my ($id,$campo,$subcampo,$nivel)=@_;
-	
-	my $niveln;
-	my $idn;
-	if ($nivel eq "1") {$niveln='cat_nivel1_repetible';$idn='id1';} elsif ($nivel eq "2"){$niveln='cat_nivel2_repetible';$idn='id2';} else {$niveln='cat_nivel3_repetible';$idn='id3';}
+    my ($id,$campo,$subcampo,$nivel)=@_;
+    
+    my $niveln;
+    my $idn;
+    if ($nivel eq "1") {$niveln='cat_nivel1_repetible';$idn='id1';} elsif ($nivel eq "2"){$niveln='cat_nivel2_repetible';$idn='id2';} else {$niveln='cat_nivel3_repetible';$idn='id3';}
 
-	my $dbh = C4::Context->dbh;
-	my $query="SELECT dato FROM ".$niveln." WHERE campo = ? and subcampo = ? and ".$idn." = ?;";
-	my $sth=$dbh->prepare($query);
-	$sth->execute($campo,$subcampo,$id);
-	my $data=$sth->fetchrow_hashref;
-	return $data->{'dato'};
+    my $dbh = C4::Context->dbh;
+    my $query="SELECT dato FROM ".$niveln." WHERE campo = ? and subcampo = ? and ".$idn." = ?;";
+    my $sth=$dbh->prepare($query);
+    $sth->execute($campo,$subcampo,$id);
+    my $data=$sth->fetchrow_hashref;
+    return $data->{'dato'};
 }
 
 sub getLevel{
@@ -670,15 +670,15 @@ sub getLevel{
 
 #Nivel bibliografico
 sub getLevels {
- 	my $dbh   = C4::Context->dbh;
-  	my $sth   = $dbh->prepare("select * from ref_nivel_bibliografico");
-  	my %resultslabels;
-  	$sth->execute;
-  	while (my $data = $sth->fetchrow_hashref) {
-   		$resultslabels{$data->{'code'}}= $data->{'description'};
-  	}
-  	$sth->finish;
-  	return(%resultslabels);
+    my $dbh   = C4::Context->dbh;
+    my $sth   = $dbh->prepare("select * from ref_nivel_bibliografico");
+    my %resultslabels;
+    $sth->execute;
+    while (my $data = $sth->fetchrow_hashref) {
+        $resultslabels{$data->{'code'}}= $data->{'description'};
+    }
+    $sth->finish;
+    return(%resultslabels);
 } # sub getlevels
 
 sub  getCountry{
@@ -693,15 +693,15 @@ sub  getCountry{
 }
 
 sub getCountryTypes{
-  	my $dbh   = C4::Context->dbh;
-  	my $sth   = $dbh->prepare("SELECT * FROM ref_pais ");
- 	 my %resultslabels;
-  	$sth->execute;
-  	while (my $data = $sth->fetchrow_hashref) {
-  		$resultslabels{$data->{'iso'}}= $data->{'printable_name'};	
-  	}
-  	$sth->finish;
-  	return(%resultslabels);
+    my $dbh   = C4::Context->dbh;
+    my $sth   = $dbh->prepare("SELECT * FROM ref_pais ");
+     my %resultslabels;
+    $sth->execute;
+    while (my $data = $sth->fetchrow_hashref) {
+        $resultslabels{$data->{'iso'}}= $data->{'printable_name'};  
+    }
+    $sth->finish;
+    return(%resultslabels);
 } # sub getcountrytypes
 
 sub getSupport{
@@ -717,15 +717,15 @@ sub getSupport{
 
 
 sub getSupportTypes{
-  	my $dbh   = C4::Context->dbh;
-  	my $sth   = $dbh->prepare("SELECT * FROM ref_soporte");
-  	my %resultslabels;
-  	$sth->execute;
-  	while (my $data = $sth->fetchrow_hashref) {
-    		$resultslabels{$data->{'idSupport'}}= $data->{'description'};	
-  	}
-  	$sth->finish;
-  	return(%resultslabels);
+    my $dbh   = C4::Context->dbh;
+    my $sth   = $dbh->prepare("SELECT * FROM ref_soporte");
+    my %resultslabels;
+    $sth->execute;
+    while (my $data = $sth->fetchrow_hashref) {
+            $resultslabels{$data->{'idSupport'}}= $data->{'description'};   
+    }
+    $sth->finish;
+    return(%resultslabels);
 } # sub getsupporttypes
 
 sub getLanguage{
@@ -740,43 +740,43 @@ sub getLanguage{
 }
 
 sub getLanguages{
- 	 my $dbh   = C4::Context->dbh;
-  	my $sth   = $dbh->prepare("SELECT * FROM ref_idioma");
-  	my %resultslabels;
-  	$sth->execute;
-  	while (my $data = $sth->fetchrow_hashref) {
-    		$resultslabels{$data->{'idLanguage'}}= $data->{'description'};	
-  	}
-  	$sth->finish;
-  	return(%resultslabels);
+     my $dbh   = C4::Context->dbh;
+    my $sth   = $dbh->prepare("SELECT * FROM ref_idioma");
+    my %resultslabels;
+    $sth->execute;
+    while (my $data = $sth->fetchrow_hashref) {
+            $resultslabels{$data->{'idLanguage'}}= $data->{'description'};  
+    }
+    $sth->finish;
+    return(%resultslabels);
 } # sub getlanguages
 
 sub getItemType {
- 	my ($type)=@_;
-  	my $dbh = C4::Context->dbh;
-  	my $sth=$dbh->prepare("SELECT nombre FROM cat_ref_tipo_nivel3 WHERE id_tipo_doc=?");
-  	$sth->execute($type);
-  	my $dat=$sth->fetchrow_hashref;
-  	$sth->finish;
+    my ($type)=@_;
+    my $dbh = C4::Context->dbh;
+    my $sth=$dbh->prepare("SELECT nombre FROM cat_ref_tipo_nivel3 WHERE id_tipo_doc=?");
+    $sth->execute($type);
+    my $dat=$sth->fetchrow_hashref;
+    $sth->finish;
 
-  	return ($dat->{'nombre'});
+    return ($dat->{'nombre'});
 }
 
 ## FIXME DEPRECATED
 sub getItemTypes {
- 	my $dbh   = C4::Context->dbh;
-  	my $sth   = $dbh->prepare("SELECT * FROM cat_ref_tipo_nivel3 ORDER BY nombre");
-  	my $count = 0;
-  	my @results;
+    my $dbh   = C4::Context->dbh;
+    my $sth   = $dbh->prepare("SELECT * FROM cat_ref_tipo_nivel3 ORDER BY nombre");
+    my $count = 0;
+    my @results;
 
-  	$sth->execute;
-  	while (my $data = $sth->fetchrow_hashref) {
-    		$results[$count] = $data;
-    		$count++;
-  	}
+    $sth->execute;
+    while (my $data = $sth->fetchrow_hashref) {
+            $results[$count] = $data;
+            $count++;
+    }
 
-  	$sth->finish;
-  	return($count, @results);
+    $sth->finish;
+    return($count, @results);
 } # sub getitemtypes
 
 =item getborrowercategory
@@ -786,13 +786,13 @@ description for a comprehensive information display.
 =cut
 ## FIXME DEPRECATEDDDDDDDDDDDDDDDDDD C4::AR::Busquedas::getborrowercategory
 sub getborrowercategory{
-	my ($catcode) = @_;
-	my $dbh = C4::Context->dbh;
-	my $sth = $dbh->prepare("SELECT description FROM usr_ref_categoria_socio WHERE categorycode = ?");
-	$sth->execute($catcode);
-	my $description = $sth->fetchrow();
-	$sth->finish();
-	return $description;
+    my ($catcode) = @_;
+    my $dbh = C4::Context->dbh;
+    my $sth = $dbh->prepare("SELECT description FROM usr_ref_categoria_socio WHERE categorycode = ?");
+    $sth->execute($catcode);
+    my $description = $sth->fetchrow();
+    $sth->finish();
+    return $description;
 } # sub getborrowercategory
 
 sub getAvail{
@@ -808,28 +808,28 @@ sub getAvail{
 
 #Disponibilidad
 sub getAvails {
-  	my $dbh   = C4::Context->dbh;
-  	my $sth   = $dbh->prepare("select * from ref_disponibilidad");
-  	my %resultslabels;
-  	$sth->execute;
-  	while (my $data = $sth->fetchrow_hashref) {
-    		$resultslabels{$data->{'codigo'}}= $data->{'nombre'};
-  	}
-  	$sth->finish;
-  	return(%resultslabels);
+    my $dbh   = C4::Context->dbh;
+    my $sth   = $dbh->prepare("select * from ref_disponibilidad");
+    my %resultslabels;
+    $sth->execute;
+    while (my $data = $sth->fetchrow_hashref) {
+            $resultslabels{$data->{'codigo'}}= $data->{'nombre'};
+    }
+    $sth->finish;
+    return(%resultslabels);
 } # sub getavails
 
 
 #Temas, toma un id de tema y devuelve la descripcion del tema.
 sub getTema{
-	my ($idTema)=@_;
-	my $dbh = C4::Context->dbh;
+    my ($idTema)=@_;
+    my $dbh = C4::Context->dbh;
         my $query = "SELECT * from cat_tema where id = ? ";
         my $sth = $dbh->prepare($query);
         $sth->execute($idTema);
         my $tema=$sth->fetchrow_hashref;
         $sth->finish();
-	return($tema);
+    return($tema);
 }
 
 =item
@@ -838,14 +838,14 @@ Devuelve el nombre de la localidad que se pasa por parametro.
 =cut
 ## FIXME DEPRECATEDDDDDDDDDDDDDDDDDD   C4::AR::Busquedas::getNombreLocalidad
 sub getNombreLocalidad{
-	my ($catcode) = @_;
-	my $dbh = C4::Context->dbh;
-	my $sth = $dbh->prepare("SELECT nombre FROM ref_localidad WHERE localidad = ?");
-	$sth->execute($catcode);
-	my $description = $sth->fetchrow();
-	$sth->finish();
-	if ($description) {return $description;}
-	else{return "";}
+    my ($catcode) = @_;
+    my $dbh = C4::Context->dbh;
+    my $sth = $dbh->prepare("SELECT nombre FROM ref_localidad WHERE localidad = ?");
+    $sth->execute($catcode);
+    my $description = $sth->fetchrow();
+    $sth->finish();
+    if ($description) {return $description;}
+    else{return "";}
 }
 
 =item
@@ -855,16 +855,16 @@ Devuelve una hash con todas bibliotecas y sus relaciones.
 
 sub getBranches {
 # returns a reference to a hash of references to branches...
-	my %branches;
-	my $dbh = C4::Context->dbh;
-	my $sth=$dbh->prepare("	SELECT pref_unidad_informacion.*,categorycode 
-				FROM pref_unidad_informacion INNER JOIN pref_relacion_unidad_informacion 
-				ON pref_unidad_informacion.id_ui=pref_relacion_unidad_informacion.branchcode");
-	$sth->execute;
-	while (my $branch=$sth->fetchrow_hashref) {
-		$branches{$branch->{'id_ui'}}=$branch;
-	}
-	return (\%branches);
+    my %branches;
+    my $dbh = C4::Context->dbh;
+    my $sth=$dbh->prepare(" SELECT pref_unidad_informacion.*,categorycode 
+                FROM pref_unidad_informacion INNER JOIN pref_relacion_unidad_informacion 
+                ON pref_unidad_informacion.id_ui=pref_relacion_unidad_informacion.branchcode");
+    $sth->execute;
+    while (my $branch=$sth->fetchrow_hashref) {
+        $branches{$branch->{'id_ui'}}=$branch;
+    }
+    return (\%branches);
 }
 
 =item
@@ -981,10 +981,10 @@ sub busquedaAvanzada_newTemp{
         #le sacamos los acentos para que busque indistintamente
 #        $params->{'titulo'} = unac_string('utf8',$params->{'titulo'});
         $query .= ' @titulo "'.$keyword;
-	    if($params->{'tipo'} eq "normal"){
-	        $query .= "*";
-	    }
-	    $query .='"';
+        if($params->{'tipo'} eq "normal"){
+            $query .= "*";
+        }
+        $query .='"';
     }
 
     if($params->{'autor'} ne ""){
@@ -1068,11 +1068,11 @@ sub busquedaAvanzada_newTemp{
     my @id1_array;
     my $matches = $results->{'matches'};
 
-	C4::AR::Debug::debug("RESULTS ".$results);
-	
-	C4::AR::Utilidades::printARRAY($results->{'matches'});
+    C4::AR::Debug::debug("RESULTS ".$results);
+    
+    C4::AR::Utilidades::printARRAY($results->{'matches'});
 
-	C4::AR::Utilidades::printHASH($results);
+    C4::AR::Utilidades::printHASH($results);
 
     C4::AR::Debug::debug("CANTIDAD DE RESULTADOS EN DATOS ARRAY ".scalar(@$matches));
 
@@ -1172,32 +1172,32 @@ sub busquedaPorTema{
 }
 
 sub busquedaPorISBN{
-	
-	my ($isbn, $session, $obj_for_log) = @_;
-	
-	
-	$obj_for_log->{'match_mode'} = 'SPH_MATCH_PHRASE';
-	
-	$isbn = "isbn@".$isbn;
-	
-	my ($cantidad, $resultId1, $suggested) = C4::AR::Busquedas::busquedaCombinada_newTemp($isbn, $session, $obj_for_log);
-	
+    
+    my ($isbn, $session, $obj_for_log) = @_;
+    
+    
+    $obj_for_log->{'match_mode'} = 'SPH_MATCH_PHRASE';
+    
+    $isbn = "isbn@".$isbn;
+    
+    my ($cantidad, $resultId1, $suggested) = C4::AR::Busquedas::busquedaCombinada_newTemp($isbn, $session, $obj_for_log);
+    
 
-    return ($cantidad, $resultId1, $suggested);	
+    return ($cantidad, $resultId1, $suggested); 
 }
 
 sub busquedaPorEstante{
-	
-	my ($estante, $session, $obj) = @_;
-	my ($cantidad, $resultEstante) = C4::AR::Estantes::buscarEstante($estante,$obj->{'ini'},$obj->{'cantR'});
-	return ($cantidad, $resultEstante, 0);	
+    
+    my ($estante, $session, $obj) = @_;
+    my ($cantidad, $resultEstante) = C4::AR::Estantes::buscarEstante($estante,$obj->{'ini'},$obj->{'cantR'});
+    return ($cantidad, $resultEstante, 0);  
 }
 
 sub busquedaEstanteDeGrupo{
-	
-	my ($id2, $session, $obj) = @_;
-	my ($cantidad, $resultEstante) = C4::AR::Estantes::getEstantesById2($id2,$obj->{'ini'},$obj->{'cantR'});
-	return ($cantidad, $resultEstante, 0);	
+    
+    my ($id2, $session, $obj) = @_;
+    my ($cantidad, $resultEstante) = C4::AR::Estantes::getEstantesById2($id2,$obj->{'ini'},$obj->{'cantR'});
+    return ($cantidad, $resultEstante, 0);  
 }
 
 # TODO ver si se puede centralizar 
@@ -1290,13 +1290,13 @@ sub busquedaCombinada_ROSE{
     my $from_suggested = $obj_for_log->{'from_suggested'} || 0;
     my @searchstring_array = C4::AR::Utilidades::obtenerBusquedas($string_utf8_encoded);
     my $string_suggested;
-	my @filtros;    
+    my @filtros;    
     my $only_sphinx        = 0;
     my $only_available     = 0;
     
     if ($sphinx_options){
-	    $only_sphinx        = $sphinx_options->{'only_sphinx'} || 0;
-	    $only_available     = $sphinx_options->{'only_available'} || 0;
+        $only_sphinx        = $sphinx_options->{'only_sphinx'} || 0;
+        $only_available     = $sphinx_options->{'only_available'} || 0;
     }    
     my $sphinx = Sphinx::Search->new();
     my $ini    = $obj_for_log->{'ini'} || 0;
@@ -1304,8 +1304,8 @@ sub busquedaCombinada_ROSE{
 
     if ($only_sphinx){
         if ($sphinx_options->{'report'}){ 
-		    $ini    = 0;
-    		$cantR  = 0;
+            $ini    = 0;
+            $cantR  = 0;
        }
             
     }
@@ -1329,7 +1329,7 @@ sub busquedaCombinada_ROSE{
         } 
         elsif ($tipo eq 'SPH_MATCH_BOOLEAN'){
             if ($string eq "AND"){
-            	$string = " AND ";
+                $string = " AND ";
             }elsif ($string eq "OR"){
                 $string = "OR";
             }elsif ($string eq "NOT"){
@@ -1343,13 +1343,13 @@ sub busquedaCombinada_ROSE{
 
 
    if ($only_available){
-   	push(@filtros, ( string => { like => '%'.' "ref_disponibilidad_code%'.C4::Modelo::RefDisponibilidad::paraPrestamoValue.'"'.'%'}));
+    push(@filtros, ( string => { like => '%'.' "ref_disponibilidad_code%'.C4::Modelo::RefDisponibilidad::paraPrestamoValue.'"'.'%'}));
    }
 
    my $busqueda_rose = C4::Modelo::IndiceBusqueda::Manager->get_indice_busqueda( query => \@filtros,
-    																			  limit => $cantR,
-    																			  offset => $ini,
-    																			  sort_by => $orden,);
+                                                                                  limit => $cantR,
+                                                                                  offset => $ini,
+                                                                                  sort_by => $orden,);
 
 
 
@@ -1378,12 +1378,12 @@ sub busquedaCombinada_newTemp{
 
     my ($string_utf8_encoded,$session,$obj_for_log,$sphinx_options) = @_;
 
-	use Sphinx::Search;
+    use Sphinx::Search;
 
     # Se agregó para sacar los acentos y que no se mame el suggest, total es lo mismo porque
     # Sphinx busca con o sin acentos
     $string_utf8_encoded    = unac_string('utf8',$string_utf8_encoded);
-    # no se encodea nunca a utf8 antes de llegar aca	
+    # no se encodea nunca a utf8 antes de llegar aca    
     # $string_utf8_encoded    = Encode::decode_utf8($string_utf8_encoded);
 
     $session    =   $session || CGI::Session->load();
@@ -1396,8 +1396,8 @@ sub busquedaCombinada_newTemp{
     my $only_available     = 0;
     
     if ($sphinx_options){
-	    $only_sphinx        = $sphinx_options->{'only_sphinx'} || 0;
-	    $only_available     = $sphinx_options->{'only_available'} || 0;
+        $only_sphinx        = $sphinx_options->{'only_sphinx'} || 0;
+        $only_available     = $sphinx_options->{'only_available'} || 0;
     }    
     my $sphinx = Sphinx::Search->new();
 
@@ -1430,7 +1430,7 @@ sub busquedaCombinada_newTemp{
         } 
         elsif ($tipo eq 'SPH_MATCH_BOOLEAN'){
             if ($string eq "AND"){
-            	$string = "&";
+                $string = "&";
             }elsif ($string eq "OR"){
                 $string = "|";
             }elsif ($string eq "NOT"){
@@ -1489,8 +1489,8 @@ sub busquedaCombinada_newTemp{
 
 =item
 #NUEVO
-	$sphinx->SetLimits( 0, 10, 10 );
-	$sphinx->SetRankingMode( SPH_RANK_PROXIMITY_BM25 );
+    $sphinx->SetLimits( 0, 10, 10 );
+    $sphinx->SetRankingMode( SPH_RANK_PROXIMITY_BM25 );
 #FIN NUEVO
 =cut
     my $results = $sphinx->Query($query, $index_to_use);
@@ -1583,7 +1583,7 @@ sub busquedaSinPaginar {
 }
 
 sub toOAI{
-	
+    
     my ($resultId1)    = @_;
     use MARC::Crosswalk::DublinCore;
     use MARC::File::XML;
@@ -1614,6 +1614,8 @@ sub toOAI{
 
 sub armarInfoNivel1{
     my ($params, @resultId1)    = @_;
+
+    use C4::AR::PortadaNivel2;
 
     my $tipo_nivel3_name        = $params->{'tipo_nivel3_name'};
     my $only_available          = $params->{'only_available'};
@@ -1660,34 +1662,46 @@ sub armarInfoNivel1{
             }
 
             #se genera el estado de coleccion si se trata de revistas
-				  C4::AR::Debug::debug("REVISTA: se genera el estado de coleccion");
-				my ($cant_revistas ,$estadoDeColeccion)           = C4::AR::Busquedas::obtenerEstadoDeColeccion(@result_array_paginado[$i]->{'id1'}, $tipo_nivel3_name, "INTRA",$nivel2_array_ref);
-				@result_array_paginado[$i]->{'estadoDeColeccion'} = 0;
-				if($cant_revistas > 0){
-					@result_array_paginado[$i]->{'estadoDeColeccion'}  = $estadoDeColeccion;
-				}
-			
+                  C4::AR::Debug::debug("REVISTA: se genera el estado de coleccion");
+                my ($cant_revistas ,$estadoDeColeccion)           = C4::AR::Busquedas::obtenerEstadoDeColeccion(@result_array_paginado[$i]->{'id1'}, $tipo_nivel3_name, "INTRA",$nivel2_array_ref);
+                @result_array_paginado[$i]->{'estadoDeColeccion'} = 0;
+                if($cant_revistas > 0){
+                    @result_array_paginado[$i]->{'estadoDeColeccion'}  = $estadoDeColeccion;
+                }
+            
                         
             @result_array_paginado[$i]->{'cat_ref_tipo_nivel3'}     = C4::AR::Nivel2::getFirstItemTypeFromN1($nivel1->getId1,$nivel2_array_ref);
             @result_array_paginado[$i]->{'cat_ref_tipo_nivel3_name'}= C4::AR::Referencias::translateTipoNivel3(@result_array_paginado[$i]->{'cat_ref_tipo_nivel3'});
             my @nivel2_portadas = ();
+            my @nivel2_portadas_personalizadas = ();
+            my $cant;
 
             if (scalar(@$nivel2_array_ref)){
                 for(my $x=0;$x<scalar(@$nivel2_array_ref);$x++){
                     my %hash_nivel2 = {};
                     my $images_n2_hash_ref                      = $nivel2_array_ref->[$x]->getAllImage();
                     if ($images_n2_hash_ref){
-	                    $hash_nivel2{'portada_registro'}          =  $images_n2_hash_ref->{'S'};
-	                    $hash_nivel2{'portada_registro_medium'}   =  $images_n2_hash_ref->{'M'};
+                        $hash_nivel2{'portada_registro'}          =  $images_n2_hash_ref->{'S'};
+                        $hash_nivel2{'portada_registro_medium'}   =  $images_n2_hash_ref->{'M'};
                         $hash_nivel2{'portada_registro_big'}      =  $images_n2_hash_ref->{'L'};
                         $hash_nivel2{'grupo'}                     =  $nivel2_array_ref->[$x]->getId2;
                         push(@nivel2_portadas, \%hash_nivel2);
+                    }
+
+                    my %hash_nivel2_portadas = {};
+                    $cant = $nivel2_array_ref->[$x]->getCountPortadasEdicion($nivel2_array_ref->[$x]->getId2);
+                    if ($cant){
+                        $hash_nivel2_portadas{'portadas'}       =  $nivel2_array_ref->[$x]->getPortadasEdicion($nivel2_array_ref->[$x]->getId2);
+                        push(@nivel2_portadas_personalizadas, \%hash_nivel2_portadas);
                     }
                 }
 
                 @result_array_paginado[$i]->{'portadas_grupo'}  = \@nivel2_portadas;
                 @result_array_paginado[$i]->{'portadas_grupo_cant'}  = scalar(@nivel2_portadas);
+                @result_array_paginado[$i]->{'portadas_perzonalizadas_cant'}  = $cant;
+                @result_array_paginado[$i]->{'portadas_perzonalizadas'}  = \@nivel2_portadas_personalizadas;
             }
+            
             #se obtine la disponibilidad total 
             @result_array_paginado[$i]->{'rating'}              =  C4::AR::Nivel2::getRatingPromedio($nivel2_array_ref);
 
@@ -1882,49 +1896,49 @@ sub t_loguearBusqueda {
 
 
 sub logBusqueda{
-	my ($params,$session) = @_;
-	#esta funcion loguea las busquedas relizadas desde la INTRA u OPAC si:
-	#la preferencia del OPAC es 1 y estoy buscando desde OPAC  
-	#la preferencia de la INTRA es 1 y estoy buscando desde la INTRA
+    my ($params,$session) = @_;
+    #esta funcion loguea las busquedas relizadas desde la INTRA u OPAC si:
+    #la preferencia del OPAC es 1 y estoy buscando desde OPAC  
+    #la preferencia de la INTRA es 1 y estoy buscando desde la INTRA
 
-	my @search_array;
-	my $valorOPAC= C4::AR::Preferencias::getValorPreferencia("logSearchOPAC");
-	my $valorINTRA= C4::AR::Preferencias::getValorPreferencia("logSearchINTRA");
+    my @search_array;
+    my $valorOPAC= C4::AR::Preferencias::getValorPreferencia("logSearchOPAC");
+    my $valorINTRA= C4::AR::Preferencias::getValorPreferencia("logSearchINTRA");
 
     $session = $session || CGI::Session->load();
 
     
-	if( (($valorOPAC == 1)&&($params->{'type'} eq 'OPAC')) || (($valorINTRA == 1)&&($params->{'type'} eq 'INTRA')) ){
-		if($params->{'codBarra'} ne ""){
-			my $search;
-			$search->{'barcode'}= $params->{'codBarra'};
-			push (@search_array, $search);
-		}
+    if( (($valorOPAC == 1)&&($params->{'type'} eq 'OPAC')) || (($valorINTRA == 1)&&($params->{'type'} eq 'INTRA')) ){
+        if($params->{'codBarra'} ne ""){
+            my $search;
+            $search->{'barcode'}= $params->{'codBarra'};
+            push (@search_array, $search);
+        }
 
-		if($params->{'autor'} ne ""){
-			my $search;
-			$search->{'autor'}= $params->{'autor'};
-			push (@search_array, $search);
-		}
-	
-		if($params->{'titulo'} ne ""){
-			my $search;
-			$search->{'titulo'}= $params->{'titulo'};
-			push(@search_array, $search);
-		}
-	
-		if($params->{'tipo_nivel3_name'} != -1 && $params->{'tipo_nivel3_name'} ne ""){
-			my $search;
-			$search->{'tipo_documento'}= $params->{'tipo_nivel3_name'};
-			push (@search_array, $search);
-		}
+        if($params->{'autor'} ne ""){
+            my $search;
+            $search->{'autor'}= $params->{'autor'};
+            push (@search_array, $search);
+        }
+    
+        if($params->{'titulo'} ne ""){
+            my $search;
+            $search->{'titulo'}= $params->{'titulo'};
+            push(@search_array, $search);
+        }
+    
+        if($params->{'tipo_nivel3_name'} != -1 && $params->{'tipo_nivel3_name'} ne ""){
+            my $search;
+            $search->{'tipo_documento'}= $params->{'tipo_nivel3_name'};
+            push (@search_array, $search);
+        }
 
       
-		if($params->{'keyword'} != -1 && $params->{'keyword'} ne ""){
-			my $search;
-			$search->{'keyword'}= $params->{'keyword'};
-			push (@search_array, $search);
-		}
+        if($params->{'keyword'} != -1 && $params->{'keyword'} ne ""){
+            my $search;
+            $search->{'keyword'}= $params->{'keyword'};
+            push (@search_array, $search);
+        }
 
         if($params->{'string'} != -1 && $params->{'string'} ne ""){
             my $search;
@@ -1933,19 +1947,19 @@ sub logBusqueda{
         }
 
 
-		if($params->{'filtrarPorAutor'} ne ""){
-			my $search;
-			$search->{'filtrarPorAutor'}= $params->{'filtrarPorAutor'};
-			push(@search_array, $search);
-		}
-	}
+        if($params->{'filtrarPorAutor'} ne ""){
+            my $search;
+            $search->{'filtrarPorAutor'}= $params->{'filtrarPorAutor'};
+            push(@search_array, $search);
+        }
+    }
 
-	my ($error, $codMsg, $message)= C4::AR::Busquedas::t_loguearBusqueda(
-										$session->param('nro_socio'),
-										$params->{'type'},
+    my ($error, $codMsg, $message)= C4::AR::Busquedas::t_loguearBusqueda(
+                                        $session->param('nro_socio'),
+                                        $params->{'type'},
                                         $session->param('browser'),
-										\@search_array
-										);
+                                        \@search_array
+                                        );
 }
 
 
@@ -1954,39 +1968,39 @@ Esta funcion arma el string para mostrar en el cliente lo que a buscado,
 ademas escapa para evitar XSS
 =cut
 sub armarBuscoPor{
-	my ($params) = @_;
-	
-	my $buscoPor="";
+    my ($params) = @_;
+    
+    my $buscoPor="";
     my $str;
 
-	if(C4::AR::Utilidades::validateString($params->{'keyword'})){
+    if(C4::AR::Utilidades::validateString($params->{'keyword'})){
         $str      = C4::AR::Utilidades::verificarValor($params->{'keyword'});
         $buscoPor.= $str."&";
-	}
+    }
 
-	if( $params->{'tipo_nivel3_name'} != -1 &&  C4::AR::Utilidades::validateString($params->{'tipo_nivel3_name'})){
+    if( $params->{'tipo_nivel3_name'} != -1 &&  C4::AR::Utilidades::validateString($params->{'tipo_nivel3_name'})){
         if ($params->{'tipo_nivel3_name'} eq 'ALL'){
-        	$buscoPor.= C4::AR::Utilidades::verificarValor(C4::AR::Filtros::i18n("TODOS"))."&";
+            $buscoPor.= C4::AR::Utilidades::verificarValor(C4::AR::Filtros::i18n("TODOS"))."&";
         }else{
             $buscoPor.= Encode::decode_utf8((C4::AR::Utilidades::verificarValor(C4::AR::Referencias::translateTipoNivel3($params->{'tipo_nivel3_name'}))."&"));
         }
-	}
+    }
 
-	if( C4::AR::Utilidades::validateString($params->{'titulo'})){
+    if( C4::AR::Utilidades::validateString($params->{'titulo'})){
         $buscoPor.= ($params->{'titulo'})."&";  
-	}
-	
-	if( C4::AR::Utilidades::validateString($params->{'completo'})){
+    }
+    
+    if( C4::AR::Utilidades::validateString($params->{'completo'})){
         $buscoPor.= (C4::AR::Filtros::i18n("Autor").": ".$params->{'completo'})."&";
-	}
+    }
 
     if( C4::AR::Utilidades::validateString($params->{'autor'})){
         $buscoPor.= (C4::AR::Filtros::i18n("Autor").": ".$params->{'autor'})."&";
     }
 
-	if( C4::AR::Utilidades::validateString($params->{'signatura'})){
+    if( C4::AR::Utilidades::validateString($params->{'signatura'})){
         $buscoPor.= (C4::AR::Filtros::i18n("Signatura").": ".$params->{'signatura'})."&";
-	}
+    }
 
     if( C4::AR::Utilidades::validateString($params->{'isbn'})){
         $buscoPor.= "ISBN: ".($params->{'isbn'})."&";
@@ -2007,9 +2021,9 @@ sub armarBuscoPor{
         $buscoPor.= "Estantes virtuales de: ".($params->{'titulo_nivel_1'})."&";
     }   
 
-	if( C4::AR::Utilidades::validateString($params->{'codBarra'})){
+    if( C4::AR::Utilidades::validateString($params->{'codBarra'})){
         $buscoPor.= Encode::decode_utf8((C4::AR::Filtros::i18n("Barcode").": ".$params->{'codBarra'}))."&";
-	}		
+    }       
 
     if( C4::AR::Utilidades::validateString($params->{'date_begin'})){
         $buscoPor.= Encode::decode_utf8(C4::AR::Filtros::i18n("desde")." ".$params->{'date_begin'})."&";  
@@ -2023,44 +2037,44 @@ sub armarBuscoPor{
         $buscoPor.= C4::AR::Filtros::i18n("Solo disponibles")."&";  
     }
 
-	my @busqueda    = split(/&/,$buscoPor);
-	$buscoPor       = " ";
-	
-	foreach my $str (@busqueda){
-		$buscoPor.=", ".$str;
-	}
-	
-	$buscoPor = substr($buscoPor,2,length($buscoPor));
+    my @busqueda    = split(/&/,$buscoPor);
+    $buscoPor       = " ";
+    
+    foreach my $str (@busqueda){
+        $buscoPor.=", ".$str;
+    }
+    
+    $buscoPor = substr($buscoPor,2,length($buscoPor));
 
-	return $buscoPor;
+    return $buscoPor;
 }
 
 
 #*****************************************Soporte MARC************************************************************************
 #devuelve toda la info en MARC de un item (id3 de nivel 3)
 sub MARCRecordById3 {
-	my ($id3)= @_;
+    my ($id3)= @_;
 
-		my $nivel3= C4::AR::Nivel3::getNivel3FromId3($id3);
-		my $marc_record = MARC::Record->new_from_usmarc($nivel3->nivel1->getMarcRecord());
-		$marc_record->append_fields(MARC::Record->new_from_usmarc($nivel3->nivel2->getMarcRecord())->fields());
-		
-		##Agregamos el indice
-		if ($nivel3->nivel2->tiene_indice){
-			$marc_record->append_fields(MARC::Field->new(865, '', '', 'a' => $nivel3->nivel2->getIndice));
-		}
-		
-		$marc_record->append_fields(MARC::Record->new_from_usmarc($nivel3->getMarcRecord())->fields());
-	return $marc_record;
+        my $nivel3= C4::AR::Nivel3::getNivel3FromId3($id3);
+        my $marc_record = MARC::Record->new_from_usmarc($nivel3->nivel1->getMarcRecord());
+        $marc_record->append_fields(MARC::Record->new_from_usmarc($nivel3->nivel2->getMarcRecord())->fields());
+        
+        ##Agregamos el indice
+        if ($nivel3->nivel2->tiene_indice){
+            $marc_record->append_fields(MARC::Field->new(865, '', '', 'a' => $nivel3->nivel2->getIndice));
+        }
+        
+        $marc_record->append_fields(MARC::Record->new_from_usmarc($nivel3->getMarcRecord())->fields());
+    return $marc_record;
 }
 
 sub MARCRecordById3WithReferences {
-	my ($id3)= @_;
+    my ($id3)= @_;
 
-	my $marc_record = C4::AR::Busquedas::MARCRecordById3($id3);
-	
+    my $marc_record = C4::AR::Busquedas::MARCRecordById3($id3);
+    
     my $tipo_doc    = C4::AR::Catalogacion::getRefFromStringConArrobas($marc_record->subfield("910","a"));
-	foreach my $field ($marc_record->fields) {
+    foreach my $field ($marc_record->fields) {
         if(! $field->is_control_field){
             my $campo                       = $field->tag;
             my $indicador_primario_dato     = $field->indicator(1);
@@ -2068,112 +2082,112 @@ sub MARCRecordById3WithReferences {
             foreach my $subfield ($field->subfields()) {
                 my $subcampo                        = $subfield->[0];
                 my $dato                            = $subfield->[1];
-                my $nivel   	                    = C4::AR::EstructuraCatalogacionBase::getNivelFromEstructuraBaseByCampoSubcampo($campo, $subcampo);
+                my $nivel                           = C4::AR::EstructuraCatalogacionBase::getNivelFromEstructuraBaseByCampoSubcampo($campo, $subcampo);
                 if (C4::AR::Utilidades::trim($dato) ne ''){
-					$dato                           = C4::AR::Catalogacion::getRefFromStringConArrobasByCampoSubcampo($campo, $subcampo, $dato, $tipo_doc,$nivel);
-					my $datoFinal= C4::AR::Catalogacion::getDatoFromReferencia($campo, $subcampo, $dato,$tipo_doc,$nivel);
-					if($datoFinal){
-						$field->update( $subcampo => $datoFinal);
-					}
-				}
+                    $dato                           = C4::AR::Catalogacion::getRefFromStringConArrobasByCampoSubcampo($campo, $subcampo, $dato, $tipo_doc,$nivel);
+                    my $datoFinal= C4::AR::Catalogacion::getDatoFromReferencia($campo, $subcampo, $dato,$tipo_doc,$nivel);
+                    if($datoFinal){
+                        $field->update( $subcampo => $datoFinal);
+                    }
+                }
             }
-		}
-	}
-	return $marc_record;
+        }
+    }
+    return $marc_record;
 }
 
 
 sub MARCDetail{
-	my ($id3,$tipo)= @_;
+    my ($id3,$tipo)= @_;
 
-	my @MARC_result;
-	my $marc_array_nivel1;
-	my $marc_array_nivel2;
-	my $marc_array_nivel3;
+    my @MARC_result;
+    my $marc_array_nivel1;
+    my $marc_array_nivel2;
+    my $marc_array_nivel3;
 
-	my $nivel3_object= C4::AR::Nivel3::getNivel3FromId3($id3);
+    my $nivel3_object= C4::AR::Nivel3::getNivel3FromId3($id3);
 
 
-	if($nivel3_object ne 0){
-		($marc_array_nivel3)= $nivel3_object->toMARC;
-	}
-	if($nivel3_object->nivel2){
-		($marc_array_nivel2)= $nivel3_object->nivel2->toMARC;
-	}
-	if($nivel3_object->nivel1){
-		($marc_array_nivel1)= $nivel3_object->nivel1->toMARC;
-	}
+    if($nivel3_object ne 0){
+        ($marc_array_nivel3)= $nivel3_object->toMARC;
+    }
+    if($nivel3_object->nivel2){
+        ($marc_array_nivel2)= $nivel3_object->nivel2->toMARC;
+    }
+    if($nivel3_object->nivel1){
+        ($marc_array_nivel1)= $nivel3_object->nivel1->toMARC;
+    }
 
-	my @result;
-	push(@result, @$marc_array_nivel1);
-	push(@result, @$marc_array_nivel2);
-	push(@result, @$marc_array_nivel3);
-	
-	my @MARC_result_array;
+    my @result;
+    push(@result, @$marc_array_nivel1);
+    push(@result, @$marc_array_nivel2);
+    push(@result, @$marc_array_nivel3);
+    
+    my @MARC_result_array;
 # FIXME no es muy eficiente pero funciona, ver si se puede mejorar, orden cuadrado
-	
-	for(my $i=0; $i< scalar(@result); $i++){
-		my %hash;	
-		my $campo= @result[$i]->{'campo'};
-		my @info_campo_array;
-		C4::AR::Debug::debug("Proceso todos los subcampos del campo: ".$campo);
-	#	if(!_existeEnArregloDeCampoMARC(\@MARC_result_array, $campo) ){
-			#proceso todos los subcampos del campo
-		my $subcampos=$result[$i]->{'subcampos_array'};
-			for(my $j=0;$j < @$subcampos;$j++){
-				if(C4::AR::Utilidades::trim($subcampos->[$j]{'dato'})){
-					my %hash_temp;
-					$hash_temp{'subcampo'}= $subcampos->[$j]{'subcampo'};
-					$hash_temp{'liblibrarian'}= $subcampos->[$j]{'liblibrarian'};
-					$hash_temp{'dato'}= $subcampos->[$j]{'dato'};
-					push(@info_campo_array, \%hash_temp);
-					C4::AR::Debug::debug("campo, subcampo, dato: ".$result[$i]->{'campo'}.", ".$subcampos->[$j]{'subcampo'}.", ".$subcampos->[$j]{'liblibrarian'});
-				}
-			}
-			if(scalar(@info_campo_array)){
-				$hash{'campo'}= $campo;
-				$hash{'header'}= @result[$i]->{'header'};
-				$hash{'info_campo_array'}= \@info_campo_array;
-				push(@MARC_result_array, \%hash);
-	# 			C4::AR::Debug::debug("campo: ".$campo);
-				C4::AR::Debug::debug("cant subcampos: ".scalar(@info_campo_array));
-			}
-		#}
-	}
+    
+    for(my $i=0; $i< scalar(@result); $i++){
+        my %hash;   
+        my $campo= @result[$i]->{'campo'};
+        my @info_campo_array;
+        C4::AR::Debug::debug("Proceso todos los subcampos del campo: ".$campo);
+    #   if(!_existeEnArregloDeCampoMARC(\@MARC_result_array, $campo) ){
+            #proceso todos los subcampos del campo
+        my $subcampos=$result[$i]->{'subcampos_array'};
+            for(my $j=0;$j < @$subcampos;$j++){
+                if(C4::AR::Utilidades::trim($subcampos->[$j]{'dato'})){
+                    my %hash_temp;
+                    $hash_temp{'subcampo'}= $subcampos->[$j]{'subcampo'};
+                    $hash_temp{'liblibrarian'}= $subcampos->[$j]{'liblibrarian'};
+                    $hash_temp{'dato'}= $subcampos->[$j]{'dato'};
+                    push(@info_campo_array, \%hash_temp);
+                    C4::AR::Debug::debug("campo, subcampo, dato: ".$result[$i]->{'campo'}.", ".$subcampos->[$j]{'subcampo'}.", ".$subcampos->[$j]{'liblibrarian'});
+                }
+            }
+            if(scalar(@info_campo_array)){
+                $hash{'campo'}= $campo;
+                $hash{'header'}= @result[$i]->{'header'};
+                $hash{'info_campo_array'}= \@info_campo_array;
+                push(@MARC_result_array, \%hash);
+    #           C4::AR::Debug::debug("campo: ".$campo);
+                C4::AR::Debug::debug("cant subcampos: ".scalar(@info_campo_array));
+            }
+        #}
+    }
 
-	#EL INDICE. Hay que ver si se puede subir, asi no queda desordenado. 
-	if($nivel3_object->nivel2->tiene_indice){
-		my %hash;
-		my @info_campo_array;
-		my %hash_temp;
-		$hash_temp{'subcampo'}= 'a';
-		$hash_temp{'liblibrarian'}= 'Índice';
-		$hash_temp{'dato'}= $nivel3_object->nivel2->getIndice;
-		push(@info_campo_array, \%hash_temp);
-		$hash{'campo'}= '865';
-		$hash{'header'}= 'Índice';
-		$hash{'info_campo_array'}= \@info_campo_array;
-		push(@MARC_result_array, \%hash);
-	}
-	
-	return (\@MARC_result_array);
-	
+    #EL INDICE. Hay que ver si se puede subir, asi no queda desordenado. 
+    if($nivel3_object->nivel2->tiene_indice){
+        my %hash;
+        my @info_campo_array;
+        my %hash_temp;
+        $hash_temp{'subcampo'}= 'a';
+        $hash_temp{'liblibrarian'}= 'Índice';
+        $hash_temp{'dato'}= $nivel3_object->nivel2->getIndice;
+        push(@info_campo_array, \%hash_temp);
+        $hash{'campo'}= '865';
+        $hash{'header'}= 'Índice';
+        $hash{'info_campo_array'}= \@info_campo_array;
+        push(@MARC_result_array, \%hash);
+    }
+    
+    return (\@MARC_result_array);
+    
 }
 
 =item
 Verifica si existe en el arreglo de campos el campo pasado por parametro
 =cut
 sub _existeEnArregloDeCampoMARC{
-	my ($array, $campo)= @_;
+    my ($array, $campo)= @_;
 
-	for(my $j=0;$j < scalar(@$array);$j++){
+    for(my $j=0;$j < scalar(@$array);$j++){
 
-		if(@$array->[$j]->{'campo'} eq $campo){
-			return 1;
-		}
-	}
+        if(@$array->[$j]->{'campo'} eq $campo){
+            return 1;
+        }
+    }
 
-	return 0;
+    return 0;
 }
 
 
@@ -2252,7 +2266,7 @@ sub getRegistrosFromRange {
 }
 
 sub cantServidoresExternos{
-	return (C4::Modelo::SysExternosMeran::Manager->get_sys_externos_meran_count());
+    return (C4::Modelo::SysExternosMeran::Manager->get_sys_externos_meran_count());
 }
 
 sub getServidoresExternos{

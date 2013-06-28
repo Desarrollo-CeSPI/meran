@@ -11,6 +11,7 @@ use vars qw(@EXPORT_OK @ISA);
 @EXPORT_OK  = qw(
           agregar
           getPortadasEdicion
+          getCountPortadasEdicion
 );
 
 
@@ -154,5 +155,20 @@ sub getPortadasEdicion{
     }
 }
 
+
+sub getCountPortadasEdicion{
+
+    my ($id2) = @_;
+
+    my @filtros;
+
+    use C4::Modelo::CatRegistroMarcN2Cover::Manager;
+        
+    push (@filtros, (id2 => {eq => $id2}) );
+    
+    my $portadas_edicion_array_ref_count = C4::Modelo::CatRegistroMarcN2Cover::Manager->get_cat_registro_marc_n2_cover_count( query => \@filtros,
+                                                                              );
+    return $portadas_edicion_array_ref_count;
+}
 
 1;

@@ -21,17 +21,17 @@
             <div class="well">
                 <div class="resultados_consulta">[% "Ha buscado por" | i18n %]: <strong>[% HTML.escape(buscoPor) %]</strong></div> 
             
-	            [% IF cantidad %]
-	                <div class="resultados_consulta">[% "Total de registros" | i18n %]: <b>[% cantidad %]</b>  en ([% timeSeg %] segundos)</div>
-	            [% END %]
+              [% IF cantidad %]
+                  <div class="resultados_consulta">[% "Total de registros" | i18n %]: <b>[% cantidad %]</b>  en ([% timeSeg %] segundos)</div>
+              [% END %]
 
                 [% IF !from_suggested %]
-			        [% IF suggested %]
-	                    <a href="#" onclick="buscarSuggested('[% suggested %]')">
-	                        [% "Usted quiso decir" | i18n %] <span style="font-style: italic">[% suggested %]</span>?
-	                    </a>
-			        [% END %]
-			    [% END %]
+              [% IF suggested %]
+                      <a href="#" onclick="buscarSuggested('[% suggested %]')">
+                          [% "Usted quiso decir" | i18n %] <span style="font-style: italic">[% suggested %]</span>?
+                      </a>
+              [% END %]
+          [% END %]
 
             </div>
         </section>    
@@ -62,14 +62,26 @@
             [% FOREACH SEARCH_RESULTS %]
                 <tr>
                      <td style="width: 60px;">
-                         [% IF portadas_grupo_cant > 0 %]
-                                 [% FOREACH portada IN portadas_grupo %]
-                                     [% IF loop.count < 4 %]
-                                   [% IF portada.portada_registro_big %]
-                                       <a class="fancylink" rel="group_[% grupo %]" href="/uploads/covers/[% portada.portada_registro_big %]">
-                                           <img alt="coverllll" src="/uploads/covers/[% portada.portada_registro %]" title="Portada" />
-                                       </a>
-                                   [% ELSE %]
+                      [% IF portadas_perzonalizadas_cant > 0 %]
+                             [% FOREACH portadas IN portadas_perzonalizadas %]
+                               [% FOREACH portada IN portadas %]
+                                [% IF loop.count < 4 %]
+                                  [% FOREACH p IN portada.value %]
+                                    <a class="fancylink" rel="group_[% grupo %]" href="/uploads/covers-added/[% p.image_name %]">
+                                      <img alt="coverllll" src="/uploads/covers-added/[% p.image_name %]" title="Portada" />
+                                   </a>
+                                [% END %]
+                               [% END %]
+                              [% END %]
+                            [% END %]
+                      [% ELSIF portadas_grupo_cant > 0 %]
+                             [% FOREACH portada IN portadas_grupo %]
+                                 [% IF loop.count < 4 %]
+                                     [% IF portada.portada_registro_big %]
+                                         <a class="fancylink" rel="group_[% grupo %]" href="/uploads/covers/[% portada.portada_registro_big %]">
+                                             <img alt="coverllll" src="/uploads/covers/[% portada.portada_registro %]" title="Portada" />
+                                         </a>
+                                     [% ELSE %]
                                        [% IF portada.portada_registro_medium %]
                                            <a class="fancylink" rel="group_[% grupo %]" href="/uploads/covers/[% portada.portada_registro_medium %]">
                                                <img alt="cover" src="/uploads/covers/[% portada.portada_registro %]" title="Portada" />
@@ -77,14 +89,14 @@
                                        [% ELSE %]
                                                <img alt="cover" src="/uploads/covers/[% portada.portada_registro %]" title="Portada" />
                                        [% END %]
-                                   [% END %]
-                                     [% END %]
-                                 [% END %]
-                         [% ELSE %]
-                               <img src="/uploads/covers/[% cat_ref_tipo_nivel3 %].png" 
-                                     alt="[% 'Sin Portada' | i18n %]"
-                                     title="[% 'Sin Portada' | i18n %]" />
-                         [% END %]
+                                    [% END %]
+                                  [% END %]
+                              [% END %]
+                       [% ELSE %]
+                             <img src="/uploads/covers/[% cat_ref_tipo_nivel3 %].png" 
+                                   alt="[% 'Sin Portada' | i18n %]"
+                                   title="[% 'Sin Portada' | i18n %]" />
+                       [% END %]
                          <br />
                          <center><div style="font-weight: bold; font-size: 10px; clear:both;" >[% cat_ref_tipo_nivel3_name %] </div></center>
                      </td>
@@ -110,77 +122,77 @@
                     </td>
             
                     <td style="[% IF estadoDeColeccion %] width: 200px;[% ELSE %] width: 120px; [% END %]"> 
-              						[% IF estadoDeColeccion %]
-              							<span id="coleccion_[% id1 %]">
-              							<ul class="listado_sin_margen estado_coleccion">
-              							[% FOREACH anio IN estadoDeColeccion.keys.sort %]
-              							[% IF estadoDeColeccion.$anio.keys %]
-              							<li>
-              								[% IF anio != '#' %]<b>[% anio %]</b>[% END %]
-              								[% FOREACH volumen IN estadoDeColeccion.$anio.keys.sort %]
-              									[% IF volumen != '#' %][% volumen  %][% END %]
-              									(
-              									[% FOREACH fasciculo IN estadoDeColeccion.$anio.$volumen.keys.sort %]
+                          [% IF estadoDeColeccion %]
+                            <span id="coleccion_[% id1 %]">
+                            <ul class="listado_sin_margen estado_coleccion">
+                            [% FOREACH anio IN estadoDeColeccion.keys.sort %]
+                            [% IF estadoDeColeccion.$anio.keys %]
+                            <li>
+                              [% IF anio != '#' %]<b>[% anio %]</b>[% END %]
+                              [% FOREACH volumen IN estadoDeColeccion.$anio.keys.sort %]
+                                [% IF volumen != '#' %][% volumen  %][% END %]
+                                (
+                                [% FOREACH fasciculo IN estadoDeColeccion.$anio.$volumen.keys.sort %]
 
-              										 [% PERL %]
-              											print C4::AR::Filtros::link_to( text =>     "[% HTML.escape(fasciculo) %]",
-              																			url=>"[% url_prefix %]/catalogacion/estructura/detalle.pl", 
-              																			params =>   ["id1=[% id1 %]","id2=[% estadoDeColeccion.$anio.$volumen.$fasciculo %]"],
-              																			title =>    "[% 'Mostrar Detalle del Registro' | i18n %]",
-              																			class => 	"link_to_detail"
-              																		) ;
-              										 [% END %]
+                                   [% PERL %]
+                                    print C4::AR::Filtros::link_to( text =>     "[% HTML.escape(fasciculo) %]",
+                                                    url=>"[% url_prefix %]/catalogacion/estructura/detalle.pl", 
+                                                    params =>   ["id1=[% id1 %]","id2=[% estadoDeColeccion.$anio.$volumen.$fasciculo %]"],
+                                                    title =>    "[% 'Mostrar Detalle del Registro' | i18n %]",
+                                                    class =>  "link_to_detail"
+                                                  ) ;
+                                   [% END %]
                                       
-              									[% END %]
-              									)
-              								[% END %]
-              							   </li>
-              							[% END %]
-              							[% END %]
-              							</ul>
-              							</span>
-              							
-              						  <script type="text/javascript">$("#coleccion_[% id1 %]").expander({
-              							  slicePoint: 2000, 
-              							  widow: 10,
-              							  expandEffect: 'fadeIn', 
+                                [% END %]
+                                )
+                              [% END %]
+                               </li>
+                            [% END %]
+                            [% END %]
+                            </ul>
+                            </span>
+                            
+                            <script type="text/javascript">$("#coleccion_[% id1 %]").expander({
+                              slicePoint: 2000, 
+                              widow: 10,
+                              expandEffect: 'fadeIn', 
                               expandText: '<i class="icon-arrow-down"></i>',
                               userCollapseText: '<i class="icon-arrow-up"></i>',
                               expandPrefix: '',
-              							});
-              						 </script>
-              						 
-              						[% ELSE %]
-              							[% IF grupos %]
-              								<span id="grupos_[% id1 %]">
+                            });
+                           </script>
+                           
+                          [% ELSE %]
+                            [% IF grupos %]
+                              <span id="grupos_[% id1 %]">
                                                   <ul class="listado_sin_margen">
-              									[% FOREACH grupos %]
+                                [% FOREACH grupos %]
                                                       [% valor = '' %]
-              										
+                                  
                                                       [% IF edicion %]
-              											[% valor = "<b>" _  edicion  _  "</b>" %]
-              										[% END %]
+                                    [% valor = "<b>" _  edicion  _  "</b>" %]
+                                  [% END %]
                                                       
                                                       [% IF anio_publicacion %]
                                                           [% IF valor %] [% valor = valor _ " " %] [% END %]
-              											[% valor = valor  _  "(" _  anio_publicacion  _  ")" %]
-              										[% END %]
+                                    [% valor = valor  _  "(" _  anio_publicacion  _  ")" %]
+                                  [% END %]
                                                       
                                                       [% IF valor %]<li> [% valor %] </li>[% END %]
-              									[% END %]
+                                [% END %]
                                                   </ul>
-              								</span>
-              						  <script type="text/javascript">$("#grupos_[% id1 %]").expander({
-              							  slicePoint: 2000, 
-              							  widow: 10,
-              							  expandEffect: 'fadeIn', 
+                              </span>
+                            <script type="text/javascript">$("#grupos_[% id1 %]").expander({
+                              slicePoint: 2000, 
+                              widow: 10,
+                              expandEffect: 'fadeIn', 
                               expandText: '<i class="icon-arrow-down"></i>',
                               userCollapseText: '<i class="icon-arrow-up"></i>',
                               expandPrefix: '',
-              							});
-              						 </script>
-              							[% END %]
-              						[% END %]
+                            });
+                           </script>
+                            [% END %]
+                          [% END %]
                     </td>
             
                     <td>
@@ -193,9 +205,9 @@
                     </td>   
                     [% IF signatura_filter %]
                         <td style="white-space: pre-line;">
-	                        [% FOREACH signatura IN signaturas %]
-	                            [% signatura %]
-	                        [% END %]
+                          [% FOREACH signatura IN signaturas %]
+                              [% signatura %]
+                          [% END %]
                         </td>
                     [% END %]
                 </tr>
