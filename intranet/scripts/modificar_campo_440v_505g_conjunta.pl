@@ -29,43 +29,62 @@ use C4::AR::Nivel2;
 #Pero hay que tener en cuenta que solo se deben migrar los 440^v cuando el 440^a y b estén vacíos, para asegurarnos que no se esté cambiando un número que sí pertenezca a una serie. 
 #Hasta ahora es el único error de migración real que apareció.
 
-my $campo_origen = '440'; 
-my $subcampo_origen = 'v'; 
-my $campo_destino = '550';
-my $subcampo_destino = 'g';
+
+sub trim{
+    my ($string) = @_;
+
+    $string =~ s/^\s+//;
+    $string =~ s/\s+$//;
+
+    return $string;
+}
+
+
 
 my $registros_array_ref = C4::AR::Nivel2::getAllNivel2();
 
- print "Modificando el campo 440v al 550g del nivel 2 \n";
+ print "Modificando el campo 440v al 505g del nivel 2 \n";
  my $st1 = time();
  #Procesamos los registros
  my $cantidad = scalar(@$registros_array_ref);
  my $registro=1;
+ my $registro_modificados=0;
    foreach my $nivel (@$registros_array_ref){
          my $marc_record = MARC::Record->new_from_usmarc($nivel->getMarcRecord());
          my $porcentaje= int (($registro * 100) / $cantidad );
          print "Procesando registro: $registro de $cantidad ($porcentaje%) \r";
 
         my $field = $marc_record->field('440');
-        if(($field)&&($field->subfield('v'))&&(!$field->subfield('a'))&&(!$field->subfield('b'))){
+        if(($field)&&(trim($field->subfield('v')))&&(!trim($field->subfield('a')))&&(!trim($field->subfield('b')))){
+
             #Es para migrar
             my $dato = $field->subfield('v');
             $field->delete_subfield(code => 'v');
             
-            my $field_dest = $marc_record->field('550');
+            my $field_dest = $marc_record->field('505');
             
             if ($field_dest){
-                #existe el campo 550
-                $field_dest->add_subfields( 'g' => $dato );
+                #existe el campo 505
+                    if(($field_dest->subfield('g')) &&(!trim($field_dest->subfield('g')))){
+                        #existe el subcampo pero esta vacío!!!
+                        $field_dest->update( 'g' => $dato );
+                    }
+                    else{
+                        $field_dest->add_subfields( 'g' => $dato );
+                        }
                 }
             else {
-                my $new_field = MARC::Field->new('550','','','g' => $dato);
+                my @subcampos_array;
+                push(@subcampos_array, ('g' => $dato));
+                my $new_field = MARC::Field->new('505','','',@subcampos_array);
                 $marc_record->append_fields($new_field);
                 }
-              print  $marc_record->as_formatted."\n";
-              
+            
+            print  $marc_record->as_formatted."\n";
+            
             $nivel->setMarcRecord($marc_record->as_usmarc);
             $nivel->save();
+            $registro_modificados++;
         }
      $registro++;
     }
@@ -75,6 +94,6 @@ my $registros_array_ref = C4::AR::Nivel2::getAllNivel2();
  my $tardo1=($end1 - $st1);
  my $min= $tardo1/60;
  print "Tardo $min minutos !!!\n";
-
+ print "Se modificaron $registro_modificados registros !!!\n";
 
 1;
