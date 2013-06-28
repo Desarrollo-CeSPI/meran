@@ -331,7 +331,6 @@
 
                         <td>	
                             [% IF NIVEL.titulo %]
-                                [% IF !NIVEL.estadoDeColeccion %]
                                     [% PERL %]
                                         print C4::AR::Filtros::link_to( text 		=>   "[% IF HTML.escape(NIVEL.titulo) %][% HTML.escape(NIVEL.titulo) %][% ELSE %]SIN T&Iacute;TULO[% END %]",
                                                                         url 		=>   "[% url_prefix %]/opac-detail.pl", 
@@ -340,9 +339,6 @@
     		                                                            on_click 	=> "startOverlay();"
                                                                     ) ;
                                     [% END %]
-                                [% ELSE %]
-                                    <p> [% HTML.escape(NIVEL.titulo) %] </p>
-                                [% END %]
                             [% ELSE %]
                                 &nbsp;
                             [% END %]
