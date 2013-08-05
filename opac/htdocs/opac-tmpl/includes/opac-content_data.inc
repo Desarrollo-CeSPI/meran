@@ -87,6 +87,9 @@
 				[% END %]	        
 	        </div>
 	        <div class="span4">
+
+miércoles
+
 	          	<h2>[% 'Ejemplares destacados' | i18n %]</h2>
 	           	<p>[% 'Revis&aacute; los ejemplares promovidos por la biblioteca' | i18n %].</p>
 				<p>

@@ -333,6 +333,7 @@ Se elimina el usuario
                                             debug           => 1,
             });
 
+
             $t_params->{'nro_socio'}        = $nro_socio;
             C4::AR::Validator::validateParams('U389',$obj,['nro_socio'] );
             #Obtenemos los datos del borrower
@@ -347,6 +348,8 @@ Se elimina el usuario
             $params{'default'}              = $socio->persona->documento->getId;
             #se genera el combo de tipos de documento
             my $comboDeTipoDeDoc            = C4::AR::Utilidades::generarComboTipoDeDocConValuesIds(\%params);
+
+            $params{'default'}              = $socio->ui->getId_ui();
             #se genera el combo de las bibliotecas
             my $comboDeUI                   = C4::AR::Utilidades::generarComboUI(\%params);
             
