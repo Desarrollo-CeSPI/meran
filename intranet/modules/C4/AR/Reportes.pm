@@ -1759,17 +1759,14 @@ sub getReporteCirculacionGeneral{
 
     # tabla circ_ref_tipo_prestamo 
     if ( C4::AR::Utilidades::validateString($tipoPrestamo) && $tipoPrestamo ne "SIN SELECCIONAR" ) {
-        C4::AR::Debug::debug("tipo prestamo");
         push(@filtros, ('tipo_prestamo_ref.id_tipo_prestamo' =>  {eq => $tipoPrestamo} ));
     }
 
     if ( C4::AR::Utilidades::validateString($categoria) ) {
-             C4::AR::Debug::debug("categoria");
         push(@filtros, ('socio.id_categoria' =>  {eq => $categoria} ));
     }
 
     if ( C4::AR::Utilidades::validateString($responsable) ) {
-        C4::AR::Debug::debug("responsable");
         push(@filtros, ('responsable_ref.nro_socio' =>  {eq => $responsable} ));
     }
 
@@ -1777,7 +1774,6 @@ sub getReporteCirculacionGeneral{
     my $hasta = C4::AR::Filtros::i18n('Hasta');
 
     if ($fecha_inicio && ($fecha_inicio ne $desde) && $fecha_fin && ($fecha_fin ne $hasta)) {
-        C4::AR::Debug::debug("fecha");
         $fecha_inicio   = C4::Date::format_date($fecha_inicio, "iso");
         $fecha_fin      = C4::Date::format_date($fecha_fin, "iso");
 
