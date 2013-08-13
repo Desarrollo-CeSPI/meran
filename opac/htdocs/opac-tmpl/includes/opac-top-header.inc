@@ -9,7 +9,7 @@
         <div id="opacLogo">
           [% IF ui.tieneLogoOpacMenu %]
           	<a href="[% url_prefix %]/opac-main.pl" class="logo_opac_menu">
-          		<img src="[% temas %]/[% user_theme %]/imagenes/[% logo %]" />
+          		<img src="/private-uploads/logos/[% logo %]" />
           	</a>
           [% ELSE %]
       			[% PERL %]

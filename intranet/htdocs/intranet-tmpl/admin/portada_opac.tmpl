@@ -80,8 +80,8 @@
 				[% FOREACH p IN portada %]
 				    <tr id="[% p.id %]">
 				        <td class="userImage">
-				            <a class="fancy_link" href="http://[% SERVER_ADDRESS_OPAC %]/opac-tmpl/uploads/portada/[% p.getImagePath %]">
-                                  <img border="0" src="http://[% SERVER_ADDRESS_OPAC %]/opac-tmpl/uploads/portada/[% p.getImagePath %]" alt >
+				            <a class="fancy_link" href="/uploads/portada/[% p.getImagePath %]">
+                                  <img border="0" src="/uploads/portada/[% p.getImagePath %]" alt >
 				            </a>
 			            </td>
                         <td>[% p.getFooterTitle %]</td>

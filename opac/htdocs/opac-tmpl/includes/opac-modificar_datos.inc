@@ -163,25 +163,13 @@ function checkPassword(){
             </section>
         </fieldset>
         <fieldset>
-            <legend>[% 'Personalizaci&oacute;n de visualizaci&oacute;n' | i18n %]</legend>
-            <section class="center-section-form">
-        	<br />
-            <div class="control-group">
-                <label class="control-label" for="temas_opac">[% 'Tema' |  i18n %] :</label>
-                <div class="controls">
-                    [% combo_temas %]
-                </div>
-            </div>
-            </section>
-        </fieldset>
-        <fieldset>
             <legend>[% 'Recordatorio de vencimiento de pr&eacute;stamos' | i18n %]</legend>
             <section class="center-section-form">
         	<br />
             <div class="control-group">
                     <label class="control-label" for="remindFlag">[% 'Recibir notificaci&oacute;nes' |  i18n %] :</label>
                     <div class="controls">
-                        <input type="checkbox" name="remindFlag" id="remindFlag" [% IF socio_data.remindFlag %] checked="checked" [% END %]/> 
+                        <input type="checkbox" name="remindFlag" id="remindFlag" [% IF socio_data.remindFlag %] checked="checked" [% END %] tabindex="18"/> 
                     </div>
                 </div>
             </section>
