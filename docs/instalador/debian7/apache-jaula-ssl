@@ -60,7 +60,7 @@ Alias /includes/ reemplazarPATHBASE/reemplazarID/includes/
 ServerSignature Off
 
 Alias /uploads/covers/ "reemplazarPATHBASE/reemplazarID/files/intranet/uploads/covers/"
-<Directory "reemplazarPATHBASE/reemplazarID/files/intranet/uploads/covers/" >
+<Directory reemplazarPATHBASE/reemplazarID/files/intranet/uploads/covers/ >
   Order allow,deny
   Allow from all
 </Directory>
