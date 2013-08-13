@@ -101,7 +101,6 @@ if ($accion) {
     
 }	    
 
-$t_params->{'logosPath'}        = C4::Context->config('logosOpacPath');
 $t_params->{'page_sub_title'}   = C4::AR::Filtros::i18n("Logos");
 
 C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);

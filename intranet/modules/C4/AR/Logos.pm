@@ -34,7 +34,6 @@ use vars qw(@EXPORT @ISA);
     eliminarLogo
     getPathLogoUI
     getPathLogoEtiquetas
-    deleteLogosUI
     deleteLogos
 );
 =item
@@ -145,19 +144,7 @@ sub eliminarLogoUI{
     return ($msg_object);
     
 }
-sub deleteLogosUI{
-    my ($db)        = @_;
-    
-    my $logos       = C4::Modelo::LogoUI::Manager->get_logoUI(db => $db);
-    my $uploaddir   = C4::Context->config('opachtdocs') . '/temas/' 
-                    . C4::AR::Preferencias::getValorPreferencia('tema_opac_default') 
-                    . '/imagenes'; 
-    foreach my $logo (@$logos){
-        my $image_name = $logo->getImagenPath();
-        unlink($uploaddir."/".$image_name);
-        $logo->delete();
-    }
-}
+
 sub deleteLogos{
     my ($db)        = @_;
     
@@ -194,8 +181,6 @@ sub agregarLogoUI{
     $db->{connect_options}->{AutoCommit} = 0;
     $db->begin_work;
     eval{
-        #borramos algun logo que este, para pisarlo con este nuevo
-        deleteLogosUI($db);
         my $code = C4::AR::Preferencias::getValorPreferencia('defaultUI').'-UI';
         
         $logo->setNombre( $code);

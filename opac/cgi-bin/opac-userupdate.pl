@@ -66,7 +66,6 @@ $data_hash{'actual_password'}       = $input->param('actual_password');
 $data_hash{'new_password1'}         = $input->param('new_password1');
 $data_hash{'new_password2'}         = $input->param('new_password2');
 $data_hash{'key'}                   = $input->param('key');
-$data_hash{'tema'}                  = $input->param('temas_opac') || 0;
 
 if($input->param('remindFlag') eq "on"){
     $data_hash{'remindFlag'}        = 1;

@@ -309,18 +309,13 @@ sub tieneLogoOpacMenu{
     use C4::AR::Logos;
 	
 	my $tema_opac   = C4::AR::Preferencias::getValorPreferencia('tema_opac_default') || $self->getId_ui;
-    my $logo =
-        C4::Context->config('opachtdocs') . '/temas/'
-      . $tema_opac
-      . '/imagenes/' . C4::AR::Logos::getNombreLogoUI();
+    my $logo = C4::Context->config('logosIntraPath') . '/' . C4::AR::Logos::getNombreLogoUI();
 
-    C4::AR::Debug::debug("TIENE LOGO OPAC MENU: ".$logo);
     if ( -e $logo ){
     	return 1;
     }else{
     	return 0;
     }
-    
 }
 
 sub getAll{

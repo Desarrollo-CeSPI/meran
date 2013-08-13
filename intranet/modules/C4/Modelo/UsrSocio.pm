@@ -96,7 +96,7 @@ sub buildFotoNameHash{
     use Digest::SHA;
     my $hash;
     
-    $hash = Digest::SHA::sha1_hex($self->getId_persona.$self->getNro_socio.$self->getId_ui.$self->getId_socio).".jpg";
+    $hash = Digest::SHA::sha1_hex($self->getId_persona.$self->getNro_socio.$self->getId_ui.$self->getId_socio);
     
     return $hash;
 }
