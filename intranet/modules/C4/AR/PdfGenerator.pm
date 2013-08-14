@@ -918,7 +918,6 @@ sub generateBookLabelA4 {
 
     #NEW WAY: trae el nombre del archivo o 0 si no hay nada
     my $escudo = C4::AR::Logos::getPathLogoEtiquetas();
-
     if ( !($escudo) ) {
         $escudo = C4::Context->config('private_path') . '/images/escudo-DEFAULT.jpg';
         $pdf->addImgScaled($escudo, $x + 85 , 122 + ($y) , 2.5/100);
@@ -1034,7 +1033,6 @@ sub generateBookLabel{
 
     #NEW WAY, trae el path al archivo, 0 si no hay ninguno cargado
     my $escudo = C4::AR::Logos::getPathLogoEtiquetas();
-
     if ( !(  $escudo ) ) {
         $escudo = C4::Context->config('private_path') . '/images/escudo-DEFAULT.jpg';
         $pdf->addImgScaled($escudo, $x + 105, $y + 40, 2.5/100);
