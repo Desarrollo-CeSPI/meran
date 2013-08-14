@@ -22,6 +22,7 @@
         objAH_repE.titulo            = $('#titulo').val();
         objAH_repE.autor             = $('#autor').val();
         objAH_repE.codBarra          = $('#codBarra').val();
+        objAH_repE.signatura         = $('#signatura').val();
         //  objAH_repE.asc                = ASC;
         objAH_repE.tipoAccion        = 'REPORTE_GEN_ETIQUETAS';
         //  se setea la funcion para cambiar de pagina
@@ -72,7 +73,8 @@
 
           if (  (jQuery.trim($('#titulo').val()) != '') ||
                 (jQuery.trim($('#autor').val()) != '') ||
-                (jQuery.trim($('#codBarra').val()) != '')
+                (jQuery.trim($('#codBarra').val()) != '')||
+                (jQuery.trim($('#signatura').val()) != '')
              ){ 
                 busqueda();
               }
