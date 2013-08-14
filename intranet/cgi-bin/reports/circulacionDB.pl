@@ -59,10 +59,22 @@ if($tipoAccion eq "EXPORT_CIRC"){
                                         
     });
 
-    $obj->{'categoriaSocio'}    =  $obj->{'categoria_socio_id'};
+
+
+    $obj->{'categoriaSocio'}    =  $obj->{'categoriaSocioReservas'};
+    $obj->{'tipoDoc'}           =  $obj->{'tipo_documento_id'};
     $obj->{'fecha_inicio'}      =  $obj->{'date-from'};
     $obj->{'fecha_fin'}         =  $obj->{'date-to'};
+    $obj->{'titulo'}            =  $obj->{'titulo'};
+    $obj->{'autor'}             =  $obj->{'autor'};
+    $obj->{'edicion'}           =  $obj->{'edicion'};
+    $obj->{'estadoReserva'}     =  $obj->{'estadoReserva'};
+    $obj->{'signatura'}         =  $obj->{'signatura'};
+
     
+    C4::AR::Debug::debug("MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM");
+    C4::AR::Debug::debug($obj->{'autor'});
+
     my ($results, $cantidad)    = C4::AR::Reportes::getReservasCirculacionToExport($obj);
 
     $t_params->{'cantidad'}     = $cantidad;
