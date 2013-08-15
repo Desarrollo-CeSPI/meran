@@ -56,31 +56,31 @@
 	                        [% FOREACH campo IN campos %]
 	                            <th class="click"> [% campo %]</th>
 	                        [% END %]
-	          
-    	                    <th>[% "Eliminar" | i18n %]</th>
-    	            
+	                        [% IF mostrar_asignar %]
+    	                        <th>[% "Asignar" | i18n %]</th>
+    	                    [% END %]
 	                    </tr>
 	                </thead>
 	                <tbody>
 	                        [% FOREACH dato IN datos %]
 	                          <tr>
 	                            [% dato.printAsTableElement %]
-	                 
-	                            <td>
-                        
-	                             [% PERL %]
-                                  print C4::AR::Filtros::action_button( 
-                                                                  button    => "btn btn-danger click",
-                                                                  action    => 'eliminarReferencia("[% tabla %]", "[% dato.getPkValue %]")', 
-                                                                  icon      => "icon-trash icon-white",
-                                                                  title     => "",
-                                                              ) ;
-
-
-                                [% END %]
-	                            	
-	                            </td>
-		                      
+	                            [% IF mostrar_asignar %]
+		                            <td>
+	                        
+		                             [% PERL %]
+	                                  print C4::AR::Filtros::action_button( 
+	                                                                  button    => "btn btn-warning click",
+	                                                                  action    => 'mostrarReferencias("[% tabla %]", "[% dato.getPkValue %]")', 
+	                                                                  icon      => "icon-move icon-white",
+	                                                                  title     => "",
+	                                                              ) ;
+	
+	
+	                                [% END %]
+		                            	
+		                            </td>
+		                        [% END %]
 	                          </tr>
 	                        [% END %]
 	                </tbody>
