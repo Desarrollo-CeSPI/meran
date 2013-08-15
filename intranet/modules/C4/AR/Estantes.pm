@@ -68,6 +68,7 @@ sub getEstante {
     C4::AR::Debug::debug("EN ESTANTES.PM");
     C4::AR::Debug::debug($id_estante);
 
+    C4::AR::Debug::debug("cuantos hay: ");
     use C4::Modelo::CatEstante;
     use C4::Modelo::CatEstante::Manager;
     my @filtros;
@@ -76,6 +77,31 @@ sub getEstante {
     my $estantes_array_ref = C4::Modelo::CatEstante::Manager->get_cat_estante( 
                                                                                 query => \@filtros,
                                                                                 #require_objects => ['contenido.nivel2.nivel1.IndiceBusqueda' ],
+                                                                                # require_objects => [ 'contenido.nivel2'],
+                                                                                );
+    
+    my $estante=  $estantes_array_ref->[0];
+
+    return ($estante);
+}
+
+
+sub getEstanteConContenido {
+    my ($id_estante,$orden) = @_;
+
+    C4::AR::Debug::debug("EN ESTANTES.PM");
+    C4::AR::Debug::debug($id_estante);
+
+    C4::AR::Debug::debug("cuantos hay: ");
+    use C4::Modelo::CatEstante;
+    use C4::Modelo::CatEstante::Manager;
+    my @filtros;
+    push(@filtros, ( id  => { eq => $id_estante} ));
+    
+    my $estantes_array_ref = C4::Modelo::CatEstante::Manager->get_cat_estante( 
+                                                                                query => \@filtros,
+                                                                                #require_objects => ['contenido.nivel2.nivel1.IndiceBusqueda' ],
+                                                                                require_objects => [ 'contenido.nivel2'],
                                                                                 );
     
     my $estante=  $estantes_array_ref->[0];

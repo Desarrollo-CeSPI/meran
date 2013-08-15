@@ -118,13 +118,7 @@
                       [% FOREACH contenido_estante IN estante.contenido %]
                           <tr>
                               <td>
-                                  [% PERL %]
-                                      print C4::AR::Filtros::link_to( text =>     "[% contenido_estante.nivel2.nivel1.getTitulo %]",
-                                                                      url =>      "[% url_prefix %]/opac-detail.pl", 
-                                                                      params =>   ["id1=[% contenido_estante.nivel2.id1 %]"],
-                                                                      title =>    "[% 'Mostrar Detalle del Ejemplar' | i18n %]"
-                                                                  ) ;
-                                  [% END %]
+
                               </td>
                               <td>
                                   [% PERL %]

@@ -58,12 +58,20 @@ else{
     eval{
         
         my $estante                     = C4::AR::Estantes::getEstante($id_estante);
-        my $subEstantes                 = C4::AR::Estantes::getSubEstantes($id_estante);
-        my $nombre                      = $estante->getEstante;
 
-        $t_params->{'estante'}          = $estante;
-        $t_params->{'SUBESTANTES'}      = $subEstantes ;
-        $t_params->{'cant_subestantes'} = @$subEstantes;      
+        if($estante){
+
+            my $subEstantes                 = C4::AR::Estantes::getSubEstantes($id_estante);
+            my $nombre                      = $estante->getEstante;
+
+            # $t_params->{'estante'}          = $estante;
+            $t_params->{'estante'}          = C4::AR::Estantes::getEstanteConContenido($id_estante);
+            $t_params->{'SUBESTANTES'}      = $subEstantes ;
+            $t_params->{'cant_subestantes'} = @$subEstantes;  
+
+        } else {
+            $t_params->{'mensaje'}          = "No existe el estante";
+        }   
     
     };
     if ($@){
