@@ -88,14 +88,25 @@
 	        </div>
 	</fieldset>
 	<div class="form-actions">
-	[% PERL %]
-      print C4::AR::Filtros::action_button(   
-                                          button   	=> "btn btn-primary",
-                                          action 	=> 'agregarRegistro("[% tabla %]");',
-                                          icon      => "icon-plus icon-white",
-                                          title   	=> " [% 'Agregar Registro' | i18n %]",
-              ) ;
-    [% END %]
-
+	[% IF mostrar_asignar %]
+		[% PERL %]
+	      print C4::AR::Filtros::action_button(   
+	                                          button   	=> "btn btn-primary",
+	                                          action 	=> 'agregarRegistro("[% tabla %]");',
+	                                          icon      => "icon-plus icon-white",
+	                                          id 		=> "agregar_registro",
+	                                          title   	=> " [% 'Agregar Registro' | i18n %]",
+	              ) ;
+	    [% END %]
+	[% ELSE %]
+		[% PERL %]
+	      print C4::AR::Filtros::action_button(   
+	                                          button   	=> "btn btn-primary",
+	                                          action 	=> 'obtenerTabla();',
+	                                          icon      => "icon-plus icon-white",
+	                                          title   	=> " [% 'Listo' | i18n %]",
+	              ) ;
+	    [% END %]
+	[% END %]
   </div>
 </div>

@@ -75,15 +75,21 @@ actualizarInstalacion(){
    echo "Se hará una actualización"
 	   if [ -d $DESTINO_MERAN/$ID ]; 
 	   then
-	     descomprimirArchivos
-      	 cambiarPermisos
+	       #Guardamos el sphinx.conf de la jaula
+         cp $DESTINO_MERAN/$ID/sphinx/etc/sphinx.conf /tmp/sphinx.conf
+         #Copiamos el código
+         descomprimirArchivos
+         #Volvemos a poner la conf de sphinx
+      	 cp -a /tmp/sphinx.conf $DESTINO_MERAN/$ID/sphinx/etc/sphinx.conf
+         #Cambiamos permisos
+         cambiarPermisos
          if [ -z $ROOT_PASS_BASE ]
-		 then
-			stty -echo
-			echo "Necesitamos un password para acceder al motor con el usuario $ROOT_USER_BASE."
-			read -p "Ingreselo:" ROOT_PASS_BASE
-			stty echo
-		 fi
+    		 then
+    			stty -echo
+    			echo "Necesitamos un password para acceder al motor con el usuario $ROOT_USER_BASE."
+    			read -p "Ingreselo:" ROOT_PASS_BASE
+    			stty echo
+    		 fi
          actualizarBDD
          /etc/init.d/apache2 restart
 	     break
@@ -104,10 +110,10 @@ generarLogRotate()
 generarJaula()
 {
   sed s/reemplazarPATHBASE/$(escaparVariable $DESTINO_MERAN)/g $sources_MERAN/debian$DEBIAN_VERSION/apache-jaula-ssl > /tmp/$ID-apache-jaula-tmp2
- sed s/reemplazarCONFMERAN/$(escaparVariable $CONFIGURACION_MERAN)/g /tmp/$ID-apache-jaula-tmp2 > /tmp/$ID-apache-jaula-tmp
+  sed s/reemplazarCONFMERAN/$(escaparVariable $CONFIGURACION_MERAN)/g /tmp/$ID-apache-jaula-tmp2 > /tmp/$ID-apache-jaula-tmp
   sed s/reemplazarID/$(escaparVariable $ID)/g /tmp/$ID-apache-jaula-tmp > /etc/apache2/sites-available/$ID-apache-jaula-ssl
   sed s/reemplazarPATHBASE/$(escaparVariable $DESTINO_MERAN)/g $sources_MERAN/debian$DEBIAN_VERSION/apache-jaula-opac > /tmp/$ID-apache-jaula-tmp2
- sed s/reemplazarCONFMERAN/$(escaparVariable $CONFIGURACION_MERAN)/g /tmp/$ID-apache-jaula-tmp2 > /tmp/$ID-apache-jaula-tmp
+  sed s/reemplazarCONFMERAN/$(escaparVariable $CONFIGURACION_MERAN)/g /tmp/$ID-apache-jaula-tmp2 > /tmp/$ID-apache-jaula-tmp
   sed s/reemplazarID/$(escaparVariable $ID)/g /tmp/$ID-apache-jaula-tmp > /etc/apache2/sites-available/$ID-apache-jaula-opac
   rm /tmp/$ID-apache-jaula-tmp
   #Generar certificado de apache
@@ -203,11 +209,11 @@ generarCrons()
 	
 		fi
 echo "
-			0 7 * * *      export PERL5LIB=$PERLLIBAUX; export MERAN_CONF=$CONFIGURACION_MERAN/meran$ID.conf; cd $DESTINO_MERAN/$ID/intranet/modules/ ; perl ../cgi-bin/cron/recordatorio_prestamos_vto.pl 2>&1
+			0 7 * * *      export PERL5LIB=$PERL_LIBAUX; export MERAN_CONF=$CONFIGURACION_MERAN/meran$ID.conf; cd $DESTINO_MERAN/$ID/intranet/modules/ ; perl ../cgi-bin/cron/recordatorio_prestamos_vto.pl 2>&1
 			0 * * * *      export PERL5LIB=$PERL_LIBAUX; export MERAN_CONF=$CONFIGURACION_MERAN/meran$ID.conf; cd $DESTINO_MERAN/$ID/intranet/modules/ ; perl ../cgi-bin/cron/mail_prestamos_vencidos.pl  2>&1
 			* * * * *      export PERL5LIB=$PERL_LIBAUX; export MERAN_CONF=$CONFIGURACION_MERAN/meran$ID.conf; cd $DESTINO_MERAN/$ID/intranet/modules/ ; perl ../cgi-bin/cron/procesarColaZ3950.pl  2>&1
 			* * * * *      export PERL5LIB=$PERL_LIBAUX; export MERAN_CONF=$CONFIGURACION_MERAN/meran$ID.conf; cd $DESTINO_MERAN/$ID/intranet/modules/ ; perl ../cgi-bin/cron/reindexar.pl 2>&1
-			0 0 * * *      export PERL5LIB=$PERL_LIBAUX; xport MERAN_CONF=$CONFIGURACION_MERAN/meran$ID.conf; cd $DESTINO_MERAN/$ID/intranet/modules/ ; perl ../cgi-bin/cron/obtener_portadas_de_registros.pl  2>&1
+			0 0 * * *      export PERL5LIB=$PERL_LIBAUX; export MERAN_CONF=$CONFIGURACION_MERAN/meran$ID.conf; cd $DESTINO_MERAN/$ID/intranet/modules/ ; perl ../cgi-bin/cron/obtener_portadas_de_registros.pl  2>&1
 			0 0 * * 6      export PERL5LIB=$PERL_LIBAUX; export MERAN_CONF=$CONFIGURACION_MERAN/meran$ID.conf; cd $DESTINO_MERAN/$ID/intranet/modules/ ; perl ../cgi-bin/cron/generar_indice.pl  2>&1" >>/tmp/$ID.crontab
 
   crontab /tmp/$ID.crontab

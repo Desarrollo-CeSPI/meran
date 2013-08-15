@@ -33,6 +33,7 @@
         objAH.categoriaSocio    = $('#categoriaSocioReservas').val();
         objAH.tipoDoc           = $('#tipo_documento_id').val();
         objAH.titulo            = $('#titulo').val();
+        objAH.autor             = $('#autor').val();
         objAH.edicion           = $('#edicion').val();
         objAH.estadoReserva     = $('#estadoReserva').val();
         objAH.fecha_inicio      = $('#date-from').val();
@@ -75,7 +76,7 @@
 </script>
 
 <div class="center_fieldset report_form_container">
-    <form class="form-horizontal" id="formReporteCiruculacion" action="[% url_prefix %]/reports/circulacionDB.pl">
+    <form class="form-horizontal" id="formReporteCirculacion" action="[% url_prefix %]/reports/circulacionDB.pl">
 
         <input type="hidden" name="tipoAccion" value="EXPORT_CIRC">
         
@@ -90,6 +91,15 @@
             <label class="control-label" for="tipo_documento_id">[% 'Tipo de documento' | i18n %]</label>
             <div class="controls">  
                 [% comboDeTipoDoc %]          
+            </div>
+        </div>
+
+        <div class="control-group">
+            <label class="control-label" for="autor">
+                [% "Autor" %]
+            </label>
+            <div class="controls">
+              <input type="text" size="25" name="autor" id="autor">
             </div>
         </div>
 
@@ -113,6 +123,7 @@
             <div class="controls">
                 <select name="estadoReserva" id="estadoReserva">
                     <option value="asignada">Asignada</option>
+                    <option value="espera">En espera</option>
                     <option value="cancelada">Cancelada</option>
                     <option value="vencida">Vencida</option>
                     <option value="TODAS">TODAS</option>

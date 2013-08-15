@@ -1,3 +1,4 @@
+
 [% IF cantidad %]
     <div class="well">
         <div class="resultados_consulta">[% "La cantidad de reservas es" | i18n %]: <strong>[% cantidad %]</strong></div>
@@ -11,10 +12,11 @@
             print C4::AR::Filtros::tableHeader(   
                               id              => "tablaResultCirculacion",
                               columns         => ['[% 'T&iacute;tulo' | i18n %]',
-                                                  '[% 'Cantidad de reservas' | i18n %]',
+                                                  '[% 'Autor' | i18n %]',
+                                                  '[% 'Fecha' | i18n %]',
+                                                  '[% 'Estado' | i18n %]',
                                                   '[% "C&oacute;digo de barras" | i18n %]',
                                                   '[% 'Signatura Topogr&aacute;fica' | i18n %]',
-                                                  '[% "Responsable" | i18n %]', 
                                                   '[% "Usuario" | i18n %]',
                                                   
                                                   ],
@@ -26,30 +28,40 @@
                                     ) ;
         [% END %]
 
-        <tbody>      
+        <tbody>
               [% FOREACH res IN results %]   
                 <tr>
                   <td>
-                      [% res.objeto.getTitulo %]
+                      [% res.nivel2.nivel1.getTitulo %]
                   </td>
                   <td>
-                      [% res.reservas %]
+                      [% res.nivel2.nivel1.getAutor %]
+                  </td>
+                  <td>
+                      [% res.getFecha_formateada %]
+                  </td>
+                  <td>
+                      [% res.tipo_operacion %]
                   </td>
                   <td>  
                       [% TRY %]
-                          [% res.nivel3.nivel3.getCodigoBarra %]
+                          [% res.nivel3.getCodigoBarra %]
                       [% CATCH %]
-                          Reserva de grupo
+                          [% IF res.tipo_operacion == "espera" %]
+                            Sin Codigo de Barras
+                          [% ELSE %]
+                            Reserva de grupo
+                          [% END %]
                       [% END %]
                   </td>
                   <td>
                       [% TRY %]
-                        [% res.nivel3.nivel3.getSignatura %]
+                        [% res.nivel3.getSignatura %]
                       [% CATCH %]
                         [% 'Sin Signatura Topogr&aacute;fica' | i18n %]
                       [% END %]
                   </td>
-                  <td>
+                  <!-- <td>
                       [% PERL %]
                         print C4::AR::Filtros::link_to(   text    =>  "[% res.responsable %]",
                                                         url       =>  "[% url_prefix %]/usuarios/reales/datosUsuario.pl",
@@ -57,13 +69,13 @@
                                                         blank     =>  1, 
                                                     ) ;
                       [% END %]
-                  </td>
+                  </td> -->
                   <td>
                       [% IF nro_socio %] 
                                 [% PERL %]
-                                      print C4::AR::Filtros::link_to(   text =>     "[% res.socio %]",
+                                      print C4::AR::Filtros::link_to(   text =>     "[% res.socio.nro_socio %]",
                                                             url=>"      [% url_prefix %]/usuarios/reales/datosUsuario.pl", 
-                                                            params =>   ["nro_socio=[% res.socio %]"],
+                                                            params =>   ["nro_socio=[% res.socio.nro_socio %]"],
                                                             title =>    "[% 'Mostrar Detalle del Usuario' | i18n %]",
                                                             blank =>    1
                                                       );
@@ -86,7 +98,7 @@
                     print C4::AR::Filtros::action_set_button(    
                             button  => 'btn btn-primary',
                             title   => " [% 'Exportar a PDF' | i18n %]",
-                            action  => 'imprimirReporte("formReporteCiruculacion");',
+                            action  => 'imprimirReporte("formReporteCirculacion");',
                             icon    => "icon-white icon-inbox",
                       ) ;
           [% END %]

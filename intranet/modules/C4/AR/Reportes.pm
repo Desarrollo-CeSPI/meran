@@ -1850,21 +1850,23 @@ sub getReporteCirculacionGeneral{
 =cut
 sub getReservasCirculacionToExport {
 
-    my ( $datos_busqueda ) = @_;
+    my ($datos_busqueda) = @_;
  
     my $categoria       = $datos_busqueda->{'categoriaSocio'};
-    my $tipoReserva     = $datos_busqueda->{'tipoReserva'};
     my $tipoDoc         = $datos_busqueda->{'tipoDoc'};
     my $titulo          = $datos_busqueda->{'titulo'};
     my $edicion         = $datos_busqueda->{'edicion'};
+    my $autor           = $datos_busqueda->{'autor'};
     my $estadoReserva   = $datos_busqueda->{'estadoReserva'};
     my $fecha_inicio    = $datos_busqueda->{'fecha_inicio'};
     my $fecha_fin       = $datos_busqueda->{'fecha_fin'};
-    my $statistics      = $datos_busqueda->{'statistics'};
-    my $orden           = $datos_busqueda->{'orden'};
+    my $signatura       = $datos_busqueda->{'signatura'};
+
 
     my @filtros;
     my $resultsarray;
+
+#    my @filtro;
 
     #OK
     if ($categoria){
@@ -1878,90 +1880,81 @@ sub getReservasCirculacionToExport {
     
     #OK, forkeado el nombre de la tabla
     if ($titulo){
-         push(@filtros,('t6.titulo' =>  { like => '%'.$titulo.'%'} ));
-    }    
+         push(@filtros, ('t6.titulo' =>  { like => '%'.$titulo.'%'} ));
+    } 
+
+    if ($autor){
+         push(@filtros, ('t6.autor' =>  { like => '%'.$autor.'%'} ));
+    }     
     
-    #tipo de reserva se relaciona con estado de reserva
-    #TODAS == ""
-    if($tipoReserva eq "grupo"){         
-        push( @filtros, or => [ 'id3' => { eq => undef },
-                                'id3' => { eq => '0'} ] ); 
-                                
-    }elsif($tipoReserva eq "ejemplar"){ 
-        push( @filtros, or => [ 'id3' => { ne => undef },
-                                'id3' => { ne => '0'} ] ); 
-    }
-    
+    if ($edicion){
+         push(@filtros, ('nivel2.marc_record' =>  { like => '%'.$edicion.'%'} ));
+    }  
+
+    if ($signatura){
+         push(@filtros, ('t8.signatura' =>  {like => '%'.$signatura.'%'} ));
+    }  
     
     #OK, ver cuando se relaciona con $tipoReserva
-    if($estadoReserva eq "asignada"){         
-        push( @filtros,  or => [ 'id3' => { ne => undef },
-                                 'id3' => { ne => '0'} ] ); 
-                                
-    }elsif($estadoReserva eq "anulada"){ 
-        push( @filtros, and => [ 'tipo_operacion'   => { eq => 'cancelacion' },
-                                'responsable'       => { ne => 'sistema'} ] ); 
-                                
-    }elsif($estadoReserva eq "vencida"){ 
-        push( @filtros, and => [ 'tipo_operacion'   => { ne => undef }, #vencida !
-                                  'responsable'     => { eq => 'sistema'} ] ); 
+    
+    if ($estadoReserva ne "TODAS"){
+        if($estadoReserva eq "asignada"){         
+            push( @filtros, or => [ 'tipo_operacion'   => {  eq => 'reserva' }, #vencida !
+                                    'tipo_operacion'    => {  eq => 'reserve'}
+                                     ]); 
+                                    
+        }elsif($estadoReserva eq "cancelada"){ 
+            push( @filtros, or =>   [   and => ['tipo_operacion'   => { eq => 'cancelacion' },
+                                                'responsable'      => { ne => 'sistema'} 
+                                            ],
+                                        and => ['tipo_operacion'   => { eq => 'cancel' },
+                                                'responsable'      => { ne => 'sistema'} 
+                                            ]  
+                                    ]
+
+                );
+                                    
+        } elsif($estadoReserva eq "vencida"){ 
+            push( @filtros, and => [ 'tipo_operacion'   => { ne => undef }, #vencida !
+                                      'responsable'     => { eq => 'sistema'} ] ); 
+        }
+    } else {
+        push( @filtros, and => [ 'tipo_operacion'   => { ne => 'prestamo' }, #vencida !
+                                'tipo_operacion'    => { ne => 'devolucion'},
+                                'tipo_operacion'    => { ne => 'renovacion'}, 
+                                'tipo_operacion'    => { ne => 'notificacion'},  ]); 
     }
 
     my $desde = C4::AR::Filtros::i18n('Desde');
     my $hasta = C4::AR::Filtros::i18n('Hasta');
 
-    if ( ($fecha_inicio) && ($fecha_inicio ne $desde) && ($fecha_fin) && ($fecha_fin ne $hasta) ) {
+    if ($fecha_inicio ne "" && $fecha_fin ne "") {
 
         $fecha_inicio   = C4::Date::format_date($fecha_inicio, "iso");
         $fecha_fin      = C4::Date::format_date($fecha_fin, "iso");
 
-        push( @filtros, and => [ 'busqueda.fecha' => { ge => $fecha_inicio },
-                                'busqueda.fecha' => { le => $fecha_fin } ] ); 
+        push( @filtros, and => ['fecha' => { ge => $fecha_inicio },
+                                'fecha' => { le => $fecha_fin } ] ); 
     }
-
-    my @arrayTitulos;
 
     my $resultsArray = C4::Modelo::RepHistorialCirculacion::Manager->get_rep_historial_circulacion( 
                                                                       query   => \@filtros,
                                                                       require_objects   => ['socio', 'socio.persona.documento',
-                                                                                            'nivel1', 'nivel1.IndiceBusqueda'
+                                                                                            'nivel1', 'nivel1.IndiceBusqueda', 'nivel2',
+                                                                                            'nivel3'
                                                                       ],
       
                                                         );
-   
-    # my ($rep_busqueda_count) = C4::Modelo::RepHistorialCirculacion::Manager->get_rep_historial_circulacion_count(
-    #                                                                         query   => \@filtros,
-    #                                                                         require_objects => ['socio', 'socio.persona.documento',
-    #                                                                                             'nivel1', 'nivel1.IndiceBusqueda'
-    #                                                                         ],
-    #                                                                           # with_objects => [],                                                           
-    #                                                                         );
+    my $rep_busqueda_count = C4::Modelo::RepHistorialCirculacion::Manager->get_rep_historial_circulacion_count(
+                                                                            query   => \@filtros,
+                                                                            require_objects => ['socio', 'socio.persona.documento',
+                                                                                                'nivel1', 'nivel1.IndiceBusqueda', 'nivel2',
+                                                                                                'nivel3'
+                                                                            ],
+                                                                                                                                  
+                                                                            );
 
-    my @resultArray;  
-
-    foreach my $objetoRepCirculacion (@$resultsArray){
-
-        my @filtro;
-
-        push(@filtro, ('id3' =>  {eq => $objetoRepCirculacion->getId3()} ));
-        push(@filtro, ('tipo_operacion' =>  {eq => 'reserva'} ));
-
-        my $cantidadReservas = C4::Modelo::RepHistorialCirculacion::Manager->get_rep_historial_circulacion( 
-                                                                      query   => \@filtro,
-                                                                      select  => ['COUNT(tipo_operacion) AS agregacion_temp'],
-                                                                );
-                                                                            
-
-        my %dataHash;
-
-        $dataHash{'reservas'}   = $cantidadReservas->[0]->{'agregacion_temp'};
-        $dataHash{'objeto'}     = C4::AR::Nivel1::getNivel1FromId1($objetoRepCirculacion->getId1());
-        $dataHash{'socio'}      = $objetoRepCirculacion->getNro_socio();
-        
-        push(@resultArray, \%dataHash);
-    }
-
-    return (\@resultArray, scalar(@$resultsArray));
+    return ($resultsArray, $rep_busqueda_count);
 
 }
 
@@ -1980,6 +1973,7 @@ sub getReservasCirculacion {
     my $tipoDoc         = $datos_busqueda->{'tipoDoc'};
     my $titulo          = $datos_busqueda->{'titulo'};
     my $edicion         = $datos_busqueda->{'edicion'};
+    my $autor           = $datos_busqueda->{'autor'};
     my $estadoReserva   = $datos_busqueda->{'estadoReserva'};
     my $fecha_inicio    = $datos_busqueda->{'fecha_inicio'};
     my $fecha_fin       = $datos_busqueda->{'fecha_fin'};
@@ -2004,7 +1998,11 @@ sub getReservasCirculacion {
     #OK, forkeado el nombre de la tabla
     if ($titulo){
          push(@filtros, ('t6.titulo' =>  { like => '%'.$titulo.'%'} ));
-    }    
+    } 
+
+    if ($autor){
+         push(@filtros, ('t6.autor' =>  { like => '%'.$autor.'%'} ));
+    }     
     
     if ($edicion){
          push(@filtros, ('nivel2.marc_record' =>  { like => '%'.$edicion.'%'} ));
@@ -2018,23 +2016,31 @@ sub getReservasCirculacion {
     
     if ($estadoReserva ne "TODAS"){
         if($estadoReserva eq "asignada"){         
-            push( @filtros,  or => [ 'tipo_operacion' => { eq => 'prestamo' } ]); 
+            push( @filtros, or => [ 'tipo_operacion'   => {  eq => 'reserva' }, #vencida !
+                                    'tipo_operacion'    => {  eq => 'reserve'}
+                                     ]); 
                                     
-        }elsif($estadoReserva eq "cancelada"){ 
-            push( @filtros, or =>   [   and => [    'tipo_operacion'   => { eq => 'cancelacion' },
-                                                'responsable'      => { ne => 'sistema'} 
+        } elsif($estadoReserva eq "cancelada"){ 
+            push( @filtros, and => [or =>   [   'tipo_operacion'   => { eq => 'cancelacion' },  
+                                                'tipo_operacion'   => { eq => 'cancel' },       
                                             ],
-                                        and => [    'tipo_operacion'   => { eq => 'cancel' },
-                                                'responsable'      => { ne => 'sistema'} 
-                                            ]  
-                                    ]
-
-                );
+                                    'responsable'  => { ne => 'sistema'}]);
                                     
-        }elsif($estadoReserva eq "vencida"){ 
-            push( @filtros, and => [ 'tipo_operacion'   => { ne => undef }, #vencida !
-                                      'responsable'     => { eq => 'sistema'} ] ); 
+        } elsif($estadoReserva eq "vencida"){ 
+            push( @filtros, and => [ or =>  [   'tipo_operacion'   => { eq => 'cancelacion' },  
+                                                'tipo_operacion'   => { eq => 'cancel' }       
+                                            ], 
+                                    'responsable'  => { eq => 'sistema'}]); 
+
+        } elsif($estadoReserva eq "espera"){ 
+            push( @filtros, ('tipo_operacion' => { eq => 'espera' })); 
         }
+
+    } else {
+        push( @filtros, and => [ 'tipo_operacion'   => { ne => 'prestamo' }, #vencida !
+                                'tipo_operacion'    => { ne => 'devolucion'},
+                                'tipo_operacion'    => { ne => 'renovacion'}, 
+                                'tipo_operacion'    => { ne => 'notificacion'}]); 
     }
 
     my $desde = C4::AR::Filtros::i18n('Desde');
@@ -2045,7 +2051,7 @@ sub getReservasCirculacion {
         $fecha_inicio   = C4::Date::format_date($fecha_inicio, "iso");
         $fecha_fin      = C4::Date::format_date($fecha_fin, "iso");
 
-        push( @filtros, and => [ 'fecha' => { ge => $fecha_inicio },
+        push( @filtros, and => ['fecha' => { ge => $fecha_inicio },
                                 'fecha' => { le => $fecha_fin } ] ); 
     }
 
@@ -2055,66 +2061,25 @@ sub getReservasCirculacion {
                                                                       query   => \@filtros,
                                                                       limit   => $cantR,
                                                                       offset  => $ini,
-                                                                      require_objects   => ['socio', 'socio.persona.documento',
-                                                                                            'nivel1', 'nivel1.IndiceBusqueda', 'nivel2',
-                                                                                            'nivel3'
-                                                                      ],
+                                                                      with_objects   => ['socio', 'socio.persona.documento',
+                                                                                            'nivel1', 'nivel1.IndiceBusqueda', 'nivel2'
+                                                                                            
+                                                                      ]
       
                                                         );
    
     my ($rep_busqueda_count) = C4::Modelo::RepHistorialCirculacion::Manager->get_rep_historial_circulacion_count(
                                                                             query   => \@filtros,
                                                                             require_objects => ['socio', 'socio.persona.documento',
-                                                                                                'nivel1', 'nivel1.IndiceBusqueda', 'nivel2',
-                                                                                                'nivel3'
-                                                                            ],
-                                                                              # with_objects => [],                                                           
+                                                                                                'nivel1', 'nivel1.IndiceBusqueda', 'nivel2'
+                                                                                                
+                                                                            ]
+                                                                                                                                  
                                                                             );
 
-    my @resultArray;  
-
-    foreach my $objetoRepCirculacion (@$resultsArray){
-
-        my @filtro;
-
-        push(@filtro, ('id3' =>  {eq => $objetoRepCirculacion->getId3()} ));
-        push(@filtro, ('tipo_operacion' =>  {eq => 'reserva'} ));
-
-        my $cantidadReservas = C4::Modelo::RepHistorialCirculacion::Manager->get_rep_historial_circulacion( 
-                                                                      query   => \@filtro,
-                                                                      select  => ['COUNT(tipo_operacion) AS agregacion_temp'],
-                                                                );
 
 
-        #######################################################################################
-
-        #responsable
-        @filtro = ();
-
-        push(@filtro, ('id3' =>  {eq => $objetoRepCirculacion->getId3()} ));
-        push(@filtro, ('tipo_operacion' =>  {eq => 'devolucion'} ));
-
-        my $responsable = C4::Modelo::RepHistorialCirculacion::Manager->get_rep_historial_circulacion( 
-                                                                      query   => \@filtro,
-                                                                      select  => ['responsable'],
-                                                                );
-
-
-        #######################################################################################
-                                                                            
-
-        my %dataHash;
-
-        $dataHash{'reservas'}       = $cantidadReservas->[0]->{'agregacion_temp'};
-        $dataHash{'objeto'}         = C4::AR::Nivel1::getNivel1FromId1($objetoRepCirculacion->getId1());
-        $dataHash{'socio'}          = $objetoRepCirculacion->getNro_socio();
-        $dataHash{'responsable'}    = $responsable->[0]->{'responsable'};
-        $dataHash{'nivel3'}         = $objetoRepCirculacion;
-        
-        push(@resultArray, \%dataHash);
-    }
-
-    return (\@resultArray, $rep_busqueda_count);
+    return ($resultsArray, $rep_busqueda_count);
 
 }
 
