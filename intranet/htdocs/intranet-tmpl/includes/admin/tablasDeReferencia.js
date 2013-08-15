@@ -90,7 +90,7 @@ function agregarRegistro(tabla){
     objAH.showOverlay       = true;
     objAH.accion="AGREGAR_REGISTRO";
     objAH.alias_tabla = tabla;
-    objAH.asignar       = 1;
+    objAH.asignar = 0;
     objAH.sendToServer();
 }
 
