@@ -56,31 +56,31 @@
 	                        [% FOREACH campo IN campos %]
 	                            <th class="click"> [% campo %]</th>
 	                        [% END %]
-	                        [% IF mostrar_asignar %]
-    	                        <th>[% "Asignar" | i18n %]</th>
-    	                    [% END %]
+	          
+    	                    <th>[% "Eliminar" | i18n %]</th>
+    	            
 	                    </tr>
 	                </thead>
 	                <tbody>
 	                        [% FOREACH dato IN datos %]
 	                          <tr>
 	                            [% dato.printAsTableElement %]
-	                            [% IF mostrar_asignar %]
-		                            <td>
-	                        
-		                             [% PERL %]
-	                                  print C4::AR::Filtros::action_button( 
-	                                                                  button    => "btn btn-warning click",
-	                                                                  action    => 'mostrarReferencias("[% tabla %]", "[% dato.getPkValue %]")', 
-	                                                                  icon      => "icon-move icon-white",
-	                                                                  title     => "",
-	                                                              ) ;
-	
-	
-	                                [% END %]
-		                            	
-		                            </td>
-		                        [% END %]
+	                 
+	                            <td>
+                        
+	                             [% PERL %]
+                                  print C4::AR::Filtros::action_button( 
+                                                                  button    => "btn btn-danger click",
+                                                                  action    => 'eliminarReferencia("[% tabla %]", "[% dato.getPkValue %]")', 
+                                                                  icon      => "icon-trash icon-white",
+                                                                  title     => "",
+                                                              ) ;
+
+
+                                [% END %]
+	                            	
+	                            </td>
+		                      
 	                          </tr>
 	                        [% END %]
 	                </tbody>
@@ -88,14 +88,25 @@
 	        </div>
 	</fieldset>
 	<div class="form-actions">
-	[% PERL %]
-      print C4::AR::Filtros::action_button(   
-                                          button   	=> "btn btn-primary",
-                                          action 	=> 'agregarRegistro("[% tabla %]");',
-                                          icon      => "icon-plus icon-white",
-                                          title   	=> " [% 'Agregar Registro' | i18n %]",
-              ) ;
-    [% END %]
-
+	[% IF mostrar_asignar %]
+		[% PERL %]
+	      print C4::AR::Filtros::action_button(   
+	                                          button   	=> "btn btn-primary",
+	                                          action 	=> 'agregarRegistro("[% tabla %]");',
+	                                          icon      => "icon-plus icon-white",
+	                                          id 		=> "agregar_registro",
+	                                          title   	=> " [% 'Agregar Registro' | i18n %]",
+	              ) ;
+	    [% END %]
+	[% ELSE %]
+		[% PERL %]
+	      print C4::AR::Filtros::action_button(   
+	                                          button   	=> "btn btn-primary",
+	                                          action 	=> 'obtenerTabla();',
+	                                          icon      => "icon-plus icon-white",
+	                                          title   	=> " [% 'Listo' | i18n %]",
+	              ) ;
+	    [% END %]
+	[% END %]
   </div>
 </div>

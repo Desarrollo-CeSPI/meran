@@ -32,10 +32,10 @@
               [% FOREACH res IN results %]   
                 <tr>
                   <td>
-                      [% res.nivel3.nivel1.getTitulo %]
+                      [% res.nivel2.nivel1.getTitulo %]
                   </td>
                   <td>
-                      [% res.nivel3.nivel1.getAutor %]
+                      [% res.nivel2.nivel1.getAutor %]
                   </td>
                   <td>
                       [% res.getFecha_formateada %]
@@ -47,7 +47,11 @@
                       [% TRY %]
                           [% res.nivel3.getCodigoBarra %]
                       [% CATCH %]
-                          Reserva de grupo
+                          [% IF res.tipo_operacion == "espera" %]
+                            Sin Codigo de Barras
+                          [% ELSE %]
+                            Reserva de grupo
+                          [% END %]
                       [% END %]
                   </td>
                   <td>

@@ -2020,26 +2020,27 @@ sub getReservasCirculacion {
                                     'tipo_operacion'    => {  eq => 'reserve'}
                                      ]); 
                                     
-        }elsif($estadoReserva eq "cancelada"){ 
-            push( @filtros, or =>   [   and => ['tipo_operacion'   => { eq => 'cancelacion' },
-                                                'responsable'      => { ne => 'sistema'} 
+        } elsif($estadoReserva eq "cancelada"){ 
+            push( @filtros, and => [or =>   [   'tipo_operacion'   => { eq => 'cancelacion' },  
+                                                'tipo_operacion'   => { eq => 'cancel' },       
                                             ],
-                                        and => ['tipo_operacion'   => { eq => 'cancel' },
-                                                'responsable'      => { ne => 'sistema'} 
-                                            ]  
-                                    ]
-
-                );
+                                    'responsable'  => { ne => 'sistema'}]);
                                     
-        }elsif($estadoReserva eq "vencida"){ 
-            push( @filtros, and => [ 'tipo_operacion'   => { ne => undef }, #vencida !
-                                      'responsable'     => { eq => 'sistema'} ] ); 
+        } elsif($estadoReserva eq "vencida"){ 
+            push( @filtros, and => [ or =>  [   'tipo_operacion'   => { eq => 'cancelacion' },  
+                                                'tipo_operacion'   => { eq => 'cancel' }       
+                                            ], 
+                                    'responsable'  => { eq => 'sistema'}]); 
+
+        } elsif($estadoReserva eq "espera"){ 
+            push( @filtros, ('tipo_operacion' => { eq => 'espera' })); 
         }
+
     } else {
         push( @filtros, and => [ 'tipo_operacion'   => { ne => 'prestamo' }, #vencida !
                                 'tipo_operacion'    => { ne => 'devolucion'},
                                 'tipo_operacion'    => { ne => 'renovacion'}, 
-                                'tipo_operacion'    => { ne => 'notificacion'},  ]); 
+                                'tipo_operacion'    => { ne => 'notificacion'}]); 
     }
 
     my $desde = C4::AR::Filtros::i18n('Desde');
@@ -2060,19 +2061,19 @@ sub getReservasCirculacion {
                                                                       query   => \@filtros,
                                                                       limit   => $cantR,
                                                                       offset  => $ini,
-                                                                      require_objects   => ['socio', 'socio.persona.documento',
-                                                                                            'nivel1', 'nivel1.IndiceBusqueda', 'nivel2',
-                                                                                            'nivel3'
-                                                                      ],
+                                                                      with_objects   => ['socio', 'socio.persona.documento',
+                                                                                            'nivel1', 'nivel1.IndiceBusqueda', 'nivel2'
+                                                                                            
+                                                                      ]
       
                                                         );
    
     my ($rep_busqueda_count) = C4::Modelo::RepHistorialCirculacion::Manager->get_rep_historial_circulacion_count(
                                                                             query   => \@filtros,
                                                                             require_objects => ['socio', 'socio.persona.documento',
-                                                                                                'nivel1', 'nivel1.IndiceBusqueda', 'nivel2',
-                                                                                                'nivel3'
-                                                                            ],
+                                                                                                'nivel1', 'nivel1.IndiceBusqueda', 'nivel2'
+                                                                                                
+                                                                            ]
                                                                                                                                   
                                                                             );
 

@@ -123,6 +123,7 @@
             <div class="controls">
                 <select name="estadoReserva" id="estadoReserva">
                     <option value="asignada">Asignada</option>
+                    <option value="espera">En espera</option>
                     <option value="cancelada">Cancelada</option>
                     <option value="vencida">Vencida</option>
                     <option value="TODAS">TODAS</option>
