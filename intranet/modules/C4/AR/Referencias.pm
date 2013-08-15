@@ -749,6 +749,7 @@ sub eliminarReferencia{
         if (!$used_or_not){
 
             my $old_pk = $tabla->getByPk($referer_involved);
+
   
             $status = $old_pk->delete();
 

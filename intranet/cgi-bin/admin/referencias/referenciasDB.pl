@@ -102,7 +102,7 @@ elsif ($accion eq "OBTENER_TABLAS"){
 
     $t_params->{'paginador'}= C4::AR::Utilidades::crearPaginador($cantidad,$cantR, $pageNumber,$funcion,$t_params);
     
-    $t_params->{'mostrar_asignar'}  = $obj->{'asignar'} || 0;
+    $t_params->{'mostrar_asignar'}  = $obj->{'asignar'} || 1;
     $t_params->{'campos'}           = $campos;
 
     $t_params->{'datos'}            = $datos;
@@ -133,6 +133,7 @@ elsif ($accion eq "AGREGAR_REGISTRO"){
     my ($clave,$tabla,$datos,$campos) = C4::AR::Referencias::agregarRegistro($alias_tabla);
     
     $t_params->{'mostrar_asignar'} = $obj->{'asignar'} || 0;
+    $t_params->{'agregar'} = 0;
     $t_params->{'campos'} = $campos;
     $t_params->{'datos'} = $datos;
     $t_params->{'tabla'} = $tabla;
