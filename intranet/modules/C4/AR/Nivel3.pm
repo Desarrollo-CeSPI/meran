@@ -894,8 +894,30 @@ sub detalleCompletoOPAC{
             $hash_nivel2->{'anio_revista'}              = $nivel2_array_ref->[$i]->getAnioRevista ? $nivel2_array_ref->[$i]->getAnioRevista : '#';
             $hash_nivel2->{'volumen_revista'}           = $nivel2_array_ref->[$i]->getVolumenRevista ? $nivel2_array_ref->[$i]->getVolumenRevista : '#';
             $hash_nivel2->{'numero_revista'}            = $nivel2_array_ref->[$i]->getNumeroRevista ? $nivel2_array_ref->[$i]->getNumeroRevista : '#';
-            
-            
+           
+            #otengo las analiticas
+            my $cat_reg_marc_n2_analiticas              = $hash_nivel2->{'nivel2_obj'}->[0]->getAnaliticas;
+
+            my $tiene_analiticas                    = scalar(@$cat_reg_marc_n2_analiticas);
+            $hash_nivel2->{'tiene_analiticas'}        = $tiene_analiticas;
+
+            if($hash_nivel2->{'cat_ref_tipo_nivel3'}  eq "ANA"){
+
+                #recupero las analiticas por el id1    
+                my $cat_reg_analiticas_array_ref    = C4::AR::Nivel2::getAllAnaliticasById1($nivel2_array_ref->[0]->getId1());
+
+                if( ($cat_reg_analiticas_array_ref) && (scalar(@$cat_reg_analiticas_array_ref) > 0) ){
+                    my $n2 = C4::AR::Nivel2::getNivel2FromId2($cat_reg_analiticas_array_ref->[0]->getId2Padre());
+
+                    if($n2){
+                        $hash_nivel2->{'nivel1_padre'}                = $n2->getId1();
+                        $hash_nivel2->{'titulo_registro_padre'}       = $n2->nivel1->getTitulo();
+                        $hash_nivel2->{'primer_signatura'}            = $n2->getSignaturas->[0];
+                        $hash_nivel2->{'edicion_analitica'}           = $n2->getEdicion();
+                    }
+                }
+            }
+
             push(@nivel2, $hash_nivel2);
         };
     }
@@ -914,6 +936,8 @@ sub detalleCompletoOPAC{
     $t_params->{'nivel1'}   = $nivel1->toMARC_Opac,
     $t_params->{'id1'}      = $id1;
     $t_params->{'nivel2'}   = \@nivel2;
+
+    # C4::AR::Utilidades::printHASH(@nivel2[0]);
     return ($cantidad_total);
 }
 

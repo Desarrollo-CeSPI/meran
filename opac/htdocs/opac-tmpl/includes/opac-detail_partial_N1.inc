@@ -6,4 +6,36 @@
                 [% END %]
             [% END %]
     [% END %]
+    [% IF cat_ref_tipo_nivel3 == "ANA" %]
+    	[% FOREACH nivel2 %]
+			[% IF cant_nivel3 == 0 %]
+		    <!-- ANA y ELE  no tienen nivel3 -->
+		    <!-- si es ELE no muestro nada -->
+		        [% IF (cat_ref_tipo_nivel3 == 'ANA') %]        
+				    <dt class="inline left rightMargin">Edicion/Año:&nbsp; </dt> 
+		            <dd>En: [% nivel1_obj.getAutor %] -
+		            	 [% PERL %]
+                            print C4::AR::Filtros::link_to( text =>   "[% IF HTML.escape(titulo_registro_padre) %][% HTML.escape( titulo_registro_padre) %][% ELSE %]SIN T&Iacute;TULO[% END %]",
+                                                            url 		=>   "[% url_prefix %]/opac-detail.pl", 
+                                                            params 		=>   ["id1=[%  nivel1_padre %]"],
+                                                            title 		=>    "[% 'Mostrar Detalle del registro' | i18n %]",
+                                                        ) ;
+                        [% END %] ([% edicion_analitica %])
+
+
+		            </dd>	
+		             
+		        [% END %]
+		        
+		    [% ELSE %]
+		    
+			    <div class="alert fade in">
+		           <strong>[% 'Este grupo no dispone de ejemplares' | i18n %]</strong>
+			    </div> 
+		 
+		    [% END %]
+
+
+    	[% END %]
+    [% END %]
 </dl>
