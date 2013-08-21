@@ -187,6 +187,8 @@ sub uploadAdjuntoNovedadOpac{
                                         pdf
                                         xls
                                         doc
+                                        docx
+                                        rft
                                         odt
                                         msword
                                     );

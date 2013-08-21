@@ -206,7 +206,7 @@ sub convertMarcRecordToMoose {
     use MARC::Moose::Formater::Iso2709;
 
   #CODIFICACION WINDOWS!!!
-  my $converter   = Text::Iconv->new( "utf8", "cp857");
+  my $converter   = Text::Iconv->new( "utf8", "cp850");
   
     my $record = MARC::Moose::Record->new();
     
