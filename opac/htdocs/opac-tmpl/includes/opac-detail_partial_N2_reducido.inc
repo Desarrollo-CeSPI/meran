@@ -68,7 +68,6 @@
                                               [% END %]
                                   [% END %]
                                 
-                                    
                               </dl>
                               
                               [% IF mostrarSignaturaEnDetalleOPAC %]
@@ -188,10 +187,12 @@
                                 
         [% IF !preferencias.resumido %]
             [% INCLUDE 'opac-detail_partial_N2_ejemplares.inc' %]
-        [% END %]                               
+        [% END %]                             
 
-        [% IF disponible %]
-           [% INCLUDE 'opac-detail_partial_disponibilidad.inc' %]
+        [% IF cat_ref_tipo_nivel3 != "ANA" %]
+          [% IF disponible %]
+            [% INCLUDE 'opac-detail_partial_disponibilidad.inc' %]
+          [% END %]
         [% END %]
 
 
