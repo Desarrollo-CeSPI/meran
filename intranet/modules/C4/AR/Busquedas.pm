@@ -1651,10 +1651,6 @@ sub armarInfoNivel1{
             my $nivel2_array_ref    = C4::AR::Nivel2::getNivel2FromId1($nivel1->getId1);
             @result_array_paginado[$i]->{'signaturas'}          = $nivel1->getSignaturas($nivel2_array_ref);
 
-
-
-
-
             my $ediciones           = C4::AR::Busquedas::obtenerGrupos(@result_array_paginado[$i]->{'id1'}, $tipo_nivel3_name, "INTRA",$nivel2_array_ref);
             @result_array_paginado[$i]->{'grupos'} = 0;
             if(scalar(@$ediciones) > 0){
@@ -1662,7 +1658,7 @@ sub armarInfoNivel1{
             }
 
             #se genera el estado de coleccion si se trata de revistas
-                  C4::AR::Debug::debug("REVISTA: se genera el estado de coleccion");
+                C4::AR::Debug::debug("REVISTA: se genera el estado de coleccion");
                 my ($cant_revistas ,$estadoDeColeccion)           = C4::AR::Busquedas::obtenerEstadoDeColeccion(@result_array_paginado[$i]->{'id1'}, $tipo_nivel3_name, "INTRA",$nivel2_array_ref);
                 @result_array_paginado[$i]->{'estadoDeColeccion'} = 0;
                 if($cant_revistas > 0){
@@ -1672,6 +1668,22 @@ sub armarInfoNivel1{
                         
             @result_array_paginado[$i]->{'cat_ref_tipo_nivel3'}     = C4::AR::Nivel2::getFirstItemTypeFromN1($nivel1->getId1,$nivel2_array_ref);
             @result_array_paginado[$i]->{'cat_ref_tipo_nivel3_name'}= C4::AR::Referencias::translateTipoNivel3(@result_array_paginado[$i]->{'cat_ref_tipo_nivel3'});
+            
+            if (@result_array_paginado[$i]->{'cat_ref_tipo_nivel3'} eq "ANA"){
+
+                my $cat_reg_analiticas_array_ref = C4::AR::Nivel2::getAllAnaliticasById1($nivel2_array_ref->[0]->getId1());
+
+                if( ($cat_reg_analiticas_array_ref) && (scalar(@$cat_reg_analiticas_array_ref) > 0) ){
+                    my $n2 = C4::AR::Nivel2::getNivel2FromId2($cat_reg_analiticas_array_ref->[0]->getId2Padre());
+
+                    if($n2){
+                        @result_array_paginado[$i]->{'nivel1_padre'}           = $n2->getId1();
+                        @result_array_paginado[$i]->{'titulo_registro_padre'}  = $n2->nivel1->getTitulo();
+                        @result_array_paginado[$i]->{'primer_signatura'}       = $n2->getSignaturas->[0];
+                    }
+                }
+            }
+
             my @nivel2_portadas = ();
             my @nivel2_portadas_personalizadas = ();
             my $cant;
@@ -1702,6 +1714,13 @@ sub armarInfoNivel1{
                 @result_array_paginado[$i]->{'portadas_perzonalizadas'}  = \@nivel2_portadas_personalizadas;
             }
             
+
+
+
+
+
+
+
             #se obtine la disponibilidad total 
             @result_array_paginado[$i]->{'rating'}              =  C4::AR::Nivel2::getRatingPromedio($nivel2_array_ref);
 
