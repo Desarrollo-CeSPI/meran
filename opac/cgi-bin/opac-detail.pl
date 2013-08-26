@@ -45,16 +45,14 @@ my $idNivel1 = $input->param('id1');
 $t_params->{'id2'} = $input->param('id2') || 0;
 my $cant_total      = 0;
 
-#eval{ 
+eval{ 
     ($cant_total)                   =   C4::AR::Nivel3::detalleCompletoOPAC($idNivel1, $t_params);
     $t_params->{'cant_total'}       = $cant_total;
-#};
+};
 
-#if ($@){
-
-#    $t_params->{'mensaje'}          = "Ha ocurrido un error al intentar mostrar el detalle del registro";
-
-#}
+if ($@){
+   $t_params->{'mensaje'}          = "Ha ocurrido un error al intentar mostrar el detalle del registro";
+}
 
 $t_params->{'partial_template'}             = "opac-detail.inc";
 $t_params->{'preferencias'}                 = C4::AR::Preferencias::getConfigVisualizacionOPAC();
