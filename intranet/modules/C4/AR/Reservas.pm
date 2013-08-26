@@ -1144,9 +1144,9 @@ sub t_reservarOPAC {
             if (!$paramsReserva->{'id3'}) {
                 #si es de grupo no hay que agregar al historial
                 #arriba ya se agrego una
-                if (($paramsReserva->{'estado'} ne 'G')){
+                # if (($paramsReserva->{'estado'} ne 'G')){
                     C4::AR::Reservas::agregarReservaAHistorial($reserva);
-                }
+                # }
             }
 
         };
@@ -1612,7 +1612,7 @@ sub getHistorialReservasParaTemplate {
     
     my @filtros;
     push(@filtros, ( nro_socio => { eq => $nro_socio }));
-    push(@filtros, ( tipo_operacion => { eq => ['cancelacion','reserva','espera','notificacion' ] } ) );
+    push(@filtros, ( tipo_operacion => { eq => ['cancelacion','reserva','reserve','espera','notificacion', 'prestamo' ] } ) );
 
     my $reservas_array_ref = C4::Modelo::RepHistorialCirculacion::Manager->get_rep_historial_circulacion( 
                                           query             => \@filtros,
