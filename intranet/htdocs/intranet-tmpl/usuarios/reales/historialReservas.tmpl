@@ -86,7 +86,11 @@
                                 [% reserva.getFecha_formateada %]
                             </td>
                             <td>
-                                [% reserva.getTipo_operacion | i18n %]
+                                [% IF reserva.getTipo_operacion == "prestamo" %]
+                                    [% 'asignacion' | i18n %]
+                                [% ELSE %]
+                                    [% reserva.getTipo_operacion | i18n %]
+                                [% END %]
                             </td>
                           </tr>
                         [% END %] <!-- FOREACH PRIMERO -->
