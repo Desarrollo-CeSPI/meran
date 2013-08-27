@@ -14,7 +14,7 @@
 		        [% IF (cat_ref_tipo_nivel3 == 'ANA') %]        
 				    <dt class="inline left rightMargin">Articulo de:&nbsp; </dt> 
 		            <dd>[% PERL %]
-                            print C4::AR::Filtros::link_to( text =>   "[% IF HTML.escape(titulo_registro_padre) %][% HTML.escape( titulo_registro_padre) %][% ELSE %]SIN T&Iacute;TULO[% END %]",
+                            print C4::AR::Filtros::link_to( text =>   "[% IF HTML.escape(titulo_registro_padre) %][% HTML.escape( titulo_registro_padre) %][% ELSE %]SIN T&Iacute;TULO[% END %][% IF HTML.escape(nivel1_obj.getAutor) %] / [% HTML.escape(nivel1_obj.getAutor) %][% END %]",
                                                             url 		=>   "[% url_prefix %]/opac-detail.pl", 
                                                             params 		=>   ["id1=[%  nivel1_padre %]"],
                                                             title 		=>    "[% 'Mostrar Detalle del registro' | i18n %]",
