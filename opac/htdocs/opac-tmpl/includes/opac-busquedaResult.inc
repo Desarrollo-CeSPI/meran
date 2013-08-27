@@ -431,7 +431,7 @@
    	  					[% IF NIVEL.cat_ref_tipo_nivel3 == "ANA" %]
    	  						 [% IF NIVEL.titulo_registro_padre %]
                                     EN: [% PERL %]
-                                        print C4::AR::Filtros::link_to( text 		=>   "[% IF HTML.escape(NIVEL.titulo_registro_padre) %][% HTML.escape(NIVEL.titulo_registro_padre) %][% ELSE %]SIN T&Iacute;TULO[% END %]",
+                                        print C4::AR::Filtros::link_to( text 		=>   "[% IF HTML.escape(NIVEL.titulo_registro_padre) %][% HTML.escape(NIVEL.titulo_registro_padre) %][% ELSE %]SIN T&Iacute;TULO[% END %][% IF HTML.escape(NIVEL.nomCompleto) %] / [% HTML.escape(NIVEL.nomCompleto) %][% END %]",
                                                                         url 		=>   "[% url_prefix %]/opac-detail.pl", 
                                                                         params 		=>   ["id1=[% NIVEL.nivel1_padre %]"],
                                                                         title 		=>    "[% 'Mostrar Detalle del registro' | i18n %]",
