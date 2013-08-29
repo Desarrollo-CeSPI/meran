@@ -20,13 +20,13 @@
  * along with Meran.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-function obtenerTabla(){
+function obtenerTabla(tabla){
     objAH=new AjaxHelper(updateObtenerTabla);
     objAH.url= URL_PREFIX+'/admin/referencias/referenciasDB.pl';
     objAH.cache = false;
     objAH.showOverlay       = true;
     objAH.accion="OBTENER_TABLAS";
-    objAH.alias_tabla = $('#tablas_ref').val();
+    objAH.alias_tabla = $('#tablas_ref').val() || tabla;
     objAH.funcion= 'changePage';
     objAH.asignar       = 1;
     objAH.sendToServer();
@@ -35,6 +35,7 @@ function obtenerTabla(){
 
 function updateObtenerTabla(responseText){
     $('#detalle_tabla').html(responseText);
+    $('#basic-modal-content').modal('hide');
 
 }
 
@@ -53,7 +54,6 @@ function obtenerTablaFiltrada(){
 
 
 function updateObtenerTablaFiltrada(responseText){
-
     $('#detalle_tabla').html(responseText);
 }
 
@@ -87,7 +87,6 @@ function agregarRegistro(tabla){
     objAH=new AjaxHelper(updateAgregarRegistro);
     objAH.url= URL_PREFIX+'/admin/referencias/referenciasDB.pl';
     objAH.cache = false;
-    objAH.showOverlay       = true;
     objAH.accion="AGREGAR_REGISTRO";
     objAH.alias_tabla = tabla;
     objAH.asignar = 0;
@@ -96,10 +95,10 @@ function agregarRegistro(tabla){
 
 
 function updateAgregarRegistro(responseText){
-
     $('#detalle_tabla').html(responseText);
     $('#basic-modal-content').modal('hide');
-
+    var Messages=JSONstring.toObject(responseText);
+    setMessages(Messages);
 }
 
 
