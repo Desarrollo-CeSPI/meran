@@ -111,8 +111,7 @@ elsif ($accion eq "OBTENER_TABLAS"){
 
     C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
 
-}
-elsif ($accion eq "AGREGAR_REGISTRO"){
+} elsif ($accion eq "AGREGAR_REGISTRO"){
 
     my $alias_tabla= $obj->{'alias_tabla'};
 
