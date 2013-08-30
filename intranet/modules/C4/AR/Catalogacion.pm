@@ -1669,6 +1669,56 @@ sub t_guardarAsociarRegistroFuente {
     return ($msg_object);
 }
 
+
+sub t_eliminarRelacion {
+    my ($params) = @_;
+
+    my $msg_object                          = C4::AR::Mensajes::create();
+    my  $cat_registro_marc_n2_analitica     = C4::Modelo::CatRegistroMarcN2Analitica->new();
+    my $db                                  = $cat_registro_marc_n2_analitica->db;
+
+    if(!$msg_object->{'error'}){
+    #No hay error
+
+        my $cat_registro_marc_n2_analitica  = C4::AR::Nivel2::getAnaliticasFromRelacion($params);
+
+        if(!$cat_registro_marc_n2_analitica){
+            #no existe la analitica
+            $msg_object = C4::AR::Mensajes::create();
+            #Se setea error para el usuario
+            $msg_object->{'error'} = 1;
+            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U616', 'params' => [$params->{'id1'}]} ) ;
+        } else {
+
+            # enable transactions, if possible
+            $db->{connect_options}->{AutoCommit} = 0;
+
+            eval {
+                $cat_registro_marc_n2_analitica->eliminar($params);
+                $db->commit;
+                $msg_object->{'error'} = 0;
+                C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U619', 'params' => []} ) ;
+            };
+
+            if ($@){
+                $msg_object = C4::AR::Mensajes::create();
+                #Se loguea error de Base de Datos
+                &C4::AR::Mensajes::printErrorDB($@, 'B426',"INTRA");
+                $db->rollback;
+                #Se setea error para el usuario
+                $msg_object->{'error'} = 1;
+                C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U618', 'params' => []} ) ;
+            }
+
+            $db->{connect_options}->{AutoCommit} = 1;
+
+        }
+
+    }
+
+    return ($msg_object);
+}
+
 =head2 sub _verificar_campo_subcampo_to_estructura
 =cut
 sub _verificar_campo_subcampo_to_estructura{

@@ -1031,3 +1031,27 @@ elsif($tipoAccion eq "UNPROMOTE_GRUPO"){
    C4::AR::Auth::print_header($session);
    print $obj->{'id2'}."/////////////////////ID2////////////////////".$html;
 }
+elsif($tipoAccion eq "ELIMINAR_RELACION_ANALITICA"){
+
+    my ($template, $session, $t_params)  = get_template_and_user({
+                            template_name   => ('catalogacion/estructura/agregarPortadaEdicionModal.tmpl'),
+                            query           => $input,
+                            type            => "intranet",
+                            authnotrequired => 0,
+                            flagsrequired   => {    ui              => 'ANY', 
+                                                    tipo_documento  => 'ANY', 
+                                                    accion          => 'CONSULTA', 
+                                                    entorno         => 'datos_nivel1' },
+    });
+
+    # my $id1 = $obj->{'id1'};
+    # my $id2 = $obj->{'id2'};
+    my ($Message_arrayref);
+   
+    ($Message_arrayref)= C4::AR::Catalogacion::t_eliminarRelacion($obj);
+
+    my $infoOperacionJSON = to_json $Message_arrayref;
+    
+    C4::AR::Auth::print_header($session);
+    print $infoOperacionJSON;
+}

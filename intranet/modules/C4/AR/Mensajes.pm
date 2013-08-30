@@ -365,6 +365,7 @@ my %mensajesINTRA = (
     'U616' => 'No existe la anal&iacute;tica para el registro (*?*)',
     'U617' => 'Registro asociado con &eacute;xito!',
     'U618' => 'Disculpe, no se pudo asociar el registro',
+    'U619' => 'Se elimin&oacute; la relaci&oacute;n de la anal&iacute;tica correctamente',
     'U900' => 'El usuario ha sido eliminado del sistema.',
     'U982' => 'El mensaje ha sido eliminado.',
     'C500' => 'Los items fueron guardados correctamente.',

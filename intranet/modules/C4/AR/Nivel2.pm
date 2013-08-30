@@ -650,6 +650,31 @@ sub getAllAnaliticasById2{
     }
 }
 
+=item
+    Retorna la relacion analica entre un registro y un grupo
+=cut
+sub getAnaliticasFromRelacion{
+    my($params, $db) = @_;
+
+    $db = $db || C4::Modelo::CatRegistroMarcN2Analitica->new()->db();
+
+    my @filtros;
+    push (@filtros, ('cat_registro_marc_n2_id'       => { eq => $params->{'id2'} } ));
+    push (@filtros, ('cat_registro_marc_n1_id'       => { eq => $params->{'id1'} } ));
+
+    my $nivel2_analiticas_array_ref = C4::Modelo::CatRegistroMarcN2Analitica::Manager->get_cat_registro_marc_n2_analitica(
+                                                                        db      => $db,
+                                                                        query   => \@filtros,
+                                                                );
+
+
+    if( scalar(@$nivel2_analiticas_array_ref) > 0){
+        return ($nivel2_analiticas_array_ref->[0]);
+    }else{
+        return 0;
+    }
+}
+
 sub getAllAnaliticasById1{
     my($id1, $db) = @_;
 
