@@ -36,44 +36,45 @@ function changePageBusquedas(ini){
               <td>
      
                   [% PERL %]
-                          print C4::AR::Filtros::link_to(   text =>     "[% res.nivel1.getTitulo %]",
+                          print C4::AR::Filtros::link_to( text =>     "[% res.nivel3.nivel1.getTitulo %]",
                                                           url=>"[% url_prefix %]/catalogacion/estructura/detalle.pl",
-                                                          params => [   "id1=[% res.nivel1.getId1 %]"], 
+                                                          params => ["id1=[% res.nivel3.nivel1.getId1 %]"], 
                                                       ) ;
                   [% END %]
               </td>
               <td>
                   <a class="click" onClick="buscarPorAutor('[% prestamo.nivel3.nivel1.getAutor %]')" title="[% 'Filtrar por Autor' | i18n %]">
-                        [% res.nivel1.getAutor %]
+                        [% res.nivel3.nivel1.getAutor %]
                   </a>          
               </td>
               <td>      
-                  [% res.getSignatura_topografica %]
+                  [% res.nivel3.getSignatura %]
               </td>
               <td>
                   [% PERL %]
-                          print C4::AR::Filtros::link_to(   text =>     "[% res.getCodigoBarra %]",
+                          print C4::AR::Filtros::link_to(   text =>     "[% res.nivel3.getBarcode %]",
                                                           url=>"[% url_prefix %]/catalogacion/estructura/detalleEjemplar.pl", 
-                                                          params => ["id3=[% res.getId3 %]"],
+                                                          params => ["id3=[% res.nivel3.getId3 %]"],
                                                           title =>  "[% "Detalle del Ejemplar" | i18n %]"
                                                       ) ;
                   [% END %] 
               </td>
-               <td>
+              <td>
 
-                  [% IF res.nivel2.getEdicion %]
-                        [% res.nivel2.getEdicion %]
+                    [% IF res.nivel3.nivel2.getEdicion %]
+                        [% res.nivel3.nivel2.getEdicion %]
                     [% END %]
 
-                    [% IF res.nivel2.getAnio_publicacion %]
-                        ([% res.nivel2.getAnio_publicacion %])
+                    [% IF res.nivel3.nivel2.getAnio_publicacion %]
+                        ([% res.nivel3.nivel2.getAnio_publicacion %])
                     [% END %]
               </td>
+  
               <td>
-                  [% res.getFechaUltimoCambioDisp %]
+                  [% res.timestamp %]
               </td>
               <td>      
-                  [% res.getEstado %]
+                  [% res.detalle %]
               </td>
               
           </tr>
