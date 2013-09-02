@@ -1085,7 +1085,7 @@ sub checkauth {
                     my ($socio)        = _verificarPassword($userid,$password,$nroRandom);
                     my $login_attempts = getSocioAttempts($userid); 
                     my $captchaResult;
-                    if (($login_attempts > 2) && (!$_[0]->url_param('welcome'))) {      # se logueo mal mas de 3 veces, debo verificar captcha
+                    if (($login_attempts > 2) && (!$_[0]->url_param('welcome')) && (C4::AR::Preferencias::getValorPreferencia('re_captcha_private_key') && C4::AR::Preferencias::getValorPreferencia('re_captcha_public_key'))) {      # se logueo mal mas de 3 veces y se tiene configuración de recaptcha, debo verificar captcha
                         my $reCaptchaPrivateKey =  C4::AR::Preferencias::getValorPreferencia('re_captcha_private_key');
                         my $reCaptchaChallenge  = $_[0]->param('recaptcha_challenge_field');
                         my $reCaptchaResponse   = $_[0]->param('recaptcha_response_field');

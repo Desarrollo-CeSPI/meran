@@ -102,7 +102,7 @@
 		[% PERL %]
 	      print C4::AR::Filtros::action_button(   
 	                                          button   	=> "btn btn-primary",
-	                                          action 	=> 'obtenerTabla();',
+	                                          action 	=> 'obtenerTabla("[% tabla %]");',
 	                                          icon      => "icon-plus icon-white",
 	                                          title   	=> " [% 'Listo' | i18n %]",
 	              ) ;
