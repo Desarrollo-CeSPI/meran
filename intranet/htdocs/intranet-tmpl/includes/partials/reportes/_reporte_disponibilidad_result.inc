@@ -43,7 +43,7 @@ function changePageBusquedas(ini){
                   [% END %]
               </td>
               <td>
-                  <a class="click" onClick="buscarPorAutor('[% prestamo.nivel3.nivel1.getAutor %]')" title="[% 'Filtrar por Autor' | i18n %]">
+                  <a class="click" onClick="buscarPorAutor('[% res.nivel3.nivel1.getAutor %]')" title="[% 'Filtrar por Autor' | i18n %]">
                         [% res.nivel3.nivel1.getAutor %]
                   </a>          
               </td>
