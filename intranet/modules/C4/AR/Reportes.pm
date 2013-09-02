@@ -1246,69 +1246,69 @@ sub reporteDisponibilidad{
     my $fecha_ini = $params->{'fecha_ini'};
     my $fecha_fin = $params->{'fecha_fin'};
 
-    my $catRegistroMarcN3   = C4::Modelo::CatRegistroMarcN3->new();  
-    my $db = $catRegistroMarcN3->db;
+    my $catHistoricoDisponibilidad  = C4::Modelo::CatHistoricoDisponibilidad->new();  
+    my $db = $catHistoricoDisponibilidad->db;
         
     my @filtros;
 
     if ($ui ne ""){
-        push (@filtros, ("t1.marc_record"    => { like   => '%@'.$ui.'%'}));
+        push (@filtros, ("t2.marc_record"    => { like   => '%@'.$ui.'%'}));
     }
 
     if ($estado ne ""){
-        push (@filtros, ("t1.marc_record"    => { like   => '%@'.$estado.'%'}));
+        push (@filtros, ("detalle"    => { like   => '%'.$estado.'%'}));
     }
 
     if ($disponibilidad ne "" && $disponibilidad ne "SIN SELECCIONAR" ){
-        push (@filtros, ("t1.marc_record"    => { like   => '%oref_disponibilidad@'.$disponibilidad.'%'}));
+        push (@filtros, ("tipo_prestamo"    => { like   => '%'.$disponibilidad.'%'}));
     } 
 
     if ($fecha_ini ne "" && $fecha_fin ne ""){
             $fecha_ini= C4::Date::format_date_hour($fecha_ini,"iso");
             $fecha_fin= C4::Date::format_date_hour($fecha_fin,"iso");
-            push(@filtros, and => [ 'created_at' => { gt => $fecha_ini, eq => $fecha_ini },
-                                    'created_at' => { lt => $fecha_fin, eq => $fecha_fin} ] ); 
+            push(@filtros, and => [ 'timestamp' => { gt => $fecha_ini, eq => $fecha_ini },
+                                    'timestamp' => { lt => $fecha_fin, eq => $fecha_fin} ] ); 
     } elsif($fecha_ini ne ""){
             $fecha_ini= C4::Date::format_date_hour($fecha_ini,"iso");
-            push (@filtros, ('created_at' => { gt => $fecha_ini, eq => $fecha_ini }));
+            push (@filtros, ('timestamp' => { gt => $fecha_ini, eq => $fecha_ini }));
 
     } elsif($fecha_fin ne ""){
             $fecha_fin= C4::Date::format_date_hour($fecha_fin,"iso");
-            push (@filtros, ('created_at' => { lt => $fecha_fin, eq => $fecha_fin }));
+            push (@filtros, ('timestamp' => { lt => $fecha_fin, eq => $fecha_fin }));
         }
 
-    my $cant = C4::Modelo::CatRegistroMarcN3::Manager->get_cat_registro_marc_n3_count(   
+    my $cant = C4::Modelo::CatHistoricoDisponibilidad::Manager->get_cat_historico_disponibilidad_count(   
                                                                         db  => $db,
                                                                         query => \@filtros, 
-                                                                        require_objects => ['nivel2'],
+                                                                        require_objects => ['nivel3','nivel3.nivel2'],
                                         );
 
 
-    my $nivel3_array_ref;
+    my $disp_array_ref;
 
     if ($params->{'exportar'}){
-            $nivel3_array_ref= C4::Modelo::CatRegistroMarcN3::Manager->get_cat_registro_marc_n3(   
+            $disp_array_ref= C4::Modelo::CatHistoricoDisponibilidad::Manager->get_cat_historico_disponibilidad(   
                                                                         db  => $db,
                                                                         query => \@filtros, 
-                                                                        require_objects => ['nivel2'],
+                                                                        require_objects => ['nivel3','nivel3.nivel2'],
             );
 
     } else {
        
                                   
-            $nivel3_array_ref = C4::Modelo::CatRegistroMarcN3::Manager->get_cat_registro_marc_n3(   
+            $disp_array_ref = C4::Modelo::CatHistoricoDisponibilidad::Manager->get_cat_historico_disponibilidad(   
                                                                                     db  => $db,
                                                                                     limit => $cantR,
                                                                                     offset => $ini,
                                                                                     query => \@filtros, 
-                                                                                    require_objects => ['nivel2'],
+                                                                                    require_objects => ['nivel3','nivel3.nivel2'],
             );
 
 
     }
 
     
-    return ($nivel3_array_ref ,$cant);
+    return ($disp_array_ref ,$cant);
 
 
 }
