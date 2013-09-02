@@ -1682,59 +1682,62 @@ sub getReporteCirculacionGeneralToExport{
                                 'fecha' => { le => $fecha_fin } ] ); 
     }
 
-    my $totals_results_array = C4::Modelo::RepHistorialCirculacion::Manager->get_rep_historial_circulacion( 
+ # cantidad de ejemplares prestados (<> id3)
+    my $total_ejemplares_array = C4::Modelo::RepHistorialCirculacion::Manager->get_rep_historial_circulacion( 
                                                                       query             => \@filtros,
                                                                       require_objects   => [ 'nivel3','socio', 'tipo_prestamo_ref', 'responsable_ref' ],
-                                                                      select            => ['id3','nro_socio','tipo_prestamo', 'responsable', 'nivel3.id'],
+                                                                      select            => ['id3'],
                                                                       distinct          => 1,
                                                         );
 
-    # cantidad de socios
-    my $cant_nro_socio = C4::Modelo::RepHistorialCirculacion::Manager->get_rep_historial_circulacion_count( 
+
+
+    # cantidad de socios (<> nro_socio)
+    my $cant_nro_socio = C4::Modelo::RepHistorialCirculacion::Manager->get_rep_historial_circulacion( 
                                                                       query             => \@filtros,
-                                                                      require_objects   => [ 'nivel3','socio', 'tipo_prestamo_ref', 'responsable_ref' ],
-                                                                      select            => ['COUNT(t5.nro_socio) AS cant_nro_socio'],
+                                                                      require_objects   => ['nivel3','socio', 'tipo_prestamo_ref', 'responsable_ref' ],
+                                                                      select            => ['nro_socio'],
+                                                                      distinct          => 1,
                                                         );
 
-    # cantidad de devoluciones
+
+    # cantidad de devoluciones 
     my @filtros_tmp = @filtros;
     push(@filtros_tmp, ('tipo_operacion' =>  {eq => 'devolucion'} ));
-    my $cant_devoluciones = C4::Modelo::RepHistorialCirculacion::Manager->get_rep_historial_circulacion_count( 
+    my $cant_devoluciones = C4::Modelo::RepHistorialCirculacion::Manager->get_rep_historial_circulacion( 
                                                                       query             => \@filtros_tmp,
                                                                       require_objects   => [ 'nivel3','socio', 'tipo_prestamo_ref', 'responsable_ref' ],
-                                                                      select            => ['COUNT(t1.tipo_operacion) AS cant_devoluciones'],
+                                                                      select            => ['tipo_operacion'],
                                                         );
 
     # cantidad de renovaciones
     my @filtros_tmp = @filtros;
     push(@filtros_tmp, ('tipo_operacion' =>  {eq => 'renovacion'} ));
-    my $cant_renovaciones = C4::Modelo::RepHistorialCirculacion::Manager->get_rep_historial_circulacion_count( 
+    my $cant_renovaciones = C4::Modelo::RepHistorialCirculacion::Manager->get_rep_historial_circulacion( 
                                                                       query             => \@filtros_tmp,
                                                                       require_objects   => [ 'nivel3','socio', 'tipo_prestamo_ref', 'responsable_ref' ],
-                                                                      select            => ['COUNT(t1.tipo_operacion) AS cant_renovaciones'],
+                                                                      select            => ['tipo_operacion'],
                                                         );
-
-    # cantidad de domiciliarios
-    my @filtros_tmp = @filtros;
-    push(@filtros_tmp, ('tipo_prestamo' =>  {eq => 'DO'} ));
-    my $cant_domiciliario = C4::Modelo::RepHistorialCirculacion::Manager->get_rep_historial_circulacion_count( 
-                                                                      query             => \@filtros_tmp,
-                                                                      require_objects   => [ 'nivel3','socio', 'tipo_prestamo_ref', 'responsable_ref' ],
-                                                                      select            => ['COUNT(t1.tipo_prestamo) AS cant_domiciliario'],
-                                                        );
+    # # cantidad de domiciliarios
+    # my @filtros_tmp = @filtros;
+    # push(@filtros_tmp, ('tipo_prestamo' =>  {eq => 'DO'} ));
+    # my $cant_domiciliario = C4::Modelo::RepHistorialCirculacion::Manager->get_rep_historial_circulacion_count( 
+    #                                                                   query             => \@filtros_tmp,
+    #                                                                   require_objects   => [ 'nivel3','socio', 'tipo_prestamo_ref', 'responsable_ref' ],
+    #                                                                   select            => ['COUNT(t1.tipo_prestamo) AS cant_domiciliario'],
+    #                                                     );
 
 
 
     # cant for paginator
-    my $resultsArrayCant = scalar(@$totals_results_array);
+    my $resultsArrayCant = scalar(@$total_ejemplares_array);
 
     # totals, to be shown at the bottom of the page
     my %data_hash;   
 
-    $data_hash{'cantidad_usuarios'}      = $cant_nro_socio;
-    $data_hash{'cantidad_devoluciones'}  = $cant_devoluciones;
-    $data_hash{'cantidad_renovaciones'}  = $cant_renovaciones;
-    $data_hash{'cantidad_domiciliario'}  = $cant_domiciliario;
+    $data_hash{'cantidad_usuarios'}      = scalar(@$cant_nro_socio);
+    $data_hash{'cantidad_devoluciones'}  = scalar(@$cant_devoluciones);
+    $data_hash{'cantidad_renovaciones'}  = scalar(@$cant_renovaciones);
 
     return ($resultsArrayCant, \%data_hash);
 }
