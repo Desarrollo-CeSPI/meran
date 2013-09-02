@@ -1355,7 +1355,9 @@ sub _enviarRecordatorio{
 
             }
 
-            C4::AR::Mail::send_mail(\%mail);
+            if (C4::AR::Preferencias::getValorPreferencia('EnabledMailSystem')){  
+                C4::AR::Mail::send_mail(\%mail);
+            }
 
         } else {
 
