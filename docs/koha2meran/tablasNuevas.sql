@@ -486,7 +486,7 @@ INSERT  INTO `cat_pref_mapeo_koha_marc` (`tabla`, `campoTabla`, `nombre`, `campo
 ( 'additionalauthors', 'author', 'Nombre Personal', '700', 'a'),
 ( 'biblio', 'abstract', 'Nota de resumen, etc.', '520', 'a'),
 ( 'biblio', 'author', 'Nombre Personal', '100', 'a'),
-( 'biblio', 'notes', 'Entrada principal del original', '534', 'a'),
+( 'biblio', 'notes', 'Entrada principal del original', '500', 'a'),
 ( 'biblio', 'seriestitle', 'Numero de Clasificacion Decimal Universal', '080', 'a'),
 ( 'biblio', 'title', 'Titulo', '245', 'a'),
 ( 'biblio', 'unititle', 'Resto del ti­tulo', '245', 'b'),
