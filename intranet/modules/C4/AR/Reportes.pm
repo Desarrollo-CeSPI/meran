@@ -1264,16 +1264,16 @@ sub reporteDisponibilidad{
     } 
 
     if ($fecha_ini ne "" && $fecha_fin ne ""){
-            $fecha_ini= C4::Date::format_date_hour($fecha_ini,"iso");
-            $fecha_fin= C4::Date::format_date_hour($fecha_fin,"iso");
+            $fecha_ini= C4::Date::format_date($fecha_ini,"iso")."00:00:00";
+            $fecha_fin= C4::Date::format_date($fecha_fin,"iso")." 23:59:59";
             push(@filtros, and => [ 'timestamp' => { gt => $fecha_ini, eq => $fecha_ini },
                                     'timestamp' => { lt => $fecha_fin, eq => $fecha_fin} ] ); 
     } elsif($fecha_ini ne ""){
-            $fecha_ini= C4::Date::format_date_hour($fecha_ini,"iso");
+            $fecha_ini= C4::Date::format_date($fecha_ini,"iso")."00:00:00";
             push (@filtros, ('timestamp' => { gt => $fecha_ini, eq => $fecha_ini }));
 
     } elsif($fecha_fin ne ""){
-            $fecha_fin= C4::Date::format_date_hour($fecha_fin,"iso");
+            $fecha_fin= C4::Date::format_date($fecha_fin,"iso")." 23:59:59";
             push (@filtros, ('timestamp' => { lt => $fecha_fin, eq => $fecha_fin }));
         }
 
