@@ -864,8 +864,10 @@ sub BornameSearchForCard {
 
     if (($fecha_inicio) && ($fecha_inicio ne $desde) && ($fecha_fin) && ($fecha_fin ne $hasta) ) {
 
-        $fecha_inicio   = C4::Date::format_date($fecha_inicio, "iso");
-        $fecha_fin      = C4::Date::format_date($fecha_fin, "iso");
+        $fecha_inicio   = C4::Date::format_date($fecha_inicio, 'iso')."00:00:00";
+        $fecha_fin      = C4::Date::format_date($fecha_fin, 'iso')." 23:59:59";
+
+        C4::AR::Debug::debug($fecha_fin);
 
         push( @filtros, and => ['last_login' => { ge => $fecha_inicio },
                                 'last_login' => { le => $fecha_fin } ] ); 
