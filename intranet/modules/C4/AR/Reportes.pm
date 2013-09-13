@@ -1228,6 +1228,7 @@ sub registroDeUsuarios {
 
 # }
 
+
 sub reporteDisponibilidad{
     my ($params) = @_;
 
@@ -1237,71 +1238,66 @@ sub reporteDisponibilidad{
     my $disponibilidad=     $params->{'disponibilidad'};
     my $estado=         $params->{'estado'};
 
-    C4::AR::Debug::debug("ESTADOOOOOOOOOOO $estado");
-
 
     my $ini    = $params->{'ini'} || 0;
     my $cantR  = $params->{'cantR'} || 1;
 
-    my $fecha_ini = $params->{'fecha_ini'};
-    my $fecha_fin = $params->{'fecha_fin'};
+    my $catRegistroMarcN3  = C4::Modelo::CatRegistroMarcN3->new();
+    my $db = $catRegistroMarcN3->db; 
 
-    my $catHistoricoDisponibilidad  = C4::Modelo::CatHistoricoDisponibilidad->new();  
-    my $db = $catHistoricoDisponibilidad->db;
-        
     my @filtros;
 
     if ($ui ne ""){
-        push (@filtros, ("t2.marc_record"    => { like   => '%@'.$ui.'%'}));
+        push (@filtros, ("marc_record"    => { like   => '%@'.$ui.'%'}));
     }
 
     if ($estado ne ""){
-        push (@filtros, ("detalle"    => { like   => '%'.$estado.'%'}));
+        push (@filtros, ("marc_record"    => { like   => '%@'.$estado.'%'}));
     }
 
     if ($disponibilidad ne "" && $disponibilidad ne "SIN SELECCIONAR" ){
-        push (@filtros, ("tipo_prestamo"    => { like   => '%'.$disponibilidad.'%'}));
+        push (@filtros, ("marc_record"    => { like   => '%@'.$disponibilidad.'%'}));
     } 
 
-    if ($fecha_ini ne "" && $fecha_fin ne ""){
-            $fecha_ini= C4::Date::format_date($fecha_ini,"iso")."00:00:00";
-            $fecha_fin= C4::Date::format_date($fecha_fin,"iso")." 23:59:59";
-            push(@filtros, and => [ 'timestamp' => { gt => $fecha_ini, eq => $fecha_ini },
-                                    'timestamp' => { lt => $fecha_fin, eq => $fecha_fin} ] ); 
-    } elsif($fecha_ini ne ""){
-            $fecha_ini= C4::Date::format_date($fecha_ini,"iso")."00:00:00";
-            push (@filtros, ('timestamp' => { gt => $fecha_ini, eq => $fecha_ini }));
+    # if ($fecha_ini ne "" && $fecha_fin ne ""){
+    #         $fecha_ini= C4::Date::format_date($fecha_ini,"iso")."00:00:00";
+    #         $fecha_fin= C4::Date::format_date($fecha_fin,"iso")." 23:59:59";
+    #         push(@filtros, and => [ 'timestamp' => { gt => $fecha_ini, eq => $fecha_ini },
+    #                                 'timestamp' => { lt => $fecha_fin, eq => $fecha_fin} ] ); 
+    # } elsif($fecha_ini ne ""){
+    #         $fecha_ini= C4::Date::format_date($fecha_ini,"iso")."00:00:00";
+    #         push (@filtros, ('timestamp' => { gt => $fecha_ini, eq => $fecha_ini }));
 
-    } elsif($fecha_fin ne ""){
-            $fecha_fin= C4::Date::format_date($fecha_fin,"iso")." 23:59:59";
-            push (@filtros, ('timestamp' => { lt => $fecha_fin, eq => $fecha_fin }));
-        }
+    # } elsif($fecha_fin ne ""){
+    #         $fecha_fin= C4::Date::format_date($fecha_fin,"iso")." 23:59:59";
+    #         push (@filtros, ('timestamp' => { lt => $fecha_fin, eq => $fecha_fin }));
+    #     }
 
-    my $cant = C4::Modelo::CatHistoricoDisponibilidad::Manager->get_cat_historico_disponibilidad_count(   
+    my $cant = C4::Modelo::CatRegistroMarcN3::Manager->get_cat_registro_marc_n3_count(   
                                                                         db  => $db,
                                                                         query => \@filtros, 
-                                                                        require_objects => ['nivel3','nivel3.nivel2'],
+                                                                        require_objects => ['nivel2'],
                                         );
 
 
     my $disp_array_ref;
 
     if ($params->{'exportar'}){
-            $disp_array_ref= C4::Modelo::CatHistoricoDisponibilidad::Manager->get_cat_historico_disponibilidad(   
+            $disp_array_ref= C4::Modelo::CatRegistroMarcN3::Manager->get_cat_registro_marc_n3(   
                                                                         db  => $db,
                                                                         query => \@filtros, 
-                                                                        require_objects => ['nivel3','nivel3.nivel2'],
+                                                                        require_objects => ['nivel2'],
             );
 
     } else {
        
                                   
-            $disp_array_ref = C4::Modelo::CatHistoricoDisponibilidad::Manager->get_cat_historico_disponibilidad(   
+            $disp_array_ref = C4::Modelo::CatRegistroMarcN3::Manager->get_cat_registro_marc_n3(   
                                                                                     db  => $db,
                                                                                     limit => $cantR,
                                                                                     offset => $ini,
                                                                                     query => \@filtros, 
-                                                                                    require_objects => ['nivel3','nivel3.nivel2'],
+                                                                                    require_objects => ['nivel2'],
             );
 
 

@@ -44,10 +44,10 @@ $t_params->{'comboDeCategorias'} =$comboDeCategorias;
 my %params_for_combo = {};
 $params_for_combo{'default'} = 'ALL';
 
-my $comboDisponibilidad= C4::AR::Utilidades::generarComboDeDisponibilidadTexto();
+my $comboDisponibilidad= C4::AR::Utilidades::generarComboDeDisponibilidad();
 $t_params->{'disp_combo'} = $comboDisponibilidad;
 
-my $comboEstados= C4::AR::Utilidades::generarComboEstadoEjemplaresTexto();
+my $comboEstados= C4::AR::Utilidades::generarComboEstadoEjemplares();
 $t_params->{'estados_combo'} = $comboEstados;
 
 $t_params->{'item_type_combo'} = C4::AR::Utilidades::generarComboTipoNivel3(\%params_for_combo);
