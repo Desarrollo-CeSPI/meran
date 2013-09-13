@@ -21,6 +21,7 @@
                           columns         => [  '[% "Apellido y Nombre"|i18n %]',
                                                 '[% "Tarjeta de Id"|i18n %]',
                                                 '[% "Legajo"|i18n %]','[% "Ingreso"|i18n %]',
+                                                '[% "Fecha ultimo acceso"|i18n %]',
                                                 '[% "Categoria"|i18n %]','[% "Regularidad"|i18n %]',  
                                               ]
                         
@@ -46,6 +47,16 @@
                         <td> [% TRY %] 
                                 [% IF socio.getFecha_alta %] 
                                     [% socio.getFecha_alta %] 
+                                [% ELSE %]
+                                    --------
+                                [% END %]
+                             [% CATCH %] 
+                                -------- 
+                             [% END %]
+                        </td>
+                          <td> [% TRY %] 
+                                [% IF socio.getLast_login %] 
+                                    [% socio.getLast_login %] 
                                 [% ELSE %]
                                     --------
                                 [% END %]
