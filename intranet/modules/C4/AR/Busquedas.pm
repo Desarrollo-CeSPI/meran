@@ -1686,6 +1686,7 @@ sub armarInfoNivel1{
 
             my @nivel2_portadas = ();
             my @nivel2_portadas_personalizadas = ();
+            my $portadas_perzonalizadas_cant = 0;
             my $cant;
 
             if (scalar(@$nivel2_array_ref)){
@@ -1705,12 +1706,13 @@ sub armarInfoNivel1{
                     if ($cant){
                         $hash_nivel2_portadas{'portadas'}       =  $nivel2_array_ref->[$x]->getPortadasEdicion($nivel2_array_ref->[$x]->getId2);
                         push(@nivel2_portadas_personalizadas, \%hash_nivel2_portadas);
+                        $portadas_perzonalizadas_cant = $portadas_perzonalizadas_cant + $cant;
                     }
                 }
 
                 @result_array_paginado[$i]->{'portadas_grupo'}  = \@nivel2_portadas;
                 @result_array_paginado[$i]->{'portadas_grupo_cant'}  = scalar(@nivel2_portadas);
-                @result_array_paginado[$i]->{'portadas_perzonalizadas_cant'}  = $cant;
+                @result_array_paginado[$i]->{'portadas_perzonalizadas_cant'}  = $portadas_perzonalizadas_cant;
                 @result_array_paginado[$i]->{'portadas_perzonalizadas'}  = \@nivel2_portadas_personalizadas;
             }
             
