@@ -49,6 +49,12 @@ echo 'Alias /uploads/covers/ "reemplazarPATHBASE/reemplazarID/files/intranet/upl
   Allow from all
 </Directory>
 
+Alias /uploads/covers-added/ "reemplazarPATHBASE/reemplazarID/files/intranet/uploads/covers-added/"
+<Directory reemplazarPATHBASE/reemplazarID/files/intranet/uploads/covers-added/ >
+ Order allow,deny
+ Allow from all
+</Directory>
+
 Alias /uploads/ "reemplazarPATHBASE/reemplazarID/files/opac/uploads/"
 <Directory reemplazarPATHBASE/reemplazarID/files/opac/uploads/ >
 Order allow,deny
@@ -57,7 +63,7 @@ Allow from all
 
 
 Alias /private-uploads/ "reemplazarPATHBASE/reemplazarID/files/intranet/private-uploads/"
-<Directory /usr/share/meran/ECONOMICAS/files/intranet/private-uploads/ >
+<Directory reemplazarPATHBASE/reemplazarID/files/intranet/private-uploads/ >
 Order allow,deny
 Allow from all
 </Directory>
