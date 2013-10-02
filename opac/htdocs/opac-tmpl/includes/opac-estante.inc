@@ -118,7 +118,7 @@
                       [% FOREACH contenido_estante IN estante.contenido %]
                           <tr>
                               <td>
-
+                                [% contenido_estante.nivel2.nivel1.getTitulo %]
                               </td>
                               <td>
                                   [% PERL %]

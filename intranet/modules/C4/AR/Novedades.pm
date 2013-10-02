@@ -84,7 +84,7 @@ sub agregar{
     };
 
     if ($@){
-    
+    C4::AR::Debug::debug("ERROR  : " . $@);
        $msg_object->{'error'}= 1;
        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'UP12', 'intra'} ) ;
        
