@@ -305,7 +305,7 @@ Se elimina el usuario
                                                                     "intranet"
                                     );	
 
-            C4::AR::Validator::validateParams('U389',$obj,['nro_socio','nombre','nacimiento','ciudad','apellido','id_ui','sexo'] );
+            #C4::AR::Validator::validateParams('U389',$obj,['nro_socio','nombre','nacimiento','ciudad','apellido','id_ui','sexo'] );
 
             my ($Message_arrayref)= C4::AR::Usuarios::actualizarSocio($obj);
             my $infoOperacionJSON=to_json $Message_arrayref;
