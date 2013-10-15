@@ -151,11 +151,18 @@ sub link_to {
 
     if($url_absolute){
         #verifico si la URL contiene http, sino lo agrego
-        ($url =~ m/http/)?$link= "<a href='".$url."'":$link= "<a href='http://".$url."'";        
+        # ($url =~ m/http/)?$link= "<a href='".$url."'":$link= "<a href='http://".$url."'";        
+        if($url =~ m/http/){
+            $link= "<a href='".$url."'";
+        } else {
+            $link= "<a href='http://".$url."'";     
+        }
         
     } else {
         $link= "<a href='".$url."'";
     }
+
+    C4::AR::Debug::debug("FILTROS URL => ".$link);
 
     if ($tooltip ne ''){
         $link .= " data-original-title='$tooltip'";
