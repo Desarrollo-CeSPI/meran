@@ -78,6 +78,13 @@ echo 'Alias /uploads/covers/ "reemplazarPATHBASE/reemplazarID/files/intranet/upl
   Allow from all
 </Directory>
 
+Alias /uploads/novedades-opac "reemplazarPATHBASE/reemplazarID/files/opac/uploads/novedades/"
+<Directory reemplazarPATHBASE/reemplazarID/files/opac/uploads/novedades >
+Order allow,deny
+Allow from all
+</Directory>
+
+
 Alias /uploads/covers-added/ "reemplazarPATHBASE/reemplazarID/files/intranet/uploads/covers-added/"
 <Directory reemplazarPATHBASE/reemplazarID/files/intranet/uploads/covers-added/ >
  Order allow,deny
