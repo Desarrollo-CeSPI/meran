@@ -193,44 +193,55 @@ sub uploadAdjuntoNovedadOpac{
                                         odt
                                         msword
                                     );
-
+    
+    my @nombreYextension        = split('\.',$adjunto);
     my $uploaddir               = C4::Context->config("novedadesOpacPath");
     my $maxFileSize             = 2048 * 2048; # 1/2mb max file size...
     my $hash_unique             = Digest::MD5::md5_hex(localtime() + rand(10));
-    my ($file_type,$notBinary)  = C4::AR::Utilidades::checkFileMagic($adjunto, @whiteList);
+    my ($mime_type,$notBinary)  = C4::AR::Utilidades::checkFileMagic($adjunto, @whiteList);
     
+  
+
+
     #es un archivo valido
-    if($file_type){
+    if($mime_type){
 
         #fix para archivos .doc. El mime es msword y lo guarda con esa extension sino
-        if($file_type eq 'msword'){ $file_type = 'doc'; }
+        if($mime_type eq 'msword'){ $mime_type = 'doc'; }
+
+        # Parche para que no se interpreten como zip los archivos docx
+        if ((@nombreYextension[1] eq "docx") && ($mime_type eq "zip")){
+                $mime_type = 'docx';
+        } 
     
         if($notBinary){
         
             #no hay que escribirlo con binmode
-            open(WRITEIT, ">$uploaddir/$hash_unique.$file_type") or die "Cant write to $uploaddir/$hash_unique.$file_type. Reason: $!";
+            open(WRITEIT, ">$uploaddir/$hash_unique.$mime_type") or die "Cant write to $uploaddir/$hash_unique.$mime_type. Reason: $!";
             print WRITEIT $adjunto;
             close(WRITEIT);
    
         }else{
         
-            open ( WRITEIT, ">$uploaddir/$hash_unique.$file_type" ) or die "Cant write to $uploaddir/$hash_unique.$file_type. Reason: $!"; 
+            open ( WRITEIT, ">$uploaddir/$hash_unique.$mime_type" ) or die "Cant write to $uploaddir/$hash_unique.$mime_type. Reason: $!"; 
             binmode WRITEIT; 
             while ( <$adjunto> ) { 
             	print WRITEIT; 
             }
             close(WRITEIT);
             
-        
         }
 
-        return ("$hash_unique.$file_type");
+        return ("$hash_unique.$mime_type");
         
     }
+     
     
     return 0;
 
 }
+
+
 
 sub uploadFotoNovedadOpac{
 
