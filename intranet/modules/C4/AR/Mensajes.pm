@@ -79,6 +79,7 @@ my %mensajesOPAC = (
                 Cuando haya alg&uacute;n ejemplar a su disposici&oacute;n se le informar&aacute; a 
                 <br><i> *?* </i><br>Verifique que sus datos sean correctos ya que el mensaje se enviar&aacute; a esta direcci&oacute;n.',
     'U304' => 'Disculpe, no puede reservar porque no hizo el curso para usuarios.',
+    'U305' => 'El ejemplar que acaba de reservar puede ser retirado hasta el d&iacute;a: *?*',
     'U308' => 'Se cancel&oacute; la reserva con &eacute;xito.',
     'U315' => 'Las passwords no coinciden, ingrese la password nuevamente.',
     'U338' => 'Se modificaron los datos del usuario correctamente.',
