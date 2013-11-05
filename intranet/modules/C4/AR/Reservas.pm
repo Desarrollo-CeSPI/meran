@@ -1127,8 +1127,8 @@ sub t_reservarOPAC {
 	            #SE RESERVO CON EXITO UN EJEMPLAR
                 $msg_object->{'error'} = 0;
                 C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U302', 'tipo'=> 'opac', 'params' => [    
-                                                                                        $paramsReserva->{'hasta'},
-                                                                                        $paramsReserva->{'hastah'}
+                                                                                        $paramsReserva->{'hasta'}
+                                                                                        
                                 ]} ) ;
 
             }else{

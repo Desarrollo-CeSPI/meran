@@ -74,7 +74,7 @@ my %mensajesOPAC = (
     'S206' => 'Disculpe, no se puede efectuar la reserva porque tiene ejemplar/es vencido/s.',
     'U300' => 'Disculpe, no puede efectuar reservas porque comple la condici&oacute;n debido a las normas de la Biblioteca.',
     'U301' => 'Disculpe, no puede efectuar reservas porque usted no ha realizado a&uacute;n el curso para usuarios.',
-    'U302' => 'El ejemplar que acaba de reservar puede ser retirado hasta el d&iacute;a: *?* a las *?*',
+    'U302' => 'El ejemplar que acaba de reservar puede ser retirado hasta el d&iacute;a: *?*.',
     'U303' => 'En este momento no hay ejemplares disponibles para pr&eacute;stamo inmediato. 
                 Cuando haya alg&uacute;n ejemplar a su disposici&oacute;n se le informar&aacute; a 
                 <br><i> *?* </i><br>Verifique que sus datos sean correctos ya que el mensaje se enviar&aacute; a esta direcci&oacute;n.',
