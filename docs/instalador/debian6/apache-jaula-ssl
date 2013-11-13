@@ -89,6 +89,13 @@ Order allow,deny
 Allow from all
 </Directory>
 
+Alias /uploads/portada "reemplazarPATHBASE/reemplazarID/files/opac/uploads/portada/"
+<Directory reemplazarPATHBASE/reemplazarID/files/opac/uploads/portada >
+Order allow,deny
+Allow from all
+</Directory>
+
+
 Alias /cron "reemplazarPATHBASE/reemplazarID/intranet/cgi-bin/cron/"
 <Directory reemplazarPATHBASE/reemplazarID/intranet/cgi-bin/cron/ >
  Order deny,allow

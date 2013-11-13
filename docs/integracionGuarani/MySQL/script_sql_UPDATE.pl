@@ -165,7 +165,7 @@ while ($line = <ARCHIVO>) {
     $cardnumber = join(" ", split(" ",$fields[1]));
 
    # PASSWORD DE GUARANI, hay que transformarla de md5 
-    $userPassword = hashearPassword(join(" ", split(" ",$fields[2])));
+    $userPassword = join(" ", split(" ",$fields[2]));
     #print "userPassword:: ".$userPassword."\n";
 
     #Esto es lo que comente para que no rompa los cardnumber con caracteres alfanumericos
