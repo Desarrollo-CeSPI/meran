@@ -162,10 +162,10 @@ while ($line = <ARCHIVO>) {
     # Comenzando en el primer caraceter y usando el <TAB> como separador de campos
     @fields = split(/\|/,$line);
     # Setea variables correspondientes a los valores del arreglo
-    $cardnumber = join(" ", split(" ",$fields[1]));
+    $cardnumber = $fields[1];
 
    # PASSWORD DE GUARANI, hay que transformarla de md5 
-    $userPassword = join(" ", split(" ",$fields[2]));
+    $userPassword = $fields[2];
     #print "userPassword:: ".$userPassword."\n";
 
     #Esto es lo que comente para que no rompa los cardnumber con caracteres alfanumericos
@@ -173,25 +173,23 @@ while ($line = <ARCHIVO>) {
     if ($debug) {print L 'cardnumber'.$cardnumber.'estado '.$fields[18]."\n";}
     ($cardnumber,$categorycode)=&obtenerCategoria($cardnumber,$fields[18]);
     if ($debug) {print L $cardnumber."\n";}
-    $surname = join(" ", split(" ",$fields[3]));
-    $surname=~ s/\'//g;
-    $firstname = join(" ", split(" ",$fields[4]));
-    $firstname=~ s/\'//g;
+    $surname = $fields[3];
+    $firstname = $fields[4];
     $documenttype = ($fields[20] eq '')?'NULL':$fields[20];
     $documentnumber = ($fields[21] eq '')?'NULL':(split(/\./,$fields[21]))[0];
     #IMPORTANTE el valor del DATEFormat debe cambiar segun sea la entrada
     Date_Init("DateFormat=US");
     my $olddate = ParseDate($fields[5]); 
     my $newdate = UnixDate($olddate, '%Y-%m-%d');
-    $dateofbirth= ($fields[5] eq '')?'NULL':'"'.$newdate.'"';
+    $dateofbirth= ($fields[5] eq '')?'NULL':$newdate;
     $sex= $fields[6];
     $sex =~ tr/12/MF/;
     $streetaddress= "CALLE: ".(($fields[7])?$fields[7]:"-")." NUMERO: ".(($fields[8])?$fields[8]:"-")." PISO: ".(($fields[9])?$fields[9]:"-")." DPTO: ".(($fields[10])?$fields[10]:"-");
-    $city= ($fields[12] eq '')?'NULL':'"'.$fields[12].'"';
-    $zipcode= ($fields[13] eq '')?'NULL':'"'.$fields[13].'"';
-    $phone= ($fields[14] eq '')?'NULL':'"'.$fields[14].'"';
-    $emailaddress= ($fields[15] eq '')?'NULL':'"'.$fields[15].'"';
-    $studentnumber= ($fields[17] eq '')?'NULL':'"'.$fields[17].'"';
+    $city= ($fields[12] eq '')?'NULL':$fields[12];
+    $zipcode= ($fields[13] eq '')?'NULL':$fields[13];
+    $phone= ($fields[14] eq '')?'NULL':$fields[14];
+    $emailaddress= ($fields[15] eq '')?'NULL':$fields[15];
+    $studentnumber= ($fields[17] eq '')?'NULL':$fields[17];
     $fields[19]=~ tr/SN/10/;
     $estado= $fields[18];
     # CALIDAD $fields[18] A: Activo - E: Egresado - N: No activo ?
@@ -210,7 +208,7 @@ while ($line = <ARCHIVO>) {
                 ($uuserPassword,$ucardnumber,$usurname,$ufirstname,$udateofbirth,$usex,$ustreetaddress,$ucity,$uzipcode,$uphone,$uemailaddress,$ustudentnumber,$udocumentnumber,$udocumenttype,$uregular,$uestado,$ucategorycode)=($userPassword,$cardnumber,$surname,$firstname,$dateofbirth,$sex,$streetaddress,$city,$zipcode,$phone,$emailaddress,$studentnumber,$documentnumber,$documenttype,$fields[19],$estado,$categorycode);
                 $paso=2;
             }#if paso==0
-            my $out = $dbh->prepare("select usr_socio.id_estado, usr_socio.id_categoria, usr_socio.id_persona, usr_persona.nro_documento, usr_persona.id_persona, usr_persona.tipo_documento from usr_socio inner join usr_persona on usr_socio.id_persona=usr_persona.id_persona where nro_socio= ? ");#and tipo_documento=?"); 
+            my $out = $dbh->prepare("SELECT usr_socio.id_estado, usr_socio.id_categoria, usr_socio.id_persona, usr_persona.nro_documento, usr_persona.id_persona, usr_persona.tipo_documento from usr_socio inner join usr_persona on usr_socio.id_persona=usr_persona.id_persona where nro_socio= ? ");#and tipo_documento=?"); 
             $out->execute($anterior);#,$tipos_de_documento->{uc($anterior_tipo_doc)}->{'id'});
             my $id_uestado= $tipos_de_estados->{&calcularEstado($uregular,$uestado)}->{'id_estado'};
             my $id_categoria=$tipos_de_usuarios->{$ucategorycode}->{'id'};               
@@ -220,13 +218,13 @@ while ($line = <ARCHIVO>) {
             if ($out->rows) {
                 my $datos=$out->fetchrow_hashref;
 		if ( ($datos->{'id_estado'} ne $id_uestado) or ($datos->{'id_categoria'} ne $id_categoria)){
-	                print("update usr_socio set id_estado= $id_uestado, id_categoria=$id_categoria where id_persona=$datos->{'id_persona'} ;\n");
+	               print("UPDATE usr_socio SET id_estado= $id_uestado, id_categoria=$id_categoria where id_persona=$datos->{'id_persona'} ;\n");
 		}	
  		if( ($datos->{'nro_documento'} ne $anterior_dni) or ($datos->{'tipo_documento'} ne $tipos_de_documento->{uc($anterior_tipo_doc)}->{'id'}))
 		{
                 #El estado calculado no es igual al que estaba
                 #Hay que ver si el tipo es automatico
-	        print("update usr_persona set tipo_documento=$tipos_de_documento->{uc($anterior_tipo_doc)}->{'id'}, nro_documento='$anterior_dni' where id_persona=$datos->{'id_persona'} ;\n");
+	               print("UPDATE usr_persona SET tipo_documento=$tipos_de_documento->{uc($anterior_tipo_doc)}->{'id'}, nro_documento='$anterior_dni' where id_persona=$datos->{'id_persona'} ;\n");
                 }
                 }
             else{#no existe lo tengo que agregar ACA voy
@@ -235,9 +233,9 @@ while ($line = <ARCHIVO>) {
                 my $out2 = $dbh->prepare("select * from usr_persona where nro_documento=? and tipo_documento=?");
                 $out2->execute($udocumentnumber,$tipos_de_documento->{uc($udocumenttype)}->{'id'});#,$tipos_de_documento->{uc($anterior_tipo_doc)}->{'id'});
                 if (! $out2->rows ){
-                    print("insert into  usr_persona (nro_documento, tipo_documento, apellido, nombre, nacimiento, sexo, calle, ciudad,  codigo_postal, telefono, email, legajo, es_socio) values ('".$udocumentnumber."','".$tipos_de_documento->{uc($udocumenttype)}->{'id'}."','".$usurname."','".$ufirstname."',".$udateofbirth.",'".$usex."','".$ustreetaddress."',".$ucity.",".$uzipcode.",".$uphone.",".$uemailaddress.",".$ustudentnumber.",0);\n");
+                    print ("INSERT INTO usr_persona (nro_documento, tipo_documento, apellido, nombre, nacimiento, sexo, calle, ciudad,  codigo_postal, telefono, email, legajo, es_socio) values ('$udocumentnumber','$tipos_de_documento->{uc($udocumenttype)}->{'id'}','$usurname','$ufirstname','$udateofbirth','$usex','$ustreetaddress','$ucity','$uzipcode','$uphone','$uemailaddress','$ustudentnumber',0);\n");
                 }
-                    print ("INSERT INTO usr_socio (id_persona, id_socio, nro_socio, id_ui, fecha_alta, expira, flags, password, last_login, last_change_password, change_password, cumple_requisito, nombre_apellido_autorizado, dni_autorizado, telefono_autorizado, is_super_user, credential_type, activo, note, agregacion_temp, theme, theme_intra, locale, lastValidation, id_categoria, id_estado, recover_password_hash, client_ip_recover_pwd, recover_date_of, last_auth_method, remindFlag) VALUES ((select id_persona from usr_persona where nro_documento='".$udocumentnumber."' and tipo_documento=".$tipos_de_documento->{uc($udocumenttype)}->{'id'}." ) , NULL, '".$anterior."', '$branchcode', NOW(), NULL, NULL, '".$uuserPassword."' , NOW(), NULL, '0', NULL, NULL, NULL, NULL, '0', NULL, 0, NULL, NULL, NULL, NULL, NULL, CURRENT_TIMESTAMP,".$id_categoria.",".$id_uestado." , NULL, NULL, NOW(), 'mysql', '1');\n");
+                    print ("INSERT INTO usr_socio (id_persona, id_socio, nro_socio, id_ui, fecha_alta, expira, flags, password, last_login, last_change_password, change_password, cumple_requisito, nombre_apellido_autorizado, dni_autorizado, telefono_autorizado, is_super_user, credential_type, activo, note, agregacion_temp, theme, theme_intra, locale, lastValidation, id_categoria, id_estado, recover_password_hash, client_ip_recover_pwd, recover_date_of, last_auth_method, remindFlag) VALUES ((select id_persona from usr_persona where nro_documento='$udocumentnumber' and tipo_documento=$tipos_de_documento->{uc($udocumenttype)}->{'id'} ) , NULL, '$anterior', '$branchcode', NOW(), NULL, NULL, '$uuserPassword' , NOW(), NULL, '0', NULL, NULL, NULL, NULL, '0', NULL, 0, NULL, NULL, NULL, NULL, NULL, CURRENT_TIMESTAMP,$id_categoria,$id_uestado , NULL, NULL, NOW(), 'mysql', '1');\n");
             } #else
             if ($paso){
                 ($uuserPassword,$ucardnumber,$usurname,$ufirstname,$udateofbirth,$usex,$ustreetaddress,$ucity,$uzipcode,$uphone,$uemailaddress,$ustudentnumber,$udocumentnumber,$udocumenttype,$uregular,$uestado,$ucategorycode)=($userPassword,$cardnumber,$surname,$firstname,$dateofbirth,$sex,$streetaddress,$city,$zipcode,$phone,$emailaddress,$studentnumber,$documentnumber,$documenttype,$fields[19],$estado,$categorycode);
@@ -271,13 +269,13 @@ if ($anterior eq $cardnumber){
             if ($out->rows) {
                 my $datos=$out->fetchrow_hashref;
                 if ( ($datos->{'id_estado'} ne $id_uestado) or ($datos->{'id_categoria'} ne $id_categoria)){
-                        print("update usr_socio set id_estado= $id_uestado, id_categoria=$id_categoria where id_persona=$datos->{'id_persona'} ;\n");
+                        print("UPDATE usr_socio SET id_estado= $id_uestado, id_categoria=$id_categoria where id_persona=$datos->{'id_persona'} ;\n");
         }       
                 if( ($datos->{'nro_documento'} ne $anterior_dni) or ($datos->{'tipo_documento'} ne $tipos_de_documento->{uc($anterior_tipo_doc)}->{'id'}))
                 {
                 #El estado calculado no es igual al que estaba
                 #Hay que ver si el tipo es automatico
-                        print("update usr_persona set tipo_documento=$tipos_de_documento->{uc($anterior_tipo_doc)}->{'id'}, nro_documento='$anterior_dni' where id_persona=$datos->{'id_persona'} ;\n");
+                        print("UPDATE usr_persona SET tipo_documento=$tipos_de_documento->{uc($anterior_tipo_doc)}->{'id'}, nro_documento='$anterior_dni' where id_persona=$datos->{'id_persona'} ;\n");
 
 		}
 
@@ -288,9 +286,9 @@ if ($anterior eq $cardnumber){
         my $out2 = $dbh->prepare("select * from usr_persona where nro_documento=? and tipo_documento=?");
         $out2->execute($udocumentnumber,$tipos_de_documento->{uc($udocumenttype)}->{'id'});#,$tipos_de_documento->{uc($anterior_tipo_doc)}->{'id'});
          if (! $out2->rows ){
-            print("insert into  usr_persona (nro_documento, tipo_documento, apellido, nombre, nacimiento, sexo, calle, ciudad,  codigo_postal, telefono, email, legajo, es_socio) values ('".$udocumentnumber."','".$tipos_de_documento->{uc($udocumenttype)}->{'id'}."','".$usurname."','".$ufirstname."',".$udateofbirth.",'".$usex."','".$ustreetaddress."',".$ucity.",".$uzipcode.",".$uphone.",".$uemailaddress.",".$ustudentnumber.",0);\n");
+            print ("INSERT INTO usr_persona (nro_documento,tipo_documento, apellido, nombre, nacimiento, sexo, calle, ciudad,  codigo_postal, telefono, email, legajo, es_socio) values ('$udocumentnumber',$tipos_de_documento->{uc($udocumenttype)}->{'id'},'$usurname','$ufirstname','$udateofbirth','$usex','$ustreetaddress','$ucity','$uzipcode','$uphone','$uemailaddress','$ustudentnumber',0);\n");
         }
-                    print ("INSERT INTO usr_socio (id_persona, id_socio, nro_socio, id_ui, fecha_alta, expira, flags, password, last_login, last_change_password, change_password, cumple_requisito, nombre_apellido_autorizado, dni_autorizado, telefono_autorizado, is_super_user, credential_type, activo, note, agregacion_temp, theme, theme_intra, locale, lastValidation, id_categoria, id_estado, recover_password_hash, client_ip_recover_pwd, recover_date_of, last_auth_method, remindFlag) VALUES ((select id_persona from usr_persona where nro_documento='".$udocumentnumber."' and tipo_documento=".$tipos_de_documento->{uc($udocumenttype)}->{'id'}." ) , NULL, '".$anterior."', '".$branchcode."', NOW(), NULL, NULL, '".$uuserPassword."' , NOW(), NULL, '0', NULL, NULL, NULL, NULL, '0', NULL, 0, NULL, NULL, NULL, NULL, NULL, CURRENT_TIMESTAMP,".$id_categoria.",".$id_uestado." , NULL, NULL, NOW(), 'mysql', '1');\n");
+            print ("INSERT INTO usr_socio (id_persona, id_socio, nro_socio, id_ui, fecha_alta, expira, flags, password, last_login, last_change_password, change_password, cumple_requisito, nombre_apellido_autorizado, dni_autorizado, telefono_autorizado, is_super_user, credential_type, activo, note, agregacion_temp, theme, theme_intra, locale, lastValidation, id_categoria, id_estado, recover_password_hash, client_ip_recover_pwd, recover_date_of, last_auth_method, remindFlag) VALUES ((select id_persona from usr_persona where nro_documento='$udocumentnumber' and tipo_documento=$tipos_de_documento->{uc($udocumenttype)}->{'id'} ) , NULL, '$anterior', '$branchcode', NOW(), NULL, NULL, '$uuserPassword' , NOW(), NULL, '0', NULL, NULL, NULL, NULL, '0', NULL, 0, NULL, NULL, NULL, NULL, NULL, CURRENT_TIMESTAMP, $id_categoria, $id_uestado , NULL, NULL, NOW(), 'mysql', '1');\n");
 		}
 	
 # Si el usuario no esta hace un INSERT
