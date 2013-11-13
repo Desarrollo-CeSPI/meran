@@ -46,7 +46,9 @@ while ($line = <ARCHIVO>) {
 	# Comenzando en el primer caraceter y usando el | como separador de campos
 	
 	@fields = split '\|',$line;
-	@fields = map (addSlashes,@fields);
+
+	@fields =  map { addSlashes($_) }  @fields;
+	
 	$fields[2]=hashearPassword($fields[2]);
 	$linea=join '|',@fields;
 
@@ -58,5 +60,5 @@ close ARCHIVO2;
 $usuario=$ARGV[1];
 $server=$ARGV[2];
 $path=$ARGV[3];
-system('scp salida '.$usuario.'@'.$server.':/'.$path);
+system('scp salida '.$usuario.'@'.$server.':'.$path);
 exit;

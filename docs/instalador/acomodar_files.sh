@@ -84,9 +84,22 @@ Order allow,deny
 Allow from all
 </Directory>
 
+Alias /uploads/portada "reemplazarPATHBASE/reemplazarID/files/opac/uploads/portada/"
+<Directory reemplazarPATHBASE/reemplazarID/files/opac/uploads/portada >
+Order allow,deny
+Allow from all
+</Directory>
 
 Alias /uploads/covers-added/ "reemplazarPATHBASE/reemplazarID/files/intranet/uploads/covers-added/"
 <Directory reemplazarPATHBASE/reemplazarID/files/intranet/uploads/covers-added/ >
  Order allow,deny
  Allow from all
-</Directory>';
+</Directory>
+
+Alias /private-uploads/ "reemplazarPATHBASE/reemplazarID/files/intranet/private-uploads/"
+<Directory reemplazarPATHBASE/reemplazarID/files/intranet/private-uploads/ >
+Order allow,deny
+Allow from all
+</Directory>
+
+';
