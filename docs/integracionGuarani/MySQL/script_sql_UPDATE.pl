@@ -16,7 +16,7 @@ use strict;
 use CGI qw(:standard);
 use DBI;
 use Text::ParseWords;
-use Date::Manip;
+use Date::Manip::DM5;
 use Digest::MD5 qw(md5_base64);
 use MIME::Base64;
 use Digest::SHA  qw(sha1 sha1_hex sha1_base64 sha256_base64 );
