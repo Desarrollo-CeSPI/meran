@@ -918,13 +918,21 @@ sub generateBookLabelA4 {
 
     #NEW WAY: trae el nombre del archivo o 0 si no hay nada
     my $escudo = C4::AR::Logos::getPathLogoEtiquetas();
-    if ( !($escudo) ) {
-        $escudo = C4::Context->config('private_path') . '/images/escudo-DEFAULT.jpg';
-        $pdf->addImgScaled($escudo, $x + 85 , 122 + ($y) , 2.5/100);
-    }else{
+
+    #verifico si el archivo existe, sino muestro logo por defecto
+    if (-e $escudo) {
+        if ($escudo) {
+            $pdf->addImgScaled($escudo, $x + 85 , 122 + ($y) , 2.5/100);
+        }
+    } else {
+        C4::AR::Debug::debug("PdfGenerator => generateBookLabelA4 => NO EXISTE ESCUDO ".$escudo); 
+        $escudo = C4::AR::Logos::getOnlyPathLogoEtiquetas();
+        $escudo .= 'logo_default.jpeg';
+        C4::AR::Debug::debug("PdfGenerator => generateBookLabelA4 => NO EXISTE ESCUDO => muestro default ".$escudo); 
         $pdf->addImgScaled($escudo, $x + 85 , 122 + ($y) , 2.5/100);
     }
    
+
     #Write the borrower data into the pdf file
     $pdf->setSize(6);
     $pdf->setFont("Arial-Bold");
@@ -1033,11 +1041,21 @@ sub generateBookLabel{
 
     #NEW WAY, trae el path al archivo, 0 si no hay ninguno cargado
     my $escudo = C4::AR::Logos::getPathLogoEtiquetas();
-    if ( !(  $escudo ) ) {
-        $escudo = C4::Context->config('private_path') . '/images/escudo-DEFAULT.jpg';
-        $pdf->addImgScaled($escudo, $x + 105, $y + 40, 2.5/100);
-    }else{
-        $pdf->addImgScaled($escudo, $x + 105, $y + 40, 2.5/100);
+
+    # if ($escudo) {
+    #     $pdf->addImgScaled($escudo, $x + 105, $y + 50, 2/100);
+    # }
+
+    if (-e $escudo) {
+        if ($escudo) {
+            $pdf->addImgScaled($escudo, $x + 105, $y + 50, 2/100));
+        }
+    } else {
+        C4::AR::Debug::debug("PdfGenerator => generateBookLabelA4 => NO EXISTE ESCUDO ".$escudo); 
+        $escudo = C4::AR::Logos::getOnlyPathLogoEtiquetas();
+        $escudo .= 'logo_default.jpeg';
+        C4::AR::Debug::debug("PdfGenerator => generateBookLabelA4 => NO EXISTE ESCUDO => muestro default ".$escudo); 
+        $pdf->addImgScaled($escudo, $x + 105, $y + 50, 2/100));
     }
 
     #Write the borrower data into the pdf file
