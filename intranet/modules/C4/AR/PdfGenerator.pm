@@ -1040,7 +1040,7 @@ sub generateBookLabel{
     use C4::AR::Logos;
 
     #NEW WAY, trae el path al archivo, 0 si no hay ninguno cargado
-    # my $escudo = C4::AR::Logos::getPathLogoEtiquetas();
+    my $escudo = C4::AR::Logos::getPathLogoEtiquetas();
 
     # if ($escudo) {
     #     $pdf->addImgScaled($escudo, $x + 105, $y + 50, 2/100);
