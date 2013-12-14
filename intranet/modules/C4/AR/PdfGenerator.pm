@@ -918,8 +918,17 @@ sub generateBookLabelA4 {
 
     #NEW WAY: trae el nombre del archivo o 0 si no hay nada
     my $escudo = C4::AR::Logos::getPathLogoEtiquetas();
-    
-    if ($escudo) {
+
+    #verifico si el archivo existe, sino muestro logo por defecto
+    if (-e $escudo) {
+        if ($escudo) {
+            $pdf->addImgScaled($escudo, $x + 85 , 122 + ($y) , 2.5/100);
+        }
+    } else {
+        C4::AR::Debug::debug("PdfGenerator => generateBookLabelA4 => NO EXISTE ESCUDO ".$escudo); 
+        $escudo = C4::AR::Logos::getOnlyPathLogoEtiquetas();
+        $escudo .= 'logo_default.jpeg';
+        C4::AR::Debug::debug("PdfGenerator => generateBookLabelA4 => NO EXISTE ESCUDO => muestro default ".$escudo); 
         $pdf->addImgScaled($escudo, $x + 85 , 122 + ($y) , 2.5/100);
     }
    
@@ -1031,12 +1040,23 @@ sub generateBookLabel{
     use C4::AR::Logos;
 
     #NEW WAY, trae el path al archivo, 0 si no hay ninguno cargado
-    my $escudo = C4::AR::Logos::getPathLogoEtiquetas();
+    # my $escudo = C4::AR::Logos::getPathLogoEtiquetas();
 
-    if ($escudo) {
-        $pdf->addImgScaled($escudo, $x + 105, $y + 50, 2/100);
+    # if ($escudo) {
+    #     $pdf->addImgScaled($escudo, $x + 105, $y + 50, 2/100);
+    # }
+
+    if (-e $escudo) {
+        if ($escudo) {
+            $pdf->addImgScaled($escudo, $x + 105, $y + 50, 2/100));
+        }
+    } else {
+        C4::AR::Debug::debug("PdfGenerator => generateBookLabelA4 => NO EXISTE ESCUDO ".$escudo); 
+        $escudo = C4::AR::Logos::getOnlyPathLogoEtiquetas();
+        $escudo .= 'logo_default.jpeg';
+        C4::AR::Debug::debug("PdfGenerator => generateBookLabelA4 => NO EXISTE ESCUDO => muestro default ".$escudo); 
+        $pdf->addImgScaled($escudo, $x + 105, $y + 50, 2/100));
     }
-
 
     #Write the borrower data into the pdf file
     $pdf->setSize(6);
