@@ -1,0 +1,110 @@
+[% INCLUDE 'opac-top.inc' %]
+
+
+<!-- Detalle del nivel 1 -->
+
+	<fieldset>
+		   	<div class="page-header">
+
+               [% PERL %]
+                      print C4::AR::Filtros::link_to( text =>     "<h1>[% titulo %] <small>[% tipo_documento %] - #[% id1 %]</small></h1><h2>[% autor %] </h2>  ",
+                                      url     =>"[% url_prefix %]/opac-detail.pl", 
+                                      params  =>   ["id1=[% id1 %]"],
+                                      title   =>    "[% 'Mostrar Detalle del Registro' | i18n %]",
+                                    ) ;
+               [% END %]
+        </div>    
+	
+		<div id="detalle1" class="detalle1">
+		   
+		    <dl>
+			    [% FOREACH nivel1 %]
+
+			            [% IF liblibrarian %]
+			                [% IF dato %]
+				                <dt class="inline left rightMargin">[% liblibrarian %]:&nbsp;</dt> 
+				                <dd>[% dato %]&nbsp;</dd>
+			                [% END %]
+			            [% END %]
+			    [% END %]
+		    </dl>
+		</div>
+	</fieldset>
+
+    <fieldset>
+        <legend>
+          <div class="group_separator">
+  				        <div class="page-header">
+                     <h2> [% IF edicion %] [% edicion %] [% ELSE %] [% 'Datos de la Edici&oacute;n' | i18n %] [% END %]
+                             <small>[% tipo_documento %] - #[% id2 %]</small>
+                     </h2>
+                     <!-- <span class="label label-info"> [% tipo_documento %] ([% nivel2_template %])</span> -->
+                  </div>                   
+          </div>
+        </legend>
+ 	</fieldset>
+
+<!-- Detalle del nivel 2 -->
+
+    <dl>
+        [% FOREACH nivel2 %]
+            [% IF liblibrarian %]
+                [% IF dato %]
+                    <dt class="inline left rightMargin">[% liblibrarian %]:&nbsp;</dt> 
+                    <dd>[% dato %]&nbsp;</dd>
+                [% END %]
+            [% END %]
+        [% END %] <!-- END FOREACH nivel2_array -->
+        <br />
+    </dl>
+
+
+<fieldset>
+    <legend>		
+	     <div class="group_separator">
+          <div>
+            <a class="accordion-toggle" data-toggle="collapse" data-parent="#analiticas_del_grupo[% id %]" href="#analiticas[% id2 %]">
+              [% 'Anal&iacute;ticas' | i18n %]
+            </a>
+          </div>
+        </div>
+  	</legend>
+</fieldset>
+          <div id="analiticas[% id2 %]" >
+                <!-- <div> -->
+                [% FOREACH analiticas_array %]
+          			<div class="alert fade in"></div>
+                <div id="analitica_id_[% nivel1_analitica_id1 %]">
+                    <div class="page-header">
+                       [% PERL %]
+                               print C4::AR::Filtros::link_to( text   => "<h2>[% nivel1_analitica_titulo | html %]</h2>",
+                                                               url    => "[% url_prefix %]/opac-detail.pl", 
+                                                               params   => ["id1=[% nivel1_analitica_id1 %]"],
+                                                               title  => "[% 'Detalle del registro' | i18n %]",
+                                                           ) ;
+                       [% END %]
+                        <h3>[% nivel1_analitica_autor %] </h3> 
+ 
+                    </div>  <!-- end <div class="page-header"> -->
+
+  	                <dl>  
+  	                    [% FOREACH nivel1_analitica %]
+                                 	<dt class="inline left rightMargin">[% liblibrarian %]:&nbsp;</dt> 
+  								                <dd>[% dato %]&nbsp;</dd>
+  	                    [% END %] <!-- END FOREACH nivel1_analitica -->
+  	                </dl>
+  	                <dl>  
+  	                    [% FOREACH nivel2_analitica_array %]
+  		                      [% FOREACH nivel2_analitica %]
+                              	  <dt class="inline left rightMargin">[% liblibrarian %]:&nbsp;</dt> 
+                                  <dd>[% dato %]&nbsp;</dd>
+  					                [% END %]
+  	                    [% END %] <!-- END FOREACH nivel1_analitica -->
+  	                </dl>
+                </div> <!-- end  <div id="analitica_id_[% nivel1_analitica_id1 %]">   -->
+                [% END %]  <!-- END FOREACH nivel1_analiticas_array -->   
+		      </div> <!--end <div id="analiticas[% id2 %]" > -->
+	     <!-- </div> -->
+	<!-- </div> -->
+
+[% INCLUDE "opac-bottom.inc" %]
