@@ -1048,14 +1048,14 @@ sub generateBookLabel{
 
     if (-e $escudo) {
         if ($escudo) {
-            $pdf->addImgScaled($escudo, $x + 105, $y + 50, 2/100));
+            $pdf->addImgScaled($escudo, $x + 105, $y + 50, 2/100);
         }
     } else {
         C4::AR::Debug::debug("PdfGenerator => generateBookLabelA4 => NO EXISTE ESCUDO ".$escudo); 
         $escudo = C4::AR::Logos::getOnlyPathLogoEtiquetas();
         $escudo .= 'logo_default.jpeg';
         C4::AR::Debug::debug("PdfGenerator => generateBookLabelA4 => NO EXISTE ESCUDO => muestro default ".$escudo); 
-        $pdf->addImgScaled($escudo, $x + 105, $y + 50, 2/100));
+        $pdf->addImgScaled($escudo, $x + 105, $y + 50, 2/100);
     }
 
     #Write the borrower data into the pdf file
