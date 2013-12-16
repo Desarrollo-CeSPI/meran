@@ -119,6 +119,16 @@
                           <tr>
                               <td>
 
+                                [% PERL %]
+                                    print C4::AR::Filtros::link_to( 
+
+                                                        text =>     "[% contenido_estante.nivel2.nivel1.getTitulo %]",
+                                                        url =>      "[% url_prefix %]/opac-detail.pl", 
+                                                        params =>   ["id1=[% contenido_estante.nivel2.nivel1.getId1 %]"],
+                                                        title =>    "[% 'Mostrar detalle del registro' | i18n %]"
+                                                                ) ;
+                                [% END %]   
+
                               </td>
                               <td>
                                   [% PERL %]

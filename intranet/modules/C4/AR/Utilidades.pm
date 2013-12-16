@@ -2046,6 +2046,49 @@ sub generarComboDeDisponibilidad{
     return $comboDeDisponibilidades;
 }
 
+
+sub generarComboDeDisponibilidadTexto{
+
+    my ($params) = @_;
+
+    my @select_estados_array;
+    my %select_estados_hash;
+    my ($disponibilidades_array_ref)= C4::AR::Referencias::obtenerDisponibilidades();
+
+    foreach my $disponibilidad (@$disponibilidades_array_ref) {
+        push(@select_estados_array, $disponibilidad->nombre);
+        $select_estados_hash{$disponibilidad->nombre}= $disponibilidad->nombre;
+    }
+
+    my %options_hash;
+
+    if ( $params->{'onChange'} ){
+        $options_hash{'onChange'}= $params->{'onChange'};
+    }
+    if ( $params->{'onFocus'} ){
+        $options_hash{'onFocus'}= $params->{'onFocus'};
+    }
+    if ( $params->{'onBlur'} ){
+        $options_hash{'onBlur'}= $params->{'onBlur'};
+    }
+
+    $options_hash{'name'}= $params->{'name'}||'disponibilidad_name';
+    $options_hash{'id'}= $params->{'id'}||'disponibilidad_id';
+    $options_hash{'size'}=  $params->{'size'}||1;
+    $options_hash{'multiple'}= $params->{'multiple'}||0;
+    $options_hash{'defaults'}= $params->{'default'} || C4::AR::Preferencias::getValorPreferencia("defaultDisponibilidad");
+
+    push (@select_estados_array, 'SIN SELECCIONAR');
+    $options_hash{'values'}= \@select_estados_array;
+    $options_hash{'labels'}= \%select_estados_hash;
+
+    my $comboDeDisponibilidades= CGI::scrolling_list(\%options_hash);
+
+    return $comboDeDisponibilidades;
+}
+
+
+
 #GENERA EL COMBO CON LAS CATEGORIAS, CON IDs EN EL LA LISTA EL CODIGO DE CATEGORIA (ES, DO, etc)
 sub generarComboCategoriasDeSocioConCodigoCat{
     my ($params) = @_;
@@ -4955,6 +4998,47 @@ sub generarComboEstadoEjemplares{
 }
 
 
+sub generarComboEstadoEjemplaresTexto{
+
+      my ($params) = @_;
+
+    my @select_estados_array;
+    my %select_estados;
+    my $estados        = &C4::AR::Referencias::obtenerEstadosEjemplares();
+
+    foreach my $estado (@$estados) {
+        push(@select_estados_array, $estado->getNombre);
+        $select_estados{$estado->getNombre}  = $estado->getNombre;
+    }
+
+    $select_estados{''}                = 'SIN SELECCIONAR';
+
+    my %options_hash;
+
+    if ( $params->{'onChange'} ){
+        $options_hash{'onChange'}   = $params->{'onChange'};
+    }
+    if ( $params->{'onFocus'} ){
+        $options_hash{'onFocus'}    = $params->{'onFocus'};
+    }
+    if ( $params->{'onBlur'} ){
+        $options_hash{'onBlur'}     = $params->{'onBlur'};
+    }
+
+    $options_hash{'name'}       = $params->{'name'}||'estado';
+    $options_hash{'id'}         = $params->{'id'}||'estado';
+    $options_hash{'size'}       = $params->{'size'}||1;
+    $options_hash{'class'}      = 'required';
+    $options_hash{'multiple'}   = $params->{'multiple'}||0;
+
+    push (@select_estados_array, '');
+    $options_hash{'values'}     = \@select_estados_array;
+    $options_hash{'labels'}     = \%select_estados;
+
+    my $combo_estados = CGI::scrolling_list(\%options_hash);
+
+    return $combo_estados;
+}
 
 
 
