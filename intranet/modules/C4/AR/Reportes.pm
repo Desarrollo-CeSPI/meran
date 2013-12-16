@@ -1228,6 +1228,7 @@ sub registroDeUsuarios {
 
 # }
 
+
 sub reporteDisponibilidad{
     my ($params) = @_;
 
@@ -1237,45 +1238,40 @@ sub reporteDisponibilidad{
     my $disponibilidad=     $params->{'disponibilidad'};
     my $estado=         $params->{'estado'};
 
-    C4::AR::Debug::debug("ESTADOOOOOOOOOOO $estado");
-
 
     my $ini    = $params->{'ini'} || 0;
     my $cantR  = $params->{'cantR'} || 1;
 
-    my $fecha_ini = $params->{'fecha_ini'};
-    my $fecha_fin = $params->{'fecha_fin'};
+    my $catRegistroMarcN3  = C4::Modelo::CatRegistroMarcN3->new();
+    my $db = $catRegistroMarcN3->db; 
 
-    my $catRegistroMarcN3   = C4::Modelo::CatRegistroMarcN3->new();  
-    my $db = $catRegistroMarcN3->db;
-        
     my @filtros;
 
     if ($ui ne ""){
-        push (@filtros, ("t1.marc_record"    => { like   => '%@'.$ui.'%'}));
+        push (@filtros, ("marc_record"    => { like   => '%@'.$ui.'%'}));
     }
 
     if ($estado ne ""){
-        push (@filtros, ("t1.marc_record"    => { like   => '%@'.$estado.'%'}));
+        push (@filtros, ("marc_record"    => { like   => '%@'.$estado.'%'}));
     }
 
     if ($disponibilidad ne "" && $disponibilidad ne "SIN SELECCIONAR" ){
-        push (@filtros, ("t1.marc_record"    => { like   => '%oref_disponibilidad@'.$disponibilidad.'%'}));
+        push (@filtros, ("marc_record"    => { like   => '%@'.$disponibilidad.'%'}));
     } 
 
-    if ($fecha_ini ne "" && $fecha_fin ne ""){
-            $fecha_ini= C4::Date::format_date_hour($fecha_ini,"iso");
-            $fecha_fin= C4::Date::format_date_hour($fecha_fin,"iso");
-            push(@filtros, and => [ 'created_at' => { gt => $fecha_ini, eq => $fecha_ini },
-                                    'created_at' => { lt => $fecha_fin, eq => $fecha_fin} ] ); 
-    } elsif($fecha_ini ne ""){
-            $fecha_ini= C4::Date::format_date_hour($fecha_ini,"iso");
-            push (@filtros, ('created_at' => { gt => $fecha_ini, eq => $fecha_ini }));
+    # if ($fecha_ini ne "" && $fecha_fin ne ""){
+    #         $fecha_ini= C4::Date::format_date($fecha_ini,"iso")."00:00:00";
+    #         $fecha_fin= C4::Date::format_date($fecha_fin,"iso")." 23:59:59";
+    #         push(@filtros, and => [ 'timestamp' => { gt => $fecha_ini, eq => $fecha_ini },
+    #                                 'timestamp' => { lt => $fecha_fin, eq => $fecha_fin} ] ); 
+    # } elsif($fecha_ini ne ""){
+    #         $fecha_ini= C4::Date::format_date($fecha_ini,"iso")."00:00:00";
+    #         push (@filtros, ('timestamp' => { gt => $fecha_ini, eq => $fecha_ini }));
 
-    } elsif($fecha_fin ne ""){
-            $fecha_fin= C4::Date::format_date_hour($fecha_fin,"iso");
-            push (@filtros, ('created_at' => { lt => $fecha_fin, eq => $fecha_fin }));
-        }
+    # } elsif($fecha_fin ne ""){
+    #         $fecha_fin= C4::Date::format_date($fecha_fin,"iso")." 23:59:59";
+    #         push (@filtros, ('timestamp' => { lt => $fecha_fin, eq => $fecha_fin }));
+    #     }
 
     my $cant = C4::Modelo::CatRegistroMarcN3::Manager->get_cat_registro_marc_n3_count(   
                                                                         db  => $db,
@@ -1284,10 +1280,10 @@ sub reporteDisponibilidad{
                                         );
 
 
-    my $nivel3_array_ref;
+    my $disp_array_ref;
 
     if ($params->{'exportar'}){
-            $nivel3_array_ref= C4::Modelo::CatRegistroMarcN3::Manager->get_cat_registro_marc_n3(   
+            $disp_array_ref= C4::Modelo::CatRegistroMarcN3::Manager->get_cat_registro_marc_n3(   
                                                                         db  => $db,
                                                                         query => \@filtros, 
                                                                         require_objects => ['nivel2'],
@@ -1296,7 +1292,7 @@ sub reporteDisponibilidad{
     } else {
        
                                   
-            $nivel3_array_ref = C4::Modelo::CatRegistroMarcN3::Manager->get_cat_registro_marc_n3(   
+            $disp_array_ref = C4::Modelo::CatRegistroMarcN3::Manager->get_cat_registro_marc_n3(   
                                                                                     db  => $db,
                                                                                     limit => $cantR,
                                                                                     offset => $ini,
@@ -1308,7 +1304,7 @@ sub reporteDisponibilidad{
     }
 
     
-    return ($nivel3_array_ref ,$cant);
+    return ($disp_array_ref ,$cant);
 
 
 }
@@ -1682,59 +1678,62 @@ sub getReporteCirculacionGeneralToExport{
                                 'fecha' => { le => $fecha_fin } ] ); 
     }
 
-    my $totals_results_array = C4::Modelo::RepHistorialCirculacion::Manager->get_rep_historial_circulacion( 
+ # cantidad de ejemplares prestados (<> id3)
+    my $total_ejemplares_array = C4::Modelo::RepHistorialCirculacion::Manager->get_rep_historial_circulacion( 
                                                                       query             => \@filtros,
                                                                       require_objects   => [ 'nivel3','socio', 'tipo_prestamo_ref', 'responsable_ref' ],
-                                                                      select            => ['id3','nro_socio','tipo_prestamo', 'responsable', 'nivel3.id'],
+                                                                      select            => ['id3'],
                                                                       distinct          => 1,
                                                         );
 
-    # cantidad de socios
-    my $cant_nro_socio = C4::Modelo::RepHistorialCirculacion::Manager->get_rep_historial_circulacion_count( 
+
+
+    # cantidad de socios (<> nro_socio)
+    my $cant_nro_socio = C4::Modelo::RepHistorialCirculacion::Manager->get_rep_historial_circulacion( 
                                                                       query             => \@filtros,
-                                                                      require_objects   => [ 'nivel3','socio', 'tipo_prestamo_ref', 'responsable_ref' ],
-                                                                      select            => ['COUNT(t5.nro_socio) AS cant_nro_socio'],
+                                                                      require_objects   => ['nivel3','socio', 'tipo_prestamo_ref', 'responsable_ref' ],
+                                                                      select            => ['nro_socio'],
+                                                                      distinct          => 1,
                                                         );
 
-    # cantidad de devoluciones
+
+    # cantidad de devoluciones 
     my @filtros_tmp = @filtros;
     push(@filtros_tmp, ('tipo_operacion' =>  {eq => 'devolucion'} ));
-    my $cant_devoluciones = C4::Modelo::RepHistorialCirculacion::Manager->get_rep_historial_circulacion_count( 
+    my $cant_devoluciones = C4::Modelo::RepHistorialCirculacion::Manager->get_rep_historial_circulacion( 
                                                                       query             => \@filtros_tmp,
                                                                       require_objects   => [ 'nivel3','socio', 'tipo_prestamo_ref', 'responsable_ref' ],
-                                                                      select            => ['COUNT(t1.tipo_operacion) AS cant_devoluciones'],
+                                                                      select            => ['tipo_operacion'],
                                                         );
 
     # cantidad de renovaciones
     my @filtros_tmp = @filtros;
     push(@filtros_tmp, ('tipo_operacion' =>  {eq => 'renovacion'} ));
-    my $cant_renovaciones = C4::Modelo::RepHistorialCirculacion::Manager->get_rep_historial_circulacion_count( 
+    my $cant_renovaciones = C4::Modelo::RepHistorialCirculacion::Manager->get_rep_historial_circulacion( 
                                                                       query             => \@filtros_tmp,
                                                                       require_objects   => [ 'nivel3','socio', 'tipo_prestamo_ref', 'responsable_ref' ],
-                                                                      select            => ['COUNT(t1.tipo_operacion) AS cant_renovaciones'],
+                                                                      select            => ['tipo_operacion'],
                                                         );
-
-    # cantidad de domiciliarios
-    my @filtros_tmp = @filtros;
-    push(@filtros_tmp, ('tipo_prestamo' =>  {eq => 'DO'} ));
-    my $cant_domiciliario = C4::Modelo::RepHistorialCirculacion::Manager->get_rep_historial_circulacion_count( 
-                                                                      query             => \@filtros_tmp,
-                                                                      require_objects   => [ 'nivel3','socio', 'tipo_prestamo_ref', 'responsable_ref' ],
-                                                                      select            => ['COUNT(t1.tipo_prestamo) AS cant_domiciliario'],
-                                                        );
+    # # cantidad de domiciliarios
+    # my @filtros_tmp = @filtros;
+    # push(@filtros_tmp, ('tipo_prestamo' =>  {eq => 'DO'} ));
+    # my $cant_domiciliario = C4::Modelo::RepHistorialCirculacion::Manager->get_rep_historial_circulacion_count( 
+    #                                                                   query             => \@filtros_tmp,
+    #                                                                   require_objects   => [ 'nivel3','socio', 'tipo_prestamo_ref', 'responsable_ref' ],
+    #                                                                   select            => ['COUNT(t1.tipo_prestamo) AS cant_domiciliario'],
+    #                                                     );
 
 
 
     # cant for paginator
-    my $resultsArrayCant = scalar(@$totals_results_array);
+    my $resultsArrayCant = scalar(@$total_ejemplares_array);
 
     # totals, to be shown at the bottom of the page
     my %data_hash;   
 
-    $data_hash{'cantidad_usuarios'}      = $cant_nro_socio;
-    $data_hash{'cantidad_devoluciones'}  = $cant_devoluciones;
-    $data_hash{'cantidad_renovaciones'}  = $cant_renovaciones;
-    $data_hash{'cantidad_domiciliario'}  = $cant_domiciliario;
+    $data_hash{'cantidad_usuarios'}      = scalar(@$cant_nro_socio);
+    $data_hash{'cantidad_devoluciones'}  = scalar(@$cant_devoluciones);
+    $data_hash{'cantidad_renovaciones'}  = scalar(@$cant_renovaciones);
 
     return ($resultsArrayCant, \%data_hash);
 }
