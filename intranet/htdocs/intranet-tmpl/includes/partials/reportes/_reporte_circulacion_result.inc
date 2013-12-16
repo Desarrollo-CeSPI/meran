@@ -56,8 +56,16 @@
                   </td>
                   <td>
                       [% TRY %]
-                        [% res.nivel3.getSignatura %]
-                      [% CATCH %]
+                        [% IF res.tipo_operacion == "espera" %]
+                          [% res.nivel2.getPrimerSignatura %]
+                        [% ELSE %]
+                          [% TRY %]
+                            [% res.nivel3.getSignatura %]
+                          [% CATCH %]
+                            [% res.nivel2.getPrimerSignatura %]
+                          [% END %]
+                        [% END %]
+                      [% CATCH %]  
                         [% 'Sin Signatura Topogr&aacute;fica' | i18n %]
                       [% END %]
                   </td>

@@ -24,7 +24,7 @@ function changePageBusquedas(ini){
                         class           => "",
                         selectAll_id    => "",
                         columns         => ['[% "T&iacute;tulo"|i18n %]','[% "Autor"|i18n %]','[% "Signatura"|i18n %]',
-                                            '[% "Edici&oacute;n" | i18n %]','[% "C&oacute;digo" | i18n %]','[% "Fecha Cambio de disponibilidad" | i18n %]', '[% "Estado"|i18n %]'
+                                            '[% "C&oacute;digo" | i18n %]','[% "Edici&oacute;n" | i18n %]','[% "Fecha Cambio de disponibilidad" | i18n %]', '[% "Estado"|i18n %]'
                                           ]
                                                         
                               ) ;
@@ -36,39 +36,40 @@ function changePageBusquedas(ini){
               <td>
      
                   [% PERL %]
-                          print C4::AR::Filtros::link_to(   text =>     "[% res.nivel1.getTitulo %]",
+                          print C4::AR::Filtros::link_to( text =>     "[% res.nivel2.nivel1.getTitulo %]",
                                                           url=>"[% url_prefix %]/catalogacion/estructura/detalle.pl",
-                                                          params => [   "id1=[% res.nivel1.getId1 %]"], 
+                                                          params => ["id1=[% res.nivel2.nivel1.getId1 %]"], 
                                                       ) ;
                   [% END %]
               </td>
               <td>
-                  <a class="click" onClick="buscarPorAutor('[% prestamo.nivel3.nivel1.getAutor %]')" title="[% 'Filtrar por Autor' | i18n %]">
-                        [% res.nivel1.getAutor %]
+                  <a class="click" onClick="buscarPorAutor('[% res.nivel2.nivel1.getAutor %]')" title="[% 'Filtrar por Autor' | i18n %]">
+                        [% res.nivel2.nivel1.getAutor %]
                   </a>          
               </td>
               <td>      
-                  [% res.getSignatura_topografica %]
+                  [% res.getSignatura %]
               </td>
               <td>
                   [% PERL %]
-                          print C4::AR::Filtros::link_to(   text =>     "[% res.getCodigoBarra %]",
+                          print C4::AR::Filtros::link_to(   text =>     "[% res.getBarcode %]",
                                                           url=>"[% url_prefix %]/catalogacion/estructura/detalleEjemplar.pl", 
                                                           params => ["id3=[% res.getId3 %]"],
                                                           title =>  "[% "Detalle del Ejemplar" | i18n %]"
                                                       ) ;
                   [% END %] 
               </td>
-               <td>
+              <td>
 
-                  [% IF res.nivel2.getEdicion %]
+                    [% IF res.nivel2.getEdicion %]
                         [% res.nivel2.getEdicion %]
                     [% END %]
 
-                    [% IF res.nivel2.getAnio_publicacion %]
-                        ([% res.nivel2.getAnio_publicacion %])
+                    [% IF res.nivel3.getAnio_publicacion %]
+                        ([% res.nivel3.getAnio_publicacion %])
                     [% END %]
               </td>
+  
               <td>
                   [% res.getFechaUltimoCambioDisp %]
               </td>

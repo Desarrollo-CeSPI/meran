@@ -75,7 +75,6 @@ sub send_mail_TLS {
         $msg_error = "Mail => send_mail_TLS => error => $@";
         C4::AR::Debug::debug($msg_error);
         $ok = 0;
-        $msg_error = "Mail => send_mail_TLS => Error al intentar conectar con el servidor";
     }
 
     C4::AR::Debug::debug("Mail => send_mail_TLS => return => ".$ok);
@@ -131,7 +130,6 @@ sub send_mail_SSL {
     if($@){
         $msg_error = "Mail => send_mail_SSL => error => $@";
         C4::AR::Debug::debug($msg_error);
-        $msg_error = "Mail => send_mail_SSL => Error al intentar conectar con el servidor";
     }
 
     C4::AR::Debug::debug("Mail => send_mail_SSL => return => ".$ok);
@@ -196,7 +194,6 @@ sub send_mail_PLANO {
     if($@){
         $msg_error = "Mail => send_mail_PLANO => error => $@";
         C4::AR::Debug::debug($msg_error);
-        $msg_error = "Mail => send_mail_PLANO => Error al intentar conectar con el servidor";
     }
 
     C4::AR::Debug::debug("Mail => send_mail_PLANO => return => ".$ok);
@@ -242,7 +239,6 @@ sub send_mail_SENDMAIL {
     if($@){
         $msg_error = "Mail => send_mail_SENDMAIL => error => $@";
         C4::AR::Debug::debug($msg_error);
-        $msg_error = "Mail => send_mail_SENDMAIL => Error al intentar conectar con el servidor";
     }
 
     C4::AR::Debug::debug("Mail => send_mail_SENDMAIL => return => ".$ok);

@@ -1123,12 +1123,11 @@ sub t_reservarOPAC {
 
             #Se setean los parametros para el mensaje de la reserva SIN ERRORES
             if($paramsReserva->{'estado'} eq 'E'){
-	            C4::AR::Debug::debug("SE RESERVO CON EXITO UN EJEMPLAR!!! codMsg: U302");
+	            C4::AR::Debug::debug("SE RESERVO CON EXITO UN EJEMPLAR!!! codMsg: U305");
 	            #SE RESERVO CON EXITO UN EJEMPLAR
                 $msg_object->{'error'} = 0;
-                C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U302', 'tipo'=> 'opac', 'params' => [    
-                                                                                        $paramsReserva->{'hasta'},
-                                                                                        $paramsReserva->{'hastah'}
+                C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U305', 'tipo'=> 'opac', 'params' => [    
+                                                                                        $paramsReserva->{'hasta'}
                                 ]} ) ;
 
             }else{

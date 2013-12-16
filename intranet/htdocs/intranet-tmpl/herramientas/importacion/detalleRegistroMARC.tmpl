@@ -27,7 +27,7 @@
                         [% IF liblibrarian %]
                             [% IF dato %]
 										<dt class="inline left rightMargin">[% liblibrarian %]:&nbsp;</dt> 
-										<dd>[% dato %]&nbsp;
+										<dd>[% FILTER html %][% dato %][% END %]&nbsp;
 										[% IF referencia %]
 										([% "Referencia a " | i18n %] [% referencia %] => <b>[% referencia_tabla %]@[% IF referencia_encontrada %][% referencia_encontrada %][% ELSE %]__NUEVA__[% END %]</b>)
                                         [% END %]
@@ -75,7 +75,7 @@
                                     [% IF liblibrarian %]
                                         [% IF dato %]
 										<dt class="inline left rightMargin">[% liblibrarian %]:&nbsp;</dt> 
-										<dd>[% dato %]&nbsp;
+										<dd>[% FILTER html %][% dato %][% END %]&nbsp;
 										[% IF referencia %]
 										([% "Referencia a " | i18n %] [% referencia %] => <b>[% referencia_tabla %]@[% IF referencia_encontrada %][% referencia_encontrada %][% ELSE %]__NUEVA__[% END %]</b>)
                                         [% END %]
@@ -107,18 +107,13 @@
 
 													<form id="tablaEjemplares[% id2 %]" name="tablaEjemplares[% id2 %]" action="[% url_prefix %]/catalogacion/barcode_gen.pl" method="post">
 														[% PERL %]
-															print C4::AR::Filtros::tableHeader(   
-																									id              => "tabla_ejemplares[% id2 %]",
-																									class           => "",
-																									columns         => ['[% "Sig. Top."|i18n %]',
-																														'[% "C&oacute;digo"|i18n %]',
-																														'[% "Disponibilidad"|i18n %]',
-																														'[% "Estado"|i18n %]',
-																													   ]
-																									
-																		) ;
+															print C4::AR::Filtros::tableHeader(
+                                                                id              => "tabla_ejemplares[% id2 %]", 
+                                                                class           => "", 
+                                                                columns         => ['[% "Sig. Top."|i18n %]','[% "C&oacute;digo"|i18n %]', '[% "Disponibilidad"|i18n %]','[% "Estado"|i18n %]']
+																		);
 														[% END %]
-														
+													
 														<tbody>
 														[% FOREACH nivel3 %]
 																<tr>
@@ -159,7 +154,9 @@
 
         <div class="tab-pane fade" id="RO">
                 <pre>
+                [% FILTER html %]
                     [% registro_importacion.getRegistroMARCOriginal.as_formatted %]
+                [% END %]
                 </pre>
 
                 [% FOREACH registro_ejemplar IN registro_importacion.getRegistrosHijo %]
@@ -167,7 +164,9 @@
                     <fieldset class="resultados_busqueda">
                     <legend class="titulo_legend trigger click">[% "Registro Hijo" | i18n %]</legend>
                         <pre>
+                        [% FILTER html %]
                             [% registro_ejemplar.getRegistroMARCOriginal.as_formatted %]
+                        [% END %]
                         </pre>
                     </fieldset>
                 [% END %]
@@ -175,7 +174,9 @@
 
         <div class="tab-pane fade" id="RR">
                 <pre>
+                [% FILTER html %]
                     [% registro_importacion.getRegistroMARCResultado.as_formatted %]
+                [% END %]
                 </pre>
         </div>
 

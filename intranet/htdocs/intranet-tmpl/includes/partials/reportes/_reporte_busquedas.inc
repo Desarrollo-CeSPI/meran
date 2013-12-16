@@ -145,8 +145,9 @@
            <div class="control-group">
                     <label class="control-label"> [% "Rango de Fechas" | i18n %] </label>
                     <div class="controls">
-                          <input type="date" id="date-from" name="date-from" data-datepicker="datepicker" placeholder="Desde" value="" required>
-                          <input type="date" id="date-to" name="date-to" data-datepicker="datepicker" placeholder="Hasta" value="" required>
+           
+                          <input type="text" id="date-from" name="date-from" data-datepicker="datepicker"  placeholder="Desde" value="" required>
+                          <input type="text" id="date-to" name="date-to" data-datepicker="datepicker" placeholder="Hasta" value="" required>
 
                     </div>
           </div>

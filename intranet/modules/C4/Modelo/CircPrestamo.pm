@@ -918,6 +918,10 @@ sub renovar {
         my ($historial_circulacion) =  C4::Modelo::RepHistorialCirculacion->new( db => $self->db );
         $historial_circulacion->agregar($data_hash);
     }
+
+    $self->setFecha_vencimiento_reporte($self->getFecha_vencimiento);
+    $self->save();
+
 }
 
 sub getInvolvedCount {

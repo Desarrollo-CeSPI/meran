@@ -84,7 +84,7 @@ sub agregar{
     };
 
     if ($@){
-    
+    C4::AR::Debug::debug("ERROR  : " . $@);
        $msg_object->{'error'}= 1;
        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'UP12', 'intra'} ) ;
        
@@ -521,7 +521,7 @@ sub delPortadaOpac{
 
     my $portada = getPortadaOpacById($id);
     
-    my $uploaddir       = C4::Context->config("opachtdocs")."/uploads/portada";
+    my $uploaddir       = C4::Context->config("opac_path")."/uploads/portada";
     
     if ($portada){
 	    my $image_name = $portada->getImagePath();
@@ -558,7 +558,7 @@ sub uploadCoverImage{
 
     use Digest::MD5;
     
-    my $uploaddir       = C4::Context->config("opachtdocs")."/uploads/portada";
+    my $uploaddir       = C4::Context->config("opac_path")."/uploads/portada";
     my $maxFileSize     = 1024 * 1024; # 1/2mb max file size...
     my $file            = $postdata;
     my $type            = "";

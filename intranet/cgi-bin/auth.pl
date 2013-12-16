@@ -55,4 +55,9 @@ if ($t_params->{'loginAttempt'} & !($t_params->{'mostrar_captcha'}) ){
 
 $t_params->{'re_captcha_public_key'} = C4::AR::Preferencias::getValorPreferencia('re_captcha_public_key');
 
+if (! $t_params->{'re_captcha_public_key'}){
+	#Si se encuentra la key de captcha configurada no se puede mostrar el captcha
+	$t_params->{'mostrar_captcha'} = 0;
+	}
+
 C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);

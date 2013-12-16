@@ -713,247 +713,6 @@ sub _verificarSession {
     return ($code_MSG,"sesion_invalida");
 }
 
-=item sub checkauth
-
-Funcion con las variables bien: (abajo se reemplazo por $_[0])
-
-sub checkauth {
-    C4::AR::Debug::debug("desde checkauth==================================================================================================");
-    my $query               = shift;
-
-    my $authnotrequired     = shift;
-    my $flagsrequired       = shift;
-    my $type                = shift;
-    my $change_password     = shift || 0;
-    my $template_params     = shift;
-    my $url                 = '';
-    
-    my $socio;
-    $type                   = 'opac' unless $type;
-    my $demo=C4::Context->config("demo") || 0;
-    my $token=_obtenerToken($query);
-    my $loggedin = 0;
-    my ($session) = CGI::Session->load();
-  # C4::AR::Debug::debug("antes del if existe sesion en checkauth, nroRandom - > " . $session->param('nroRandom') . " sessionid : " . $session->param('sessionID'));
-    my $userid= undef;
-   
-    if ($session){
-        # C4::AR::Debug::debug("existe sesion en checkauth");
-        # C4::AR::Debug::debug("existe sesion en checkauth, nroRandom - > " . $session->param('nroRandom') . " sessionid : " . $session->param('sessionID'));
-        $userid= $session->param('userid');
-    }else{
-        # C4::AR::Debug::debug("NO existe sesion en checkauth, se generara");
-        $session = _generarSession();
-    }
-    my $flags=0;
-    my $sin_captcha=0;
-    my $time = localtime(time());
-    
-    if ($authnotrequired) {
-        my $socio_object = getSessionSocioObject();
-        if ($userid){
-
-
-                      $socio = C4::AR::Usuarios::getSocioInfoPorNroSocio($session->param('userid'));
-                      #Se verifica si el usuario tiene que cambiar la password
-                      if ( ($userid) && ( new_password_is_needed($userid, $socio) ) && !$change_password ) {
-                          _change_Password_Controller($query, $userid, $type, $token);
-                      }
-            
-            buildSocioData($session,$socio_object);
-        }
-        return ($userid, $session, $flags, $socio_object);
-    }
-
-    if ($demo) {
-        #Quiere decir que no es necesario una autenticacion
-        $userid="demo";
-        $flags=1;
-        _actualizarSession($userid, $userid,$userid, $time, getSessionNroRandom(), $type, $flagsrequired, _generarToken(), $session);
-
-        $socio=C4::Modelo::UsrSocio->new();
-        return ($userid, $session, $flags, $socio);
-    } else {
-        #No es DEMO hay q hacer todas las comprobaciones de la sesion
- 
-                  my ($code_MSG,$estado)=_verificarSession($session,$type,$token);
-           
-                  if ($estado eq "sesion_valida"){ 
-                
-                      # C4::AR::Debug::debug("C4::AR::Auth::checkauth => session_valida");
-                      $socio = C4::AR::Usuarios::getSocioInfoPorNroSocio($session->param('userid'));
-                      $flags=$socio->tienePermisos($flagsrequired);
-                      loginSuccess($socio->getNro_socio);
-                      _init_i18n({ type => $type });
-                      
-                      #Se verifica si el usuario tiene que cambiar la password
-                      if ( ($userid) && ( new_password_is_needed($userid, $socio) ) && !$change_password ) {
-                          _change_Password_Controller($query, $userid, $type, $token);
-                      }
-                      
-                      if ($flags) {
-                          $loggedin = 1;
-                      } else {
-                          #redirecciono a una pagina informando q no tiene  permisos
-                          $session->param('codMsg', 'U354');
-                          $session->param('redirectTo', C4::AR::Utilidades::getUrlPrefix().'/informacion.pl');
-                          redirectTo(C4::AR::Utilidades::getUrlPrefix().'/informacion.pl');
-                    } 
-                  }
-                  elsif ($estado eq "datos_censales_invalidos"){
-                      # C4::AR::Debug::debug("C4::AR::Auth::checkauth => datos_censales_invalidos");
-                      $url = C4::AR::Utilidades::getUrlPrefix().'/auth.pl';
-                      $session->param('codMsg', $code_MSG);
-                      $session->param('redirectTo', $url);
-                      redirectTo($url); 
-                  }
-                  elsif ($estado eq "sesion_invalida") { 
-                      # C4::AR::Debug::debug("C4::AR::Auth::checkauth => session_invalida");
-                      $url = C4::AR::Utilidades::getUrlPrefix().'/auth.pl';
-                      $session->param('codMsg', $code_MSG);
-                      $session->param('redirectTo', $url);
-                      redirectTo($url); 
-                  } 
-                  elsif ($estado eq "sin_sesion") { 
-                      # C4::AR::Debug::debug("C4::AR::Auth::checkauth => sin_sesion");
-                      #ESTO DEBERIA PASAR solo cuando la sesion esta sin iniciar
-                      #_destruirSession('U406', $template_params);
-                      inicializarAuth($template_params);
-                      $session->param('codMsg', $code_MSG);
-                      }
-                  else { 
-                      #ESTO MENOS
-                      # C4::AR::Debug::debug("C4::AR::Auth::checkauth => ESTO MENOS ???");
-                      _destruirSession(($code_MSG || 'U406'), $template_params);
-                      $session->param('codMsg', $code_MSG);
-                      $session->param('redirectTo', C4::AR::Utilidades::getUrlPrefix().'/error.pl');
-                      redirectTo(C4::AR::Utilidades::getUrlPrefix().'/error.pl'); 
-                  }
-                  
-                  #por aca se permite llegar a paginas que no necesitan autenticarse
-                  my $insecure = C4::AR::Preferencias::getValorPreferencia('insecure');
-                  if ($loggedin || $authnotrequired || (defined($insecure) && $insecure)) {
-                      
-                      # que se hace aca ?
-      
-                  return ($userid, $session, $flags, $socio);
-                  }
-                unless ($userid) { 
-                    #si no hay userid, hay que autentificarlo y no existe sesion
-                    #No genero un nuevo sessionID
-                    #con este sessionID puedo recuperar el nroRandom (si existe) guardado en la base, para verificar la password
-                    my $sessionID     = $session->param('sessionID');
-                    #recupero el userid y la password desde el cliente
-                    $userid           = $query->param('userid');
-                    my $password      = $query->param('password');
-                    my $nroRandom     = $session->param('nroRandom');
-                    # C4::AR::Debug::debug("checkauth -> nroRandom en sesion Auth.pm -> " . $nroRandom . " sessionId : " . $sessionID);
-                    $session->param('username_input',$userid);
-                    my $error_login = 0;
-                    my $mensaje;
-                    my $cant_fallidos;
-                    #se verifica la password ingresada
-                    my ($socio)         = _verificarPassword($userid,$password,$nroRandom);
-                    my $login_attempts = getSocioAttempts($userid); 
-                    my $captchaResult;
-                    if (($login_attempts > 2) && (!$query->url_param('welcome'))) {      # se logueo mal mas de 3 veces, debo verificar captcha
-                        my $reCaptchaPrivateKey =  C4::AR::Preferencias::getValorPreferencia('re_captcha_private_key');
-                        my $reCaptchaChallenge  = $query->param('recaptcha_challenge_field');
-                        my $reCaptchaResponse   = $query->param('recaptcha_response_field');
-                        use Captcha::reCAPTCHA;
-                        
-                        my $c = Captcha::reCAPTCHA->new;
-                        
-                        eval{
-                           $captchaResult = $c->check_answer($reCaptchaPrivateKey, $ENV{'REMOTE_ADDR'},$reCaptchaChallenge, $reCaptchaResponse);
-                        };
-
-                        C4::AR::Debug::debug("ERROR DE CAPTCHA: ".$captchaResult->{error});
-                        
-                        
-                    } else {  
-                        #else del  if ($login_attempts > 2 )
-                        $sin_captcha = 1; 
-                    }  
-                    if (($sin_captcha || $captchaResult->{is_valid}) && $socio){
-                        #se valido el captcha, la pass y el user y son validos
-                        #setea loguins duplicados si existe, dejando logueado a un solo usuario a la vez
-                        _setLoguinDuplicado($userid,  $ENV{'REMOTE_ADDR'});
-                        #$socio = C4::AR::Usuarios::getSocioInfoPorNroSocio($userid);
-                        # TODO todo esto va en una funcion
-                        $sessionID  = $session->param('sessionID');
-                        $sessionID.="_".$socio->ui->getNombre;
-                        _actualizarSession($sessionID, $userid, $socio->getNro_socio(), $time, getSessionNroRandom(), $type, $flagsrequired, _generarToken(), $session);
-                        buildSocioData($session,$socio);
-                        #Logueo una nueva sesion
-                        _session_log(sprintf "%20s from %16s logged out at %30s.\n", $userid,$ENV{'REMOTE_ADDR'},$time);
-                        #por defecto no tiene permisos
-                        if( $flags = $socio->tienePermisos($flagsrequired) ){
-                            _realizarOperacionesLogin($type,$socio);
-                        }
-                        
-                        # C4::AR::Debug::debug("C4::AR::Auth::checkauth => fin operaciones login");
-                        
-                        #Si se logueo correctamente en intranet entonces guardo la fecha
-                        my $now = Date::Manip::ParseDate("now");
-                        if ($session->param('type') eq "intranet"){
-                            $socio->setLast_login($now);
-                            $socio->save();
-                        }
-                        C4::AR::Debug::debug("C4::AR::Auth::checkauth => fecha ".$now);
-                        
-                        my $referer  = $ENV{'HTTP_REFERER'};
-                        my $fromAuth = index($referer,'auth.pl');
-                        $referer     = C4::AR::Utilidades::addParamToUrl($referer,"token",$session->param('token'));
-                          
-                        if ($type eq 'opac') {
-                            $session->param('redirectTo', C4::AR::Utilidades::getUrlPrefix().'/opac-main.pl?token='.$session->param('token'));
-                            if ($fromAuth eq "-1"){
-                                redirectTo($referer);
-                            }else{                                                              
-                                redirectToNoHTTPS(C4::AR::Utilidades::getUrlPrefix().'/opac-main.pl?token='.$session->param('token'));
-                            }
-                            # #                               $session->secure(0);
-                        }else{
-                            # si es estudiante no puede loguearse en la INTRA
-                            if($socio->getCredentialType() eq "estudiante"){
-                                $session->param('redirectTo', C4::AR::Utilidades::getUrlPrefix().'/auth.pl?token='.$session->param('token'));
-                                redirectTo(C4::AR::Utilidades::getUrlPrefix().'/auth.pl?token='.$session->param('token'));
-                            }else{
-                                $session->param('redirectTo', C4::AR::Utilidades::getUrlPrefix().'/mainpage.pl?token='.$session->param('token'));
-                                redirectTo(C4::AR::Utilidades::getUrlPrefix().'/mainpage.pl?token='.$session->param('token'));
-                            }
-                            
-                        }
-                    } else {  # if ($sin_captcha || $captchaResult->{is_valid} ) - INGRESA CAPTCHA INVALIDO
-                        if ($socio) {$code_MSG='U425';}
-                        elsif ($userid) {     
-                               
-                               $code_MSG='U357';
-                        }
-                        $session->param('codMsg', $code_MSG);
-                        loginFailed($userid);
-                        $cant_fallidos = getSocioAttempts($userid);
-                        if ($cant_fallidos > 0){
-                                $template_params->{'loginFailed'}=1;
-                        }
-                        if ($cant_fallidos >= 3){
-                                $template_params->{'mostrar_captcha'}=1;
-                        }  
-                    }
-            if ($query->url_param('welcome')){
-                $template_params->{'loginAttempt'} = 0;
-                $mensaje = 'U000';
-            }
-            _destruirSession($mensaje, $template_params);
-      }# end unless ($userid)
-                  
-    }# el else de DEMO
-}
-
-=cut
-
-
 sub checkauth {
     C4::AR::Debug::debug("desde checkauth==================================================================================================");
     
@@ -1085,7 +844,10 @@ sub checkauth {
                     my ($socio)        = _verificarPassword($userid,$password,$nroRandom);
                     my $login_attempts = getSocioAttempts($userid); 
                     my $captchaResult;
-                    if (($login_attempts > 2) && (!$_[0]->url_param('welcome'))) {      # se logueo mal mas de 3 veces, debo verificar captcha
+                    if (($login_attempts > 2) && (!$_[0]->url_param('welcome')) && 
+                        ( C4::AR::Utilidades::trim(C4::AR::Preferencias::getValorPreferencia('re_captcha_private_key')) && C4::AR::Utilidades::trim(C4::AR::Preferencias::getValorPreferencia('re_captcha_public_key')))) {
+                        # se logueo mal mas de 3 veces y se tiene configuración de recaptcha, debo verificar captcha
+                        
                         my $reCaptchaPrivateKey =  C4::AR::Preferencias::getValorPreferencia('re_captcha_private_key');
                         my $reCaptchaChallenge  = $_[0]->param('recaptcha_challenge_field');
                         my $reCaptchaResponse   = $_[0]->param('recaptcha_response_field');
@@ -1101,7 +863,7 @@ sub checkauth {
                         
                         
                     } else {  
-                        #else del  if ($login_attempts > 2 )
+                        #else del  if ($login_attempts > 2 ) que revisa si hay captcha configurado
                         $sin_captcha = 1; 
                     }  
                     if (($sin_captcha || $captchaResult->{is_valid}) && $socio){
@@ -1166,7 +928,7 @@ sub checkauth {
                         if ($cant_fallidos > 0){
                                 $_[5]->{'loginFailed'} = 1;
                         }
-                        if ($cant_fallidos >= 3){
+                        if (!$sin_captcha && $cant_fallidos >= 3){
                                 $_[5]->{'mostrar_captcha'} = 1;
                         }  
                     }

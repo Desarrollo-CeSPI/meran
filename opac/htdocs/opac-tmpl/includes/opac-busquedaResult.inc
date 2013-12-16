@@ -301,33 +301,47 @@
              <tbody>  
                 [% FOREACH NIVEL IN SEARCH_RESULTS %]
                     <tr>
-	                     <td style="width: 60px;">
-	                         [% IF NIVEL.portadas_grupo_cant > 0 %]
-	                                 [% FOREACH portada IN NIVEL.portadas_grupo %]
-	                                     [% IF loop.count < 4 %]
-	                                   [% IF portada.portada_registro_big %]
-	                                       <a class="fancylink" rel="group_[% grupo %]" href="/uploads/covers/[% portada.portada_registro_big %]">
-	                                           <img alt="cover" src="/uploads/covers/[% portada.portada_registro %]" title="Portada" />
-	                                       </a>
-	                                   [% ELSE %]
-	                                       [% IF portada.portada_registro_medium %]
-	                                           <a class="fancylink" rel="group_[% grupo %]" href="/uploads/covers/[% portada.portada_registro_medium %]">
-	                                               <img alt="cover" src="/uploads/covers/[% portada.portada_registro %]" title="Portada" />
-	                                           </a>
-	                                       [% ELSE %]
-	                                               <img alt="cover" src="/uploads/covers/[% portada.portada_registro %]" title="Portada" />
-	                                       [% END %]
-	                                   [% END %]
-	                                     [% END %]
-	                                 [% END %]
-	                         [% ELSE %]
-	                               <img src="/uploads/covers/[% NIVEL.cat_ref_tipo_nivel3 %].png" 
-	                                     alt="[% 'Sin Portada' | i18n %]"
-	                                     title="[% 'Sin Portada' | i18n %]" />
-	                         [% END %]
-	                         <br />
-	                         <center><div style="font-weight: bold; font-size: 10px; clear:both;" >[% NIVEL.cat_ref_tipo_nivel3_name %] </div></center>
-	                     </td>
+
+
+                                         <td style="width: 60px;">
+                      [% IF NIVEL.portadas_perzonalizadas_cant > 0 %]
+                             [% FOREACH portadas IN NIVEL.portadas_perzonalizadas %]
+                               [% FOREACH portada IN portadas %]
+                                [% IF loop.count < 4 %]
+                                  [% FOREACH p IN portada.value %]
+                                    <a class="fancylink" rel="group_[% grupo %]" href="/uploads/covers-added/[% p.image_name %]">
+                                      <img alt="coverllll" src="/uploads/covers-added/[% p.image_name %]" title="Portada" />
+                                   </a>
+                                [% END %]
+                               [% END %]
+                              [% END %]
+                            [% END %]
+                      [% ELSIF NIVEL.portadas_grupo_cant > 0 %]
+                             [% FOREACH portada IN NIVEL.portadas_grupo %]
+                                 [% IF loop.count < 4 %]
+                                     [% IF portada.portada_registro_big %]
+                                         <a class="fancylink" rel="group_[% grupo %]" href="/uploads/covers/[% portada.portada_registro_big %]">
+                                             <img alt="coverllll" src="/uploads/covers/[% portada.portada_registro %]" title="Portada" />
+                                         </a>
+                                     [% ELSE %]
+                                       [% IF portada.portada_registro_medium %]
+                                           <a class="fancylink" rel="group_[% grupo %]" href="/uploads/covers/[% portada.portada_registro_medium %]">
+                                               <img alt="cover" src="/uploads/covers/[% portada.portada_registro %]" title="Portada" />
+                                           </a>
+                                       [% ELSE %]
+                                               <img alt="cover" src="/uploads/covers/[% portada.portada_registro %]" title="Portada" />
+                                       [% END %]
+                                    [% END %]
+                                  [% END %]
+                              [% END %]
+                       [% ELSE %]
+                             <img src="/uploads/covers/[% NIVEL.cat_ref_tipo_nivel3 %].png" 
+                                   alt="[% 'Sin Portada' | i18n %]"
+                                   title="[% 'Sin Portada' | i18n %]" />
+                       [% END %]
+                         <br />
+                         <center><div style="font-weight: bold; font-size: 10px; clear:both;" >[% NIVEL.cat_ref_tipo_nivel3_name %] </div></center>
+                     </td>
 
                         <td>	
                             [% IF NIVEL.titulo %]

@@ -80,12 +80,15 @@ sub guardarNuevaImportacion {
     $Io_importacion->agregar($params);
 
     C4::AR::Debug::debug("Obtener Campos !!");
-
-    #Obtengo los campos/subcampos para ver si por si es necesario realizar un corrimiento de campos
-     my $campos_archivo = C4::AR::ImportacionIsoMARC::obtenerCamposDeArchivo($params);
-     $params->{'camposArchivo'}     = $campos_archivo;
-     my %camposMovidos;
-     $params->{'camposMovidos'}     = \%camposMovidos;
+    
+    # MARC pasa 1 a 1
+    if ($params->{'esquemaImportacion'} ne 'MARC') {
+        #Obtengo los campos/subcampos para ver si por si es necesario realizar un corrimiento de campos
+         my $campos_archivo = C4::AR::ImportacionIsoMARC::obtenerCamposDeArchivo($params);
+         $params->{'camposArchivo'}     = $campos_archivo;
+         my %camposMovidos;
+         $params->{'camposMovidos'}     = \%camposMovidos;
+    }
 
     #Ahora los registros del archivo $params->{'write_file'}
     C4::AR::ImportacionIsoMARC::guardarRegistrosNuevaImportacion($Io_importacion,$params,$msg_object,$db);
@@ -127,6 +130,34 @@ sub guardarNuevaImportacion {
     $db->{connect_options}->{AutoCommit} = 1;
 }
 
+=item sub releerEsquemaDeRegistros
+Relee el esquema a partir de los Registros de una importación
+=cut
+
+sub releerEsquemaDeRegistrosDeImportacion {
+    my ($id) = @_;
+
+    my $importacion = C4::AR::ImportacionIsoMARC::getImportacionById($id);
+
+    #Limpio el detalle del Esquema
+    foreach my $detalle_esquema ($importacion->esquema->detalle){
+        $detalle_esquema->delete();
+    }
+
+    #Armar nuevo esquema (hash de hashes)
+    my $detalle_esquema = $importacion->obtenerCamposSubcamposDeRegistros();
+
+    foreach my $campo ( keys %$detalle_esquema) {
+        foreach my $subcampo ( keys %{$detalle_esquema->{$campo}}) {
+            my $nuevo_esquema_detalle          = C4::Modelo::IoImportacionIsoEsquemaDetalle->new();
+            my %detalle=();
+            $detalle{'campo'}=$campo;
+            $detalle{'subcampo'}=$subcampo;
+            $detalle{'id_importacion_esquema'} = $importacion->getEsquema();
+            $nuevo_esquema_detalle->agregar(\%detalle);
+        }
+    }
+}
 
 =item sub guardarRegistrosNuevaImportacion
 Guarda los registros de una nueva imporatción
@@ -206,6 +237,7 @@ sub guardarRegistrosNuevaImportacion {
                  }
                  else {
                     for my $subfield ( @{$field->subf} ) {
+
                         if(!$new_field){
                             my $ind1=$field->ind1?$field->ind1:'#';
                             my $ind2=$field->ind2?$field->ind2:'#';
@@ -252,6 +284,8 @@ sub guardarRegistrosNuevaImportacion {
              }
          }
 
+            C4::AR::Debug::debug($marc_record->as_usmarc());
+            
             my %parametros;
             $parametros{'id_importacion_iso'}      = $importacion->getId;
             $parametros{'marc_record'}   = $marc_record->as_usmarc();

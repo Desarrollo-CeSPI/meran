@@ -59,6 +59,18 @@ Alias /includes/ reemplazarPATHBASE/reemplazarID/includes/
 
 ServerSignature Off
 
+Alias /uploads/covers/ "reemplazarPATHBASE/reemplazarID/files/intranet/uploads/covers/"
+<Directory reemplazarPATHBASE/reemplazarID/files/intranet/uploads/covers/ >
+  Order allow,deny
+  Allow from all
+</Directory>
+
+Alias /uploads/covers-added/ "reemplazarPATHBASE/reemplazarID/files/intranet/uploads/covers-added/"
+<Directory reemplazarPATHBASE/reemplazarID/files/intranet/uploads/covers-added/ >
+ Order allow,deny
+ Allow from all
+</Directory>
+
 Alias /uploads/ "reemplazarPATHBASE/reemplazarID/files/intranet/uploads/"
 <Directory reemplazarPATHBASE/reemplazarID/files/intranet/uploads/ >
 Order allow,deny
@@ -67,6 +79,18 @@ Allow from all
 
 Alias /private-uploads/ "reemplazarPATHBASE/reemplazarID/files/intranet/private-uploads/"
 <Directory reemplazarPATHBASE/reemplazarID/files/intranet/private-uploads/ >
+Order allow,deny
+Allow from all
+</Directory>
+
+Alias /uploads/novedades-opac "reemplazarPATHBASE/reemplazarID/files/opac/uploads/novedades/"
+<Directory reemplazarPATHBASE/reemplazarID/files/opac/uploads/novedades >
+Order allow,deny
+Allow from all
+</Directory>
+
+Alias /uploads/portada "reemplazarPATHBASE/reemplazarID/files/opac/uploads/portada/"
+<Directory reemplazarPATHBASE/reemplazarID/files/opac/uploads/portada >
 Order allow,deny
 Allow from all
 </Directory>
