@@ -1,48 +1,6 @@
 [% INCLUDE 'opac-top.inc' %]
 
 
-	<script type="text/javascript"> 
-        var ID1 = 0;
-
-        function agregarAnalitica(){
-            window.location.href="[% url_prefix %]/catalogacion/estructura/datosDocumento.pl?id1=[% id1 %]&id2=[% id2 %]&tipoAccion=AGREGAR_ANALITICA";
-        }
-        
-
-        function borrarRelacionAnalitica(id1, id2){
-          
-            bootbox.confirm(ESTA_SEGURO_QUE_DESEA_BORRARLO, function (confirmStatus){ 
-                  ID1 = id1;
-
-                  if(confirmStatus){
-                        objAH               = new AjaxHelper(updateBorrarRelacionAnalitica);
-                        objAH.showOverlay   = true;
-                        objAH.debug         = true;
-                        objAH.url           = URL_PREFIX+"/catalogacion/estructura/estructuraCataloDB.pl";
-                        objAH.id1           = id1;
-                        objAH.id2           = id2;
-                        objAH.tipoAccion    = "ELIMINAR_RELACION_ANALITICA";
-                        objAH.sendToServer();
-                    }
-              
-                }
-            );
-        }
-
-        function updateBorrarRelacionAnalitica(responseText){
-
-            var Messages = JSONstring.toObject(responseText);
-            if(setMessages(Messages) == 1){
-              clear_fatal_error();
-            } else {
-              $("#analitica_id_" + ID1).hide();
-              setMessages(Messages);
-              setTimeout(refreshMeranPage,5000);
-            }
-        }
-
-  </script>
-
 <!-- Detalle del nivel 1 -->
 
 	<fieldset>
@@ -50,7 +8,7 @@
 
                [% PERL %]
                       print C4::AR::Filtros::link_to( text =>     "<h1>[% titulo %] <small>[% tipo_documento %] - #[% id1 %]</small></h1><h2>[% autor %] </h2>  ",
-                                      url     =>"[% url_prefix %]/catalogacion/estructura/detalle.pl", 
+                                      url     =>"[% url_prefix %]/opac-detail.pl", 
                                       params  =>   ["id1=[% id1 %]"],
                                       title   =>    "[% 'Mostrar Detalle del Registro' | i18n %]",
                                     ) ;
@@ -120,27 +78,13 @@
                     <div class="page-header">
                        [% PERL %]
                                print C4::AR::Filtros::link_to( text   => "<h2>[% nivel1_analitica_titulo | html %]</h2>",
-                                                               url    => "[% url_prefix %]/catalogacion/estructura/detalle.pl", 
+                                                               url    => "[% url_prefix %]/opac-detail.pl", 
                                                                params   => ["id1=[% nivel1_analitica_id1 %]"],
                                                                title  => "[% 'Detalle del registro' | i18n %]",
                                                            ) ;
                        [% END %]
                         <h3>[% nivel1_analitica_autor %] </h3> 
-                        <div class="botones_analitica">
-                                 
-                                [% PERL %]
-                                    print C4::AR::Filtros::action_set_button(    
-                                                                        title           => "[% 'Registro' | i18n %]",
-                                                                        button          => 'btn btn-primary',
-
-                                                                        actions         => [
-                                                                                            {title => "Eliminar relación", action=>"borrarRelacionAnalitica([% nivel1_analitica_id1 %], [% id2 %])", icon=>"icon-trash"},
-                                                                                            ],
-
-                                            ) ;
-                                [% END %]
-                              
-                        </div>  <!-- end <div class="botones_analitica"> -->
+ 
                     </div>  <!-- end <div class="page-header"> -->
 
   	                <dl>  
@@ -162,16 +106,5 @@
 		      </div> <!--end <div id="analiticas[% id2 %]" > -->
 	     <!-- </div> -->
 	<!-- </div> -->
-
-    <div class="form-actions">
- 
-                    [% PERL %]
-                            print C4::AR::Filtros::to_Button(   text    => "[% 'Agregar analítica' | i18n %]",
-                                                                boton   => "btn btn btn-primary",
-                                                                onClick => "agregarAnalitica();",
-                                                                title   => "[% 'Agregar analítica' | i18n %]",
-                                    ) ;
-                    [% END %]
-    </div>  
 
 [% INCLUDE "opac-bottom.inc" %]
