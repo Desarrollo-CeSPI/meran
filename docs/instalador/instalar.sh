@@ -251,12 +251,8 @@ descomprimirArchivos()
 }
 cambiarPermisos()
 {
-      chown www-data:www-data -R $DESTINO_MERAN/$ID/opac/htdocs/uploads/ 
-      chown www-data:www-data -R $DESTINO_MERAN/$ID/opac/htdocs/opac-tmpl/uploads/
-      chown www-data:www-data -R $DESTINO_MERAN/$ID/intranet/htdocs/uploads
-      chown www-data:www-data -R $DESTINO_MERAN/$ID/intranet/htdocs/private-uploads
+      chown www-data:www-data -R $DESTINO_MERAN/$ID/files/
       chown www-data:www-data -R /var/log/meran/$ID/
-
 }
 arrancarSphinx()
 {

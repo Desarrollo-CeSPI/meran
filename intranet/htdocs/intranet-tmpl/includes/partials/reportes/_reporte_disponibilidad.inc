@@ -29,14 +29,7 @@
             </div>            
         </div>
 
-        <div class="control-group">
-            <label class="control-label"  for="fecha_alta"> [% "Fecha de Alta" | i18n %]</label>
-            <div class="controls">
-                    <input type="text" id="fecha_inicio" name="fecha_ini" data-datepicker="datepicker"  placeholder="Desde" value="" required>
-                    <input type="text" id="fecha_final" name="fecha_fin" data-datepicker="datepicker" placeholder="Hasta" value="" required>
-            </div>         
 
-        </div>
             <div class="form-actions">
                 [% PERL %]
                         print C4::AR::Filtros::action_button( 

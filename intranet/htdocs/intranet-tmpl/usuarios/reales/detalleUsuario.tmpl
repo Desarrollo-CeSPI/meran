@@ -263,7 +263,11 @@ var loaderPath= "";
 			                            <dd>[%  socio.nro_socio %]</dd>
 			
 			                            <dt class="inline left rightMargin">[% "Incorporaci&oacute;n a Biblioteca:" | i18n %]</dt>
-			                            <dd>[%  socio.ui.nombre %]</dd>
+			                            [% TRY %]
+			                            	<dd>[%  socio.ui.nombre %]</dd>
+		                                [% CATCH %]
+       										<dd>Sin Unidad de Información</dd>
+    									[% END %]
 			                            
 		          						[%IF  socio.persona.getInstitucion %]
 				                            <dt class="inline left rightMargin">[% "Instituci&oacute;n :" | i18n %]</dt>

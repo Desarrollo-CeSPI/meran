@@ -47,13 +47,12 @@ use C4::Modelo::UsrSocio::Manager;
 print "Reparar Templates\n";  
    repararTemplates();
 
- print "Volver a Bajar las Portadas\n";
-   bajarPortadas();
-   
-
- print "Generar Indice\n";
+print "Generar Indice\n";
    regenerarIndice();
 
+print "Volver a Bajar las Portadas\n";
+   bajarPortadas();
+   
 sub darPermisosSocios {
     #Permisos de socios!
 
