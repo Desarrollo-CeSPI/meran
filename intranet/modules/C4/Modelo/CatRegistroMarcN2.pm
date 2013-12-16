@@ -274,6 +274,14 @@ sub getSignaturas{
     return (\@signaturas);
 }
 
+sub getPrimerSignatura {
+    my ($self)          = shift;
+
+    my $signaturas_array_ref = $self->getSignaturas();
+
+    (scalar(@$signaturas_array_ref) > 0)? return $signaturas_array_ref->[0]: return 0;
+}
+
 =head2
 sub getISBN
 

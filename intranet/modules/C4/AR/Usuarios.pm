@@ -571,9 +571,8 @@ sub getSocioInfoPorNroSocio {
     if ($nro_socio){
         my $socio_array_ref = C4::Modelo::UsrSocio::Manager->get_usr_socio( 
                                                     query => [ nro_socio => { eq => $nro_socio } ],
-                                                    require_objects => ['persona','ui',
-                                                                        'persona.documento','categoria'],
-                                                    with_objects => ['persona.alt_ciudad_ref','persona.ciudad_ref'],
+                                                    require_objects => ['persona','persona.documento','categoria'],
+                                                    with_objects => ['ui', 'persona.alt_ciudad_ref','persona.ciudad_ref'],
                                                     select       => ['persona.*','usr_socio.*','usr_ref_categoria_socio.*','ui.*'],
                                         );
 
@@ -864,8 +863,10 @@ sub BornameSearchForCard {
 
     if (($fecha_inicio) && ($fecha_inicio ne $desde) && ($fecha_fin) && ($fecha_fin ne $hasta) ) {
 
-        $fecha_inicio   = C4::Date::format_date($fecha_inicio, "iso");
-        $fecha_fin      = C4::Date::format_date($fecha_fin, "iso");
+        $fecha_inicio   = C4::Date::format_date($fecha_inicio, 'iso')."00:00:00";
+        $fecha_fin      = C4::Date::format_date($fecha_fin, 'iso')." 23:59:59";
+
+        C4::AR::Debug::debug($fecha_fin);
 
         push( @filtros, and => ['last_login' => { ge => $fecha_inicio },
                                 'last_login' => { le => $fecha_fin } ] ); 
