@@ -1784,7 +1784,8 @@ sub getTipoDocumentoFromMarcRecord {
         my ($marc_record) = @_;
     #FIXME  Debería ir a una tabla de referencia de alias o sinónimos
         my $tipo_documento = $marc_record->subfield('910','a');
-        
+        my $nivel_bibliografico = $marc_record->subfield('900','b');
+
         my $object_tipo_documento = C4::AR::Referencias::getTipoNivel3ByCodigo($tipo_documento);
         
         if ($object_tipo_documento){
@@ -1803,6 +1804,18 @@ sub getTipoDocumentoFromMarcRecord {
                         }
                     case 'DVD' { 
                         $resultado = 'CDR';
+                        }
+                    case 'M' { 
+                        $resultado = 'LIB';
+                        }
+                    case 'MT' { 
+                        $resultado = 'TES';
+                        }
+                    case 'MS' { 
+                        $resultado = 'REV';
+                        }
+                    case 'AS' { 
+                        $resultado = 'ANA';
                         }
                 }
             }
