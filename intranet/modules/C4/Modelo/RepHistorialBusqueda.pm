@@ -70,7 +70,7 @@ sub agregar{
 
 		if (C4::AR::Utilidades::validateString($search->{'keyword'}) ){
 	#EN CADA IF HAY QUE CREAR DE NUEVO SINO SOLAMENTE SE ACTUALIZA
-			$historial_temp = C4::Modelo::RepHistorialBusqueda->new(db => $db);
+			
 			$historial_temp->agregarSimple($rep_busqueda->getIdBusqueda, 'keyword', $search->{'keyword'}, $desde,$http_user_agent);
 		}
 
