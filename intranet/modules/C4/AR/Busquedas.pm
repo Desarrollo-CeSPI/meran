@@ -1519,7 +1519,7 @@ sub busquedaCombinada_newTemp{
 
     ($total_found_paginado, $resultsarray) = C4::AR::Busquedas::armarInfoNivel1($obj_for_log, @id1_array);
     #se loquea la busqueda
-    
+        
     if (!$obj_for_log->{'no_log_search'}){
         C4::AR::Busquedas::logBusqueda($obj_for_log, $session);
     }
@@ -1890,7 +1890,6 @@ sub busquedaPorBarcodeBySphinx{
 
 sub t_loguearBusqueda {
     my($nro_socio,$desde,$http_user_agent,$search_array)=@_;
-
     my $msg_object= C4::AR::Mensajes::create();
     $desde = $desde || 'SIN_TIPO';
     my $historial = C4::Modelo::RepHistorialBusqueda->new();
@@ -1927,9 +1926,10 @@ sub logBusqueda{
     my $valorINTRA= C4::AR::Preferencias::getValorPreferencia("logSearchINTRA");
 
     $session = $session || CGI::Session->load();
-
+ 
     
     if( (($valorOPAC == 1)&&($params->{'type'} eq 'OPAC')) || (($valorINTRA == 1)&&($params->{'type'} eq 'INTRA')) ){
+       
         if($params->{'codBarra'} ne ""){
             my $search;
             $search->{'barcode'}= $params->{'codBarra'};
@@ -1961,12 +1961,23 @@ sub logBusqueda{
             push (@search_array, $search);
         }
 
-        if($params->{'string'} != -1 && $params->{'string'} ne ""){
+        if($params->{'isbn'} ne ""){
             my $search;
-            $search->{'keyword'}= $params->{'string'};
+            $search->{'isbn'}= $params->{'isbn'};
             push (@search_array, $search);
         }
 
+        if($params->{'tema'} ne ""){
+            my $search;
+            $search->{'tema'}= $params->{'tema'};
+            push (@search_array, $search);
+        }
+
+        if($params->{'signatura'} ne ""){
+            my $search;
+            $search->{'signatura'}= $params->{'signatura'};
+            push (@search_array, $search);
+        }
 
         if($params->{'filtrarPorAutor'} ne ""){
             my $search;
