@@ -310,7 +310,7 @@
         [% IF ((nivel2_template == 'ANA')) %]        
 		    <h4>		
                 [% PERL %]
-                    print C4::AR::Filtros::link_to(   text      => "Articulo de: [% titulo_registro_padre %] / [% autor %]",
+                    print C4::AR::Filtros::link_to(   text      => "Articulo de: [% titulo_registro_padre %] / [% autor_registro_padre %]",
                                                       url       => "[% url_prefix %]/catalogacion/estructura/detalle.pl", 
                                                       params    => ["id1=[% nivel1_padre %]"],
                                                       title     => "[% 'Detalle del registro fuente' | i18n %]"
