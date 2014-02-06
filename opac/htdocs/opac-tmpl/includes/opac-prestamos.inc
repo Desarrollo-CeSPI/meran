@@ -4,7 +4,7 @@
 <div class="alert">
 	<a class="close" data-dismiss="alert" href="#">×</a>
 	<div class="modal-header">
-		<h3>[% "Usted tiene los siguientes prestamos" | i18n %]</h3>
+		<h3>[% "Usted tiene los siguientes préstamos" | i18n %]</h3>
 	</div>
 	<div class="modal-body">
                [% FOREACH prestamo IN prestamos %]

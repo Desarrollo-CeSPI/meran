@@ -495,7 +495,6 @@ sub detalleNivel3{
         $hash_nivel2{'cant_analiticas'}         = $tiene_analiticas;
 
         if($nivel2_object->getTemplate() eq "ANA"){
-
             #recupero las analiticas por el id1    
             my $cat_reg_analiticas_array_ref    = C4::AR::Nivel2::getAllAnaliticasById1($nivel2_object->getId1());
 
@@ -505,6 +504,7 @@ sub detalleNivel3{
                 if($n2){
                     $hash_nivel2{'nivel1_padre'}                = $n2->getId1();
                     $hash_nivel2{'titulo_registro_padre'}       = $n2->nivel1->getTitulo();
+                    $hash_nivel2{'autor_registro_padre'}        = $n2->nivel1->getAutor();
                     $hash_nivel2{'primer_signatura'}            = $n2->getSignaturas->[0];
                 }
             }
@@ -915,6 +915,7 @@ sub detalleCompletoOPAC{
                     if($n2){
                         $hash_nivel2->{'nivel1_padre'}                = $n2->getId1();
                         $hash_nivel2->{'titulo_registro_padre'}       = $n2->nivel1->getTitulo();
+                        $hash_nivel2->{'autor_registro_padre'}        = $n2->nivel1->getAutor();
                         $hash_nivel2->{'primer_signatura'}            = $n2->getSignaturas->[0];
                         $hash_nivel2->{'edicion_analitica'}           = $n2->getEdicion();
                     }
