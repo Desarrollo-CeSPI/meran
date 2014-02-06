@@ -1587,7 +1587,7 @@ sub getBusquedasDeUsuario {
     }   
 
     if ($valor){
-        push(@filtro, ('valor'  =>  { like => '% '.$valor.'%'}));
+        push(@filtro, ('valor'  =>  { like => '%'.$valor.'%'}));
     }
    
     if ($fecha_inicio ne '' && $fecha_fin ne ''){
@@ -1609,7 +1609,8 @@ sub getBusquedasDeUsuario {
                                                                       require_objects => ['busqueda'],
                                                                       with_objects => [],
                                                                       select       => ['busqueda.*','rep_historial_busqueda.*'],
-                                                                      sort_by => $orden,
+                                                                      # sort_by => $orden,
+                                                                      sort_by => "busqueda.fecha DESC",
                                                           );
 
 
@@ -1618,7 +1619,8 @@ sub getBusquedasDeUsuario {
                                                                       require_objects => ['busqueda'],
                                                                       with_objects => [],
                                                                       select       => ['busqueda.*','rep_historial_busqueda.*'],
-                                                                      sort_by => $orden,
+                                                                      sort_by => "busqueda.fecha DESC",
+                                                                      # sort_by => $orden,
                                                           );
 
    

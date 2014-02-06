@@ -195,6 +195,20 @@
           [% END %]
         [% END %]
 
+        [% IF show_analiticas > 0 %]
+            <div class="accordion-heading">
+
+                       [% PERL %]
+                               print C4::AR::Filtros::link_to( text   => "[% 'Anal&iacute;ticas' | i18n %] <span class='badge badge-warning' style='cursor: default;'>[% cant_analiticas %]</span>",
+                                                               url    => "[% url_prefix %]/opac-analiticas.pl", 
+                                                               params   => ["id2=[% id2 %]"],
+                                                               title  => "[% 'Anal&iacute;ticas' | i18n %]",
+                                                               class  => "accordion-toggle"
+                                                           ) ;
+                       [% END %]
+            </div>
+        [% END %]
+
 
   </section>
 

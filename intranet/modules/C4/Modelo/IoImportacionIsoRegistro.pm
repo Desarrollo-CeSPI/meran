@@ -768,7 +768,7 @@ sub guardarNivel3DeImportacion{
       push (@infoArrayNivel,\%hash_temp)
     }
     
-    
+    # Ahora TODOS los 900!
     my %hash_temp2 = {};
     $hash_temp2{'indicador_primario'}  = '#';
     $hash_temp2{'indicador_secundario'}  = '#';
@@ -778,17 +778,19 @@ sub guardarNivel3DeImportacion{
 
     my %hash_sub_temp2 = {};
     
-    #Operador
-    my $hash;
-    $hash->{'g'}= $nivel3->{'operador'};
-    $hash_sub_temp2{$hash_temp2{'cant_subcampos'}} = $hash;
-    $hash_temp2{'cant_subcampos'}++;
-    
-    #baja/modificacion
-    my $hash;
-    $hash->{'h'}= $nivel3->{'fecha_baja_modificacion'};
-    $hash_sub_temp2{$hash_temp2{'cant_subcampos'}} = $hash;
-    $hash_temp2{'cant_subcampos'}++;
+    my $marc_record_n3 = $nivel3->{'marc_record'};
+
+    my $field_900 = $marc_record_n3->field('900');
+
+    foreach my $subfield ($field_900->subfields()) {
+        my $subcampo          = $subfield->[0];
+        my $dato              = $subfield->[1];
+        
+        my $hash;
+        $hash->{$subcampo}= $dato;
+        $hash_sub_temp2{$hash_temp2{'cant_subcampos'}} = $hash;
+        $hash_temp2{'cant_subcampos'}++;
+    }
     
     $hash_temp2{'subcampos_hash'} =\%hash_sub_temp2;
     if ($hash_temp2{'cant_subcampos'}){

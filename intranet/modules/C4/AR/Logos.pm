@@ -69,6 +69,13 @@ sub getPathLogoEtiquetas{
         return (0);
     }
 }
+
+=item
+    Devuelve el path del archivo del logo de etiquetas, el anterior devuelve el nombre del archivo
+=cut
+sub getOnlyPathLogoEtiquetas {
+    return C4::Context->config('logosIntraPath') . "/";
+}
 =item
     Devuelve el tamaño del archivo del logo de etiquetas
 =cut

@@ -18,6 +18,7 @@
                             class           => "",
                             selectAll_id    => "",
                             columns         => ['[% "Valor" | i18n %]','[% 'Campo' | i18n %]',
+                                                '[% 'Intra/Opac' | i18n %]',
                                                 '[% "Usuario" | i18n %]','[% "Fecha" | i18n %]',                
                                                 ],
                             order           => {  'Valor' =>'valor', 
@@ -39,11 +40,14 @@
                     [% res.campo %]
                 </td>
                 <td>
-                    [% IF nro_socio %] 
+                    [% res.tipo %]
+                </td>
+                <td>
+                    [% IF res.busqueda.nro_socio %] 
                               [% PERL %]
-                                    print C4::AR::Filtros::link_to(   text =>     "[% nro_socio %]",
+                                    print C4::AR::Filtros::link_to(   text =>     "[% res.busqueda.nro_socio %]",
                                                           url=>"      [% url_prefix %]/usuarios/reales/datosUsuario.pl", 
-                                                          params =>   ["nro_socio=[% nro_socio %]"],
+                                                          params =>   ["nro_socio=[% res.busqueda.nro_socio %]"],
                                                           title =>    "[% 'Mostrar Detalle del Usuario' | i18n %]"
                                                     );
                               [% END %] 
