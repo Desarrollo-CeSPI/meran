@@ -162,7 +162,7 @@ sub link_to {
         $link= "<a href='".$url."'";
     }
 
-    C4::AR::Debug::debug("FILTROS URL => ".$link);
+    # C4::AR::Debug::debug("FILTROS URL => ".$link);
 
     if ($tooltip ne ''){
         $link .= " data-original-title='$tooltip'";
