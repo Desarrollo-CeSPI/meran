@@ -73,13 +73,8 @@ sub getPathLogoEtiquetas{
 =item
     Devuelve el path del archivo del logo de etiquetas, el anterior devuelve el nombre del archivo
 =cut
-sub getOnlyPathLogoEtiquetas{
-    my $logosArrayRef = C4::Modelo::LogoEtiquetas::Manager->get_logoEtiquetas( limit => 1 );
-    if(scalar(@$logosArrayRef) > 0){
-        return C4::Context->config('logosIntraPath') . "/";
-    }else{
-        return (0);
-    }
+sub getOnlyPathLogoEtiquetas {
+    return C4::Context->config('logosIntraPath') . "/";
 }
 =item
     Devuelve el tamaño del archivo del logo de etiquetas
