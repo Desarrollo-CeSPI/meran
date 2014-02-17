@@ -1794,29 +1794,34 @@ sub getTipoDocumentoFromMarcRecord {
         else{
             my $resultado =C4::AR::Preferencias::getValorPreferencia("defaultTipoNivel3");
             if ($tipo_documento){
-                use Switch;
-                switch (uc($tipo_documento)) {
-                    case 'TEXTO' { 
-                        $resultado = 'LIB';
-                        }
-                    case 'CD' { 
-                        $resultado = 'CDR';
-                        }
-                    case 'DVD' { 
-                        $resultado = 'CDR';
-                        }
-                    case 'M' { 
-                        $resultado = 'LIB';
-                        }
-                    case 'MT' { 
-                        $resultado = 'TES';
-                        }
-                    case 'MS' { 
-                        $resultado = 'REV';
-                        }
-                    case 'AS' { 
-                        $resultado = 'ANA';
-                        }
+
+                my %tipo_documento_alias = {
+                    'TEXTO' =>  'LIB',
+                    'CD'    =>  'CDR',
+                    'DVD'   =>  'CDR',
+                    'M'     =>  'LIB',
+                    'MT'    =>  'TES',
+                    'T'     =>  'TES',
+                    'MS'    =>  'REV',
+                    'S'     =>  'REV',
+                    'SC'    =>  'REV',
+                    'SMC'   =>  'REV',
+                    'AS'    =>  'ANA',
+                    'A'     =>  'ANA',
+                    'MC'    =>  'LIB',
+                    'MV'    =>  'LIB',
+                    'ÇM'    =>  'LIB',
+                    'MV'    =>  'LIB',
+                    'V'     =>  'LIB',
+                    'VT'    =>  'TES',
+                    'C'     =>  'LIB',
+                    'MC'    =>  'LIB',
+                    'CM'    =>  'LIB'
+                };
+
+
+                if ($tipo_documento_alias{C4::AR::Utilidades::trim(uc($tipo_documento))}) {
+                    $resultado = $tipo_documento_alias{C4::AR::Utilidades::trim(uc($tipo_documento))};
                 }
             }
 
@@ -2194,6 +2199,41 @@ sub cancelarImportacion{
     }
 
     return $msg_object;
+}
+
+
+
+sub leerValoresCampoImportacion {
+    my ($id,$campo) = @_;
+
+    my $hash = ();
+    my $importacion = C4::AR::ImportacionIsoMARC::getImportacionById($id);
+
+    #Limpio el detalle del Esquema
+    foreach my $registro ($importacion->registros){
+        my $marc = $registro->getRegistroMARCOriginal();
+        my $field = $marc->field($campo);
+        if($field){
+            if($field->is_control_field()){
+                my $dato  = $field->data;
+                if($hash->{$dato}){
+                        $hash->{$dato}++;
+                    }else{
+                        $hash->{$dato}=1;
+                    }
+            }else{
+                foreach my $subfield ($field->subfields()) {
+                    my $dato              = $subfield->[1];        
+                    if($hash->{$dato}){
+                        $hash->{$dato}++;
+                    }else{
+                        $hash->{$dato}=1;
+                    }                }
+            }
+        }
+    }
+
+    return $hash;
 }
 
 END { }       # module clean-up code here (global destructor)
