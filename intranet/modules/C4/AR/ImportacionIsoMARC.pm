@@ -1798,25 +1798,7 @@ sub getTipoDocumentoFromMarcRecord {
                 my %tipo_documento_alias = {
                     'TEXTO' =>  'LIB',
                     'CD'    =>  'CDR',
-                    'DVD'   =>  'CDR',
-                    'M'     =>  'LIB',
-                    'MT'    =>  'TES',
-                    'T'     =>  'TES',
-                    'MS'    =>  'REV',
-                    'S'     =>  'REV',
-                    'SC'    =>  'REV',
-                    'SMC'   =>  'REV',
-                    'AS'    =>  'ANA',
-                    'A'     =>  'ANA',
-                    'MC'    =>  'LIB',
-                    'MV'    =>  'LIB',
-                    'ÇM'    =>  'LIB',
-                    'MV'    =>  'LIB',
-                    'V'     =>  'LIB',
-                    'VT'    =>  'TES',
-                    'C'     =>  'LIB',
-                    'MC'    =>  'LIB',
-                    'CM'    =>  'LIB'
+                    'DVD'   =>  'CDR'
                 };
 
 
