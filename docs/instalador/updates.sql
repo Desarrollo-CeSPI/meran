@@ -351,3 +351,7 @@ INSERT IGNORE INTO `usr_regularidad` (`id`, `usr_estado_id`, `usr_ref_categoria_
 (103, 11, 7, 1),
 (104, 11, 8, 0),
 (105, 11, 9, 1);
+
+## 25/02/2014
+
+ALTER TABLE  `ref_nivel_bibliografico` CHANGE  `description`  `description` VARCHAR( 255 );
