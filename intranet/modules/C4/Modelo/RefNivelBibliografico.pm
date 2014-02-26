@@ -10,7 +10,7 @@ __PACKAGE__->meta->setup(
     columns => [
         id          => { type => 'serial', overflow => 'truncate', not_null => 1 },
         code        => { type => 'varchar', overflow => 'truncate', length => 4, not_null => 1 },
-        description => { type => 'varchar', overflow => 'truncate', default => '', length => 20, not_null => 1 },
+        description => { type => 'varchar', overflow => 'truncate', default => '', length => 255, not_null => 1 },
     ],
 
     primary_key_columns => [ 'id' ],
