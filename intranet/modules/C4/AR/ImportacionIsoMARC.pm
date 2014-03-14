@@ -1201,6 +1201,9 @@ sub getNivelesFromRegistro {
     my ($registro_importacion) = C4::AR::ImportacionIsoMARC::getRegistroFromImportacionById($id_registro);
     my $marc_record_to_meran = $registro_importacion->getRegistroMARCResultado();
     
+    C4::AR::Debug::debug("REGISTRO=   ".$marc_record_to_meran->as_formatted()); 
+
+
     #Armamos un grupo de niveles vacio 
     my $marc_record_n1 = MARC::Record->new();
     my $marc_record_n2 = MARC::Record->new();
@@ -1219,9 +1222,9 @@ sub getNivelesFromRegistro {
                 my $subcampo          = $subfield->[0];
                 my $dato              = $subfield->[1];
                 my $estructura        = C4::AR::EstructuraCatalogacionBase::getEstructuraBaseFromCampoSubCampo($campo, $subcampo);
-                
+
                 if($estructura) {
-                #C4::AR::Debug::debug("NIVEL ??  ".$estructura->getNivel); 
+                 # C4::AR::Debug::debug("NIVEL ??  ".$estructura->getNivel); 
                   use Switch;
                   switch ($estructura->getNivel) {
                   case 1 { 
@@ -1274,7 +1277,8 @@ sub getNivelesFromRegistro {
                   case 2 {
                           #Nivel 2
       
-      
+                              C4::AR::Debug::debug("NIVEL 2  ".$campo."&".$subcampo."=".$dato." ".$marc_record_n2->subfield($campo,$subcampo)." repetible? ".$estructura->getRepetible);
+
                           if ((($campo eq '900')&&($subcampo eq 'b'))&&($marc_record_n2->subfield($campo,$subcampo))){
                                   #ya existe el 900,b NIVEL BIBLIOGRAFICO, no sirve que haya varios
                                   next;
@@ -1292,15 +1296,20 @@ sub getNivelesFromRegistro {
                            
                            
                           #HAY QUE CREAR UNO NUEVO??
-                          #C4::AR::Debug::debug("HAY QUE CREAR UNO NUEVO??  ".$campo."&".$subcampo."=".$dato." ".$marc_record_n2->subfield($campo,$subcampo)." repetible? ".$estructura->getRepetible);
-      
-                          if(($marc_record_n2->subfield($campo,$subcampo))&&(!$estructura->getRepetible)){
+                          C4::AR::Debug::debug("HAY QUE CREAR UNO NUEVO??  ".$campo."&".$subcampo."=".$dato." ".$marc_record_n2->subfield($campo,$subcampo)." repetible? ".$estructura->getRepetible);
+                          # FIXME y si hay varios????? ===> Busco el último y me fijo ahi siempre !!!
+                          
+                          my @campos_registro = $marc_record_n2->field($campo);
+                          if($campos_registro[$#campos_registro]){
+                            C4::AR::Debug::debug("ULTIMO CAMPO ".$campos_registro[$#campos_registro]->as_formatted() );
+                            }
+                          if(($campos_registro[-1])&&($campos_registro[-1]->subfield($subcampo))&&(!$estructura->getRepetible)){
                               #Existe el subcampo y no es repetible ==> es un nivel 2 nuevo
-                              #C4::AR::Debug::debug("Existe el subcampo y no es repetible ==> es un nivel 2 nuevo  ".$campo."&".$subcampo."=".$dato);
+                              C4::AR::Debug::debug("Existe el subcampo y no es repetible ==> es un nivel 2 nuevo  ".$campo."&".$subcampo."=".$dato);
                                               
                               #Agrego el último ejemplar y lo guardo
                               if (scalar($marc_record_n3->fields())){
-                                  #C4::AR::Debug::debug("EJEMPLAR ".$marc_record_n3->as_formatted); 
+                                  C4::AR::Debug::debug("EJEMPLAR ".$marc_record_n3->as_formatted); 
                                   push(@ejemplares,$marc_record_n3);
                                   $marc_record_n3 = MARC::Record->new();
                               }
@@ -1325,12 +1334,14 @@ sub getNivelesFromRegistro {
                           }
                           else{
                               #El campo es de Nivel 2
-                              if (($marc_record_n2->field($campo))&&(!$marc_record_n2->subfield($campo,$subcampo))){
+                              #FIXME y si son muchos campos repetibles?? 
+                              if (($campos_registro[-1])&&(!$campos_registro[-1]->subfield($subcampo))){
                                   #Existe el campo pero no el subcampo, agrego el subcampo
-                                  $marc_record_n2->field($campo)->add_subfields($subcampo => $dato);
+                                    C4::AR::Debug::debug("Existe el campo pero no el subcampo, agrego el subcampo");
+                                  $campos_registro[-1]->add_subfields($subcampo => $dato);
                               }
                               else{
-                                  #C4::AR::Debug::debug("CAMPO NUEVO");
+                                  C4::AR::Debug::debug("CAMPO NUEVO");
                                   #No existe el campo, se crea uno nuevo
                                   my $field = MARC::Field->new($campo,'','',$subcampo => $dato);
                                   $marc_record_n2->append_fields($field);
@@ -1470,7 +1481,7 @@ sub detalleCompletoRegistro {
         $hash_nivel2{'tipo_documento'}      = C4::AR::ImportacionIsoMARC::getTipoDocumentoFromMarcRecord_Object($nivel2_marc);
         $tipo_documento                     = $hash_nivel2{'tipo_documento'};
         
-        #C4::AR::Debug::debug(" TIPO DOCUMENTO!!! ".$tipo_documento->getNombre());
+        C4::AR::Debug::debug(" TIPO DOCUMENTO!!! ".$tipo_documento->getNombre());
         
         #Seteo bien el código de tipo de documento
         if($nivel2_marc->field('910')){
@@ -1783,11 +1794,19 @@ sub getEjemplarFromMarcRecord {
 sub getTipoDocumentoFromMarcRecord {
         my ($marc_record) = @_;
     #FIXME  Debería ir a una tabla de referencia de alias o sinónimos
-        my $tipo_documento = $marc_record->subfield('910','a');
+        my $tipo_documento = $marc_record->subfield('910','a');        
         my $nivel_bibliografico = $marc_record->subfield('900','b');
+
+        C4::AR::Debug::debug(" TIPO DOCUMENTO  ".$tipo_documento );
+        C4::AR::Debug::debug(" NIVEL BIBLIOGRAFICO  ".$nivel_bibliografico );
+
 
         my $object_tipo_documento = C4::AR::Referencias::getTipoNivel3ByCodigo($tipo_documento);
         
+
+                C4::AR::Debug::debug(" TIPO DOC??  ".$object_tipo_documento );
+
+
         if ($object_tipo_documento){
             return $object_tipo_documento->getId_tipo_doc();
         }
@@ -1798,9 +1817,11 @@ sub getTipoDocumentoFromMarcRecord {
                 my %tipo_documento_alias = {
                     'TEXTO' =>  'LIB',
                     'CD'    =>  'CDR',
-                    'DVD'   =>  'CDR'
+                    'DVD'   =>  'CDR',
+                    'S'     =>  'REV'
                 };
 
+            C4::AR::Debug::debug(" TIPO DOCUMENTO  ".$tipo_documento_alias{C4::AR::Utilidades::trim(uc($tipo_documento))});
 
                 if ($tipo_documento_alias{C4::AR::Utilidades::trim(uc($tipo_documento))}) {
                     $resultado = $tipo_documento_alias{C4::AR::Utilidades::trim(uc($tipo_documento))};

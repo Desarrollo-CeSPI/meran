@@ -65,7 +65,8 @@ sub getDestino{
     my $subcampo_origen = $self->getSubcampoOrigen;
     
     my @filtros;
-    
+
+    push(@filtros,(id_importacion_esquema => {eq => $self->getIdImportacionEsquema}));
     push (@filtros, (campo_origen => {eq =>$campo_origen}) );
     push (@filtros, (subcampo_origen => {eq =>$subcampo_origen}) );
 

@@ -33,15 +33,15 @@ open (OUT,">", $outfile);
 
 
 my $reader = MARC::Moose::Reader::File::Isis->new(
-    file   => 'biblio.iso', );
+    file   =>  $ARGV[0] || 'biblio.iso');
 
 while ( my $record = $reader->read() ) {
   $records++;
      for my $field ( @{$record->fields} ) {
          if($field->tag < '010'){
              #CONTROL FIELD
-               #  print "CAMPO CONTROL > ".$field->tag;
-                # print "\n";
+                print "CAMPO CONTROL > ".$field->tag;
+                 print "\n";
              }
              else {
          for my $subfield ( @{$field->subf} ) {

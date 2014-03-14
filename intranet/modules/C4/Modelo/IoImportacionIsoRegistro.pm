@@ -99,23 +99,38 @@ sub getRegistroMARCResultado{
                     $new_field = MARC::Field->new( $detalle->getCampoDestino, $dato );
                    }
                 else {
-                    my $field = $marc_record->field($detalle->getCampoDestino);
-                    my $subfield = $marc_record->subfield($detalle->getCampoDestino,$detalle->getSubcampoDestino);
-                    #Hay que ver si es repetible
-                    if((($field)&&(!$subfield)) || (($subfield)&&($estructura->getRepetible))){
-                        #Existe el campo pero no el subcampo o existe el subcampo pero es repetible, agrego otro subcampo
-                        $field->add_subfields( $detalle->getSubcampoDestino => $dato );
+                    my @fields = $marc_record->field($detalle->getCampoDestino);
+
+                    #Si es repetible irá al primero, sino busco el primero que no lo tenga.
+                    #Si no encuentro lugar se crea uno nuevo 
+                    my $done=0;
+                    foreach my $field (@fields){                    
+                        if (!$done){
+                            my $subfield = $field->subfield($detalle->getSubcampoDestino);
+                            #Hay que ver si es repetible
+                            if((!$subfield) || (($subfield)&&($estructura->getRepetible))){
+                                #Existe el campo pero no el subcampo o existe el subcampo pero es repetible, agrego otro subcampo
+                                $field->add_subfields( $detalle->getSubcampoDestino => $dato );
+                                $done=1;
+                                }
                         }
-                    else {
+                    }
+
+                    if(!$done) {
                         #No existe el campo o existe y no es repetible, se crea uno nuevo
                         my $campo=$detalle->getCampoDestino;
                         my $subcampo=$detalle->getSubcampoDestino;
                         
-                        if (($field)&&(($campo eq '100')&&($subcampo eq 'a'))){
+                        if ((@fields)&&(($campo eq '100')&&($subcampo eq 'a'))){
                            #Parche de AUTORES, si hay muchos 100 a => el resto va al 700 a
                                 $campo='700';
-                          }
-                          
+                        }
+                        
+                        if ((@fields)&&(($campo eq '110')&&($subcampo eq 'a'))) {
+                           #Parche de AUTORES, si hay muchos 110 a => el resto va al 710 a
+                                $campo='710';
+                        }
+
                         my $ind1='#';
                         my $ind2='#';
                         $new_field= MARC::Field->new($campo, $ind1, $ind2,$subcampo => $dato);
@@ -305,7 +320,10 @@ sub getTitulo{
 sub getAutor{
     my ($self) = shift;
     
-    my $autor= $self->getCampoSubcampoJoined('100','a');
+    my $autor = $self->getCampoSubcampoJoined('100','a');
+    if(!$autor){ 
+        $autor = $self->getCampoSubcampoJoined('110','a');
+    }
 
     if(!$autor){
         my $padre=$self->getRegistroPadre;
