@@ -53,8 +53,12 @@
             <tr>
 
                 <td>[% regla_tipo.getOrden %]</td>
-                <td>[% regla_tipo.ref_regla.getDias_demora %]</td>
-                <td>[% regla_tipo.ref_regla.getDias_sancion %]</td>
+              [% TRY %]
+                  <td>[% regla_tipo.ref_regla.getDias_demora %]</td>
+                  <td>[% regla_tipo.ref_regla.getDias_sancion %]</td>
+              [% CATCH %]
+                  <td>SIN REGLAS</td>
+              [% END %]
                 <td>[% IF regla_tipo.getCantidad %] [% regla_tipo.getCantidad %]  [% ELSE %] <i class="icon-refresh" title="[% 'Infinito' | i18n %]"></i> [% END %]</td>
                 <td>
                 [% PERL %]
