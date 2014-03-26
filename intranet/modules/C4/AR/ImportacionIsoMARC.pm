@@ -1300,8 +1300,8 @@ sub getNivelesFromRegistro {
                           # FIXME y si hay varios????? ===> Busco el último y me fijo ahi siempre !!!
                           
                           my @campos_registro = $marc_record_n2->field($campo);
-                          if($campos_registro[$#campos_registro]){
-                            C4::AR::Debug::debug("ULTIMO CAMPO ".$campos_registro[$#campos_registro]->as_formatted() );
+                          if($campos_registro[-1]){
+                            C4::AR::Debug::debug("ULTIMO CAMPO ".$campos_registro[-1]->as_formatted() );
                             }
                           if(($campos_registro[-1])&&($campos_registro[-1]->subfield($subcampo))&&(!$estructura->getRepetible)){
                               #Existe el subcampo y no es repetible ==> es un nivel 2 nuevo
@@ -1315,7 +1315,7 @@ sub getNivelesFromRegistro {
                               }
                                   
                               #Guardo el nivel 2 con sus ejemplares
-                              if(!$tipo_ejemplar){
+                              if(($marc_record_n2->subfield('910','a'))||(!$tipo_ejemplar)){
                                 $tipo_ejemplar = C4::AR::ImportacionIsoMARC::getTipoDocumentoFromMarcRecord($marc_record_n2);
                               }
                               
@@ -1330,7 +1330,7 @@ sub getNivelesFromRegistro {
                               push (@grupos, \%hash_temp);
                               $marc_record_n2 = MARC::Record->new();
                               @ejemplares = ();
-                              $tipo_ejemplar ='';
+                              #$tipo_ejemplar ='';
                           }
                           else{
                               #El campo es de Nivel 2
@@ -1425,7 +1425,7 @@ sub getNivelesFromRegistro {
         }
                             
         #Guardo el nivel 2 con sus ejemplares
-        if(!$tipo_ejemplar){
+        if(($marc_record_n2->subfield('910','a'))||(!$tipo_ejemplar)){
             $tipo_ejemplar = C4::AR::ImportacionIsoMARC::getTipoDocumentoFromMarcRecord($marc_record_n2);
         }
         
@@ -1440,14 +1440,14 @@ sub getNivelesFromRegistro {
         push (@grupos, \%hash_temp);
     
         #C4::AR::Debug::debug("###########################################################################################");
-        #foreach my $grupo (@grupos){
+        foreach my $grupo (@grupos){
             #my $ej = $grupo->{'ejemplares'};
             #C4::AR::Debug::debug(" GRUPO con ".scalar(@$ej)." ej");
-            #C4::AR::Debug::debug(" Grupo  ".$grupo->{'grupo'}->as_formatted);
+            C4::AR::Debug::debug(" Grupo  ".$grupo->{'grupo'}->as_formatted);
                 #foreach my $ejemplar (@$ej){
                         #C4::AR::Debug::debug(" Ejemplar  ".$ejemplar->as_formatted);
                 #}
-        #}
+        }
         #C4::AR::Debug::debug("###########################################################################################");
         
         my %hash_temp;
@@ -1472,15 +1472,21 @@ sub detalleCompletoRegistro {
     my $nivel1              = $detalle->{'registro'};
     my $grupos = $detalle->{'grupos'};
     my $tipo_documento;
+    my $nivel_bibliografico;
     my @niveles2;    
     foreach my $nivel2 (@$grupos){
         my $nivel2_marc = $nivel2->{'grupo'};
         my %hash_nivel2=();
         
+        C4::AR::Debug::debug("detalleCompletoRegistro >>> GRUPO \n ".$nivel2_marc->as_formatted());
+
         ##TIPO DE DOCUMENTO##
-        $hash_nivel2{'tipo_documento'}      = C4::AR::ImportacionIsoMARC::getTipoDocumentoFromMarcRecord_Object($nivel2_marc);
-        $tipo_documento                     = $hash_nivel2{'tipo_documento'};
-        
+        if($nivel2_marc->subfield('910','a') || (!$tipo_documento)){
+            $hash_nivel2{'tipo_documento'}      = C4::AR::ImportacionIsoMARC::getTipoDocumentoFromMarcRecord_Object($nivel2_marc);
+            $tipo_documento                     = $hash_nivel2{'tipo_documento'};
+            $nivel2->{'tipo_ejemplar'}          = $tipo_documento->getId_tipo_doc();        
+        }
+
         C4::AR::Debug::debug(" TIPO DOCUMENTO!!! ".$tipo_documento->getNombre());
         
         #Seteo bien el código de tipo de documento
@@ -1489,7 +1495,7 @@ sub detalleCompletoRegistro {
         }else{
                 my $new_field= MARC::Field->new('910','#','#','a' => $tipo_documento->getNombre());
                 $nivel2_marc->append_fields($new_field);
-            }
+        }
 
         ##ISBN vs ISSN##
 
@@ -1538,17 +1544,19 @@ sub detalleCompletoRegistro {
         }
         
         ##NIVEL BIBLIOGRAFICO##
-        $hash_nivel2{'nivel_bibliografico'}      = C4::AR::ImportacionIsoMARC::getNivelBibliograficoFromMarcRecord_Object($nivel2_marc);        
-        my $nivel_bibliografico                  = $hash_nivel2{'nivel_bibliografico'};
-        if($nivel_bibliografico){
+                ##TIPO DE DOCUMENTO##
+        if($nivel2_marc->subfield('900','b') || (!$nivel_bibliografico)){
+            $hash_nivel2{'nivel_bibliografico'}     = C4::AR::ImportacionIsoMARC::getNivelBibliograficoFromMarcRecord_Object($nivel2_marc);        
+            $nivel_bibliografico                    = $hash_nivel2{'nivel_bibliografico'};
+        }
             #Seteo bien el código del nivel bibliográfico
             if($nivel2_marc->field('900')){
                 $nivel2_marc->field('900')->update( 'b' => $nivel_bibliografico->getDescription());
             }else{
                     my $new_field= MARC::Field->new('900','#','#','b' => $nivel_bibliografico->getDescription());
                     $nivel2_marc->append_fields($new_field);
-                }
-        }
+                }        
+       
         $hash_nivel2{'marc_record'}             = $nivel2_marc;
         $hash_nivel2{'nivel2_array'}            = C4::AR::ImportacionIsoMARC::toMARC_Array($nivel2_marc,$tipo_documento->getId_tipo_doc(),'',2);
         $hash_nivel2{'nivel2_template'}         = $nivel2->{'tipo_ejemplar'};
@@ -1821,7 +1829,9 @@ sub getTipoDocumentoFromMarcRecord {
                     'S'     =>  'REV'
                 };
 
-            C4::AR::Debug::debug(" TIPO DOCUMENTO  ".$tipo_documento_alias{C4::AR::Utilidades::trim(uc($tipo_documento))});
+            $tipo_documento_alias{'S'} = 'REV';
+
+            C4::AR::Debug::debug(" TIPO DOCUMENTO ALIAS! ".C4::AR::Utilidades::trim(uc($tipo_documento))." => ".$tipo_documento_alias{C4::AR::Utilidades::trim(uc($tipo_documento))});
 
                 if ($tipo_documento_alias{C4::AR::Utilidades::trim(uc($tipo_documento))}) {
                     $resultado = $tipo_documento_alias{C4::AR::Utilidades::trim(uc($tipo_documento))};
@@ -1833,6 +1843,8 @@ sub getTipoDocumentoFromMarcRecord {
             if ($signatura =~ m/Folleto/g ){
                     $resultado = 'FOL';
                 }
+
+            C4::AR::Debug::debug(" RESULTADO => ".$resultado );
 
            return $resultado;     
         }

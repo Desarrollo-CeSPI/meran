@@ -81,71 +81,39 @@ sub getRegistroMARCResultado{
     my ($params) = @_;
     
     my $marc_record = MARC::Record->new();
+    my $marc_record_original = $self->getRegistroMARCOriginal();
     
     my $importacion = C4::AR::ImportacionIsoMARC::getImportacionById($self->getIdImportacionIso());
     my $detalle_destino = $importacion->esquema->getDetalleDestino();
+    my $detalle_destino_campo;
+    
+        C4::AR::Debug::debug($marc_record_original->as_formatted);
 
-    foreach my $detalle (@$detalle_destino){
-        my $new_field=0;
-        my $datos = $self->getCampoSubcampoJoined($detalle->getCampoDestino,$detalle->getSubcampoDestino);
-        my $estructura  = C4::AR::EstructuraCatalogacionBase::getEstructuraBaseFromCampoSubCampo($detalle->getCampoDestino, $detalle->getSubcampoDestino);
-        
-        foreach my $dato (@$datos){
-            #Hay dato en el campo
-            if ($detalle->getCampoDestino ne 'ZZZ'){
-                #Sino no esta configurado
-                if($detalle->getCampoDestino < '010'){
-                    #CONTROL FIELD
-                    $new_field = MARC::Field->new( $detalle->getCampoDestino, $dato );
-                   }
-                else {
-                    my @fields = $marc_record->field($detalle->getCampoDestino);
+    foreach my $field ( $marc_record_original->fields ) {
+        my $campo_original = $field->tag;
 
-                    #Si es repetible irá al primero, sino busco el primero que no lo tenga.
-                    #Si no encuentro lugar se crea uno nuevo 
-                    my $done=0;
-                    foreach my $field (@fields){                    
-                        if (!$done){
-                            my $subfield = $field->subfield($detalle->getSubcampoDestino);
-                            #Hay que ver si es repetible
-                            if((!$subfield) || (($subfield)&&($estructura->getRepetible))){
-                                #Existe el campo pero no el subcampo o existe el subcampo pero es repetible, agrego otro subcampo
-                                $field->add_subfields( $detalle->getSubcampoDestino => $dato );
-                                $done=1;
-                                }
-                        }
-                    }
-
-                    if(!$done) {
-                        #No existe el campo o existe y no es repetible, se crea uno nuevo
-                        my $campo=$detalle->getCampoDestino;
-                        my $subcampo=$detalle->getSubcampoDestino;
-                        
-                        if ((@fields)&&(($campo eq '100')&&($subcampo eq 'a'))){
-                           #Parche de AUTORES, si hay muchos 100 a => el resto va al 700 a
-                                $campo='700';
-                        }
-                        
-                        if ((@fields)&&(($campo eq '110')&&($subcampo eq 'a'))) {
-                           #Parche de AUTORES, si hay muchos 110 a => el resto va al 710 a
-                                $campo='710';
-                        }
-
-                        my $ind1='#';
-                        my $ind2='#';
-                        $new_field= MARC::Field->new($campo, $ind1, $ind2,$subcampo => $dato);
-                    }
-                }
-                
-                if($new_field){
-                    $marc_record->append_fields($new_field);
-                }
-             }
-          
+        if ($campo_original < '010'){
+            my $detalle =  $importacion->esquema->getDetalleByCampoSubcampoOrigen($campo_original,'');
+            if (($detalle)&&($detalle->getCampoDestino)){
+                    $self->agregarDatoAMarcRecord($marc_record,$detalle,$field->data);
+            }    
         }
-        
-       }
+        else{
+            foreach my $subfield ( $field->subfields() ) {
+                my $subcampo_original = $subfield->[0];
+                my $dato = $subfield->[1];
+                
+                C4::AR::Debug::debug("ORIGEN ".$campo_original." & ".$subcampo_original." = ".$dato);
 
+                my $detalle =  $importacion->esquema->getDetalleByCampoSubcampoOrigen($campo_original,$subcampo_original);
+                
+                if (($detalle)&&($detalle->getCampoDestino)){
+                    $self->agregarDatoAMarcRecord($marc_record,$detalle,$dato);
+                }
+
+              }
+            }
+        }
     #Ahora agregamos los registros hijo
     my $registros_hijo = $self->getRegistrosHijo();
     if($registros_hijo){
@@ -154,12 +122,81 @@ sub getRegistroMARCResultado{
              $marc_record->append_fields($mc->fields());
         }
     }
+
+    C4::AR::Debug::debug($marc_record->as_formatted());
     return $marc_record;
-    }
+
+}
+    
 
 #----------------------------------- FIN - FUNCIONES DEL MODELO -------------------------------------------
 
+sub agregarDatoAMarcRecord {
+    my ($self)      = shift;
+    my ($marc_record, $detalle, $dato) = @_;
 
+        my $estructura  = C4::AR::EstructuraCatalogacionBase::getEstructuraBaseFromCampoSubCampo($detalle->getCampoDestino, $detalle->getSubcampoDestino);
+        #Lo mando a un campo por ahora
+        my $new_field=0;
+        if($detalle->getCampoDestino < '010'){
+            #CONTROL FIELD
+            $new_field = MARC::Field->new( $detalle->getCampoDestino, $dato );
+
+           }else{
+
+
+            if ($detalle->getCampoDestino eq '863') {
+                C4::AR::Debug::debug("REVISTA=".$dato);
+            } 
+
+            C4::AR::Debug::debug("DESTINO ". $detalle->getCampoDestino." & ".$detalle->getSubcampoDestino." = ".$dato);
+            my @fields = $marc_record->field($detalle->getCampoDestino);
+
+            #Si es repetible o no existe el subcampo se agrega al final
+            #Si no encuentro lugar se crea uno nuevo 
+            my $subf;
+            my $done=0;
+
+            if ($fields[-1]){
+                $subf = $fields[-1]->subfield($detalle->getSubcampoDestino);
+                 C4::AR::Debug::debug("REPETIBLE=".$estructura->getRepetible());
+            #Hay que ver si es repetible
+                if((!$subf) || (($subf)&&($estructura->getRepetible))) {
+                    #Existe el campo pero no el subcampo o existe el subcampo pero es repetible, agrego otro subcampo
+                    $fields[-1]->add_subfields( $detalle->getSubcampoDestino() => $dato );
+                    $done=1;
+                    if ($detalle->getCampoDestino eq '863') {
+                        C4::AR::Debug::debug(" SUBCAMPO ");
+                    } 
+                }
+            }
+
+            if (!$done) {
+                #No existe el campo o existe y no es repetible, se crea uno nuevo
+                my $campo=$detalle->getCampoDestino;
+                my $subcampo=$detalle->getSubcampoDestino;
+                if ((@fields)&&(($campo eq '100')&&($subcampo eq 'a'))){
+                   #Parche de AUTORES, si hay muchos 100 a => el resto va al 700 a
+                        $campo='700';
+                }
+                if ((@fields)&&(($campo eq '110')&&($subcampo eq 'a'))) {
+                   #Parche de AUTORES, si hay muchos 110 a => el resto va al 710 a
+                        $campo='710';
+                }
+                my $ind1='#';
+                my $ind2='#';
+                $new_field= MARC::Field->new($campo, $ind1, $ind2,$subcampo => $dato);
+                if ($detalle->getCampoDestino eq '863') {
+                        C4::AR::Debug::debug(" NUEVO CAMPO ");
+                    }
+            }
+        }
+        
+        if($new_field){
+            $marc_record->append_fields($new_field);
+        }
+
+    }
 
 #----------------------------------- GETTERS y SETTERS------------------------------------------------
 
@@ -240,6 +277,27 @@ sub setIdMatching{
     my ($matching) = @_;
     $self->id_matching($matching);
 }
+
+sub getCampoDestinoJoined{
+    my ($self) = shift;
+    my ($campo) = @_;
+
+    my $marc = $self->getRegistroMARCOriginal;
+    my $importacion = C4::AR::ImportacionIsoMARC::getImportacionById($self->getIdImportacionIso());
+    
+    my $detalle_subcampos = $importacion->esquema->getDetalleSubcamposByCampoDestino($campo);
+   
+    my %campo={};
+    my @fields = $marc->field($campo);
+    foreach my $field (@fields) {
+        foreach my $subcampo (@$detalle_subcampos){
+            $campo{$subcampo->{'subcampo_destino'}} = $field->subfield($subcampo->{'subcampo_origen'});  
+        }
+    }
+    ########### FIXME!
+    return (\%campo);
+}
+
 
 
 sub getCampoSubcampoJoined{
