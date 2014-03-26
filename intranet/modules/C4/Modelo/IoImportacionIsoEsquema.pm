@@ -77,6 +77,28 @@ sub getDescripcion{
 }
 
 
+sub getDetalleSubcamposByCampoDestino{
+    my ($self)  = shift;
+    my ($campo) = @_;
+
+    require C4::Modelo::IoImportacionIsoEsquemaDetalle;
+    require C4::Modelo::IoImportacionIsoEsquemaDetalle::Manager;
+
+    my @filtros;
+    push(@filtros,(id_importacion_esquema   => { eq => $self->getId }));
+    push(@filtros,(campo_destino            => { eq => $campo}));
+
+    my $detalleTemp = C4::Modelo::IoImportacionIsoEsquemaDetalle->new();
+    my $ordenAux= $detalleTemp->sortByString('orden');
+    my $detalle_completo = C4::Modelo::IoImportacionIsoEsquemaDetalle::Manager->get_io_importacion_iso_esquema_detalle(
+                                                                                        query => \@filtros,
+                                                                                        distinct => 1,
+                                                                                        select => [ 'subcampo_destino' ],
+                                                                                        );
+    ########### FIXME!
+    return $detalle_completo;
+}
+
 sub getDetalleByCampoSubcampoDestino{
     my ($self)  = shift;
     my ($campo,$subcampo) = @_;
@@ -121,4 +143,29 @@ sub getDetalleDestino{
      );
 
     return $detalle_completo;
+}
+
+
+
+sub getDetalleByCampoSubcampoOrigen{
+    my ($self)  = shift;
+    my ($campo,$subcampo) = @_;
+
+    require C4::Modelo::IoImportacionIsoEsquemaDetalle;
+    require C4::Modelo::IoImportacionIsoEsquemaDetalle::Manager;
+
+    my @filtros;
+    push(@filtros,(id_importacion_esquema   => { eq => $self->getId }));
+    push(@filtros,(campo_origen            => { eq => $campo}));
+    push(@filtros,(subcampo_origen            => { eq => $subcampo}));
+    push(@filtros,(campo_destino            => { ne => undef}));
+    my $detalleTemp = C4::Modelo::IoImportacionIsoEsquemaDetalle->new();
+    my $ordenAux= $detalleTemp->sortByString('orden');
+    my $detalle_completo = C4::Modelo::IoImportacionIsoEsquemaDetalle::Manager->get_io_importacion_iso_esquema_detalle(
+                                                                                        query => \@filtros,
+                                                                                        distinct => 1,
+                                                                                        select => ['campo_destino', 'subcampo_destino' ],
+                                                                                        );
+    ########### FIXME!
+    return $detalle_completo->[0];
 }
