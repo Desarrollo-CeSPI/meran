@@ -102,8 +102,6 @@ sub getRegistroMARCResultado{
             foreach my $subfield ( $field->subfields() ) {
                 my $subcampo_original = $subfield->[0];
                 my $dato = $subfield->[1];
-                
-                C4::AR::Debug::debug("ORIGEN ".$campo_original." & ".$subcampo_original." = ".$dato);
 
                 my $detalle =  $importacion->esquema->getDetalleByCampoSubcampoOrigen($campo_original,$subcampo_original);
                 
@@ -143,13 +141,6 @@ sub agregarDatoAMarcRecord {
             $new_field = MARC::Field->new( $detalle->getCampoDestino, $dato );
 
            }else{
-
-
-            if ($detalle->getCampoDestino eq '863') {
-                C4::AR::Debug::debug("REVISTA=".$dato);
-            } 
-
-            C4::AR::Debug::debug("DESTINO ". $detalle->getCampoDestino." & ".$detalle->getSubcampoDestino." = ".$dato);
             my @fields = $marc_record->field($detalle->getCampoDestino);
 
             #Si es repetible o no existe el subcampo se agrega al final
@@ -159,15 +150,11 @@ sub agregarDatoAMarcRecord {
 
             if ($fields[-1]){
                 $subf = $fields[-1]->subfield($detalle->getSubcampoDestino);
-                 C4::AR::Debug::debug("REPETIBLE=".$estructura->getRepetible());
             #Hay que ver si es repetible
                 if((!$subf) || (($subf)&&($estructura->getRepetible))) {
                     #Existe el campo pero no el subcampo o existe el subcampo pero es repetible, agrego otro subcampo
                     $fields[-1]->add_subfields( $detalle->getSubcampoDestino() => $dato );
                     $done=1;
-                    if ($detalle->getCampoDestino eq '863') {
-                        C4::AR::Debug::debug(" SUBCAMPO ");
-                    } 
                 }
             }
 
@@ -186,9 +173,6 @@ sub agregarDatoAMarcRecord {
                 my $ind1='#';
                 my $ind2='#';
                 $new_field= MARC::Field->new($campo, $ind1, $ind2,$subcampo => $dato);
-                if ($detalle->getCampoDestino eq '863') {
-                        C4::AR::Debug::debug(" NUEVO CAMPO ");
-                    }
             }
         }
         
