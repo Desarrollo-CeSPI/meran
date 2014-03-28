@@ -841,17 +841,17 @@ sub guardarNivel3DeImportacion{
     my $marc_record_n3 = $nivel3->{'marc_record'};
 
     my $field_900 = $marc_record_n3->field('900');
-
-    foreach my $subfield ($field_900->subfields()) {
-        my $subcampo          = $subfield->[0];
-        my $dato              = $subfield->[1];
-        
-        my $hash;
-        $hash->{$subcampo}= $dato;
-        $hash_sub_temp2{$hash_temp2{'cant_subcampos'}} = $hash;
-        $hash_temp2{'cant_subcampos'}++;
+    if ($field_900){
+        foreach my $subfield ($field_900->subfields()) {
+            my $subcampo          = $subfield->[0];
+            my $dato              = $subfield->[1];
+            
+            my $hash;
+            $hash->{$subcampo}= $dato;
+            $hash_sub_temp2{$hash_temp2{'cant_subcampos'}} = $hash;
+            $hash_temp2{'cant_subcampos'}++;
+        }
     }
-    
     $hash_temp2{'subcampos_hash'} =\%hash_sub_temp2;
     if ($hash_temp2{'cant_subcampos'}){
       push (@infoArrayNivel,\%hash_temp2)
