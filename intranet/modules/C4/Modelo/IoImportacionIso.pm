@@ -421,7 +421,7 @@ sub getRegistrosParaImportar{
     my @filtros;
     push (@filtros, ( id_importacion_iso => { eq => $self->getId }));
     #Solo registros padre por defecto
-    push (@filtros, ( relacion => { eq => '' }));
+    push (@filtros, ( relacion => { eq => undef }));
     
     #Solo registros que matcheen
     push (@filtros, ( or => [matching => { ne => 1 }, matching => { eq => undef }]));

@@ -1329,6 +1329,10 @@ sub getNivelesFromRegistro {
                               #C4::AR::Debug::debug("GRUPO CON ".$hash_temp{'cant_ejemplares'}." EJEMPLARES");
                               push (@grupos, \%hash_temp);
                               $marc_record_n2 = MARC::Record->new();
+                              
+                              my $field = MARC::Field->new($campo,'','',$subcampo => $dato);
+                              $marc_record_n2->append_fields($field);
+                              
                               @ejemplares = ();
                               #$tipo_ejemplar ='';
                           }
