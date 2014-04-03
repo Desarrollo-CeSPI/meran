@@ -1710,8 +1710,9 @@ sub procesarRevistas {
                     if (@secuencia gt 1){
                         my $ini = C4::AR::Utilidades::trim($secuencia[0]);
                         my $fin = C4::AR::Utilidades::trim($secuencia[1]);
-
-                        if ($ini < $fin){
+                        # Errores en las secuencias, secuencia inicial mayor ala final o que la diferencia sea de más de un nro por día. Hay registros erroneos y hay que evitarlos.
+                        if (($ini < $fin)&&( ($fin - $ini) <= 365 )) {
+                            
                             foreach my $ns ($ini..$fin) {
                                 C4::AR::Debug::debug("COLECCION  ==>  AGREGA UNO DE SECUENCIA: $ns \n");
 
