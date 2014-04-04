@@ -63,6 +63,15 @@
                                                                 ) ;
                                             [% END %]
                                     
+                                            [% PERL %]
+                                                                print C4::AR::Filtros::action_button(
+                                                                                                    button   => "btn btn-warning",
+                                                                                                    icon => "icon-white icon-plus",
+                                                                                                    title   => " [% 'Clonar estante' | i18n %]",
+                                                                                                    action => "clonarEstante([% estante.getId %],[% estante.getPadre %]);",
+                                                                                            
+                                                                ) ;
+                                            [% END %]
                             </div>
 
        

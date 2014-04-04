@@ -110,7 +110,30 @@ function updateAgregarSubEstante(responseText){
          verSubEstantes(objAH.estante,objAH.padre);
 }
 
+function clonarEstante(estante,padre) {
 
+        theStatus = ESTA_SEGURO+"?";
+        bootbox.confirm(theStatus,
+            function(confirmStatus){
+                if (confirmStatus) {
+                    objAH=new AjaxHelper(updateClonarEstante);
+                    objAH.debug= true;
+                    objAH.url= 'estanteDB.pl';
+                    objAH.estante= estante;
+                    objAH.padre= padre;
+                    objAH.tipo= 'CLONAR_ESTANTE';
+                    objAH.sendToServer();
+                }
+            }
+        );
+  
+}
+
+function updateClonarEstante(responseText){
+    var Messages= JSONstring.toObject(responseText);
+    setMessages(Messages);
+    verEstantes();
+}
 
 function verSubEstantes(estante,padre){
         objAH=new AjaxHelper(updateVerSubEstantes);

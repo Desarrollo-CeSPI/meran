@@ -83,4 +83,36 @@ sub getContenido{
     my ($self) = shift;
     return ($self->contenido);
 }
+
+sub clonar{
+    my ($self) = shift;
+
+    #Clonamos Estante
+    my $nuevo_estante = C4::Modelo::CatEstante->new();
+    $nuevo_estante->setEstante($self->getEstante());
+    $nuevo_estante->setPadre($self->getPadre());
+    $nuevo_estante->setTipo($self->getTipo());
+    $nuevo_estante->save();
+
+    #Clonamos Contenido
+    my $contenido_estante = $self->getContenido();
+    foreach my $contenido (@$contenido_estante)
+    {
+        my $nuevo_contenido = C4::Modelo::CatContenidoEstante->new();
+        $nuevo_contenido->setId_estante($nuevo_estante->getId());
+        $nuevo_contenido->setId2($contenido->getId2());
+        $nuevo_contenido->save();
+    }
+    
+    my $subestantes = C4::AR::Estantes::getSubEstantes($self->getId());
+    foreach my $subestante (@$subestantes)
+    {   #Clonamos el hijo y seteamos nuevo padre
+        my $subestante_clonado = $subestante->clonar();
+        $subestante_clonado->setPadre($nuevo_estante->getId);
+        $subestante_clonado->save();
+    }
+
+    return $nuevo_estante;
+}
+
 1;

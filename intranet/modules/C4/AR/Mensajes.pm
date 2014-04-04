@@ -436,6 +436,8 @@ my %mensajesINTRA = (
     'E013' => 'Se produjo un error al tratar de agregar contenido al estante "*?*" .',
     'E014' => 'El contenido fue agregado con &eacute;xito al estante "*?*".',
     'E015' => 'Ya existe el contenido en el estante "*?*".',
+    'E016' => 'El estante fue clonado con &eacute;xito a "*?*".',
+    'E017' => 'Se produjo un error al tratar de clonar el estante "*?*" .',
     'REF0' => 'La referencia no se ha podido eliminar, verifique que no se est&eacute; usando.',
     'REF1' => 'La referencia ha sido eliminada correctamente.',
 #   Mensajes de Adquisicion Proveedores y Presupuestos

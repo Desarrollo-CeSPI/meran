@@ -121,6 +121,22 @@ elsif($tipo eq "BORRAR_ESTANTES"){
     C4::AR::Auth::print_header($session);
     print $infoOperacionJSON;
 }
+elsif($tipo eq "CLONAR_ESTANTE"){
+    my ($user, $session, $flags)= checkauth(    $input, 
+                                                $authnotrequired, 
+                                                {   ui => 'ANY', 
+                                                    tipo_documento => 'ANY', 
+                                                    accion => 'BAJA', 
+                                                    entorno => 'undefined' },
+                                                'intranet'
+                               );
+
+    my $estante_a_clonar= $obj->{'estante'};
+    ($Messages_arrayref)= &C4::AR::Estantes::clonarEstante($estante_a_clonar);
+    my $infoOperacionJSON=to_json $Messages_arrayref;
+    C4::AR::Auth::print_header($session);
+    print $infoOperacionJSON;
+}
 elsif($tipo eq "MODIFICAR_ESTANTE"){
     my ($user, $session, $flags)= checkauth(    $input, 
                                                 $authnotrequired, 
