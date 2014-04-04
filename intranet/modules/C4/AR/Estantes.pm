@@ -497,4 +497,36 @@ sub agregarContenidoAEstante {
     return ($msg_object);
     }
 
+sub clonarEstante  {
+    my ($id_estante)=@_;
+
+    my $msg_object= C4::AR::Mensajes::create();
+    $msg_object->{'tipo'}="INTRA";
+
+    my ($estante) = C4::Modelo::CatEstante->new(id => $id_estante);
+    $estante->load();
+
+    my $db = $estante->db;
+    $db->{connect_options}->{AutoCommit} = 0;
+    $db->begin_work;
+
+    eval{
+            my $nuevo_estante =  $estante->clonar();
+            $db->commit;
+            $msg_object->{'error'}= 0;
+            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'E016', 'params' => [$nuevo_estante->getEstante]} ) ;
+        };
+    if ($@){
+        C4::AR::Debug::debug("ERROR");
+        &C4::AR::Mensajes::printErrorDB($@, '',"INTRA");
+        $db->rollback;
+        #Se setea error para el usuario
+        $msg_object->{'error'}= 1;
+        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'E017', 'params' => [$estante->getEstante]} ) ;
+    }
+    $db->{connect_options}->{AutoCommit} = 1;
+
+    return ($msg_object);
+}
+
 1;
