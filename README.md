@@ -30,6 +30,18 @@ You can install MERAN it three ways:
 Once that you have cloned the repo, go to MERAN_REPO/docs/generacionInstalador.
 
 ```
+ ./new_instalador.sh
+```
+
+This will generate new installation files in the directory aux/, extract them. 
+
+```
+tar -xzvf meranunlp-vX.x.x.tar.gz
+``` 
+
+And now proceed to install.
+
+```
 chmod +x instalar.pl
 ./instalar -i MERAN_ID
 ```
