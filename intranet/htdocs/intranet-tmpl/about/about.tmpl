@@ -58,5 +58,13 @@ function updateEdit(responseText){
          <dd>Paula Gabriela Gonzalez</dd>
     </div>
 </fieldset>
-    
+
+[% IF version %]
+  <fieldset>
+    <legend class="titulo_legend">[% 'Versi&oacute;n' | i18n %]:</legend>
+    <div>[% version %]</div>
+  </fieldset>
+[% END %]
+
+
 [% INCLUDE "intranet-bottom.inc" %]
