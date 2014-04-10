@@ -124,7 +124,8 @@ if($tipoAccion eq "MODIFICAR_NIVEL_1"){
 $t_params->{'template_catalogo'}                = $template_catalogo;
 $params_combo{'onChange'}                       = 'seleccionar_esquema()';
 $params_combo{'default'}                        = C4::AR::Preferencias::getValorPreferencia("defaultTipoNivel3");#'SIN SELECCIONAR';
-$t_params->{'comboTipoDocumento'}               = &C4::AR::Utilidades::generarComboTipoNivel3(\%params_combo);
+$params_combo{'enable'}                         = 1; #se muestran los tipos de documentos habilitados para el alta de registros
+$t_params->{'comboTipoDocumento'}               = &C4::AR::Utilidades::generarComboTipoNivel3ByEnable(\%params_combo);
 $t_params->{'nivel'}                            = $nivel;
 $params_combo{'onChange'}                       = '';
 $params_combo{'default'}                        = C4::AR::Preferencias::getValorPreferencia("defaultlevel");#'SIN SELECCIONAR';

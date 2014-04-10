@@ -172,6 +172,24 @@ sub obtenerTiposNivel3 {
 }
 
 =item
+Esta funcion devuelve un arreglo de objetos con los tipos de nivel3 filtrado por "enable_from_new_register"
+=cut
+sub obtenerEsquemaParaAltaRegistro{
+    my ($enable) = @_;
+    my @results;
+
+    my $esquema_array_ref = C4::Modelo::CatRefTipoNivel3::Manager->get_cat_ref_tipo_nivel3(
+                                                                query => [ enable_from_new_register => { eq => $enable } ]
+                                            );
+
+    foreach my $tipo_nivel3 (@$esquema_array_ref) {
+        push (@results, $tipo_nivel3);
+    }
+
+    return(\@results);
+}
+
+=item
 Esta funcion devuelve un arreglo de objetos de categorias de socios
 =cut
 sub obtenerCategoriaDeSocio {
