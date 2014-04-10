@@ -99,6 +99,8 @@ sub new
 
 	$self->{"dbh"} = undef;		# Database handle
 	$self->{"stopwords"} = undef; # stopwords list
+	$self->{"version"} = undef; #version
+
 
 	bless $self, $class;
 	return $self;
@@ -453,6 +455,36 @@ sub _new_stopwords
 	}
 	return $stopwordlist;
 }
+
+
+sub version
+{
+	my $retval = {};
+
+	# If the hash already exists, return it.
+	return $context->{"version"} if defined($context->{"version"});
+
+	# No hash. Create one.
+	$context->{"version"} = &_read_version();
+
+	return $context->{"version"};
+}
+
+
+# Read VERSION
+
+sub _read_version
+{
+	my $version= undef;
+
+	if ( open my $vf, '<', $context->config('intranetdir')."/../VERSION") 
+	{ 
+	 $version = <$vf>; 
+	close $vf;
+	}
+	return $version;
+}
+
 
 BEGIN{
       new C4::Context;

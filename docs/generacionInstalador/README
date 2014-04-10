@@ -1,6 +1,6 @@
-Este es el README de la version 0.9.5 de MERAN publicada el 02/08/2013.
+Este es el README de la version 0.9.7 de MERAN publicada el 10/04/2014.
 
-Para mas información visite el sitio del proyecto http://meran.unlp.edu.ar.
+Para mas información visite el sitio del proyecto http://cespi.unlp.edu.ar/meran .
 
 Con este instalador se distribuye un script automatico de instalación para utilizarlo con GNU/Linux Debian 6 con todos los módulos precompilados para Perl 5.10.1.
 Igualmente distribuimos el código fuente pero tal vez sea necesario que instale las dependencias de Meran en forma manual dependiendo de la plataforma en que lo instale.

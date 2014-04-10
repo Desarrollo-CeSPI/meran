@@ -112,6 +112,7 @@ sub gettemplate {
     my $user_theme      = $session->param('usr_theme') || $tema_opac;
     my $server_port     = ":".$ENV{'SERVER_PORT'};
     my $registrado      = C4::AR::Preferencias::getValorPreferencia('registradoMeran'); #si esta registrado MERAN o no
+    my $version         = C4::Context->version();
 
     if ( ($server_port == 80) || ($server_port == 443) ){
             $server_port = "";
@@ -154,7 +155,8 @@ sub gettemplate {
             nroRandom                   => C4::AR::Auth::getSessionNroRandom(),
             unload_alert                => 0,
             logo                        => C4::AR::Logos::getNombreLogoUI(),
-            registrado_meran            => $registrado,            
+            registrado_meran            => $registrado,
+            version                     => $version,
         );
 
     return ($template, \%params);
