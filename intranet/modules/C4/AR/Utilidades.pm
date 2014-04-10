@@ -2585,6 +2585,57 @@ sub generarComboRecomendaciones{
 }
 
 
+sub generarComboTipoNivel3ByEnable{
+
+    my ($params) = @_;
+
+    my @select_tipo_nivel3_array;
+    my %select_tipo_nivel3_hash;
+    my ($tipoNivel3_array_ref)  = &C4::AR::Referencias::obtenerEsquemaParaAltaRegistro($params->{'enable'});
+
+    foreach my $tipoNivel3 (@$tipoNivel3_array_ref) {
+        push(@select_tipo_nivel3_array, $tipoNivel3->id_tipo_doc);
+        $select_tipo_nivel3_hash{$tipoNivel3->id_tipo_doc}= $tipoNivel3->nombre;
+    }
+
+    push (@select_tipo_nivel3_array, '');
+    $select_tipo_nivel3_hash{''}    = 'SIN SELECCIONAR';
+
+    my %options_hash;
+
+    if ( $params->{'onChange'} ){
+         $options_hash{'onChange'}  = $params->{'onChange'};
+    }
+
+    if ( $params->{'class'} ){
+         $options_hash{'class'} = $params->{'class'};
+    }
+
+    if ( $params->{'onFocus'} ){
+      $options_hash{'onFocus'}  = $params->{'onFocus'};
+    }
+
+    if ( $params->{'onBlur'} ){
+      $options_hash{'onBlur'}   = $params->{'onBlur'};
+    }
+
+    $options_hash{'name'}       = $params->{'name'}||'tipo_nivel3_name';
+    $options_hash{'id'}         = $params->{'id'}||'tipo_nivel3_id';
+    $options_hash{'size'}       = $params->{'size'}||1;
+    $options_hash{'multiple'}   = $params->{'multiple'}||0;
+    $options_hash{'defaults'}   = $params->{'default'} || C4::AR::Preferencias::getValorPreferencia("defaultTipoNivel3");
+
+    push (@select_tipo_nivel3_array, 'ALL');
+    $select_tipo_nivel3_hash{'ALL'} = 'TODOS';
+
+    $options_hash{'values'}     = \@select_tipo_nivel3_array;
+    $options_hash{'labels'}     = \%select_tipo_nivel3_hash;
+
+    my $comboTipoNivel3         = CGI::scrolling_list(\%options_hash);
+
+    return $comboTipoNivel3;
+}
+
 sub generarComboTipoNivel3{
 
     my ($params) = @_;

@@ -7,12 +7,13 @@ __PACKAGE__->meta->setup(
     table   => 'cat_ref_tipo_nivel3',
 
     columns => [
-        id                      => { type => 'serial', overflow => 'truncate', length => 11, not_null => 1 },
-        id_tipo_doc             => { type => 'varchar', overflow => 'truncate', length => 8, not_null => 1 },
-        nombre                  => { type => 'varchar', overflow => 'truncate', length => 255, not_null => 1 },
-        agregacion_temp         => { type => 'varchar', overflow => 'truncate', length => 250 },
-        disponible              => { type => 'integer', overflow => 'truncate', length => 1, not_null => 1, default => 1 },
-        enable_nivel3           => { type => 'integer', overflow => 'truncate', length => 1, not_null => 1, default => 1 },
+        id                          => { type => 'serial', overflow => 'truncate', length => 11, not_null => 1 },
+        id_tipo_doc                 => { type => 'varchar', overflow => 'truncate', length => 8, not_null => 1 },
+        nombre                      => { type => 'varchar', overflow => 'truncate', length => 255, not_null => 1 },
+        agregacion_temp             => { type => 'varchar', overflow => 'truncate', length => 250 },
+        disponible                  => { type => 'integer', overflow => 'truncate', length => 1, not_null => 1, default => 1 },
+        enable_nivel3               => { type => 'integer', overflow => 'truncate', length => 1, not_null => 1, default => 1 },
+        enable_from_new_register    => { type => 'integer', overflow => 'truncate', length => 1, not_null => 1, default => 1 },
     ],
 
     primary_key_columns => [ 'id' ],
@@ -102,6 +103,20 @@ sub setEnableNivel3{
     my ($self) = shift;
     my ($enable_nivel3) = @_;
     $self->enable_nivel3($enable_nivel3);
+}
+
+=item
+    Habilita o no, el tipo de documento desde el alta de registros
+=cut
+sub getEnableFromNewRegister{
+    my ($self) = shift;
+    return $self->enable_from_new_register;
+}
+
+sub setEnableFromNewRegister{
+    my ($self) = shift;
+    my ($enable) = @_;
+    $self->enable_from_new_register($enable);
 }
 
 sub nextMember{
