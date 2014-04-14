@@ -1679,131 +1679,198 @@ sub procesarRevistas {
                 }
             }
      }
+    
+    my @nuevos_grupos=();
+    my $total_ejemplares=0;
 
   #  C4::AR::Debug::debug("REFISTRO BASE ==>  \n ".$marc_record_base->as_formatted);
 
     #Porceso la colección generando los nuevos grupos
-    my @revistas_resultado=();
      foreach my $nivel2 (@$revistas){
         my $nivel2_marc = $nivel2->{'grupo'};
         my $field863 = $nivel2_marc->field('863');
 
-        if($field863){
+        if($field863) {
+
+            my @estadoDeColeccion= (); 
+
             # 863 _i        => Año (se mantiene)
-            #     _a9       => Volumen (se mantiene)
+            #     _a9       => Volumen (de acá saco los grupos)
             #     _b89-99   =>  Números (de acá saco los grupos)
             my $new_field863 = $field863->clone();
+            $new_field863->delete_subfield(code => 'a');
             $new_field863->delete_subfield(code => 'b');
 
-            my $numeros = $field863->subfield('b');
-            if ($numeros) {
 
-            C4::AR::Debug::debug("COLECCION  ==>  PROCESO : $numeros \n");
+            my $volumenes = $field863->subfield('a');
+            my $numeros   = $field863->subfield('b');
             
-            my @numeros_separados = split(',', $numeros );
-
-            foreach my $n (@numeros_separados){
-                if (index($n , '-') != -1) {
-                    #son muchos
-                    my @secuencia = split('-', $n);
-                    #Agarro únicamente los 2 primeros valores, el resto lo considero erroneo. Por ej: debe venir a-b y debe ser a>b, no puede ser a-b-c y desordenado
-                    if (@secuencia gt 1){
-                        my $ini = C4::AR::Utilidades::trim($secuencia[0]);
-                        my $fin = C4::AR::Utilidades::trim($secuencia[1]);
-                        # Errores en las secuencias, secuencia inicial mayor ala final o que la diferencia sea de más de un nro por día. Hay registros erroneos y hay que evitarlos.
-                        if (($ini < $fin)&&( ($fin - $ini) <= 365 )) {
+            if ($volumenes) {
+                C4::AR::Debug::debug("COLECCION  ==>  PROCESO : $volumenes \n");
+                my @volumenes_separados = split(',', $volumenes );   
+                foreach my $v (@volumenes_separados){
+                    if (index($v , '-') != -1) {
+                        #son muchos
+                        my @vsecuencia = split('-', $v);
+                        #Agarro únicamente los 2 primeros valores, el resto lo considero erroneo. Por ej: debe venir a-b y debe ser a>b, no puede ser a-b-c y desordenado
+                        if (@vsecuencia gt 1){
+                            my $vini = C4::AR::Utilidades::trim($vsecuencia[0]);
+                            my $vfin = C4::AR::Utilidades::trim($vsecuencia[1]);
+                            if (($vini < $vfin)&&( ($vfin - $vini) <= 365 )) {
                             
-                            foreach my $ns ($ini..$fin) {
-                                C4::AR::Debug::debug("COLECCION  ==>  AGREGA UNO DE SECUENCIA: $ns \n");
-
-                                my $numero_limpio =C4::AR::Utilidades::trim($ns);
-                                my $field863_final = $new_field863->clone();
-                                $field863_final->add_subfields('b' => $numero_limpio);
-                                my $marc_revista =  $marc_record_base->clone();
-                                $marc_revista->add_fields($field863_final);
-                                push(@revistas_resultado,$marc_revista);
+                                foreach my $vs ($vini..$vfin) {
+                                    C4::AR::Debug::debug("COLECCION  ==>  AGREGA UNO DE SECUENCIA Volumen: $vs \n");
+                                    my $volumen_limpio =C4::AR::Utilidades::trim($vs);
+                                    push( @estadoDeColeccion, _generarNumerosDeVolumen($volumen_limpio,$numeros));
+                                }    
+     
                             }
+                            else{
+                                # error en orden de secuencia, lo agrego igual
+                                C4::AR::Debug::debug("COLECCION  ==>  ERROR EN ORDEN DE SECUENCIA Volumen $v => $vini <= $vfin \n");
+                                my $volumen_limpio =C4::AR::Utilidades::trim($v);
+                                push( @estadoDeColeccion, _generarNumerosDeVolumen($volumen_limpio,$numeros));
+                            }
+
                         }
                         else{
-                            # error en orden de secuencia, lo agrego igual
-                            C4::AR::Debug::debug("COLECCION  ==>  ERROR EN ORDEN DE SECUENCIA $n => $ini <= $fin \n");
-                            my $numero_limpio =C4::AR::Utilidades::trim($n);
-                            my $field863_final = $new_field863->clone();
-                            $field863_final->add_subfields('b' => $numero_limpio);
-                            my $marc_revista =  $marc_record_base->clone();
-                            $marc_revista->add_fields($field863_final);
-                            push(@revistas_resultado,$marc_revista);
-
+                            #uno solo, es un error, lo agrego igual
+                            C4::AR::Debug::debug("COLECCION  ==>  ERROR: posee un - y existe un solo valor $v \n");
+                            my $volumen_limpio =C4::AR::Utilidades::trim($v);
+                            push( @estadoDeColeccion, _generarNumerosDeVolumen($volumen_limpio,$numeros));
                         }
 
-                    }
-                    else{
-                        #uno solo, es un error, lo agrego igual
-                        C4::AR::Debug::debug("COLECCION  ==>  ERROR: posee un - y existe un solo valor $n \n");
+                    }else{
+                        #uno solo
+                         C4::AR::Debug::debug("COLECCION  ==>  AGREGA UNO: $v \n");
+                        my $volumen_limpio =C4::AR::Utilidades::trim($v);
+                        push( @estadoDeColeccion, _generarNumerosDeVolumen($volumen_limpio,$numeros));
 
-                        my $numero_limpio =C4::AR::Utilidades::trim($n);
-                        my $field863_final = $new_field863->clone();
-                        $field863_final->add_subfields('b' => $numero_limpio);
-                        my $marc_revista =  $marc_record_base->clone();
-                        $marc_revista->add_fields($field863_final);
-                        push(@revistas_resultado,$marc_revista);
                     }
 
-                }else{
-                    #uno solo
-                     C4::AR::Debug::debug("COLECCION  ==>  AGREGA UNO: $n \n");
-
-                    my $numero_limpio =C4::AR::Utilidades::trim($n);
-                    my $field863_final = $new_field863->clone();
-                    $field863_final->add_subfields('b' => $numero_limpio);
-                    my $marc_revista =  $marc_record_base->clone();
-                    $marc_revista->add_fields($field863_final);
-                    push(@revistas_resultado,$marc_revista);
-                }
-
-                }
-            } #if 
+                    } #foreach
+                } #if 
 
             else {
-                        #no tiene número
-                        C4::AR::Debug::debug("COLECCION  ==>  ERROR: no tiene número \n");
-                        my $field863_final = $new_field863->clone();
-                        my $marc_revista =  $marc_record_base->clone();
-                        $marc_revista->add_fields($field863_final);
-                        push(@revistas_resultado,$marc_revista);
-
+                        #no tiene volumen agrego los números solos, si hay!
+                        push( @estadoDeColeccion, _generarNumerosDeVolumen('',$numeros));
             }
-            
-        } #if existe el campo 863
-        else{
+
+
+                C4::AR::Debug::debug("ESTADO DE COLECCION ==>  \n ");
+            foreach my $rev (@estadoDeColeccion){
+                C4::AR::Debug::debug("REVISTA ==>  \n ".$rev->{'volumen'}."-".$rev->{'numero'});
+
+                    my $field863_final = $new_field863->clone();
+                    $field863_final->add_subfields('a' => $rev->{'volumen'});
+                    $field863_final->add_subfields('b' => $rev->{'numero'});                
+                    my $marc_revista =  $marc_record_base->clone();
+                    $marc_revista->add_fields($field863_final);
+
+
+                    my %hash_temp;
+                    $hash_temp{'grupo'}  = $marc_revista;
+                    $hash_temp{'tipo_ejemplar'}  = $revistas->[0]->{'tipo_ejemplar'};
+                    $hash_temp{'cant_ejemplares'}   = 1;
+                    $total_ejemplares+=$hash_temp{'cant_ejemplares'};
+
+                    my $marc_record_n3 = MARC::Record->new();
+                    # OJO ACA VER CAMPO 003 !!!
+
+                    my @ejemplares;
+                    push(@ejemplares,$marc_record_n3);
+                    $hash_temp{'ejemplares'}   = \@ejemplares;
+                    push (@nuevos_grupos, \%hash_temp);
+            }
+
+    }        #if existe el campo 863
+    else {
            #no tiene el campo
            C4::AR::Debug::debug("COLECCION  ==>  ERROR: grupo sin campo 863 \n");
 
-        }
     }
+    
 
-        my @nuevos_grupos=();
-        my $total_ejemplares=0;
-        foreach my $rev (@revistas_resultado){
-          #  C4::AR::Debug::debug("REVISTA ==>  \n ".$rev->as_formatted);
-
-
-                my %hash_temp;
-                $hash_temp{'grupo'}  = $rev;
-                $hash_temp{'tipo_ejemplar'}  = $revistas->[0]->{'tipo_ejemplar'};
-                $hash_temp{'cant_ejemplares'}   = 1;
-                $total_ejemplares+=$hash_temp{'cant_ejemplares'};
-
-                my $marc_record_n3 = MARC::Record->new();
-
-                my @ejemplares;
-                push(@ejemplares,$marc_record_n3);
-                $hash_temp{'ejemplares'}   = \@ejemplares;
-                push (@nuevos_grupos, \%hash_temp);
-        }
+    } #foreach
 
         return ($total_ejemplares, \@nuevos_grupos);
 }
+
+
+    sub _generarNumerosDeVolumen {
+        my ($volumen,$numeros) = @_;
+            my @estadoDeColeccion= (); 
+
+            if ($numeros) {
+
+                C4::AR::Debug::debug("COLECCION  ==>  PROCESO : $numeros \n");
+                
+                my @numeros_separados = split(',', $numeros );
+
+                foreach my $n (@numeros_separados){
+                    if (index($n , '-') != -1) {
+                        #son muchos
+                        my @secuencia = split('-', $n);
+                        #Agarro únicamente los 2 primeros valores, el resto lo considero erroneo. Por ej: debe venir a-b y debe ser a>b, no puede ser a-b-c y desordenado
+                        if (@secuencia gt 1){
+                            my $ini = C4::AR::Utilidades::trim($secuencia[0]);
+                            my $fin = C4::AR::Utilidades::trim($secuencia[1]);
+                            # Errores en las secuencias, secuencia inicial mayor ala final o que la diferencia sea de más de un nro por día. Hay registros erroneos y hay que evitarlos.
+                            if (($ini < $fin)&&( ($fin - $ini) <= 365 )) {
+                                
+                                foreach my $ns ($ini..$fin) {
+                                    C4::AR::Debug::debug("COLECCION  ==>  AGREGA UNO DE SECUENCIA: $ns \n");
+                                    my $numero_limpio =C4::AR::Utilidades::trim($ns);
+                                    my %fasciculo=();
+                                    $fasciculo{'volumen'} = $volumen;
+                                    $fasciculo{'numero'} = $numero_limpio;
+                                    push(@estadoDeColeccion,\%fasciculo);
+                                }
+                            }
+                            else{
+                                # error en orden de secuencia, lo agrego igual
+                                C4::AR::Debug::debug("COLECCION  ==>  ERROR EN ORDEN DE SECUENCIA $n => $ini <= $fin \n");
+                                my $numero_limpio =C4::AR::Utilidades::trim($n);
+                                     my %fasciculo=();
+                                    $fasciculo{'volumen'} = $volumen;
+                                    $fasciculo{'numero'} = $numero_limpio;
+                                    push(@estadoDeColeccion,\%fasciculo);
+                            }
+
+                        }
+                        else{
+                            #uno solo, es un error, lo agrego igual
+                            C4::AR::Debug::debug("COLECCION  ==>  ERROR: posee un - y existe un solo valor $n \n");
+                            my $numero_limpio =C4::AR::Utilidades::trim($n);
+                            my %fasciculo=();
+                            $fasciculo{'volumen'} = $volumen;
+                            $fasciculo{'numero'} = $numero_limpio;
+                            push(@estadoDeColeccion,\%fasciculo);
+                        }
+
+                    }else{
+                        #uno solo
+                         C4::AR::Debug::debug("COLECCION  ==>  AGREGA UNO: $n \n");
+                        my $numero_limpio =C4::AR::Utilidades::trim($n);
+                        my %fasciculo=();
+                        $fasciculo{'volumen'} = $volumen;
+                        $fasciculo{'numero'} = $numero_limpio;
+                        push(@estadoDeColeccion,\%fasciculo);
+                    }
+
+                    } #foreach
+                } #if 
+
+            else {
+                        #no tiene número
+                        my %fasciculo=();
+                        $fasciculo{'volumen'} = $volumen;
+                        $fasciculo{'numero'} = '';
+                        push(@estadoDeColeccion,\%fasciculo);
+            }
+
+        return  @estadoDeColeccion;           
+        } 
 
 sub toMARC_Array {
     my ($marc_record, $itemtype, $type, $nivel) = @_;
