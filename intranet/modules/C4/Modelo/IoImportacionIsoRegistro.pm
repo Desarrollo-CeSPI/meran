@@ -121,7 +121,6 @@ sub getRegistroMARCResultado{
         }
     }
 
-    C4::AR::Debug::debug($marc_record->as_formatted());
     return $marc_record;
 
 }
