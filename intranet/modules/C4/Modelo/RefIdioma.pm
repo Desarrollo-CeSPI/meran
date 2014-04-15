@@ -157,8 +157,11 @@ sub getIdiomaById{
     my ($idioma) = @_;
 
     my @filtros;
+    my @filtros_or;
+    push(@filtros_or, (idLanguage => {eq => $idioma}) );
+    push(@filtros_or, (marc_code => {eq => $idioma}) );
+    push(@filtros, (or => \@filtros_or) );
 
-    push(@filtros, ( idLanguage => { eq => $idioma}) );
 
     my $idiomas_array_ref = C4::Modelo::RefIdioma::Manager->get_ref_idioma(
 
@@ -173,6 +176,27 @@ sub getIdiomaById{
 
 }
 
+sub getIdiomaByName{
+    my ($self) = shift;
+    my ($idioma) = @_;
+
+    my @filtros;
+
+    push(@filtros, (description => {eq => $idioma}) );
+
+    my $idiomas_array_ref = C4::Modelo::RefIdioma::Manager->get_ref_idioma(
+
+        query   => \@filtros,
+        select  => ['*'],
+        sort_by => 'description ASC',
+        limit   => 1,
+        offset  => 0,
+    );
+
+    return (scalar(@$idiomas_array_ref), $idiomas_array_ref);
+
+
+}
 
 sub getAll{
 
