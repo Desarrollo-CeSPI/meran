@@ -87,14 +87,14 @@ sub getRegistroMARCResultado{
     my $detalle_destino = $importacion->esquema->getDetalleDestino();
     my $detalle_destino_campo;
     
-        C4::AR::Debug::debug($marc_record_original->as_formatted);
+     #   C4::AR::Debug::debug($marc_record_original->as_formatted);
 
     foreach my $field ( $marc_record_original->fields ) {
         my $campo_original = $field->tag;
 
         if ($campo_original < '010'){
             my $detalle =  $importacion->esquema->getDetalleByCampoSubcampoOrigen($campo_original,'');
-            if (($detalle)&&($detalle->getCampoDestino)){
+            if (($detalle)&&($detalle->getCampoDestino)&&( C4::AR::Utilidades::trim($detalle->getCampoDestino) != '' )){
                     $self->agregarDatoAMarcRecord($marc_record,$detalle,$field->data);
             }    
         }
@@ -105,7 +105,7 @@ sub getRegistroMARCResultado{
 
                 my $detalle =  $importacion->esquema->getDetalleByCampoSubcampoOrigen($campo_original,$subcampo_original);
                 
-                if (($detalle)&&($detalle->getCampoDestino)){
+                if (($detalle)&&($detalle->getCampoDestino)&&( C4::AR::Utilidades::trim($detalle->getCampoDestino) != '' )){
                     $self->agregarDatoAMarcRecord($marc_record,$detalle,$dato);
                 }
 
@@ -131,6 +131,7 @@ sub getRegistroMARCResultado{
 sub agregarDatoAMarcRecord {
     my ($self)      = shift;
     my ($marc_record, $detalle, $dato) = @_;
+
 
         my $estructura  = C4::AR::EstructuraCatalogacionBase::getEstructuraBaseFromCampoSubCampo($detalle->getCampoDestino, $detalle->getSubcampoDestino);
         #Lo mando a un campo por ahora
@@ -868,7 +869,7 @@ sub prepararNivelParaImportar{
 
 
    my @infoArrayNivel=();
-       $self->debug($marc_record->as_formatted);
+      # $self->debug($marc_record->as_formatted);
        foreach my $field ($marc_record->fields) {
         if(! $field->is_control_field){
             
