@@ -1230,12 +1230,12 @@ sub getNivelesFromRegistro {
                   case 1 { 
 
 
-                            if ((($campo eq '041')&&($subcampo eq 'h'))&&($marc_record_n2->subfield($campo,$subcampo))){
+                            if ((($campo eq '041')&&($subcampo eq 'h'))&&($marc_record_n1->subfield($campo,$subcampo))){
                                   #ya existe el 041,h IDIOMA, no sirve que haya varios
                                   next;
                            }
 
-                            if ((($campo eq '043')&&($subcampo eq 'a'))&&($marc_record_n2->subfield($campo,$subcampo))){
+                            if ((($campo eq '043')&&($subcampo eq 'a'))&&($marc_record_n1->subfield($campo,$subcampo))){
                                   #ya existe el 043,a PAIS, no sirve que haya varios
                                   next;
                            }
@@ -1701,6 +1701,12 @@ sub procesarRevistas {
     #Armo regstro base de las revistas
     my $marc_record_base = MARC::Record->new();
 
+    #ejemplares
+    my $marc_record_ejemplares_base = MARC::Record->new();
+    my $new_field995 = undef;
+
+    my @signaturas = ();
+    
      foreach my $nivel2 (@$revistas){
         my $nivel2_marc = $nivel2->{'grupo'};
 
@@ -1708,12 +1714,48 @@ sub procesarRevistas {
                 #Los datos de la colección los proceso luego
                 if($field->tag ne '863'){
                     if (! $marc_record_base->field($field->tag)){
-                        $marc_record_base->append_fields($field->clone)
+                        $marc_record_base->append_fields($field->clone);
                     }
                 }
             }
+     
+        my $ejemplares = $nivel2->{'ejemplares'};
+
+            foreach my $nivel3_marc (@$ejemplares) {
+                my $field995 = $nivel3_marc->field('995');
+                if ( $field995 ) {
+                    foreach my $sf ($field995->subfields()){
+                        my $subcampo = $sf->[0];
+                        my $dato = $sf->[1];
+
+                        if ($subcampo eq 't'){
+                            #signatura 
+                            push (@signaturas, $dato);
+                        } else {
+
+
+                            if (($new_field995)&&($new_field995->subfield($subcampo))){
+                                $new_field995->update( $subcampo => $new_field995->subfield($subcampo)." ".$dato);
+                            }
+                            else{
+                                if (!$new_field995){
+                                   $new_field995 = MARC::Field->new('995',' ',' ',$subcampo => $dato);
+                                }
+                                else{
+                                    $new_field995->add_subfields(  $subcampo => $dato );
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
      }
-    
+    if($new_field995){
+        $marc_record_ejemplares_base->append_fields($new_field995);
+    }
+   # C4::AR::Debug::debug("EJEMPLARES BASE ==>  \n ".$marc_record_ejemplares_base->as_formatted);
+        
     my @nuevos_grupos=();
     my $total_ejemplares=0;
 
@@ -1805,14 +1847,22 @@ sub procesarRevistas {
                     my %hash_temp;
                     $hash_temp{'grupo'}  = $marc_revista;
                     $hash_temp{'tipo_ejemplar'}  = $revistas->[0]->{'tipo_ejemplar'};
-                    $hash_temp{'cant_ejemplares'}   = 1;
-                    $total_ejemplares+=$hash_temp{'cant_ejemplares'};
-
-                    my $marc_record_n3 = MARC::Record->new();
-                    # OJO ACA VER CAMPO 003 !!!
-
+                    $hash_temp{'cant_ejemplares'}   = 0;
                     my @ejemplares;
-                    push(@ejemplares,$marc_record_n3);
+                    foreach my $sig (@signaturas){
+                        my $marc_record_n3 = $marc_record_ejemplares_base->clone();
+                         
+                        if (!$marc_record_n3->field('995')){
+                           $marc_record_n3->append_fields(MARC::Field->new('995',' ',' ','t' => $sig));
+                        }
+                        else{
+                           $marc_record_n3->field('995')->add_subfields(  't' => $sig );
+                        }
+                        $hash_temp{'cant_ejemplares'} ++;
+                        push(@ejemplares,$marc_record_n3);
+                    }
+
+                    $total_ejemplares+=$hash_temp{'cant_ejemplares'};                   
                     $hash_temp{'ejemplares'}   = \@ejemplares;
                     push (@nuevos_grupos, \%hash_temp);
             }
@@ -2202,7 +2252,7 @@ sub getIdiomaFromMarcRecord{
         $texto = C4::AR::Utilidades::trim($texto);
         #Casos raros
             use Switch;
-            switch ($idioma) {
+            switch (uc($idioma)) {
                 case 'CASTELLANO' { 
                     $idioma = "es";
                     }
@@ -2218,20 +2268,20 @@ sub getIdiomaFromMarcRecord{
             }
 
         C4::AR::Debug::debug("busco idioma =>".$texto);
-
-       my ($cantidad, $objetos) = (C4::Modelo::RefIdioma->new())->getIdiomaById($texto);
-       
-        if($cantidad){
-            C4::AR::Debug::debug("encontro idioma =>".$objetos->[0]->getIdLanguage());
-             return  $objetos->[0]->getIdLanguage();
-        }
-        else {
-            #NO lo encontre por iso voy a buscar por nombre exacto
-            my ($cantidad, $objetos) = (C4::Modelo::RefIdioma->new())->getIdiomaByName($texto);
+        if (length($texto) le 3 ){
+            my ($cantidad, $objetos) = (C4::Modelo::RefIdioma->new())->getIdiomaById($texto);
+           
             if($cantidad){
                 C4::AR::Debug::debug("encontro idioma =>".$objetos->[0]->getIdLanguage());
-                return $objetos->[0]->getIdLanguage();
+                 return  $objetos->[0]->getIdLanguage();
             }
+        }
+
+        #NO lo encontre por iso voy a buscar por nombre exacto
+        my ($cantidad, $objetos) = (C4::Modelo::RefIdioma->new())->getIdiomaByName($texto);
+        if($cantidad){
+            C4::AR::Debug::debug("encontro idioma =>".$objetos->[0]->getIdLanguage());
+            return $objetos->[0]->getIdLanguage();
         }
     }
 }
@@ -2280,52 +2330,61 @@ sub getPaisFromMarcRecord{
     }
 
     my @textos =();
-    if ($codigo){ push (@textos, $codigo);}
     push (@textos, $nombre);
-
+    if ($codigo){ push (@textos, $codigo);}
 
     foreach my $texto (@textos){
         $texto = C4::AR::Utilidades::trim($texto);
         #Casos raros
         use Switch;
-            switch ($texto) {
-                case 'xxk' { 
-                    $texto = "GBR";
-                    }
-                case 'enk' { 
-                    $texto = "GBR";
-                    }
-                case 'xxu' { 
-                    $texto = "USA";
-                    }
-                case 'ne' { 
-                    $texto = "NLD";
-                    }
-                case 'ag' { 
-                    $texto = "ARG";
-                    }
-                case 'ja' { 
-                    $texto = "JPN";
-                    }
-            }
+        switch (uc($texto)) {
+            case 'XXK' { 
+                $texto = "GBR";
+                }
+            case 'ENK' { 
+                $texto = "GBR";
+                }
+            case 'REINO UNIDO' { 
+                $texto = "GBR";
+                }
+            case 'XXU' { 
+                $texto = "USA";
+                }
+            case 'NE' { 
+                $texto = "NLD";
+                }
+            case 'AG' { 
+                $texto = "ARG";
+                }
+            case 'BL' { 
+                $texto = "BRA";
+                }
+            case 'JA' { 
+                $texto = "JPN";
+                }
+            case 'GW' { 
+                $texto = "DEU";
+                }
+        }
 
         C4::AR::Debug::debug("busco pais =>".$texto);
 
-
-       my ($cantidad, $objetos) = (C4::Modelo::RefPais->new())->getPaisByIso($texto);
+        if (length($texto) le 3 ){
+            # no es un código
+            my ($cantidad, $objetos) = (C4::Modelo::RefPais->new())->getPaisByIso($texto);
        
-        if($cantidad){
-            C4::AR::Debug::debug("encontro pais =>".$objetos->[0]->getNombre());
-             return  $objetos->[0]->getIso();
+            if($cantidad){
+                C4::AR::Debug::debug("encontro pais =>".$objetos->[0]->getNombre());
+                 return  $objetos->[0]->getIso();
+            }
         }
-        else {
+
             #NO lo encontre por iso voy a buscar por nombre exacto
             my ($cantidad, $objetos) = (C4::Modelo::RefPais->new())->getPaisByName($texto);
             if($cantidad){
                 C4::AR::Debug::debug("encontro pais =>".$objetos->[0]->getNombre());
                 return $objetos->[0]->getIso();
             }
-        }
     }
 }
 
