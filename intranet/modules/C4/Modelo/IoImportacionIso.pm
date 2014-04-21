@@ -431,7 +431,7 @@ sub getRegistrosParaImportar{
     
    require C4::Modelo::IoImportacionIsoRegistro;
    require C4::Modelo::IoImportacionIsoRegistro::Manager;
-   my $registros_array_ref= C4::Modelo::IoImportacionIsoRegistro::Manager->get_io_importacion_iso_registro(query => \@filtros);
+   my $registros_array_ref= C4::Modelo::IoImportacionIsoRegistro::Manager->get_io_importacion_iso_registro(query => \@filtros, sort_by => 'id1 ASC');
    return  $registros_array_ref;
 }
 
