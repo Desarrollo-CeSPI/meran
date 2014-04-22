@@ -1263,6 +1263,11 @@ sub getNivelesFromRegistro {
                                 if ($marc_record_n1->subfield($campo,$subcampo)) {
 
                          #           C4::AR::Debug::debug("Existe el subcampo $subcampo ");
+                                    #Parche Campo Notas unido 505 a en nivel 1
+                                    if (($campo eq '505')&&($subcampo eq 'a')){
+                                       $marc_record_n1->field($campo)->update( $subcampo =>  $marc_record_n1->subfield($campo,$subcampo)." - ".$dato);
+                                        next;
+                                    }
 
                                     #existe el subcampo y no es repetible, hay que agregar uno nuevo
                                     my $field = MARC::Field->new($campo,'','',$subcampo => $dato);
