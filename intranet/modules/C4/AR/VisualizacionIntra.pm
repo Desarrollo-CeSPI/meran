@@ -327,7 +327,6 @@ sub getVistaCampo{
     my $key = $nivel.$campo.$template;
 
     if (defined C4::AR::CacheMeran::obtener($key)){
-        C4::AR::Debug::debug("EINARRRRR VisualizacionOpac::getVistaCampo => KEY ==".$key."== valor => ".C4::AR::CacheMeran::obtener($key)." CACHED!!!!!!!");
         return C4::AR::CacheMeran::obtener($key);
     } else {
 
