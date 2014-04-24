@@ -23,11 +23,13 @@
 
 use DBI;
 
-#use CGI::Session;
-#use C4::Context;
+use CGI::Session;
+use C4::Context;
+use C4::AR::Utilidades;
+use C4::Modelo::RefPais;
+use C4::Modelo::CatAutor;
 
 my $db_driver =  "mysql";
-
 my $db_name   = 'calp_paradox';
 my $db_host   = 'localhost';
 my $db_user   = 'root';
@@ -36,21 +38,41 @@ my $db_passwd = 'dev';
 my $db_calp= DBI->connect("DBI:mysql:$db_name:$db_host",$db_user, $db_passwd);
 $db_calp->do('SET NAMES utf8');
 
+my $dbh = C4::Context->dbh;
 
-
+sub migrarAutores {
 	#Leemos los Autores
-	my $autores_calp=$db_calp->prepare("SELECT * FROM AUTORES;");
+	my $autores_calp=$db_calp->prepare("SELECT AUTORES.Nombre as nombre ,AUTORES.Apellido as apellido,TC_PAIS.Descripcion as pais FROM AUTORES left join TC_PAIS on AUTORES.CodPais=TC_PAIS.CodPais;");
 	$autores_calp->execute();
 
 	while (my $autor=$autores_calp->fetchrow_hashref) {
-		print "INSERT $autor->{'Nombre'};";	
-		my $completo = $autor->{'Apellido'};
-		if ($autor->{'Nombre'}){$completo.=", ".$autor->{'Nombre'}}
+		my $completo = $autor->{'apellido'};
+		if ($autor->{'nombre'}){
+			$completo.=", ".$autor->{'nombre'}
+		}
+		
+		#YA EXISTE EL AUTOR?
+		my @filtros=();
+        push(@filtros, (completo => {eq => $completo}) );
+        my $existe = C4::Modelo::CatAutor::Manager->get_cat_autor_count(query => \@filtros,);
 
-		my $nuevo_autor=$dbh->prepare("INSERT into cat_autor (nombre,apellido,completo) values (?,?,?);");
-        $nuevo_autor->execute($autor->{'Nombre'},$autor->{'Apellido'},$completo);
+        if (!$existe){
+			my $nacionalidad = '';
+			if ($autor->{'pais'}){
+				$nacionalidad= $autor->{'pais'};
+	            my ($cantidad, $objetos) = (C4::Modelo::RefPais->new())->getPaisByName($autor->{'pais'});
+	            if($cantidad){
+	                C4::AR::Debug::debug("encontro pais =>".$objetos->[0]->getNombre());
+	                $nacionalidad= $objetos->[0]->getIso3();
+	            }
+	    	}
+
+			my $nuevo_autor=$dbh->prepare("INSERT into cat_autor (nombre,apellido,completo,nacionalidad) values (?,?,?,?);");
+	        $nuevo_autor->execute($autor->{'nombre'},$autor->{'apellido'},$completo, $nacionalidad);
+		}
 	}
 	
 	$autores_calp->finish();
+}
 
 1;
