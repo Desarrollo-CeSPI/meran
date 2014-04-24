@@ -1556,7 +1556,7 @@ sub getBusquedasDeUsuario {
     my ( $datos_busqueda, $ini, $cantR ) = @_;
 
 
-    my $limit_pref          = C4::AR::Preferencias::getValorPreferencia('renglones') || 20;
+    my $limit_pref          = C4::AR::Preferencias::getValorPreferencia('paginas') || 10;
     $cantR                  = $cantR || $limit_pref;
 
     my $nro_socio= $datos_busqueda->{'usuario'};
@@ -1967,7 +1967,7 @@ sub getReservasCirculacion {
     my ( $datos_busqueda, $ini, $cantR ) = @_;
 
 
-    my $limit_pref      = C4::AR::Preferencias::getValorPreferencia('renglones') || 20;
+    my $limit_pref      = C4::AR::Preferencias::getValorPreferencia('paginas') || 10;
     $cantR              = $cantR || $limit_pref;
  
     my $categoria       = $datos_busqueda->{'categoriaSocio'};
@@ -2094,7 +2094,7 @@ sub reporteGenEtiquetas{
     my $sphinx          = Sphinx::Search->new();
     
      
-    $sphinx->SetLimits($params->{'ini'}, C4::AR::Preferencias::getValorPreferencia('renglones'));  
+    $sphinx->SetLimits($params->{'ini'}, C4::AR::Preferencias::getValorPreferencia('paginas'));  
 
 
     my $query   = '';
