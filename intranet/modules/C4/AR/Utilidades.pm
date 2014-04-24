@@ -1453,7 +1453,7 @@ sub armarPaginas{
 #
 #Cantidad de renglones seteado en las preferencias del sistema para ver por cada pagina
 sub cantidadRenglones{
-    return(C4::AR::Preferencias::getValorPreferencia('renglones') || 10);
+    return(C4::AR::Preferencias::getValorPreferencia('paginas') || 10);
 }
 
 #**************************************Fins***Paginador*********************************

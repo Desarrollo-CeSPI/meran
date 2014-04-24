@@ -965,7 +965,7 @@ sub busquedaAvanzada_newTemp{
             $sphinx->SetLimits($params->{'ini'}, 100000);
  
        } else {            
-            $sphinx->SetLimits($params->{'ini'}, C4::AR::Preferencias::getValorPreferencia('renglones'));  
+            $sphinx->SetLimits($params->{'ini'}, C4::AR::Preferencias::getValorPreferencia('paginas'));  
        }
 
     }
@@ -1407,7 +1407,7 @@ sub busquedaCombinada_newTemp{
             $sphinx->SetLimits($obj_for_log->{'ini'}, 100000);
  
        } else {
-            $sphinx->SetLimits($obj_for_log->{'ini'}, C4::AR::Preferencias::getValorPreferencia('renglones'));  
+            $sphinx->SetLimits($obj_for_log->{'ini'}, C4::AR::Preferencias::getValorPreferencia('paginas'));  
        }
             
     }

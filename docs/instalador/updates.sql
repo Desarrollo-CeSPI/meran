@@ -355,3 +355,8 @@ INSERT IGNORE INTO `usr_regularidad` (`id`, `usr_estado_id`, `usr_ref_categoria_
 ## 25/02/2014
 
 ALTER TABLE  `ref_nivel_bibliografico` CHANGE  `description`  `description` VARCHAR( 255 );
+
+## 11/04/2014
+
+ALTER TABLE  `cat_ref_tipo_nivel3` ADD  `enable_from_new_register` INT( 1 ) NOT NULL DEFAULT  '1' AFTER  `enable_nivel3`;
+UPDATE  pref_preferencia_sistema SET  `categoria` =  'sistema' WHERE  variable = 'timeout';

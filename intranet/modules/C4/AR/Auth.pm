@@ -1040,14 +1040,10 @@ sub getSessionNroRandom {
     }
     
     if ($session->param('nroRandom')){
-        C4::AR::Debug::debug("getSessionNroRandom -> NRO RANDOM DE SESSION EXISTENTE : " . $session->param('nroRandom'));
         return $session->param('nroRandom');
-    }else{
-        my $nroRandom = _generarNroRandom();
-        
+    } else {
+        my $nroRandom = _generarNroRandom();        
         $session->param('nroRandom',$nroRandom);
-        C4::AR::Debug::debug("getSessionNroRandom -> NRO RANDOM DE SESSION RECIEN GENERADO EN PERL : ".$session->param('nroRandom'));
-        C4::AR::Debug::debug("getSessionNroRandom-> NRO RANDOM DE SESSION RECIEN GENERADO EN SESION : ".$session->param('nroRandom'));
 
         return $nroRandom;
     }
