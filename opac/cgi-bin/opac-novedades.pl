@@ -41,7 +41,7 @@ my ($template, $session, $t_params)= get_template_and_user({
             });
 
 $t_params->{'content_title'}    = C4::AR::Filtros::i18n("Novedades de la Biblioteca");
-my ($cantidad, $novedades)      = C4::AR::Novedades::getNovedadesByFecha();
+my ($cantidad, $novedades)      = C4::AR::Novedades::getNovedadesByFecha(0, C4::AR::Preferencias::getValorPreferencia('limite_novedades'));
 $t_params->{'novedades'}        = $novedades;
 $t_params->{'cantidad'}         = $cantidad;
 

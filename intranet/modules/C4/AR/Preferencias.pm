@@ -324,11 +324,11 @@ sub getValorPreferencia {
 
 #    verifico si se encuentra en la cache, sino se busca de la base
     if (defined $PREFERENCES->{$variable}){
-          # C4::AR::Debug::debug("getValorPreferencia => VARIABLE ==".$variable."== valor => ".$PREFERENCES->{$variable}." CACHED!!!!!!!");
+          C4::AR::Debug::debug("Preferencias => getValorPreferencia => VARIABLE ==".$variable."== valor => ".$PREFERENCES->{$variable}." CACHED!!!!!!!");
         return $PREFERENCES->{$variable};
     }
 
-      # C4::AR::Debug::debug("getValorPreferencia => VARIABLE ==".$variable."== NO CACHED!!!!!!!");
+      C4::AR::Debug::debug("Preferencias => getValorPreferencia => VARIABLE ==".$variable."== NO CACHED!!!!!!!");
     my $preferencia_array_ref = C4::Modelo::PrefPreferenciaSistema::Manager->get_pref_preferencia_sistema( query => [ variable => { eq => $variable} ]);
 
     if ($preferencia_array_ref->[0]){
@@ -393,12 +393,12 @@ sub setVariable {
     } 
 
     if(scalar(@$preferencia) > 0){
-        # C4::AR::Debug::debug("Preferencias => setVariable => ".$variable." valor => ".$valor);
-#        C4::AR::Debug::debug("Preferencias => setVariable => ".$variable." valor CACHE antes => ".$PREFERENCES->{$variable});
+        C4::AR::Debug::debug("Preferencias => setVariable => ".$variable." valor => ".$valor);
+       C4::AR::Debug::debug("Preferencias => setVariable => ".$variable." valor CACHE antes => ".$PREFERENCES->{$variable});
         $preferencia->[0]->setValue($valor);
         $preferencia->[0]->save();
         reloadAllPreferences();
-        # C4::AR::Debug::debug("Preferencias => getVariable => ".$variable." valor desde la base => ".C4::AR::Preferencias::getValorPreferencia($variable));
+        C4::AR::Debug::debug("Preferencias => getVariable => ".$variable." valor desde la base => ".C4::AR::Preferencias::getValorPreferencia($variable));
     }
 }
 
@@ -437,7 +437,7 @@ sub t_modificarVariable {
     $db->begin_work;
     eval {
         $preferencia->modificar($params);
-#        $PREFERENCES->{$params->{'variable'}} = $params->{'value'};
+        $PREFERENCES->{$params->{'variable'}} = $params->{'value'};
         C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'SP003', 'params' => []} ) ;
         $db->commit;
     };
