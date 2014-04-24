@@ -443,7 +443,7 @@
                                                                                 [% IF show_analiticas > 0 %]
                                                                                     {title => "Ver anal&iacute;ticas", action=>"verAnaliticas([% id2 %])", icon=>"icon-edit"},
                                                                                 [% END %]
-                                                                                	{title => "Portadas de libro", action=>"showAddPortadaEdicion([% id2 %], [% id1 %])",icon=>"icon-picture"},
+                                                                                	{title => "Tapa de libro", action=>"showAddPortadaEdicion([% id2 %], [% id1 %])",icon=>"icon-picture"},
 		                                                                            ],
 		
 		                            ) ;
@@ -574,7 +574,7 @@
                                 [% FOREACH p IN portada_edicion_local %]
                                     <div class="item portadaEdicionImage" [% IF !loop.first %]style="display:none;"[% END %]>
                                         <a class="fancylink" id="imagen_[% imagen.getImageName %]" rel="group_[% id2 %]" href="https://[% SERVER_ADDRESS %]/uploads/covers-added/[% p.getImageName %]">
-                                            <img border="0" src="https://[% SERVER_ADDRESS %]/uploads/covers-added/[% p.getImageName %]" title="Portada" alt="[% 'Portada del ejemplar' | i18n %]" >
+                                            <img border="0" src="https://[% SERVER_ADDRESS %]/uploads/covers-added/[% p.getImageName %]" title="Portada" alt="[% 'Tapa del ejemplar' | i18n %]" >
                                         </a>
                                     </div>
                                 [% END %]
@@ -585,7 +585,7 @@
     			                   <div>
     				                    [% IF portada_registro %]
     				                        <a class="fancy_link" href="/uploads/covers/[% portada_registro_big %]">
-    				                            <img style="max-height: 180px; max-width:110px;" src="/uploads/covers/[% portada_registro_medium %]" title="Portada" alt="[% 'Portada del ejemplar' | i18n %]" />
+    				                            <img style="max-height: 180px; max-width:110px;" src="/uploads/covers/[% portada_registro_medium %]" title="Portada" alt="[% 'Tapa del ejemplar' | i18n %]" />
     				                        </a>
     				                    [% END %]
     							   </div>
