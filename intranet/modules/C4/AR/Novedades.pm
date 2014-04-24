@@ -405,10 +405,11 @@ sub eliminar{
     Trae las novedades ordenadas por fecha
 =cut
 sub getNovedadesByFecha{
-#    my ($ini,$cantR) = @_;
+    my ($ini,$cantR) = @_;
+
     my $novedades_array_ref = C4::Modelo::SysNovedad::Manager->get_sys_novedad( 
                                                                                 sort_by => ['fecha DESC'],
-#                                                                                limit   => $cantR,
+                                                                                limit   => $cantR,
 #                                                                                offset  => $ini,
                                                                               );
 

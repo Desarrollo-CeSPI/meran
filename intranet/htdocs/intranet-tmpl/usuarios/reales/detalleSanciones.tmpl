@@ -58,16 +58,25 @@ function updateBorrarSancion(responseText){
 	              [% FOREACH sancion IN SANCIONES %]
 	              
 	              <tr>
-	                  <td>[% IF sancion.ref_tipo_sancion.ref_tipo_prestamo.getId_tipo_prestamo %]
+	                  <td>
+	                  	[% TRY %]
+                  		  [% IF sancion.ref_tipo_sancion.ref_tipo_prestamo.getId_tipo_prestamo %]
 	                          [% sancion.ref_tipo_sancion.ref_tipo_prestamo.getDescripcion %]
 	                      [% ELSE %]
 	                          [% "Reserva no retirada" | i18n %]
 	                      [% END %]
+  						[% CATCH %]
+							NO EXISTE EL TIPO DE PRESTAMO
+						[% END %]
 	                  </td>
 	                  <td>
+                  	[% TRY %]
 	                      [% FOREACH ts IN sancion.ref_tipo_sancion.ref_tipo_prestamo_sancion %] 
 	                          [% ts.ref_tipo_prestamo.descripcion %]<br>
 	                      [% END %]
+					[% CATCH %]
+						NO EXISTE EL TIPO DE PRESTAMO
+					[% END %]
 	                  </td>
 	                  <td>[% sancion.getFecha_comienzo_formateada %]</td>
 	                  <td>[% sancion.getFecha_final_formateada %]</td>

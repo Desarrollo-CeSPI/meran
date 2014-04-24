@@ -327,7 +327,6 @@ sub getVistaCampo{
     my $key = $nivel.$campo.$template;
 
     if (defined C4::AR::CacheMeran::obtener($key)){
-        C4::AR::Debug::debug("EINARRRRR VisualizacionOpac::getVistaCampo => KEY ==".$key."== valor => ".C4::AR::CacheMeran::obtener($key)." CACHED!!!!!!!");
         return C4::AR::CacheMeran::obtener($key);
     } else {
 
@@ -498,7 +497,7 @@ sub getVisualizacionFromCampoSubCampo{
     my ($campo, $subcampo, $tipo_ejemplar, $nivel, $db) = @_;
     my $key = $campo.$subcampo.$nivel.$tipo_ejemplar;
     my $cat_estruct_info_array;
-    C4::AR::Debug::debug("ME esta llamando". ((caller(1) )[3]));
+
     if (! defined C4::AR::CacheMeran::obtener($key)){
         $db = $db || C4::Modelo::CatVisualizacionIntra->new()->db;
         my @filtros;
