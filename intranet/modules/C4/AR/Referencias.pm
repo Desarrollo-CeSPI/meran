@@ -203,6 +203,21 @@ sub obtenerCategoriaDeSocio {
     return(\@results);
 }
 
+=item
+    Esta funcion retorca el categorycode de la categoria de un usuario apartir del ID de la categoria
+=cut
+sub getCategoryCodeById {
+    my ($id) = @_;
+
+    my @filtros;
+    
+    push (@filtros, (id => {eq => $id}) );
+
+    my $categorias_array_ref = C4::Modelo::UsrRefCategoriaSocio::Manager->get_usr_ref_categoria_socio(query => \@filtros,);
+    my @results;
+
+    return($categorias_array_ref->[0]);
+}
 
 sub idCategoriaDeSocio {
 	my ($codigo) = @_;
