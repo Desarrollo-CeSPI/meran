@@ -360,3 +360,7 @@ ALTER TABLE  `ref_nivel_bibliografico` CHANGE  `description`  `description` VARC
 
 ALTER TABLE  `cat_ref_tipo_nivel3` ADD  `enable_from_new_register` INT( 1 ) NOT NULL DEFAULT  '1' AFTER  `enable_nivel3`;
 UPDATE  pref_preferencia_sistema SET  `categoria` =  'sistema' WHERE  variable = 'timeout';
+
+## 24/04/2014
+
+ALTER TABLE  `usr_socio` CHANGE  `cumple_requisito`  `cumple_requisito` VARCHAR( 255 ) NOT NULL;
