@@ -910,7 +910,8 @@ sub generateBookLabelA4 {
 
 
     #Insert a barcode to the card
-    $pdf->drawBarcode( $x + 100, $y + 75, 70 / 100, 1, "3of9", $codigo, undef, 10,10, 25, 10 );
+    # ($x, $y, $scale, $frame, $type, $code, $extn, $umzn, $lmzn, $zone, $quzn, $spcr, $ofwt, $fnsz, $text)
+    $pdf->drawBarcode( $x + 100, $y + 75, 70 / 100, 1, "3of9", $codigo, undef, 10,10, 25, 10, undef, undef, 12 );
 
     my $posy = 100;
 
@@ -986,7 +987,7 @@ sub generateBookLabelA4 {
   
 
     #AHORA DIBUJAMOS LA SIGNATURA SEPARADA POR ' '
-    $pdf->setSize(8);
+    $pdf->setSize(10);
     $pdf->setFont("Arial-Bold");
     my @sigs = split( / /, $signatura );
     my $posicion = 0;
@@ -1051,10 +1052,10 @@ sub generateBookLabel{
             $pdf->addImgScaled($escudo, $x + 105, $y + 50, 2/100);
         }
     } else {
-        C4::AR::Debug::debug("PdfGenerator => generateBookLabelA4 => NO EXISTE ESCUDO ".$escudo); 
+        C4::AR::Debug::debug("PdfGenerator => generateBookLabel => NO EXISTE ESCUDO ".$escudo); 
         $escudo = C4::AR::Logos::getOnlyPathLogoEtiquetas();
         $escudo .= 'logo_default.jpeg';
-        C4::AR::Debug::debug("PdfGenerator => generateBookLabelA4 => NO EXISTE ESCUDO => muestro default ".$escudo); 
+        C4::AR::Debug::debug("PdfGenerator => generateBookLabel => NO EXISTE ESCUDO => muestro default ".$escudo); 
         $pdf->addImgScaled($escudo, $x + 105, $y + 50, 2/100);
     }
 
