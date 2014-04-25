@@ -49,7 +49,11 @@ sub setId{
 
 sub getEstante{
     my ($self) = shift;
-    return ($self->estante);
+
+    my $estante = $self->estante;
+    $estante =~ s/"/\'/g;
+
+    return ($estante);
 }
 
 sub setEstante{
