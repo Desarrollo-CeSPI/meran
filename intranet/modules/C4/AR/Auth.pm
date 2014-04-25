@@ -449,8 +449,6 @@ sub inicializarAuth{
     #recupero los datos de la sesion anterior que voy a necesitar y luego la destruyo
     my ($session) = CGI::Session->load();
     my $msjCode = getMsgCode();
-
-     C4::AR::Debug::debug("FUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUU inicializarAuth => ".$t_params->{'type'});
      
 #     $t_params->{'mensaje'}= C4::AR::Mensajes::getMensaje($msjCode,'INTRA',[]);
 
