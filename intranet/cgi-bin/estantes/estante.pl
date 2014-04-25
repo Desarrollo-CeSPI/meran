@@ -49,18 +49,18 @@ my ($template, $session, $t_params) = get_template_and_user ({
 
 
 if ($input->param('id_estante')){
-  $subestante_actual= $input->param('id_estante');
-  $padre_actual= $input->param('id_padre');
-  C4::AR::Debug::debug($padre_actual);
+  $subestante_actual  = $input->param('id_estante');
+  $padre_actual       = $input->param('id_padre');
+  #C4::AR::Debug::debug($padre_actual);
 }
 
 
-my $estantes_publicos = C4::AR::Estantes::getListaEstantesPublicos();
-$t_params->{'subestante_actual'}= $subestante_actual;
-$t_params->{'padre_actual'}= $padre_actual;
-
-$t_params->{'cant_estantes'}= @$estantes_publicos;
-$t_params->{'ESTANTES'}= $estantes_publicos;
+my $estantes_publicos             = C4::AR::Estantes::getListaEstantesPublicos();
+$t_params->{'subestante_actual'}  = $subestante_actual;
+$t_params->{'padre_actual'}       = $padre_actual;
+$t_params->{'cant_estantes'}      = @$estantes_publicos;
+$t_params->{'ESTANTES'}           = $estantes_publicos;
+$t_params->{'id_registro'}        = ($input->param('id_registro'))?$input->param('id_registro'):0;
 
 
 C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
