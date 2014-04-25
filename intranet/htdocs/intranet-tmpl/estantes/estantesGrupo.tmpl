@@ -30,7 +30,7 @@
                     [% PERL %]
                       print C4::AR::Filtros::link_to( text =>     "[% auxEstante.getEstante %]",
                                      url=>"[% url_prefix %]/estantes/estante.pl", 
-                                      params =>   ["id_estante=[% auxEstante.getId %]"],
+                                      params =>   ["id_estante=[% auxEstante.getId %]", "id_registro=[% estante.contenido.nivel2.getId1 %]"],
                                       title =>    "[% 'Mostrar Detalle del Estante' | i18n %]",
                                       class => "link_to_detail"
                                   ) ;

@@ -56,3 +56,16 @@
 <div id="subestante">
 </div>
 
+[% IF id_registro %]
+
+  [% PERL %]
+      print C4::AR::Filtros::link_to(
+                            text      => "[% 'Volver al registro' %]",
+                            url       => "[% url_prefix %]/catalogacion/estructura/detalle.pl", 
+                            params    => ["id1=[% id_registro %]"],
+                            title     => "[% 'Volver al registro' | i18n %]",
+                            class     => "link_to_detail"
+                      ) ;
+  [% END %]
+
+[% END %]
