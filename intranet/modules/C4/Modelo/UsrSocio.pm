@@ -403,6 +403,7 @@ sub activar{
 
     $self->setActivo(1);
     $self->persona->activar();
+    $self->setCumple_requisito("0000000000:00:00");
 
     my ($credential_type) = $self->getCredentialType;
 
