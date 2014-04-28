@@ -54,41 +54,39 @@ function consultarBar(filtro,doScroll){
 
 function consultar(filtro,doScroll){
     if (doScroll)
-      shouldScrollUser = doScroll;
-    objAH_usuarios=new AjaxHelper(updateInfoUsuarios);
-    objAH_usuarios.showOverlay       = true;
-    objAH_usuarios.cache = true;
-    busqueda = jQuery.trim($('#socio').val());
-    inicial = '0';
+        shouldScrollUser            = doScroll;
+        objAH_usuarios              = new AjaxHelper(updateInfoUsuarios);
+        objAH_usuarios.showOverlay  = true;
+        objAH_usuarios.cache        = true;
+        busqueda                    = jQuery.trim($('#socio').val());
+        inicial                     = '0';
+
     if (filtro){
-        inicial = filtro;
-        busqueda = jQuery.trim(filtro);
-        objAH_usuarios.inicial= inicial;
+        inicial                 = filtro;
+        busqueda                = jQuery.trim(filtro);
+        objAH_usuarios.inicial  = inicial;
         $('#socio').val(FILTRO_POR + filtro);
-    }
-    else
-       {
+    } else {
         if (busqueda.substr(8,5).toUpperCase() == 'TODOS'){
-                busqueda = busqueda.substr(8,5);
-                $('#socio').val(busqueda);
-                consultar(busqueda);
-        }
-        else
-           {
+            busqueda = busqueda.substr(8,5);
+            $('#socio').val(busqueda);
+            consultar(busqueda);
+        } else {
             if (busqueda.substr(0,6).toUpperCase() == 'FILTRO'){
                 busqueda = busqueda.substr(8,1);
                 $('#socio').val(busqueda);
                 consultar(busqueda);
             }
-           }
+        }
     }
-    if(jQuery.trim(busqueda).length > 0){
-        objAH_usuarios.url= URL_PREFIX+'/usuarios/reales/buscarUsuarioResult.pl';
-        objAH_usuarios.showOverlay       = true;
-        objAH_usuarios.debug= true;
+    if( (jQuery.trim(busqueda).length > 0) || ($('#categoria_socio_id').val() > 0)){
+        objAH_usuarios.url          = URL_PREFIX+'/usuarios/reales/buscarUsuarioResult.pl';
+        objAH_usuarios.showOverlay  = true;
+        objAH_usuarios.debug        = true;
 //      objAH_usuarios.cache= true;
-        objAH_usuarios.funcion= 'changePage_usuarios';
-        objAH_usuarios.socio= busqueda;
+        objAH_usuarios.funcion      = 'changePage_usuarios';
+        objAH_usuarios.socio        = busqueda;
+        objAH_usuarios.categoria    = $('#categoria_socio_id').val();
         objAH_usuarios.sendToServer();
     }
     else{

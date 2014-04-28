@@ -39,6 +39,12 @@ my ($template, $session, $t_params) = get_template_and_user({
 									debug => 1,
 			    });
 
-$t_params->{'page_sub_title'}=C4::AR::Filtros::i18n("B&uacute;squeda de Usuarios");
+
+my %params;
+$params{'default'} 							= 'SIN SELECCIONAR';
+my $comboCategoriasDeSocio 			= C4::AR::Utilidades::generarComboCategoriasDeSocio(\%params);
+
+$t_params->{'categories'}				= $comboCategoriasDeSocio;
+$t_params->{'page_sub_title'}		= C4::AR::Filtros::i18n("B&uacute;squeda de Usuarios");
 
 C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);

@@ -12,6 +12,14 @@
                         );
                   [% END %]
               </div>
+
+              <div class="control-group">
+                        <label class="control-label" for="categoria_socio_id">[% "Categoria" | i18n %]</label>
+                        <div class="controls">
+                                [% categories %]
+                        </div>
+              </div>
+
         </div>
   
         <div class="form-actions">
