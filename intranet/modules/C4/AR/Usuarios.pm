@@ -633,7 +633,7 @@ sub existeSocio {
     Esta funcion busca por nro_documento, nro_socio, apellido y combinados por ej: "27 Car", donde 27 puede ser parte del DNI o legajo o ambos
 =cut
 sub getSocioLike {
-    my ($socio,$orden,$ini,$cantR,$habilitados,$inicial) = @_;
+    my ($socio, $orden, $ini, $cantR, $habilitados, $inicial, $categoria) = @_;
 
 
 # C4::AR::Debug::debug("Usuarios => getSocioLike => orden => ".$orden);
@@ -667,6 +667,11 @@ sub getSocioLike {
                 push (  @filtros, ( or   => [   apellido => { like => $s.'%'}, ]) );
             }
         }
+    }
+
+    #filtro por categoria del socio
+    if ($categoria ne ""){
+        push(@filtros, ( id_categoria => { eq => $categoria}));
     }
 
     if (!defined $habilitados){
