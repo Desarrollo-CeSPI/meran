@@ -69,8 +69,8 @@
                                   [% END %]
                                 
                               </dl>
-                              
-                              [% IF mostrarSignaturaEnDetalleOPAC %]
+
+                              [% IF (mostrarSignaturaEnDetalleOPAC) && (cat_ref_tipo_nivel3 != "ELE") %]
                                 <p>[% 'Puede solicitar m&aacute;s f&aacute;cilmente el ejemplar con:' | i18n %] <strong> [% HTML.escape(primer_signatura) %]</strong></p>
                               [% END %]
                                 [% IF tiene_indice %]
