@@ -239,6 +239,7 @@ sub migrarLibros {
 
 		my $principal='';
 		my $tipo_principal='';
+		my $responsabilidad_principal='';
 		my @secundarios=();
 		
 		while (my $autor=$responsables_calp->fetchrow_hashref) {
@@ -251,9 +252,15 @@ sub migrarLibros {
 
 			if ($cat_autor){
 				if($autor->{'AutorPrincipal'} eq 'A'){
+					if($principal){ #Habia un blanco antes?
+						#Colaborador
+						push (@secundarios,[$principal,$responsabilidad_principal])
+					}
 					#Principal
 					$principal = $cat_autor;
 					$tipo_principal = $autor->{'TipoResponsabilidad'};
+					$responsabilidad_principal = $autor->{'CodTResponsabilidad'};
+
 				}elsif($autor->{'AutorPrincipal'} eq 'N'){
 					#Colaborador
 					push (@secundarios,[$cat_autor,$autor->{'CodTResponsabilidad'}])
@@ -264,6 +271,7 @@ sub migrarLibros {
 					}else{
 						$principal = $cat_autor;
 						$tipo_principal = $autor->{'TipoResponsabilidad'};
+						$responsabilidad_principal = $autor->{'CodTResponsabilidad'};
 					}
 				}
 			}
@@ -271,9 +279,12 @@ sub migrarLibros {
 		
 		if($principal){
 			my $c = '100';
-			if($tipo_principal eq 'I'){ 
+			if(($tipo_principal eq 'I')||($tipo_principal eq 'T')){ 
 				#Institucion
-				#$c='110';
+				$c='110';
+			}elsif($tipo_principal eq 'E'){ 
+				#Congreso
+				$c='111';
 			}
 			push(@campos_n1, [$c,'a','cat_autor@'.$principal->getId()]);
 		}
@@ -288,6 +299,18 @@ sub migrarLibros {
 		
 		#Buscamos Temas
 
+		my $temas_calp=$db_calp->prepare("SELECT MATERIAS.Materia,TEM_MAT.Nivel,TEM_MAT.Orden
+				FROM TEM_MAT LEFT JOIN MATERIAS ON TEM_MAT.RecNoMateria =  MATERIAS.RecNo
+				WHERE TEM_MAT.Material_RecNo = ? ORDER BY TEM_MAT.Orden ;");
+		$temas_calp->execute($material->{'RecNo'});
+
+		while (my $tema=$temas_calp->fetchrow_hashref) {
+				my $cat_tema= getTema($tema->{'Materia'});
+				if($cat_tema){
+					push(@campos_n1, ['650','a','cat_tema@'.$cat_tema->getId()]);
+				}
+		}
+		
 		my $marc_record_n1 = MARC::Record->new();
 		foreach my $campo (@campos_n1){
 			if($campo->[2]){
@@ -395,5 +418,24 @@ sub getAutor{
 	    return undef;
 	  }
 }
+
+
+
+sub getTema{
+	my ($tema)=@_;
+
+		my @filtros=();
+        push(@filtros, (nombre => {eq => $tema}) );
+        my $ref_tema = C4::Modelo::CatTema::Manager->get_cat_tema(query => \@filtros,);
+       
+	  if(scalar(@$ref_tema) > 0){
+	    return ($ref_tema->[0]);
+	  }else{
+	    #no se pudo recuperar el objeto por el id pasado por parametro
+	    return undef;
+	  }
+}
+
+
 
 migrarLibros();
