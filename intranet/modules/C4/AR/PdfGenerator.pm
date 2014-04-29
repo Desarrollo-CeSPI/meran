@@ -987,7 +987,7 @@ sub generateBookLabelA4 {
   
 
     #AHORA DIBUJAMOS LA SIGNATURA SEPARADA POR ' '
-    $pdf->setSize(10);
+    $pdf->setSize(11);
     $pdf->setFont("Arial-Bold");
     my @sigs = split( / /, $signatura );
     my $posicion = 0;
@@ -995,15 +995,17 @@ sub generateBookLabelA4 {
         if (C4::AR::Utilidades::validateString($sig)){
           $sig=  Encode::decode_utf8($sig);
 #         $pdf->addRawText( "$sig", $x + 15, $pageheight + 50 + ( $y - 120 ) - $posicion );
-          $pdf->addRawText( "$sig", $x + 5, 250 + ( $y - 90 ) - $posicion );
+          $pdf->addRawText( "$sig", $x - 5, 250 + ( $y - 90 ) - $posicion );
           $posicion += 10;
         }
     }
 
 #     $pdf->addRawText( $codigo, $x + 15, $pageheight + ( $y - 120 ) - $posicion );
-    $pdf->addRawText( $codigo, $x + 5, 250 + ( $y - 128 ) - 37);
+    
+    #saco el barcode por ticket #9034
+    # $pdf->addRawText( $codigo, $x + 5, 250 + ( $y - 128 ) - 37);
     $posicion += 15;
-    $pdf->addRawText( $nivel3->getDisponibilidadObject()->getNombre(), $x + 5, ( $y + 145 ) - 50);
+    $pdf->addRawText( $nivel3->getDisponibilidadObject()->getNombre(), $x - 5, ( $y + 145 ) - 50);
 
 # Inserto el barcode debajo de signatura
 #     $pdf->addRawText( "$codigo", $x + 10, $y + 80);
