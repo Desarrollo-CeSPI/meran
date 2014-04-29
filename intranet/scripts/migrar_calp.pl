@@ -30,6 +30,8 @@ use C4::AR::Utilidades;
 use C4::Modelo::RefPais;
 use C4::Modelo::CatAutor;
 use MARC::Record;
+use C4::AR::ImportacionIsoMARC;
+use C4::AR::Catalogacion;
 
 my $db_driver =  "mysql";
 my $db_name   = 'calp_paradox';
@@ -311,6 +313,36 @@ sub migrarLibros {
 				}
 		}
 		
+
+
+
+		#Buscamos Ejemplares
+		my @ejemplares=();
+		my $cant_ejemplares=0;
+		my $ejemplares_calp=$db_calp->prepare("SELECT * FROM MATSTOCK WHERE MATSTOCK.Material_RecNo = ?;");
+		$ejemplares_calp->execute($material->{'RecNo'});
+
+		while (my $ejemplar=$ejemplares_calp->fetchrow_hashref) {
+				my @nuevo_ejemplar=();
+				push(@nuevo_ejemplar, ['995','f', $ejemplar->{'Inventario'}]);
+				push(@nuevo_ejemplar, ['995','t', $ejemplar->{'SignaturaTopografica'}]);
+				push(@nuevo_ejemplar, ['995','o', 'ref_disponibilidad@'.getDisponibilidad($ejemplar->{'CodEstDisponibilidad'})]);
+				push(@nuevo_ejemplar, ['995','o', 'ref_estado@'.getEstado($ejemplar->{'CodEstDisponibilidad'},$ejemplar->{'Disponible'})]);
+				push(@nuevo_ejemplar, ['995','p', $ejemplar->{'Precio'}]);
+				push(@nuevo_ejemplar, ['995','u', $ejemplar->{'Observaciones'}]);
+				push(@nuevo_ejemplar, ['900','p', $ejemplar->{'FechaAlta'}]);
+
+				my $fecha=$ejemplar->{'FechaUltModificacion'};
+				if ($ejemplar->{'FechaBaja'}){
+					$fecha = $ejemplar->{'FechaBaja'};
+				}
+				push(@nuevo_ejemplar, ['900','h', $fecha]);
+
+				$ejemplares[$cant_ejemplares] = \@nuevo_ejemplar;
+				$cant_ejemplares++;
+		}
+
+
 		my $marc_record_n1 = MARC::Record->new();
 		foreach my $campo (@campos_n1){
 			if($campo->[2]){
@@ -341,26 +373,46 @@ sub migrarLibros {
 			}
 		}
 
-		my $marc_record_n3 = MARC::Record->new();
+		my $marc_record_n3_base = MARC::Record->new();
 		foreach my $campo (@campos_n3){
 			if($campo->[2]){
-				  if ($marc_record_n3->field($campo->[0])){
+				  if ($marc_record_n3_base->field($campo->[0])){
 				  	#Existe el campo agrego subcampo
-				  	$marc_record_n3->field($campo->[0])->add_subfields($campo->[1] => $campo->[2]);
+				  	$marc_record_n3_base->field($campo->[0])->add_subfields($campo->[1] => $campo->[2]);
 				  }
 				  else{
 				  	#No existe el campo
 					my $field= MARC::Field->new($campo->[0], '', '', $campo->[1] => $campo->[2]);
-    				$marc_record_n3->append_fields($field);
+    				$marc_record_n3_base->append_fields($field);
 				  }
 			}
 		}
 
-
+		#IMPORTAMOS!!!!!!
 		print "N1\n".$marc_record_n1->as_formatted()."\n";
-		print "N2\n".$marc_record_n2->as_formatted()."\n";
-		print "N3\n".$marc_record_n3->as_formatted()."\n";
 
+		  guardarNivel1DeImportacion($marc_record_n1,'LIB');
+
+
+		#print "N2\n".$marc_record_n2->as_formatted()."\n";
+		foreach my $ejemplar (@ejemplares){
+			my $marc_record_n3 = $marc_record_n3_base->clone;
+			foreach my $campo (@$ejemplar){
+			
+				if($campo->[2]){
+					  if ($marc_record_n3->field($campo->[0])){
+					  	#Existe el campo agrego subcampo
+					  	$marc_record_n3->field($campo->[0])->add_subfields($campo->[1] => $campo->[2]);
+					  }
+					  else{
+					  	#No existe el campo
+						my $field= MARC::Field->new($campo->[0], '', '', $campo->[1] => $campo->[2]);
+	    				$marc_record_n3->append_fields($field);
+					  }
+				}
+			}
+			print "EJEMPLAR\n".$marc_record_n3->as_formatted()."\n";
+		}
 
 	}
 	
@@ -389,6 +441,40 @@ sub getIdioma{
 }
 
 
+
+sub getDisponibilidad{
+	my ($codigo)=@_;
+
+#CodEstDisponibilidad	Descripcion
+#Ex	Extraviado
+#PE	Préstamo Especial
+#PRS	Préstamo
+#SL	Sala de Lectura
+
+    switch (uc($codigo)) {
+        case "EX"  {return 'CIRC0000';}
+        case "PE"  {return 'CIRC0000';}
+        case "PRS"   {return 'CIRC0000';}
+        case "SL"  {return 'CIRC0001';}
+    }
+    return 'CIRC0000';
+}
+
+sub getEstado{
+	my ($codigo,$disponible)=@_;
+
+	if ($codigo eq 'Ex'){
+		#Perdido
+		return 'STATE005';
+	}
+
+	if ($disponible){
+		return 'STATE002';
+	}else{
+		return 'STATE009';
+	}
+
+}
 
 sub getPais{
 	my ($pais)=@_;
@@ -434,6 +520,93 @@ sub getTema{
 	    #no se pudo recuperar el objeto por el id pasado por parametro
 	    return undef;
 	  }
+}
+
+
+
+sub prepararNivelParaImportar{
+     my ($marc_record, $itemtype, $nivel) = @_;
+
+
+   my @infoArrayNivel=();
+       foreach my $field ($marc_record->fields) {
+        if(! $field->is_control_field){
+            
+            my %hash_temp                       = {};
+            $hash_temp{'campo'}                 = $field->tag;
+            $hash_temp{'indicador_primario'}    = $field->indicator(1);
+            $hash_temp{'indicador_secundario'}  = $field->indicator(2);
+            $hash_temp{'subcampos_array'}       = ();
+            $hash_temp{'subcampos_hash'}        = ();
+            $hash_temp{'cant_subcampos'}        = 0;
+            
+            my %hash_sub_temp = {};
+            my @subcampos_array;
+            #proceso todos los subcampos del campo
+            foreach my $subfield ($field->subfields()) {
+                my $subcampo          = $subfield->[0];
+                my $dato              = $subfield->[1];
+                
+                
+                C4::AR::Debug::debug("REFERENCIA!!!  ".$hash_temp{'campo'}."  ". $subcampo);
+                
+                my $estructura = C4::AR::Catalogacion::_getEstructuraFromCampoSubCampo($hash_temp{'campo'} , $subcampo , $itemtype , $nivel);
+                
+                if(($estructura)&&($estructura->getReferencia)&&($estructura->infoReferencia)){
+                    
+                    C4::AR::Debug::debug("REFERENCIA!!!  ".$estructura->infoReferencia);
+                    #es una referencia, yo tengo el dato nomás (luego se verá si hay que crear una nueva o ya existe en la base)
+                    my $tabla = $estructura->infoReferencia->getReferencia;
+                    my ($clave_tabla_referer_involved,$tabla_referer_involved) =  C4::AR::Referencias::getTablaInstanceByAlias($tabla);
+                    my ($ref_cantidad,$ref_valores) = $tabla_referer_involved->getAll(1,0,0,$dato);
+
+                    if ($ref_cantidad){
+                      #REFERENCIA ENCONTRADA
+                        $dato =  $ref_valores->[0]->get_key_value;
+                    }
+                    else { #no existe la referencia, hay que crearla 
+                      $dato = C4::AR::ImportacionIsoMARC::procesarReferencia($dato,$tabla,$clave_tabla_referer_involved,$tabla_referer_involved);
+                    }
+                 }  
+                #ahora guardo el dato para importar 
+                if ($dato){
+                  C4::AR::Debug::debug("CAMPO: ". $hash_temp{'campo'}." SUBCAMPO: ".$subcampo." => ".$dato);
+                  my $hash; 
+                  $hash->{$subcampo}= $dato;
+                  
+                  $hash_sub_temp{$hash_temp{'cant_subcampos'}} = $hash;
+                  push(@subcampos_array, ($subcampo => $dato));
+                  
+                  $hash_temp{'cant_subcampos'}++;
+                }
+                 
+              }
+                    
+          if ($hash_temp{'cant_subcampos'}){
+            $hash_temp{'subcampos_hash'} =\%hash_sub_temp;
+            $hash_temp{'subcampos_array'} =\@subcampos_array;
+            push (@infoArrayNivel,\%hash_temp)
+          }
+        }
+      }
+    
+    return  \@infoArrayNivel;
+}
+
+
+
+
+sub guardarNivel1DeImportacion{
+    my ($marc_record, $template) = @_;
+    
+    my $infoArrayNivel1 =  prepararNivelParaImportar($marc_record,$template,1);
+   
+   my $params_n1;
+    $params_n1->{'id_tipo_doc'} = $template;
+    $params_n1->{'infoArrayNivel1'} = $infoArrayNivel1;
+   my ($msg_object, $id1) = C4::AR::Nivel1::t_guardarNivel1($params_n1);
+
+    return ($msg_object,$id1);
 }
 
 
