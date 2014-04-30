@@ -41,6 +41,11 @@ sub getObjeto{
 }
 
 
+sub getId{
+    my ($self) = shift;
+    return (C4::AR::Utilidades::trim($self->id));
+}
+
 sub getIdLocalidad{
     my ($self) = shift;
     return (C4::AR::Utilidades::trim($self->id));

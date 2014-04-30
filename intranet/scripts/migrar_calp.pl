@@ -123,10 +123,14 @@ sub migrarReferenciasColaboradores {
 }
 
 
-sub migrarLibros {
+sub migrar {
+
+	my ($template)=@_;
+	
+	my $nivel='M'; #Template LIB
 	#Leemos de la tabla de Materiales los que tienen nivel bibliográfico M
-	my $material_calp=$db_calp->prepare("SELECT * FROM  MATERIAL where NivelBibliografico = 'M';");
-	$material_calp->execute();
+	my $material_calp=$db_calp->prepare("SELECT * FROM  MATERIAL where NivelBibliografico = ? ;");
+	$material_calp->execute($nivel);
 
 	while (my $material=$material_calp->fetchrow_hashref) {
 
@@ -288,11 +292,11 @@ sub migrarLibros {
 				#Congreso
 				$c='111';
 			}
-			push(@campos_n1, [$c,'a','cat_autor@'.$principal->getId()]);
+			push(@campos_n1, [$c,'a',$principal->getCompleto()]);
 		}
 
 		foreach my $aut_sec (@secundarios){
-			push(@campos_n1, ['700','a','cat_autor@'.$aut_sec->[0]->getId()]);
+			push(@campos_n1, ['700','a',$aut_sec->[0]->getCompleto()]);
 			if($aut_sec->[1]){
 				#funcion
 				push(@campos_n1, ['700','e','ref_colaborador@'.$aut_sec->[1]]);
@@ -309,12 +313,9 @@ sub migrarLibros {
 		while (my $tema=$temas_calp->fetchrow_hashref) {
 				my $cat_tema= getTema($tema->{'Materia'});
 				if($cat_tema){
-					push(@campos_n1, ['650','a','cat_tema@'.$cat_tema->getId()]);
+					push(@campos_n1, ['650','a',$cat_tema->getNombre()]);
 				}
 		}
-		
-
-
 
 		#Buscamos Ejemplares
 		my @ejemplares=();
@@ -389,31 +390,48 @@ sub migrarLibros {
 		}
 
 		#IMPORTAMOS!!!!!!
-		print "N1\n".$marc_record_n1->as_formatted()."\n";
+		#print "N1\n".$marc_record_n1->as_formatted()."\n";
+		my ($msg_object,$id1);
+		
+		#Si ya existe? 
+		my $n1 = buscarRegistroDuplicado($marc_record_n1,$template);
+		if ($n1){
+			#Ya existe!!!
+			print "Nivel 1 ya existe \n";
+			$id1 = $n1->getId1();
+		} else {
+			($msg_object,$id1) =  guardarNivel1DeImportacion($marc_record_n1,$template);
+        	print "Nivel 1 creado ?? ".$msg_object->{'error'}."\n";
+        }
 
-		  guardarNivel1DeImportacion($marc_record_n1,'LIB');
+        if ($id1){
+        	my ($msg_object2,$id1,$id2) =  guardarNivel2DeImportacion($id1,$marc_record_n2,$template);
+	        print "Nivel 2 creado ?? ".$msg_object2->{'error'}."\n";
+            if (!$msg_object2->{'error'}){
 
+            	print "Ejemplaress";
+				foreach my $ejemplar (@ejemplares){
+					my $marc_record_n3 = $marc_record_n3_base->clone;
+					foreach my $campo (@$ejemplar){
+					
+						if($campo->[2]){
+							  if ($marc_record_n3->field($campo->[0])){
+							  	#Existe el campo agrego subcampo
+							  	$marc_record_n3->field($campo->[0])->add_subfields($campo->[1] => $campo->[2]);
+							  }
+							  else{
+							  	#No existe el campo
+								my $field= MARC::Field->new($campo->[0], '', '', $campo->[1] => $campo->[2]);
+			    				$marc_record_n3->append_fields($field);
+							  }
+						}
+					}
 
-		#print "N2\n".$marc_record_n2->as_formatted()."\n";
-		foreach my $ejemplar (@ejemplares){
-			my $marc_record_n3 = $marc_record_n3_base->clone;
-			foreach my $campo (@$ejemplar){
-			
-				if($campo->[2]){
-					  if ($marc_record_n3->field($campo->[0])){
-					  	#Existe el campo agrego subcampo
-					  	$marc_record_n3->field($campo->[0])->add_subfields($campo->[1] => $campo->[2]);
-					  }
-					  else{
-					  	#No existe el campo
-						my $field= MARC::Field->new($campo->[0], '', '', $campo->[1] => $campo->[2]);
-	    				$marc_record_n3->append_fields($field);
-					  }
+	                my ($msg_object3) = guardarNivel3DeImportacion($id1,$id2,$marc_record_n3,$template,'BLGL');
+	                print "Nivel 3 creado ?? ".$msg_object3->{'error'}."\n";
 				}
 			}
-			print "EJEMPLAR\n".$marc_record_n3->as_formatted()."\n";
 		}
-
 	}
 	
 	$material_calp->finish();
@@ -610,5 +628,109 @@ sub guardarNivel1DeImportacion{
 }
 
 
+sub guardarNivel2DeImportacion{
+    my ($id1,$marc_record,$template) = @_;
+    
+    my $infoArrayNivel2 =  prepararNivelParaImportar($marc_record,$template,2);   
+    my $params_n2;
+    $params_n2->{'id_tipo_doc'} = $template;
+    $params_n2->{'tipo_ejemplar'} = $template;
+    $params_n2->{'infoArrayNivel2'} = $infoArrayNivel2;
+    $params_n2->{'id1'}=$id1;
+    my ($msg_object2,$id1,$id2) = C4::AR::Nivel2::t_guardarNivel2($params_n2);
+    return ($msg_object2,$id1,$id2);
+}
 
-migrarLibros();
+sub guardarNivel3DeImportacion{
+    my ($id1, $id2, $marc_record, $template, $ui) = @_;
+    
+    my $params_n3;
+    $params_n3->{'id_tipo_doc'} = $template;
+    $params_n3->{'tipo_ejemplar'} = $template;
+    $params_n3->{'id1'}=$id1;
+    $params_n3->{'id2'}=$id2;
+    $params_n3->{'ui_origen'}=$ui;
+    $params_n3->{'ui_duenio'}=$ui;
+
+    $params_n3->{'cantEjemplares'} = 1;
+    
+    #Hay que autogenerar el barcode o no???
+    $params_n3->{'esPorBarcode'} = 'true';
+    
+    my @barcodes_array=();
+    $barcodes_array[0]=generaCodigoBarraFromMarcRecord($marc_record,$template);
+    $params_n3->{'BARCODES_ARRAY'} = \@barcodes_array;
+
+    my $infoArrayNivel3 =  prepararNivelParaImportar($marc_record,$template,3);   
+    $params_n3->{'infoArrayNivel3'} = $infoArrayNivel3;
+    my ($msg_object3) = C4::AR::Nivel3::t_guardarNivel3($params_n3);
+    
+    return $msg_object3;
+}
+
+
+
+sub buscarRegistroDuplicado{
+    my ($marc_record,$template) = @_;
+    
+    
+    my $infoArrayNivel1 =  prepararNivelParaImportar($marc_record,$template,1);
+    
+    my $params_n1;
+    $params_n1->{'id_tipo_doc'} = $template;
+    $params_n1->{'infoArrayNivel1'} = $infoArrayNivel1;
+    
+     my $marc_record            = C4::AR::Catalogacion::meran_nivel1_to_meran($params_n1);
+     my $catRegistroMarcN1       = C4::Modelo::CatRegistroMarcN1->new();
+     my $clave_unicidad_alta    = $catRegistroMarcN1->generar_clave_unicidad($marc_record);
+     my $n1 = C4::AR::Nivel1::getNivel1ByClaveUnicidad($clave_unicidad_alta);
+     
+    return $n1;
+}
+
+sub generaCodigoBarraFromMarcRecord{
+    my($marc_record_n3,$tipo_ejemplar) = @_;
+
+   my $barcode; 
+   my @estructurabarcode = split(',', C4::AR::Preferencias::getValorPreferencia("barcodeFormat"));
+    
+    my $like = '';
+
+    for (my $i=0; $i<@estructurabarcode; $i++) {
+        if (($i % 2) == 0) {
+            my $pattern_string ='';
+            use Switch;
+            switch ($estructurabarcode[$i]) {
+                case 'UI' { 
+                    $pattern_string= C4::AR::ImportacionIsoMARC::getUIFromMarcRecord($marc_record_n3);
+                    }
+                case 'tipo_ejemplar' {
+                    $pattern_string= C4::AR::ImportacionIsoMARC::getTipoDocumentoFromMarcRecord($marc_record_n3);
+                    }
+            }
+            if ($pattern_string){
+                $like.= $pattern_string;
+            }else{
+                $like.= $estructurabarcode[$i];
+            }
+        } else {
+            $like.= $estructurabarcode[$i];
+        }
+    }
+    
+    my $nro_inventario = $marc_record_n3->subfield('995','f');
+    if ($nro_inventario){
+     #viene con nro de inventario
+        $barcode  = $like.C4::AR::Nivel3::completarConCeros($nro_inventario);
+     }
+    
+    if ((C4::AR::Nivel3::existeBarcode($barcode))||(!$barcode)){
+        # Si no viene el códifo en el campo 995, f  o ya existe se busca el máximo de su tipo
+        $barcode  = 'AUTOGENERADO';
+     }
+     
+    return ($barcode);
+}
+
+
+migrar('LIB');
