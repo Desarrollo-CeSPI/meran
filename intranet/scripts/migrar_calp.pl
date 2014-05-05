@@ -131,10 +131,12 @@ sub migrar {
 	#Leemos de la tabla de Materiales los que tienen nivel bibliográfico M
 	my $material_calp=$db_calp->prepare("SELECT * FROM  MATERIAL where NivelBibliografico = ? ;");
 	$material_calp->execute($nivel);
+	
+	my $cant =  $material_calp->rows;
+	my $count=0;
+	print "Migramos $cant registros \n";
 
 	while (my $material=$material_calp->fetchrow_hashref) {
-
-
 		#Calculamos algunos campos
 		#Soporte
     	my $soporte;
@@ -325,10 +327,14 @@ sub migrar {
 
 		while (my $ejemplar=$ejemplares_calp->fetchrow_hashref) {
 				my @nuevo_ejemplar=();
+				#UI
+				push(@nuevo_ejemplar, ['995','c', 'BLGL']);
+				push(@nuevo_ejemplar, ['995','d', 'BLGL']);
+
 				push(@nuevo_ejemplar, ['995','f', $ejemplar->{'Inventario'}]);
 				push(@nuevo_ejemplar, ['995','t', $ejemplar->{'SignaturaTopografica'}]);
-				push(@nuevo_ejemplar, ['995','o', 'ref_disponibilidad@'.getDisponibilidad($ejemplar->{'CodEstDisponibilidad'})]);
-				push(@nuevo_ejemplar, ['995','o', 'ref_estado@'.getEstado($ejemplar->{'CodEstDisponibilidad'},$ejemplar->{'Disponible'})]);
+				push(@nuevo_ejemplar, ['995','o', getDisponibilidad($ejemplar->{'CodEstDisponibilidad'})]);
+				push(@nuevo_ejemplar, ['995','e', getEstado($ejemplar->{'CodEstDisponibilidad'},$ejemplar->{'Disponible'})]);
 				push(@nuevo_ejemplar, ['995','p', $ejemplar->{'Precio'}]);
 				push(@nuevo_ejemplar, ['995','u', $ejemplar->{'Observaciones'}]);
 				push(@nuevo_ejemplar, ['900','p', $ejemplar->{'FechaAlta'}]);
@@ -397,21 +403,21 @@ sub migrar {
 		my $n1 = buscarRegistroDuplicado($marc_record_n1,$template);
 		if ($n1){
 			#Ya existe!!!
-			print "Nivel 1 ya existe \n";
+		#	print "Nivel 1 ya existe \n";
 			$id1 = $n1->getId1();
 		} else {
 			($msg_object,$id1) =  guardarNivel1DeImportacion($marc_record_n1,$template);
-        	print "Nivel 1 creado ?? ".$msg_object->{'error'}."\n";
+        #	print "Nivel 1 creado ?? ".$msg_object->{'error'}."\n";
         }
 
         if ($id1){
         	my ($msg_object2,$id1,$id2) =  guardarNivel2DeImportacion($id1,$marc_record_n2,$template);
-	        print "Nivel 2 creado ?? ".$msg_object2->{'error'}."\n";
+	    #    print "Nivel 2 creado ?? ".$msg_object2->{'error'}."\n";
             if (!$msg_object2->{'error'}){
 
-            	print "Ejemplaress";
+        #    	print "Ejemplaress";
 				foreach my $ejemplar (@ejemplares){
-					my $marc_record_n3 = $marc_record_n3_base->clone;
+					my $marc_record_n3 = $marc_record_n3_base->clone();
 					foreach my $campo (@$ejemplar){
 					
 						if($campo->[2]){
@@ -427,11 +433,20 @@ sub migrar {
 						}
 					}
 
+					#print $marc_record_n3->as_formatted;
+
 	                my ($msg_object3) = guardarNivel3DeImportacion($id1,$id2,$marc_record_n3,$template,'BLGL');
-	                print "Nivel 3 creado ?? ".$msg_object3->{'error'}."\n";
+	     #           print "Nivel 3 creado ?? ".$msg_object3->{'error'}."\n";
 				}
 			}
 		}
+	
+
+		$count ++;
+		my $perc = ($count * 100) / $cant;
+		my $rounded = sprintf "%.2f", $perc;
+
+		print "Registro $count de $cant ( $rounded %)  \r\n";
 	}
 	
 	$material_calp->finish();
@@ -644,6 +659,9 @@ sub guardarNivel2DeImportacion{
 sub guardarNivel3DeImportacion{
     my ($id1, $id2, $marc_record, $template, $ui) = @_;
     
+
+    my @infoArrayNivel = ();
+   
     my $params_n3;
     $params_n3->{'id_tipo_doc'} = $template;
     $params_n3->{'tipo_ejemplar'} = $template;
@@ -651,7 +669,6 @@ sub guardarNivel3DeImportacion{
     $params_n3->{'id2'}=$id2;
     $params_n3->{'ui_origen'}=$ui;
     $params_n3->{'ui_duenio'}=$ui;
-
     $params_n3->{'cantEjemplares'} = 1;
     
     #Hay que autogenerar el barcode o no???
@@ -661,8 +678,63 @@ sub guardarNivel3DeImportacion{
     $barcodes_array[0]=generaCodigoBarraFromMarcRecord($marc_record,$template);
     $params_n3->{'BARCODES_ARRAY'} = \@barcodes_array;
 
-    my $infoArrayNivel3 =  prepararNivelParaImportar($marc_record,$template,3);   
-    $params_n3->{'infoArrayNivel3'} = $infoArrayNivel3;
+    my %hash_temp1 = {};
+    $hash_temp1{'indicador_primario'}  = '#';
+    $hash_temp1{'indicador_secundario'}  = '#';
+    $hash_temp1{'campo'}   = '995';
+    $hash_temp1{'subcampos_array'}   =();
+    $hash_temp1{'cant_subcampos'}   = 0;
+    
+    my %hash_sub_temp1 = {};
+    my $field_995 = $marc_record->field('995');
+    if ($field_995){
+        foreach my $subfield ($field_995->subfields()) {
+            my $subcampo          = $subfield->[0];
+            my $dato              = $subfield->[1];
+            
+            my $hash;
+            $hash->{$subcampo}= $dato;
+            $hash_sub_temp1{$hash_temp1{'cant_subcampos'}} = $hash;
+            $hash_temp1{'cant_subcampos'}++;
+        }
+    }
+    $hash_temp1{'subcampos_hash'} =\%hash_sub_temp1;
+    if ($hash_temp1{'cant_subcampos'}){
+      push (@infoArrayNivel,\%hash_temp1)
+    }
+
+    # Ahora TODOS los 900!
+    my %hash_temp2 = {};
+    $hash_temp2{'indicador_primario'}  = '#';
+    $hash_temp2{'indicador_secundario'}  = '#';
+    $hash_temp2{'campo'}   = '900';
+    $hash_temp2{'subcampos_array'}   =();
+    $hash_temp2{'cant_subcampos'}   = 0;
+
+    my %hash_sub_temp2 = {};
+    my $field_900 = $marc_record->field('900');
+    if ($field_900){
+        foreach my $subfield ($field_900->subfields()) {
+            my $subcampo          = $subfield->[0];
+            my $dato              = $subfield->[1];
+            
+            my $hash;
+            $hash->{$subcampo}= $dato;
+            $hash_sub_temp2{$hash_temp2{'cant_subcampos'}} = $hash;
+            $hash_temp2{'cant_subcampos'}++;
+        }
+    }
+    $hash_temp2{'subcampos_hash'} =\%hash_sub_temp2;
+    if ($hash_temp2{'cant_subcampos'}){
+      push (@infoArrayNivel,\%hash_temp2)
+    }
+
+    #my $infoArrayNivel3 =  prepararNivelParaImportar($marc_record,$template,3);
+	
+	###########################################################################
+
+
+    $params_n3->{'infoArrayNivel3'} = \@infoArrayNivel;
     my ($msg_object3) = C4::AR::Nivel3::t_guardarNivel3($params_n3);
     
     return $msg_object3;
