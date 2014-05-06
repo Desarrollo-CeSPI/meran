@@ -1677,9 +1677,10 @@ sub armarInfoNivel1{
                     my $n2 = C4::AR::Nivel2::getNivel2FromId2($cat_reg_analiticas_array_ref->[0]->getId2Padre());
 
                     if($n2){
-                        @result_array_paginado[$i]->{'nivel1_padre'}           = $n2->getId1();
-                        @result_array_paginado[$i]->{'titulo_registro_padre'}  = $n2->nivel1->getTitulo();
-                        @result_array_paginado[$i]->{'primer_signatura'}       = $n2->getSignaturas->[0];
+                        @result_array_paginado[$i]->{'nomCompleto'}             = $n2->nivel1->getAutor();
+                        @result_array_paginado[$i]->{'nivel1_padre'}            = $n2->getId1();
+                        @result_array_paginado[$i]->{'titulo_registro_padre'}   = $n2->nivel1->getTitulo();
+                        @result_array_paginado[$i]->{'primer_signatura'}        = $n2->getSignaturas->[0];
                     }
                 }
             }
