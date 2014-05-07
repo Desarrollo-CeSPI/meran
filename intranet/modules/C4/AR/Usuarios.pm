@@ -239,13 +239,20 @@ sub deshabilitarPersona {
     my ($id_socios_array_ref)=@_;
     my $dbh = C4::Context->dbh;
     my $msg_object= C4::AR::Mensajes::create();
+    C4::AR::Debug::debug("Usuarios => deshabilitar!!!");
 
     eval {
         foreach my $socio (@$id_socios_array_ref){
-            my ($partner) = getSocioInfo($socio);
+            C4::AR::Debug::debug("Usuarios => deshabilitar => socio => " . $socio);
+
+            # my ($partner) = getSocioInfo($socio);
+            my ($partner) = getSocioInfoPorNroSocio($socio);
+            
+            C4::AR::Debug::debug("Usuarios => deshabilitar => partner => " . $partner);
+
             if ($partner){
-                $partner->desactivar;
-                C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U363', 'params' => [$partner->getNro_socio]});
+                my ($o, $cod_msg) = $partner->desactivar;
+                C4::AR::Mensajes::add($msg_object, {'codMsg'=> $cod_msg, 'params' => [$partner->getNro_socio]});
             }
         }
      };
