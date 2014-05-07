@@ -33,6 +33,9 @@ use MARC::Record;
 use C4::AR::ImportacionIsoMARC;
 use C4::AR::Catalogacion;
 
+
+my $op = $ARGV[0] || 0;
+
 my $db_driver =  "mysql";
 my $db_name   = 'calp_paradox';
 my $db_host   = 'localhost';
@@ -52,7 +55,7 @@ sub migrarAutores {
 	while (my $autor=$autores_calp->fetchrow_hashref) {
 		my $completo = $autor->{'apellido'};
 		if ($autor->{'nombre'}){
-			$completo.=", ".$autor->{'nombre'}
+			$completo.=", ".$autor->{'nombre'};
 		}
 		
 		#YA EXISTE EL AUTOR?
@@ -127,15 +130,27 @@ sub migrar {
 
 	my ($template)=@_;
 	
-	my $nivel='M'; #Template LIB
+
+	my $sql= "SELECT * FROM  MATERIAL ";
+	my $where ="";
+
+	if($template eq 'LIB'){
+		$where = " WHERE NivelBibliografico = 'M' OR NivelBibliografico = 'C'; ";
+	}
+	elsif($template eq 'REV'){
+		$where = " WHERE NivelBibliografico = 'S' OR NivelBibliografico = 'X'; ";
+	}
+	elsif($template eq 'ANA'){
+		$where = " WHERE NivelBibliografico = 'A'; ";
+	}
 	#Leemos de la tabla de Materiales los que tienen nivel bibliográfico M
-	my $material_calp=$db_calp->prepare("SELECT * FROM  MATERIAL where NivelBibliografico = ? ;");
-	$material_calp->execute($nivel);
+	my $material_calp=$db_calp->prepare($sql.$where);
+	$material_calp->execute();
 	
 	my $cant =  $material_calp->rows;
 	my $count=0;
 	print "Migramos $cant registros \n";
-
+	
 	while (my $material=$material_calp->fetchrow_hashref) {
 		#Calculamos algunos campos
 		#Soporte
@@ -180,18 +195,23 @@ sub migrar {
     		$dimension .= " ".$material->{'UnidadDim'};
     	}
 
+		#Edicion Desde Hasta
+    	my $fecha_edicion = $material->{'Edicion_FechaDesde'};
+    	if($material->{'Edicion_FechaHasta'}){
+    		my $fecha_edicion .= "-".$material->{'Edicion_FechaHasta'};
+    	}
 
 		#Fascículos
     	my $fasciculos = $material->{'Serie_NumDesde'};
     	if($material->{'Serie_NumHasta'}){
     		my $fasciculos .= "-".$material->{'Serie_NumHasta'};
     	}
-
+    	my $volumen = $material->{'Serie_Volumen'};
 		#Lista de campos
 		#Tenemos Niveles 1 y 2, si ya existe el título, se agrega un nuevo 2, 
 		#sino se agregan los 2 niveles
 		my @campos_n1=(
-			['245','h','ref_soporte@'.$soporte],
+			['245','h',$soporte],
 			['210','a',$material->{'ShortTitulo'}],
 			['245','a',$material->{'Titulo'}],
 			['245','b',$material->{'TituloUniforme'}],
@@ -203,23 +223,24 @@ sub migrar {
 
 		my @campos_n2=(
 
-			['900','b','ref_nivel_bibliografico@m'],
-			['910','a','cat_ref_tipo_nivel3@'.$material->{'CodTMaterial'}],
+			['900','b','m'], #Depende
+			['910','a',$template],
 			['250','a',$material->{'Edicion'}],	
 			['043','c',$pais],	
 			['041','a',$idioma],	
 			['260','a',$material->{'Lugar'}],	
-			['260','b',$material->{'CodEditor'}],	 # mmmm responsable? CodEditor2 y CodEditor3
-			['260','b',$material->{'CodEditor2'}],
-			['260','b',$material->{'CodEditor3'}],
+			#['260','b',$material->{'CodEditor'}],	 # mmmm responsable? CodEditor2 y CodEditor3 NO, AUTOR
+			#['260','b',$material->{'CodEditor2'}],
+			#['260','b',$material->{'CodEditor3'}],
+			['260','c',$fecha_edicion],
 			['505','t',$material->{'Preliminares'}],	
 			['300','a',$extension],
-			['300','b',$extension2],	
+			['300','b',$extension2],
 			['300','c',$dimension],
-			['505','a',$material->{'Notas'}],	
+			['505','a',$material->{'Notas'}],
 			['020','a',$material->{'ISBN'}],
+			
 			#Revista
-			['863','b',$fasciculos],
 			['863','i',$material->{'Serie_AnioReal'}],
 			['863','a',$material->{'Serie_Volumen'}],
 			['362','a',$material->{'Serie_Fecha'}]
@@ -233,6 +254,26 @@ sub migrar {
 			['900','h',$material->{'FechaUltModificacion'}],
 			);
 		
+		#Buscamos Editores
+
+		my @editores = ($material->{'CodEditor'}, $material->{'CodEditor2'}, $material->{'CodEditor3'});
+		foreach $cod_ed (@editores) {
+
+			if ($cod_ed){
+				my $editor_calp=$db_calp->prepare("SELECT AUTORES.Nombre as nombre ,AUTORES.Apellido as apellido FROM AUTORES 
+					WHERE AUTORES.RecNo = ? ;");
+				$editor_calp->execute($cod_ed);
+
+
+				if (my $editor=$editor_calp->fetchrow_hashref) {
+					my $ed_completo = $editor->{'apellido'};
+					if ($editor->{'nombre'}){
+						$ed_completo.=", ".$editor->{'nombre'};
+					}
+					push (@campos_n2,['260','b',$ed_completo]);
+				}
+			}
+		}
 
 		#Buscamos Autores/Colaboradores
 		#Autor Principal RESPMAT..AutorPrincipal = A 100a
@@ -301,7 +342,7 @@ sub migrar {
 			push(@campos_n1, ['700','a',$aut_sec->[0]->getCompleto()]);
 			if($aut_sec->[1]){
 				#funcion
-				push(@campos_n1, ['700','e','ref_colaborador@'.$aut_sec->[1]]);
+				push(@campos_n1, ['700','e',$aut_sec->[1]]);
 			}
 		}
 		
@@ -411,32 +452,57 @@ sub migrar {
         }
 
         if ($id1){
-        	my ($msg_object2,$id1,$id2) =  guardarNivel2DeImportacion($id1,$marc_record_n2,$template);
-	    #    print "Nivel 2 creado ?? ".$msg_object2->{'error'}."\n";
-            if (!$msg_object2->{'error'}){
 
-        #    	print "Ejemplaress";
-				foreach my $ejemplar (@ejemplares){
-					my $marc_record_n3 = $marc_record_n3_base->clone();
-					foreach my $campo (@$ejemplar){
-					
-						if($campo->[2]){
-							  if ($marc_record_n3->field($campo->[0])){
-							  	#Existe el campo agrego subcampo
-							  	$marc_record_n3->field($campo->[0])->add_subfields($campo->[1] => $campo->[2]);
-							  }
-							  else{
-							  	#No existe el campo
-								my $field= MARC::Field->new($campo->[0], '', '', $campo->[1] => $campo->[2]);
-			    				$marc_record_n3->append_fields($field);
-							  }
+        	#Si es una Revista hay que generar el estado de colección
+        	if($template eq 'REV'){
+        		#Revistas
+        		print  "REVISTAS v $volumen n $fasciculos \n";
+
+        		my @estadoDeColeccion = _generarNumerosDeVolumen($volumen,$fasciculos);
+        	
+            	foreach my $rev (@estadoDeColeccion){
+              	#  C4::AR::Debug::debug("REVISTA ==>  \n ".$rev->{'volumen'}."-".$rev->{'numero'});
+                    my $marc_revista =  $marc_record_n2->clone();
+                    my $field863 = $marc_revista->field('863');
+                    if($field863){
+                    	$field863->add_subfields('b' => $rev->{'numero'}); 
+                    } else {
+                    	$field863 = MARC::Field->new('863', '', '' ,'b' => $rev->{'numero'});
+                    }
+
+                    $marc_revista->add_fields($field863);
+                	
+                }
+        	}
+        	else{
+        		#Libros
+	        	my ($msg_object2,$id1,$id2) =  guardarNivel2DeImportacion($id1,$marc_record_n2,$template);
+		    #    print "Nivel 2 creado ?? ".$msg_object2->{'error'}."\n";
+	            if (!$msg_object2->{'error'}){
+
+	        #    	print "Ejemplaress";
+					foreach my $ejemplar (@ejemplares){
+						my $marc_record_n3 = $marc_record_n3_base->clone();
+						foreach my $campo (@$ejemplar){
+						
+							if($campo->[2]){
+								  if ($marc_record_n3->field($campo->[0])){
+								  	#Existe el campo agrego subcampo
+								  	$marc_record_n3->field($campo->[0])->add_subfields($campo->[1] => $campo->[2]);
+								  }
+								  else{
+								  	#No existe el campo
+									my $field= MARC::Field->new($campo->[0], '', '', $campo->[1] => $campo->[2]);
+				    				$marc_record_n3->append_fields($field);
+								  }
+							}
 						}
+
+						#print $marc_record_n3->as_formatted;
+
+		                my ($msg_object3) = guardarNivel3DeImportacion($id1,$id2,$marc_record_n3,$template,'BLGL');
+		     #           print "Nivel 3 creado ?? ".$msg_object3->{'error'}."\n";
 					}
-
-					#print $marc_record_n3->as_formatted;
-
-	                my ($msg_object3) = guardarNivel3DeImportacion($id1,$id2,$marc_record_n3,$template,'BLGL');
-	     #           print "Nivel 3 creado ?? ".$msg_object3->{'error'}."\n";
 				}
 			}
 		}
@@ -455,13 +521,13 @@ sub migrar {
 
 sub getIdioma{
 	my ($idioma)=@_;
-#CodIdioma	idLanguage
-#PRTG	pt
-#LAT	la
-#IT	it
-#ING	en
-#FRA	fr
-#ES	es
+	#CodIdioma	idLanguage
+	#PRTG	pt
+	#LAT	la
+	#IT	it
+	#ING	en
+	#FRA	fr
+	#ES	es
     switch ($idioma) {
         case "PRTG"  {return 'pt';}
         case "LAT"  {return 'la';}
@@ -478,11 +544,11 @@ sub getIdioma{
 sub getDisponibilidad{
 	my ($codigo)=@_;
 
-#CodEstDisponibilidad	Descripcion
-#Ex	Extraviado
-#PE	Préstamo Especial
-#PRS	Préstamo
-#SL	Sala de Lectura
+	#CodEstDisponibilidad	Descripcion
+	#Ex	Extraviado
+	#PE	Préstamo Especial
+	#PRS	Préstamo
+	#SL	Sala de Lectura
 
     switch (uc($codigo)) {
         case "EX"  {return 'CIRC0000';}
@@ -560,8 +626,7 @@ sub getTema{
 sub prepararNivelParaImportar{
      my ($marc_record, $itemtype, $nivel) = @_;
 
-
-   my @infoArrayNivel=();
+   	   my @infoArrayNivel=();
        foreach my $field ($marc_record->fields) {
         if(! $field->is_control_field){
             
@@ -623,7 +688,7 @@ sub prepararNivelParaImportar{
         }
       }
     
-    return  \@infoArrayNivel;
+    	return  \@infoArrayNivel;
 }
 
 
@@ -744,8 +809,7 @@ sub guardarNivel3DeImportacion{
 
 sub buscarRegistroDuplicado{
     my ($marc_record,$template) = @_;
-    
-    
+
     my $infoArrayNivel1 =  prepararNivelParaImportar($marc_record,$template,1);
     
     my $params_n1;
@@ -804,5 +868,106 @@ sub generaCodigoBarraFromMarcRecord{
     return ($barcode);
 }
 
+    sub _generarNumerosDeVolumen {
+            my ($volumen,$numeros) = @_;
+            my @estadoDeColeccion= (); 
 
-migrar('LIB');
+            if ($numeros) {
+
+ 	#       C4::AR::Debug::debug("COLECCION  ==>  PROCESO : $numeros \n");
+                
+                my @numeros_separados = split(',', $numeros );
+
+                foreach my $n (@numeros_separados){
+                    if (index($n , '-') != -1) {
+                        #son muchos
+                        my @secuencia = split('-', $n);
+                        #Agarro únicamente los 2 primeros valores, el resto lo considero erroneo. Por ej: debe venir a-b y debe ser a>b, no puede ser a-b-c y desordenado
+                        if (@secuencia gt 1){
+                            my $ini = C4::AR::Utilidades::trim($secuencia[0]);
+                            my $fin = C4::AR::Utilidades::trim($secuencia[1]);
+                            # Errores en las secuencias, secuencia inicial mayor ala final o que la diferencia sea de más de un nro por día. Hay registros erroneos y hay que evitarlos.
+                            if (($ini < $fin)&&( ($fin - $ini) <= 365 )) {
+                                
+                                foreach my $ns ($ini..$fin) {
+  #                                  C4::AR::Debug::debug("COLECCION  ==>  AGREGA UNO DE SECUENCIA: $ns \n");
+                                    my $numero_limpio =C4::AR::Utilidades::trim($ns);
+                                    my %fasciculo=();
+                                    $fasciculo{'volumen'} = $volumen;
+                                    $fasciculo{'numero'} = $numero_limpio;
+                                    push(@estadoDeColeccion,\%fasciculo);
+                                }
+                            }
+                            else{
+                                # error en orden de secuencia, lo agrego igual
+   #                             C4::AR::Debug::debug("COLECCION  ==>  ERROR EN ORDEN DE SECUENCIA $n => $ini <= $fin \n");
+                                my $numero_limpio =C4::AR::Utilidades::trim($n);
+                                     my %fasciculo=();
+                                    $fasciculo{'volumen'} = $volumen;
+                                    $fasciculo{'numero'} = $numero_limpio;
+                                    push(@estadoDeColeccion,\%fasciculo);
+                            }
+
+                        }
+                        else{
+                            #uno solo, es un error, lo agrego igual
+    #                        C4::AR::Debug::debug("COLECCION  ==>  ERROR: posee un - y existe un solo valor $n \n");
+                            my $numero_limpio =C4::AR::Utilidades::trim($n);
+                            my %fasciculo=();
+                            $fasciculo{'volumen'} = $volumen;
+                            $fasciculo{'numero'} = $numero_limpio;
+                            push(@estadoDeColeccion,\%fasciculo);
+                        }
+
+                    }else{
+                        #uno solo
+    #                     C4::AR::Debug::debug("COLECCION  ==>  AGREGA UNO: $n \n");
+                        my $numero_limpio =C4::AR::Utilidades::trim($n);
+                        my %fasciculo=();
+                        $fasciculo{'volumen'} = $volumen;
+                        $fasciculo{'numero'} = $numero_limpio;
+                        push(@estadoDeColeccion,\%fasciculo);
+                    }
+
+                    } #foreach
+                } #if 
+
+            else {
+                        #no tiene número
+                        my %fasciculo=();
+                        $fasciculo{'volumen'} = $volumen;
+                        $fasciculo{'numero'} = '';
+                        push(@estadoDeColeccion,\%fasciculo);
+            }
+
+        return  @estadoDeColeccion;           
+    }
+
+
+################################################################################################################
+################################################################################################################
+
+
+    switch ($op) {
+        case 0  { 
+        	print "NADA? Opciones: \n1: Migrar Referencias \n2: Migrar Libros \n3: Migrar Revistas \n4: Migrar Analíticas\n";
+        }
+        case 1  {
+        	print "Migrando Referencias... \n";
+	 		migrarAutores ();
+			migrarTemas (); 
+	 		migrarReferenciasColaboradores ();
+        }
+        case 2  {
+        	print "Migrando Libros... \n";
+        	migrar('LIB');
+        }
+        case 3  {
+        	print "Migrando Revistas... \n";
+        	migrar('REV');
+        }
+        case 4  {
+        	print "Migrando Analiticas... \n";
+        	migrar('ANA');
+        }
+    }
