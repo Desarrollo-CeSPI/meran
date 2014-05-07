@@ -1,7 +1,66 @@
 [% INCLUDE   'intranet-top.inc'  %]
 <script type="text/javascript" src="/includes/jquery/jquery-highlight-min.js"></script>
-<script type="text/javascript" src="/intranet-tmpl/includes/busquedasUsuarios-min.js"></script>
+<script type="text/javascript" src="/intranet-tmpl/includes/busquedasUsuarios.js"></script>
+<script src="/intranet-tmpl/includes/usuarios/usuariosPotenciales.js"></script>
 <script type="text/javascript">
+
+
+function habilitar(){
+  var checks=$("#tablaResult input[@type='checkbox']:checked");
+  var array=checks.get();
+  var theStatus="";
+  var personNumbers=new Array();
+  var cant=checks.length;
+  var accion=$("#accion").val();
+  if (cant>0){
+    theStatus= ($("#accion").val() == "HABILITAR_PERSON")?HABILITAR_POTENCIALES_CONFIRM:DESHABILITAR_POTENCIALES_CONFIRM; 
+  
+    for(i=0;i<checks.length;i++){
+      personNumbers[i]=array[i].value;
+    }
+
+    if (cant>0){
+      bootbox.confirm(theStatus, function (ok){ 
+                  if (ok)
+                    actualizarPersonas(cant,personNumbers);
+      }
+      );
+    }
+  }
+  else{ jAlert (NO_SE_SELECCIONO_NINGUN_USUARIO);}
+} 
+
+
+function actualizarPersonas(cant,arrayPersonNumbers){
+  objAH=new AjaxHelper(updateInfoActualizar);
+  objAH.url= URL_PREFIX+"/usuarios/potenciales/usuariosPotencialesDB.pl";
+  objAH.debug= true;
+  objAH.showOverlay = true;
+  objAH.cantidad= cant;
+  var tipoAccion = "HABILITAR_PERSON";
+
+  try{
+    if ($("#accion").val())
+      tipoAccion = $("#accion").val();
+    else
+      fromDetail = true;
+  }
+  catch (e){}
+
+  objAH.tipoAccion= tipoAccion;
+  objAH.id_personas= arrayPersonNumbers;
+  objAH.funcion= "changePage";
+  objAH.sendToServer();
+}
+
+function updateInfoActualizar(responseText){
+
+  var Messages=JSONstring.toObject(responseText);
+  setMessages(Messages);
+  
+  if (!fromDetail)
+    consultar('TODOS');
+}
 
 
 $(document).ready(function() {

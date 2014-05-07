@@ -65,14 +65,14 @@ function updateDetalleUsuario(responseText){
 }
 
 function habilitar(){
-	var checks=$("#result input[@type='checkbox']:checked");
+	var checks=$("#tablaResult input[@type='checkbox']:checked");
 	var array=checks.get();
 	var theStatus="";
 	var personNumbers=new Array();
 	var cant=checks.length;
 	var accion=$("#accion").val();
 	if (cant>0){
-		theStatus= HABILITAR_POTENCIALES_CONFIRM; 
+		theStatus= ($("#accion").val() == "HABILITAR_PERSON")?HABILITAR_POTENCIALES_CONFIRM:DESHABILITAR_POTENCIALES_CONFIRM; 
 	
 		for(i=0;i<checks.length;i++){
 			personNumbers[i]=array[i].value;
