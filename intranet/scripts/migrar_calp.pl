@@ -133,15 +133,18 @@ sub migrar {
 
 	my $sql= "SELECT * FROM  MATERIAL ";
 	my $where ="";
-
+	my $nivel = "Monografico";
 	if($template eq 'LIB'){
 		$where = " WHERE NivelBibliografico = 'M' OR NivelBibliografico = 'C'; ";
+		$nivel = "Monografico";
 	}
 	elsif($template eq 'REV'){
 		$where = " WHERE NivelBibliografico = 'S' OR NivelBibliografico = 'X'; ";
+		$nivel = "Serie";
 	}
 	elsif($template eq 'ANA'){
 		$where = " WHERE NivelBibliografico = 'A'; ";
+		$nivel = "Analitico";	
 	}
 	#Leemos de la tabla de Materiales los que tienen nivel bibliográfico M
 	my $material_calp=$db_calp->prepare($sql.$where);
@@ -168,17 +171,17 @@ sub migrar {
     		$pais = 'ref_pais@'.($pais_obj->getIso());
 		}
 		#Idioma
-    	my $idioma='ref_idioma@'.getIdioma($material->{'CodIdioma'});
+    	my $idioma=getIdioma($material->{'CodIdioma'});
 		
 		#Extension
     	my $extension = $material->{'Extension'};
-    	if($material->{'UnidadExtension'}){
+    	if($material->{'Extension'} && $material->{'UnidadExtension'}){
     		my $extension .= " ".$material->{'UnidadExtension'};
     	}
 
 		#Extension
     	my $extension2 = $material->{'ExtensionSecundaria'};
-    	if($material->{'UnidadExtSecundaria'}){
+    	if($material->{'ExtensionSecundaria'} && $material->{'UnidadExtSecundaria'}){
     		my $extension2 .= " ".$material->{'UnidadExtSecundaria'};
     	}
 
@@ -191,7 +194,7 @@ sub migrar {
     		$dimension .= "x".$material->{'DimProfundidad'};
     	}
 
-    	if($material->{'UnidadDim'}){
+    	if($dimension  && $material->{'UnidadDim'}){
     		$dimension .= " ".$material->{'UnidadDim'};
     	}
 
@@ -223,7 +226,7 @@ sub migrar {
 
 		my @campos_n2=(
 
-			['900','b','m'], #Depende
+			['900','b',$nivel], 
 			['910','a',$template],
 			['250','a',$material->{'Edicion'}],	
 			['043','c',$pais],	
@@ -420,7 +423,7 @@ sub migrar {
 				  }
 			}
 		}
-
+print "N2\n".$marc_record_n2->as_formatted()."\n";
 		my $marc_record_n3_base = MARC::Record->new();
 		foreach my $campo (@campos_n3){
 			if($campo->[2]){
@@ -456,7 +459,7 @@ sub migrar {
         	#Si es una Revista hay que generar el estado de colección
         	if($template eq 'REV'){
         		#Revistas
-        		print  "REVISTAS v $volumen n $fasciculos \n";
+        		#print  "REVISTAS v $volumen n $fasciculos \n";
 
         		my @estadoDeColeccion = _generarNumerosDeVolumen($volumen,$fasciculos);
         	
@@ -471,10 +474,33 @@ sub migrar {
                     }
 
                     $marc_revista->add_fields($field863);
-                	
+                	my ($msg_object2,$id1,$id2) =  guardarNivel2DeImportacion($id1,$marc_revista,$template);
+
+	            	if (!$msg_object2->{'error'}){
+	                	#Ejemplares
+						foreach my $ejemplar (@ejemplares){
+							my $marc_record_n3 = $marc_record_n3_base->clone();
+							foreach my $campo (@$ejemplar){
+							
+								if($campo->[2]){
+									  if ($marc_record_n3->field($campo->[0])){
+									  	#Existe el campo agrego subcampo
+									  	$marc_record_n3->field($campo->[0])->add_subfields($campo->[1] => $campo->[2]);
+									  }
+									  else{
+									  	#No existe el campo
+										my $field= MARC::Field->new($campo->[0], '', '', $campo->[1] => $campo->[2]);
+					    				$marc_record_n3->append_fields($field);
+									  }
+								}
+							}
+
+			                my ($msg_object3) = guardarNivel3DeImportacion($id1,$id2,$marc_record_n3,$template,'BLGL');
+						}
+	                }
                 }
         	}
-        	else{
+        	elsif($template eq 'LIB'){
         		#Libros
 	        	my ($msg_object2,$id1,$id2) =  guardarNivel2DeImportacion($id1,$marc_record_n2,$template);
 		    #    print "Nivel 2 creado ?? ".$msg_object2->{'error'}."\n";
