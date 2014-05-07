@@ -1,10 +1,34 @@
 
 <script type="text/javascript">
+
+    function checkTr(){
+          // click sobre los <tr>, para darle estilo
+          $('tr').click(function() {
+              var clase = $(this).attr('class').split(' ');
+              //solo los <tr> que tengan en el primer <td> un input checkbox
+              if($(this).children(':first-child').children(':first-child').attr('type') == 'checkbox'){
+                  if(clase[1] == 'marked'){
+                      $(this).removeClass("marked"); 
+                      $(this).children(':first-child').children(':first-child').removeAttr('checked');
+                  }else{
+                      $(this).addClass("marked");
+                      $(this).children(':first-child').children(':first-child').attr('checked','true');
+                  }
+              }
+          });     
+          //seleccion con shift
+          $(function() {
+              $('tr').shiftClick();
+          }); 
+      }
+
+
       $(document).ready(function() {
           makeToggle('datos_tabla_div_user','trigger',null,false);
           $('.user_pic_fancy').fancybox();
           disableAlert();
           $('#navBarResult').html('');
+          checkedAll('checkAllUsuariosReales','check_reales');
       });
 </script>
 
@@ -26,7 +50,7 @@
                       print C4::AR::Filtros::tableHeader(   
                                         id              => "tablaResult",
                                         class           => "",
-                                        selectAll_id    => "",
+                                        selectAll_id    => "checkAllUsuariosReales",
                                         columns         => ['[% "Tarjeta Id." | i18n %]','[% 'Foto' | i18n %]',
                                                             '[% "Apellido y Nombres" | i18n %]','[% "Documento" | i18n %]',
                                                             '[% "Legajo" | i18n %]','[% "Cat." | i18n %]','[% "Prest." | i18n %]',
@@ -42,6 +66,15 @@
                   
                             [% FOREACH resultsloop %]	
                                 <tr>
+                                      <td>
+                                          [% IF nomodificable %]
+                                              [% "Imposible" | i18n %] 
+                                          [% ELSE %]
+                                              <input type="checkbox" name="check_reales" 
+                                                  id="check_reales_[% socio.getNro_socio %]" 
+                                                  value="[% socio.getNro_socio %]">
+                                          [% END %]
+                                      </td>
                             
                                       <td class="tarjetaId">
                                           [% PERL %]
@@ -116,6 +149,27 @@
                       </tr>-->
                       </tbody>
                   </table>
+
+                <div class="form-actions">
+                        <input name="cantidad" id="cantidad" type="hidden" value="[% modificable %]">
+      
+                           <select id="accion" name="accion">
+                               <option value="DESHABILITAR_PERSON">
+                                   [% "Deshabilitar Seleccionados" | i18n %]
+                               </option>
+                           </select>
+      
+                          [% PERL %]
+                                    print C4::AR::Filtros::to_Button(   
+                                                                          text          => "[% 'Aceptar' | i18n %]",
+                                                                          boton         => "boton_seleccionar",
+                                                                          width         => "auto",
+                                                                          onClick       => "habilitar();",
+                                                                          title         => "[% 'Aceptar' | i18n %]",
+                                            ) ;
+                          [% END %]
+                </div>
+
              [% ELSE %]
                  <div class="alert alert-info">[% 'No hay usuarios para mostrar'| i18n %]</div>
              [% END %]

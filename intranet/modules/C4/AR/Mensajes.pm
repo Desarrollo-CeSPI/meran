@@ -333,7 +333,7 @@ my %mensajesINTRA = (
     'U421' => 'No se puede extender el libre deuda porque el usuario tiene pr&eacute;stamos vigentes.',
     'U422' => 'No se puede extender el libre deuda porque el usuario se encuentra sancionado.',
     'U423' => 'Se puede imprimir el certificado de libre deuda para *?*. <br/> *?*',
-    'U424' => 'No se puede eliminar el usuario porque tiene pr&eacute;stamos vigentes y/o vencidos.',
+    'U424' => 'No se puede deshabilitar el usuario porque tiene pr&eacute;stamos vigentes y/o vencidos.',
     'U425' => 'El valor ingresado en el Captcha es invalido, por favor intente nuevamente',
 
     'U426' => 'El mail ha sido enviado',

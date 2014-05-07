@@ -431,7 +431,7 @@ sub desactivar{
     $self->setActivo(0);
     $self->save();
     
-    return (0,'U320')
+    return (0,'U363')
 }
 
 sub eliminar{
