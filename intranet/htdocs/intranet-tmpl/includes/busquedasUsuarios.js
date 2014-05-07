@@ -96,8 +96,7 @@ function consultar(filtro,doScroll){
 }
 
 function updateInfoUsuarios(responseText){
-    $('#marco_contenido_datos').html(responseText);
-    $('#resultBusqueda').html("");
+    $('#resultBusqueda').html(responseText);
     var idArray = [];
     var classes = [];
     idArray[0] = 'socio';
@@ -106,7 +105,7 @@ function updateInfoUsuarios(responseText){
     classes[2] = 'legajo';
     classes[3] = 'tarjetaId';
     busqueda = jQuery.trim($('#socio').val());
-    scrollTo('marco_contenido_datos');
+    scrollTo('resultBusqueda');
 }
 
 function updateInfoUsuariosBar(responseText){

@@ -56,6 +56,7 @@
     UD_ESTA_A_PUNTO= "[% 'Usted est&aacute; a punto de habilitar' | i18n %]";
     A_LOS_PROPIETARIOS= "[% 'a los propietarios de' | i18n %]:";
     HABILITAR_POTENCIALES_CONFIRM = "[% 'Habilitar a los usuarios seleccionados?' | i18n %]"; 
+    DESHABILITAR_POTENCIALES_CONFIRM = "[% 'Deshabilitar a los usuarios seleccionados?' | i18n %]"; 
     // fin mensaje compuesto
 
     PERMISOS_DE_ACCESO= "[% 'Permisos de Acceso' | i18n %]";
