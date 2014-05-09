@@ -157,7 +157,7 @@ sub migrar {
 	
 	while (my $material=$material_calp->fetchrow_hashref) {
 
-		my ($marc_record_n1,$marc_record_n2,$marc_record_n3_base,$ejemplares) = prepararRegistroParaMigrar($material,$template);
+		my ($marc_record_n1,$marc_record_n2,$marc_record_n3_base,$ejemplares) = prepararRegistroParaMigrar($material,$template,$nivel);
 
 		#IMPORTAMOS!!!!!!
 		#print "N1\n".$marc_record_n1->as_formatted()."\n";
@@ -193,16 +193,16 @@ sub migrar {
         		my @estadoDeColeccion = _generarNumerosDeVolumen($volumen,$fasciculos);
         	
             	foreach my $rev (@estadoDeColeccion){
-              	#  C4::AR::Debug::debug("REVISTA ==>  \n ".$rev->{'volumen'}."-".$rev->{'numero'});
+              	C4::AR::Debug::debug("REVISTA ==>  \n ".$rev->{'volumen'}."-".$rev->{'numero'});
                     my $marc_revista =  $marc_record_n2->clone();
                     my $field863 = $marc_revista->field('863');
                     if($field863){
                     	$field863->add_subfields('b' => $rev->{'numero'}); 
                     } else {
                     	$field863 = MARC::Field->new('863', '', '' ,'b' => $rev->{'numero'});
+                    	$marc_revista->add_fields($field863);
                     }
 
-                    $marc_revista->add_fields($field863);
                 	my ($msg_object2,$id1,$id2) =  guardarNivel2DeImportacion($id1,$marc_revista,$template);
 
 	            	if (!$msg_object2->{'error'}){
@@ -738,7 +738,7 @@ sub generaCodigoBarraFromMarcRecord{
 
 		my $analiticas_creadas=0;
 		while (my $material=$ana_calp->fetchrow_hashref) {
-			my ($marc_record_n1,$marc_record_n2,$marc_record_n3_base,$ejemplares) = prepararRegistroParaMigrar($material,"ANA");
+			my ($marc_record_n1,$marc_record_n2,$marc_record_n3_base,$ejemplares) = prepararRegistroParaMigrar($material,"ANA", "Analitico");
 			#N1
 			my ($msg_object,$id1_analitica) =  guardarNivel1DeImportacion($marc_record_n1,"ANA",$id2_padre);
 	        if(!$msg_object->{'error'}){
@@ -752,7 +752,7 @@ sub generaCodigoBarraFromMarcRecord{
 
 
 	sub prepararRegistroParaMigrar {
-		my ($material, $template) = @_;
+		my ($material, $template, $nivel) = @_;
 				#Calculamos algunos campos
 		#Soporte
     	my $soporte;
@@ -1128,5 +1128,11 @@ sub generaCodigoBarraFromMarcRecord{
 				while (my $material=$ana_rel_calp->fetchrow_hashref) {
 					print "Huefano ". $material->{'RecNo'}." \n";
 				 }
+        }
+
+        case 5  {
+        	print "Migrando Libros y Revistas con sus analíticas... \n";
+            migrar('LIB');
+        	migrar('REV');
         }
     }
