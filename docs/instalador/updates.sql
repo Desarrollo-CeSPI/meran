@@ -364,3 +364,6 @@ UPDATE  pref_preferencia_sistema SET  `categoria` =  'sistema' WHERE  variable =
 ## 24/04/2014
 
 ALTER TABLE  `usr_socio` CHANGE  `cumple_requisito`  `cumple_requisito` VARCHAR( 255 ) NOT NULL;
+
+## 12/05/2014
+UPDATE usr_socio SET cumple_requisito = '0000000000:00:00' WHERE cumple_requisito = '0000-00-00' and nro_socio <> 'kohaadmin';
