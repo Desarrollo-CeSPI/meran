@@ -4,8 +4,10 @@
 <!-- para manejar la ventana de campos MARC -->
 <script src="/intranet-tmpl/includes/popups/helpCamposMARC.js"></script>
 <!-- para manejar el ABM del catalogo -->
-<script src="/intranet-tmpl/includes/catalogacion-min.js"></script>
+<!-- <script src="/intranet-tmpl/includes/catalogacion-min.js"></script> -->
+<script src="/intranet-tmpl/includes/catalogacion.js"></script>
 <script src="/intranet-tmpl/includes/admin/tablasDeReferencia.js"></script>
+<script src="/intranet-tmpl/includes/estantesVirtuales.js"></script>
 <script src="/includes/jquery/jquery.jeditable.js"></script>
 
 
@@ -17,6 +19,80 @@
 
 
 <script type="text/javascript">
+
+    // funcionalidad para buscar estantes virtuales y poder agregar un registro al mismo
+
+    var ESTANTES_SELECCIONADOS_ARRAY = new Array();
+
+    function open_buscar_estante(){
+        verEstantes();
+        $("#buscador_estantes_virtuales").modal();
+
+    
+        // if(MODIFICAR == 1){
+        //     // $("#boton_guardar_en_estante").show();
+        //     $("#boton_cerrar").hide();  
+        // } else {
+        //     // $("#boton_guardar_en_estante").hide();
+        //     $("#boton_cerrar").show();    
+        // } 
+    }
+
+    function seleccionarEstanteCerrar(id){
+        closeModal(id);
+    }
+
+    //ESTANTES sobre escribo de estantesVirtuales.js
+
+    function updateVerEstantes(responseText){
+        $('#estante_collapse').html(responseText);
+      //  $('#subestante').html('');
+        makeToggle('datos_tabla_div_estantes','trigger',null,false);
+        $(".datos_tabla_div_estantes .form-actions").hide()
+        $(".alert-info").hide();
+    }
+
+    function updateVerSubEstantes(responseText){
+        if(objAH.padre == 0){
+            $('#subestante').html(responseText);
+            scrollTo('subestante');
+        }
+        else{
+            $('#subestante-'+ objAH.padre).html(responseText);
+            scrollTo('subestante-'+ objAH.padre);
+        }
+
+        $("#subestante .form-actions").hide();
+        $(".alert-info").hide();
+        // $("input[type=checkbox]").hide()
+
+        if(CANT_SUB_ESTANTES == 0){
+            $(".resultados_busqueda").hide();
+        }
+    }
+
+    function select_estante(){
+        $(".click").click(function() {
+          alert( "HOLAA" +  $( this ).value());
+        });
+    }
+
+    function guardarEnEstante(){
+        if($("input[type=checkbox]:checked").length == 0){
+            jAlert(SELECCIONE_AL_MENOS_UN_ESTANTE,CATALOGO_ALERT_TITLE);
+        } else {
+                //inicializo el arreglo
+            _freeMemory(ESTANTES_SELECCIONADOS_ARRAY);
+            ESTANTES_SELECCIONADOS_ARRAY= [];
+            
+            $('input[type=checkbox]:checked"').each(function(){
+                ESTANTES_SELECCIONADOS_ARRAY.push($(this).val());
+            });
+
+            closeModal('buscador_estantes_virtuales');
+        }
+    }
+
 
     //copiado de detalle.tmpl
     //FIXME: deberia estar en catalogacion.js
@@ -171,6 +247,42 @@ $(document).ready( function() {
 </div>
 
 
+<div id="buscador_estantes_virtuales" class="modal fade hide">
+        <div class="modal-header">
+               <h3>[% "Seleccione el Estante Virtual" | i18n %]</h3>
+            </div>
+          <div class="modal-body">
+                <div class="control-group">
+                <label for="tipo_nivel3_id">
+                    [% "Estante seleccionado:" | i18n %]
+                </label>
+                <div class="controls">
+                    <div id="estante_collapse"></div>
+            </div>
+            </div>
+             </div>
+            <div class='modal-footer'>
+                    [% PERL %]
+                            print C4::AR::Filtros::to_Button(     text   => "[% 'Cerrar' | i18n %]",
+                                                                  boton   => "btn btn-primary",
+                                                                  onClick => "seleccionarEstanteCerrar('buscador_estantes_virtuales');",
+                                                                  title   => "[% 'Cerrar' | i18n %]",
+                                                                  id      => "boton_cerrar",
+                                    ) ;
+                    [% END %]
+                    
+                    [% PERL %]
+                            print C4::AR::Filtros::to_Button(   text        => "[% 'Guardar' | i18n %]",
+                                                                boton       => "btn btn-primary",
+                                                                onClick     => "guardarEnEstante();",
+                                                                title       => "[% 'Guardar' | i18n | i18n %]",
+                                                                id          => "boton_guardar_en_estante",
+                                    ) ;
+                    [% END %]
+       </div>
+</div>
+
+
 <div id="datos_indice" class="modal hide fade">
     <div class="modal-header">
         <a class="close" data-dismiss="modal">×</a>
@@ -244,10 +356,13 @@ $(document).ready( function() {
     [% END %]
         
     <form id="formNivel2" name="formNivel2" class="form-horizontal" onsubmit="return false;">
+       <a class='btn btn-primary click' title='Agregar a Estante Virtual' onclick='open_buscar_estante();' > Agregar a Estante Virtual</a>
+
 		  <fieldset>
 			    <legend class="titulo_legend">[% "Datos del grupo" | i18n %]
     			     <div id="estado_accion" class="titulos estado_accion alert pagination-centered" style="display:none"></div>
 			    </legend>
+
 			    <!--     CAMPOS DINAMICOS DEL NIVEL 2 -->
 			        <div id= "estructuraDelNivel2"></div>
 			        <input type="hidden" name="token" value="[% token %]" />
