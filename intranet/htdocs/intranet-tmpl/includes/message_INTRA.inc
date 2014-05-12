@@ -240,5 +240,6 @@
 
     /*=================================Exportacion Visualizaciones======================================*/
     EXPORTACION_VISUALIZACION = "[% 'Esta a punto de realizar la exportaci&oacute;n. ¿Desea continuar?' | i18n %]";
+    SELECCIONE_AL_MENOS_UN_ESTANTE = "[% 'Seleccione al menos un Estante Virtual' | i18n %]";
     /*===============================FIN - Exportacion Visualizaciones====================================*/
 </script>

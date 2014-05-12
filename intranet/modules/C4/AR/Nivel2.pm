@@ -130,6 +130,13 @@ sub guardarRealmente{
             $db->commit;
             #recupero el id1 recien agregado
             $id2 = $catRegistroMarcN2->getId2;
+
+# TODO guardar en estantes, si es que se especifica en $params->{'estantes_array'}
+            foreach my $estante_id (@{$params->{'estantes_array'}}){
+                C4::AR::Debug::debug("Nivel2 => estante_id => " . $estante_id);
+                C4::AR::Estantes::agregarContenidoAEstante($estante_id, $id2);                
+            }
+
             eval {
                 C4::AR::Sphinx::generar_indice($catRegistroMarcN2->getId1, 'R_PARTIAL', 'INSERT');
                 #ahora el indice se encuentra DESACTUALIZADO
@@ -551,6 +558,14 @@ sub t_modificarNivel2 {
             my $marc_record = C4::AR::Catalogacion::meran_nivel2_to_meran($params);
             $cat_registro_marc_n2->modificar($params, $marc_record->as_usmarc, $db);  
             $db->commit;
+
+# TODO guardar en estantes, si es que se especifica en $params->{'estantes_array'}
+            foreach my $estante_id (@{$params->{'estantes_array'}}){
+                C4::AR::Debug::debug("Nivel2 => estante_id => " . $estante_id);
+                C4::AR::Estantes::agregarContenidoAEstante($estante_id, $cat_registro_marc_n2->getId2());                
+            }
+
+
             eval {
                 C4::AR::Sphinx::generar_indice($cat_registro_marc_n2->getId1, 'R_PARTIAL', 'UPDATE');
                 #ahora el indice se encuentra DESACTUALIZADO
