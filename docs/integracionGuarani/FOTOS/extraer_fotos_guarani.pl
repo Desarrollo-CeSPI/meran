@@ -27,7 +27,7 @@ while ($line = <ARCHIVO>) {
     #print "foto:: ".$foto."\n\n\n";
 
 
-    my $out = $dbh->prepare("SELECT * from usr_socio where nro_socio= ? ");
+    my $out = $dbh->prepare("SELECT * from usr_persona where nro_documento= ? ;");
     $out->execute($nro_documento);
 
     if ($out->rows) {
@@ -38,7 +38,7 @@ while ($line = <ARCHIVO>) {
                 open(my $out, '>:raw', $pictures_dir.'/'.$file_name) or die "Unable to open: $!";
                 print $out pack('H*',$foto);
                 close($out);
-                print("UPDATE usr_socio SET foto= $file_name where id_socio=$datos->{'id_socio'} ;\n");
+                print("UPDATE usr_persona SET foto= '$file_name' where id_persona=$datos->{'id_persona'} ;\n");
             }
 		}
     }
