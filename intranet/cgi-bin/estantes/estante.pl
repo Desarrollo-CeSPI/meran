@@ -55,6 +55,9 @@ if ($input->param('id_estante')){
 }
 
 
+my %params_combo;
+$params_combo{'default'}          = C4::AR::Preferencias::getValorPreferencia("defaultTipoNivel3");
+$t_params->{'comboTipoDocumento'} = &C4::AR::Utilidades::generarComboTipoNivel3(\%params_combo);
 my $estantes_publicos             = C4::AR::Estantes::getListaEstantesPublicos();
 $t_params->{'subestante_actual'}  = $subestante_actual;
 $t_params->{'padre_actual'}       = $padre_actual;
