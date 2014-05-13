@@ -331,22 +331,20 @@ function agregarContenido(estante,padre){
 }
 
 function buscarContenido(){
-    
         $('#buscarContBoton').text('Cargando...'); 
         $('#buscarContBoton').toggleClass('disabled');
-        objAH=new AjaxHelper(updateBuscarContenido);
-        objAH.debug= true;
+        objAH                   = new AjaxHelper(updateBuscarContenido);
+        objAH.debug             = true;
         objAH.showOverlay       = true;
-        objAH.url= 'estanteDB.pl';
-        objAH.showStatusIn  = 'busqueda_contenido_estante';
-        objAH.funcion = "changePage";
-        objAH.only_sphinx = 1;
-        objAH.valor=$('#input_busqueda_contenido').val();
-        objAH.tipo= 'BUSCAR_CONTENIDO';
-        
-        objAH.orden= ORDEN;
-        objAH.sentido_orden= SENTIDO_ORDEN;
-
+        objAH.url               = 'estanteDB.pl';
+        objAH.showStatusIn      = 'busqueda_contenido_estante';
+        objAH.funcion           = "changePage";
+        objAH.only_sphinx       = 1;
+        objAH.valor             = $('#input_busqueda_contenido').val();
+        objAH.tipo_nivel3_name  = $('#tipo_nivel3_id').val();
+        objAH.tipo              = 'BUSCAR_CONTENIDO'; 
+        objAH.orden             = ORDEN;
+        objAH.sentido_orden     = SENTIDO_ORDEN;
         objAH.sendToServer();
 }
 
