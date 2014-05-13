@@ -7,6 +7,8 @@ use CGI::Session;
 use C4::Context;
 use Digest::MD5 qw(md5 md5_hex md5_base64);
 
+open (L,">/tmp/sql_fotos.sql");
+
 #
 # Abre el archivo cuyo nombre se mando como primer parámetro
 open(ARCHIVO,$ARGV[0]) || die("El archivo no abre");
@@ -32,15 +34,15 @@ while ($line = <ARCHIVO>) {
 
     if ($out->rows) {
         my $datos=$out->fetchrow_hashref;
-		if (!$datos->{'foto'}){
+#		if (!$datos->{'foto'}){
             if (length($foto) > 150 ){
             #Hay foto o es muy chica? 
                 open(my $out, '>:raw', $pictures_dir.'/'.$file_name) or die "Unable to open: $!";
                 print $out pack('H*',$foto);
                 close($out);
-                print("UPDATE usr_persona SET foto= '$file_name' where id_persona=$datos->{'id_persona'} ;\n");
+                print L "UPDATE usr_persona SET foto= '$file_name' where id_persona=$datos->{'id_persona'} ;\n";
             }
-		}
+#		}
     }
 }
 

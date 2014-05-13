@@ -15,6 +15,7 @@ use C4::Modelo::PrefEstructuraSubcampoMarc;
 use C4::Modelo::PrefEstructuraSubcampoMarc::Manager;
 use C4::Modelo::CatEstructuraCatalogacion::Manager;
 use C4::AR::CacheMeran;
+use HTML::Entities;
 
 use vars qw(@EXPORT_OK @ISA );
 
@@ -711,6 +712,8 @@ sub as_stringReloaded {
         my $dato                            = $subfield->[1];
         $dato                               = getRefFromStringConArrobasByCampoSubcampo($campo, $subcampo, $dato, $itemtype, $nivel);
         $dato                               = getDatoFromReferencia($campo, $subcampo, $dato, $itemtype, $nivel);
+        $dato                               = encode_entities($dato, '<>&"');
+
         C4::AR::Debug::debug("Catalogacion => as_stringReloaded => campo => ".$campo." subcampo => ".$subcampo." dato => ".$dato);
         $hash_temp{'dato_link'}             = C4::AR::Filtros::show_componente( ('campo' => $campo, 'subcampo' => $subcampo, 'dato' => $dato , 'id1' => $params->{'id1'}, 'id2' => $params->{'id2'}, 'template' => $itemtype ) );
 
