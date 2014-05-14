@@ -1,2 +1,0 @@
-UPDATE sys_metodo_auth SET enabled = '0' WHERE metodo ='ldap';
-UPDATE sys_metodo_auth SET enabled = '1' WHERE metodo ='mysql';

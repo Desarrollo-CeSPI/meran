@@ -1,3 +1,0 @@
-UPDATE `usr_socio` 
-SET theme = NULL,
-    theme_intra = NULL;

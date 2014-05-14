@@ -1,2 +1,0 @@
-UPDATE indice_busqueda as IB
-SET hits = (SELECT COUNT(id1) as 'cantidad' from rep_historial_circulacion WHERE id1 = IB.id GROUP BY (id1));

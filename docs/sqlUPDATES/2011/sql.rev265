@@ -1,3 +1,0 @@
-UPDATE `pref_preferencia_sistema` 
-SET categoria = "catalogo"
-WHERE (variable = "detalle_INTRA_extendido") OR (variable = "detalle_OPAC_extendido");

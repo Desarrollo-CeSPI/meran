@@ -1,3 +1,0 @@
-ALTER TABLE `cat_visualizacion_opac` ADD UNIQUE (`campo` ,`subcampo` ,`id_perfil`);
-
-ALTER TABLE `cat_visualizacion_intra` ADD UNIQUE (`campo` ,`subcampo` ,`tipo_ejemplar`);

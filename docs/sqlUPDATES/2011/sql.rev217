@@ -1,3 +1,0 @@
-INSERT INTO `usr_estado` (`id_estado`, `fuente`, `nombre`) VALUES
-(10, 'GUARANI', 'PASIVO REGULAR'),
-(11, 'GUARANI', 'PASIVO IRREGULAR');

@@ -1,2 +1,0 @@
-ALTER TABLE `rep_historial_sancion` ADD `dias_sancion` INT( 11 ) NULL ,
-ADD `id3` INT( 11 ) NULL DEFAULT NULL ;

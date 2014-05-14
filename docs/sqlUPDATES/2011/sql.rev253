@@ -1,1 +1,0 @@
-ALTER TABLE `io_importacion_iso_registro` ADD `detalle` TEXT NULL AFTER `estado` ;

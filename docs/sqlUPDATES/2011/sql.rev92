@@ -1,3 +1,0 @@
-UPDATE `pref_preferencia_sistema` SET `value` = 'UI,-,tipo_ejemplar,-' WHERE variable='barcodeFormat';
-UPDATE `pref_preferencia_sistema` SET `value` = '5' WHERE variable ='longitud_barcode';
-

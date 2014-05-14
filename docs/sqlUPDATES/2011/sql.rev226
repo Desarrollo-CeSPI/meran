@@ -1,1 +1,0 @@
-ALTER TABLE  `portada_opac` ADD  `footer_title` VARCHAR( 64 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL AFTER  `footer`;

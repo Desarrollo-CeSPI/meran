@@ -1,1 +1,0 @@
-ALTER TABLE `usr_socio` CHANGE `recover_date_of` `recover_date_of` TIMESTAMP NULL DEFAULT NULL;

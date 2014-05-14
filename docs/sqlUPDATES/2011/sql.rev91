@@ -1,1 +1,0 @@
-ALTER TABLE `usr_socio` CHANGE `cumple_requisito` `cumple_requisito` VARCHAR( 255 ) NULL DEFAULT NULL;

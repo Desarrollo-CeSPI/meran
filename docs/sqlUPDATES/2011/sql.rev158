@@ -1,1 +1,0 @@
-ALTER TABLE `usr_socio` ADD `note` TEXT NULL AFTER `activo` 

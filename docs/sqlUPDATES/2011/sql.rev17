@@ -1,1 +1,0 @@
-ALTER TABLE `cat_registro_marc_n3` ADD `created_at` DATETIME NOT NULL AFTER `updated_at`;

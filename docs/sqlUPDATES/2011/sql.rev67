@@ -1,6 +1,0 @@
-ALTER TABLE `indice_busqueda`
-  DROP string_tabla_con_dato;
-
-ALTER TABLE `indice_busqueda`
-  DROP string_con_dato;
-

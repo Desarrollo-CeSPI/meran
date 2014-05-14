@@ -1,2 +1,0 @@
-DELETE FROM usr_estado
-WHERE fuente like "%ES UNA FUENTE DEFAULT%";
