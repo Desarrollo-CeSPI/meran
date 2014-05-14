@@ -1,5 +1,0 @@
-ALTER TABLE `usr_socio` ADD `client_ip_recover_pwd` VARCHAR( 255 ) NULL DEFAULT NULL ,
-ADD `recover_date_of` DATE NULL DEFAULT NULL;
-
-
-ALTER TABLE `usr_socio` ADD `login_attempts` INT NULL DEFAULT '0';

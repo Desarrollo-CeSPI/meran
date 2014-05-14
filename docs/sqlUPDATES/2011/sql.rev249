@@ -1,2 +1,0 @@
-ALTER TABLE `sys_novedad` ADD `adjunto` VARCHAR( 255 ) NULL;
-ALTER TABLE `sys_novedad` ADD `nombreAdjunto` VARCHAR( 255 ) NOT NULL;

@@ -1,2 +1,0 @@
-UPDATE `pref_preferencia_sistema` SET `categoria` = 'temas_opac' WHERE `pref_preferencia_sistema`.`variable` ='tema_opac_test';
-UPDATE `pref_preferencia_sistema` SET `categoria` = 'temas_intra' WHERE `pref_preferencia_sistema`.`variable` ='tema_intra_test';

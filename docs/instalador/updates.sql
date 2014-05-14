@@ -3,24 +3,24 @@ USE reemplazarDATABASE;
 
 #agregar al actualizar el numero de version actual (0.9.3) y los updates.sql con un postFix que sea el numero de version
 
-ALTER TABLE  `circ_prestamo` ADD  `fecha_vencimiento_reporte` VARCHAR( 20 ) NOT NULL;
+ALTER TABLE   circ_prestamo  ADD   fecha_vencimiento_reporte  VARCHAR( 20 ) NOT NULL;
 
 # APARTIR DE ACA ES LA v0.9.3
 
-INSERT INTO  `pref_tabla_referencia` (
-`id` ,
-`nombre_tabla` ,
-`alias_tabla` ,
-`campo_busqueda` ,
-`client_title`
+INSERT INTO   pref_tabla_referencia  (
+ id  ,
+ nombre_tabla  ,
+ alias_tabla  ,
+ campo_busqueda  ,
+ client_title 
 )
 VALUES (
 NULL ,  'cat_ref_tipo_nivel3',  'tipo_ejemplar',  'nombre',  'Tipo de Documento'
 );
 
-ALTER TABLE  `cat_estructura_catalogacion` CHANGE  `itemtype`  `itemtype` VARCHAR( 8 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL;
+ALTER TABLE   cat_estructura_catalogacion  CHANGE   itemtype    itemtype  VARCHAR( 8 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL;
 
-ALTER TABLE  `usr_persona` CHANGE  `foto`  `foto` VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL;
+ALTER TABLE   usr_persona  CHANGE   foto    foto  VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL;
 
 
 ## 13/02/2013
@@ -32,7 +32,7 @@ WHERE (variable = 'limite_resultados_autocompletables');
 
 ## 22/02/2013
 
-INSERT INTO  `pref_preferencia_sistema` (`id`, `variable`, `value`, `explanation`, `options`, `type`, `categoria`, `label`, `explicacion_interna`, `revisado`) VALUES (NULL, 'origen_catalogacion', 'AgLpU', 'Origen de Catalogacion (Campo 40 a en exportación Isis MARC)', NULL, 'text', 'sistema', 'Origen de Catalogación', 'Origen de Catalogacion (Campo 40 a en exportación Isis MARC)', '0');
+INSERT INTO   pref_preferencia_sistema  ( id ,  variable ,  value ,  explanation ,  options ,  type ,  categoria ,  label ,  explicacion_interna ,  revisado ) VALUES (NULL, 'origen_catalogacion', 'AgLpU', 'Origen de Catalogacion (Campo 40 a en exportación Isis MARC)', NULL, 'text', 'sistema', 'Origen de Catalogación', 'Origen de Catalogacion (Campo 40 a en exportación Isis MARC)', '0');
 
 ## 25/02/2013
 
@@ -42,24 +42,24 @@ UPDATE pref_preferencia_sistema SET explanation = 'Habilita/Deshabilita la búsq
 ## 15/03/2013  - Nuevo codigo de ref_idioma paraa la exportación de ROBLE
 
 --
--- Estructura de tabla para la tabla `ref_idioma`
+-- Estructura de tabla para la tabla  ref_idioma 
 --
 
-DROP TABLE IF EXISTS `ref_idioma`;
-CREATE TABLE IF NOT EXISTS `ref_idioma` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `idLanguage` char(2) DEFAULT NULL,
-  `marc_code` varchar(3) DEFAULT NULL,
-  `description` varchar(30) DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `marc_code` (`marc_code`)
+DROP TABLE IF EXISTS  ref_idioma ;
+CREATE TABLE IF NOT EXISTS  ref_idioma  (
+   id  int(11) NOT NULL AUTO_INCREMENT,
+   idLanguage  char(2) DEFAULT NULL,
+   marc_code  varchar(3) DEFAULT NULL,
+   description  varchar(30) DEFAULT NULL,
+  PRIMARY KEY ( id ),
+  UNIQUE KEY  marc_code  ( marc_code )
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=141 ;
 
 --
--- Volcar la base de datos para la tabla `ref_idioma`
+-- Volcar la base de datos para la tabla  ref_idioma 
 --
 
-INSERT INTO `ref_idioma` (`id`, `idLanguage`, `marc_code`, `description`) VALUES
+INSERT INTO  ref_idioma  ( id ,  idLanguage ,  marc_code ,  description ) VALUES
 (1, 'ab', 'abk', 'Abkhaziano'),
 (2, 'aa', 'aar', 'Afar'),
 (3, 'af', 'afr', 'Afrikaans'),
@@ -201,51 +201,51 @@ INSERT INTO `ref_idioma` (`id`, `idLanguage`, `marc_code`, `description`) VALUES
 (139, 'za', 'zha', 'Zhuang'),
 (140, 'zu', 'zul', 'Zulú');
 
-INSERT IGNORE INTO `cat_ref_tipo_nivel3` (id_tipo_doc, nombre, notforloan, agregacion_temp, disponible, enable_nivel3) 
+INSERT IGNORE INTO  cat_ref_tipo_nivel3  (id_tipo_doc, nombre, notforloan, agregacion_temp, disponible, enable_nivel3) 
 VALUES ('LIB','Libro',0,NULL,1,1);
-INSERT IGNORE INTO `cat_ref_tipo_nivel3` (id_tipo_doc, nombre, notforloan, agregacion_temp, disponible, enable_nivel3) 
+INSERT IGNORE INTO  cat_ref_tipo_nivel3  (id_tipo_doc, nombre, notforloan, agregacion_temp, disponible, enable_nivel3) 
 VALUES ('SOFT','Software',0,NULL,1,1);
-INSERT IGNORE INTO `cat_ref_tipo_nivel3` (id_tipo_doc, nombre, notforloan, agregacion_temp, disponible, enable_nivel3) 
+INSERT IGNORE INTO  cat_ref_tipo_nivel3  (id_tipo_doc, nombre, notforloan, agregacion_temp, disponible, enable_nivel3) 
 VALUES ('REV','Revista',0,NULL,1,1);
-INSERT IGNORE INTO `cat_ref_tipo_nivel3` (id_tipo_doc, nombre, notforloan, agregacion_temp, disponible, enable_nivel3) 
+INSERT IGNORE INTO  cat_ref_tipo_nivel3  (id_tipo_doc, nombre, notforloan, agregacion_temp, disponible, enable_nivel3) 
 VALUES ('TES','Tesis',1,NULL,1,1);
-INSERT IGNORE INTO `cat_ref_tipo_nivel3` (id_tipo_doc, nombre, notforloan, agregacion_temp, disponible, enable_nivel3) 
+INSERT IGNORE INTO  cat_ref_tipo_nivel3  (id_tipo_doc, nombre, notforloan, agregacion_temp, disponible, enable_nivel3) 
 VALUES ('ELE','Documento Electrónico',0,NULL,1,0);
-INSERT IGNORE INTO `cat_ref_tipo_nivel3` (id_tipo_doc, nombre, notforloan, agregacion_temp, disponible, enable_nivel3) 
+INSERT IGNORE INTO  cat_ref_tipo_nivel3  (id_tipo_doc, nombre, notforloan, agregacion_temp, disponible, enable_nivel3) 
 VALUES ('CDR','CD-ROM',0,NULL,1,1);
-INSERT IGNORE INTO `cat_ref_tipo_nivel3` (id_tipo_doc, nombre, notforloan, agregacion_temp, disponible, enable_nivel3) 
+INSERT IGNORE INTO  cat_ref_tipo_nivel3  (id_tipo_doc, nombre, notforloan, agregacion_temp, disponible, enable_nivel3) 
 VALUES ('SEW','Publicacion seriada (web)',0,NULL,1,1);
-INSERT IGNORE INTO `cat_ref_tipo_nivel3` (id_tipo_doc, nombre, notforloan, agregacion_temp, disponible, enable_nivel3) 
+INSERT IGNORE INTO  cat_ref_tipo_nivel3  (id_tipo_doc, nombre, notforloan, agregacion_temp, disponible, enable_nivel3) 
 VALUES ('SER','Publicacion seriada',0,NULL,1,1);
-INSERT IGNORE INTO `cat_ref_tipo_nivel3` (id_tipo_doc, nombre, notforloan, agregacion_temp, disponible, enable_nivel3) 
+INSERT IGNORE INTO  cat_ref_tipo_nivel3  (id_tipo_doc, nombre, notforloan, agregacion_temp, disponible, enable_nivel3) 
 VALUES ('CAT','Catálogo',0,NULL,1,1);
-INSERT IGNORE INTO `cat_ref_tipo_nivel3` (id_tipo_doc, nombre, notforloan, agregacion_temp, disponible, enable_nivel3) 
+INSERT IGNORE INTO  cat_ref_tipo_nivel3  (id_tipo_doc, nombre, notforloan, agregacion_temp, disponible, enable_nivel3) 
 VALUES ('ART','Artículo',0,NULL,1,1);
-INSERT IGNORE INTO `cat_ref_tipo_nivel3` (id_tipo_doc, nombre, notforloan, agregacion_temp, disponible, enable_nivel3) 
+INSERT IGNORE INTO  cat_ref_tipo_nivel3  (id_tipo_doc, nombre, notforloan, agregacion_temp, disponible, enable_nivel3) 
 VALUES ('LEG','Legislación',0,NULL,1,1);
-INSERT IGNORE INTO `cat_ref_tipo_nivel3` (id_tipo_doc, nombre, notforloan, agregacion_temp, disponible, enable_nivel3) 
+INSERT IGNORE INTO  cat_ref_tipo_nivel3  (id_tipo_doc, nombre, notforloan, agregacion_temp, disponible, enable_nivel3) 
 VALUES ('REF','Obra de referencia',0,NULL,1,1);
-INSERT IGNORE INTO `cat_ref_tipo_nivel3` (id_tipo_doc, nombre, notforloan, agregacion_temp, disponible, enable_nivel3) 
+INSERT IGNORE INTO  cat_ref_tipo_nivel3  (id_tipo_doc, nombre, notforloan, agregacion_temp, disponible, enable_nivel3) 
 VALUES ('WEB','Sitio web',0,NULL,1,1);
-INSERT IGNORE INTO `cat_ref_tipo_nivel3` (id_tipo_doc, nombre, notforloan, agregacion_temp, disponible, enable_nivel3) 
+INSERT IGNORE INTO  cat_ref_tipo_nivel3  (id_tipo_doc, nombre, notforloan, agregacion_temp, disponible, enable_nivel3) 
 VALUES ('VID','Video grabación',0,NULL,1,1);
-INSERT IGNORE INTO `cat_ref_tipo_nivel3` (id_tipo_doc, nombre, notforloan, agregacion_temp, disponible, enable_nivel3) 
+INSERT IGNORE INTO  cat_ref_tipo_nivel3  (id_tipo_doc, nombre, notforloan, agregacion_temp, disponible, enable_nivel3) 
 VALUES ('DCD','Documento de cátedra docente',0,NULL,1,1);
-INSERT IGNORE INTO `cat_ref_tipo_nivel3` (id_tipo_doc, nombre, notforloan, agregacion_temp, disponible, enable_nivel3) 
+INSERT IGNORE INTO  cat_ref_tipo_nivel3  (id_tipo_doc, nombre, notforloan, agregacion_temp, disponible, enable_nivel3) 
 VALUES ('FOT','Fotocopia',0,NULL,1,1);
-INSERT IGNORE INTO `cat_ref_tipo_nivel3` (id_tipo_doc, nombre, notforloan, agregacion_temp, disponible, enable_nivel3) 
+INSERT IGNORE INTO  cat_ref_tipo_nivel3  (id_tipo_doc, nombre, notforloan, agregacion_temp, disponible, enable_nivel3) 
 VALUES ('SEM','Seminarios',1,NULL,1,1);
-INSERT IGNORE INTO `cat_ref_tipo_nivel3` (id_tipo_doc, nombre, notforloan, agregacion_temp, disponible, enable_nivel3) 
+INSERT IGNORE INTO  cat_ref_tipo_nivel3  (id_tipo_doc, nombre, notforloan, agregacion_temp, disponible, enable_nivel3) 
 VALUES ('DCA','Documento de cátedra',1,NULL,1,1);
-INSERT IGNORE INTO `cat_ref_tipo_nivel3` (id_tipo_doc, nombre, notforloan, agregacion_temp, disponible, enable_nivel3) 
+INSERT IGNORE INTO  cat_ref_tipo_nivel3  (id_tipo_doc, nombre, notforloan, agregacion_temp, disponible, enable_nivel3) 
 VALUES ('ANA','Analítica',1,NULL,1,0);
-INSERT IGNORE INTO `cat_ref_tipo_nivel3` (id_tipo_doc, nombre, notforloan, agregacion_temp, disponible, enable_nivel3) 
+INSERT IGNORE INTO  cat_ref_tipo_nivel3  (id_tipo_doc, nombre, notforloan, agregacion_temp, disponible, enable_nivel3) 
 VALUES ('VAL','Documento para valoración',NULL,NULL,1,0);
-INSERT IGNORE INTO `cat_ref_tipo_nivel3` (id_tipo_doc, nombre, notforloan, agregacion_temp, disponible, enable_nivel3) 
+INSERT IGNORE INTO  cat_ref_tipo_nivel3  (id_tipo_doc, nombre, notforloan, agregacion_temp, disponible, enable_nivel3) 
 VALUES ('FOL','Folleto',NULL,NULL,1,0);
 
 
-INSERT IGNORE INTO `usr_regularidad` (`id`, `usr_estado_id`, `usr_ref_categoria_id`, `condicion`) VALUES
+INSERT IGNORE INTO  usr_regularidad  ( id ,  usr_estado_id ,  usr_ref_categoria_id ,  condicion ) VALUES
 (1, 1, 1, 1),
 (2, 2, 1, 0),
 (3, 3, 1, 0),
@@ -354,16 +354,19 @@ INSERT IGNORE INTO `usr_regularidad` (`id`, `usr_estado_id`, `usr_ref_categoria_
 
 ## 25/02/2014
 
-ALTER TABLE  `ref_nivel_bibliografico` CHANGE  `description`  `description` VARCHAR( 255 );
+ALTER TABLE   ref_nivel_bibliografico  CHANGE   description    description  VARCHAR( 255 );
 
 ## 11/04/2014
 
-ALTER TABLE  `cat_ref_tipo_nivel3` ADD  `enable_from_new_register` INT( 1 ) NOT NULL DEFAULT  '1' AFTER  `enable_nivel3`;
-UPDATE  pref_preferencia_sistema SET  `categoria` =  'sistema' WHERE  variable = 'timeout';
+ALTER TABLE   cat_ref_tipo_nivel3  ADD   enable_from_new_register  INT( 1 ) NOT NULL DEFAULT  '1' AFTER   enable_nivel3 ;
+UPDATE  pref_preferencia_sistema SET   categoria  =  'sistema' WHERE  variable = 'timeout';
 
 ## 24/04/2014
 
-ALTER TABLE  `usr_socio` CHANGE  `cumple_requisito`  `cumple_requisito` VARCHAR( 255 ) NOT NULL;
+ALTER TABLE   usr_socio  CHANGE   cumple_requisito    cumple_requisito  VARCHAR( 255 ) NOT NULL;
 
 ## 12/05/2014
 UPDATE usr_socio SET cumple_requisito = '0000000000:00:00' WHERE cumple_requisito = '0000-00-00' and nro_socio <> 'kohaadmin';
+
+## 15/05/2014
+update pref_preferencia_sistema set categoria="sistema" where variable ='titulo_nombre_ui' ;

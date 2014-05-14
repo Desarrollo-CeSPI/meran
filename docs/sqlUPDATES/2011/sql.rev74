@@ -1,1 +1,0 @@
-ALTER TABLE `rep_historial_circulacion` CHANGE `tipo_operacion` `tipo_operacion` VARCHAR( 255 );

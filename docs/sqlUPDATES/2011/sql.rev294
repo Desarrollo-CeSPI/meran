@@ -1,2 +1,0 @@
-UPDATE cat_rating
-SET rate = rate / 2;

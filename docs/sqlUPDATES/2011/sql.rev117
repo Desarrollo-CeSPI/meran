@@ -1,2 +1,0 @@
-ALTER TABLE `cat_visualizacion_intra` ADD `nivel` INT( 1 ) NULL DEFAULT NULL;
-ALTER TABLE `cat_visualizacion_opac` ADD `nivel` INT( 1 ) NULL DEFAULT NULL;

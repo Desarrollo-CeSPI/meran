@@ -1,1 +1,0 @@
-UPDATE `cat_ref_tipo_nivel3` SET `enable_nivel3` = 0 WHERE `id_tipo_doc` = 'ELE';

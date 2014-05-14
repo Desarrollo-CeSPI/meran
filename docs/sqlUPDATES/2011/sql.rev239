@@ -1,5 +1,0 @@
-UPDATE `cat_visualizacion_opac` SET pre = CONCAT(pre, "|");
-UPDATE `cat_visualizacion_opac` SET pre = CONCAT(post, "|");
-UPDATE `cat_visualizacion_intra` SET pre = CONCAT(pre, "|");
-UPDATE `cat_visualizacion_intra` SET pre = CONCAT(post, "|");
-

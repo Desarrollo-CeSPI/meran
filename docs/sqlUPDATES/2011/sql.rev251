@@ -1,1 +1,0 @@
-ALTER TABLE  `cat_registro_marc_n2` ADD  `indice_file_path` VARCHAR( 255 )  NULL AFTER  `indice`;

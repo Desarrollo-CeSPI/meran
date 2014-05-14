@@ -1,2 +1,0 @@
-ALTER TABLE `sys_novedad` ADD `links` VARCHAR( 1024 ) NULL;
-ALTER TABLE `sys_novedad_intra` ADD `links` VARCHAR( 1024 ) NULL ;

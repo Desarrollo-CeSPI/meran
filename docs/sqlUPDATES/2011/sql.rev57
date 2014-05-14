@@ -1,3 +1,0 @@
-UPDATE `pref_preferencia_sistema` SET `type` = 'bool' WHERE `pref_preferencia_sistema`.`variable` ='split_by_levels';
-UPDATE `pref_preferencia_sistema` SET `type` = 'text' WHERE `pref_preferencia_sistema`.`variable` ='longitud_barcode';
-UPDATE `pref_preferencia_sistema` SET `type` = 'bool' WHERE `pref_preferencia_sistema`.`variable` ='detalle_resumido';

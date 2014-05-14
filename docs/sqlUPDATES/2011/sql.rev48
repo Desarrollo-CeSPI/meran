@@ -1,2 +1,0 @@
-ALTER TABLE `usr_persona`  ADD `completo` VARCHAR(255) NOT NULL AFTER `apellido`;
-UPDATE usr_persona SET completo = CONCAT(apellido, ", ",nombre);

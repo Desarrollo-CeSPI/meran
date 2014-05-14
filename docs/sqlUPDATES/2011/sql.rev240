@@ -1,1 +1,0 @@
-UPDATE `cat_estructura_catalogacion` SET fijo = 1 WHERE campo = '910' AND subcampo = 'a';

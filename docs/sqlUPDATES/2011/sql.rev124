@@ -1,1 +1,0 @@
-UPDATE cat_visualizacion_intra SET `orden_subcampo`=0 WHERE 1=1;

@@ -1,2 +1,0 @@
-ALTER TABLE `cat_visualizacion_opac` ADD `orden` INT NOT NULL AFTER `id_perfil`;
-UPDATE `cat_visualizacion_opac` SET `orden` = `id` ;

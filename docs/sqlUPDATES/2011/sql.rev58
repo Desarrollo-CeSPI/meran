@@ -1,2 +1,0 @@
-UPDATE `pref_preferencia_sistema` SET `type` = 'text', `categoria` = 'sistema' WHERE `pref_preferencia_sistema`.`variable` ='tema_opac_default';
-UPDATE `pref_preferencia_sistema` SET `type` = 'text', `categoria` = 'sistema' WHERE `pref_preferencia_sistema`.`variable` ='tema_intra_default';

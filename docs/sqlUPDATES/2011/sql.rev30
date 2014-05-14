@@ -1,1 +1,0 @@
-INSERT INTO `pref_preferencia_sistema` (`variable`, `value`, `explanation`, `options`, `type`, `categoria`) VALUES ('prestar_mismo_grupo_distintos_tipos_prestamo', '0', 'Se permite (1) o no (0) prestar a un mismo usuario dos libros del mismo grupo con distintos tipos de préstamo (sala, domiciliario)', NULL, 'bool', 'sistema');

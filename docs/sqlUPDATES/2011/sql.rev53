@@ -1,8 +1,0 @@
-ALTER TABLE `perm_general` CHANGE `reportes` `reportes` VARBINARY( 8 ) NOT NULL DEFAULT '00000000',
-CHANGE `permisos` `permisos` VARBINARY( 8 ) NOT NULL DEFAULT '00000000',
-CHANGE `adquisiciones` `adquisiciones` VARBINARY( 8 ) NOT NULL DEFAULT '00000000';
-
-ALTER TABLE `perm_general` CHANGE `adquisiciones` `adq_opac` VARBINARY( 8 ) NOT NULL DEFAULT '00000000';
-
-ALTER TABLE `perm_general` ADD `adq_intra` VARBINARY( 8 ) NOT NULL DEFAULT '00000000';
-

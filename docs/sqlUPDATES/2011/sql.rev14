@@ -1,1 +1,0 @@
-ALTER TABLE `pref_tabla_referencia` ADD `client_title` VARCHAR( 255 ) NOT NULL;

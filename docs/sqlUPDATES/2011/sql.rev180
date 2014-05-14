@@ -1,2 +1,0 @@
-UPDATE `pref_preferencia_sistema` SET `type` = 'bool' WHERE `pref_preferencia_sistema`.`variable` = 'auto_generar_comprobante_prestamo';
-

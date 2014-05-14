@@ -1,2 +1,0 @@
-ALTER TABLE  `cat_registro_marc_n3` ADD UNIQUE (`codigo_barra`);
-

@@ -1,3 +1,0 @@
-UPDATE `pref_preferencia_sistema` 
-SET type = "texta"
-WHERE variable = "google_map";

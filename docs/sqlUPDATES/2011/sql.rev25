@@ -1,1 +1,0 @@
-ALTER TABLE `rep_historial_sancion` ADD `fecha_comienzo` DATE NULL DEFAULT NULL AFTER `fecha` ;
