@@ -1,7 +1,7 @@
 package C4::Modelo::CatEstante;
 
 use strict;
-
+use C4::AR::Utilidades;
 use base qw(C4::Modelo::DB::Object::AutoBase2);
 
 __PACKAGE__->meta->setup(
@@ -52,6 +52,15 @@ sub getEstante{
 
     my $estante = $self->estante;
     $estante =~ s/"/\'/g;
+
+    return ($estante);
+}
+
+sub getEstanteStringEscaped{
+    my ($self) = shift;
+
+    my $estante = $self->estante;
+    $estante = C4::AR::Utilidades::escapeData($estante);
 
     return ($estante);
 }

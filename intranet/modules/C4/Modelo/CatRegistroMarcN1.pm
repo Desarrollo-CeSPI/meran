@@ -432,6 +432,12 @@ sub getTitulo{
     return $marc_record->subfield("245","a");
 }
 
+sub getTituloStringEscaped {
+    my ($self)      = shift;
+    my $titulo = $self->getTitulo();
+    return C4::AR::Utilidades::escapeData($titulo);
+}
+
 sub getRestoDelTitulo{
     my ($self)      = shift;
 
@@ -490,6 +496,13 @@ sub getAutor{
     my $autor = $self->getAutorObject();
 
     return ($autor->getCompleto());
+}
+
+
+sub getAutorStringEscaped {
+    my ($self)      = shift;
+    my $autor = $self->getAutor();
+    return C4::AR::Utilidades::escapeData($autor);
 }
 
 =head2 sub getNivelBibliografico

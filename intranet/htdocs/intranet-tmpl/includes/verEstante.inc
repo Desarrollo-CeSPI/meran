@@ -14,22 +14,21 @@
                                           <ul id="ul_tabla_div_estante_0" class="unstyled">
                                               [% FOREACH estante IN ESTANTES %]
                                                   <li>
-                                                      <input type=checkbox name="[% estante.getEstante %]" value="[% estante.getId %]">
-                                                      <a class="click" onClick="verSubEstantes([% estante.getId %],0)">[% estante.getEstante %]</a>
+                                                      <input type=checkbox name="[% estante.getEstanteStringEscaped %]" value="[% estante.getId %]">
+                                                      <a class="click" onClick="verSubEstantes([% estante.getId %],0)">[% estante.getEstanteStringEscaped %]</a>
                                                   </li>
                                               [% END %]
                                           </ul>
 
-                                          <div class="form-actions">
-                                               
-                                                      [% PERL %]
-                                                                    print C4::AR::Filtros::action_button(
-                                                                                                        button  => "btn btn-danger",
-                                                                                                        action => "borrarEstantesSeleccionados(0,0);",
-                                                                                                        icon     => 'icon-white icon-minus',
-                                                                                                        title   => " [% 'Borrar seleccionados' | i18n %]",
-                                                                            ) ;
-                                                      [% END %]
+                                          <div class="form-actions">                                               
+                                                [% PERL %]
+                                                    print C4::AR::Filtros::action_button(
+                                                                                        button  => "btn btn-danger",
+                                                                                        action => "borrarEstantesSeleccionados(0,0);",
+                                                                                        icon     => 'icon-white icon-minus',
+                                                                                        title   => " [% 'Borrar seleccionados' | i18n %]",
+                                                            ) ;
+                                                [% END %]
                                             [% ELSE %]
                                           <div class="alert alert-info">
                                                 [% 'No se encontraron estantes virtuales.' | i18n %]
@@ -37,12 +36,12 @@
                                       [% END %]
                                           
                                                 [% PERL %]
-                                                                    print C4::AR::Filtros::action_button(
-                                                                                                        button   => "btn btn-success",
-                                                                                                        title   => " [% 'Agregar estante' | i18n %]",
-                                                                                                        icon     => 'icon-white icon-plus',
-                                                                                                        action => "agregarNuevoEstante();",
-                                                                            ) ;
+                                                    print C4::AR::Filtros::action_button(
+                                                                                        button   => "btn btn-success",
+                                                                                        title   => " [% 'Agregar estante' | i18n %]",
+                                                                                        icon     => 'icon-white icon-plus',
+                                                                                        action => "agregarNuevoEstante();",
+                                                            ) ;
                                                 [% END %]
                                            
                                                 

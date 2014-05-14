@@ -3403,6 +3403,16 @@ sub escapeHashData{
     return ($hash_ref);
 }
 
+sub escapeData{
+
+    my ($data) = @_;
+    if($data){
+        # Pasa a entidades HTML los caracteres especiales, para que no sean interpretados como otra cosa
+        #$data = encode_entities($data);
+        $data = encode_entities($data, '<>&"“”¿\'');
+    }
+    return ($data);
+}
 
 sub initHASH{
 

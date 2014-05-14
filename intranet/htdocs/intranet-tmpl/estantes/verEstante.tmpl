@@ -15,8 +15,8 @@
                                           <ul id="ul_tabla_div_estante_0" class="unstyled">
                                               [% FOREACH estante IN ESTANTES %]
                                                   <li>
-                                                      <input type=checkbox name="[% estante.getEstante %]" value="[% estante.getId %]">
-                                                      <a class="click" onClick="verSubEstantes([% estante.getId %],0)">[% estante.getEstante %]</a>
+                                                      <input type=checkbox name="[% estante.getEstanteStringEscaped %]" value="[% estante.getId %]">
+                                                      <a class="click" onClick="verSubEstantes([% estante.getId %],0)">[% estante.getEstanteStringEscaped %]</a>
                                                   </li>
                                               [% END %]
                                           </ul>

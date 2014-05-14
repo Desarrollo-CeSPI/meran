@@ -11,7 +11,7 @@
 <div id="contenido-[% estante.getId %]" class="accordion">
       <div class="accordion-group">
             <div class="accordion-heading">
-                         <a class="accordion-toggle" data-toggle="collapse" data-parent="#contenido-[% estante.getId %]" href="#datos_tabla_div_subestante_[% estante.getId %]">[% estante.getEstante %]</a>
+                         <a class="accordion-toggle" data-toggle="collapse" data-parent="#contenido-[% estante.getId %]" href="#datos_tabla_div_subestante_[% estante.getId %]">[% estante.getEstanteStringEscaped %]</a>
             </div>
             <div id="datos_tabla_div_subestante_[% estante.getId %]" class="accordion-body collapse in">
                     <div class="accordion-inner">
@@ -21,7 +21,7 @@
                                       [% FOREACH subestante IN SUBESTANTES %]
                                         <li>
                                               <input type=checkbox name="[% subestante.getEstante %]" value="[% subestante.getId %]">
-                                              <a class="click" onClick="verSubEstantes([% subestante.getId %],[% subestante.getPadre %])">[% subestante.getEstante %]</a>
+                                              <a class="click" onClick="verSubEstantes([% subestante.getId %],[% subestante.getPadre %])">[% subestante.getEstanteStringEscaped %]</a>
                                         </li>
                                       [% END %]
                                   [% ELSE %]
@@ -31,48 +31,46 @@
                               <div class="form-actions">
                                     [% IF cant_subestantes %]
                                             [% PERL %]
-                                                                print C4::AR::Filtros::action_button(
-                                                                                                    button   => "btn btn-danger",
-                                                                                                    action => "borrarEstantesSeleccionados([% estante.getId %],[% estante.getPadre %]);",
-                                                                                                    icon     => 'icon-white icon-minus',
-                                                                                                    title   => " [% 'Borrar seleccionados' | i18n %]",
-                                                                                                
-                                                                        ) ;
+                                                print C4::AR::Filtros::action_button(
+                                                                                    button   => "btn btn-danger",
+                                                                                    action => "borrarEstantesSeleccionados([% estante.getId %],[% estante.getPadre %]);",
+                                                                                    icon     => 'icon-white icon-minus',
+                                                                                    title   => " [% 'Borrar seleccionados' | i18n %]",
+                                                                                
+                                                        ) ;
                                             [% END %]
+                                            
+                                    [% END %]
 
                                             [% PERL %]
-                                                                print C4::AR::Filtros::action_button(
-                                                                                                    button   => "btn btn-primary",
-                                                                                                    action => 'editarEstante("[% estante.getEstante %]",[% estante.getId %],[% estante.getPadre %],[% IF estante.padre %][% estante.estante_padre.getPadre %][% ELSE %]-1[% END %]);',
-                                                                                                    icon     => 'icon-white icon-pencil',
-                                                                                                    title   => " [%  'Editar estante actual' | i18n %]",
-                                                                                               
-                                                                        ) ;
+                                              print C4::AR::Filtros::action_button(
+                                                                                  button   => "btn btn-primary",
+                                                                                  action => 'editarEstante("[% estante.getEstanteStringEscaped %]",[% estante.getId %],[% estante.getPadre %],[% IF estante.padre %][% estante.estante_padre.getPadre %][% ELSE %]-1[% END %]);',
+                                                                                  icon     => 'icon-white icon-pencil',
+                                                                                  title   => " [%  'Editar estante actual' | i18n %]",
+                                                                             
+                                                                      ) ;
                                             [% END %]
-
-
-
-                                    [% END %]
                                   
                                                                  
                                             [% PERL %]
-                                                                print C4::AR::Filtros::action_button(
-                                                                                                    button   => "btn btn-success",
-                                                                                                    icon => "icon-white icon-plus",
-                                                                                                    title   => " [% 'Agregar subestante' | i18n %]",
-                                                                                                    action => "agregarNuevoSubEstante([% estante.getId %],[% estante.getPadre %]);",
-                                                                                            
-                                                                ) ;
+                                                print C4::AR::Filtros::action_button(
+                                                                                    button   => "btn btn-success",
+                                                                                    icon => "icon-white icon-plus",
+                                                                                    title   => " [% 'Agregar subestante' | i18n %]",
+                                                                                    action => "agregarNuevoSubEstante([% estante.getId %],[% estante.getPadre %]);",
+                                                                            
+                                                ) ;
                                             [% END %]
                                     
                                             [% PERL %]
-                                                                print C4::AR::Filtros::action_button(
-                                                                                                    button   => "btn btn-warning",
-                                                                                                    icon => "icon-white icon-plus",
-                                                                                                    title   => " [% 'Clonar estante' | i18n %]",
-                                                                                                    action => "clonarEstante([% estante.getId %],[% estante.getPadre %]);",
-                                                                                            
-                                                                ) ;
+                                                print C4::AR::Filtros::action_button(
+                                                                                    button   => "btn btn-warning",
+                                                                                    icon => "icon-white icon-plus",
+                                                                                    title   => " [% 'Clonar estante' | i18n %]",
+                                                                                    action => "clonarEstante([% estante.getId %],[% estante.getPadre %]);",
+                                                                            
+                                                ) ;
                                             [% END %]
                             </div>
 
@@ -143,26 +141,26 @@
                                     [% IF estante.contenido %]
                                           [% PERL %]
                                                             
-                                                              print C4::AR::Filtros::action_button(
-                                                                                                      button  => "btn btn-danger",
-                                                                                                      action => "borrarContenidoSeleccionado([% estante.getId %],[% estante.getPadre %]);",
-                                                                                                      icon     => 'icon-white icon-minus',
-                                                                                                      title   => " [% 'Borrar seleccionados' | i18n %]",
-                                                                              ) ;
+                                            print C4::AR::Filtros::action_button(
+                                                                                    button  => "btn btn-danger",
+                                                                                    action => "borrarContenidoSeleccionado([% estante.getId %],[% estante.getPadre %]);",
+                                                                                    icon     => 'icon-white icon-minus',
+                                                                                    title   => " [% 'Borrar seleccionados' | i18n %]",
+                                                            ) ;
 
 
 
                                           [% END %]   
                                     [% END %]
                                     [% PERL %]            
-                                                              print C4::AR::Filtros::action_button(
+                                            print C4::AR::Filtros::action_button(
 
-                                                                                                    button   => "btn btn-primary",
-                                                                                                    title   => " [% 'Agregar contenido' | i18n %]",
-                                                                                                    icon => "icon-white icon-plus",
-                                                                                                    action => "agregarContenido([% estante.getId %],[% estante.getPadre %]);",
+                                                                                  button   => "btn btn-primary",
+                                                                                  title   => " [% 'Agregar contenido' | i18n %]",
+                                                                                  icon => "icon-white icon-plus",
+                                                                                  action => "agregarContenido([% estante.getId %],[% estante.getPadre %]);",
 
-                                                                        ) ;
+                                                      ) ;
                                     [% END %]
                               </div>
                                   
