@@ -31,14 +31,14 @@
       </div>
       <div class="modal-footer">
               [% PERL %]
-                                        print C4::AR::Filtros::action_button(   
-                                                                    
-                                                                            button   => "btn btn-primary",
-                                                                            action   => 'agregarEstante();',
-                                                                            icon     => 'icon-white icon-ok',
-                                                                            title    => " [% 'Agregar Estante' | i18n %]",
-                                                                      
-                                                ) ;
+                  print C4::AR::Filtros::action_button(   
+                                              
+                                                      button   => "btn btn-primary",
+                                                      action   => 'agregarEstante();',
+                                                      icon     => 'icon-white icon-ok',
+                                                      title    => " [% 'Agregar Estante' | i18n %]",
+                                                
+                          ) ;
               [% END %]
       </div>
 
@@ -68,13 +68,13 @@
 
                                           
               [% PERL %]
-                                        print C4::AR::Filtros::action_button(  
-                                                                            button   => "btn btn-primary",
-                                                                            action => 'agregarSubEstante();',
-                                                                             icon     => 'icon-white icon-ok',
-                                                                            title   => " [% 'Agregar Subestante' | i18n %]",
-                                                                          
-                                                ) ;
+                print C4::AR::Filtros::action_button(  
+                                                    button   => "btn btn-primary",
+                                                    action => 'agregarSubEstante();',
+                                                     icon     => 'icon-white icon-ok',
+                                                    title   => " [% 'Agregar Subestante' | i18n %]",
+                                                  
+                        ) ;
               [% END %]
          
       </div>
@@ -101,12 +101,12 @@
 
                                           
                   [% PERL %]
-                                        print C4::AR::Filtros::action_button(   
-                                                                            button   => "btn btn-primary",
-                                                                            action   => 'modificarEstante();',
-                                                                            title   => "[% 'Aceptar' | i18n %]",
-                                                                        
-                                        ) ;
+                      print C4::AR::Filtros::action_button(   
+                                                          button   => "btn btn-primary",
+                                                          action   => 'modificarEstante();',
+                                                          title   => "[% 'Aceptar' | i18n %]",
+                                                      
+                      ) ;
                   [% END %]
          
       </div>
@@ -161,14 +161,14 @@
       
           <div class="modal-footer">
                       [% PERL %]
-                                          print C4::AR::Filtros::action_button(
-                                                                              button   => "btn btn-primary",
-                                                                              id       => "buscarContBoton",
-                                                                              icon     => "icon-search icon-white",
-                                                                              action   => "buscarContenido();",
-                                                                              title    => "[% 'Buscar' | i18n %]",
-                                                          
-                                                  ) ;
+                          print C4::AR::Filtros::action_button(
+                                                              button   => "btn btn-primary",
+                                                              id       => "buscarContBoton",
+                                                              icon     => "icon-search icon-white",
+                                                              action   => "buscarContenido();",
+                                                              title    => "[% 'Buscar' | i18n %]",
+                                          
+                                  ) ;
                       [% END %] 
 
           </div>

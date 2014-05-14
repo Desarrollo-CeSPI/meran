@@ -648,8 +648,8 @@ sub detalleCompletoINTRA {
     $t_params->{'tipo_documento'}               = $nivel1->getNombreTipoDoc();
     $t_params->{'id1'}                          = $id1;
     $t_params->{'indexado'}                     = $nivel1->estaEnIndice;
-    $t_params->{'titulo'}                       = $nivel1->getTitulo();    
-    $t_params->{'autor'}                        = $nivel1->getAutor();
+    $t_params->{'titulo'}                       = C4::AR::Utilidades::escapeData($nivel1->getTitulo());    
+    $t_params->{'autor'}                        = C4::AR::Utilidades::escapeData($nivel1->getAutor());
     $t_params->{'cantItemN1'}                   = C4::AR::Nivel3::cantNiveles3FromId1($id1,$nivel1->db);
     $t_params->{'nivel2'}                       = \@nivel2;
     #se ferifica si la preferencia "circularDesdeDetalleDelRegistro" esta seteada
