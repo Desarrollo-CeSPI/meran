@@ -589,6 +589,7 @@ sub getTablaInstanceByTableName{
       case "cat_visualizacion_opac" { $tabla = C4::Modelo::CatVisualizacionOpac->new()  }
       case "usr_estado" { $tabla = C4::Modelo::UsrEstado->new()  }
       case "usr_regularidad" { $tabla = C4::Modelo::UsrRegularidad->new()  }
+      case "usr_ref_categoria_socio" { $tabla = C4::Modelo::UsrRefCategoriaSocio->new()  }
 
       else { C4::AR::Debug::debug("getTablaInstanceByTableName()========================================= >TABLA POR NOMBRE INEXISTENTE") }
   }
