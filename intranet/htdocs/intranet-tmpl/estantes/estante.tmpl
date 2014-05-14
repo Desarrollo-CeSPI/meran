@@ -132,14 +132,31 @@
                               <div class="controls">
                                   <input class="horizontal" type="text" id="input_busqueda_contenido">
                               </div>
+
                           <script type="text/javascript">
                                 $(document).ready(function() {
                                     $('#input_busqueda_contenido').keypress(function(e){if(e.which==13){if(this.value!=''){buscarContenido();}}});
                                 });
                           </script>
                       </div>
+
+                      <div class="control-group">
+                        <label class="control-label" for="tipo_nivel3_id">
+                            [% "Tipo de documento" | i18n %] 
+                        </label>
+                        <div class="controls">
+                            [% comboTipoDocumento %]
+                        </div>
+                      </div>
           </form>
           </section>
+          <section class="center-section-form">
+            <div class="well">
+              <div class="resultados_consulta">Buscar contenido por cualquier palabra que se encuentre en el registro completo y por tipo de documento
+              </div> 
+            </div>
+          </section>
+
         </div>
       
           <div class="modal-footer">

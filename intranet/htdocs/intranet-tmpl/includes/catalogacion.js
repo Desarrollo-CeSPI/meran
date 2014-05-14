@@ -921,6 +921,7 @@ function guardarDocumentoN2(){
         objAH.tipo_ejemplar     = $('#' + _getIdComponente('910','a')).val();  
         _sacarOpciones();
         objAH.infoArrayNivel2   = MARC_OBJECT_ARRAY;
+        objAH.estantes_array    = ESTANTES_SELECCIONADOS_ARRAY; 
         objAH.id1               = ID_N1;
         objAH.id2               = ID_N2; //por si se modificó
         objAH.id2_padre         = ID_N2_PADRE;
@@ -1068,6 +1069,7 @@ function guardarModificacionDocumentoN2(){
     objAH.showOverlay       = true;
     objAH.url               = URL_PREFIX+"/catalogacion/estructura/estructuraCataloDB.pl";
     objAH.tipoAccion        = "MODIFICAR_NIVEL_2";
+    objAH.estantes_array    = ESTANTES_SELECCIONADOS_ARRAY; 
     _sacarOpciones();
     objAH.infoArrayNivel2   = MARC_OBJECT_ARRAY;   
     objAH.tipo_ejemplar     = ID_TIPO_EJEMPLAR;
