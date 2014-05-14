@@ -50,9 +50,10 @@ if($tipo eq "VER_ESTANTES"){
     my $estantes_publicos = C4::AR::Estantes::getListaEstantesPublicos();
     $t_params->{'cant_estantes'}= @$estantes_publicos;
     $t_params->{'ESTANTES'}= $estantes_publicos;
+
     C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
-}
-elsif($tipo eq "VER_SUBESTANTE"){
+
+} elsif($tipo eq "VER_SUBESTANTE"){
 
 	my ($template, $session, $t_params) = get_template_and_user(
             {template_name => "estantes/subEstante.tmpl",
@@ -65,20 +66,20 @@ elsif($tipo eq "VER_SUBESTANTE"){
                                         entorno => 'undefined'},
 					});
 	
-    my $id_estante= $obj->{'estante'};
+    my $id_estante                     = $obj->{'estante'};
+
     if($id_estante ne 0){
-	    my $estante= C4::AR::Estantes::getEstante($id_estante);
-        
-	    $t_params->{'estante'}= $estante;
+	    my $estante                    = C4::AR::Estantes::getEstante($id_estante);
+	    $t_params->{'estante'}         = $estante;
     }
 
-    my $subEstantes= C4::AR::Estantes::getSubEstantes($id_estante);
+    my $subEstantes                     = C4::AR::Estantes::getSubEstantes($id_estante);
+    $t_params->{'SUBESTANTES'}          = $subEstantes;
+    $t_params->{'cant_subestantes'}     = @$subEstantes;
 
-    $t_params->{'SUBESTANTES'}= $subEstantes;
-    $t_params->{'cant_subestantes'}= @$subEstantes;
     C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
-}
-elsif($tipo eq "VER_ESTANTE_BY_ID"){
+    
+} elsif($tipo eq "VER_ESTANTE_BY_ID"){
 
 	my ($template, $session, $t_params) = get_template_and_user(
             {template_name => "estantes/subEstante.tmpl",

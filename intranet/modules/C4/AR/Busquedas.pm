@@ -1446,6 +1446,10 @@ sub busquedaCombinada_newTemp{
         }
     }
 
+    if( ($obj_for_log->{'tipo_nivel3_name'} ne "") && ($obj_for_log->{'tipo_nivel3_name'} ne "ALL") ){
+        $query .= "  cat_ref_tipo_nivel3%".$obj_for_log->{'tipo_nivel3_name'};
+    }
+
     if ($only_available){
         $query .= ' "ref_disponibilidad_code%'.C4::Modelo::RefDisponibilidad::paraPrestamoValue.'"';
     }
