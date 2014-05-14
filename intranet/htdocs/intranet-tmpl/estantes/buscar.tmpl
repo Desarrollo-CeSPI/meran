@@ -1,0 +1,69 @@
+[% INCLUDE "intranet-top.inc" %]
+<script type="text/javascript" src="/intranet-tmpl/includes/estantesVirtuales.js">
+</script>
+
+
+<div id="contenido_estante">
+ 
+      <div class="modal-header">
+            <a class="close" data-dismiss="modal" href="#">×</a>
+            <h3> [% "Buscar Contenido" | i18n %]</h3>
+      </div>
+      <div class="modal-body">
+          <section class="center-section-form">  
+          <form class="form-horizontal" onsubmit="return false;">
+
+                      <input type="hidden" id="input_contenido_id_estante">
+                      <input type="hidden" id="input_contenido_id_padre_estante">
+                  
+                      <div class="control-group">
+                              <label class="control-label" for="input01">Ingrese el criterio de busqueda</label>
+                              <div class="controls">
+                                  <input class="horizontal" type="text" id="input_busqueda_contenido">
+                              </div>
+
+                          <script type="text/javascript">
+                                $(document).ready(function() {
+                                    $('#input_busqueda_contenido').keypress(function(e){if(e.which==13){if(this.value!=''){buscarContenido();}}});
+                                });
+                          </script>
+                      </div>
+
+                      <div class="control-group">
+                        <label class="control-label" for="tipo_nivel3_id">
+                            [% "Tipo de documento" | i18n %] 
+                        </label>
+                        <div class="controls">
+                            [% comboTipoDocumento %]
+                        </div>
+                      </div>
+          </form>
+          </section>
+          <section class="center-section-form">
+            <div class="well">
+              <div class="resultados_consulta">Buscar contenido por cualquier palabra que se encuentre en el registro completo y por tipo de documento
+              </div> 
+            </div>
+          </section>
+
+        </div>
+      
+          <div class="modal-footer">
+                      [% PERL %]
+                          print C4::AR::Filtros::action_button(
+                                                              button   => "btn btn-primary",
+                                                              id       => "buscarContBoton",
+                                                              icon     => "icon-search icon-white",
+                                                              action   => "buscarContenido();",
+                                                              title    => "[% 'Buscar' | i18n %]",
+                                          
+                                  ) ;
+                      [% END %] 
+
+          </div>
+       <div id="layer">
+          <div id="resultado_contenido_estante"> </div>
+      </div>
+</div>  
+
+[% INCLUDE "intranet-bottom.inc" %]
