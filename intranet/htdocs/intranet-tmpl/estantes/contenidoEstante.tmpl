@@ -15,7 +15,7 @@ function existeEnContenido(){
                         function(){
                        
                             if ($(this).val() == val_contenido){
-                                $('#optionsCheckbox'+$(this).val()).replaceWith("<span id=optionsCheckbox"+$(this).val()+"><a class='btn btn-danger' href='#' title='Eliminar de estante' onclick=borrarCont("+$(this).val()+","+ $('#input_contenido_id_estante').val()+","+$('#input_contenido_id_padre_estante').val()+"); id=optionsCheckbox"+$(this).val()+">"
+                                $('#optionsCheckbox'+$(this).val()).replaceWith("<span id=optionsCheckbox"+$(this).val()+"><a class='btn btn-mini btn-danger' href='#' title='Eliminar de estante' onclick=borrarCont("+$(this).val()+","+ $('#input_contenido_id_estante').val()+","+$('#input_contenido_id_padre_estante').val()+"); id=optionsCheckbox"+$(this).val()+">"
                                   +"<i class='icon-trash icon-white'></i></a></span>");
 
                             }
@@ -27,7 +27,7 @@ function existeEnContenido(){
 }
 
 function agregarCont(id2){
-           $('#optionsCheckbox'+id2).replaceWith("<span id=optionsCheckbox"+id2+"><a class='btn btn-danger' title='Eliminar de estante' href='#' onclick=borrarCont("+id2+","+ $('#input_contenido_id_estante').val()+","+$('#input_contenido_id_padre_estante').val()+"); id=optionsCheckbox"+id2+">"
+           $('#optionsCheckbox'+id2).replaceWith("<span id=optionsCheckbox"+id2+"><a class='btn btn-mini btn-danger' title='Eliminar de estante' href='#' onclick=borrarCont("+id2+","+ $('#input_contenido_id_estante').val()+","+$('#input_contenido_id_padre_estante').val()+"); id=optionsCheckbox"+id2+">"
               +"<i class='icon-trash icon-white'></i></a></span>");
             $('#eliminar_uno').val(id2) ;
             agregarContenidoAEstante(id2);
@@ -38,7 +38,7 @@ function agregarCont(id2){
 
 function borrarCont(cont, estante, padre){
 //       $('#optionsCheckbox'+cont).replaceWith("<input type=button class='btn btn-info' onclick=agregarCont("+cont+"); id=optionsCheckbox"+cont+">");
-      $('#optionsCheckbox'+cont).replaceWith("<span id=optionsCheckbox"+cont+"><a class='btn btn-success' title='Agregar a estante' href='#' onclick=agregarCont("+cont+"); id=optionsCheckbox"+cont+"><i class='icon-plus icon-white'></i></a></span>");
+      $('#optionsCheckbox'+cont).replaceWith("<span id=optionsCheckbox"+cont+"><a class='btn btn-mini btn-success' title='Agregar a estante' href='#' onclick=agregarCont("+cont+"); id=optionsCheckbox"+cont+"><i class='icon-plus icon-white'></i></a></span>");
       $('#eliminar_uno').val(cont);
       borrarContenido(cont, estante,padre);
       $('#eliminar_uno').val('');
@@ -90,8 +90,43 @@ function borrarCont(cont, estante, padre){
                             [% nomCompleto %]
                     </td>    
                     <td class="button_add_content" width="250px"> 
-                              <ul class="unstyled">
-                             
+                          <ul class="unstyled">
+                             [% IF estadoDeColeccion %]
+                            <span id="coleccion_[% id1 %]">
+                            <ul class="listado_sin_margen estado_coleccion">
+                            [% FOREACH anio IN estadoDeColeccion.keys.sort %]
+                            [% IF estadoDeColeccion.$anio.keys %]
+                            <li>
+                              [% IF anio != '#' %]<b>[% anio %]</b>[% END %]
+                              [% FOREACH volumen IN estadoDeColeccion.$anio.keys.sort %]
+                                [% IF volumen != '#' %]<br><b>[% volumen  %]</b>[% END %]
+                                <br>
+                                [% FOREACH fasciculo IN estadoDeColeccion.$anio.$volumen.keys.sort %]
+                                 <span id="optionsCheckbox[% estadoDeColeccion.$anio.$volumen.$fasciculo %]">
+                                    [% PERL %]            
+                                     print C4::AR::Filtros::action_button(
+                                          button  => "btn btn-mini btn-success",
+                                          alt_text  => "[% 'Agregar a estante' | i18n %]",
+                                          icon    => "icon-plus icon-white",
+                                          action  => 'agregarCont([% estadoDeColeccion.$anio.$volumen.$fasciculo %]);',
+                                            ) ;
+                                    [% END %]
+                                  </span>
+                                  <input type='hidden' value='[% estadoDeColeccion.$anio.$volumen.$fasciculo %]'>
+                                  <span class="help-inline">
+                                   [% HTML.escape(fasciculo) %]
+                                  </span>
+                                <br>
+                                [% END %]
+                               <br>
+                              [% END %]
+                               </li>
+                            [% END %]
+                            [% END %]
+                            </ul>
+                            </span>
+                            
+                          [% ELSE %]
                                   [% FOREACH grupos %]
                                         
                                          <li>
@@ -100,10 +135,10 @@ function borrarCont(cont, estante, padre){
                                                   <span id="optionsCheckbox[% id2 %]">
                                                         [% PERL %]            
                                                               print C4::AR::Filtros::action_button(
-                                                                                                    button  => "btn btn-success",
-                                                                                                    alt_text  => "[% 'Agregar a estante' | i18n %]",
-                                                                                                    icon    => "icon-plus icon-white",
-                                                                                                    action  => 'agregarCont([% id2 %]);',
+                                                                      button  => "btn btn-mini btn-success",
+                                                                      alt_text  => "[% 'Agregar a estante' | i18n %]",
+                                                                      icon    => "icon-plus icon-white",
+                                                                      action  => 'agregarCont([% id2 %]);',
                                                                                                  
                                                                         ) ;
                                                         [% END %]
@@ -116,10 +151,12 @@ function borrarCont(cont, estante, padre){
                                                         [% IF anio_publicacion %]
                                                                    [% anio_publicacion %]
                                                         [% END %]
+
                                                     </span>
                                                 </div> <br>
                                           </li>        
                                   [% END %]
+                              [% END %]
                                 </ul>
                             
 

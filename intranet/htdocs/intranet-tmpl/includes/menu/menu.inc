@@ -23,6 +23,15 @@
 	                                                );
 	                  [% END %]
 	              </li>
+                <li>
+                    [% PERL %]
+                    print C4::AR::Filtros::link_to( text =>     " [% 'Buscar en Estantes Virtuales' | i18n %]",
+                                    url =>      "[% url_prefix %]/estantes/buscar.pl",
+                                    icon  =>    "icon-search",
+                                                    title =>    " [% 'Buscar en Estantes Virtuales' | i18n %]"
+                                                  );
+                    [% END %]
+                </li>
 	         	  <li>
 					       [% PERL %]
 	                   print C4::AR::Filtros::link_to( text =>     " [% 'Registros y Grupos' | i18n %]",

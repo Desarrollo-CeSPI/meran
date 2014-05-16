@@ -117,12 +117,22 @@
                                                               [% contenido_estante.nivel2.getCiudadObject.getNombre %]
                                                               </td>
                                                               <td>
-                                                                    [% IF contenido_estante.nivel2.getEdicion %]
-                                                                            [% contenido_estante.nivel2.getEdicion %] &nbsp;
-                                                                    [% END %]
-                                                                    [% IF contenido_estante.nivel2.getAnio_publicacion %]
-                                                                            ([% contenido_estante.nivel2.getAnio_publicacion %])
-                                                                    [% END %]
+                                                                [% IF contenido_estante.nivel2.getNumeroRevista %]
+                                                                  [% IF contenido_estante.nivel2.getAnioRevista %]
+                                                                    [% contenido_estante.nivel2.getAnioRevista %] 
+                                                                  [% END %]
+                                                                  [% IF contenido_estante.nivel2.getVolumenRevista %]
+                                                                    [% contenido_estante.nivel2.getVolumenRevista %]
+                                                                  [% END %]
+                                                                  ([% contenido_estante.nivel2.getNumeroRevista %])
+                                                                [% ELSE %]
+                                                                  [% IF contenido_estante.nivel2.getEdicion %]
+                                                                          [% contenido_estante.nivel2.getEdicion %]
+                                                                  [% END %]
+                                                                  [% IF contenido_estante.nivel2.getAnio_publicacion %]
+                                                                          ([% contenido_estante.nivel2.getAnio_publicacion %])
+                                                                  [% END %]
+                                                                [% END %]
                                                               </td>
                                                           </tr>
                                                         [% CATCH %]
