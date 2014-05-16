@@ -1385,6 +1385,8 @@ sub busquedaCombinada_newTemp{
     $string_utf8_encoded    = unac_string('utf8',$string_utf8_encoded);
     # no se encodea nunca a utf8 antes de llegar aca    
     # $string_utf8_encoded    = Encode::decode_utf8($string_utf8_encoded);
+    # limpiamos puntuación
+    $string_utf8_encoded    = C4::AR::Utilidades::cleanPunctuation($string_utf8_encoded);
 
     $session    =   $session || CGI::Session->load();
     
