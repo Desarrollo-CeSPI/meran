@@ -3414,6 +3414,17 @@ sub escapeData{
     return ($data);
 }
 
+
+sub cleanPunctuation{
+    my ($data) = @_;
+    if($data){
+        # Pasa a entidades HTML los caracteres especiales, para que no sean interpretados como otra cosa
+        $data =~ s/[[:punct:]]/ /g; 
+        $data =~ s/[¿,¡,“,”]/ /g; # estos no lo elimina el anterior
+    }
+    return ($data);
+}
+
 sub initHASH{
 
     my ($hash_ref) = @_;
