@@ -392,7 +392,7 @@ sub getNotaGeneral{
 
      my $marc_record = MARC::Record->new_from_usmarc($self->getMarcRecord());
 
-     return $marc_record->subfield("500","a");
+     return C4::AR::Utilidades::escapeData($marc_record->subfield("500","a"));
 }
 
 =head2

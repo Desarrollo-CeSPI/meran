@@ -1,4 +1,3 @@
-[% IF estante %]
     <div id='listaEstantes'>
               <ul class="breadcrumb">
                   <li>
@@ -27,7 +26,7 @@
                      
                       [% FOREACH auxEstante IN listaEstantes %]
                           [% PERL %]
-            				            print C4::AR::Filtros::link_to( text =>     "[% auxEstante.getEstante %]",
+            				            print C4::AR::Filtros::link_to( text =>     "[% auxEstante.getEstanteStringEscaped %]",
             								      url=> '[% url_prefix %]/opac-estante.pl', 
             								      params =>   ["id_estante=[% auxEstante.getId %]"],
             								      title =>    "[% 'Mostrar Detalle del Estante' | i18n %]",
@@ -41,8 +40,6 @@
                   </li>
             </ul>
      </div>
-[% END %]
-
 
 [% IF SUBESTANTES %]
     [% IF cant_subestantes > 0 %]
@@ -67,7 +64,7 @@
                                   <tr>
                                     <td>
                                       [% PERL %]
-                                          print C4::AR::Filtros::link_to( text    =>  "[% subestante.getEstante %]",
+                                          print C4::AR::Filtros::link_to( text    =>  "[% subestante.getEstanteStringEscaped %]",
                                                                           url     =>  '[% url_prefix %]/opac-estante.pl',
                                                                           params =>   ["id_estante=[% subestante.getId %]"],
                                                                           title =>    "[% 'Mostrar Detalle del Estante' | i18n %]",
@@ -143,12 +140,23 @@
                                   [% contenido_estante.nivel2.getCiudadObject.getNombre %]
                               </td>
                               <td>
+                                [% IF contenido_estante.nivel2.getNumeroRevista %]
+                                  [% IF contenido_estante.nivel2.getAnioRevista %]
+                                    [% contenido_estante.nivel2.getAnioRevista %] 
+                                  [% END %]
+                                  [% IF contenido_estante.nivel2.getVolumenRevista %]
+                                    [% contenido_estante.nivel2.getVolumenRevista %]
+                                  [% END %]
+                                  ([% contenido_estante.nivel2.getNumeroRevista %])
+                                [% ELSE %]
+
                                   [% IF contenido_estante.nivel2.getEdicion %]
                                             [% contenido_estante.nivel2.getEdicion %] &nbsp;
                                   [% END %]
                                   [% IF contenido_estante.nivel2.getAnio_publicacion %]
                                             ([% contenido_estante.nivel2.getAnio_publicacion %])
                                   [% END %]
+                                [% END %]
                               </td>
                           </tr>
                       [% END %]

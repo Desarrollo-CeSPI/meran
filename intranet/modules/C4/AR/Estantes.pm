@@ -101,7 +101,7 @@ sub getEstanteConContenido {
     my $estantes_array_ref = C4::Modelo::CatEstante::Manager->get_cat_estante( 
                                                                                 query => \@filtros,
                                                                                 #require_objects => ['contenido.nivel2.nivel1.IndiceBusqueda' ],
-                                                                                require_objects => [ 'contenido.nivel2'],
+                                                                                with_objects => [ 'contenido.nivel2'],
                                                                                 );
     
     my $estante=  $estantes_array_ref->[0];
