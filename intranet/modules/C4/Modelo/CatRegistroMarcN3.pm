@@ -673,7 +673,7 @@ sub getNota{
 
     my $marc_record = MARC::Record->new_from_usmarc($self->getMarcRecord());
 
-    return C4::AR::Utilidades::trim($marc_record->subfield("995","u"));
+    return C4::AR::Utilidades::escapeData(C4::AR::Utilidades::trim($marc_record->subfield("995","u")));
 }
 
 sub getEstadoFromMarcrecord{
