@@ -1487,8 +1487,8 @@ sub busquedaCombinada_newTemp{
         $sphinx->SetLimits($obj_for_log->{'ini'}, $obj_for_log->{'cantR'},100000);
     }
   
-    C4::AR::Debug::debug("C4::AR::Busquedas::busquedaCombinada_newTemp => ini => ".$obj_for_log->{'ini'});
-    C4::AR::Debug::debug("C4::AR::Busquedas::busquedaCombinada_newTemp => cantR => ".$obj_for_log->{'cantR'});
+    # C4::AR::Debug::debug("C4::AR::Busquedas::busquedaCombinada_newTemp => ini => ".$obj_for_log->{'ini'});
+    # C4::AR::Debug::debug("C4::AR::Busquedas::busquedaCombinada_newTemp => cantR => ".$obj_for_log->{'cantR'});
 
     # NOTA: sphinx necesita el string decode_utf8
     

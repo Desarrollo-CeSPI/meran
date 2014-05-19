@@ -761,7 +761,7 @@ sub estadoDisponible{
     my ($self) = shift;
 
 #     return (C4::Modelo::RefEstado->getByPk($self->getIdEstado())->getNombre() eq "Disponible");
-    C4::AR::Debug::debug("CatRegistroMarcN3 => getIdEstado => ".$self->getIdEstado());
+    # C4::AR::Debug::debug("CatRegistroMarcN3 => getIdEstado => ".$self->getIdEstado());
     return (ESTADO_DISPONIBLE($self->getIdEstado()));
 }
 
