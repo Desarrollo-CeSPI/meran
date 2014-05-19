@@ -1705,6 +1705,7 @@ sub armarInfoNivel1{
                         $hash_nivel2{'portada_registro_medium'}   =  $images_n2_hash_ref->{'M'};
                         $hash_nivel2{'portada_registro_big'}      =  $images_n2_hash_ref->{'L'};
                         $hash_nivel2{'grupo'}                     =  $nivel2_array_ref->[$x]->getId2;
+
                         push(@nivel2_portadas, \%hash_nivel2);
                     }
 
@@ -1715,6 +1716,7 @@ sub armarInfoNivel1{
                         push(@nivel2_portadas_personalizadas, \%hash_nivel2_portadas);
                         $portadas_perzonalizadas_cant = $portadas_perzonalizadas_cant + $cant;
                     }
+
                 }
 
                 @result_array_paginado[$i]->{'portadas_grupo'}  = \@nivel2_portadas;
