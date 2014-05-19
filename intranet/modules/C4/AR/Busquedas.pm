@@ -451,9 +451,10 @@ sub obtenerGrupos {
     my @result;
     my $res=0;
     foreach my $nivel2 (@$niveles2){
-        $result[$res]->{'id2'}=$nivel2->getId2;
-        $result[$res]->{'edicion'}= $nivel2->getEdicion;
-        $result[$res]->{'anio_publicacion'}=$nivel2->getAnio_publicacion;
+        $result[$res]->{'id2'}                  = $nivel2->getId2;
+        $result[$res]->{'edicion'}              = $nivel2->getEdicion;
+        $result[$res]->{'anio_publicacion'}     = $nivel2->getAnio_publicacion;
+        $result[$res]->{'estantes_array'}       = C4::AR::Estantes::getEstantesById2($nivel2->getId2());
         $res++;
     }
 
@@ -518,20 +519,20 @@ sub obtenerDisponibilidadTotal{
     my $i                       = 0;
 
     foreach my $n3 (@$cat_ref_tipo_nivel3_array_ref){
-        C4::AR::Debug::debug("Busquedas => obtenerDisponibilidadTotal => BARCODE => ".$n3->getBarcode());
+        # C4::AR::Debug::debug("Busquedas => obtenerDisponibilidadTotal => BARCODE => ".$n3->getBarcode());
         if($n3->estadoDisponible){
             if ($n3->esParaPrestamo) {
             #DOMICILIO    
-                C4::AR::Debug::debug("Busquedas => obtenerDisponibilidadTotal => DOMICILIO");
+                # C4::AR::Debug::debug("Busquedas => obtenerDisponibilidadTotal => DOMICILIO");
                 $cant_para_domicilio++;
             } elsif($n3->esParaSala) {
             #PARA SALA
-                C4::AR::Debug::debug("Busquedas => obtenerDisponibilidadTotal => PARA SALA");
+                # C4::AR::Debug::debug("Busquedas => obtenerDisponibilidadTotal => PARA SALA");
                 $cant_para_sala++;
             }
         } else {
             #NO DISPONIBLE
-            C4::AR::Debug::debug("Busquedas => obtenerDisponibilidadTotal => NO DISPONIBLE ");
+            # C4::AR::Debug::debug("Busquedas => obtenerDisponibilidadTotal => NO DISPONIBLE ");
             $cant_no_disponible++;
         }
     }
