@@ -358,6 +358,34 @@ function updateBuscarContenido(responseText){
     
 }
 
+function buscarEstantePorContenido(){
+        $('#buscarContBoton').text('Cargando...'); 
+        $('#buscarContBoton').toggleClass('disabled');
+        objAH                   = new AjaxHelper(updateBuscarEstantePorContenido);
+        objAH.debug             = true;
+        objAH.showOverlay       = true;
+        objAH.url               = 'estanteDB.pl';
+        objAH.showStatusIn      = 'busqueda_contenido_estante';
+        objAH.funcion           = "changePage";
+        objAH.only_sphinx       = 1;
+        objAH.valor             = $('#input_busqueda_contenido').val();
+        objAH.tipo_nivel3_name  = $('#tipo_nivel3_id').val();
+        objAH.tipo              = 'BUSCAR_ESTANTO_POR_CONTENIDO'; 
+        objAH.orden             = ORDEN;
+        objAH.sentido_orden     = SENTIDO_ORDEN;
+        objAH.sendToServer();
+}
+
+function updateBuscarEstantePorContenido(responseText){
+    // var infoHash = JSONstring.toObject(responseText);
+    $('#buscarContBoton').replaceWith("<a id=buscarContBoton class='btn btn-primary click' onclick=buscarEstantePorContenido();><i class='icon-search icon-white'></i> Buscar</a>"); 
+    $('#resultado_contenido_estante').html(responseText);
+
+    $('#resultado_contenido_estante').show();
+    ocultarLayer();
+    
+}
+
 // function cambiarSentidoOrd(){
 //     if (objAH.sentido_orden == 1){
 //                 $('#icon_'+ ORDEN).attr("class","icon-chevron-down click");

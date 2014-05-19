@@ -231,6 +231,43 @@ elsif($tipo eq "BUSCAR_CONTENIDO"){
     
     C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
 }
+elsif($tipo eq "BUSCAR_ESTANTO_POR_CONTENIDO"){
+
+    my ($template, $session, $t_params) = get_template_and_user(
+                        {   template_name => "estantes/contenidoEstanteResult.tmpl",
+                            query => $input,
+                            type => "intranet",
+                            authnotrequired => 0,
+                            flagsrequired => {  ui => 'ANY', 
+                                                tipo_documento => 'ANY', 
+                                                accion => 'CONSULTA', 
+                                                entorno => 'undefined'},
+                        });
+                    
+    my $ini= $obj->{'ini'};
+    my ($ini,$pageNumber,$cantR)    = C4::AR::Utilidades::InitPaginador($ini);
+    $t_params->{'ini'}              = $obj->{'ini'} = $ini;
+    $t_params->{'cantR'}            = $obj->{'cantR'} = $cantR;
+    $obj->{'type'}                  = 'INTRA';
+    my $valor                       = $obj->{'valor'};
+    my $search;
+    $search->{'keyword'}            = $valor;
+    my ($cantidad, $resultId1, $suggested)      = C4::AR::Busquedas::busquedaCombinada_newTemp($search->{'keyword'}, $session, $obj);
+    $t_params->{'paginador'}        = C4::AR::Utilidades::crearPaginador($cantidad, $cantR, $pageNumber, $obj->{'funcion'}, $t_params);
+    $obj->{'cantidad'}              = $cantidad;
+    $t_params->{'sentido_orden'}    = $obj->{'sentido_orden'}; 
+    $t_params->{'orden'}            = $obj->{'orden'};
+
+
+    C4::AR::Debug::debug("SENTIDO: ".$obj->{'sentido_orden'} );
+    C4::AR::Debug::debug("ORDEN: ".$obj->{'orden'});
+
+    $t_params->{'SEARCH_RESULTS'}   = $resultId1;
+    $t_params->{'cantidad'}         = $cantidad;
+    $t_params->{'socio_busqueda'}   = $valor;
+    
+    C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
+}
 elsif($tipo eq "AGREGAR_CONTENIDO"){
     my ($user, $session, $flags)= checkauth(    $input, 
                                                 $authnotrequired, 
