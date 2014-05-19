@@ -351,7 +351,7 @@ sub getEstantesById2 {
 									      require_objects    => ['contenido'],
 									       sort_by => 'estante');
 
-    C4::AR::Debug::debug("BUSQUEDA ESTANTES de ID2 ==> ".$id2."  resultados: ".$cant." limit = ".$cantR." offset = ".$ini);
+    # C4::AR::Debug::debug("BUSQUEDA ESTANTES de ID2 ==> ".$id2."  resultados: ".$cant." limit = ".$cantR." offset = ".$ini);
 
 	if($cant > 0){
 		return ($cant, $estantes_array_ref);
