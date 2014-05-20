@@ -639,6 +639,22 @@ sub getId_ui_poseedora{
     return C4::AR::Utilidades::trim($ref);
 }
 
+sub getId_ui {
+    my ($self)      = shift;
+
+    my $id_ui =  C4::AR::Utilidades::trim($self->getId_ui_poseedora());
+    if ($id_ui){
+        return  $id_ui;
+    }
+    $id_ui =  C4::AR::Utilidades::trim($self->getId_ui_origen());
+    if ($id_ui){
+        return $id_ui;
+    }
+    return C4::AR::Preferencias::getValorPreferencia("defaultUI");
+}
+
+
+
 =head2 sub getIdEstado
 =cut
 sub getIdEstado{

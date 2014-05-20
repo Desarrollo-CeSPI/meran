@@ -889,7 +889,7 @@ sub generateBookLabelA4 {
 
     my $signatura   = $nivel3->getSignatura_topografica; 
     my $codigo      = $nivel3->getBarcode;
-    my $branchcode  = $nivel3->getId_ui_origen;
+    my $branchcode  = $nivel3->getId_ui;
     
 
     
@@ -1021,7 +1021,7 @@ sub generateBookLabel{
 
     my $signatura   = $nivel3->getSignatura_topografica; 
     my $codigo      = $nivel3->getBarcode;
-    my $branchcode  = $nivel3->getId_ui_origen;
+    my $branchcode  = $nivel3->getId_ui;
     
     #Datos de la biblioteca
     my $branch = datosBiblio($branchcode);
