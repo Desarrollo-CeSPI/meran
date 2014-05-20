@@ -338,8 +338,8 @@ sub getEstantesById2 {
     my ($id2, $ini, $cantR) = @_;
 
     my @filtros;
-    push(@filtros, ( 'contenido.id2' => { eq => $id2 }) );
-    push(@filtros, ( 'tipo' => { eq => 'public' }));
+    push(@filtros, ( 'contenido.id2'    => { eq => $id2 }) );
+    push(@filtros, ( 'tipo'             => { eq => 'public' }));
 
     my $estantes_array_ref = C4::Modelo::CatEstante::Manager->get_cat_estante( query => \@filtros, 
 									       sort_by => 'estante',
@@ -347,11 +347,11 @@ sub getEstantesById2 {
 									       limit   => $cantR,
 									       offset  => $ini,);
 
-    my $cant= C4::Modelo::CatEstante::Manager->get_cat_estante_count( query => \@filtros, 
+    my $cant = C4::Modelo::CatEstante::Manager->get_cat_estante_count( query => \@filtros, 
 									      require_objects    => ['contenido'],
 									       sort_by => 'estante');
 
-    C4::AR::Debug::debug("BUSQUEDA ESTANTES de ID2 ==> ".$id2."  resultados: ".$cant." limit = ".$cantR." offset = ".$ini);
+    # C4::AR::Debug::debug("BUSQUEDA ESTANTES de ID2 ==> ".$id2."  resultados: ".$cant." limit = ".$cantR." offset = ".$ini);
 
 	if($cant > 0){
 		return ($cant, $estantes_array_ref);

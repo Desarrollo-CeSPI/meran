@@ -451,9 +451,10 @@ sub obtenerGrupos {
     my @result;
     my $res=0;
     foreach my $nivel2 (@$niveles2){
-        $result[$res]->{'id2'}=$nivel2->getId2;
-        $result[$res]->{'edicion'}= $nivel2->getEdicion;
-        $result[$res]->{'anio_publicacion'}=$nivel2->getAnio_publicacion;
+        $result[$res]->{'id2'}                  = $nivel2->getId2;
+        $result[$res]->{'edicion'}              = $nivel2->getEdicion;
+        $result[$res]->{'anio_publicacion'}     = $nivel2->getAnio_publicacion;
+        $result[$res]->{'estantes_array'}       = C4::AR::Estantes::getEstantesById2($nivel2->getId2());
         $res++;
     }
 
@@ -518,20 +519,20 @@ sub obtenerDisponibilidadTotal{
     my $i                       = 0;
 
     foreach my $n3 (@$cat_ref_tipo_nivel3_array_ref){
-        C4::AR::Debug::debug("Busquedas => obtenerDisponibilidadTotal => BARCODE => ".$n3->getBarcode());
+        # C4::AR::Debug::debug("Busquedas => obtenerDisponibilidadTotal => BARCODE => ".$n3->getBarcode());
         if($n3->estadoDisponible){
             if ($n3->esParaPrestamo) {
             #DOMICILIO    
-                C4::AR::Debug::debug("Busquedas => obtenerDisponibilidadTotal => DOMICILIO");
+                # C4::AR::Debug::debug("Busquedas => obtenerDisponibilidadTotal => DOMICILIO");
                 $cant_para_domicilio++;
             } elsif($n3->esParaSala) {
             #PARA SALA
-                C4::AR::Debug::debug("Busquedas => obtenerDisponibilidadTotal => PARA SALA");
+                # C4::AR::Debug::debug("Busquedas => obtenerDisponibilidadTotal => PARA SALA");
                 $cant_para_sala++;
             }
         } else {
             #NO DISPONIBLE
-            C4::AR::Debug::debug("Busquedas => obtenerDisponibilidadTotal => NO DISPONIBLE ");
+            # C4::AR::Debug::debug("Busquedas => obtenerDisponibilidadTotal => NO DISPONIBLE ");
             $cant_no_disponible++;
         }
     }
@@ -1536,8 +1537,8 @@ sub busquedaCombinada_newTemp{
         $sphinx->SetLimits($obj_for_log->{'ini'}, $obj_for_log->{'cantR'},100000);
     }
   
-    C4::AR::Debug::debug("C4::AR::Busquedas::busquedaCombinada_newTemp => ini => ".$obj_for_log->{'ini'});
-    C4::AR::Debug::debug("C4::AR::Busquedas::busquedaCombinada_newTemp => cantR => ".$obj_for_log->{'cantR'});
+    # C4::AR::Debug::debug("C4::AR::Busquedas::busquedaCombinada_newTemp => ini => ".$obj_for_log->{'ini'});
+    # C4::AR::Debug::debug("C4::AR::Busquedas::busquedaCombinada_newTemp => cantR => ".$obj_for_log->{'cantR'});
 
     # NOTA: sphinx necesita el string decode_utf8
     
@@ -1755,6 +1756,7 @@ sub armarInfoNivel1{
                         $hash_nivel2{'portada_registro_medium'}   =  $images_n2_hash_ref->{'M'};
                         $hash_nivel2{'portada_registro_big'}      =  $images_n2_hash_ref->{'L'};
                         $hash_nivel2{'grupo'}                     =  $nivel2_array_ref->[$x]->getId2;
+
                         push(@nivel2_portadas, \%hash_nivel2);
                     }
 
@@ -1765,6 +1767,7 @@ sub armarInfoNivel1{
                         push(@nivel2_portadas_personalizadas, \%hash_nivel2_portadas);
                         $portadas_perzonalizadas_cant = $portadas_perzonalizadas_cant + $cant;
                     }
+
                 }
 
                 @result_array_paginado[$i]->{'portadas_grupo'}  = \@nivel2_portadas;
