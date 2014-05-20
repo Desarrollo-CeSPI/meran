@@ -125,7 +125,15 @@ function borrarCont(cont, estante, padre){
                             [% END %]
                             </ul>
                             </span>
-                            
+                           <script type="text/javascript">$("#coleccion_[% id1 %]").expander({
+                              slicePoint: 2000, 
+                              widow: 10,
+                              expandEffect: 'fadeIn', 
+                              expandText: '<i class="icon-arrow-down"></i>',
+                              userCollapseText: '<i class="icon-arrow-up"></i>',
+                              expandPrefix: '',
+                            });
+                           </script>
                           [% ELSE %]
                                   [% FOREACH grupos %]
                                         
