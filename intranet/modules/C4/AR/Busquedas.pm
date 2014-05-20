@@ -912,6 +912,7 @@ sub getSuggestion{
     my $speller = Text::Aspell->new;
     my $lang = C4::AR::Auth::getUserLocale();
     C4::AR::Debug::debug("******************* USER LANG DE SUGGESTIONS: ".$lang);
+    C4::AR::Debug::debug("******************* SUGGESTION!!!!!: ".suggestion($search));
 
     my $only_sphinx        = 0;
     my $only_available     = 0;
@@ -949,6 +950,55 @@ sub getSuggestion{
         }
     }
     return (0);
+}
+
+sub buildTrigrams {
+    my ($keyword) = @_;
+    my $t = "__" . $keyword . "__";
+
+    my $trigrams = "";
+    for (my $i=0; $i<length($t)-2; $i++ ){
+        $trigrams .= substr ( $t, $i, 3 ) . " ";
+    }
+
+    return $trigrams;
+}
+
+sub suggestion {
+    my ($keyword) = @_;
+
+    my $trigrams = buildTrigrams ( $keyword );
+    my $query = "\"$trigrams\"/1";
+    my $len = length($keyword);
+    my $delta = 2;
+
+    my $sphinx          = Sphinx::Search->new();
+
+    $sphinx->SetMatchMode ( 'SPH_MATCH_EXTENDED' );
+    $sphinx->SetRankingMode ( 'SPH_RANK_WORDCOUNT' );
+    $sphinx->SetFilterRange ( "len", $len-$delta, $len+$delta );
+    $sphinx->SetSelect ( "*, @"."weight+$delta-abs(len-$len) AS myrank" );
+    $sphinx->SetSortMode ( 'SPH_SORT_EXTENDED', "myrank DESC, freq DESC" );
+    #$sphinx->SetArrayResult ( true );
+
+    $sphinx->SetLimits ( 0, 10 );
+    my $res = $sphinx->Query ( $query, "suggest" );
+
+    if ((!$res) || (!$res->{"matches"})){
+        return 0;
+    }
+
+    my $matches = $res->{'matches'};
+    foreach my $match  (@$matches)
+    {
+      my  $suggested = $match->{"attrs"}{"keyword"};
+
+          C4::AR::Debug::debug("******************* SUGGESTION!!!!!: ". $suggested );
+      if ( Text::Levenshtein::distance( $keyword, $suggested ) lt 2 ){
+            return $suggested;
+     }
+    }
+    return $keyword;
 }
 
 sub busquedaAvanzada_newTemp{
