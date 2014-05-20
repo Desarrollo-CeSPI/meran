@@ -10,6 +10,9 @@ use C4::Modelo::RefEstado::Manager;
 use C4::Modelo::IndiceBusqueda;
 use C4::Modelo::IndiceBusqueda::Manager;
 
+use C4::Modelo::IndiceSuggest;
+use C4::Modelo::IndiceSuggest::Manager;
+
 use C4::Modelo::CatRegistroMarcN1;
 use C4::Modelo::CatRegistroMarcN1::Manager;
 
@@ -189,8 +192,28 @@ sub generar_indice {
 =back
 
 =cut
+sub limpiarIndiceSugerencias{
+    my $indice_sugerencia_array_ref = C4::Modelo::IndiceSuggest::Manager->get_indice_suggest();
+    foreach my $indice (@$indice_sugerencia_array_ref){
+            $indice->delete();
+    }
+}
 
-
+sub generar_sugerencias {
+  limpiarIndiceSugerencias();
+  my $mgr = Sphinx::Manager->new({ config_file => C4::Context->config("sphinx_conf") , bindir => C4::Context->config("sphinx_bin_dir"), searchd_bin=> C4::Context->config("sphinx_bin_dir")});
+  sphinx_start($mgr);
+  my $index_to_use = C4::AR::Preferencias::getValorPreferencia("nombre_indice_sphinx") || 'test1';
+  my @args;
+  push (@args, $index_to_use);
+  push (@args, '--buildstops');
+  push (@args, '/tmp/dict.txt');
+  push (@args, '100000');
+  push (@args, '--buildfreqs');
+  push (@args, '--quiet');
+  $mgr->indexer_args(\@args);
+  $mgr->run_indexer();
+}
 
 END { }
 1;

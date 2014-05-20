@@ -370,3 +370,14 @@ UPDATE usr_socio SET cumple_requisito = '0000000000:00:00' WHERE cumple_requisit
 
 ## 15/05/2014
 update pref_preferencia_sistema set categoria="sistema" where variable ='titulo_nombre_ui' ;
+
+## 20/05/2014
+
+
+CREATE TABLE indice_suggest (
+	id			INTEGER PRIMARY KEY AUTO_INCREMENT NOT NULL,
+	keyword		VARCHAR(255) NOT NULL,
+	trigrams	VARCHAR(255) NOT NULL,
+	freq		INTEGER NOT NULL,
+	UNIQUE(keyword)
+);
