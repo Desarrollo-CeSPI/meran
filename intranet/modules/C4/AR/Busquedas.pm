@@ -967,6 +967,9 @@ sub buildTrigrams {
 
 sub suggestion {
     my ($keyword) = @_;
+    
+    use Sphinx::Search;
+    use Text::LevenshteinXS qw(distance);
 
     my $trigrams = buildTrigrams ( $keyword );
     my $query = "\"$trigrams\"/1";
@@ -975,12 +978,11 @@ sub suggestion {
 
     my $sphinx          = Sphinx::Search->new();
 
-    $sphinx->SetMatchMode ( 'SPH_MATCH_EXTENDED' );
-    $sphinx->SetRankingMode ( 'SPH_RANK_WORDCOUNT' );
+    $sphinx->SetMatchMode (  SPH_MATCH_EXTENDED2 );
+    $sphinx->SetRankingMode ( SPH_RANK_WORDCOUNT );
     $sphinx->SetFilterRange ( "len", $len-$delta, $len+$delta );
-    $sphinx->SetSelect ( "*, @"."weight+$delta-abs(len-$len) AS myrank" );
-    $sphinx->SetSortMode ( 'SPH_SORT_EXTENDED', "myrank DESC, freq DESC" );
-    #$sphinx->SetArrayResult ( true );
+    $sphinx->SetSelect ( "*, \@weight+$delta-abs(len-$len) AS myrank" );
+    $sphinx->SetSortMode ( SPH_SORT_EXTENDED, "myrank DESC, freq DESC" );
 
     $sphinx->SetLimits ( 0, 10 );
     my $res = $sphinx->Query ( $query, "suggest" );
@@ -989,13 +991,14 @@ sub suggestion {
         return 0;
     }
 
-    my $matches = $res->{'matches'};
+    use Data::Dumper;
+    #C4::AR::Debug::debug( Dumper($res));
+    my $matches = $res->{"matches"};
     foreach my $match  (@$matches)
     {
-      my  $suggested = $match->{"attrs"}{"keyword"};
-
-          C4::AR::Debug::debug("******************* SUGGESTION!!!!!: ". $suggested );
-      if ( Text::Levenshtein::distance( $keyword, $suggested ) lt 2 ){
+      my  $suggested = $match->{"keyword"};
+          C4::AR::Debug::debug("******************* SUGGESTION!!!!!: ". $suggested." ditancia ".distance( $keyword, $suggested ) );
+      if ( distance( $keyword, $suggested ) le 2 ){
             return $suggested;
      }
     }
@@ -1582,7 +1585,7 @@ sub busquedaCombinada_newTemp{
     }
 
     if ( (!$from_suggested) && ($total_found == 0) && ($tipo ne 'SPH_MATCH_PHRASE') ){
-        $string_suggested = getSuggestion($string_utf8_encoded,$total_found,$obj_for_log,$sphinx_options);
+        $string_suggested = suggestion($string_utf8_encoded);
     }
     
   

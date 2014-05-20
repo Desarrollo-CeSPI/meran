@@ -31,7 +31,8 @@ use Fcntl qw(:flock);
 unless (!flock(DATA, LOCK_EX|LOCK_NB)) {
     C4::AR::Debug::debug("CRON => reindexar.pl!!!!!");
     if (($ENV{'REMOTE_ADDR'} eq '127.0.0.1') || (!$ENV{'REMOTE_ADDR'})) {
-	    C4::AR::Sphinx::reindexar();
+	 	C4::AR::Sphinx::reindexar();
+		C4::AR::Sphinx::generar_sugerencias();
 	} else {
 	    C4::AR::Debug::debug("reindexar => se intento correr script de una dir. IP no local => ".$ENV{'REMOTE_ADDR'});
 	} 
