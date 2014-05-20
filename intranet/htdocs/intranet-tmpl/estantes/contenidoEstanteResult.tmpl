@@ -1,0 +1,168 @@
+ [% USE HTML%]
+
+<script type="text/javascript">
+
+$(document).ready(function(){
+    existeEnContenido();
+});
+
+
+function existeEnContenido(){
+       $('#tablaResult input').each(
+                function(){
+                    val_contenido= $(this).val();
+                    $('#tablaResultCont input').each(
+                        function(){
+                       
+                            if ($(this).val() == val_contenido){
+                                $('#optionsCheckbox'+$(this).val()).replaceWith("<span id=optionsCheckbox"+$(this).val()+"><a class='btn btn-mini btn-danger' href='#' title='Eliminar de estante' onclick=borrarCont("+$(this).val()+","+ $('#input_contenido_id_estante').val()+","+$('#input_contenido_id_padre_estante').val()+"); id=optionsCheckbox"+$(this).val()+">"
+                                  +"<i class='icon-trash icon-white'></i></a></span>");
+
+                            }
+
+                        }
+                    );
+                }
+        );   
+}
+
+function agregarCont(id2){
+           $('#optionsCheckbox'+id2).replaceWith("<span id=optionsCheckbox"+id2+"><a class='btn btn-mini btn-danger' title='Eliminar de estante' href='#' onclick=borrarCont("+id2+","+ $('#input_contenido_id_estante').val()+","+$('#input_contenido_id_padre_estante').val()+"); id=optionsCheckbox"+id2+">"
+              +"<i class='icon-trash icon-white'></i></a></span>");
+            $('#eliminar_uno').val(id2) ;
+            agregarContenidoAEstante(id2);
+            $('#eliminar_uno').val('');
+   
+}
+
+
+function borrarCont(cont, estante, padre){
+//       $('#optionsCheckbox'+cont).replaceWith("<input type=button class='btn btn-info' onclick=agregarCont("+cont+"); id=optionsCheckbox"+cont+">");
+      $('#optionsCheckbox'+cont).replaceWith("<span id=optionsCheckbox"+cont+"><a class='btn btn-mini btn-success' title='Agregar a estante' href='#' onclick=agregarCont("+cont+"); id=optionsCheckbox"+cont+"><i class='icon-plus icon-white'></i></a></span>");
+      $('#eliminar_uno').val(cont);
+      borrarContenido(cont, estante,padre);
+      $('#eliminar_uno').val('');
+}
+</script>
+
+
+<fieldset class="resultados_busqueda">
+    <legend class="titulo_legend">[% "Resultados de la b&uacute;squeda" | i18n %]:</legend>
+            <input type="hidden" class="btn btn-info" value="" id="eliminar_uno">  
+            <div class="well">
+                <div class="resultados_consulta">[% "Ha buscado por" | i18n %]: <strong>[% HTML.escape(socio_busqueda) %]</strong></div> 
+                 [% IF cantidad %]
+                          <div class="resultados_consulta">[% "Total de registros" | i18n %]: <strong>[% cantidad %]</strong></div>
+                 [% END %]
+            </div>
+         [% IF cantidad %]
+                  <div class="contenedor_paginador">[% paginador %]</div>  
+                  [% PERL %]
+                      print C4::AR::Filtros::sortableTableHeader(   
+                                        id              => "tablaResultCont",
+                                        class           => "table table-bordered",
+                                        selectAll_id    => "",
+                                        columns         => ["[% 'T&iacute;tulo' | i18n %]","[% 'Autor' | i18n %]","[% 'Edici&oacute;n' | i18n %]",
+                                                            ],
+
+                                        sortable_fields  => { 'T&iacute;tulo' =>'titulo', 
+                                                              'Autor' => 'autor',
+                                                              'Edici&oacute;n' => ''
+                                                            },
+                                        order => "[% orden %]",
+                                        order_direction => "[% sentido_orden %]",
+                                        order_name_function => "busqueda_contenido"
+                      );
+                  [% END %]
+
+            [% FOREACH SEARCH_RESULTS %]
+                <tr class="asasdas">
+                    <td>
+                        [% PERL %]
+                            print C4::AR::Filtros::link_to( text =>     "[% titulo %]",
+                                                            url=>"[% url_prefix %]/catalogacion/estructura/detalle.pl", 
+                                                            params =>   ["id1=[% id1 %]"],
+                                                            title =>    "[% 'Mostrar Detalle del Ejemplar' | i18n %]"
+                                                        ) ;
+                        [% END %]
+                    </td>
+                    <td>
+                            [% nomCompleto %]
+                    </td>    
+                    <td class="button_add_content" width="250px"> 
+                          <ul class="unstyled">
+                             [% IF estadoDeColeccion %]
+                            <span id="coleccion_[% id1 %]">
+                            <ul class="listado_sin_margen estado_coleccion">
+                            [% FOREACH anio IN estadoDeColeccion.keys.sort %]
+                            [% IF estadoDeColeccion.$anio.keys %]
+                            <li>
+                              [% IF anio != '#' %]<b>[% anio %]</b>[% END %]
+                              [% FOREACH volumen IN estadoDeColeccion.$anio.keys.sort %]
+                                [% IF volumen != '#' %]<br><b>[% volumen  %]</b>[% END %]
+                                <br>
+                                [% FOREACH fasciculo IN estadoDeColeccion.$anio.$volumen.keys.sort %]
+                                 <span id="optionsCheckbox[% estadoDeColeccion.$anio.$volumen.$fasciculo %]">
+                                    [% PERL %]            
+                                     print C4::AR::Filtros::action_button(
+                                          button  => "btn btn-mini btn-success",
+                                          alt_text  => "[% 'Agregar a estante' | i18n %]",
+                                          icon    => "icon-plus icon-white",
+                                          action  => 'agregarCont([% estadoDeColeccion.$anio.$volumen.$fasciculo %]);',
+                                            ) ;
+                                    [% END %]
+                                  </span>
+                                  <input type='hidden' value='[% estadoDeColeccion.$anio.$volumen.$fasciculo %]'>
+                                  <span class="help-inline">
+                                   [% HTML.escape(fasciculo) %]
+                                  </span>
+                                <br>
+                                [% END %]
+                               <br>
+                              [% END %]
+                               </li>
+                            [% END %]
+                            [% END %]
+                            </ul>
+                            </span>
+                            
+                          [% ELSE %]
+                                  [% FOREACH grupos %]
+                                   <li>
+                                      <div>
+                                          <span class="help-inline">
+                                              <strong>
+                                                Edición #[% id2 %] -  
+                                                [% IF edicion %]
+                                                    [% edicion %]
+                                                [% END %]
+                                                [% IF anio_publicacion %]
+                                                    [% anio_publicacion %]
+                                                [% END %]
+                                              </strong>
+                                              <ul>
+                                                [% FOREACH e IN estantes_array %]
+                                                  <li>[% e.getEstante %]</li>
+                                                [% END %]
+                                              </ul>
+                                          </span>
+                                      </div> 
+                                      <br>
+                                    </li>        
+                                  [% END %]
+                              [% END %]
+                                </ul>
+                   </td>
+
+                </tr>
+            [% END %]
+            </table>
+
+            [% ELSE %]
+                 <div class="alert alert-info">[% 'No hay registros que coincidan con el criterio de busqueda'| i18n %]</div>
+             [% END %]
+          </div>
+        </div>
+</div>
+</fieldset>
+

@@ -24,7 +24,7 @@
 
                           <script type="text/javascript">
                                 $(document).ready(function() {
-                                    $('#input_busqueda_contenido').keypress(function(e){if(e.which==13){if(this.value!=''){buscarContenido();}}});
+                                    $('#input_busqueda_contenido').keypress(function(e){if(e.which==13){if(this.value!=''){buscarEstantePorContenido();}}});
                                 });
                           </script>
                       </div>
@@ -54,7 +54,7 @@
                                                               button   => "btn btn-primary",
                                                               id       => "buscarContBoton",
                                                               icon     => "icon-search icon-white",
-                                                              action   => "buscarContenido();",
+                                                              action   => "buscarEstantePorContenido();",
                                                               title    => "[% 'Buscar' | i18n %]",
                                           
                                   ) ;
