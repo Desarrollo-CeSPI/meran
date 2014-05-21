@@ -139,7 +139,7 @@ sub printAsTableElement{
   
     foreach my $campo (@$campos){
         
-        $td.="<td>".$self->{$campo}."</td>";
+        $td.="<td>".C4::AR::Utilidades::escapeData($self->{$campo})."</td>";
     }
     return ($td);
 }

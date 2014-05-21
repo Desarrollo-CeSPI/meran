@@ -246,7 +246,7 @@ sub printAsTableElement{
     my $editId = 1;
     foreach my $campo (@$campos){
         
-        $td.="<td class='editable' id='".$self->getAlias."___".$campo."___".$self->getPkValue."___".$editId."'>".$self->{$campo}."</td>";
+        $td.="<td class='editable' id='".$self->getAlias."___".$campo."___".$self->getPkValue."___".$editId."'>". C4::AR::Utilidades::escapeData($self->{$campo})."</td>";
         $editId++;
     }
     return ($td);
