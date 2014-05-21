@@ -1,11 +1,11 @@
-package C4::Modelo::IndiceSuggest;
+package C4::Modelo::IndiceSugerencia;
 
 use strict;
 
 use base qw(C4::Modelo::DB::Object::AutoBase2);
 
 __PACKAGE__->meta->setup(
-    table   => 'indice_suggest',
+    table   => 'indice_sugerencia',
 
     columns => [
         id              => { type => 'serial', overflow => 'truncate', not_null => 1 },

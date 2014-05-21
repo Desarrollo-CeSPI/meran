@@ -10,8 +10,8 @@ use C4::Modelo::RefEstado::Manager;
 use C4::Modelo::IndiceBusqueda;
 use C4::Modelo::IndiceBusqueda::Manager;
 
-use C4::Modelo::IndiceSuggest;
-use C4::Modelo::IndiceSuggest::Manager;
+use C4::Modelo::IndiceSugerencia;
+use C4::Modelo::IndiceSugerencia::Manager;
 
 use C4::Modelo::CatRegistroMarcN1;
 use C4::Modelo::CatRegistroMarcN1::Manager;
@@ -193,7 +193,7 @@ sub generar_indice {
 
 =cut
 sub limpiarIndiceSugerencias{
-    my $indice_sugerencia_array_ref = C4::Modelo::IndiceSuggest::Manager->get_indice_suggest();
+    my $indice_sugerencia_array_ref = C4::Modelo::IndiceSugerencia::Manager->get_indice_sugerencia();
     foreach my $indice (@$indice_sugerencia_array_ref){
             $indice->delete();
     }
@@ -207,12 +207,26 @@ sub generar_sugerencias {
   my @args;
   push (@args, $index_to_use);
   push (@args, '--buildstops');
-  push (@args, '/tmp/dict.txt');
+  push (@args, '/tmp/index_tops.txt');
   push (@args, '100000');
   push (@args, '--buildfreqs');
   push (@args, '--quiet');
   $mgr->indexer_args(\@args);
   $mgr->run_indexer();
+  
+  if(open(TOPS,'/tmp/index_tops.txt')){
+    while (my $top = <TOPS>) {
+        my @datos = split ' ',$top;
+        #se toman los que tengan alguna frecuencia mayor a la minima configurada al menos y que no sean solo números o tengan al menos 3 caracteres
+        if(!($datos[0] =~ /^\d+$/)&&(length($datos[0]) ge 3)&&($datos[1] >= C4::AR::Preferencias::getValorPreferencia('ocurrencia_sugerencia_sphinx'))){          
+          my $indice_sugerencia = C4::Modelo::IndiceSugerencia->new();
+          $indice_sugerencia->setKeyword($datos[0]);
+          $indice_sugerencia->setTrigrams(C4::AR::Busquedas::buildTrigrams($datos[0]));
+          $indice_sugerencia->setFreq($datos[1]);
+          $indice_sugerencia->save();
+        }
+    }
+  }
 }
 
 END { }
