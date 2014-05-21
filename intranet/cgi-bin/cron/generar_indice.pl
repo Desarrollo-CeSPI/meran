@@ -29,7 +29,10 @@ use C4::AR::CacheMeran;
 	 my $tt1 = time();
 
 	C4::AR::Sphinx::generar_indice($id1,$flag);
-	 
+	
+	#Agrego generar sugerencias del indice
+	C4::AR::Sphinx::generar_sugerencias();
+
 	 my $end1 = time();
 	 my $tardo1=($end1 - $tt1);
 	 my $min= $tardo1/60;

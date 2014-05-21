@@ -374,10 +374,16 @@ update pref_preferencia_sistema set categoria="sistema" where variable ='titulo_
 ## 20/05/2014
 
 
-CREATE TABLE indice_suggest (
+CREATE TABLE indice_sugerencia (
 	id			INTEGER PRIMARY KEY AUTO_INCREMENT NOT NULL,
 	keyword		VARCHAR(255) NOT NULL,
 	trigrams	VARCHAR(255) NOT NULL,
 	freq		INTEGER NOT NULL,
 	UNIQUE(keyword)
 );
+
+INSERT INTO  pref_preferencia_sistema (id ,variable ,value ,explanation ,options ,type ,categoria ,label ,explicacion_interna ,revisado)
+VALUES 
+( NULL ,  'nombre_indice_sugerencia_sphinx',  'sugerencia',  'Indice de sugerencias de Sphinx a utilizar', NULL ,  'text',  'interna',  'Nombre Indice Sugerencia Sphinx', 'Indice de sugerencias de Sphinx a utilizar',  '0'),
+( NULL ,  'distancia_sugerencia_sphinx',  '3',  'Distancia de Levenshtein (Distancia entre palabras) mínima que se acepta para dar una sugerencia.', NULL ,  'text',  'sistema', 'Distancia sugerencia sphinx',  'Distancia de Levenshtein (Distancia entre palabras) mínima que se acepta para dar una sugerencia.',  '0'),
+( NULL , 'ocurrencia_sugerencia_sphinx', '10', 'Cantidad mínima de ocurrencias que debe tener una palabra para ingresar a la lista de sugerencias.', NULL, 'text', 'sistema', 'Ocurrencias Sugerencia Sphinx', 'Cantidad mínima de ocurrencias que debe tener una palabra para ingresar a la lista de sugerencias.', '0');

@@ -985,24 +985,22 @@ sub suggestion {
     $sphinx->SetSortMode ( SPH_SORT_EXTENDED, "myrank DESC, freq DESC" );
 
     $sphinx->SetLimits ( 0, 10 );
-    my $res = $sphinx->Query ( $query, "suggest" );
+    my $res = $sphinx->Query ( $query,  C4::AR::Preferencias::getValorPreferencia("nombre_indice_sugerencia_sphinx") );
 
     if ((!$res) || (!$res->{"matches"})){
         return 0;
     }
 
-    use Data::Dumper;
-    #C4::AR::Debug::debug( Dumper($res));
     my $matches = $res->{"matches"};
     foreach my $match  (@$matches)
     {
       my  $suggested = $match->{"keyword"};
           C4::AR::Debug::debug("******************* SUGGESTION!!!!!: ". $suggested." ditancia ".distance( $keyword, $suggested ) );
-      if ( distance( $keyword, $suggested ) le 2 ){
+      if ( distance( $keyword, $suggested ) le  C4::AR::Preferencias::getValorPreferencia("distancia_sugerencia_sphinx") ){
             return $suggested;
      }
     }
-    return $keyword;
+    return '';
 }
 
 sub busquedaAvanzada_newTemp{
