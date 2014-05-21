@@ -3409,7 +3409,7 @@ sub escapeData{
     if($data){
         # Pasa a entidades HTML los caracteres especiales, para que no sean interpretados como otra cosa
         #$data = encode_entities($data);
-        $data = encode_entities($data, '<>&"“”¿\'');
+        $data = encode_entities($data, '<>&"“”\'');
     }
     return ($data);
 }
