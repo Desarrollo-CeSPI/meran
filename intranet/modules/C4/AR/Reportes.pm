@@ -2117,8 +2117,7 @@ sub reporteGenEtiquetas{
     }
 
     if( $params->{'codBarra'} ne "") {
-        $query .= ' @string "'."barcode%".$sphinx->EscapeString($params->{'codBarra'})."*'";
-        $query .='*"';
+        $query .= ' @string "'.'barcode%'.$sphinx->EscapeString($params->{'codBarra'}).'*"';
     }
 
     if ($params->{'signatura'}){
@@ -2168,9 +2167,16 @@ sub reporteGenEtiquetas{
     foreach my $res (@$resultsarray){
         my %hash_temp;
         $hash_temp{'nivel1'}= $res;
-        $hash_temp{'nivel2'}= C4::AR::Nivel2::getNivel2FromId1($res->{'id1'});
-        $hash_temp{'nivel3'}= C4::AR::Nivel3::getNivel3FromId2(%hash_temp->{'nivel2'}[0]->{'id'});
- 
+        my $grupos = C4::AR::Nivel2::getNivel2FromId1($res->{'id1'});
+        my @niveles3 = ();
+
+        foreach my $grupo (@$grupos) {
+            my $ejemplares = C4::AR::Nivel3::getNivel3FromId2($grupo->{'id'});
+            push (@niveles3, @$ejemplares);
+        }
+
+        $hash_temp{'nivel2'} = $grupos;
+        $hash_temp{'nivel3'}=\@niveles3;
         
         push (@datos, \%hash_temp);
     
@@ -2178,7 +2184,7 @@ sub reporteGenEtiquetas{
     }      
 
 
-C4::AR::Debug::debug($total_found);
+    C4::AR::Debug::debug($total_found);
 
     return ($total_found, \@datos);
 }
