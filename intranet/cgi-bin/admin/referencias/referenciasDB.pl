@@ -72,7 +72,7 @@ C4::AR::Debug::debug($value);
                         debug => 1,
                     });
 
-    $t_params->{'value'} = $value;
+    $t_params->{'value'} = C4::AR::Utilidades::escapeData($value);
 
     C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
 }
