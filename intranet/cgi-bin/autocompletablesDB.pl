@@ -131,6 +131,6 @@ elsif ($accion eq 'autocomplete_nivel2_id'){
 
 
 C4::AR::Auth::print_header($session);
-print $result;
+print C4::AR::Utilidades::escapeData($result);
 
 1;
