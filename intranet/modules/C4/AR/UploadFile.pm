@@ -188,9 +188,11 @@ sub uploadAdjuntoNovedadOpac{
                                         xls
                                         doc
                                         docx
+                                        xlsx
                                         zip
                                         rft
                                         odt
+                                        ods
                                         msword
                                     );
     
@@ -214,6 +216,12 @@ sub uploadAdjuntoNovedadOpac{
                 $mime_type = 'docx';
         } 
     
+        # Parche para que no se interpreten como zip los archivos docx
+        if ((@nombreYextension[1] eq "xlsx") && ($mime_type eq "zip")){
+                $mime_type = 'xlsx';
+        } 
+    
+
         if($notBinary){
         
             #no hay que escribirlo con binmode
@@ -405,7 +413,7 @@ sub uploadFile{
     my $msg                     = '';
     my $size                    = 0;
     my $msg_object              = C4::AR::Mensajes::create();
-    my @extensiones_permitidas  = ("odt","xls");
+    my @extensiones_permitidas  = ("doc","docx","odt","ods","pdf","xls","xlsx","zip");
 
     my @nombreYextension        = split('\.',$filepath);
 
@@ -452,7 +460,7 @@ sub uploadDocument {
 
     if (C4::AR::Preferencias::getPreferencia("e_documents")){
 
-        my @extensiones_permitidas=("bmp","jpg","gif","png","jpeg","doc","docx","odt","pdf","xls","zip","rar");
+        my @extensiones_permitidas=("bmp","jpg","gif","png","jpeg","doc","docx","odt","ods","pdf","xls","xlsx","zip","rar");
         my $size = scalar(@nombreYextension) - 1;
         my $ext= @nombreYextension[$size];
 
@@ -688,8 +696,10 @@ sub uploadIndiceFile{
                                         doc
                                         docx
                                         odt
+                                        ods
                                         pdf
                                         xls
+                                        xlsx
                                     );
 
     # my @extensiones_permitidas=("bmp","jpg","gif","png","jpeg","doc","docx","odt","pdf","xls");
