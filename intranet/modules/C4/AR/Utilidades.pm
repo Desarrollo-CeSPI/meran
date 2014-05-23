@@ -4715,7 +4715,7 @@ sub isValidFile{
 
     $file_type = $flm->checktype_filename($file_path);
 
-    my @extensiones_permitidas=("bmp","jpg","gif","png","jpeg","msword","docx","odt","pdf","xls","zip","rar");
+    my @extensiones_permitidas=("bmp","jpg","gif","png","jpeg","msword","docx","odt","pdf","xls","xlsx","zip","rar");
     my @nombreYextension=split('\.',$file_path);
 
     C4::AR::Debug::debug("UploadDocument ====== > FileType: ".$file_type);
@@ -4723,7 +4723,7 @@ sub isValidFile{
     C4::AR::Debug::debug("UploadDocument ====== > Extension: ".@nombreYextension[1]);
     my $size = scalar(@nombreYextension) - 1;
 
-    if (!( @nombreYextension[$size] =~ m/bmp|jpg|gif|png|jpeg|msword|docx|odt|pdf|xls|zip/i) ) {
+    if (!( @nombreYextension[$size] =~ m/bmp|jpg|gif|png|jpeg|msword|docx|odt|ods|pdf|xls|xlsx|zip/i) ) {
         $return_value = 0;
     }
 
