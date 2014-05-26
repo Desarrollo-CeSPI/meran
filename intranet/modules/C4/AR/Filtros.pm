@@ -74,6 +74,44 @@ sub crearCheckButtonsBootstrap {
 
 }
 
+sub showPermisosActuales {
+
+    my $params  = shift;
+
+    # el tipo lo usamos como id en el div generado
+    my $tipo    = shift;
+
+    my $text    = '<div class="btn-group" id="' . $tipo . '_actual" >';
+
+
+    if ($params->{'TODOS'}) { 
+        $text .= '<button class="btn btn-danger active ">'.i18n("Todos").' </button>';
+    } else {
+
+        if ($params->{'BAJA'}) { 
+            $text .= '<button class="btn btn-danger active ">'.i18n("Baja").' </button>';
+        }  
+        if ($params->{'MODIFICACION'}) { 
+            $text .= '<button class="btn btn-danger active ">'.i18n("Modificaci&oacute;n").' </button>';
+        } 
+        if ($params->{'ALTA'}) { 
+            $text .= '<button class="btn btn-warning active ">'.i18n("Alta").' </button>';
+        }
+        if ($params->{'CONSULTA'}) { 
+            $text .= '<button class="btn btn-success active ">'.i18n("Consulta").' </button>';
+        }
+
+        if (!($params->{'TODOS'} || $params->{'BAJA'} || $params->{'MODIFICACION'} || $params->{'ALTA'} || $params->{'CONSULTA'} )) {
+           $text .= '<button class="btn btn-info active ">'.i18n("Sin Permisos").' </button>'; 
+        }
+
+    }
+    $text .= '</div>';
+
+    return $text;   
+
+}
+
 =item
     Esta funcion despliega un texto sobre un icono, una especia de ayuda.
 =cut

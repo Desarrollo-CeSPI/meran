@@ -1960,7 +1960,7 @@ sub generarComboPerfiles{
     $labels{"SL"}= C4::AR::Filtros::i18n('Directivo');
     $labels{"L"}= C4::AR::Filtros::i18n('Bibliotecario');
     $labels{"E"}= C4::AR::Filtros::i18n('Usuario');
-    $labels{"custom"}= 'Custom';
+    $labels{"custom"}= 'Actual';
 
     $options_hash{'onChange'}= $params->{'onChange'};
     $options_hash{'values'}= \@values;

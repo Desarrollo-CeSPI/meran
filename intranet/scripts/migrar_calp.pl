@@ -817,6 +817,7 @@ sub generaCodigoBarraFromMarcRecord{
 			['245','a',$material->{'Titulo'}],
 			['245','b',$material->{'TituloUniforme'}],
 			['310','a',$material->{'Frecuencia'}],
+			['500','a',$material->{'Notas'}],
 			['520','a',$material->{'Resumen'}],	
 			['246','a',$material->{'TituloOriginal'}],	
 			['030','a',$material->{'CODEN'}],
@@ -838,7 +839,6 @@ sub generaCodigoBarraFromMarcRecord{
 			['300','a',$extension],
 			['300','b',$extension2],
 			['300','c',$dimension],
-			['505','a',$material->{'Notas'}],
 			['020','a',$material->{'ISBN'}],
 			
 			#Revista
