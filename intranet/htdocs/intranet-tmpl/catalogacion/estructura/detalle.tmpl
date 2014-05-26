@@ -300,7 +300,7 @@
 	[% END %]
 		<div id="detalle1" class="detalle1">
 	        <div class="botones_detalle_nivel1">
-	               
+	                 
                 [% PERL %]
                     print C4::AR::Filtros::action_set_button(    
                                                         title           => "[% 'Registro' | i18n %]",
@@ -310,7 +310,7 @@
                                                                             {title => "Modificar", action=>"modificarNivel1()",icon=>"icon-edit"},
                                                                             {title => "Eliminar", action=>"borrarN1([% id1 %])", icon=>"icon-trash"},
                                                                             {title => "Agregar Nivel 2", action=>'agregarEdicion("[% id1 %]")', icon=>"icon-plus-sign"},
-	                                                                        [% IF show_asociar_registro_fuente > 0 %]
+                                                                        	[% IF show_asociar_registro_fuente == 1 %]
 	                                                                            {title => "Asociar registro fuente", action=>"asociarRegistroFuente([% id1 %])", icon=>"icon-edit"},
 	                                                                        [% END %]
                                                                             ],

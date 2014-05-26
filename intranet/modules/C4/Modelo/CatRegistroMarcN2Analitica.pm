@@ -57,12 +57,14 @@ sub setId1{
 }
 
 sub agregar{
-    my ($self)      = shift;
-    my ($id1,$marc_record)    = @_;
+    my ($self)          = shift;
+    my ($params, $db)   = @_;
 
-# TODO terminar
+    my $analitica = C4::Modelo::CatRegistroMarcN2Analitica->new( db => $db );
+    $analitica->setId1($params->{'id1'});
+    $analitica->setId2Padre($params->{'id2'});
 
-    $self->save();
+    $analitica->save();
 }
 
 sub modificar{
@@ -73,6 +75,27 @@ sub modificar{
     $self->setId2Padre($params->{'id2'});
 
     $self->save();
+}
+
+=item
+    Asocia un registro a una edición del registro fuente
+    SOLO mantiene una asociación, si existe una asociación vieja, la elimina, luego crea la nueva
+=cut
+sub asociarARegistroFuente{
+    my ($self)      = shift;
+    my ($params, $db)    = @_;
+
+
+    my $nivel2_analiticas_array_ref = C4::AR::Nivel2::getAnaliticasFromRelacion($params);
+
+    if($nivel2_analiticas_array_ref != 0){
+        $nivel2_analiticas_array_ref->delete();
+    }
+
+    my $analitica = C4::Modelo::CatRegistroMarcN2Analitica->new( db => $db );
+    $analitica->setId1($params->{'id1'});
+    $analitica->setId2Padre($params->{'id2'});
+    $analitica->save();
 }
 
 sub eliminar{
