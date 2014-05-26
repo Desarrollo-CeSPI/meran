@@ -208,7 +208,19 @@ var loaderPath= "";
                       
 
                       <dt class="inline left rightMargin">[% "Credenciales" | i18n %]:</dt>
-                      <dd>[% PERL %] print C4::AR::Utilidades::translateTipoCredencial('[% socio.getCredentialType %]') [% END %]</dd>
+                      <dd>[% PERL %] print C4::AR::Utilidades::translateTipoCredencial('[% socio.getCredentialType %]') [% END %]
+                       [% PERL %]
+                        print C4::AR::Filtros::action_button( 
+                                                        id      => 'permisos_usuario',
+                                                        button         => "btn click",
+                                                        action       => "verPermisosActuales()", 
+                                                        icon         => "icon-info-sign ",
+                                                        title        => "",
+                                                        alt => "[% 'Ver Permisos Actuales' | i18n %]"
+                                                    ) ;
+
+                        [% END %]
+                      </dd>
                 </dl>
 
 

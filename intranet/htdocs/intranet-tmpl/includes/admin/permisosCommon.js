@@ -388,3 +388,28 @@ function armarArregloDePermisos_GENERAL(){
 
     return(arreglo);
 }
+
+function verPermisosActuales(){
+
+    usuario = $('#nro_socio_hidden').val();
+    if ($.trim(usuario) != ""){
+        objAH               = new AjaxHelper(updateVerPermisosActuales);
+        objAH.url           = URL_PREFIX+'/admin/permisos/permisosDB.pl';
+        objAH.cache         = false;
+        objAH.showOverlay   = true;  
+        objAH.nro_socio     = $('#nro_socio_hidden').val();
+        
+        if ($('#id_ui').val() != "SIN SELECCIONAR")
+            objAH.id_ui = $('#id_ui').val();
+        else
+            objAH.id_ui = 0;
+
+        objAH.accion            = "VER_PERMISOS_ACTUALES"
+        objAH.sendToServer();
+    }
+}
+
+function updateVerPermisosActuales(responseText){
+    $('#permisosUsuario').html(responseText);
+    $('#permisosUsuario').modal('show');
+}

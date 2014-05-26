@@ -427,3 +427,60 @@ elsif ($accion eq "SHOW_NUEVO_PERMISO_CIRCULACION"){
     $t_params->{'nuevoPermiso'}=1;
     C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
 }
+elsif ($accion eq "VER_PERMISOS_ACTUALES"){
+
+    my $nro_socio = $obj->{'nro_socio'};
+    my $id_ui = $obj->{'id_ui'} || C4::AR::Preferencias::getValorPreferencia('default_ui') ;
+    my $tipo_documento = $obj->{'tipo_documento'};
+
+    my ($template, $session, $t_params)  = get_template_and_user({  
+                        template_name   => "admin/permisos/ver_permisos_actuales.tmpl",
+                        query           => $input,
+                        type            => "intranet",
+                        authnotrequired => 0,
+                        flagsrequired   => {  ui            => 'ANY', 
+                                            tipo_documento  => 'ANY', 
+                                            accion          => 'CONSULTA', 
+                                            entorno         => 'permisos', 
+                                            tipo_permiso    => 'general'
+                        },
+                        debug           => 1,
+                    });
+
+    my $perfil                  =  0;
+    my ($permisos,$newUpdate)   = C4::AR::Permisos::obtenerPermisosCatalogo($nro_socio,$id_ui,$tipo_documento,$perfil);
+
+    $t_params->{'permisos_nivel1'} = C4::AR::Filtros::showPermisosActuales($permisos->{'datos_nivel1'}, 'datos_nivel1');
+    $t_params->{'permisos_nivel2'} = C4::AR::Filtros::showPermisosActuales($permisos->{'datos_nivel2'}, 'datos_nivel2');
+    $t_params->{'permisos_nivel3'} = C4::AR::Filtros::showPermisosActuales($permisos->{'datos_nivel3'}, 'datos_nivel3');
+    $t_params->{'permisos_estantes_virtuales'} = C4::AR::Filtros::showPermisosActuales($permisos->{'estantes_virtuales'}, 'estantes_virtuales');
+    $t_params->{'permisos_estructura_catalogacion_n1'} = C4::AR::Filtros::showPermisosActuales($permisos->{'estructura_catalogacion_n1'}, 'estructura_catalogacion_n1');
+    $t_params->{'permisos_estructura_catalogacion_n2'} = C4::AR::Filtros::showPermisosActuales($permisos->{'estructura_catalogacion_n2'}, 'estructura_catalogacion_n2');
+    $t_params->{'permisos_estructura_catalogacion_n3'} = C4::AR::Filtros::showPermisosActuales($permisos->{'estructura_catalogacion_n3'}, 'estructura_catalogacion_n3');
+    $t_params->{'permisos_tablas_de_refencia'} = C4::AR::Filtros::showPermisosActuales($permisos->{'tablas_de_refencia'}, 'tablas_de_refencia');
+    $t_params->{'permisos_control_de_autoridades'} = C4::AR::Filtros::showPermisosActuales($permisos->{'control_de_autoridades'}, 'control_de_autoridades');
+    $t_params->{'permisos_usuarios'} = C4::AR::Filtros::showPermisosActuales($permisos->{'usuarios'}, 'usuarios');
+    $t_params->{'permisos_sistema'} = C4::AR::Filtros::showPermisosActuales($permisos->{'sistema'}, 'sistema');
+    $t_params->{'permisos_undefined'} = C4::AR::Filtros::showPermisosActuales($permisos->{'undefined'}, 'undefined');
+
+    my ($permisos,$newUpdate) = C4::AR::Permisos::obtenerPermisosCirculacion($nro_socio,$id_ui,$tipo_documento,$perfil);
+
+    $t_params->{'prestamos'} = C4::AR::Filtros::showPermisosActuales($permisos->{'prestamos'}, 'prestamos');
+    $t_params->{'circ_opac'} = C4::AR::Filtros::showPermisosActuales($permisos->{'circ_opac'}, 'circ_opac');
+    $t_params->{'circ_prestar'} = C4::AR::Filtros::showPermisosActuales($permisos->{'circ_prestar'}, 'circ_prestar');
+    $t_params->{'circ_renovar'} = C4::AR::Filtros::showPermisosActuales($permisos->{'circ_renovar'}, 'circ_renovar');
+    $t_params->{'circ_devolver'} = C4::AR::Filtros::showPermisosActuales($permisos->{'circ_devolver'}, 'circ_devolver');
+    $t_params->{'circ_sanciones'} = C4::AR::Filtros::showPermisosActuales($permisos->{'circ_sanciones'}, 'circ_sanciones');
+
+
+    my ($permisos,$newUpdate) = C4::AR::Permisos::obtenerPermisosGenerales($nro_socio,$id_ui,$tipo_documento,$perfil);
+
+    $t_params->{'reportes'} = C4::AR::Filtros::showPermisosActuales($permisos->{'reportes'}, 'reportes');
+    $t_params->{'preferencias'} = C4::AR::Filtros::showPermisosActuales($permisos->{'preferencias'}, 'preferencias');
+    $t_params->{'permisosButton'} = C4::AR::Filtros::showPermisosActuales($permisos->{'permisos'}, 'permisos');
+    $t_params->{'adq_opac'} = C4::AR::Filtros::showPermisosActuales($permisos->{'adq_opac'}, 'adq_opac');
+    $t_params->{'adq_intra'} = C4::AR::Filtros::showPermisosActuales($permisos->{'adq_intra'}, 'adq_intra');
+
+
+    C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
+}

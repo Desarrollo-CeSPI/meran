@@ -10,7 +10,20 @@
                     <div class="controls">
                         <input type="text" name="usuario" id="usuario" />
                         <input type="hidden" name="nro_socio_hidden" id="nro_socio_hidden" />
+                 
+                       [% PERL %]
+                        print C4::AR::Filtros::action_button( 
+                                                        id      => 'permisos_usuario',
+                                                        button         => "btn click",
+                                                        action       => "verPermisosActuales()", 
+                                                        icon         => "icon-info-sign ",
+                                                        title        => "",
+                                                        alt => "[% 'Ver Permisos Actuales' | i18n %]"
+                                                    ) ;
+
+                        [% END %]
                     </div>
+
                 </div>
                 
                 <div class="control-group">
@@ -44,10 +57,11 @@
                                                             title   => " [% 'Obtener Permisos' | i18n %]",
                                 ) ;
                     [% END %]
-                    
                 </div>
         </fieldset>
     </form>
     </section>
     <div class="permisos_assign_chk" id="permisos_assign_chk"> </div>
+
+    <div id="permisosUsuario" class="modal hide bigModal fade"></div>
 </div>
