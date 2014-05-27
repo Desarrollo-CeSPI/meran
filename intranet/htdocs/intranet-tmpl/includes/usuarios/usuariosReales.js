@@ -408,6 +408,9 @@ function updateModificacionCredenciales(responseText){
 	setMessages(Messages);
 	detalleUsuario(USUARIO.ID);
 }
+/************************************* FIN - Cambiar credenciales **********************************/
+
+/*************************************  Cambiar Nro Socio **********************************/
 
 function showModalCambiarNroSocio(){
   $('#modificar-nro-socio').modal('show');
@@ -449,4 +452,58 @@ function updateGuardarModificacionUsuario(responseText){
   detalleUsuario();
 }
 
-/************************************* FIN - Cambiar credenciales **********************************/
+/************************************* FIN - Cambiar Nro Socio **********************************/
+
+/*************************************  Aplicar Sancion Manual **********************************/
+
+
+
+function sancionManual(){
+    objAH               = new AjaxHelper(updateSancionManual);
+    objAH.url           = URL_PREFIX+'/usuarios/reales/usuariosRealesDB.pl';
+    objAH.debug         = true;
+    objAH.showOverlay   = true;
+    objAH.nro_socio     = USUARIO.ID;
+    objAH.tipoAccion    = 'SANCION_MANUAL';
+    objAH.sendToServer();
+}
+
+function updateSancionManual(responseText){
+    if (!verificarRespuesta(responseText))
+        return(0);
+
+    $('#sancionManual').html(responseText);
+    $('#sancionManual').modal();
+}
+
+function aplicarSancionManual(){
+
+  $('#sancionManual').modal('hide');
+
+  nro_socio = $('#nro_socio_hidden').val();
+  dias = $('#dias').val();
+  motivo = $('#motivo').val();
+
+  objAH                   = new AjaxHelper(updateAplicarSancionManual);
+  objAH.url               = URL_PREFIX+'/usuarios/reales/usuariosRealesDB.pl';
+  objAH.debug             = true;
+  objAH.showOverlay       = true;
+  objAH.nro_socio         = USUARIO.ID; 
+  objAH.dias              = dias;
+  objAH.motivo              = motivo; 
+  objAH.tipoAccion        = 'APLICAR_SANCION_MANUAL';
+
+  objAH.sendToServer();
+  startOverlay();
+
+}
+
+function updateAplicarSancionManual(responseText){
+  var Messages=JSONstring.toObject(responseText);
+  setMessages(Messages);
+
+  if (Messages.error)
+      USUARIO.ID = nro_socio_temp;
+
+  detalleUsuario();
+}

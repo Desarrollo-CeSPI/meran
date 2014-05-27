@@ -527,5 +527,51 @@ Se elimina el usuario
 
             C4::AR::Auth::print_header($session);
             print $infoOperacionJSON;
+        } elsif($tipoAccion eq "SANCION_MANUAL"){
+
+            my ($template, $session, $t_params, $socio) = get_template_and_user({
+                                            template_name   => "usuarios/reales/sancionManual.tmpl",
+                                            query           => $input,
+                                            type            => "intranet",
+                                            authnotrequired => 0,
+                                            flagsrequired   => {    ui              => 'ANY', 
+                                                                    tipo_documento  => 'ANY', 
+                                                                    accion          => 'ALTA', 
+                                                                    entorno         => 'sancion',
+                                                                    tipo_permiso    => 'circulacion'},
+                                            debug           => 1,
+            });
+
+            $t_params->{'nro_socio'}            = $nro_socio;
+            C4::AR::Validator::validateParams('U389',$obj,['nro_socio'] );
+            #Obtenemos los datos del borrower
+            my $socio                           = C4::AR::Usuarios::getSocioInfoPorNroSocio($nro_socio);
+            #SI NO EXISTE EL SOCIO IMPRIME 0, PARA INFORMAR AL CLIENTE QUE ACCION REALIZAR
+            C4::AR::Validator::validateObjectInstance($socio);
+
+
+            C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
+        }
+        elsif($tipoAccion eq "APLICAR_SANCION_MANUAL"){
+
+            my ($template, $session, $t_params, $socio) = get_template_and_user({
+                                            template_name   => "usuarios/reales/sancionManual.tmpl",
+                                            query           => $input,
+                                            type            => "intranet",
+                                            authnotrequired => 0,
+                                            flagsrequired   => {    ui              => 'ANY', 
+                                                                    tipo_documento  => 'ANY', 
+                                                                    accion          => 'ALTA', 
+                                                                    entorno         => 'sancion',
+                                                                    tipo_permiso    => 'circulacion'},
+                                            debug           => 1,
+            });
+
+#            $obj->{'nro_socio'}
+            my $Message_arrayref  = C4::AR::Usuarios::modificarCredencialesSocio($obj);
+            my $infoOperacionJSON = to_json $Message_arrayref;
+
+            C4::AR::Auth::print_header($session);
+            print $infoOperacionJSON;
         }
     }
