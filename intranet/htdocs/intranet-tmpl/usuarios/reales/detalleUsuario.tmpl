@@ -114,6 +114,7 @@ var loaderPath= "";
                                        {title => "Prest. Interbibliotecario", action=>'prestamosInterBibliotecarios()', icon=>"icon-shopping-cart"},
                                        [% IF socio_data.usr_credential_type == "superLibrarian" %]
                                       	  {title => "Cambiar Credenciales", action=>'cambiarCredencial()', icon=>"icon-flag"},
+                                           {title => "Sanci&oacute;n Manual", action=>'sancionManual()', icon=>"icon-minus-sign"},
                                        [% END %]
                                        [% IF foto_name %]
                                            {title => 'Eliminar Foto', action=>'eliminarFoto()', icon=>'icon-picture'},
@@ -372,4 +373,5 @@ var loaderPath= "";
 
 </div>
 
-
+<div id="permisosUsuario" class="modal hide bigModal fade"></div>
+<div id="sancionManual" class="modal hide bigModal fade"></div>
