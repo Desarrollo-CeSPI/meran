@@ -4,8 +4,15 @@
     $(document).ready(function() {
     	$("#usuario").focus();
     	CrearAutocompleteUsuarios({ IdInput: 'usuario', 
-                                    IdInputHidden: 'nro_socio_hidden', 
+                                    IdInputHidden: 'nro_socio_hidden',
+                                    callBackFunction: usuarioEncontrado
                                  });
+    	[% IF socio_permisos %]
+			$("#nro_socio_hidden").val('[% socio_permisos.getNro_socio %]');
+			$("#usuario").val('[% socio_permisos.persona.getApeYNom %] ([% socio_permisos.getNro_socio %])');
+			usuarioEncontrado();
+			obtenerPermisos();
+    	[% END %]
     });
 
 	/*

@@ -13,12 +13,12 @@
                  
                        [% PERL %]
                         print C4::AR::Filtros::action_button( 
-                                                        id      => 'permisos_usuario',
-                                                        button         => "btn click",
+                                                        id      => 'ver_permisos_usuario',
+                                                        button         => " hide click",
                                                         action       => "verPermisosActuales()", 
-                                                        icon         => "icon-info-sign ",
+                                                        icon         => "icon-flag ",
                                                         title        => "",
-                                                        alt => "[% 'Ver Permisos Actuales' | i18n %]"
+                                                        alt_text => "[% 'Ver Permisos Actuales' | i18n %]"
                                                     ) ;
 
                         [% END %]
