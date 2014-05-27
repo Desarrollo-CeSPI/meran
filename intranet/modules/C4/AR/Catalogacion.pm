@@ -1638,11 +1638,52 @@ sub t_guardarAsociarRegistroFuente {
         # enable transactions, if possible
         $db->{connect_options}->{AutoCommit} = 0;
 
-        eval {
+        # eval {
             $analitica->asociarARegistroFuente($params, $db);
             $db->commit;
             $msg_object->{'error'} = 0;
             C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U617', 'params' => []} ) ;
+        # };
+
+        # if ($@){
+        #     $msg_object = C4::AR::Mensajes::create();
+        #     #Se loguea error de Base de Datos
+        #     &C4::AR::Mensajes::printErrorDB($@, 'B426',"INTRA");
+        #     $db->rollback;
+        #     #Se setea error para el usuario
+        #     $msg_object->{'error'} = 1;
+        #     C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U618', 'params' => []} ) ;
+        # }
+
+        $db->{connect_options}->{AutoCommit} = 1;
+
+    }
+
+    return ($msg_object);
+}
+
+
+sub t_guardarDesAsociarRegistroFuente {
+    my ($params) = @_;
+
+    my $msg_object          = C4::AR::Mensajes::create();
+
+    if(!$msg_object->{'error'}){
+    #No hay error
+        my $db   = C4::Modelo::CatRegistroMarcN2Analitica->new()->db;
+
+        eval {
+            # enable transactions, if possible
+            $db->{connect_options}->{AutoCommit} = 0;
+            my $nivel2_analiticas_array_ref = C4::AR::Nivel2::getAllAnaliticasById1($params->{'id1'}, $db);
+
+            foreach $a (@$nivel2_analiticas_array_ref){
+                $a->delete();
+            };
+
+            $db->commit;
+            $msg_object->{'error'} = 0;
+            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U619', 'params' => []} ) ;
         };
 
         if ($@){
@@ -1661,7 +1702,6 @@ sub t_guardarAsociarRegistroFuente {
 
     return ($msg_object);
 }
-
 
 sub t_eliminarRelacion {
     my ($params) = @_;

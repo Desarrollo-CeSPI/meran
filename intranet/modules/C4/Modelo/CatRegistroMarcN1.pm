@@ -214,6 +214,15 @@ sub agregar{
     $self->setearLeader($params);
 }
 
+sub tengoRegistroFuente {
+    my ($self)  = shift;
+    my ($db)    = @_;
+
+    my $nivel2_analiticas_array_ref = C4::AR::Nivel2::getAllAnaliticasById1($self->getId1, $db);
+
+    return scalar(@$nivel2_analiticas_array_ref) > 0;
+}
+
 sub modificar{
     my ($self)                  = shift;
     my ($marc_record, $params)  = @_;

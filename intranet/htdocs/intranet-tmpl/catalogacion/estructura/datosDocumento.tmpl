@@ -71,12 +71,6 @@
         }
     }
 
-    function select_estante(){
-        $(".click").click(function() {
-          alert( "HOLAA" +  $( this ).value());
-        });
-    }
-
     function guardarEnEstante(){
         if($("input[type=checkbox]:checked").length == 0){
             jAlert(SELECCIONE_AL_MENOS_UN_ESTANTE,CATALOGO_ALERT_TITLE);
