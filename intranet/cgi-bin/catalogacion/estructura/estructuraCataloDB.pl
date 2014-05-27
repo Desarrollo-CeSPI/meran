@@ -281,6 +281,23 @@ elsif($tipoAccion eq "ASOCIAR_REGISTRO_FUENTE"){
     C4::AR::Auth::print_header($session);
     print $infoOperacionJSON;
 }
+elsif($tipoAccion eq "DESASOCIAR_REGISTRO_FUENTE"){
+     my ($user, $session, $flags)= checkauth(    $input, 
+                                                $authnotrequired, 
+                                                {   ui => 'ANY', 
+                                                    tipo_documento => 'ANY', 
+                                                    accion => 'CONSULTA', 
+                                                    entorno => 'datos_nivel1'}, 
+                                                'intranet'
+                                    );
+
+    my ($Message_arrayref) = C4::AR::Catalogacion::t_guardarDesAsociarRegistroFuente($obj);
+    
+    my $infoOperacionJSON = to_json $Message_arrayref;
+    
+    C4::AR::Auth::print_header($session);
+    print $infoOperacionJSON;
+}
 elsif($tipoAccion eq "MODIFICAR_ESTRUCTURA_CATALOGACION"){
      my ($user, $session, $flags) = checkauth(    $input, 
                                                 $authnotrequired, 
@@ -1048,6 +1065,7 @@ elsif($tipoAccion eq "ELIMINAR_RELACION_ANALITICA"){
     # my $id2 = $obj->{'id2'};
     my ($Message_arrayref);
    
+# FIXME esto es correcto????
     ($Message_arrayref)= C4::AR::Catalogacion::t_eliminarRelacion($obj);
 
     my $infoOperacionJSON = to_json $Message_arrayref;

@@ -86,10 +86,16 @@ sub asociarARegistroFuente{
     my ($params, $db)    = @_;
 
 
-    my $nivel2_analiticas_array_ref = C4::AR::Nivel2::getAnaliticasFromRelacion($params);
+    # my $nivel2_analiticas_array_ref = C4::AR::Nivel2::getAnaliticasFromRelacion($params);
 
-    if($nivel2_analiticas_array_ref != 0){
-        $nivel2_analiticas_array_ref->delete();
+    # if($nivel2_analiticas_array_ref != 0){
+    #     $nivel2_analiticas_array_ref->delete();
+    # }
+
+    my $nivel2_analiticas_array_ref = C4::AR::Nivel2::getAllAnaliticasById1($params->{'id1'}, $db);
+
+    foreach $a (@$nivel2_analiticas_array_ref){
+        $a->delete();
     }
 
     my $analitica = C4::Modelo::CatRegistroMarcN2Analitica->new( db => $db );

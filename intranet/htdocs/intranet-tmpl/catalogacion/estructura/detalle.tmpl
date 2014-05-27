@@ -39,6 +39,27 @@
         	
         }
 
+	    function reload(){
+	        window.location.href="[% url_prefix %]/catalogacion/estructura/detalle.pl?id1=[% id1 %]&token=[% token %]";
+	    }
+
+        function desasociarRegistroFuente(id1){
+	        objAH                   = new AjaxHelper(updateDesasociarRegistroFuente);
+	        objAH.debug             = true;
+	        objAH.showOverlay       = true;
+	        objAH.url               = URL_PREFIX+'/catalogacion/estructura/estructuraCataloDB.pl';
+	        objAH.tipoAccion        = 'DESASOCIAR_REGISTRO_FUENTE';
+	        objAH.id1               = id1;
+	        objAH.sendToServer();
+        }
+
+		function updateDesasociarRegistroFuente(responseText){
+	        var info        = JSONstring.toObject(responseText);  
+		    var Messages    = info;
+		    setMessages(Messages);
+		    reload();
+		}
+
         function asociarRegistroFuente(id1){
         	$('#div_asociar_registro_fuente').modal('show');
         	onEnter("buscar_edicion_id",buscarEdicion);
@@ -95,6 +116,7 @@
 	        var info        = JSONstring.toObject(responseText);  
 		    var Messages    = info;
 		    setMessages(Messages);
+		    reload();
 		}
         
       	function ProcessGBSBookInfo(booksInfo) {
@@ -312,6 +334,9 @@
                                                                             {title => "Agregar Nivel 2", action=>'agregarEdicion("[% id1 %]")', icon=>"icon-plus-sign"},
                                                                         	[% IF show_asociar_registro_fuente == 1 %]
 	                                                                            {title => "Asociar registro fuente", action=>"asociarRegistroFuente([% id1 %])", icon=>"icon-edit"},
+	                                                                        [% END %]
+                                                                        	[% IF show_desasociar_registro_fuente == 1 %]
+	                                                                            {title => "Desasociar registro fuente", action=>"desasociarRegistroFuente([% id1 %])", icon=>"icon-edit"},
 	                                                                        [% END %]
                                                                             ],
 
