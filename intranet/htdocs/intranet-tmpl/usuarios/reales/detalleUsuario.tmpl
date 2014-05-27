@@ -90,36 +90,36 @@ var loaderPath= "";
 	<div id="acciones_usuario" class="right" style="margin-right: 60px;">
 	        [% PERL %]
 	         print C4::AR::Filtros::action_set_button(    
-	                                             title           => "[% socio.persona.getNombre %], [% socio.persona.getApellido %]",
-	                                             button          => 'btn btn-primary',
-	                                             action 		 => 'modificarDatosDeUsuario()', 
-                                                 modifier        => "btn-large",
-	                                             icon 			 => "icon-white icon-pencil",
-	                                             actions         => [  [% IF needsDataValidation %]
-	                                                                       {title => "Validar datos Censales", action=>'validarDatosCensales();',icon=>"icon-share-alt"},
-	                                                                   [% END %]
-	                                                                   {title => "Deshabilitar Usuario", action=>'eliminarUsuario()', icon=>"icon-trash"},
-	                                                                   [% IF !socio.tieneAutorizado %]
-	                                                                         {title => "Agregar Usuario Adicional", action=>'agregarAutorizado()', icon=>"icon-plus-sign"},
-	                                                                   [% ELSE %]
-	                                                                         {title => "Eliminar Usuario Adicional", action=>'desautorizarTercero()', icon=>"icon-eye-close"},
-	                                                                   [% END %]
-	                                                                   [% IF socio_data.usr_nro_socio != nro_socio %]
-	                                                                         {title => "Reestablecer contrase&ntilde;a", action=>'resetPassword()', icon=>"icon-warning-sign"},
-	                                                                   [% ELSE %]
-	                                                                         {title => "Cambio de Contrase&ntilde;a", action=>'cambiarPassword()', icon=>"icon-warning-sign"},
-	                                                                   [% END %]
-                                                                       {title => "Generar carnet", action=>'formCarnet.submit();', icon=>"icon-barcode"},
-                                                                       {title => "Libre Deuda", action=>'generarLibreDeuda()', icon=>"icon-asterisk"},
-	                                                                   {title => "Prest. Interbibliotecario", action=>'prestamosInterBibliotecarios()', icon=>"icon-shopping-cart"},
-	                                                                   [% IF socio_data.usr_credential_type == "superLibrarian" %]
-	                                                                  	  {title => "Cambiar Credenciales", action=>'cambiarCredencial()', icon=>"icon-flag"},
-	                                                                   [% END %]
-	                                                                   [% IF foto_name %]
-	                                                                       {title => 'Eliminar Foto', action=>'eliminarFoto()', icon=>'icon-picture'},
-	                                                                   [% END %]
-	                                                                 ]
-	
+                 title           => "[% socio.persona.getNombre %], [% socio.persona.getApellido %]",
+                 button          => 'btn btn-primary',
+                 action 		 => 'modificarDatosDeUsuario()', 
+                 modifier        => "btn-large",
+                 icon 			 => "icon-white icon-pencil",
+                 actions         => [  [% IF needsDataValidation %]
+                                           {title => "Validar datos Censales", action=>'validarDatosCensales();',icon=>"icon-share-alt"},
+                                       [% END %]
+                                       {title => "Deshabilitar Usuario", action=>'eliminarUsuario()', icon=>"icon-trash"},
+                                       [% IF !socio.tieneAutorizado %]
+                                             {title => "Agregar Usuario Adicional", action=>'agregarAutorizado()', icon=>"icon-plus-sign"},
+                                       [% ELSE %]
+                                             {title => "Eliminar Usuario Adicional", action=>'desautorizarTercero()', icon=>"icon-eye-close"},
+                                       [% END %]
+                                       [% IF socio_data.usr_nro_socio != nro_socio %]
+                                             {title => "Reestablecer contrase&ntilde;a", action=>'resetPassword()', icon=>"icon-warning-sign"},
+                                       [% ELSE %]
+                                             {title => "Cambio de Contrase&ntilde;a", action=>'cambiarPassword()', icon=>"icon-warning-sign"},
+                                       [% END %]
+                                       {title => "Generar carnet", action=>'formCarnet.submit();', icon=>"icon-barcode"},
+                                       {title => "Libre Deuda", action=>'generarLibreDeuda()', icon=>"icon-asterisk"},
+                                       {title => "Prest. Interbibliotecario", action=>'prestamosInterBibliotecarios()', icon=>"icon-shopping-cart"},
+                                       [% IF socio_data.usr_credential_type == "superLibrarian" %]
+                                      	  {title => "Cambiar Credenciales", action=>'cambiarCredencial()', icon=>"icon-flag"},
+                                       [% END %]
+                                       [% IF foto_name %]
+                                           {title => 'Eliminar Foto', action=>'eliminarFoto()', icon=>'icon-picture'},
+                                       [% END %]
+                                     ]
+
 	                           );
 	         [% END %]
 	
@@ -212,11 +212,11 @@ var loaderPath= "";
                        [% PERL %]
                         print C4::AR::Filtros::action_button( 
                                                         id      => 'permisos_usuario',
-                                                        button         => "btn click",
+                                                        button         => "click",
                                                         action       => "verPermisosActuales()", 
-                                                        icon         => "icon-info-sign ",
+                                                        icon         => "icon-flag ",
                                                         title        => "",
-                                                        alt => "[% 'Ver Permisos Actuales' | i18n %]"
+                                                        alt_text => "[% 'Ver Permisos Actuales' | i18n %]"
                                                     ) ;
 
                         [% END %]

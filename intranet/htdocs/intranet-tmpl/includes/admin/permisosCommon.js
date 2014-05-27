@@ -28,7 +28,7 @@ function changeTipoPermiso(){
     valueSelected = $("#tipo_permisos").val();
     usuarioHidden = $("#nro_socio_hidden").val();
     
-    if ($.trim(usuarioHidden) != ''){
+    if (($.trim(usuario) != "")&&($.trim(usuario) != "-1")){
 	    switch (valueSelected){
 		    case "PCAT":
 		    	tipoPermiso = "CATALOGO";
@@ -119,7 +119,7 @@ function obtenerPermisos(){
 	
 	var usuario = $('#nro_socio_hidden').val();
 	
-	if ($.trim(usuario) != ""){	
+    if (($.trim(usuario) != "")&&($.trim(usuario) != "-1")){
 	    objAH               = new AjaxHelper(updateObtenerPermisos);
 	    objAH.url           = URL_PREFIX+'/admin/permisos/permisosDB.pl';
 	    objAH.cache         = false;
@@ -209,7 +209,7 @@ function updateActualizarPermisos(responseText){
 function nuevoPermiso(){
 
     usuario = $('#nro_socio_hidden').val();
-    if ($.trim(usuario) != ""){
+    if (($.trim(usuario) != "")&&($.trim(usuario) != "-1")){
         objAH               = new AjaxHelper(updateNuevoPermiso);
         objAH.url           = URL_PREFIX+'/admin/permisos/permisosDB.pl';
         objAH.cache         = false;
@@ -392,7 +392,7 @@ function armarArregloDePermisos_GENERAL(){
 function verPermisosActuales(){
 
     usuario = $('#nro_socio_hidden').val();
-    if ($.trim(usuario) != ""){
+    if (($.trim(usuario) != "")&&($.trim(usuario) != "-1")){
         objAH               = new AjaxHelper(updateVerPermisosActuales);
         objAH.url           = URL_PREFIX+'/admin/permisos/permisosDB.pl';
         objAH.cache         = false;
@@ -412,4 +412,14 @@ function verPermisosActuales(){
 function updateVerPermisosActuales(responseText){
     $('#permisosUsuario').html(responseText);
     $('#permisosUsuario').modal('show');
+}
+
+
+function usuarioEncontrado(){
+    usuario = $('#nro_socio_hidden').val();
+    if (($.trim(usuario) != "")&&($.trim(usuario) != "-1")){
+         $('#ver_permisos_usuario').show();
+    }else{
+         $('#ver_permisos_usuario').hide();
+    }
 }

@@ -29,6 +29,11 @@ use C4::AR::Permisos;
 
 my $input   = new CGI;
 my $obj     = $input->param('obj');
+my $socio   = "";
+if ($input->param('nro_socio')){
+     $socio = C4::AR::Usuarios::getSocioInfoPorNroSocio($input->param('nro_socio'));
+     C4::AR::Debug::debug("socio string : " . $socio->persona->getApeYNom);
+}
 
 my ($template, $session, $t_params)  = get_template_and_user({  
                     template_name => "admin/permisos/permisos.tmpl",
@@ -43,6 +48,10 @@ my ($template, $session, $t_params)  = get_template_and_user({
                     debug => 1,
                 });
 
+
+if ($socio){
+     $t_params->{'socio_permisos'}           = $socio;
+}
 my %params_combo                        = {};
 $params_combo{'default'}                = 'ALL';
 
