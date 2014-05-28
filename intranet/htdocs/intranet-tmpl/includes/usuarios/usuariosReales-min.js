@@ -1,25 +1,3 @@
-/*
- * Meran - MERAN UNLP is a ILS (Integrated Library System) wich provides Catalog,
- * Circulation and User's Management. It's written in Perl, and uses Apache2
- * Web-Server, MySQL database and Sphinx 2 indexing.
- * Copyright (C) 2009-2013 Grupo de desarrollo de Meran CeSPI-UNLP
- *
- * This file is part of Meran.
- *
- * Meran is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * Meran is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with Meran.  If not, see <http://www.gnu.org/licenses/>.
- */
-
 var nro_socio_temp;var vDatosUsuario=0;function modificarDatosDeUsuario(){objAH=new AjaxHelper(updateModificarDatosDeUsuario);objAH.showOverlay=true;objAH.debug=true;objAH.url=URL_PREFIX+'/usuarios/reales/usuariosRealesDB.pl';objAH.debug=true;objAH.nro_socio=USUARIO.ID;nro_socio_temp=objAH.nro_socio;objAH.tipoAccion='MODIFICAR_USUARIO';objAH.sendToServer();}
 function updateModificarDatosDeUsuario(responseText){if(!verificarRespuesta(responseText))
 return(0);$('#modificar-datos-usuario').html(responseText);$('#modificar-datos-usuario').modal();}
@@ -63,4 +41,13 @@ function showModalCambiarNroSocio(){$('#modificar-nro-socio').modal('show');$('#
 function cambiarNroSocio(nuevo_nro_socio){$('#modificar-nro-socio').modal('hide');if(!nuevo_nro_socio)
 nuevo_nro_socio=$('#nuevo_nro_socio').val();objAH=new AjaxHelper(updateGuardarModificacionUsuario);objAH.url=URL_PREFIX+'/usuarios/reales/usuariosRealesDB.pl';objAH.debug=true;objAH.showOverlay=true;objAH.nro_socio=USUARIO.ID;objAH.nuevo_nro_socio=nuevo_nro_socio;objAH.tipoAccion='CAMBIAR_NRO_SOCIO';nro_socio_temp=USUARIO.ID;USUARIO.ID=nuevo_nro_socio;objAH.sendToServer();startOverlay();}
 function updateGuardarModificacionUsuario(responseText){var Messages=JSONstring.toObject(responseText);setMessages(Messages);if(Messages.error)
+USUARIO.ID=nro_socio_temp;detalleUsuario();}
+function verPermisosActuales(){usuario=USUARIO.ID;if($.trim(usuario)!=""){objAH=new AjaxHelper(updateVerPermisosActuales);objAH.url=URL_PREFIX+'/admin/permisos/permisosDB.pl';objAH.cache=false;objAH.showOverlay=true;objAH.nro_socio=usuario;objAH.accion="VER_PERMISOS_ACTUALES"
+objAH.sendToServer();}}
+function updateVerPermisosActuales(responseText){$('#permisosUsuario').html(responseText);$('#permisosUsuario').modal('show');}
+function sancionManual(){objAH=new AjaxHelper(updateSancionManual);objAH.url=URL_PREFIX+'/usuarios/reales/usuariosRealesDB.pl';objAH.debug=true;objAH.showOverlay=true;objAH.nro_socio=USUARIO.ID;objAH.tipoAccion='SANCION_MANUAL';objAH.sendToServer();}
+function updateSancionManual(responseText){if(!verificarRespuesta(responseText))
+return(0);$('#sancionManual').html(responseText);$('#sancionManual').modal();}
+function aplicarSancionManual(){$('#sancionManual').modal('hide');nro_socio=$('#nro_socio_sancion_hidden').val();dias=$('#dias_sancion_manual').val();motivo=$('#motivo_sancion_manual').val();objAH=new AjaxHelper(updateAplicarSancionManual);objAH.url=URL_PREFIX+'/usuarios/reales/usuariosRealesDB.pl';objAH.debug=true;objAH.showOverlay=true;objAH.nro_socio=USUARIO.ID;objAH.dias=dias;objAH.motivo=motivo;objAH.tipoAccion='APLICAR_SANCION_MANUAL';objAH.sendToServer();startOverlay();}
+function updateAplicarSancionManual(responseText){var Messages=JSONstring.toObject(responseText);setMessages(Messages);if(Messages.error)
 USUARIO.ID=nro_socio_temp;detalleUsuario();}

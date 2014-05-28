@@ -308,49 +308,6 @@ function updateDetalleSanciones(responseText){
 }
 //**********************************Fin**Para manejar la circulacion********************************************
 
-
-function verPermisosActuales(){
-
-    usuario = USUARIO.ID;
-    if ($.trim(usuario) != ""){
-        objAH               = new AjaxHelper(updateVerPermisosActuales);
-        objAH.url           = URL_PREFIX+'/admin/permisos/permisosDB.pl';
-        objAH.cache         = false;
-        objAH.showOverlay   = true;  
-        objAH.nro_socio     = usuario;
-        objAH.accion            = "VER_PERMISOS_ACTUALES"
-        objAH.sendToServer();
-    }
-}
-
-function updateVerPermisosActuales(responseText){
-    $('#permisosUsuario').html(responseText);
-    $('#permisosUsuario').modal('show');
-}
-
-
-
-function aplicarSancionManual(){
-
-    usuario = USUARIO.ID;
-    if ($.trim(usuario) != ""){
-        objAH               = new AjaxHelper(updateVerPermisosActuales);
-        objAH.url           = URL_PREFIX+'/admin/permisos/permisosDB.pl';
-        objAH.cache         = false;
-        objAH.showOverlay   = true;  
-        objAH.nro_socio     = usuario;
-        objAH.accion            = "VER_PERMISOS_ACTUALES"
-        objAH.sendToServer();
-    }
-}
-
-function updateVerPermisosActuales(responseText){
-    $('#permisosUsuario').html(responseText);
-    $('#permisosUsuario').modal('show');
-}
-
-
-
 $(document).ready(function(){
 	
 	//definido en circulacion.js

@@ -204,7 +204,9 @@ my %mensajesINTRA = (
     'S203' => 'No se pudo eliminar la sanci&oacute;n a *?*, *?*, *?*.',
     'S204' => 'Disculpe, no puede efectuar el pr&eacute;stamo porque el usuario tiene un ejemplar vencido.',
     'S205' => 'No es posible realizar el pr&eacute;stamo porque el usuario tiene una sanci&oacute;n para ese tipo de pr&eacute;stamo hasta el *?*.',
-
+    'S206' => 'El usuario est&aacute; sancionado.',
+    'S207' => 'Fue aplicada correctamente la sanci&oacute;n manual.',
+    'S208' => 'No pudo aplicarse la sanci&oacute;n manual.',
     'U300' => 'El usuario no puede reservar porque no es un alumno regular.',
     'U301' => 'El usuario no puede reservar porque no ha realizado a&uacute;n el curso para usuarios.',
     'U302' => 'El libro que acaba de reservar puede ser retirado hasta del d&iacute;a: *?* a las *?*',
@@ -393,8 +395,6 @@ my %mensajesINTRA = (
     'M903' => 'Se elimin&oacute; con &eacute;xito el Registro *?* .',
     'SP000' => 'Las preferencias han sido modificadas con &eacute;xito.',
     'SP001' => 'Se produjo un error al actualizar la preferencia.',
-    'S206' => 'El usuario est&aacute; sancionado.',
-
     'SP002' => 'Se produjo un error al guardar la preferencia.',
     'SP003' => 'La preferencia ha sido modificada con &eacute;xito.',
     'SP004' => 'La preferencia ha sido agregada al sistema con &eacute;xito.',
@@ -640,6 +640,8 @@ my %mensajesINTRA = (
     'B461' => 'Error subiendo logos. Funcion C4::AR::Logos::uploadLogo',
     'B462' => 'Error subiendo logos. Funcion C4::AR::Logos::eliminarLogo',
     'B463' => 'Error aliminando la ayuda MARC. Funcion C4::AR::AyudaMarc::eliminarAyudaMarc',
+    'B464' => 'Error en funcion C4::AR::Sanciones::aplicarSancionManualSocio',
+
 
     #mensajes ayuda marc
     'AM00' => 'La ayuda MARC ha sido guardada exitosamente',

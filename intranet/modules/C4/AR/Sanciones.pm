@@ -771,6 +771,68 @@ sub getHistorialSanciones{
 
 }
 
+
+=item
+    Aplicar Sancion Manual a Socio
+=cut
+sub aplicarSancionManualSocio {
+
+    my ($params)    = @_;
+    my $msg_object  = C4::AR::Mensajes::create();
+    my ($socio)     = C4::AR::Usuarios::getSocioInfoPorNroSocio($params->{'nro_socio'});
+
+    if ($socio){
+        my $db = $socio->db;
+        $db->{connect_options}->{AutoCommit} = 0;
+        $db->begin_work;
+
+        eval {
+            #$socio->setCredentialType($params->{'credenciales'});
+              C4::AR::Debug::debug("***__________________________CALCULO COMIENZO SANCION MANUAL__________________***");   
+              my $dateformat = C4::Date::get_date_format();
+              my ($fin_reserva,$comienzo_sancion,$apertura,$cierre)    = C4::Date::proximosHabiles(1,1);
+
+              my $fechaHoy =  C4::Date::format_date_in_iso( Date::Manip::ParseDate("today"), $dateformat );   
+              my $diasDeSancionManual =  $params->{'dias'};
+              C4::AR::Debug::debug("***___________________________________DIAS SANCION MANUAL___________________________".$diasDeSancionManual);  
+              
+              my $tipo_sancion = $params->{'motivo'};
+
+              if ($diasDeSancionManual > 0) {
+                C4::AR::Debug::debug("***_____________________________CALCULO FIN SANCION MANUAL____________________***");
+                my ($fecha_comienzo_sancion,$fecha_fin_sancion,$apertura,$cierre) = C4::Date::proximosHabiles($diasDeSancionManual,0,$comienzo_sancion);
+                
+                $fecha_comienzo_sancion   = C4::Date::format_date_in_iso($fecha_comienzo_sancion,$dateformat);
+                $fecha_fin_sancion        = C4::Date::format_date_in_iso($fecha_fin_sancion,$dateformat);
+                my  $sancion              = C4::Modelo::CircSancion->new(db => $db);
+                my %paramsSancion;
+                $paramsSancion{'responsable'}       = $params->{'responsable'};
+                $paramsSancion{'tipo_sancion'}      = "MANUAL";
+                $paramsSancion{'nro_socio'}         = $params->{'nro_socio'};
+                $paramsSancion{'fecha_comienzo'}    = $fecha_comienzo_sancion;
+                $paramsSancion{'fecha_final'}       = $fecha_fin_sancion;
+                $paramsSancion{'dias_sancion'}      = $diasDeSancionManual;
+                $paramsSancion{'motivo_sancion'}    = $params->{'motivo'};
+                $sancion->insertar_sancion(\%paramsSancion);
+              }
+
+            $db->commit;
+            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'S207', 'params' => []} ) ;
+            
+        };
+
+        if ($@){
+            C4::AR::Mensajes::printErrorDB($@, 'B423',"INTRA");
+            $msg_object->{'error'}= 1;
+            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'S208', 'params' => []} ) ;
+            $db->rollback;
+        }
+        $db->{connect_options}->{AutoCommit} = 1;
+    }
+    return ($msg_object);
+}
+
+
 END { }       # module clean-up code here (global destructor)
 
 1;

@@ -16,6 +16,7 @@ __PACKAGE__->meta->setup(
         fecha_final       => { type => 'varchar', overflow => 'truncate', default => '0000-00-00', not_null => 1 },
         dias_sancion      => { type => 'integer', overflow => 'truncate', default => '0' },
         id3               => { type => 'integer', overflow => 'truncate' },
+        motivo_sancion    => { type => 'text', overflow => 'truncate', length => 65535 },
     ],
 
     primary_key_columns => [ 'id_sancion' ],
@@ -155,6 +156,19 @@ sub setDias_sancion{
     $self->dias_sancion($dias_sancion);
 }
 
+
+sub getMotivo_sancion{
+    my ($self) = shift;
+    return ($self->motivo_sancion);
+}
+
+sub setMotivo_sancion{
+    my ($self) = shift;
+    my ($motivo_sancion) = @_;
+    $self->motivo_sancion($motivo_sancion);
+}
+
+
 =item
 agregar
 Funcion que agrega una sancion
@@ -171,6 +185,7 @@ sub agregar {
     $self->setFecha_comienzo($data_hash->{'fecha_comienzo'});
     $self->setFecha_final($data_hash->{'fecha_final'});
     $self->setDias_sancion($data_hash->{'dias_sancion'}||undef);
+    $self->setMotivo_sancion($data_hash->{'motivo_sancion'}||undef);
     $self->save();
 
 }
