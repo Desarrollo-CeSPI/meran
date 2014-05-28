@@ -21,15 +21,22 @@
  */
 
 function obtenerTabla(tabla){
-    objAH=new AjaxHelper(updateObtenerTabla);
-    objAH.url= URL_PREFIX+'/admin/referencias/referenciasDB.pl';
-    objAH.cache = false;
-    objAH.showOverlay       = true;
-    objAH.accion="OBTENER_TABLAS";
-    objAH.alias_tabla = $('#tablas_ref').val() || tabla;
-    objAH.funcion= 'changePage';
-    objAH.asignar       = 1;
-    objAH.sendToServer();
+    if( $('#tablas_ref option:selected').text() != 'SIN SELECCIONAR' ) {
+    
+        objAH               = new AjaxHelper(updateObtenerTabla);
+        objAH.url           = URL_PREFIX+'/admin/referencias/referenciasDB.pl';
+        objAH.cache         = false;
+        objAH.showOverlay   = true;
+        objAH.accion        = "OBTENER_TABLAS";
+        objAH.alias_tabla   = $('#tablas_ref').val() || tabla;
+        objAH.funcion       = 'changePage';
+        objAH.asignar       = 1;
+        objAH.sendToServer();
+
+    } else {
+        jAlert(DEBE_SELECCIONAR_UNA_TABLA_DE_REFERENCIA,CATALOGO_ALERT_TITLE);
+        $('#tablas_ref').focus();
+    }
 }
 
 
