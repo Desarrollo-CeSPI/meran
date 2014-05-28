@@ -4,36 +4,31 @@
 </div>
 
 <div class="modal-body">
-            <div class="control-group">
-                  <label  class="control-label" for="tipo_socio_id">[% "Cambiar Perfil" | i18n %]</label>
-                      [% comboDeCredenciales %]
-                      <br>
-                         [% PERL %]
-                             print C4::AR::Filtros::action_button(
-                                     title           => ' [% " Aceptar" | i18n %]',
-                                     button          => 'btn btn-success',
-                                     icon            => 'icon-white icon-ok',
-                                     action          => 'guardarModificacionCredenciales();',
-                                 );
-                         [% END %]
-            </div>
-            <hr>
-            <div class="control-group">
-                  <label  class="control-label" for="tipo_socio_id">[% "Editar Credenciales Puntuales" | i18n %]</label>
-                      [% PERL %]
-                        print C4::AR::Filtros::action_link_button( 
-                          button          => 'btn btn-primary',
-                          title           => ' [% " Editar Permisos" | i18n %]',
-                          button          => 'btn btn-success',
-                          icon            => 'icon-white icon-ok',
-                          url =>       "[% url_prefix %]/admin/permisos/permisos.pl?nro_socio=[% nro_socio %]",
-                          icon  =>    "icon-pencil",
-                          alt_text => "[% 'Editar Permisos' | i18n %]"
-                          );
-                      [% END %]
-            </div>
+  <div class="center_fieldset">  
+          <input type="hidden" name="nro_socio_sancion_manual_hidden"  value="[% nro_socio %]">
+          <div class="control-group">
+              <label class="control-label" for="motivo">[% "Motivo de la Sanci&oacute;n" | i18n %]</label>
+              <div id="motivo" class="controls">  
+                      <textarea id="motivo_sancion_manual" cols="58" rows="2"></textarea>        
+              </div>   
+          </div>
 
+          <div class="control-group">
+              <label class="control-label" for="dias"> [% "D&iacute;as de Sanci&oacute;n" | i18n %]</label>
+              <div id="dias" class="controls">  
+                      <input  id="dias_sancion_manual" type="number">    
+               </div>            
+          </div>
+  </div>
 </div>
 
 <div class="modal-footer">
+             [% PERL %]
+                      print C4::AR::Filtros::action_button( 
+                                                          button       => "btn btn-primary",
+                                                          action       => "aplicarSancionManual();", 
+                                                          icon         => "icon-white icon-inbox",
+                                                          title       =>'[% "Aplicar Sancion"|i18n %]',
+                                                      );
+              [% END %]
 </div>

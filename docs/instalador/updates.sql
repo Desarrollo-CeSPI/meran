@@ -387,3 +387,8 @@ VALUES
 ( NULL ,  'nombre_indice_sugerencia_sphinx',  'sugerencia',  'Indice de sugerencias de Sphinx a utilizar', NULL ,  'text',  'interna',  'Nombre Indice Sugerencia Sphinx', 'Indice de sugerencias de Sphinx a utilizar',  '0'),
 ( NULL ,  'distancia_sugerencia_sphinx',  '3',  'Distancia de Levenshtein (Distancia entre palabras) mínima que se acepta para dar una sugerencia.', NULL ,  'text',  'sistema', 'Distancia sugerencia sphinx',  'Distancia de Levenshtein (Distancia entre palabras) mínima que se acepta para dar una sugerencia.',  '0'),
 ( NULL , 'ocurrencia_sugerencia_sphinx', '10', 'Cantidad mínima de ocurrencias que debe tener una palabra para ingresar a la lista de sugerencias.', NULL, 'text', 'sistema', 'Ocurrencias Sugerencia Sphinx', 'Cantidad mínima de ocurrencias que debe tener una palabra para ingresar a la lista de sugerencias.', '0');
+
+
+##28/05/014 ##
+
+ALTER TABLE  circ_sancion ADD  motivo_sancion TEXT NOT NULL

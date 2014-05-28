@@ -453,9 +453,31 @@ function updateGuardarModificacionUsuario(responseText){
 }
 
 /************************************* FIN - Cambiar Nro Socio **********************************/
+/*************************************  Ver Permisos Actuales **********************************/
 
+
+function verPermisosActuales(){
+
+    usuario = USUARIO.ID;
+    if ($.trim(usuario) != ""){
+        objAH               = new AjaxHelper(updateVerPermisosActuales);
+        objAH.url           = URL_PREFIX+'/admin/permisos/permisosDB.pl';
+        objAH.cache         = false;
+        objAH.showOverlay   = true;  
+        objAH.nro_socio     = usuario;
+        objAH.accion            = "VER_PERMISOS_ACTUALES"
+        objAH.sendToServer();
+    }
+}
+
+function updateVerPermisosActuales(responseText){
+    $('#permisosUsuario').html(responseText);
+    $('#permisosUsuario').modal('show');
+}
+
+
+/************************************* FIN - Ver Permisos Actuales **********************************/
 /*************************************  Aplicar Sancion Manual **********************************/
-
 
 
 function sancionManual(){
@@ -480,9 +502,9 @@ function aplicarSancionManual(){
 
   $('#sancionManual').modal('hide');
 
-  nro_socio = $('#nro_socio_hidden').val();
-  dias = $('#dias').val();
-  motivo = $('#motivo').val();
+  nro_socio = $('#nro_socio_sancion_hidden').val();
+  dias      = $('#dias_sancion_manual').val();
+  motivo    = $('#motivo_sancion_manual').val();
 
   objAH                   = new AjaxHelper(updateAplicarSancionManual);
   objAH.url               = URL_PREFIX+'/usuarios/reales/usuariosRealesDB.pl';
@@ -490,12 +512,11 @@ function aplicarSancionManual(){
   objAH.showOverlay       = true;
   objAH.nro_socio         = USUARIO.ID; 
   objAH.dias              = dias;
-  objAH.motivo              = motivo; 
+  objAH.motivo            = motivo; 
   objAH.tipoAccion        = 'APLICAR_SANCION_MANUAL';
 
   objAH.sendToServer();
   startOverlay();
-
 }
 
 function updateAplicarSancionManual(responseText){

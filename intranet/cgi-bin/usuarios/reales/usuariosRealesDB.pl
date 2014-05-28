@@ -537,7 +537,7 @@ Se elimina el usuario
                                             flagsrequired   => {    ui              => 'ANY', 
                                                                     tipo_documento  => 'ANY', 
                                                                     accion          => 'ALTA', 
-                                                                    entorno         => 'sancion',
+                                                                    entorno         => 'circ_sanciones',
                                                                     tipo_permiso    => 'circulacion'},
                                             debug           => 1,
             });
@@ -562,13 +562,13 @@ Se elimina el usuario
                                             flagsrequired   => {    ui              => 'ANY', 
                                                                     tipo_documento  => 'ANY', 
                                                                     accion          => 'ALTA', 
-                                                                    entorno         => 'sancion',
+                                                                    entorno         => 'circ_sanciones',
                                                                     tipo_permiso    => 'circulacion'},
                                             debug           => 1,
             });
 
 #            $obj->{'nro_socio'}
-            my $Message_arrayref  = C4::AR::Usuarios::modificarCredencialesSocio($obj);
+            my $Message_arrayref  = C4::AR::Sanciones::aplicarSancionManualSocio($obj);
             my $infoOperacionJSON = to_json $Message_arrayref;
 
             C4::AR::Auth::print_header($session);
