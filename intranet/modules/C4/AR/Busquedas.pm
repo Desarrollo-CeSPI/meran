@@ -482,18 +482,18 @@ sub obtenerEstadoDeColeccion {
             $cant_revistas++;
             
             my $anio='#';
-            if($nivel2->getAnioRevista ne undef){
-                $anio = $nivel2->getAnioRevista;
+            if(($nivel2->getAnioRevista ne undef)||(C4::AR::Utilidades::trim($nivel2->getAnioRevista) ne '')){
+                $anio = C4::AR::Utilidades::trim($nivel2->getAnioRevista);
             }
             
             my $volumen='#';
-            if($nivel2->getVolumenRevista ne undef){
+            if(($nivel2->getVolumenRevista ne undef)||(C4::AR::Utilidades::trim($nivel2->getVolumenRevista) ne '')){
                 $volumen = C4::AR::Utilidades::trim($nivel2->getVolumenRevista);
             }
             
             my $numero='#';
-            if($nivel2->getNumeroRevista ne undef){
-                $numero = $nivel2->getNumeroRevista;
+            if(($nivel2->getNumeroRevista ne undef)||(C4::AR::Utilidades::trim($nivel2->getNumeroRevista) ne '')){
+                $numero = C4::AR::Utilidades::trim($nivel2->getNumeroRevista);
             }
             
             $HoH{$anio}->{$volumen}->{$numero}=$nivel2->getId2;
