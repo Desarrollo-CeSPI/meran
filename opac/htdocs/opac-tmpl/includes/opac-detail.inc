@@ -85,29 +85,58 @@
 						         <div id="estado_coleccion[% id1 %]" class="detalle_total estado_coleccion[% id1 %]">
 									<ul class="listado_sin_margen estado_coleccion unstyled">
 										[% FOREACH anio IN estadoDeColeccion.keys.sort %]
-										[% IF estadoDeColeccion.$anio.keys %]
-										<li>
-											[% IF anio != '#' %]<b>[% anio %]</b>[% END %]
-											[% FOREACH volumen IN estadoDeColeccion.$anio.keys.sort %]
-												[% IF volumen != '#' %][% volumen  %][% END %]
-												(
-												[% FOREACH fasciculo IN estadoDeColeccion.$anio.$volumen.keys.sort %]
+			                            [% IF estadoDeColeccion.$anio.keys %]
+			                            <li>
+			                                [% IF  (estadoDeColeccion.$anio.size > 1 || (estadoDeColeccion.$anio.keys.first && estadoDeColeccion.$anio.keys.first != '#'))||
+			                                (estadoDeColeccion.$anio.item('#').size > 1 || (estadoDeColeccion.$anio.item('#').keys.first && estadoDeColeccion.$anio.item('#').keys.first != '#')) 
+			                                       %]
+			                                   [% IF anio != '#' %] <b>[% anio %]</b>  [% END %]
 
-													 [% PERL %]
-														print C4::AR::Filtros::link_to( text =>     "[% fasciculo %]",
-																						url=>"[% url_prefix %]/opac-detail.pl", 
-																						params =>   ["id1=[% id1 %]","id2=[% estadoDeColeccion.$anio.$volumen.$fasciculo %]"],
-																						title =>    "[% 'Mostrar Detalle del Registro' | i18n %]",
-																						class => 	"link_to_detail"
-																					) ;
-													 [% END %]
-									
-												[% END %]
-												)
-											[% END %]
-										   </li>
-										[% END %]
-										[% END %]
+			                                  [% FOREACH volumen IN estadoDeColeccion.$anio.keys.sort %]
+			                                    
+			                                      [% IF  estadoDeColeccion.$anio.$volumen.keys.size > 1 || estadoDeColeccion.$anio.$volumen.keys.sort.first != '#' %]
+			                                       [% IF volumen != '#' %] <b>[% volumen %]</b>[% END %]
+			                                        (
+			                                          [% FOREACH fasciculo IN estadoDeColeccion.$anio.$volumen.keys.sort %]
+
+																 [% PERL %]
+																	print C4::AR::Filtros::link_to( text =>     "[% fasciculo %]",
+																									url=>"[% url_prefix %]/opac-detail.pl", 
+																									params =>   ["id1=[% id1 %]","id2=[% estadoDeColeccion.$anio.$volumen.$fasciculo %]"],
+																									title =>    "[% 'Mostrar Detalle del Registro' | i18n %]",
+																									class => 	"link_to_detail"
+																								) ;
+																 [% END %]
+			                                                
+			                                          [% END %]
+			                                         )
+			                                      [% ELSE %]
+			                                        [% PERL %]
+			                                          print C4::AR::Filtros::link_to( text =>     "[% volumen %]",
+			                                                        url=>"[% url_prefix %]/opac-detail.pl", 
+			                                                        params =>   ["id1=[% id1 %]","id2=[% estadoDeColeccion.$anio.$volumen.item('#') %]"],
+			                                                        title =>    "[% 'Mostrar Detalle del Registro' | i18n %]",
+			                                                        class =>  "link_to_detail"
+			                                                      ) ;
+			                                        [% END %]
+			                                      [% END %]
+
+			                                  [% END %]
+
+			                                [% ELSE %]
+			                                    [% PERL %]
+			                                      print C4::AR::Filtros::link_to( text =>     "[% anio %]",
+			                                                    url=>"[% url_prefix %]/opac-detail.pl", 
+			                                                    params =>   ["id1=[% id1 %]","id2=[% estadoDeColeccion.$anio.item('#').item('#') %]"],
+			                                                    title =>    "[% 'Mostrar Detalle del Registro' | i18n %]",
+			                                                    class =>  "link_to_detail"
+			                                                  ) ;
+			                                    [% END %]
+			                                [% END %]
+			                            </li>
+			                            [% END %]
+			                            [% END %]
+
 									</ul>
 									[% IF issn %]
 										<div class="right">
