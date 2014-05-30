@@ -841,7 +841,7 @@ sub detalleCompletoOPAC{
     
     
     for(my $i=$inicio;$i<$cantidad;$i++){
-        eval{
+       # eval{
             my $hash_nivel2;
             $nivel2_array_ref->[$i]->load();
             $hash_nivel2->{'id2'}                       = $nivel2_array_ref->[$i]->getId2;
@@ -906,7 +906,7 @@ sub detalleCompletoOPAC{
             $hash_nivel2->{'show_analiticas'}           = $tiene_analiticas; #muestra la accion "Ver analíticas" si el grupo tiene analíticas
             $hash_nivel2->{'cant_analiticas'}           = $tiene_analiticas;
 
-            if ( ($$nivel2_array_ref->[$i]->getTemplate() eq "ANA") && ($hash_nivel2->{'cat_ref_tipo_nivel3'}  eq "ANA") ){
+            if ( ($nivel2_array_ref->[$i]->getTemplate() eq "ANA") && ($hash_nivel2->{'cat_ref_tipo_nivel3'}  eq "ANA") ){
 
                 #recupero las analiticas por el id1    
                 my $cat_reg_analiticas_array_ref    = C4::AR::Nivel2::getAllAnaliticasById1($nivel2_array_ref->[0]->getId1());
@@ -925,7 +925,7 @@ sub detalleCompletoOPAC{
             }
 
             push(@nivel2, $hash_nivel2);
-        };
+       # };
     }
 
     #Es una Revista? Armo el estado de colección
@@ -970,7 +970,7 @@ sub generaCodigoBarra{
 
     for (my $i=0; $i<@estructurabarcode; $i++) {
         if (($i % 2) == 0) {
-            my $pattern_string = %$parametros->{$estructurabarcode[$i]};
+            my $pattern_string = $parametros->{$estructurabarcode[$i]};
             if ($pattern_string){
                 $like.= $pattern_string;
             }else{

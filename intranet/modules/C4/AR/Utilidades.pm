@@ -358,8 +358,8 @@ sub setHeaders{
 sub getStringFor{
     my ($key) = @_;
 
-    if(defined %LABELS_COMPONENTS->{$key}){
-        return C4::AR::Filtros::i18n(%LABELS_COMPONENTS->{$key});
+    if(defined $LABELS_COMPONENTS{$key}){
+        return C4::AR::Filtros::i18n($LABELS_COMPONENTS{$key});
     }else{
         return "INDEFINIDO";
     }

@@ -327,7 +327,7 @@ sub _eliminarImageneNovedadByNombre{
 
         if(scalar(@$novedades_array_ref) > 0){
         
-            @$novedades_array_ref->[0]->delete();
+            $novedades_array_ref->[0]->delete();
             
         }else{
             return (0);

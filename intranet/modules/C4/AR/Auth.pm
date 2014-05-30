@@ -1120,9 +1120,9 @@ sub print_header {
     $cookie = new CGI::Cookie(  
                                 -secure     => $secure, 
                                 -httponly   => 1, 
-                                -name       =>$session->name, 
-                                -value      =>$session->id, 
-                                -expires    => '+' .$session->expire. 's', 
+                                -name       => $session->name, 
+                                -value      => $session->id, 
+                                -expires    => $session->expire ? '+' .$session->expire. 's' : 0, 
                             );
                             
 #En el header podría ir esto para la parte de las user pictures, 
