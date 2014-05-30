@@ -391,4 +391,4 @@ VALUES
 
 ##28/05/014 ##
 
-ALTER TABLE  circ_sancion ADD  motivo_sancion TEXT NOT NULL
+ALTER TABLE  circ_sancion ADD  motivo_sancion TEXT NOT NULL;

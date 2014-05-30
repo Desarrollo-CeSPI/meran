@@ -121,7 +121,7 @@ sub _eliminarPortadaEdicionByNombre{
 
         if(scalar(@$portadas_edicion_array_ref) > 0){
         
-            @$portadas_edicion_array_ref->[0]->delete();
+            $portadas_edicion_array_ref->[0]->delete();
             
         }else{
             return (0);

@@ -136,7 +136,7 @@ sub debug{
 
     my $enabled = _debugStatus();
 
-    ($enabled >= 1024) && (_write_debug("[debug] ".$data));
+    ($enabled >= 1024) && ($data) && (_write_debug("[debug] ".$data));
 }
 
 sub _printHASH {

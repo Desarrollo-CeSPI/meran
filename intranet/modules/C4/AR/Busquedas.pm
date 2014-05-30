@@ -482,17 +482,17 @@ sub obtenerEstadoDeColeccion {
             $cant_revistas++;
             
             my $anio='#';
-            if(($nivel2->getAnioRevista ne undef)||(C4::AR::Utilidades::trim($nivel2->getAnioRevista) ne '')){
+            if(($nivel2->getAnioRevista ne undef)&&(C4::AR::Utilidades::trim($nivel2->getAnioRevista) ne '')){
                 $anio = C4::AR::Utilidades::trim($nivel2->getAnioRevista);
             }
             
             my $volumen='#';
-            if(($nivel2->getVolumenRevista ne undef)||(C4::AR::Utilidades::trim($nivel2->getVolumenRevista) ne '')){
+            if(($nivel2->getVolumenRevista ne undef)&&(C4::AR::Utilidades::trim($nivel2->getVolumenRevista) ne '')){
                 $volumen = C4::AR::Utilidades::trim($nivel2->getVolumenRevista);
             }
             
             my $numero='#';
-            if(($nivel2->getNumeroRevista ne undef)||(C4::AR::Utilidades::trim($nivel2->getNumeroRevista) ne '')){
+            if(($nivel2->getNumeroRevista ne undef)&&(C4::AR::Utilidades::trim($nivel2->getNumeroRevista) ne '')){
                 $numero = C4::AR::Utilidades::trim($nivel2->getNumeroRevista);
             }
             
@@ -2275,7 +2275,7 @@ sub _existeEnArregloDeCampoMARC{
 
     for(my $j=0;$j < scalar(@$array);$j++){
 
-        if(@$array->[$j]->{'campo'} eq $campo){
+        if($array->[$j]->{'campo'} eq $campo){
             return 1;
         }
     }

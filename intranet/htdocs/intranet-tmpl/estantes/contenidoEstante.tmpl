@@ -114,7 +114,7 @@ function borrarCont(cont, estante, padre){
                                   </span>
                                   <input type='hidden' value='[% estadoDeColeccion.$anio.$volumen.$fasciculo %]'>
                                   <span class="help-inline">
-                                   [% HTML.escape(fasciculo) %]
+                                  [% IF fasciculo != '#' %] [% HTML.escape(fasciculo) %] [% END %]
                                   </span>
                                 <br>
                                 [% END %]
