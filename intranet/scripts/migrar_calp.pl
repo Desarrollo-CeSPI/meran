@@ -732,6 +732,10 @@ sub generaCodigoBarraFromMarcRecord{
     sub agregarAnaliticas {
         my ($id1_padre,$id2_padre, $recno) = @_;
 	
+        my $n2_padre   = C4::AR::Nivel2::getNivel2FromId2(id2_padre);
+        
+        my $signaturas = $n2_padre->getSignaturas();
+		
 		my $ana_sql= "SELECT * FROM  MATERIAL WHERE NivelBibliografico = 'A' AND Parent_RecNo = ? ; ";
 		my $ana_calp=$db_calp->prepare($ana_sql);
 		   $ana_calp->execute($recno);
@@ -740,6 +744,15 @@ sub generaCodigoBarraFromMarcRecord{
 		while (my $material=$ana_calp->fetchrow_hashref) {
 			my ($marc_record_n1,$marc_record_n2,$marc_record_n3_base,$ejemplares) = prepararRegistroParaMigrar($material,"ANA", "Analitico");
 			#N1
+			#Agregamos signatura del padre si es que tiene (ticket #9443):
+
+			if (@$signaturas){
+				#No existe el campo
+				my $field= MARC::Field->new('995', '', '', 't' => $signaturas->[0]);
+    			$marc_record_n1->append_fields($field);
+    			print "Analitica con signatura=> ".$signaturas->[0];
+			}
+
 			my ($msg_object,$id1_analitica) =  guardarNivel1DeImportacion($marc_record_n1,"ANA",$id2_padre);
 	        if(!$msg_object->{'error'}){
 	        	$analiticas_creadas++;
@@ -773,7 +786,14 @@ sub generaCodigoBarraFromMarcRecord{
 		
 		#Extension
     	my $extension = $material->{'Extension'};
-    	if($material->{'Extension'} && $material->{'UnidadExtension'}){
+
+    	#Prelimiar de extrensión
+    	if ($extension && $material->{'Preliminares'}){
+    	   	$extension = $material->{'Preliminares'}." ".$extension;
+    	}
+    	
+    	#Unidad de Extensión
+    	if($extension && $material->{'UnidadExtension'}){
     		my $extension .= " ".$material->{'UnidadExtension'};
     	}
 
@@ -835,7 +855,6 @@ sub generaCodigoBarraFromMarcRecord{
 			#['260','b',$material->{'CodEditor2'}],
 			#['260','b',$material->{'CodEditor3'}],
 			['260','c',$fecha_edicion],
-			['505','t',$material->{'Preliminares'}],	
 			['300','a',$extension],
 			['300','b',$extension2],
 			['300','c',$dimension],
