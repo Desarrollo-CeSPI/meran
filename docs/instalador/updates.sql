@@ -392,3 +392,7 @@ VALUES
 ##28/05/014 ##
 
 ALTER TABLE  circ_sancion ADD  motivo_sancion TEXT NOT NULL;
+
+## 02/06/2014 ## FIX NOT NULL!
+
+ALTER TABLE  circ_sancion CHANGE  motivo_sancion  motivo_sancion TEXT NULL;
