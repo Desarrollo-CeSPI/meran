@@ -746,6 +746,7 @@ sub generaCodigoBarraFromMarcRecord{
 		        #N2
 	        	my ($msg_object2,$id1_analitica,$id2_analitica) =  guardarNivel2DeImportacion($id1_analitica,$marc_record_n2,"ANA");
     		}
+    		
         }
        	return $analiticas_creadas;
 	}
@@ -773,7 +774,14 @@ sub generaCodigoBarraFromMarcRecord{
 		
 		#Extension
     	my $extension = $material->{'Extension'};
-    	if($material->{'Extension'} && $material->{'UnidadExtension'}){
+
+    	#Prelimiar de extrensión
+    	if ($extension && $material->{'Preliminares'}){
+    	   	$extension = $material->{'Preliminares'}." ".$extension;
+    	}
+    	
+    	#Unidad de Extensión
+    	if($extension && $material->{'UnidadExtension'}){
     		my $extension .= " ".$material->{'UnidadExtension'};
     	}
 
@@ -835,7 +843,6 @@ sub generaCodigoBarraFromMarcRecord{
 			#['260','b',$material->{'CodEditor2'}],
 			#['260','b',$material->{'CodEditor3'}],
 			['260','c',$fecha_edicion],
-			['505','t',$material->{'Preliminares'}],	
 			['300','a',$extension],
 			['300','b',$extension2],
 			['300','c',$dimension],
