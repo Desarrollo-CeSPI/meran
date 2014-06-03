@@ -731,7 +731,7 @@ sub generaCodigoBarraFromMarcRecord{
     }
     sub agregarAnaliticas {
         my ($id1_padre,$id2_padre, $recno) = @_;
-	
+		
 		my $ana_sql= "SELECT * FROM  MATERIAL WHERE NivelBibliografico = 'A' AND Parent_RecNo = ? ; ";
 		my $ana_calp=$db_calp->prepare($ana_sql);
 		   $ana_calp->execute($recno);
@@ -839,9 +839,6 @@ sub generaCodigoBarraFromMarcRecord{
 			['043','c',$pais],	
 			['041','a',$idioma],	
 			['260','a',$material->{'Lugar'}],	
-			#['260','b',$material->{'CodEditor'}],	 # mmmm responsable? CodEditor2 y CodEditor3 NO, AUTOR
-			#['260','b',$material->{'CodEditor2'}],
-			#['260','b',$material->{'CodEditor3'}],
 			['260','c',$fecha_edicion],
 			['300','a',$extension],
 			['300','b',$extension2],
@@ -1002,44 +999,47 @@ sub generaCodigoBarraFromMarcRecord{
 		my $marc_record_n1 = MARC::Record->new();
 		foreach my $campo (@campos_n1){
 			if($campo->[2]){
-				  if ($marc_record_n1->field($campo->[0])){
-				  	#Existe el campo agrego subcampo
-				  	$marc_record_n1->field($campo->[0])->add_subfields($campo->[1] => $campo->[2]);
-				  }
-				  else{
-				  	#No existe el campo
+				my @campos_registro = $marc_record_n1->field($campo->[0]);
+				if (($campos_registro[-1])&&(!$campos_registro[-1]->subfield($campo->[1]))){
+					#No existe el subcampo en el campo, lo agrego
+				  	$campos_registro[-1]->add_subfields($campo->[1] => $campo->[2]);
+				}
+				else{
+				  	#No existe el campo o ya existe el subcampo, se crea uno nuevo.
 					my $field= MARC::Field->new($campo->[0], '', '', $campo->[1] => $campo->[2]);
     				$marc_record_n1->append_fields($field);
-				  }
+				}
 			}
 		}
 
 		my $marc_record_n2 = MARC::Record->new();
 		foreach my $campo (@campos_n2){
 			if($campo->[2]){
-				  if ($marc_record_n2->field($campo->[0])){
-				  	#Existe el campo agrego subcampo
-				  	$marc_record_n2->field($campo->[0])->add_subfields($campo->[1] => $campo->[2]);
-				  }
-				  else{
-				  	#No existe el campo
+				my @campos_registro = $marc_record_n2->field($campo->[0]);
+				if (($campos_registro[-1])&&(!$campos_registro[-1]->subfield($campo->[1]))){
+					#No existe el subcampo en el campo, lo agrego
+				  	$campos_registro[-1]->add_subfields($campo->[1] => $campo->[2]);
+				}
+				else{
+				  	#No existe el campo o ya existe el subcampo, se crea uno nuevo.
 					my $field= MARC::Field->new($campo->[0], '', '', $campo->[1] => $campo->[2]);
     				$marc_record_n2->append_fields($field);
-				  }
+				}
 			}
 		}
 		my $marc_record_n3_base = MARC::Record->new();
 		foreach my $campo (@campos_n3){
 			if($campo->[2]){
-				  if ($marc_record_n3_base->field($campo->[0])){
-				  	#Existe el campo agrego subcampo
-				  	$marc_record_n3_base->field($campo->[0])->add_subfields($campo->[1] => $campo->[2]);
-				  }
-				  else{
-				  	#No existe el campo
+				my @campos_registro = $marc_record_n3_base->field($campo->[0]);
+				if (($campos_registro[-1])&&(!$campos_registro[-1]->subfield($campo->[1]))){
+					#No existe el subcampo en el campo, lo agrego
+				  	$campos_registro[-1]->add_subfields($campo->[1] => $campo->[2]);
+				}
+				else{
+				  	#No existe el campo o ya existe el subcampo, se crea uno nuevo.
 					my $field= MARC::Field->new($campo->[0], '', '', $campo->[1] => $campo->[2]);
     				$marc_record_n3_base->append_fields($field);
-				  }
+				}
 			}
 		}
 
@@ -1069,7 +1069,7 @@ sub generaCodigoBarraFromMarcRecord{
         }
         case 4  {
         	print "Calculando Analíticas... \n";
-        	#migrar('ANA');
+        	#migrar('ANA')
 
 
         	#contar analiticas
