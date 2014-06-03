@@ -1003,7 +1003,11 @@ sub generateBookLabelA4 {
 #     $pdf->addRawText( $codigo, $x + 15, $pageheight + ( $y - 120 ) - $posicion );
     
     #saco el barcode por ticket #9034
-    # $pdf->addRawText( $codigo, $x + 5, 250 + ( $y - 128 ) - 37);
+    $pdf->setSize(10);
+    if(C4::AR::Preferencias::getValorPreferencia('mostrar_barcode_en_etiqueta')){
+        $pdf->addRawText( $codigo, $x + 5, 250 + ( $y - 128 ) - 37);    
+    }
+    
     $posicion += 15;
     $pdf->addRawText( $nivel3->getDisponibilidadObject()->getNombre(), $x - 5, ( $y + 145 ) - 50);
 
