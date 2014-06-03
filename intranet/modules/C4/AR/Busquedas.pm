@@ -1690,18 +1690,19 @@ sub armarInfoNivel1{
         if($nivel1){
 
         # TODO ver si esto se puede sacar del resultado del indice asi no tenemos q ir a buscarlo
-            @result_array_paginado[$i]->{'titulo'}              = $nivel1->getTitulo();
+            @result_array_paginado[$i]->{'titulo'}                      = $nivel1->getTitulo();
             
             if ($params->{'isOAI_search'}){
-                @result_array_paginado[$i]->{'marc_record'}         = $nivel1->toMARC_OAI();
+                @result_array_paginado[$i]->{'marc_record'}             = $nivel1->toMARC_OAI();
             }
 
             @result_array_paginado[$i]->{'titulo'}              .= ($nivel1->getRestoDelTitulo() ne "")?": ".$nivel1->getRestoDelTitulo():"";
-            my $autor_object                                     = $nivel1->getAutorObject();
+            my $autor_object                                            = $nivel1->getAutorObject();
 
-            @result_array_paginado[$i]->{'nomCompleto'}         = $autor_object->getCompleto();
-            @result_array_paginado[$i]->{'idAutor'}             = $autor_object->getId();
-            @result_array_paginado[$i]->{'esta_en_favoritos'}   = C4::AR::Nivel1::estaEnFavoritos($nivel1->getId1());
+            @result_array_paginado[$i]->{'nomCompleto'}                 = $autor_object->getCompleto();
+            @result_array_paginado[$i]->{'nomCompletoRegistroFuente'}   = $autor_object->getCompleto();
+            @result_array_paginado[$i]->{'idAutor'}                     = $autor_object->getId();
+            @result_array_paginado[$i]->{'esta_en_favoritos'}           = C4::AR::Nivel1::estaEnFavoritos($nivel1->getId1());
 
             #aca se procesan solo los ids de nivel 1 que se van a mostrar
             #se generan los grupos para mostrar en el resultado de la consulta
