@@ -504,8 +504,8 @@ sub detalleNivel3{
 
                 if($n2){
                     $hash_nivel2{'nivel1_padre'}                = $n2->getId1();
-                    $hash_nivel2{'titulo_registro_padre'}       = $n2->nivel1->getTitulo();
-                    $hash_nivel2{'autor_registro_padre'}        = $n2->nivel1->getAutor();
+                    $hash_nivel2{'titulo_registro_padre'}       = $n2->nivel1->getTituloStringEscaped();
+                    $hash_nivel2{'autor_registro_padre'}        = $n2->nivel1->getAutorStringEscaped();
                     $hash_nivel2{'primer_signatura'}            = $n2->getSignaturas->[0];
                 }
             }
@@ -916,8 +916,8 @@ sub detalleCompletoOPAC{
 
                     if($n2){
                         $hash_nivel2->{'nivel1_padre'}                = $n2->getId1();
-                        $hash_nivel2->{'titulo_registro_padre'}       = $n2->nivel1->getTitulo();
-                        $hash_nivel2->{'autor_registro_padre'}        = $n2->nivel1->getAutor();
+                        $hash_nivel2->{'titulo_registro_padre'}       = $n2->nivel1->getTituloStringEscaped();
+                        $hash_nivel2->{'autor_registro_padre'}        = $n2->nivel1->getAutorStringEscaped();
                         $hash_nivel2->{'primer_signatura'}            = $n2->getSignaturas->[0];
                         $hash_nivel2->{'edicion_analitica'}           = $n2->getEdicion();
                     }
