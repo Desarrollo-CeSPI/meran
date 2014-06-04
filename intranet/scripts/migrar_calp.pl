@@ -193,7 +193,6 @@ sub migrar {
         		my @estadoDeColeccion = _generarNumerosDeVolumen($volumen,$fasciculos);
         	
             	foreach my $rev (@estadoDeColeccion){
-              	C4::AR::Debug::debug("REVISTA ==>  \n ".$rev->{'volumen'}."-".$rev->{'numero'});
                     my $marc_revista =  $marc_record_n2->clone();
                     my $field863 = $marc_revista->field('863');
                     if($field863){
@@ -745,6 +744,9 @@ sub generaCodigoBarraFromMarcRecord{
 	        	$analiticas_creadas++;
 		        #N2
 	        	my ($msg_object2,$id1_analitica,$id2_analitica) =  guardarNivel2DeImportacion($id1_analitica,$marc_record_n2,"ANA");
+    			
+    			print "\n\n\n".$marc_record_n2->as_formatted."\n\n\n";
+
     		}
     		
         }
@@ -771,25 +773,6 @@ sub generaCodigoBarraFromMarcRecord{
 		}
 		#Idioma
     	my $idioma=getIdioma($material->{'CodIdioma'});
-		
-		#Extension
-    	my $extension = $material->{'Extension'};
-
-    	#Prelimiar de extrensión
-    	if ($extension && $material->{'Preliminares'}){
-    	   	$extension = $material->{'Preliminares'}." ".$extension;
-    	}
-    	
-    	#Unidad de Extensión
-    	if($extension && $material->{'UnidadExtension'}){
-    		my $extension .= " ".$material->{'UnidadExtension'};
-    	}
-
-		#Extension
-    	my $extension2 = $material->{'ExtensionSecundaria'};
-    	if($material->{'ExtensionSecundaria'} && $material->{'UnidadExtSecundaria'}){
-    		my $extension2 .= " ".$material->{'UnidadExtSecundaria'};
-    	}
 
 		#Dimension
     	my $dimension = $material->{'DimAlto'};
@@ -840,8 +823,6 @@ sub generaCodigoBarraFromMarcRecord{
 			['041','a',$idioma],	
 			['260','a',$material->{'Lugar'}],	
 			['260','c',$fecha_edicion],
-			['300','a',$extension],
-			['300','b',$extension2],
 			['300','c',$dimension],
 			['020','a',$material->{'ISBN'}],
 			
@@ -850,6 +831,53 @@ sub generaCodigoBarraFromMarcRecord{
 			['863','a',$material->{'Serie_Volumen'}],
 			['362','a',$material->{'Serie_Fecha'}]
 			);
+
+		if($template eq "ANA"){
+			my $extension ="";
+			my $cant_paginas = $material->{'Extension'};
+			my $desde = $material->{'ExtensionSecundaria'};
+
+			if ($desde && $cant_paginas){
+				my $hasta = $desde + $cant_paginas - 1;
+				$extension =$desde."-".$hasta;
+			}elsif(!$desde){
+				$extension = $cant_paginas;
+			}
+
+		    #Prelimiar de extrensión
+		    if ($extension && $material->{'Preliminares'}){
+		       	$extension = $material->{'Preliminares'}.", ".$extension;
+		    }
+	    	
+	    	#Unidad de Extensión
+	    	if($extension && $material->{'UnidadExtension'}){
+	    		my $extension .= " ".$material->{'UnidadExtension'};
+	    	}
+
+			push (@campos_n2,['300','a',$extension]);
+		}else{
+			#Extension
+	    	my $extension = $material->{'Extension'};
+
+	    	#Prelimiar de extrensión
+	    	if ($extension && $material->{'Preliminares'}){
+	    	   	$extension = $material->{'Preliminares'}.", ".$extension;
+	    	}
+	    	
+	    	#Unidad de Extensión
+	    	if($extension && $material->{'UnidadExtension'}){
+	    		my $extension .= " ".$material->{'UnidadExtension'};
+	    	}
+
+			#Extension 2
+	    	my $extension2 = $material->{'ExtensionSecundaria'};
+	    	if($material->{'ExtensionSecundaria'} && $material->{'UnidadExtSecundaria'}){
+	    		my $extension2 .= " ".$material->{'UnidadExtSecundaria'};
+	    	}
+
+			push (@campos_n2,['300','a',$extension]);
+			push (@campos_n2,['300','b',$extension2]);
+		}
 
 
 		my @campos_n3=(	
