@@ -396,3 +396,9 @@ ALTER TABLE  circ_sancion ADD  motivo_sancion TEXT NOT NULL;
 ## 02/06/2014 ## FIX NOT NULL!
 
 ALTER TABLE  circ_sancion CHANGE  motivo_sancion  motivo_sancion TEXT NULL;
+
+## 03/06/2014 ##
+INSERT INTO pref_preferencia_sistema( id, variable, value, explanation, options, type , categoria, label, explicacion_interna, revisado ) 
+VALUES (
+NULL ,  'mostrar_barcode_en_etiqueta',  '0',  'Muestra el nrp. de inventario en el lomo de la etiqueta.', NULL ,  'bool',  'sistema',  'Mostrar nro. inventario en etiqueta', 'Muestra el nrp. de inventario en el lomo de la etiqueta.',  '0'
+);
