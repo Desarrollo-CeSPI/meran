@@ -746,6 +746,7 @@ sub generaCodigoBarraFromMarcRecord{
 		        #N2
 	        	my ($msg_object2,$id1_analitica,$id2_analitica) =  guardarNivel2DeImportacion($id1_analitica,$marc_record_n2,"ANA");
     		}
+    		
         }
        	return $analiticas_creadas;
 	}
