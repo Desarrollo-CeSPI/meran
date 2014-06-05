@@ -175,7 +175,11 @@ sub estaSancionado {
                                                                                 );
                                                                                 
   foreach my $sancion (@$sanciones_array_ref){
-  foreach my $tipo ($sancion->ref_tipo_prestamo_sancion){
+    #Es una sanción Manual?
+    if ( $sancion->getTipo_Sancion eq -1 ){ return $sancion; }
+    
+
+    foreach my $tipo ($sancion->ref_tipo_prestamo_sancion){
       if ( $tipo->getTipo_prestamo eq $tipo_prestamo ){ return $sancion; }
     }
   }
@@ -790,14 +794,9 @@ sub aplicarSancionManualSocio {
             #$socio->setCredentialType($params->{'credenciales'});
               C4::AR::Debug::debug("***__________________________CALCULO COMIENZO SANCION MANUAL__________________***");   
               my $dateformat = C4::Date::get_date_format();
-              my ($fin_reserva,$comienzo_sancion,$apertura,$cierre)    = C4::Date::proximosHabiles(1,1);
-
-              my $fechaHoy =  C4::Date::format_date_in_iso( Date::Manip::ParseDate("today"), $dateformat );   
+              my $comienzo_sancion =  C4::Date::format_date_in_iso( Date::Manip::ParseDate("today"), $dateformat );   
               my $diasDeSancionManual =  $params->{'dias'};
               C4::AR::Debug::debug("***___________________________________DIAS SANCION MANUAL___________________________".$diasDeSancionManual);  
-              
-              my $tipo_sancion = $params->{'motivo'};
-
               if ($diasDeSancionManual > 0) {
                 C4::AR::Debug::debug("***_____________________________CALCULO FIN SANCION MANUAL____________________***");
                 my ($fecha_comienzo_sancion,$fecha_fin_sancion,$apertura,$cierre) = C4::Date::proximosHabiles($diasDeSancionManual,0,$comienzo_sancion);
@@ -807,7 +806,7 @@ sub aplicarSancionManualSocio {
                 my  $sancion              = C4::Modelo::CircSancion->new(db => $db);
                 my %paramsSancion;
                 $paramsSancion{'responsable'}       = $params->{'responsable'};
-                $paramsSancion{'tipo_sancion'}      = "MANUAL";
+                $paramsSancion{'tipo_sancion'}      = -1;
                 $paramsSancion{'nro_socio'}         = $params->{'nro_socio'};
                 $paramsSancion{'fecha_comienzo'}    = $fecha_comienzo_sancion;
                 $paramsSancion{'fecha_final'}       = $fecha_fin_sancion;

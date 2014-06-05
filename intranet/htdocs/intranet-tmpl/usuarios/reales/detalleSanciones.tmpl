@@ -63,26 +63,40 @@ function updateBorrarSancion(responseText){
                   		  [% IF sancion.ref_tipo_sancion.ref_tipo_prestamo.getId_tipo_prestamo %]
 	                          [% sancion.ref_tipo_sancion.ref_tipo_prestamo.getDescripcion %]
 	                      [% ELSE %]
-	                          [% "Reserva no retirada" | i18n %]
+	                      	[% IF sancion.tipo_sancion == -1 %]
+		                          [% "Sanci&oacute;n Manual" | i18n %]
+	                      	[% ELSE %]
+		                      	[% IF sancion.tipo_sancion == 0 %]
+		                          [% "Reserva no retirada" | i18n %]
+		                    	[% END %]
+	                    	[% END %]
 	                      [% END %]
   						[% CATCH %]
 							NO EXISTE EL TIPO DE PRESTAMO
 						[% END %]
 	                  </td>
 	                  <td>
-                  	[% TRY %]
-	                      [% FOREACH ts IN sancion.ref_tipo_sancion.ref_tipo_prestamo_sancion %] 
-	                          [% ts.ref_tipo_prestamo.descripcion %]<br>
-	                      [% END %]
-					[% CATCH %]
-						NO EXISTE EL TIPO DE PRESTAMO
-					[% END %]
+	                  [% IF sancion.tipo_sancion == -1 %]
+		                	[% "Todos los tipos de pr&eacute;stamo" | i18n %]
+	                  [% ELSE %]
+	                  	[% TRY %]
+		                      [% FOREACH ts IN sancion.ref_tipo_sancion.ref_tipo_prestamo_sancion %] 
+		                          [% ts.ref_tipo_prestamo.descripcion %]<br>
+		                      [% END %]
+						[% CATCH %]
+							NO EXISTE EL TIPO DE PRESTAMO
+						[% END %]
+					  [% END %]
 	                  </td>
 	                  <td>[% sancion.getFecha_comienzo_formateada %]</td>
 	                  <td>[% sancion.getFecha_final_formateada %]</td>
-	                  <td>[% sancion.nivel3.nivel1.getAutor %]</td>
-	                  <td>[% sancion.nivel3.nivel1.getTitulo %]</td>
-	                  <td>[% sancion.nivel3.nivel2.getEdicion %]</td>
+	                  	[% IF sancion.tipo_sancion == -1 %]
+	                         <td colspan="3"><b>[% "Motivo" | i18n %]:</b> [% sancion.getMotivo_sancion %]</td>
+	                  	[% ELSE %]
+		                  <td>[% sancion.nivel3.nivel1.getAutor %]</td>
+		                  <td>[% sancion.nivel3.nivel1.getTitulo %]</td>
+		                  <td>[% sancion.nivel3.nivel2.getEdicion %]</td>
+		                [% END %]
 	                  <td>
 	        
 	

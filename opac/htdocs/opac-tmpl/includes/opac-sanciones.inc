@@ -12,17 +12,24 @@
                 [% FOREACH sancion IN sanciones %]
                       <dl>
                             <dt> 
-
-	                            [% IF sancion.tipo_sancion %]
-	                                [% FOREACH ts IN sancion.ref_tipo_prestamo_sancion %] 
-	                                    [% ts.ref_tipo_prestamo.descripcion %]
-	                                    [% BREAK %]
-	                                [% END %]
-	                                [% ELSE %]
-	                                    [% "Reserva no retirada" | i18n %]
-	                             [% END %]
+                  		  [% IF sancion.ref_tipo_sancion.ref_tipo_prestamo.getId_tipo_prestamo %]
+	                          [% sancion.ref_tipo_sancion.ref_tipo_prestamo.getDescripcion %]
+	                      [% ELSE %]
+	                      	[% IF sancion.tipo_sancion == -1 %]
+		                          [% "Sanci&oacute;n Manual" | i18n %]
+	                      	[% ELSE %]
+		                      	[% IF sancion.tipo_sancion == 0 %]
+		                          [% "Reserva no retirada" | i18n %]
+		                    	[% END %]
+	                    	[% END %]
+	                      [% END %]
                             </dt>
-							                            
+							   [% IF sancion.tipo_sancion == -1 %]
+								<div class="well">
+		                            <dt class="inline left rightMargin">[% "Motivo: " | i18n %]</dt>
+		                            <dd>[% HTML.escape(sancion.getMotivo_sancion) %]</dd>
+		                        </div>
+							   [% ELSE %]     
 								<div class="well">
 		                            <dt class="inline left rightMargin">[% "Autor: " | i18n %]</dt>
 		                            <dd>[% HTML.escape(sancion.nivel3.nivel1.getAutor) %]</dd>
@@ -37,7 +44,7 @@
 			                            </dd>
                                     [% END %]
 	                            </div>
-
+	                            [% END %]
 	                            <dt class="inline left rightMargin">[% "Desde el: " | i18n %]</dt>
 	                            <dd>[% sancion.getFecha_comienzo_formateada %]<b> [% " hasta el: " | i18n %]</b>[% sancion.getFecha_final_formateada %] ([% sancion.getDias_sancion %] [% "d&iacute;as" | i18n %]) </dd>
 								

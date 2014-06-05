@@ -18,20 +18,29 @@
                         [% FOREACH sancion IN sanciones %]
                         <tr>  
                             <td>
-                                  [% IF sancion.tipo_sancion %] 
-                                        [% sancion.ref_tipo_sancion.ref_tipo_prestamo.getDescripcion %]
-                                  [% ELSE %]
-                                        [% "Reserva no retirada" | i18n %]
-                                  [% END %]
+                            [% IF sancion.ref_tipo_sancion.ref_tipo_prestamo.getId_tipo_prestamo %]
+                                [% sancion.ref_tipo_sancion.ref_tipo_prestamo.getDescripcion %]
+                            [% ELSE %]
+                              [% IF sancion.tipo_sancion == -1 %]
+                                  [% "Sanci&oacute;n Manual" | i18n %]
+                              [% ELSE %]
+                                [% IF sancion.tipo_sancion == 0 %]
+                                  [% "Reserva no retirada" | i18n %]
+                              [% END %]
+                            [% END %]
+                            [% END %]
                             </td>
                             <td>
-
+                              [% IF sancion.tipo_sancion == -1 %]
+                                <b>[% "Motivo" | i18n %]:</b> [% sancion.getMotivo_sancion %]
+                              [% ELSE %]
                                    [% PERL %]
                                                 print C4::AR::Filtros::link_to( text =>     "[% sancion.nivel3.nivel1.getTitulo %]",
                                                                                 url =>      "[% url_prefix %]/opac-detail.pl", 
                                                                                 params => [ "id1=[% sancion.nivel3.nivel1.getId1 %]", ],
                                                                             ) ;
                                   [% END %]
+                              [% END %]
                             </td>
                             <td>
                                   [% sancion.getFecha_comienzo_formateada %]
