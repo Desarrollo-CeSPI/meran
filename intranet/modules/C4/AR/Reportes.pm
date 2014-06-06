@@ -2082,6 +2082,71 @@ sub getReservasCirculacion {
 
 }
 
+sub reporteGenEtiquetasPorRango{
+    my ($params,$session) = @_;
+
+    my @datos_array;
+    my @filtros;
+
+    push(@filtros, ( codigo_barra   => { gt => $params->{'codBarra1'} } ) );
+    push(@filtros, ( codigo_barra   => { lt => $params->{'codBarra2'} } ) );
+
+    my $cat_registro_marc_n3_array = C4::Modelo::CatRegistroMarcN3::Manager->get_cat_registro_marc_n3(
+                                                                query => \@filtros,
+                                                            );
+
+
+    foreach my $hash (@$cat_registro_marc_n3_array){
+        my %hash_temp = {};
+        $hash_temp{'id1'}   = $hash->nivel1->getId1();
+
+        push (@datos_array, \%hash_temp);
+    }
+
+    my ($total_found_paginado, $resultsarray);
+    #arma y ordena el arreglo para enviar al cliente
+    ($total_found_paginado, $resultsarray) = C4::AR::Busquedas::armarInfoNivel1($params, @datos_array);
+    #se loquea la busqueda
+
+    C4::AR::Busquedas::logBusqueda($params, $session);
+    
+    my @datos;
+    foreach my $res (@$resultsarray){
+        my %hash_temp;
+        $hash_temp{'nivel1'}= $res;
+        my $grupos = C4::AR::Nivel2::getNivel2FromId1($res->{'id1'});
+        my @niveles3 = ();
+
+        foreach my $grupo (@$grupos) {
+            my $ejemplares = C4::AR::Nivel3::getNivel3FromId2($grupo->{'id'});
+            push (@niveles3, @$ejemplares);
+        }
+
+        $hash_temp{'nivel2'} = $grupos;
+        $hash_temp{'nivel3'}=\@niveles3;
+        
+        push (@datos, \%hash_temp);
+    
+       
+    }
+
+    my $total_found = scalar(@datos);      
+
+    return ($total_found, \@datos);
+}
+
+
+sub reporteGenerarEtiquetas{
+    my ($params, $session) = @_;
+
+    if( (C4::AR::Utilidades::trim($params->{'codBarra1'}) ne "") && (C4::AR::Utilidades::trim($params->{'codBarra2'}) ne "") ){
+        reporteGenEtiquetasPorRango($params, $session);
+    } else {
+        reporteGenEtiquetas($params, $session);       
+    }
+
+}
+
 sub reporteGenEtiquetas{
     my ($params,$session) = @_;
 

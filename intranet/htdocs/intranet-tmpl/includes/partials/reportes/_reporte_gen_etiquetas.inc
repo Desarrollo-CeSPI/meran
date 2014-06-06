@@ -22,6 +22,8 @@
         objAH_repE.titulo            = $('#titulo').val();
         objAH_repE.autor             = $('#autor').val();
         objAH_repE.codBarra          = $('#codBarra').val();
+        objAH_repE.codBarra1         = $('#codBarra1').val();
+        objAH_repE.codBarra2         = $('#codBarra2').val();
         objAH_repE.signatura         = $('#signatura').val();
         //  objAH_repE.asc                = ASC;
         objAH_repE.tipoAccion        = 'REPORTE_GEN_ETIQUETAS';
@@ -74,6 +76,8 @@
           if (  (jQuery.trim($('#titulo').val()) != '') ||
                 (jQuery.trim($('#autor').val()) != '') ||
                 (jQuery.trim($('#codBarra').val()) != '')||
+                (jQuery.trim($('#codBarra1').val()) != '')||
+                (jQuery.trim($('#codBarra2').val()) != '')||
                 (jQuery.trim($('#signatura').val()) != '')
              ){ 
                 busqueda();
@@ -118,6 +122,18 @@
                     <div class="controls">
                         <input type="text" size="25" id="codBarra">
                     </div>
+                    <label class="control-label" for="codBarra">
+                        [% "C&oacute;digo de barras Inicial" | i18n %]
+                    </label>
+                    <div class="controls">
+                        <input type="text" size="25" id="codBarra1">
+                    </div>
+                    <label class="control-label" for="codBarra">
+                        [% "C&oacute;digo de barras Final" | i18n %]
+                    </label>
+                    <div class="controls">
+                        <input type="text" size="25" id="codBarra2">
+                    </div>                    
                 </div>
                 <div class="control-group">
                     <label class="control-label" for="signatura">
