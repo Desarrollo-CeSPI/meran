@@ -373,7 +373,6 @@ update pref_preferencia_sistema set categoria="sistema" where variable ='titulo_
 
 ## 20/05/2014
 
-
 CREATE TABLE indice_sugerencia (
 	id			INTEGER PRIMARY KEY AUTO_INCREMENT NOT NULL,
 	keyword		VARCHAR(255) NOT NULL,
@@ -393,6 +392,7 @@ VALUES
 
 ALTER TABLE  circ_sancion ADD  motivo_sancion TEXT NOT NULL;
 
+### 0.10.0 ###
 ## 02/06/2014 ## FIX NOT NULL!
 
 ALTER TABLE  circ_sancion CHANGE  motivo_sancion  motivo_sancion TEXT NULL;
@@ -402,3 +402,7 @@ INSERT INTO pref_preferencia_sistema( id, variable, value, explanation, options,
 VALUES (
 NULL ,  'mostrar_barcode_en_etiqueta',  '0',  'Muestra el nrp. de inventario en el lomo de la etiqueta.', NULL ,  'bool',  'sistema',  'Mostrar nro. inventario en etiqueta', 'Muestra el nrp. de inventario en el lomo de la etiqueta.',  '0'
 );
+
+## 06/06/2014 ##
+
+ALTER TABLE  rep_historial_sancion ADD  motivo_sancion TEXT  NULL;

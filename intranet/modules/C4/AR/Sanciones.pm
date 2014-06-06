@@ -175,9 +175,8 @@ sub estaSancionado {
                                                                                 );
                                                                                 
   foreach my $sancion (@$sanciones_array_ref){
-    #Es una sanción Manual?
-    if ( $sancion->getTipo_Sancion eq -1 ){ return $sancion; }
-    
+    #Es una sanción Manual? Se aplica a todos los tipos de préstamo!
+    if ( $sancion->getTipo_sancion eq -1 ){ return $sancion; }
 
     foreach my $tipo ($sancion->ref_tipo_prestamo_sancion){
       if ( $tipo->getTipo_prestamo eq $tipo_prestamo ){ return $sancion; }
