@@ -83,30 +83,48 @@
                     <td>[% sancion.socio.persona.getLegajo %]</td>
                     <td>[% sancion.socio.categoria.getDescription %]</td>
                     <td>
-                        [% IF sancion.ref_tipo_sancion.ref_tipo_prestamo.id_tipo_prestamo %]
+                      [% TRY %]
+                        [% IF sancion.ref_tipo_sancion.ref_tipo_prestamo.getId_tipo_prestamo %]
                             [% sancion.ref_tipo_sancion.ref_tipo_prestamo.getDescripcion %]
                         [% ELSE %]
-                            Reserva no retirada
+                          [% IF sancion.tipo_sancion == -1 %]
+                              [% "Sanci&oacute;n Manual" | i18n %]
+                          [% ELSE %]
+                            [% IF sancion.tipo_sancion == 0 %]
+                              [% "Reserva no retirada" | i18n %]
+                          [% END %]
                         [% END %]
+                        [% END %]
+                      [% CATCH %]
+                        NO EXISTE EL TIPO DE PRESTAMO
+                      [% END %]
                     </td>
                     <td>[% sancion.getFecha_comienzo_formateada %]</td>
                     <td>[% sancion.getFecha_final_formateada %]</td>
 
-                    [% IF sancion.nivel3.getId %]
-                        <td>[% sancion.nivel3.nivel1.getAutor %]</td>
-                        <td style="width:200px;">[% sancion.nivel3.nivel1.getTitulo %]</td>
-                        <td>[% sancion.nivel3.nivel2.getEdicion %]</td>
+                    [% IF sancion.tipo_sancion == -1 %]
+                      <td colspan="3">
+                          [% IF sancion.getMotivo_sancion %]
+                              <b>[% "Motivo" | i18n %]:</b> [% sancion.getMotivo_sancion %]
+                          [% END %]
+                      </td>
                     [% ELSE %]
-                        [% IF sancion.reserva.nivel3.getId %]
-                            <td>[% sancion.reserva.nivel3.nivel1.getAutor %]</td>
-                            <td>[% sancion.reserva.nivel3.nivel1.getTitulo %]</td>
-                            <td>[% sancion.reserva.nivel3.nivel2.getEdicion %]</td>
-                        [% ELSE %]
-                            <td>[% '---' | i18n %]</td>
-                            <td>[% '---' | i18n %]</td>
-                            <td>[% '---' | i18n %]</td>
-                        [% END %]
-                    [% END %]    
+                      [% IF sancion.nivel3.getId %]
+                          <td>[% sancion.nivel3.nivel1.getAutor %]</td>
+                          <td style="width:200px;">[% sancion.nivel3.nivel1.getTitulo %]</td>
+                          <td>[% sancion.nivel3.nivel2.getEdicion %]</td>
+                      [% ELSE %]
+                          [% IF sancion.reserva.nivel3.getId %]
+                              <td>[% sancion.reserva.nivel3.nivel1.getAutor %]</td>
+                              <td>[% sancion.reserva.nivel3.nivel1.getTitulo %]</td>
+                              <td>[% sancion.reserva.nivel3.nivel2.getEdicion %]</td>
+                          [% ELSE %]
+                              <td>[% '---' | i18n %]</td>
+                              <td>[% '---' | i18n %]</td>
+                              <td>[% '---' | i18n %]</td>
+                          [% END %]
+                      [% END %]    
+                    [% END %]
                 </tr>
               [% END %]
           </tbody>

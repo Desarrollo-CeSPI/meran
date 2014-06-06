@@ -567,7 +567,7 @@ Se elimina el usuario
                                             debug           => 1,
             });
 
-#            $obj->{'nro_socio'}
+            $obj->{'responsable'}            = $socio->getNro_socio;
             my $Message_arrayref  = C4::AR::Sanciones::aplicarSancionManualSocio($obj);
             my $infoOperacionJSON = to_json $Message_arrayref;
 

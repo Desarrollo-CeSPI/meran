@@ -26,8 +26,13 @@
                         <td style="color:red;">
                         [% 'Borrado el' | i18n %] [% historial_sancion.getTimestamp %]
                     [% ELSE %]
-		                <td>
-		                --
+                        [% IF historial_sancion.getTipo_operacion == "Insercion"  %]
+                            <td>
+                             [% 'Agregada el' | i18n %] [% historial_sancion.getTimestamp %]
+                        [% ELSE %]
+                            <td>
+                             [% historial_sancion.getTipo_operacion %] [% historial_sancion.getTimestamp %]
+                        [% END %]
 		            [% END %]
                 </td>
                 <td>
@@ -44,34 +49,52 @@
                     [% historial_sancion.getFecha_final_formateada %]
                 </td>
                 <td>
-                  
-                    [% IF historial_sancion.getTipo_sancion %]
-                            [% historial_sancion.ref_tipo_sancion.ref_tipo_prestamo.getDescripcion %]
+                 [% TRY %]
+                  [% IF historial_sancion.ref_tipo_sancion.ref_tipo_prestamo.getId_tipo_prestamo %]
+                      [% historial_sancion.ref_tipo_sancion.ref_tipo_prestamo.getDescripcion %]
+                  [% ELSE %]
+                    [% IF historial_sancion.tipo_sancion == -1 %]
+                          [% "Sanci&oacute;n Manual" | i18n %]
                     [% ELSE %]
-                            Reserva no retirada
+                        [% IF historial_sancion.tipo_sancion == 0 %]
+                          [% "Reserva no retirada" | i18n %]
+                        [% END %]
                     [% END %]
+                  [% END %]
+                [% CATCH %]
+                    NO EXISTE EL TIPO DE PRESTAMO
+                [% END %]
                 </td>
                 </td>
   
                 <td>
                    [% historial_sancion.dias_sancion %]
                 </td>
-                <td>
-                   <a class="click" onClick="buscarPorAutor('[%  historial_sancion.nivel3.nivel1.getAutor %]')" title="[% 'Filtrar por Autor' | i18n %]">
-                    [%  historial_sancion.nivel3.nivel1.getAutor %]
-                    </a>
-                </td>
-                <td>
-                   [% PERL %]
-						    print C4::AR::Filtros::link_to(	text => 	"[% HTML.escape(historial_sancion.nivel3.nivel1.getTitulo) %]",
-		                                                    url => 		"[% url_prefix %]/catalogacion/estructura/detalle.pl",
-														    params =>	[	"id1=[% HTML.escape(historial_sancion.nivel3.nivel1.getId1) %]"], 
-													    ) ;
-				    [% END %]
-                </td>
-                <td>
-                   [% historial_sancion.nivel3.nivel2.getEdicion %] [% historial_sancion.nivel3.nivel2.getAnio_publicacion %]
-                </td>
+
+                [% IF historial_sancion.tipo_sancion == -1 %]
+                    <td colspan="3">
+                        [% IF historial_sancion.getMotivo_sancion %]
+                            <b>[% "Motivo" | i18n %]:</b> [% historial_sancion.getMotivo_sancion %]
+                        [% END %]
+                    </td>
+                [% ELSE %]
+                    <td>
+                       <a class="click" onClick="buscarPorAutor('[%  historial_sancion.nivel3.nivel1.getAutor %]')" title="[% 'Filtrar por Autor' | i18n %]">
+                        [%  historial_sancion.nivel3.nivel1.getAutor %]
+                        </a>
+                    </td>
+                    <td>
+                       [% PERL %]
+    						    print C4::AR::Filtros::link_to(	text => 	"[% HTML.escape(historial_sancion.nivel3.nivel1.getTitulo) %]",
+    		                                                    url => 		"[% url_prefix %]/catalogacion/estructura/detalle.pl",
+    														    params =>	[	"id1=[% HTML.escape(historial_sancion.nivel3.nivel1.getId1) %]"], 
+    													    ) ;
+    				    [% END %]
+                    </td>
+                    <td>
+                       [% historial_sancion.nivel3.nivel2.getEdicion %] [% historial_sancion.nivel3.nivel2.getAnio_publicacion %]
+                    </td>
+                [% END %]
               </tr>
             [% END %] 
           

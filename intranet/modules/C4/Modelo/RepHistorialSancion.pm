@@ -19,6 +19,7 @@ __PACKAGE__->meta->setup(
         tipo_sancion          => { type => 'integer', overflow => 'truncate', default => '0' },
         dias_sancion          => { type => 'integer', overflow => 'truncate', default => '0' },
         id3                   => { type => 'integer', overflow => 'truncate' },
+        motivo_sancion        => { type => 'text', overflow => 'truncate', length => 65535 },
     ],
 
     primary_key_columns => [ 'id' ],
@@ -187,6 +188,17 @@ sub setDias_sancion{
     $self->dias_sancion($dias_sancion);
 }
 
+sub getMotivo_sancion{
+    my ($self) = shift;
+    return ($self->motivo_sancion);
+}
+
+sub setMotivo_sancion{
+    my ($self) = shift;
+    my ($motivo_sancion) = @_;
+    $self->motivo_sancion($motivo_sancion);
+}
+
 sub agregar {
     my ($self)=shift;
     my ($data_hash)=@_;
@@ -203,6 +215,7 @@ sub agregar {
     $self->setTipo_sancion($data_hash->{'tipo_sancion'});
     $self->setId3($data_hash->{'id3'} || undef);
     $self->setDias_sancion($data_hash->{'dias_sancion'}||undef);
+    $self->setMotivo_sancion($data_hash->{'motivo_sancion'}||undef);
 
     $self->save();
 }
