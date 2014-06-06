@@ -194,7 +194,7 @@ if($tipoAccion eq "BUSQUEDAS"){
                                                                     entorno         => 'undefined'},
       });
 
-      my ($cantidad, $array_nivel1)   = C4::AR::Reportes::reporteGenEtiquetas($obj, $session);
+      my ($cantidad, $array_nivel1)   = C4::AR::Reportes::reporteGenerarEtiquetas($obj, $session);
 
       $obj->{'cantidad'}              = $cantidad;
       $t_params->{'paginador'}        = C4::AR::Utilidades::crearPaginador($cantidad,$cantR, $pageNumber,$funcion,$t_params);
