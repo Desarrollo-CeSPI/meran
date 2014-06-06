@@ -68,7 +68,7 @@
                                 [% IF loop.count < 4 %]
                                   [% FOREACH p IN portada.value %]
                                     <a class="fancylink" rel="group_[% grupo %]" href="/uploads/covers-added/[% p.image_name %]">
-                                      <img alt="coverllll" src="/uploads/covers-added/[% p.image_name %]" title="Portada" />
+                                      <img alt="portada" src="/uploads/covers-added/[% p.image_name %]" title="Portada" />
                                    </a>
                                 [% END %]
                                [% END %]
@@ -79,15 +79,15 @@
                                  [% IF loop.count < 4 %]
                                      [% IF portada.portada_registro_big %]
                                          <a class="fancylink" rel="group_[% grupo %]" href="/uploads/covers/[% portada.portada_registro_big %]">
-                                             <img alt="coverllll" src="/uploads/covers/[% portada.portada_registro %]" title="Portada" />
+                                             <img alt="portada" src="/uploads/covers/[% portada.portada_registro %]" title="Portada" />
                                          </a>
                                      [% ELSE %]
                                        [% IF portada.portada_registro_medium %]
                                            <a class="fancylink" rel="group_[% grupo %]" href="/uploads/covers/[% portada.portada_registro_medium %]">
-                                               <img alt="cover" src="/uploads/covers/[% portada.portada_registro %]" title="Portada" />
+                                               <img alt="portada" src="/uploads/covers/[% portada.portada_registro %]" title="Portada" />
                                            </a>
                                        [% ELSE %]
-                                               <img alt="cover" src="/uploads/covers/[% portada.portada_registro %]" title="Portada" />
+                                               <img alt="portada" src="/uploads/covers/[% portada.portada_registro %]" title="Portada" />
                                        [% END %]
                                     [% END %]
                                   [% END %]
@@ -193,22 +193,20 @@
                           [% ELSE %]
                             [% IF grupos %]
                               <span id="grupos_[% id1 %]">
-                                                  <ul class="listado_sin_margen">
+                                <ul class="listado_sin_margen">
                                 [% FOREACH grupos %]
-                                                      [% valor = '' %]
-                                  
-                                                      [% IF edicion %]
-                                    [% valor = "<b>" _  edicion  _  "</b>" %]
-                                  [% END %]
-                                                      
-                                                      [% IF anio_publicacion %]
-                                                          [% IF valor %] [% valor = valor _ " " %] [% END %]
-                                    [% valor = valor  _  "(" _  anio_publicacion  _  ")" %]
-                                  [% END %]
-                                                      
-                                                      [% IF valor %]<li> [% valor %] </li>[% END %]
+                                    [% valor = '' %]
+                                    [% IF edicion %]
+                                      [% valor = "<b>" _  edicion  _  "</b>" %]
+                                    [% END %]
+                                    
+                                    [% IF anio_publicacion %]
+                                        [% IF valor %] [% valor = valor _ " " %] [% END %]
+                                        [% valor = valor  _  "(" _  anio_publicacion  _  ")" %]
+                                    [% END %]
+                                    [% IF valor %]<li> [% valor %] </li>[% END %]
                                 [% END %]
-                                                  </ul>
+                                </ul>
                               </span>
                             <script type="text/javascript">$("#grupos_[% id1 %]").expander({
                               slicePoint: 2000, 
@@ -224,13 +222,29 @@
 
                           [% IF cat_ref_tipo_nivel3 == "ANA"%]
                             [% IF titulo_registro_padre %]
-                                EN: [% PERL %]
-                                        print C4::AR::Filtros::link_to( text =>   "[% IF HTML.escape(titulo_registro_padre) %][% HTML.escape( titulo_registro_padre) %][% ELSE %]SIN T&Iacute;TULO[% END %][% IF HTML.escape(nomCompleto) %] / [% HTML.escape(nomCompleto) %][% END %]",
-                                                            url     =>   "[% url_prefix %]/catalogacion/estructura/detalle.pl", 
-                                                            params    =>   ["id1=[%  nivel1_padre %]"],
-                                                            title     =>    "[% 'Mostrar Detalle del registro' | i18n %]",
-                                                        ) ;
-                                    [% END %]
+                                EN: <br>
+                                  [% PERL %]
+                                        print C4::AR::Filtros::link_to( 
+                                        text =>   
+                                          "[% IF HTML.escape(titulo_registro_padre) %]
+                                            [% HTML.escape( titulo_registro_padre) %]
+                                           [% ELSE %]
+                                           SIN T&Iacute;TULO
+                                           [% END %]
+                                           [% IF HTML.escape(autor_registro_padre) %]
+                                            / [% HTML.escape(autor_registro_padre) %]
+                                           [% END %]
+                                           [% IF HTML.escape(detalle_grupo_registro_padre) %]
+                                            <br>[% HTML.escape(detalle_grupo_registro_padre) %]
+                                           [% END %]
+                                           [% IF HTML.escape(tipo_documento_padre) %]
+                                            <br>([% HTML.escape(tipo_documento_padre) %])
+                                           [% END %]",
+                                        url     =>   "[% url_prefix %]/catalogacion/estructura/detalle.pl", 
+                                        params    =>   ["id1=[%  nivel1_padre %]","id2=[%  nivel2_padre %]"],
+                                        title     =>    "[% 'Mostrar Detalle del registro' | i18n %]",
+                                        ) ;
+                                [% END %]
                             [% END %]
                           [% END %]
 

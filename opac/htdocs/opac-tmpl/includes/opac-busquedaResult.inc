@@ -471,16 +471,31 @@
 
    	  					[% IF NIVEL.cat_ref_tipo_nivel3 == "ANA" %]
    	  						 [% IF NIVEL.titulo_registro_padre %]
-                                    EN: [% PERL %]
-                                        print C4::AR::Filtros::link_to( text 		=>   "[% IF HTML.escape(NIVEL.titulo_registro_padre) %][% HTML.escape(NIVEL.titulo_registro_padre) %][% ELSE %]SIN T&Iacute;TULO[% END %][% IF HTML.escape(NIVEL.nomCompleto) %] / [% HTML.escape(NIVEL.nomCompleto) %][% END %]",
-                                                                        url 		=>   "[% url_prefix %]/opac-detail.pl", 
-                                                                        params 		=>   ["id1=[% NIVEL.nivel1_padre %]"],
-                                                                        title 		=>    "[% 'Mostrar Detalle del registro' | i18n %]",
-    		                                                            on_click 	=> "startOverlay();"
-                                                                    ) ;
-                                    [% END %]
-                            [% END %]
-                      	[% END %]
+                      EN: <br>
+                      [% PERL %]
+                          print C4::AR::Filtros::link_to( 
+                              text 		=> 
+                              "[% IF HTML.escape(NIVEL.titulo_registro_padre) %]
+                                [% HTML.escape( NIVEL.titulo_registro_padre) %]
+                               [% ELSE %]
+                               SIN T&Iacute;TULO
+                               [% END %]
+                               [% IF HTML.escape(NIVEL.autor_registro_padre) %]
+                                / [% HTML.escape(NIVEL.autor_registro_padre) %]
+                               [% END %]
+                               [% IF HTML.escape(NIVEL.detalle_grupo_registro_padre) %]
+                                 <br>[% HTML.escape(NIVEL.detalle_grupo_registro_padre) %]
+                               [% END %]
+                               [% IF HTML.escape(NIVEL.tipo_documento_padre) %]
+                                 <br>([% HTML.escape(NIVEL.tipo_documento_padre) %])
+                               [% END %]",
+                              url 		=>   "[% url_prefix %]/opac-detail.pl", 
+                              params 		=>   ["id1=[% NIVEL.nivel1_padre %]","id2=[% NIVEL.nivel2_padre %]"],
+                              title 		=>    "[% 'Mostrar Detalle del registro' | i18n %]", on_click 	=> "startOverlay();"
+                          ) ;
+                      [% END %]
+                    [% END %]
+                [% END %]
 
                         </td>
 

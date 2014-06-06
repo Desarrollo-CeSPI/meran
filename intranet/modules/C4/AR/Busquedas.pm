@@ -1736,10 +1736,13 @@ sub armarInfoNivel1{
                     my $n2 = C4::AR::Nivel2::getNivel2FromId2($cat_reg_analiticas_array_ref->[0]->getId2Padre());
 
                     if($n2){
-                        @result_array_paginado[$i]->{'nomCompleto'}             = $n2->nivel1->getAutorStringEscaped();
-                        @result_array_paginado[$i]->{'nivel1_padre'}            = $n2->getId1();
-                        @result_array_paginado[$i]->{'titulo_registro_padre'}   = $n2->nivel1->getTituloStringEscaped();
-                        @result_array_paginado[$i]->{'primer_signatura'}        = $n2->getSignaturas->[0];
+                        @result_array_paginado[$i]->{'autor_registro_padre'}        = $n2->nivel1->getAutorStringEscaped();
+                        @result_array_paginado[$i]->{'nivel1_padre'}                = $n2->getId1();
+                        @result_array_paginado[$i]->{'nivel2_padre'}                = $n2->getId2();
+                        @result_array_paginado[$i]->{'tipo_documento_padre'}        = $n2->getTipoDocumentoObject->getNombre;
+                        @result_array_paginado[$i]->{'titulo_registro_padre'}       = $n2->nivel1->getTituloStringEscaped();
+                        @result_array_paginado[$i]->{'detalle_grupo_registro_padre'}= $n2->getDetalleGrupo();
+                        @result_array_paginado[$i]->{'primer_signatura'}            = $n2->getSignaturas->[0];
                     }
                 }
             }
