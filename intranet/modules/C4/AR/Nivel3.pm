@@ -504,8 +504,11 @@ sub detalleNivel3{
 
                 if($n2){
                     $hash_nivel2{'nivel1_padre'}                = $n2->getId1();
+                    $hash_nivel2{'nivel2_padre'}                = $n2->getId2();
+                    $hash_nivel2{'tipo_documento_padre'}        = $n2->getTipoDocumentoObject->getNombre;
                     $hash_nivel2{'titulo_registro_padre'}       = $n2->nivel1->getTituloStringEscaped();
                     $hash_nivel2{'autor_registro_padre'}        = $n2->nivel1->getAutorStringEscaped();
+                    $hash_nivel2{'detalle_grupo_registro_padre'}= $n2->getDetalleGrupo();
                     $hash_nivel2{'primer_signatura'}            = $n2->getSignaturas->[0];
                 }
             }
@@ -916,10 +919,12 @@ sub detalleCompletoOPAC{
 
                     if($n2){
                         $hash_nivel2->{'nivel1_padre'}                = $n2->getId1();
+                        $hash_nivel2->{'nivel2_padre'}                = $n2->getId2();
+                        $hash_nivel2->{'tipo_documento_padre'}        = $n2->getTipoDocumentoObject->getNombre;
                         $hash_nivel2->{'titulo_registro_padre'}       = $n2->nivel1->getTituloStringEscaped();
                         $hash_nivel2->{'autor_registro_padre'}        = $n2->nivel1->getAutorStringEscaped();
+                        $hash_nivel2->{'detalle_grupo_registro_padre'}= $n2->getDetalleGrupo();                        
                         $hash_nivel2->{'primer_signatura'}            = $n2->getSignaturas->[0];
-                        $hash_nivel2->{'edicion_analitica'}           = $n2->getEdicion();
                     }
                 }
             }
@@ -939,9 +944,10 @@ sub detalleCompletoOPAC{
         
     }
     
-    $t_params->{'nivel1'}   = $nivel1->toMARC_Opac,
-    $t_params->{'id1'}      = $id1;
-    $t_params->{'nivel2'}   = \@nivel2;
+    $t_params->{'nivel1'}     = $nivel1->toMARC_Opac;
+    $t_params->{'nivel1_obj'} = $nivel1;
+    $t_params->{'id1'}        = $id1;
+    $t_params->{'nivel2'}     = \@nivel2;
 
     # C4::AR::Utilidades::printHASH(@nivel2[0]);
     return ($cantidad_total);

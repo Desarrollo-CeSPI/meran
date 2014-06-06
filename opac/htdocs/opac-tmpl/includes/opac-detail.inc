@@ -75,6 +75,13 @@
     });
 </script>
 
+<section class="detalle_registro" id="detalle_registro_[% id1 %]">
+      <div class="page-header">
+          <h1>[% nivel1_obj.getTituloStringEscaped %]  </h1>
+          <h3>[% nivel1_obj.getAutorStringEscaped %] </h3> 
+      </div>
+</section>
+
 [% IF estadoDeColeccion %]
     <div class="detalle_completo_niveles">
         <div class="main-subcontent" style="width:100%; float:left">

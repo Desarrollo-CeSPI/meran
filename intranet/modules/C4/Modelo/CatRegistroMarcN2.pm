@@ -1119,4 +1119,53 @@ sub getPortadasEdicion{
     return C4::AR::PortadaNivel2::getPortadasEdicion($self->id);
 }
 
+
+sub getDetalleGrupo {
+    my ($self) = shift;
+    my $string="";
+ 
+    if ($self->getTipoDocumento eq "REV"){
+      #Es una revista va Año Volumen(Fascículo)
+      $string .= "Número: ";
+
+      if ($self->getAnioRevista){
+        if($string){$string.=" ";}
+        $string.= $self->getAnioRevista;
+      }
+      if ($self->getVolumenRevista){
+        if($string){$string.=" ";}
+        $string.= $self->getVolumenRevista;
+      }
+      if ($self->getNumeroRevista){
+        if($string){$string.=" ";}
+        $string.= "(".$self->getNumeroRevista.")";
+      }
+    }else{
+      #Es otra cosa Serie Edicion Volumen (Año)
+      $string .= "Edición: ";
+      
+      if ($self->getNroSerie){
+      if($string){$string.=" ";}
+      $string.= $self->getNroSerie;
+      }
+
+      if ($self->getEdicion){
+      if($string){$string.=" ";}
+      $string.= $self->getEdicion;
+      }
+
+      if ($self->getVolumen){
+      if($string){$string.=" ";}
+      $string.= $self->getVolumen;
+      }
+
+      if ($self->getAnio_publicacion){
+      if($string){$string.=" ";}
+      $string.= "(".$self->getAnio_publicacion.")";
+      }
+    }
+
+    return ($string);
+}
+
 1;
