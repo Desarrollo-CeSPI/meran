@@ -1559,7 +1559,7 @@ sub getBusquedasDeUsuario {
     my $limit_pref          = C4::AR::Preferencias::getValorPreferencia('paginas') || 10;
     $cantR                  = $cantR || $limit_pref;
     my $nro_socio           = $datos_busqueda->{'usuario'};
-    my $categoria           = C4::AR::Referencias::getCategoryCodeById($datos_busqueda->{'categoria'})->getCategory_code;
+    my $categoria           = ($datos_busqueda->{'categoria'})?C4::AR::Referencias::getCategoryCodeById($datos_busqueda->{'categoria'})->getCategory_code:"";
     my $interfaz            = $datos_busqueda->{'interfaz'};
     my $valor               = $datos_busqueda->{'valor'};
     my $fecha_inicio        = $datos_busqueda->{'fecha_inicio'};
