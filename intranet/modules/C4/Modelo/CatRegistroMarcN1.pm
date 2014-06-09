@@ -1082,6 +1082,7 @@ sub generarIndice {
 
         $indice_busqueda->setTitulo($titulo);
         $indice_busqueda->setAutor($autor);
+        $indice_busqueda->setPromoted($self->getCountPromoted);
         $indice_busqueda->setString($superstring);
         $indice_busqueda->setMarcRecord($marc_record_datos->as_usmarc);
         $indice_busqueda->save();
@@ -1128,5 +1129,24 @@ sub estaEnIndice{
 
 }
 
+=head2 sub getCountPromoted
+    Cuenta la cantidad de grupos promovidos para ponderar en el índice
+=cut
+sub getCountPromoted{
+    my ($self) = shift;
 
+    my $promoted = 0;
+
+    #obtengo los grupos
+    my $grupos = $self->getGrupos();
+
+    #cuento promovidos
+    foreach my $nivel2 (@$grupos){
+        if ($nivel2->isPromoted()){
+            $promoted++;
+        }
+    }
+
+    return $promoted;
+}
 1;

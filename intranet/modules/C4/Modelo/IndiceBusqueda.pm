@@ -15,6 +15,7 @@ __PACKAGE__->meta->setup(
         marc_record     => { type => 'text', overflow => 'truncate', not_null => 1},
         timestamp       => { type => 'timestamp', not_null => 1 },
         hits            => { type => 'integer', default => '0', not_null => 1 },
+        promoted        => { type => 'integer', default => '0', not_null => 1 }
     ],
 
     primary_key_columns => [ 'id' ],
@@ -52,8 +53,6 @@ sub getTimestamp{
 
     return $self->timestamp;
 }
-
-
 
 sub getAutor{
     my ($self) = shift;
@@ -107,6 +106,19 @@ sub setString{
 
     $self->string($string);
 }
+
+sub getPromoted{
+    my ($self) = shift;
+    return (C4::AR::Utilidades::trim($self->promoted));
+}
+
+sub setPromoted{
+    my ($self)          = shift;
+    my ($promoted)   = @_;
+
+    $self->promoted($promoted);
+}
+
 
 =head2 sub generarIndice
     Genera el índice para este nivel 1

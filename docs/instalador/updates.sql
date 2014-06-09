@@ -404,5 +404,7 @@ NULL ,  'mostrar_barcode_en_etiqueta',  '0',  'Muestra el nrp. de inventario en 
 );
 
 ## 06/06/2014 ##
-
 ALTER TABLE  rep_historial_sancion ADD  motivo_sancion TEXT  NULL;
+
+## 09/06/2014 ##
+ALTER TABLE  indice_busqueda ADD  promoted INT( 11 ) NOT NULL DEFAULT  '0';

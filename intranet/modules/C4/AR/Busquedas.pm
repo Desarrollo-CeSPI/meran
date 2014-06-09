@@ -1105,7 +1105,7 @@ sub busquedaAvanzada_newTemp{
                 $sphinx->SetSortMode(SPH_SORT_ATTR_ASC,"titulo_local");
             }
     } else {
-            $sphinx->SetSortMode(SPH_SORT_ATTR_ASC,"titulo_local");
+            $sphinx->SetSortMode(SPH_SORT_EXTENDED,"promoted DESC, hits DESC, titulo_local ASC");
     }
     
     $sphinx->SetEncoders(\&Encode::encode_utf8, \&Encode::decode_utf8);
@@ -1524,7 +1524,7 @@ sub busquedaCombinada_newTemp{
                 $sphinx->SetSortMode(SPH_SORT_ATTR_ASC,"titulo_local");
             }
     } else {
-            $sphinx->SetSortMode(SPH_SORT_EXTENDED,"hits DESC, titulo_local ASC");
+            $sphinx->SetSortMode(SPH_SORT_EXTENDED,"promoted DESC, hits DESC, titulo_local ASC");
     }
 
     $sphinx->SetEncoders(\&Encode::encode_utf8, \&Encode::decode_utf8);
