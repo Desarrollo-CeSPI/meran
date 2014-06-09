@@ -1053,10 +1053,18 @@ sub promoteGrupo{
     my ($id2) = @_;
 
     my $nivel2 = C4::AR::Nivel2::getNivel2FromId2($id2);
-
     $nivel2->promote();
-
     $nivel2->save();
+
+    #Actualizo indice para reflejar el destacado
+    eval {
+        C4::AR::Sphinx::generar_indice($nivel2->getId1, 'R_PARTIAL', 'UPDATE');
+        #ahora el indice se encuentra DESACTUALIZADO
+        C4::AR::Preferencias::setVariable('indexado', 0, $nivel2->db());
+    };    
+    if ($@){
+        C4::AR::Debug::debug("ERROR AL REINDEXAR EN EL REGISTRO: ".$nivel2->getId1()." !!! ( ".$@." )");
+    }
 
     return checkPromotion($id2);    
 }
@@ -1065,10 +1073,18 @@ sub unPromoteGrupo{
     my ($id2) = @_;
 
     my $nivel2 = C4::AR::Nivel2::getNivel2FromId2($id2);
-
     $nivel2->unPromote();
-
     $nivel2->save();
+
+    #Actualizo indice para reflejar el destacado
+    eval {
+        C4::AR::Sphinx::generar_indice($nivel2->getId1, 'R_PARTIAL', 'UPDATE');
+        #ahora el indice se encuentra DESACTUALIZADO
+        C4::AR::Preferencias::setVariable('indexado', 0, $nivel2->db());
+    };    
+    if ($@){
+        C4::AR::Debug::debug("ERROR AL REINDEXAR EN EL REGISTRO: ".$nivel2->getId1()." !!! ( ".$@." )");
+    }
 
     return checkPromotion($id2);    
 }
