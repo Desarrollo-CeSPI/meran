@@ -75,20 +75,21 @@
     });
 </script>
 
-<section class="detalle_registro" id="detalle_registro_[% id1 %]">
-      <div class="page-header">
+<section class="detalle_registro" id="detalle_registro_[% id1 %]">  
           <h1>[% nivel1_obj.getTituloStringEscaped %]  </h1>
           <h3>[% nivel1_obj.getAutorStringEscaped %] </h3> 
-      </div>
 </section>
 
 [% IF estadoDeColeccion %]
     <div class="detalle_completo_niveles">
-        <div class="main-subcontent" style="width:100%; float:left">
-            <div class="subcontent-unit-border" style="width:100%;">
+        <div class="main-subcontent" >
+            <div class="subcontent-unit-border" >
                 <div class="round-border-topleft"></div>
-                    <div class="main-subcontent" style="width:100%; float:left;">
-						 <legend class="trigger trigger_estado_coleccion_[% id1 %] click" ><h1>[% "Estado de Colecci&oacute;n" | i18n %]</h1></legend>
+                    <div class="main-subcontent">
+						 <legend class="trigger trigger_estado_coleccion_[% id1 %] click" >
+						 <h3>[% "Estado de Colecci&oacute;n" | i18n %]  <i class="icon-arrow-down" style="float:right"></i> </h3>
+
+						 </legend>
 						         <div id="estado_coleccion[% id1 %]" class="detalle_total estado_coleccion[% id1 %]">
 									<ul class="listado_sin_margen estado_coleccion unstyled">
 										[% FOREACH anio IN estadoDeColeccion.keys.sort %]
@@ -161,7 +162,7 @@
 			</div>
 		</div>
 	</div>
-	<script type="text/javascript">makeToggle('estado_coleccion[% id1 %]','trigger_estado_coleccion_[% id1 %]',null,false);</script>
+	<script type="text/javascript">makeToggle('estado_coleccion[% id1 %]','trigger_estado_coleccion_[% id1 %]',null,true);</script>
 [% END %]
 
 [% INCLUDE 'opac-detail_partial_N2_reducido.inc' %]
