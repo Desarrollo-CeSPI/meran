@@ -7,10 +7,7 @@
 
 [% FOREACH nivel2 %]
     [% IF nivel2_array %]
-        <section class="detalle_grupo" id="detalle_grupo_[% id2 %]">
-                <div class="page-header">
-                    <h1>&nbsp;</h1>
-                </div>                          
+        <section class="detalle_grupo" id="detalle_grupo_[% id2 %]">                       
                 <div class="well">
                    [% IF isbn %]
                       <div class="right">
