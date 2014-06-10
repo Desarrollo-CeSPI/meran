@@ -408,3 +408,8 @@ ALTER TABLE  rep_historial_sancion ADD  motivo_sancion TEXT  NULL;
 
 ## 09/06/2014 ##
 ALTER TABLE  indice_busqueda ADD  promoted INT( 11 ) NOT NULL DEFAULT  '0';
+
+## 10/06/2014 ##
+
+INSERT INTO pref_preferencia_sistema (variable, value, explanation, options, type, categoria, label, explicacion_interna, revisado) VALUES
+('user_data_validation_required_or_days', '0', 'Cantidad de días desde la última modificación de datos que se esperan para requerirle al usuario actualizar sus datos. El 0 deshabilita esta comprobación.', NULL, 'text', 'sistema', 'Actualización de datos censales', 'Actualización de datos censales', 0);
