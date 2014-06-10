@@ -10,6 +10,16 @@
           onEnter('autor',busqueda,true);
           onEnter('codBarra',busqueda,true);
           onEnter('signatura',busqueda,true);
+
+          $('#titulo').click(clearRangos);
+          $('#signatura').click(clearRangos);
+          $('#autor').click(clearRangos);
+
+          $('#fecha_ini').click(clearFromRangoPorFecha);
+          $('#fecha_fin').click(clearFromRangoPorFecha);
+
+          $('#codBarra1').click(clearFromRangoPorBarcode);
+          $('#codBarra2').click(clearFromRangoPorBarcode);
     });
 
     function busqueda(){
@@ -24,6 +34,8 @@
         objAH_repE.codBarra          = $('#codBarra').val();
         objAH_repE.codBarra1         = $('#codBarra1').val();
         objAH_repE.codBarra2         = $('#codBarra2').val();
+        objAH_repE.fecha_ini         = $('#fecha_ini').val();
+        objAH_repE.fecha_fin         = $('#fecha_fin').val();
         objAH_repE.signatura         = $('#signatura').val();
         //  objAH_repE.asc                = ASC;
         objAH_repE.tipoAccion        = 'REPORTE_GEN_ETIQUETAS';
@@ -33,6 +45,37 @@
         objAH_repE.sendToServer();
     }
 
+
+    function clearRangoPorFecha(){
+        $('#fecha_ini').val("");
+        $('#fecha_fin').val("");
+    }
+
+    function clearRangoPorBarcode(){
+        $('#codBarra1').val("");
+        $('#codBarra2').val("");
+    }
+
+    function clearRangos(){
+        clearRangoPorBarcode();
+        clearRangoPorFecha();
+    }
+
+    function clearCamposCombibables(){
+        $('#titulo').val("");
+        $('#autor').val("");
+        $('#signatura').val("");
+    }
+
+    function clearFromRangoPorFecha(){
+        clearCamposCombibables();
+        clearRangoPorBarcode();
+    }
+
+    function clearFromRangoPorBarcode(){
+        clearCamposCombibables();
+        clearRangoPorFecha();
+    }
 
     function changePage_ReporteGenEtiquetas(ini){
         objAH_repE.changePage(ini);
@@ -78,6 +121,8 @@
                 (jQuery.trim($('#codBarra').val()) != '')||
                 (jQuery.trim($('#codBarra1').val()) != '')||
                 (jQuery.trim($('#codBarra2').val()) != '')||
+                (jQuery.trim($('#fecha_ini').val()) != '')||
+                (jQuery.trim($('#fecha_fin').val()) != '')||
                 (jQuery.trim($('#signatura').val()) != '')
              ){ 
                 busqueda();
@@ -97,6 +142,8 @@
 
 <div class="center_fieldset report_form_container">
       <form class="form-horizontal" id="form_reporte_gen_etiquetas" onsubmit="false">
+            <legend class="titulo_legend">Búsqueda combinable</legend>
+
                 <div class="control-group">
                         <label class="control-label" for="titulo"> 
                             [% "T&iacute;tulo" %]
@@ -116,32 +163,29 @@
                 </div>
 
                 <div class="control-group">
-                    <label class="control-label" for="codBarra">
-                        [% "C&oacute;digo de barras" | i18n %]
-                    </label>
-                    <div class="controls">
-                        <input type="text" size="25" id="codBarra">
-                    </div>
-                    <label class="control-label" for="codBarra">
-                        [% "C&oacute;digo de barras Inicial" | i18n %]
-                    </label>
-                    <div class="controls">
-                        <input type="text" size="25" id="codBarra1">
-                    </div>
-                    <label class="control-label" for="codBarra">
-                        [% "C&oacute;digo de barras Final" | i18n %]
-                    </label>
-                    <div class="controls">
-                        <input type="text" size="25" id="codBarra2">
-                    </div>                    
-                </div>
-                <div class="control-group">
                     <label class="control-label" for="signatura">
                         [% "Signatura Topogr&aacute;fica" | i18n %]
                     </label>
                     <div class="controls">
                         <input type="text" size="25" id="signatura">
                     </div>
+                </div>
+
+            <legend class="titulo_legend">Búsqueda no combinable</legend>
+
+                <div class="control-group">
+                    <label class="control-label"  for="fecha_alta"> [% "Por rango de Nro. de Inventario" | i18n %]</label>
+                    <div class="controls">
+                            <input type="text" id="codBarra1" name="codBarra1" placeholder="Desde" value="" required>
+                            <input type="text" id="codBarra2" name="codBarra2" placeholder="Hasta" value="" required>
+                    </div>         
+                </div>
+                <div class="control-group">
+                    <label class="control-label"  for="fecha_alta"> [% "Por rango de Fecha de Alta" | i18n %]</label>
+                    <div class="controls">
+                            <input type="text" id="fecha_ini" name="fecha_ini" data-datepicker="datepicker"  placeholder="Desde" value="" required>
+                            <input type="text" id="fecha_fin" name="fecha_fin" data-datepicker="datepicker" placeholder="Hasta" value="" required>
+                    </div>         
                 </div>
           
                 <div class="form-actions">

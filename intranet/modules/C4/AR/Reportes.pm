@@ -2082,57 +2082,58 @@ sub getReservasCirculacion {
 
 }
 
-sub reporteGenEtiquetasPorRango{
+sub reporteGenEtiquetasPorRangoFechas{
     my ($params,$session) = @_;
 
     my @datos_array;
     my @filtros;
+    my $dateformat  = C4::Date::get_date_format();
+    my $f_ini       = format_date_in_iso($params->{'fecha_ini'},$dateformat);
+    my $f_fin       = format_date_in_iso($params->{'fecha_fin'},$dateformat);
 
-    push(@filtros, ( codigo_barra   => { gt => $params->{'codBarra1'} } ) );
-    push(@filtros, ( codigo_barra   => { lt => $params->{'codBarra2'} } ) );
+    push(@filtros, ( created_at   => { eq => $f_ini, gt => $f_ini } ) );
+    push(@filtros, ( created_at   => { eq => $f_fin, lt => $f_fin } ) );
 
     my $cat_registro_marc_n3_array = C4::Modelo::CatRegistroMarcN3::Manager->get_cat_registro_marc_n3(
                                                                 query => \@filtros,
                                                             );
 
-
     foreach my $hash (@$cat_registro_marc_n3_array){
         my %hash_temp = {};
-        $hash_temp{'id1'}   = $hash->nivel1->getId1();
+        $hash_temp{'nivel3'}   = $hash;
 
         push (@datos_array, \%hash_temp);
     }
 
-    my ($total_found_paginado, $resultsarray);
-    #arma y ordena el arreglo para enviar al cliente
-    ($total_found_paginado, $resultsarray) = C4::AR::Busquedas::armarInfoNivel1($params, @datos_array);
-    #se loquea la busqueda
+    my $total_found         = scalar(@datos_array); 
+    return ($total_found, \@datos_array);  
+}
 
-    C4::AR::Busquedas::logBusqueda($params, $session);
-    
-    my @datos;
-    foreach my $res (@$resultsarray){
-        my %hash_temp;
-        $hash_temp{'nivel1'}= $res;
-        my $grupos = C4::AR::Nivel2::getNivel2FromId1($res->{'id1'});
-        my @niveles3 = ();
+sub reporteGenEtiquetasPorRangoBarcode{
+    my ($params,$session) = @_;
 
-        foreach my $grupo (@$grupos) {
-            my $ejemplares = C4::AR::Nivel3::getNivel3FromId2($grupo->{'id'});
-            push (@niveles3, @$ejemplares);
-        }
+    my @datos_array;
+    my @filtros;
 
-        $hash_temp{'nivel2'} = $grupos;
-        $hash_temp{'nivel3'}=\@niveles3;
-        
-        push (@datos, \%hash_temp);
-    
-       
+    push(@filtros, ( codigo_barra   => { eq => $params->{'codBarra1'}, gt => $params->{'codBarra1'} } ) );
+    push(@filtros, ( codigo_barra   => { eq => $params->{'codBarra2'}, lt => $params->{'codBarra2'} } ) );
+
+    my $cat_registro_marc_n3_array = C4::Modelo::CatRegistroMarcN3::Manager->get_cat_registro_marc_n3(
+                                                                query => \@filtros,
+                                                                with_objects     => ['nivel1'],
+                                                            );
+
+
+    foreach my $hash (@$cat_registro_marc_n3_array){
+        my %hash_temp = {};
+        $hash_temp{'nivel1'}   = $hash->nivel1;
+        $hash_temp{'nivel3'}   = $hash;
+
+        push (@datos_array, \%hash_temp);
     }
 
-    my $total_found = scalar(@datos);      
-
-    return ($total_found, \@datos);
+    my $total_found         = scalar(@datos_array); 
+    return ($total_found, \@datos_array);  
 }
 
 
@@ -2140,7 +2141,9 @@ sub reporteGenerarEtiquetas{
     my ($params, $session) = @_;
 
     if( (C4::AR::Utilidades::trim($params->{'codBarra1'}) ne "") && (C4::AR::Utilidades::trim($params->{'codBarra2'}) ne "") ){
-        reporteGenEtiquetasPorRango($params, $session);
+        reporteGenEtiquetasPorRangoBarcode($params, $session);
+    } elsif( ($params->{'fecha_ini'} ne "") && ($params->{'fecha_fin'} ne "") ){
+        reporteGenEtiquetasPorRangoFechas($params, $session);
     } else {
         reporteGenEtiquetas($params, $session);       
     }
@@ -2224,9 +2227,9 @@ sub reporteGenEtiquetas{
     my ($total_found_paginado, $resultsarray);
     #arma y ordena el arreglo para enviar al cliente
     ($total_found_paginado, $resultsarray) = C4::AR::Busquedas::armarInfoNivel1($params, @datos_array);
-    #se loquea la busqueda
-
-    C4::AR::Busquedas::logBusqueda($params, $session);
+    # #se loquea la busqueda
+# FIXME esto no tiene sentido aca
+    # C4::AR::Busquedas::logBusqueda($params, $session);
     
     my @datos;
     foreach my $res (@$resultsarray){

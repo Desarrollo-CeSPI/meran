@@ -109,16 +109,17 @@ $(document).ready(function(){
 <div class="contenedor_paginador">[% paginador %]</div> 
 <div>        
           [% FOREACH SEARCH_RESULTS %]
-          <div id="grupo[% nivel1.id1 %]">  
+
+          <div id="grupo[% nivel3.nivel1.id1 %]">  
                     <div class="page-header">
-                          <h3>[% nivel1.titulo %] <small> ([% nivel1.nomCompleto %]) </small> </h3>
+                          <h3>[% nivel3.nivel1.getTitulo %] <small> ([% nivel3.nivel1.getAutor %]) </small> FALTA AGREGAR EDICION!!!!</h3>
                     </div>    
                     [% IF nivel3.size > 0 %]                         
                         [% PERL %]
                           print C4::AR::Filtros::tableHeader(   
-                                            id              => "tablaResult[% nivel1.id1 %]",
+                                            id              => "tablaResult[% nivel3.nivel1.id1 %]",
                                             class           => "",
-                                            selectAll_id    => "selectAll[% nivel1.id1 %]",
+                                            selectAll_id    => "selectAll[% nivel3.nivel1.id1 %]",
                                             columns         => ['[% "Codigo de Barra" | i18n %]','[% 'Signatura' | i18n %]',
                                                                 '[% "Estado" | i18n %]'               
                                                                 ],
