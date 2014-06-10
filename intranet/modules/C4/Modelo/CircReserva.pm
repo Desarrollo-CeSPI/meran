@@ -111,7 +111,6 @@ sub estaVencida{
     my $fecha_vencimiento = $self->getFecha_notificacion_formateada();
     $fecha_vencimiento = C4::Date::format_date_in_iso(Date::Manip::ParseDate($fecha_vencimiento), $dateformat);
     if ( Date::Manip::Date_Cmp( $fecha_vencimiento, $hoy ) < 0 ){
-    	C4::AR::Debug::debug("ESTA VENCIDAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
     	return (1);
     }
     

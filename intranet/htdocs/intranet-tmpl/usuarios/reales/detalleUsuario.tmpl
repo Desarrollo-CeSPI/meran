@@ -76,14 +76,13 @@ var loaderPath= "";
     <div class="alert alert-block">
             <a class="close" data-dismiss="alert">×</a>
             <h4 class="alert-heading" >[% "Atenci&oacute;n" | i18n %]!</h4>
-            <p>[% "Los datos censales del socio necesitan ser validados" | i18n %]</p>
+            <p>[% "Los datos censales del socio necesitan ser validados." | i18n %]</p>
+            <p>[% "La &uacute;ltima actualización fue el " | i18n %] [% socio.getLastValidation_formateada %] ([% socio.daysFromLastValidation %] [% "d&iacute;as" | i18n %]) </p>
             <p>
               <a class="btn btn-danger click" onclick="validarDatosCensales();" >[% "Validar datos censales" | i18n %]</a>
             </p>            
     </div>
 [% END %]
-
-
 
 <fieldset>
     <legend class="titulo_legend_resaltado">[% 'Datos del Usuario' | i18n %]</legend>
