@@ -226,6 +226,7 @@ sub getNivel3FromId2{
                                                                         query => [  
                                                                                     id2 => { eq => $id2 },
                                                                             ], 
+                                                                        with_objects => ['nivel1', 'nivel2'],
                                         );
     my $nivel3_array_ref_count = C4::Modelo::CatRegistroMarcN3::Manager->get_cat_registro_marc_n3_count(   
                                                                         db  => $db,

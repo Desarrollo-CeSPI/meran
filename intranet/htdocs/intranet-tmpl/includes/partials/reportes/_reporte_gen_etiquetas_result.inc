@@ -108,13 +108,16 @@ $(document).ready(function(){
 [% IF cantidad %]
 <div class="contenedor_paginador">[% paginador %]</div> 
 <div>        
-          [% FOREACH SEARCH_RESULTS %]
+    [% FOREACH SEARCH_RESULTS %]
 
-          <div id="grupo[% nivel3.nivel1.id1 %]">  
+
+          [% FOREACH nivel2 IN nivel2_array %]
+          <!-- <div id="grupo[% nivel3.nivel1.id1 %]">   -->
+          <div id="grupo[% nivel2.nivel1.id1 %]">  
                     <div class="page-header">
-                          <h3>[% nivel3.nivel1.getTitulo %] <small> ([% nivel3.nivel1.getAutor %]) </small> FALTA AGREGAR EDICION!!!!</h3>
+                          <h3>[% nivel2.nivel1.getTitulo %] <small> ([% nivel2.nivel1.getAutor %]) </small> [% nivel2.toString %]</h3>
                     </div>    
-                    [% IF nivel3.size > 0 %]                         
+                    [% IF nivel3_array.size > 0 %]                         
                         [% PERL %]
                           print C4::AR::Filtros::tableHeader(   
                                             id              => "tablaResult[% nivel3.nivel1.id1 %]",
@@ -128,10 +131,10 @@ $(document).ready(function(){
                         [% END %]
                         <tbody>
                  
-                                 [% FOREACH n3 IN nivel3 %]
+                                 [% FOREACH n3 IN nivel3_array %]
                                       <tr id="[% n3.id %]_tr">
                                               <td><label class="checkbox">
-                                                      <input type="checkbox" value="[% n3.id %]" id="checkEjemplares[% nivel1.id1 %]" name="checkEjemplares[% nivel1.id1 %]">
+                                                      <input type="checkbox" value="[% n3.id %]" id="checkEjemplares[% nivel2.nivel1.id1 %]" name="checkEjemplares[% nivel2.nivel1.id1 %]">
                                                   </label>
                                               </td> 
                                               <td id="barcode[% n3.id %]">[% n3.getBarcode %]</td>
@@ -149,11 +152,12 @@ $(document).ready(function(){
                   </div>  
                 <script type="text/javascript">
                             onSelectTr(); 
-                            checkedAllTrs("selectAll"+ "[% nivel1.id1 %]", "checkEjemplares"+"[% nivel1.id1 %]");
+                            checkedAllTrs("selectAll"+ "[% nivel2.nivel1.id1 %]", "checkEjemplares"+"[% nivel2.nivel1.id1 %]");
                            
                 </script>
-               
           [% END %]
+               
+    [% END %]
     
 </div>
 <div class="form-actions"  id="button-seleccionados"> 
