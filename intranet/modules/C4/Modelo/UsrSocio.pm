@@ -627,9 +627,15 @@ sub setLast_change_password{
 
 sub getLastValidation{
     my ($self) = shift;
-
-    return ($self->lastValidation);
+    return $self->lastValidation;
 }
+
+sub getLastValidation_formateada{
+    my ($self) = shift; 
+
+    return $self->lastValidation;
+}
+
 
 sub updateValidation{
     my ($self) = shift;
@@ -1305,7 +1311,7 @@ sub needsValidation{
 	
 	my $lastValidation = $self->getLastValidation();
 	
-	my $days = C4::AR::Utilidades::daysToNow($lastValidation);
+	my $days = $self->daysFromLastValidation();
 	            
 	my $validation_required_or_days = C4::AR::Preferencias::getValorPreferencia("user_data_validation_required_or_days") || 0;
 	            
@@ -1316,6 +1322,14 @@ sub needsValidation{
 	                          
 	return ($needsDataValidation);
 	
+}
+
+sub daysFromLastValidation{
+    my ($self)      = shift;
+
+    my $lastValidation = $self->getLastValidation();
+    my $days = C4::AR::Utilidades::daysToNow($lastValidation);
+    return $days;
 }
 
 sub getInvolvedCount{

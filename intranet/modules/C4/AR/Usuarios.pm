@@ -1019,8 +1019,8 @@ sub needsDataValidation {
                                        );
         if($socio_array_ref){
             my $socio = $socio_array_ref->[0];
-       
-            return ( $socio->needsValidation());
+            # Si es admin no le exijo validación
+            return ($socio->needsValidation() && !$socio->esAdmin());
         }else{
             return 0;
         }

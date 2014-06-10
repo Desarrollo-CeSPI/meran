@@ -687,7 +687,7 @@ sub _verificarSession {
                   } else {
                          if (C4::AR::Usuarios::needsDataValidation($session->param('userid')) != 0){
                                 
-                                 $code_MSG='U309';            
+                                 $code_MSG='U505';            
                                  C4::AR::Debug::debug("C4::AR::Auth::_verificarSession => datos censales invalidos");  
                                  return ($code_MSG,"datos_censales_invalidos");
                          } else {
