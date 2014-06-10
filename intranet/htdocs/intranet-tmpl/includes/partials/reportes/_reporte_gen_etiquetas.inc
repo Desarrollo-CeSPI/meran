@@ -3,6 +3,7 @@
 <script>
 
     var objAH_repE;
+    var TIPO;
 
 
     $(document).ready(function(){
@@ -10,6 +11,10 @@
           onEnter('autor',busqueda,true);
           onEnter('codBarra',busqueda,true);
           onEnter('signatura',busqueda,true);
+          onEnter('fecha_ini',busqueda,true);
+          onEnter('fecha_fin',busqueda,true);
+          onEnter('codBarra1',busqueda,true);
+          onEnter('codBarra2',busqueda,true);
 
           $('#titulo').click(clearRangos);
           $('#signatura').click(clearRangos);
@@ -25,7 +30,7 @@
     function busqueda(){
 
         objAH_repE                   = new AjaxHelper(updateBusqueda);
-        objAH_repE.debug             = true;
+        // objAH_repE.debug             = true;
         objAH_repE.showOverlay       = true;
         //para busquedas combinables
         objAH_repE.url               = URL_PREFIX+'/reports/catalogoDB.pl';
@@ -37,6 +42,7 @@
         objAH_repE.fecha_ini         = $('#fecha_ini').val();
         objAH_repE.fecha_fin         = $('#fecha_fin').val();
         objAH_repE.signatura         = $('#signatura').val();
+        objAH_repE.tipo_reporte      = TIPO;
         //  objAH_repE.asc                = ASC;
         objAH_repE.tipoAccion        = 'REPORTE_GEN_ETIQUETAS';
         //  se setea la funcion para cambiar de pagina
@@ -59,6 +65,7 @@
     function clearRangos(){
         clearRangoPorBarcode();
         clearRangoPorFecha();
+        TIPO = 'con_grupos';
     }
 
     function clearCamposCombibables(){
@@ -70,11 +77,13 @@
     function clearFromRangoPorFecha(){
         clearCamposCombibables();
         clearRangoPorBarcode();
+        TIPO = 'sin_grupos';
     }
 
     function clearFromRangoPorBarcode(){
         clearCamposCombibables();
         clearRangoPorFecha();
+        TIPO = 'sin_grupos';
     }
 
     function changePage_ReporteGenEtiquetas(ini){

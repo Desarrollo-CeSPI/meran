@@ -2100,6 +2100,7 @@ sub reporteGenEtiquetasPorRangoFechas{
 
     foreach my $hash (@$cat_registro_marc_n3_array){
         my %hash_temp = {};
+
         $hash_temp{'nivel3'}   = $hash;
 
         push (@datos_array, \%hash_temp);
@@ -2120,34 +2121,20 @@ sub reporteGenEtiquetasPorRangoBarcode{
 
     my $cat_registro_marc_n3_array = C4::Modelo::CatRegistroMarcN3::Manager->get_cat_registro_marc_n3(
                                                                 query => \@filtros,
-                                                                with_objects     => ['nivel1'],
+                                                                with_objects     => ['nivel1', 'nivel2'],
                                                             );
 
 
     foreach my $hash (@$cat_registro_marc_n3_array){
         my %hash_temp = {};
-        $hash_temp{'nivel1'}   = $hash->nivel1;
-        $hash_temp{'nivel3'}   = $hash;
+
+        $hash_temp{'nivel3'}  = $hash;
 
         push (@datos_array, \%hash_temp);
     }
 
     my $total_found         = scalar(@datos_array); 
     return ($total_found, \@datos_array);  
-}
-
-
-sub reporteGenerarEtiquetas{
-    my ($params, $session) = @_;
-
-    if( (C4::AR::Utilidades::trim($params->{'codBarra1'}) ne "") && (C4::AR::Utilidades::trim($params->{'codBarra2'}) ne "") ){
-        reporteGenEtiquetasPorRangoBarcode($params, $session);
-    } elsif( ($params->{'fecha_ini'} ne "") && ($params->{'fecha_fin'} ne "") ){
-        reporteGenEtiquetasPorRangoFechas($params, $session);
-    } else {
-        reporteGenEtiquetas($params, $session);       
-    }
-
 }
 
 sub reporteGenEtiquetas{
@@ -2206,7 +2193,7 @@ sub reporteGenEtiquetas{
 
     my $results = $sphinx->Query($query, $index_to_use);
 
-    my @datos_array;
+    my @datos;
     my $matches = $results->{'matches'};
 
     my $total_found = $results->{'total_found'};
@@ -2218,46 +2205,29 @@ sub reporteGenEtiquetas{
     
     foreach my $hash (@$matches){
         my %hash_temp = {};
-        $hash_temp{'id1'} = $hash->{'doc'};
-        $hash_temp{'hits'} = $hash->{'weight'};
-
-        push (@datos_array, \%hash_temp);
-    }
-
-    my ($total_found_paginado, $resultsarray);
-    #arma y ordena el arreglo para enviar al cliente
-    ($total_found_paginado, $resultsarray) = C4::AR::Busquedas::armarInfoNivel1($params, @datos_array);
-    # #se loquea la busqueda
-# FIXME esto no tiene sentido aca
-    # C4::AR::Busquedas::logBusqueda($params, $session);
-    
-    my @datos;
-    foreach my $res (@$resultsarray){
-        my %hash_temp;
-        $hash_temp{'nivel1'}= $res;
-        my $grupos = C4::AR::Nivel2::getNivel2FromId1($res->{'id1'});
-        my @niveles3 = ();
-
-        foreach my $grupo (@$grupos) {
-            my $ejemplares = C4::AR::Nivel3::getNivel3FromId2($grupo->{'id'});
-            push (@niveles3, @$ejemplares);
-        }
-
-        $hash_temp{'nivel2'} = $grupos;
-        $hash_temp{'nivel3'}=\@niveles3;
+        my $cat_registro_marc_n3_array  = C4::AR::Nivel3::getNivel3FromId1($hash->{'doc'});
+        $hash_temp{'nivel2_array'}      = C4::AR::Nivel2::getNivel2FromId1($hash->{'doc'});
+        $hash_temp{'nivel3_array'}      = $cat_registro_marc_n3_array;
         
         push (@datos, \%hash_temp);
-    
-       
-    }      
 
-
-    C4::AR::Debug::debug($total_found);
+    }  
 
     return ($total_found, \@datos);
 }
 
+sub reporteGenerarEtiquetas{
+    my ($params, $session) = @_;
 
+    if( (C4::AR::Utilidades::trim($params->{'codBarra1'}) ne "") && (C4::AR::Utilidades::trim($params->{'codBarra2'}) ne "") ){
+        reporteGenEtiquetasPorRangoBarcode($params, $session);
+    } elsif( ($params->{'fecha_ini'} ne "") && ($params->{'fecha_fin'} ne "") ){
+        reporteGenEtiquetasPorRangoFechas($params, $session);
+    } else {
+        reporteGenEtiquetas($params, $session);       
+    }
+
+}
 
 sub reportToPDF{
     my ($datos, $cantidad, $headers) = @_;
