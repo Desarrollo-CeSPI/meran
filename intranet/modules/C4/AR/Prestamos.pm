@@ -138,16 +138,14 @@ sub prestamosHabilitadosPorTipo {
         if($sanciones){
         #tiene sanciones
             foreach my $sancion (@$sanciones){
-                if($sancion->getTipo_sancion){#Si no es una sancion por una reserva
-                #tipos de prestamo que afecta
-                my @tipos_prestamo_sancion=$sancion->ref_tipo_sancion->ref_tipo_prestamo_sancion;
+                if(($sancion->getTipo_sancion ne 0)&&($sancion->getTipo_sancion ne -1)){#Si no es una sancion por una Reserva (0) o Manual (-1) 
+                    #tipos de prestamo que afecta
+                    my @tipos_prestamo_sancion=$sancion->ref_tipo_sancion->ref_tipo_prestamo_sancion;
                     foreach my $tipo_prestamo_sancion (@tipos_prestamo_sancion){
                         if ($tipo_prestamo_sancion->getTipo_prestamo eq $tipo_prestamo->getId_tipo_prestamo){
                             $estaSancionado= 1;
                         }
                     }
-                }
-                else{#Si es una sancion por reserva???
                 }
             }# END foreach my $sancion (@$sanciones)
         }
