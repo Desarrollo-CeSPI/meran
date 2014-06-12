@@ -685,15 +685,9 @@ sub _verificarSession {
                     $code_MSG='U354';            
                     C4::AR::Debug::debug("C4::AR::Auth::_verificarSession => sesion invalido => token invalido");    
                   } else {
-                         if (C4::AR::Usuarios::needsDataValidation($session->param('userid')) != 0){
-                                
-                                 $code_MSG='U505';            
-                                 C4::AR::Debug::debug("C4::AR::Auth::_verificarSession => datos censales invalidos");  
-                                 return ($code_MSG,"datos_censales_invalidos");
-                         } else {
                          #ESTA TODO OK
 #                        C4::AR::Debug::debug("valida");    
-                         return ($code_MSG,"sesion_valida"); }
+                         return ($code_MSG,"sesion_valida"); 
                   }
 
         } else {
@@ -776,7 +770,17 @@ sub checkauth {
                       if ( ($userid) && ( new_password_is_needed($userid, $socio) ) && !$_[4] ) {
                           _change_Password_Controller($_[0], $userid, $_[3], $token);
                       }
-                      
+
+                      #Se deben actualizar los datos censales? se redirige a editar el perfil
+                      if ( (!$session->param('modificar_datos_censales')) &&  (C4::AR::Usuarios::needsDataValidation($session->param('userid')) != 0)) {
+                                        
+                         C4::AR::Debug::debug("C4::AR::Auth::_verificarSession => datos censales invalidos");    
+                         $session->param('codMsg', 'U505');
+                         #Marcamos para evitar loop de redirecciones 
+                         $session->param('modificar_datos_censales', 1);
+                         _update_Data_Controller($_[0], $userid, $_[3], $token);
+                      } 
+
                       if ($flags) {
                           $loggedin = 1;
                       } else {
@@ -785,13 +789,6 @@ sub checkauth {
                           $session->param('redirectTo', C4::AR::Utilidades::getUrlPrefix().'/informacion.pl');
                           redirectTo(C4::AR::Utilidades::getUrlPrefix().'/informacion.pl');
                     } 
-                  }
-                  elsif ($estado eq "datos_censales_invalidos"){
-                      # C4::AR::Debug::debug("C4::AR::Auth::checkauth => datos_censales_invalidos");
-                      $_[6] = C4::AR::Utilidades::getUrlPrefix().'/auth.pl';
-                      $session->param('codMsg', $code_MSG);
-                      $session->param('redirectTo', $_[6]);
-                      redirectTo($_[6]); 
                   }
                   elsif ($estado eq "sesion_invalida") { 
                       # C4::AR::Debug::debug("C4::AR::Auth::checkauth => session_invalida");
@@ -1311,6 +1308,23 @@ sub _change_Password_Controller {
             redirectTo(C4::AR::Utilidades::getUrlPrefix().'/change_password.pl?token='.$token);
     } else {
             redirectTo(C4::AR::Utilidades::getUrlPrefix().'/usuarios/change_password.pl?token='.$token);
+    }
+}
+
+=item sub _update_Data_Controller
+
+    Esta funcion se encarga de manejar la actualización de datos censales
+    Parametros: 
+    $dbh, $query, $userid, $type
+
+=cut
+sub _update_Data_Controller {
+    my ($query, $userid, $type, $token) = @_;
+    if ($type eq 'opac') {
+        C4::AR::Debug::debug("redirigiendo al OPAC ------------------------ ");
+            redirectTo(C4::AR::Utilidades::getUrlPrefix().'/opac-actualizar_datos_censales.pl?token='.$token);
+    } else {
+            redirectTo(C4::AR::Utilidades::getUrlPrefix().'/usuarios/reales/datosUsuario.pl?nro_socio='.$userid.'&token='.$token);
     }
 }
 =item sub cerrarSesion

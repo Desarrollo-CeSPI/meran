@@ -278,8 +278,8 @@ var loaderPath= "";
 			                            [% TRY %]
 			                            	<dd>[%  socio.ui.nombre %]</dd>
 		                                [% CATCH %]
-       										<dd>Sin Unidad de Información</dd>
-    									[% END %]
+                   										<dd>Sin Unidad de Información</dd>
+                									[% END %]
 			                            
 		          						[%IF  socio.persona.getInstitucion %]
 				                            <dt class="inline left rightMargin">[% "Instituci&oacute;n :" | i18n %]</dt>
@@ -303,6 +303,12 @@ var loaderPath= "";
 				                            <dt class="inline left rightMargin">[% "Divisi&oacute;n :" | i18n %] </dt>
 				                            <dd>[% socio.persona.getDivision %]</dd>
 				                        [% END %]
+                                  <br>
+                                   <dt class="inline left rightMargin">                                    [% "La &uacute;ltima actualización fue el " | i18n %] [% socio.getLastValidation_formateada %] ([% socio.daysFromLastValidation %] [% "d&iacute;as" | i18n %]) </dt>
+                                  <dd>
+
+                                  </dd>
+
 			                        </dl>
 			                    </div>
 		                    </div>
