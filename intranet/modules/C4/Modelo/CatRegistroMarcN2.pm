@@ -1168,4 +1168,21 @@ sub getDetalleGrupo {
     return ($string);
 }
 
+=head2 sub estaEnEstante
+    Devuelve 1 si tiene el restro se encuentra en un estante, 0 caso contrario
+=cut
+sub estaEnEstante {
+    my ($self) = shift;
+    my @filtros;
+    push(@filtros, ( id2    => { eq => $self->getId2}));
+
+    my ($contenido_array_ref) = C4::Modelo::CatContenidoEstante::Manager->get_cat_contenido_estante( query => \@filtros);
+
+    if (scalar(@$contenido_array_ref) > 0){
+        return 1;
+    }else{
+        return 0;
+    }
+}
+
 1;

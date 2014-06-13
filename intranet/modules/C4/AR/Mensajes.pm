@@ -439,6 +439,7 @@ my %mensajesINTRA = (
     'E015' => 'Ya existe el contenido en el estante "*?*".',
     'E016' => 'El estante fue clonado con &eacute;xito a "*?*".',
     'E017' => 'Se produjo un error al tratar de clonar el estante "*?*" .',
+    'E018' => 'Disculpe, no se pudo eliminar el grupo (*?*), se ecnuentra contenido en al menos 1 estante. Debe quitarlo del estante antes.',
     'REF0' => 'La referencia no se ha podido eliminar, verifique que no se est&eacute; usando.',
     'REF1' => 'La referencia ha sido eliminada correctamente.',
 #   Mensajes de Adquisicion Proveedores y Presupuestos
