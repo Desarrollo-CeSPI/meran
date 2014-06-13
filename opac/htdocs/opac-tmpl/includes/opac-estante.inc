@@ -114,6 +114,7 @@
                  <tbody>
                       [% FOREACH contenido_estante IN estante.contenido %]
                           <tr>
+                            [% TRY %]
                               <td>
 
                                 [% PERL %]
@@ -158,6 +159,10 @@
                                   [% END %]
                                 [% END %]
                               </td>
+                        [% CATCH %]
+                          <!-- <td colspan="4"><b>[% "Contenido inexistente"|i18n %]</b></td> -->
+                        [% END %]
+
                           </tr>
                       [% END %]
                  </tbody>

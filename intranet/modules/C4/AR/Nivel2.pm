@@ -414,6 +414,12 @@ sub _verificarDeleteNivel2 {
         C4::AR::Debug::debug("_verificarDeleteNivel2 => Se está intentando eliminar un ejemplar que tiene al menos un ejemplar reservado ");
         C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'P123', 'params' => [$params->{'id2'}]} ) ;
     }
+    elsif( !($msg_object->{'error'}) && $cat_registro_marc_n2->estaEnEstante() ){
+        #verifico que el nivel2 que quiero eliminar no esté contenido en algún estante
+        $msg_object->{'error'} = 1;
+        C4::AR::Debug::debug("_verificarDeleteNivel2 => Se está intentando eliminar un grupo que esta contenido en un estante ");
+        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'E018', 'params' => [$params->{'id2'}]} ) ;
+    }
 
 }
 

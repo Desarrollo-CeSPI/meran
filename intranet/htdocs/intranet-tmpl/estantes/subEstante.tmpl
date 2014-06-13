@@ -95,13 +95,17 @@
                                               [% END %]  
                                               <tbody>
                                                       [% FOREACH contenido_estante IN estante.contenido %]
-                                                        [% TRY %]
+                                                        
                                                           <tr>
                                                               <td>
                                                               <input type='checkbox' id="checkbox_[% estante.getId %]" name="checkbox_[% estante.getId %]" value="[% contenido_estante.getId2 %]">
-                                                              <input type="hidden" id="titulo_[% estante.getId %]" value="[% contenido_estante.nivel2.nivel1.getTitulo %]">
                                                               </td>
+                                                              [% TRY %]
+
+                                                              [% IF contenido_estante.nivel2.nivel1  %]
+                                                              
                                                               <td class="titulo_result">
+                                                              <input type="hidden" id="titulo_[% estante.getId %]" value="[% contenido_estante.nivel2.nivel1.getTitulo %]">
                                                                   [% PERL %]
                                                                       print C4::AR::Filtros::link_to( text =>     "[% contenido_estante.nivel2.nivel1.getTitulo %]",
                                                                                                       url=>"[% url_prefix %]/catalogacion/estructura/detalle.pl", 
@@ -134,10 +138,13 @@
                                                                   [% END %]
                                                                 [% END %]
                                                               </td>
-                                                          </tr>
+                                                            [% END %]
                                                         [% CATCH %]
-                                                          [% 'El grupo no existe m&aacute;s. Eliminar del estante' | i18n %]
+                                                          <td colspan="4">
+                                                            <b>[% 'El grupo no existe m&aacute;s. Eliminar del estante.' | i18n %] </b>
+                                                          </td>
                                                         [% END %]
+                                                        </tr>
                                                       [% END %]
                                                   </tbody>
                                               </table>
