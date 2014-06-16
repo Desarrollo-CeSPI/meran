@@ -99,6 +99,10 @@ my ($ini,$pageNumber,$cantR)= C4::AR::Utilidades::InitPaginador($ini);
 $obj->{'ini'}               = $ini;
 $obj->{'cantR'}             = $cantR;
 
+# Se filtran los registros sin disponibilidad?
+$obj->{'opac_only_state_available'} = C4::AR::Preferencias::getValorPreferencia('opac_only_state_available');
+
+
 my $url;
 my $url_todos;
 my $token;

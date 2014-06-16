@@ -413,3 +413,9 @@ ALTER TABLE  indice_busqueda ADD  promoted INT( 11 ) NOT NULL DEFAULT  '0';
 
 INSERT INTO pref_preferencia_sistema (variable, value, explanation, options, type, categoria, label, explicacion_interna, revisado) VALUES
 ('user_data_validation_required_or_days', '0', 'Cantidad de días desde la última modificación de datos que se esperan para requerirle al usuario actualizar sus datos. El 0 deshabilita esta comprobación.', NULL, 'text', 'sistema', 'Actualización de datos censales', 'Actualización de datos censales', 0);
+
+
+## 16/06/2014 ##
+
+INSERT INTO pref_preferencia_sistema (variable, value, explanation, options, type, categoria, label, explicacion_interna, revisado) VALUES
+('opac_only_state_available', '0', 'Evita visualizar registros desde el opac donde los ejemplares no están disponibles, cualquiera sea el motivo (baja, perdido,en procesos técnicos, etc.).', NULL, 'bool', 'sistema', 'Visualización de registros no disponibles en el OPAC', 'Evita visualizar registros desde el opac donde los ejemplares no están disponibles, cualquiera sea el motivo (baja, perdido,en procesos técnicos, etc.).', 0);

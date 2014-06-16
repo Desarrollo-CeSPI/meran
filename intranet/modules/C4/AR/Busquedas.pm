@@ -1449,10 +1449,14 @@ sub busquedaCombinada_newTemp{
     my $only_sphinx        = 0;
     my $only_available     = 0;
     
+    my $opac_only_state_available     = 0;
+
     if ($sphinx_options){
         $only_sphinx        = $sphinx_options->{'only_sphinx'} || 0;
         $only_available     = $sphinx_options->{'only_available'} || 0;
+        $opac_only_state_available     = $sphinx_options->{'opac_only_state_available'} || 0;
     }    
+    
     my $sphinx = Sphinx::Search->new();
 
     if ($only_sphinx){
@@ -1506,6 +1510,10 @@ sub busquedaCombinada_newTemp{
 
     if ($only_available){
         $query .= ' "ref_disponibilidad_code%'.C4::Modelo::RefDisponibilidad::paraPrestamoValue.'"';
+    }
+
+    if ($opac_only_state_available){
+        $query .= ' "ref_estado_code%'.C4::Modelo::RefEstado::estadoDisponibleValue.'"';
     }
 
     C4::AR::Debug::debug("Busquedas => query string ".$query);
