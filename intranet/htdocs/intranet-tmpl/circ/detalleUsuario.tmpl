@@ -52,6 +52,25 @@
                        <dd>[% socio.getNro_socio %]</dd>
                    [% END %]
              </dl>
+             [% IF socio.needsValidation %]
+                <div class="alert alert-block">
+                  <a class="close" data-dismiss="alert">×</a>
+                  <h4 class="alert-heading" >[% "Atenci&oacute;n" | i18n %]!</h4>
+                  <p>[% "Los datos censales del socio necesitan ser validados." | i18n %]</p>
+                  <p>[% "La &uacute;ltima actualización fue el " | i18n %] [% socio.getLastValidation_formateada %] ([% socio.daysFromLastValidation %] [% "d&iacute;as" | i18n %]) </p>
+                  <p>
+                    [% PERL %]
+                      print C4::AR::Filtros::link_to(
+                          text =>   "[% "Ir al registro del usuario para validar datos censales" | i18n %]",
+                          url =>    "[% url_prefix %]/usuarios/reales/datosUsuario.pl", 
+                          class =>  "btn btn-danger click",
+                          params => ["nro_socio=[% socio.getNro_socio %]"],
+                          title =>  "[% 'Mostrar Detalle del Usuario' | i18n %]"
+                                                );
+                    [% END %]
+                  </p>            
+                </div>
+            [% END %]
          </div>
     
     </fieldset>

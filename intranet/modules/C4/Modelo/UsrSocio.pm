@@ -632,8 +632,9 @@ sub getLastValidation{
 
 sub getLastValidation_formateada{
     my ($self) = shift; 
+    my $dateformat = C4::Date::get_date_format();
+    return  C4::Date::format_date(substr($self->getLastValidation,0,10),$dateformat);
 
-    return $self->lastValidation;
 }
 
 

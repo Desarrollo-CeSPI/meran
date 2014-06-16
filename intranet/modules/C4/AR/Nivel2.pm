@@ -420,7 +420,15 @@ sub _verificarDeleteNivel2 {
         C4::AR::Debug::debug("_verificarDeleteNivel2 => Se está intentando eliminar un grupo que esta contenido en un estante ");
         C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'E018', 'params' => [$params->{'id2'}]} ) ;
     }
-
+    else{
+         #FINALMENTE: verifico que puedan eliminarse todos sus ejemplares!! para evitar inconsistencias
+            my $ejemplares = $cat_registro_marc_n2->getEjemplares();
+            foreach my $nivel3 (@$ejemplares){
+                #verifico condiciones necesarias antes de eliminar los ejemplares    
+                $params->{'id3'} = $nivel3->getId3;
+                C4::AR::Nivel3::_verificarDeleteItem($msg_object, $params);
+            }
+    }
 }
 
 

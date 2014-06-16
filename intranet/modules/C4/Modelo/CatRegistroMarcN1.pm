@@ -861,7 +861,7 @@ sub getGrupos {
 }
 
 =head2 sub tienePrestamos
-    Verifica si el nivel 1 pasado por parametro tiene ejemplares con prestamos o no
+    Verifica si el nivel 1  tiene ejemplares con prestamos o no
 =cut
 sub tienePrestamos{
     my ($self) = shift;
@@ -872,14 +872,30 @@ sub tienePrestamos{
 
     #recorro los id2 del nivel 1 para verificar si tienen prestamos o no
     foreach my $nivel2 (@$nivel2_object_array){
-        $cant = C4::AR::Prestamos::getCountPrestamosDeGrupo($nivel2->getId2);
-        if($cant > 0){
-            last;
+        if($nivel2->tienePrestamos){
+            return 1;
         }
-
     }
+    return 0;
+}
 
-    return ($cant > 0)?1:0;
+=head2 sub tienePrestamos
+    Verifica si el nivel 1  tiene ejemplares con reservas o no
+=cut
+sub tieneReservas{
+    my ($self) = shift;
+
+    my $cant = 0;
+    #recupero todos los grupos del nivel 1
+    my ($nivel2_object_array) = $self->getGrupos();
+
+    #recorro los id2 del nivel 1 para verificar si tienen prestamos o no
+    foreach my $nivel2 (@$nivel2_object_array){
+        if($nivel2->tieneReservas){
+            return 1;
+        }
+    }
+    return 0;
 }
 
 sub getInvolvedCount{

@@ -399,18 +399,26 @@ sub _verificarDeleteNivel1 {
 
     if( !($msg_object->{'error'}) && $cat_registro_marc_n1->tienePrestamos() ){
         C4::AR::Debug::debug("_verificarDeleteNivel1 => tiene al menos 1 ejemplar prestado ");
-        #verifico que el nivel2 que quiero eliminar no tenga ningun ejemplar prestado
+        #verifico que el nivel 1 que quiero eliminar no tenga ningun ejemplar prestado
         $msg_object->{'error'} = 1;
-        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'P124', 'params' => [$params->{'id2'}]} ) ;
+        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'P133', 'params' => [$cat_registro_marc_n1->getId1]} ) ;
 
     }
-# TODO falta el tieneReservas
-#     elsif( !($msg_object->{'error'}) && $cat_registro_marc_n1->tieneReservas() ){
-#         #verifico que el nivel2 que quiero eliminar no tenga ningun ejemplar reservado
-#         $msg_object->{'error'} = 1;
-#         C4::AR::Debug::debug("_verificarDeleteNivel1 => Se está intentando eliminar un ejemplar que tiene al menos un ejemplar reservado ");
-#         C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'P123', 'params' => [$params->{'id2'}]} ) ;
-#     }
+    elsif( !($msg_object->{'error'}) && $cat_registro_marc_n1->tieneReservas() ){
+         #verifico que el nivel 1 que quiero eliminar no tenga ningun ejemplar reservado
+         $msg_object->{'error'} = 1;
+         C4::AR::Debug::debug("_verificarDeleteNivel1 => tiene al menos 1 ejemplar reservado  ");
+         C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'P132', 'params' => [$cat_registro_marc_n1->getId1]} ) ;
+    
+    }else{
+         #FINALMENTE: verifico que puedan eliminarse todos sus grupos!! para evitar inconsistencias
+            my $grupos = $cat_registro_marc_n1->getGrupos();
+            foreach my $nivel2 (@$grupos){
+                 $params->{'id2'} = $nivel2->getId2;
+                #verifico condiciones necesarias antes de eliminar     
+                C4::AR::Nivel2::_verificarDeleteNivel2($msg_object, $params, $nivel2);
+            }
+    }
 
 }
 
