@@ -1002,6 +1002,13 @@ sub _verificaciones {
         C4::AR::Debug::debug("Reservas.pm => _verificaciones => Entro al if que verifica si el ejemplar se encuentra asignado a otro usuario");
     }
 
+#Si se encuentra configurado, se verifica que el usuario tenga sus datos censales actualizados.
+#SOLO PARA INTRA, ES UN PRESTAMO INMEDIATO.
+    if( !($msg_object->{'error'}) && $tipo eq "INTRA" && $socio->needsValidation() ){
+        $msg_object->{'error'}= 1;
+        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U506', 'params' => [$nro_socio]} ) ;
+        C4::AR::Debug::debug("Reservas.pm => _verificaciones => Entro al if que verifica datos censales");
+    }
 
 #Se verifica que el usuario no tenga el maximo de prestamos permitidos para el tipo de prestamo.
 #SOLO PARA INTRA, ES UN PRESTAMO INMEDIATO.
