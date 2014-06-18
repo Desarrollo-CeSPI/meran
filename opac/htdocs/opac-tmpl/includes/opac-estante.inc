@@ -141,7 +141,7 @@
                                   [% contenido_estante.nivel2.getCiudadObject.getNombre %]
                               </td>
                               <td>
-                                [% IF contenido_estante.nivel2.getNumeroRevista %]
+                                [% IF contenido_estante.nivel2.getTipoDocumento == "REV"%]
                                   [% IF contenido_estante.nivel2.getAnioRevista %]
                                     [% contenido_estante.nivel2.getAnioRevista %] 
                                   [% END %]
