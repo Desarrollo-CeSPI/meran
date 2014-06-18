@@ -1371,7 +1371,7 @@ sub busquedaCombinada_ROSE{
 
     my $tipo_match  = C4::AR::Utilidades::getSphinxMatchMode($tipo);
 
-    C4::AR::Debug::debug("Busquedas => match_mode ".$tipo);
+    C4::AR::Debug::debug("Busquedas _ busquedaCombinada_ROSE => match_mode ".$tipo);
 
     #se arma el query string
     foreach my $string (@searchstring_array){
@@ -1513,12 +1513,17 @@ sub busquedaCombinada_newTemp{
     }
 
     if ($opac_only_state_available){
-        $query .= ' "ref_estado_code%'.C4::Modelo::RefEstado::estadoDisponibleValue.'"';
+        # Se filtran los registros que posean algún ejemplar disponible o bien sean analíticas
+        $query .= ' ("ref_estado_code%'.C4::Modelo::RefEstado::estadoDisponibleValue.'" | "cat_ref_tipo_nivel3%ANA" | "cat_ref_tipo_nivel3%ELE")';
+        $tipo_match = C4::AR::Utilidades::getSphinxMatchMode('SPH_MATCH_BOOLEAN');
     }
 
     C4::AR::Debug::debug("Busquedas => query string ".$query);
 
     $sphinx->SetMatchMode($tipo_match);
+
+
+
     if ($orden eq 'autor') {
             if ($sentido_orden){
                 $sphinx->SetSortMode(SPH_SORT_ATTR_DESC,"autor_local");
@@ -1568,8 +1573,9 @@ sub busquedaCombinada_newTemp{
 
     if ($only_sphinx){
         C4::AR::Debug::debug("total_found: ".$total_found);
-        C4::AR::Debug::info("Busquedas.pm => LAST ERROR: ".$sphinx->GetLastError());
- 
+        if ($sphinx->GetLastError()) {
+            C4::AR::Debug::info( "Busquedas.pm => LAST ERROR: ".$sphinx->GetLastError() );
+        } 
         return ($total_found,$matches);
     }
 #arma y ordena el arreglo para enviar al cliente
@@ -1613,6 +1619,8 @@ sub busquedaSinPaginar {
      if ($obj->{'tipoAccion'} eq "BUSQUEDA_COMBINABLE"){
                 $sphinx_options{'only_sphinx'} = 1;
                 $sphinx_options{'report'} = 1;
+                $sphinx_options{'opac_only_state_available'} = $obj->{'opac_only_state_available'};
+    
                ($total_found,$matches) = C4::AR::Busquedas::busquedaCombinada_newTemp($obj->{'string'},$session,$obj,\%sphinx_options);
       } else {
             $obj->{'only_sphinx'}=1;
