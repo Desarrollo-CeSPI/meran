@@ -373,6 +373,7 @@ my %mensajesINTRA = (
     'U617' => 'Registro asociado con &eacute;xito!',
     'U618' => 'Disculpe, no se pudo asociar el registro',
     'U619' => 'Se elimin&oacute; la relaci&oacute;n de la anal&iacute;tica correctamente',
+    'U620' => 'Se copi&oacute; la configuraci&oacute;n (campo, subcampo, tipo de ejemplar) (*?*, *?*, *?*) con &eacute;xito.',
     'U900' => 'El usuario ha sido eliminado del sistema.',
     'U982' => 'El mensaje ha sido eliminado.',
     'C500' => 'Los items fueron guardados correctamente.',
@@ -503,6 +504,7 @@ my %mensajesINTRA = (
     'M001' => 'Se eliminaron todas las visualizaciones del campo "*?*", nivel "*?*" y ejemplar "*?*" con &eacute;xito.',
     'M002' => 'Error al intentar eliminar las visualizaciones con campo "*?*" y nivel "*?*".',
     'M003' => 'Error en la funcion eliminarTodoElCampo.',
+    'M004' => 'Se copi&oacute; toda la visualizaci&oacute;n del campo "*?*", nivel "*?*" y ejemplar "*?*" con &eacute;xito.',
 
     #Mensajes Social
     'SC000' => 'El mensaje ha sido publicado en Twitter',

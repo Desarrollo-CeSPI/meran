@@ -83,6 +83,26 @@ function eliminarVista(vista_id){
 
 }
 
+function clonarVista(vista_id){
+
+    objAH               = new AjaxHelper(updateAgregarVisualizacion);
+    objAH.showOverlay       = true;
+    objAH.debug         = true;
+    objAH.url           = URL_PREFIX+"/catalogacion/visualizacionINTRA/visualizacionIntraDB.pl";
+    objAH.tipoAccion    = 'CLONAR_VISUALIZACION';
+    objAH.showOverlay   = true;
+    
+    if ( vista_id ){
+        bootbox.confirm(ESTA_SEGURO_QUE_DESEA_COPIARLO, function(confirmStatus){
+            if (confirmStatus){
+                objAH.vista_id= vista_id;
+                objAH.sendToServer();
+            }
+        });
+    }
+
+}
+
 function agregarVisualizacion(){
 
     $('#add_vista_intra').modal('hide');
@@ -389,6 +409,32 @@ function eliminarTodoElCampo(campo){
 }
 
 function updateEliminarTodoCampo(responseText){
+    var Messages        = JSONstring.toObject(responseText);
+    setMessages(Messages);
+    mostrarTabla();
+    eleccionDeEjemplar();
+}
+
+function copiarTodoElCampo(campo){
+    objAH               = new AjaxHelper(updateCopiarTodoElCampo);
+    objAH.debug         = true;
+    objAH.showOverlay   = true;  
+    objAH.url           = URL_PREFIX+"/catalogacion/visualizacionINTRA/visualizacionIntraDB.pl";
+    objAH.tipoAccion    = 'COPIAR_TODO_EL_CAMPO';
+    objAH.nivel         = $("#eleccion_nivel").val();
+    objAH.ejemplar      = $("#tipo_nivel3_id").val();
+    
+    if (campo){
+        bootbox.confirm(SEGURO_QUE_DESEA_COPIAR_TODO_EL_CAMPO, function(confirmStatus){
+            if (confirmStatus){
+                objAH.campo         = campo;
+                objAH.sendToServer();
+            }
+        });
+    }
+}
+
+function updateCopiarTodoElCampo(responseText){
     var Messages        = JSONstring.toObject(responseText);
     setMessages(Messages);
     mostrarTabla();

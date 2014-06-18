@@ -60,6 +60,10 @@
                                                             action  => 'eliminarTodoElCampo("[% campo.getCampo %]");',
                                                             icon    => "icon-trash"
                                                            },
+                                                           {title   => "[% 'Copiar Campo' | i18n %]", 
+                                                            action  => 'copiarTodoElCampo("[% campo.getCampo %]");',
+                                                            icon    => "icon-random"
+                                                           },
                                                           ],
                                         popover       => {text  => 'Esta acci&oacute;n se aplica para todos los ejemplares seleccionados', 
                                                           title => 'Atenci&oacute;n'},

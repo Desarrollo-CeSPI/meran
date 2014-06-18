@@ -647,6 +647,56 @@ sub t_agregar_configuracion {
     return ($msg_object);
 }
 
+=head2 sub t_clonar_configuracion
+   
+=cut
+sub t_clonar_configuracion {
+    my ($params) = @_;
+
+    my $visualizacion_intra = C4::Modelo::CatVisualizacionIntra->new();  
+    my $db                  = $visualizacion_intra->db;
+    my $msg_object          = C4::AR::Mensajes::create();
+
+    my $v = $visualizacion_intra->getByPk($params->{'vista_id'});
+
+    if($v){
+
+        # enable transactions, if possible
+        $db->{connect_options}->{AutoCommit} = 0;
+
+        eval {
+            my %params;
+            $params{'campo'}        = $v->getCampo();
+            $params{'subcampo'}     = $v->getSubCampo();
+            $params{'ejemplar'}     = $v->getTipoEjemplar();
+            $params{'nivel'}        = $v->getNivel();
+            $params{'pre'}          = $v->getPre();
+            $params{'post'}         = $v->getPost();
+            $params{'liblibrarian'} = $v->getVistaIntra();
+
+            C4::AR::VisualizacionOpac::t_agregar_configuracion(\%params, $db);
+            $msg_object->{'error'} = 0;
+            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U620', 'params' => [$v->getCampo(), $v->getSubCampo(), $v->getTipoEjemplar()]} ) ;
+
+            $db->commit;
+        };
+
+        if ($@){
+            #Se loguea error de Base de Datos
+            &C4::AR::Mensajes::printErrorDB($@, 'B432',"INTRA");
+            $db->rollback;
+            #Se setea error para el usuario
+            $msg_object->{'error'} = 1;
+            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U609', 'params' => [$v->getCampo(), $v->getSubCampo(), $v->getTipoEjemplar()]} ) ;
+        }
+
+        $db->{connect_options}->{AutoCommit} = 1;
+    }
+
+
+    return ($msg_object);
+}
+
 =head2 sub t_delete_configuracion
    
 =cut
@@ -731,7 +781,6 @@ sub eliminarTodoElCampo{
     return ($msg_object);
 }
 
-
 =item
     Funcion interna que elimina todos los campos-subcampos de un nivel
 =cut
@@ -759,6 +808,85 @@ sub _eliminarTodoElCampo{
     }
     C4::AR::Preferencias::unsetCacheMeran();
 }
+
+
+=item
+   Esta funcion clona todo un campo con sus respectivos subcampos de un nivel recibido por parametro a la visualización del OPAC
+=cut
+sub copiarTodoElCampo{
+    my ($params) = @_;
+
+    my $visualizacion_intra = C4::Modelo::CatVisualizacionIntra->new();  
+    my $db                  = $visualizacion_intra->db;
+    my $msg_object          = C4::AR::Mensajes::create();
+    my $campo               = $params->{'campo'};
+    my $nivel               = $params->{'nivel'};
+    my $ejemplar            = $params->{'ejemplar'};
+
+    $db->{connect_options}->{AutoCommit} = 0;
+
+    eval {
+        $msg_object = C4::AR::VisualizacionIntra::_copiarTodoElCampo($params, $db);
+
+        if($msg_object->{'error'} == 0){
+            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'M004', 'params' => [$campo, $nivel, $ejemplar]} ) ;
+
+            $db->commit;
+        }
+    };
+
+    if ($@){
+        #Se loguea error de Base de Datos
+        C4::AR::Mensajes::printErrorDB($@, 'M003',"INTRA");
+        $db->rollback;
+        #Se setea error para el usuario
+        $msg_object->{'error'} = 1;
+        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'M002', 'params' => [$campo, $nivel, $ejemplar]} ) ;
+    }
+
+    $db->{connect_options}->{AutoCommit} = 1;
+
+    return ($msg_object);
+}
+
+=item
+    Funcion interna que elimina todos los campos-subcampos de un nivel
+=cut
+sub _copiarTodoElCampo{
+    my ($params, $db) = @_;
+    my @filtros;
+    my $campo       = $params->{'campo'};
+    my $nivel       = $params->{'nivel'};
+    my $ejemplar    = $params->{'ejemplar'};
+    my $msg_object;
+
+    push (@filtros, (campo      => { eq => $campo }) );
+    push (@filtros, (nivel      => { eq => $nivel }) );
+    
+    #FIXME: esta con un 'OR' porque cuando se muestran los campos se hace lo mismo: sub getConfiguracionByOrderGroupCampo
+    push ( @filtros, ( or   => [    tipo_ejemplar   => { eq => $ejemplar }, 
+                                    tipo_ejemplar   => { eq => 'ALL'     } ]),
+                                
+    );
+
+    my $configuracion = C4::Modelo::CatVisualizacionIntra::Manager->get_cat_visualizacion_intra(db => $db, query => \@filtros,);
+
+    foreach my $conf (@$configuracion){
+        my %params;
+        $params{'campo'}        = $conf->getCampo();
+        $params{'subcampo'}     = $conf->getSubCampo();
+        $params{'nivel'}        = $conf->getNivel();
+        $params{'ejemplar'}     = $conf->getTipoEjemplar();
+        $params{'liblibrarian'} = $conf->getVistaIntra();
+        $params{'pre'}          = $conf->getPre();
+        $params{'post'}         = $conf->getPost();
+
+        $msg_object = C4::AR::VisualizacionOpac::t_agregar_configuracion(\%params); 
+    }
+
+    return ($msg_object);
+}
+
 
 
 END { }       # module clean-up code here (global destructor)

@@ -16,6 +16,7 @@
     CAMPO_NO_PUEDE_ESTAR_EN_BLANCO= "[% 'El campo no puede estar en blanco' | i18n %]";
     ESTE_CAMPO_NO_PUEDE_ESTAR_EN_BLANCO= "[% 'Este campo es requerido, no lo deje en blanco' | i18n %]";
     ESTA_SEGURO_QUE_DESEA_BORRARLO= "&iquest;[% 'Est&aacute; seguro que desea borrarlo' | i18n %]?";
+    ESTA_SEGURO_QUE_DESEA_COPIARLO= "&iquest;[% 'Est&aacute; seguro que desea copiarlo' | i18n %]?";
     HAY_BARCODES_REPETIDOS= "[% 'Hay barcodes repetidos' | i18n %]";
     ELIJA_AL_MENOS_UN_EJEMPLAR= "[% 'Elija al menos un ejemplar para realizar la acci&oacute;n' | i18n %]";
     FALTA_PARAMETRO_PARA_REFERENCIA= "[% 'Falta par&aacute;metro para referencia' | i18n %]";
@@ -140,6 +141,7 @@
     INGRESE_EL_SEPERADOR= "[% 'Ingrese el separador' | i18n %]";
     SELECCIONE_VISTA_INTRA= "[% 'Seleccione una opcion en todos los campos' | i18n %]";
     SEGURO_QUE_DESEA_ELIMINAR_TODO_EL_CAMPO= "&iquest;[% 'Est&aacute; seguro que desea eliminar el campo y todas sus visualizaciones' | i18n %]?";
+    SEGURO_QUE_DESEA_COPIAR_TODO_EL_CAMPO= "&iquest;[% 'Est&aacute; seguro que desea copiar el campo a la visualizaci&oacute;n del OPAC' | i18n %]?";
     /*=============================================Fin===Visualizacion Opac===========================================*/
     /*================================================Busquedas==============================================*/
     INGRESE_DATOS_PARA_LA_BUSQUEDA = "[% 'Ingrese datos para la b&uacute;squeda' | i18n %]";
