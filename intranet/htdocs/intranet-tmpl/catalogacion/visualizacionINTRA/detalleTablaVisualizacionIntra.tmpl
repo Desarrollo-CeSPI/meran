@@ -111,6 +111,16 @@
 
 
                             [% END %]
+                            [% PERL %]
+                                  print C4::AR::Filtros::action_button( 
+                                                                  button       => "btn click btn-danger",
+                                                                  action       => "clonarVista([% campo.id %])", 
+                                                                  icon         => "icon-random icon-white",
+                                                                  alt_text     => "Copiar la configuración al OPAC",
+                                                              ) ;
+
+
+                            [% END %]
                         </td>
                     </tr>
                 [% END %]

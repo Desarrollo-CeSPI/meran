@@ -70,6 +70,16 @@
 	                                                        inline => "1"
 	                            ) ;
 	            [% END %]
+	            [% PERL %]
+	                    print C4::AR::Filtros::to_Button(   text    => "[% 'Agregar Vista' | i18n %]",
+	                                                        boton   => "btn btn-primary",
+	                                                        onClick => "agregarVisualizacion()",
+	                                                        title   => "[% 'Agregar Vista' | i18n %]",
+	                                                        width => "auto",
+	                                                        alternClass => "botonCentrado",
+	                                                        inline => "1"
+	                            ) ;
+	            [% END %]
 	      </div>
 	    </div>
 	  </div>
