@@ -61,14 +61,14 @@
 
             [% FOREACH SEARCH_RESULTS %]
                 <tr>
-                     <td style="width: 60px;">
+                     <td>
                       [% IF portadas_perzonalizadas_cant > 0 %]
                              [% FOREACH portadas IN portadas_perzonalizadas %]
                                [% FOREACH portada IN portadas %]
                                 [% IF loop.count < 4 %]
                                   [% FOREACH p IN portada.value %]
                                     <a class="fancylink" rel="group_[% grupo %]" href="/uploads/covers-added/[% p.image_name %]">
-                                      <img alt="portada" src="/uploads/covers-added/[% p.image_name %]" title="Portada" />
+                                      <img class="portadaEdicionImage_60" alt="portada" src="/uploads/covers-added/[% p.image_name %]" title="Portada" />
                                    </a>
                                 [% END %]
                                [% END %]
@@ -79,15 +79,15 @@
                                  [% IF loop.count < 4 %]
                                      [% IF portada.portada_registro_big %]
                                          <a class="fancylink" rel="group_[% grupo %]" href="/uploads/covers/[% portada.portada_registro_big %]">
-                                             <img alt="portada" src="/uploads/covers/[% portada.portada_registro %]" title="Portada" />
+                                             <img class="portadaEdicionImage_60" alt="portada" src="/uploads/covers/[% portada.portada_registro %]" title="Portada" />
                                          </a>
                                      [% ELSE %]
                                        [% IF portada.portada_registro_medium %]
                                            <a class="fancylink" rel="group_[% grupo %]" href="/uploads/covers/[% portada.portada_registro_medium %]">
-                                               <img alt="portada" src="/uploads/covers/[% portada.portada_registro %]" title="Portada" />
+                                               <img class="portadaEdicionImage_60" alt="portada" src="/uploads/covers/[% portada.portada_registro %]" title="Portada" />
                                            </a>
                                        [% ELSE %]
-                                               <img alt="portada" src="/uploads/covers/[% portada.portada_registro %]" title="Portada" />
+                                               <img class="portadaEdicionImage_60" alt="portada" src="/uploads/covers/[% portada.portada_registro %]" title="Portada" />
                                        [% END %]
                                     [% END %]
                                   [% END %]

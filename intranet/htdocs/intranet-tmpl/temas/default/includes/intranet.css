@@ -1083,6 +1083,7 @@ body{padding-bottom:60px;}
 .listado_sin_margen{list-style-type:none;}
 legend div.group_separator{background-color:#dff0d8;border-color:#d6e9c6;color:#468847;padding-left:10px;}
 .portadaEdicionImage img{max-height:180px;max-width:110px;}
+td a img.portadaEdicionImage_60 {max-height:180px;max-width:60px;}
 body{position:relative;padding-top:50px;}
 h3 code{font-size:14px;font-weight:normal;}
 body>.navbar{font-size:13px;}
