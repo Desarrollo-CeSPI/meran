@@ -418,4 +418,4 @@ INSERT INTO pref_preferencia_sistema (variable, value, explanation, options, typ
 ## 16/06/2014 ##
 
 INSERT INTO pref_preferencia_sistema (variable, value, explanation, options, type, categoria, label, explicacion_interna, revisado) VALUES
-('opac_only_state_available', '0', 'Evita visualizar registros desde el opac donde los ejemplares no están disponibles, cualquiera sea el motivo (baja, perdido,en procesos técnicos, etc.).', NULL, 'bool', 'sistema', 'Visualización de registros no disponibles en el OPAC', 'Evita visualizar registros desde el opac donde los ejemplares no están disponibles, cualquiera sea el motivo (baja, perdido,en procesos técnicos, etc.).', 0);
+('opac_only_state_available', '0', 'Evita visualizar registros desde el opac donde los ejemplares no están disponibles, cualquiera sea el motivo (baja, perdido,en procesos técnicos, etc.).', NULL, 'bool', 'sistema', 'Visualizar sólo registros disponibles en el OPAC', 'Evita visualizar registros desde el opac donde los ejemplares no están disponibles, cualquiera sea el motivo (baja, perdido,en procesos técnicos, etc.).', 0);
