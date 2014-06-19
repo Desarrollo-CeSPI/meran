@@ -309,12 +309,13 @@ sub getIdioma{
 	#FRA	fr
 	#ES	es
     switch ($idioma) {
-        case "PRTG"  {return 'pt';}
-        case "LAT"  {return 'la';}
-        case "IT"   {return 'it';}
-        case "ING"  {return 'en';}
-        case "FRA"  {return 'fr';}
-        case "ES"  {return 'es';}
+        case "PRTG"  {return 'Portugués';}
+        case "LAT"  {return 'Latín';}
+        case "IT"   {return 'Italiano';}
+        case "ING"  {return 'Inglés';}
+        case "FRA"  {return 'Francés';}
+        case "ES"  {return 'Español';}
+        case "HEB"  {return 'Hebreo';}
     }
     return '';
 }
