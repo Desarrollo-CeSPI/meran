@@ -835,14 +835,16 @@ sub generaCodigoBarraFromMarcRecord{
 
 		if($template eq "ANA"){
 			my $extension ="";
-			my $cant_paginas = $material->{'Extension'};
-			my $desde = $material->{'ExtensionSecundaria'};
 
-			if ($desde && $cant_paginas){
+			my $cant_paginas = C4::AR::Utilidades::trim($material->{'Extension'});
+			my $desde = C4::AR::Utilidades::trim($material->{'ExtensionSecundaria'});
+
+			if (($desde != '') && ($cant_paginas != '')){
 				my $hasta = $desde + $cant_paginas - 1;
 				$extension =$desde."-".$hasta;
-			}elsif(!$desde){
-				$extension = $cant_paginas;
+			}
+			elsif($desde != ''){
+				$extension =$desde;
 			}
 
 		    #Prelimiar de extrensión
@@ -852,9 +854,8 @@ sub generaCodigoBarraFromMarcRecord{
 	    	
 	    	#Unidad de Extensión
 	    	if($extension && $material->{'UnidadExtension'}){
-	    		my $extension .= " ".$material->{'UnidadExtension'};
+	    		$extension .= " ".$material->{'UnidadExtension'};
 	    	}
-
 			push (@campos_n2,['300','a',$extension]);
 		}else{
 			#Extension
@@ -867,13 +868,13 @@ sub generaCodigoBarraFromMarcRecord{
 	    	
 	    	#Unidad de Extensión
 	    	if($extension && $material->{'UnidadExtension'}){
-	    		my $extension .= " ".$material->{'UnidadExtension'};
+	    		$extension .= " ".$material->{'UnidadExtension'};
 	    	}
 
 			#Extension 2
 	    	my $extension2 = $material->{'ExtensionSecundaria'};
 	    	if($material->{'ExtensionSecundaria'} && $material->{'UnidadExtSecundaria'}){
-	    		my $extension2 .= " ".$material->{'UnidadExtSecundaria'};
+	    		$extension2 .= " ".$material->{'UnidadExtSecundaria'};
 	    	}
 
 			push (@campos_n2,['300','a',$extension]);
