@@ -553,6 +553,11 @@ sub get_template_and_user {
         $params->{'menu_preferences'}           = C4::AR::Preferencias::getMenuPreferences();
     }
 
+    #Logueo de estadísticas piwik desde el opac 
+    if ($in->{'type'} eq 'opac'){
+        $params->{'piwik_code'} = C4::AR::Preferencias::getValorPreferencia("piwik_code");
+    }
+
     #se cargan todas las variables de entorno de las preferencias del sistema
     $params->{'limite_resultados_autocompletables'} = C4::AR::Preferencias::getValorPreferencia("limite_resultados_autocompletables");
 
