@@ -61,21 +61,29 @@ my $fields_to_check = ['nombre','apellido','direccion','numero_telefono','id_ciu
 
 if (C4::AR::Validator::checkParams('VA002',\%data_hash,$fields_to_check)){
         eval {
-            # Actualizamos datos
-            $socio->load();
-            $socio->persona->modificarDatosDeOPAC(\%data_hash);
-            $socio->save();
             
+            $socio->load();
             # Seteamos fecha de actualización
-            C4::AR::Usuarios::updateUserDataValidation($nro_socio);
+            my ($Message_arrayref) = C4::AR::Usuarios::updateUserDataValidation($nro_socio,'opac');
+         
+            if(C4::AR::Mensajes::hayError($Message_arrayref)){
+                $t_params->{'mensaje'}          = C4::AR::Mensajes::getMensaje(C4::AR::Mensajes::getFirstCodeError($Message_arrayref),'opac');
+                $t_params->{'mensaje_class'} = "alert-error";
+                $t_params->{'partial_template'} = "opac-modificar_datos_censales.inc";
+            }
+            else{
+                # Actualizamos datos
+                $socio->persona->modificarDatosDeOPAC(\%data_hash);
+                $socio->save();
 
-            # Marcamos en la session 
-            $session->param('modificar_datos_censales', 0);
+                # Marcamos en la session 
+                $session->param('modificar_datos_censales', 0);
 
-            $t_params->{'mensaje'}          = C4::AR::Mensajes::getMensaje('U338','opac');
-            $t_params->{'mensaje_class'} = "alert-success";
-            $t_params->{'foto_name'}        = $socio->tieneFoto();
-            $t_params->{'partial_template'} = "opac-mis_datos.inc";
+                $t_params->{'mensaje'}          = C4::AR::Mensajes::getMensaje('U338','opac');
+                $t_params->{'mensaje_class'} = "alert-success";
+                $t_params->{'foto_name'}        = $socio->tieneFoto();
+                $t_params->{'partial_template'} = "opac-mis_datos.inc";
+            }
         };
         
         if (@$){

@@ -422,5 +422,13 @@ INSERT INTO pref_preferencia_sistema (variable, value, explanation, options, typ
 
 ### 0.10.1 ###
 
+## 24/06/2014 ##
 INSERT INTO  pref_preferencia_sistema (variable, value, explanation, options, type, categoria, label, explicacion_interna, revisado)
 VALUES ('piwik_code',  '',  'Código para loguear estadísticas web con Piwik', NULL ,  'texta',  'sistema',  'Código para Estadísticas (Piwik)', 'Código para loguear estadísticas web con Piwik',  '0');
+
+INSERT INTO pref_preferencia_sistema (variable, value, explanation, options, type, categoria, label, explicacion_interna, revisado) VALUES
+('user_data_validation_required_intra', '0', 'Permite o no la actualización de datos censales desde la Intranet.', NULL, 'bool', 'sistema', 'Actualización de datos censales desde la Intranet', 'Permite o no la actualización de datos censales desde la Intranet', 0);
+
+INSERT INTO pref_preferencia_sistema (variable, value, explanation, options, type, categoria, label, explicacion_interna, revisado) VALUES
+('user_data_validation_required_opac', '0', 'Permite o no la actualización de datos censales desde el Opac.', NULL, 'bool', 'sistema', 'Actualización de datos censales desde el Opac', 'Permite o no la actualización de datos censales desde el Opac', 0);
+
