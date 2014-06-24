@@ -586,7 +586,7 @@ sub crearComponentes{
     elsif($tipoInput eq 'texta'){
 
         my $class_texta = "";
-        if ( ($id ne "google_map") && ($id ne "twitter_follow_button") ){
+        if ( ($id ne "google_map") && ($id ne "twitter_follow_button") && ($id ne "piwik_code") ){
             $class_texta = "input-xxlarge editable_wysiwyg",
         }else{
             $class_texta = "input-xxlarge",    

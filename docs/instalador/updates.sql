@@ -421,3 +421,6 @@ INSERT INTO pref_preferencia_sistema (variable, value, explanation, options, typ
 ('opac_only_state_available', '0', 'Evita visualizar registros desde el opac donde los ejemplares no están disponibles, cualquiera sea el motivo (baja, perdido,en procesos técnicos, etc.).', NULL, 'bool', 'sistema', 'Visualizar sólo registros disponibles en el OPAC', 'Evita visualizar registros desde el opac donde los ejemplares no están disponibles, cualquiera sea el motivo (baja, perdido,en procesos técnicos, etc.).', 0);
 
 ### 0.10.1 ###
+
+INSERT INTO  pref_preferencia_sistema (variable, value, explanation, options, type, categoria, label, explicacion_interna, revisado)
+VALUES ('piwik_code',  '',  'Código para loguear estadísticas web con Piwik', NULL ,  'texta',  'sistema',  'Código para Estadísticas (Piwik)', 'Código para loguear estadísticas web con Piwik',  '0');
