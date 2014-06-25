@@ -190,7 +190,7 @@ if ($editing){
 
             C4::AR::Validator::validateParams('U389',$obj,['nro_socio'] );
 
-            my ($Message_arrayref)= C4::AR::Usuarios::updateUserDataValidation($obj->{'nro_socio'});
+            my ($Message_arrayref)= C4::AR::Usuarios::updateUserDataValidation($obj->{'nro_socio'},"intranet");
             my $infoOperacionJSON=to_json $Message_arrayref;
 
             C4::AR::Auth::print_header($session);

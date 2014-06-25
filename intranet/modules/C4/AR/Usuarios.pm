@@ -1031,17 +1031,26 @@ sub needsDataValidation {
     Este funcion devuelve si el socio tiene que pasar por ventanilla a validar sus datos censales
 =cut
 sub updateUserDataValidation {
-    my ($nro_socio) = @_;
+    my ($nro_socio, $tipo) = @_;
 
     my $msg_object= C4::AR::Mensajes::create();
     use Date::Manip;
     
-    if ($nro_socio){
+    #Verificamos si se permite actualizar datos censales desde donde se hace el requerimiento
+    if(
+        ($tipo eq "opac")&&(!C4::AR::Preferencias::getValorPreferencia("user_data_validation_required_opac")) 
+     || ($tipo eq "intranet")&&(!C4::AR::Preferencias::getValorPreferencia("user_data_validation_required_intra")) 
+        )
+    {
+        $msg_object->{'error'}= 1;
+        C4::AR::Mensajes::add($msg_object, {'codMsg' => 'U507', 'tipo' => $tipo, 'params' => []} ) ;
+    }
+
+    if (($nro_socio) && (!$msg_object->{'error'})) {
         my $socio_array_ref = C4::Modelo::UsrSocio::Manager->get_usr_socio( 
                                                     query => [ nro_socio => { eq => $nro_socio } ],
                                                     select       => ['*'],
                                         );
-
         if($socio_array_ref){
             my $socio = $socio_array_ref->[0];
             

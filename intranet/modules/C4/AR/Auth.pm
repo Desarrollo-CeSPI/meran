@@ -553,6 +553,11 @@ sub get_template_and_user {
         $params->{'menu_preferences'}           = C4::AR::Preferencias::getMenuPreferences();
     }
 
+    #Logueo de estadísticas piwik desde el opac 
+    if ($in->{'type'} eq 'opac'){
+        $params->{'piwik_code'} = C4::AR::Preferencias::getValorPreferencia("piwik_code");
+    }
+
     #se cargan todas las variables de entorno de las preferencias del sistema
     $params->{'limite_resultados_autocompletables'} = C4::AR::Preferencias::getValorPreferencia("limite_resultados_autocompletables");
 
@@ -778,7 +783,7 @@ sub checkauth {
                          $session->param('codMsg', 'U505');
                          #Marcamos para evitar loop de redirecciones 
                          $session->param('modificar_datos_censales', 1);
-                         _update_Data_Controller($_[0], $userid, $_[3], $token);
+                         _update_Data_Controller($_[0], $userid, $_[3], $token,$session);
                       } 
 
                       if ($flags) {
@@ -1319,12 +1324,30 @@ sub _change_Password_Controller {
 
 =cut
 sub _update_Data_Controller {
-    my ($query, $userid, $type, $token) = @_;
+    my ($query, $userid, $type, $token, $session) = @_;
     if ($type eq 'opac') {
-        C4::AR::Debug::debug("redirigiendo al OPAC ------------------------ ");
+        if(C4::AR::Preferencias::getValorPreferencia("user_data_validation_required_opac")){
+            #Se permiten actualizar los datos desde el opac?
+            C4::AR::Debug::debug("redirigiendo en OPAC datos censales ------------------------ ");
             redirectTo(C4::AR::Utilidades::getUrlPrefix().'/opac-actualizar_datos_censales.pl?token='.$token);
+        }else{
+            #redirecciono a una pagina informando que no se permite actualizar
+            $session->param('codMsg', 'U507');
+            $session->param('redirectTo', C4::AR::Utilidades::getUrlPrefix().'/informacion.pl');
+            redirectTo(C4::AR::Utilidades::getUrlPrefix().'/informacion.pl');
+        }
     } else {
+        if(C4::AR::Preferencias::getValorPreferencia("user_data_validation_required_intra")){
+            #Se permiten actualizar los datos desde el opac?
+            C4::AR::Debug::debug("redirigiendo en INTRA datos censales ------------------------ ");
             redirectTo(C4::AR::Utilidades::getUrlPrefix().'/usuarios/reales/datosUsuario.pl?nro_socio='.$userid.'&token='.$token);
+        }else{
+            #redirecciono a una pagina informando que no se permite actualizar
+            $session->param('codMsg', 'U507');
+            $session->param('redirectTo', C4::AR::Utilidades::getUrlPrefix().'/informacion.pl');
+            redirectTo(C4::AR::Utilidades::getUrlPrefix().'/informacion.pl');
+        }
+
     }
 }
 =item sub cerrarSesion

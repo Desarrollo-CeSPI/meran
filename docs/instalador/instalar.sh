@@ -1,5 +1,5 @@
 #!/bin/bash
-version=0.9
+version="$(head -n 1 VERSION)"
 if [ $(uname -a|grep x86_64|wc -l) -gt 0 ];
   then 
      versionKernel=64;
