@@ -1035,7 +1035,8 @@ sub updateUserDataValidation {
 
     my $msg_object= C4::AR::Mensajes::create();
     use Date::Manip;
-    
+        C4::AR::Debug::debug("Usuarios => updateUserDataValidation!!!");
+
     #Verificamos si se permite actualizar datos censales desde donde se hace el requerimiento
     if(
         ($tipo eq "opac")&&(!C4::AR::Preferencias::getValorPreferencia("user_data_validation_required_opac")) 
@@ -1056,6 +1057,8 @@ sub updateUserDataValidation {
             
             eval{
                 $socio->updateValidation();
+
+                C4::AR::Debug::debug("Usuarios => updateUserDataValidation UPDATED!!!");
                 C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U415', 'params' => []});
             };
             if ($@){

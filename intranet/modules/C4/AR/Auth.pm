@@ -735,6 +735,9 @@ sub checkauth {
     my $time        = localtime(time());
     
     if ($_[1]) {
+
+        C4::AR::Debug::debug("C4::AR::Auth::checkauth => Autorización Requerida");    
+        C4::AR::Debug::debug("C4::AR::Auth::checkauth => userid  $userid"); 
         my $socio_object = getSessionSocioObject();
         if ($userid){
 
@@ -745,6 +748,16 @@ sub checkauth {
                           _change_Password_Controller($_[0], $userid, $_[3], $token);
                       }
             
+                      #Se deben actualizar los datos censales? se redirige a editar el perfil
+                      if ( (!$session->param('modificar_datos_censales')) &&  (C4::AR::Usuarios::needsDataValidation($session->param('userid')) != 0)) {
+                                        
+                         C4::AR::Debug::debug("C4::AR::Auth::_verificarSession => datos censales invalidos");    
+                         $session->param('codMsg', 'U505');
+                         #Marcamos para evitar loop de redirecciones 
+                         $session->param('modificar_datos_censales', 1);
+                         _update_Data_Controller($_[0], $userid, $_[3], $token,$session);
+                      } 
+
             buildSocioData($session,$socio_object);
         }
         return ($userid, $session, $flags, $socio_object);
@@ -762,10 +775,10 @@ sub checkauth {
         #No es DEMO hay q hacer todas las comprobaciones de la sesion
  
                   my ($code_MSG,$estado) = _verificarSession($session, $_[3], $token);
-           
+                    C4::AR::Debug::debug("C4::AR::Auth::checkauth => estado?? $estado");
                   if ($estado eq "sesion_valida"){ 
                 
-                      # C4::AR::Debug::debug("C4::AR::Auth::checkauth => session_valida");
+                      C4::AR::Debug::debug("C4::AR::Auth::checkauth => session_valida");
                       $socio = C4::AR::Usuarios::getSocioInfoPorNroSocio($session->param('userid'));
                       $flags = $socio->tienePermisos($_[2]);
                       loginSuccess($socio->getNro_socio);
@@ -823,7 +836,8 @@ sub checkauth {
                   if ($loggedin || $_[1] || (defined($insecure) && $insecure)) {
                       
                       # que se hace aca ?
-      
+                    C4::AR::Debug::debug("C4::AR::Auth::checkauth => por aca se permite llegar a paginas que no necesitan autenticarse");    
+
                   return ($userid, $session, $flags, $socio);
                   }
                 unless ($userid) { 
@@ -1332,9 +1346,7 @@ sub _update_Data_Controller {
             redirectTo(C4::AR::Utilidades::getUrlPrefix().'/opac-actualizar_datos_censales.pl?token='.$token);
         }else{
             #redirecciono a una pagina informando que no se permite actualizar
-            $session->param('codMsg', 'U507');
-            $session->param('redirectTo', C4::AR::Utilidades::getUrlPrefix().'/informacion.pl');
-            redirectTo(C4::AR::Utilidades::getUrlPrefix().'/informacion.pl');
+            redirectAndAdvice('U507');
         }
     } else {
         if(C4::AR::Preferencias::getValorPreferencia("user_data_validation_required_intra")){
@@ -1343,9 +1355,7 @@ sub _update_Data_Controller {
             redirectTo(C4::AR::Utilidades::getUrlPrefix().'/usuarios/reales/datosUsuario.pl?nro_socio='.$userid.'&token='.$token);
         }else{
             #redirecciono a una pagina informando que no se permite actualizar
-            $session->param('codMsg', 'U507');
-            $session->param('redirectTo', C4::AR::Utilidades::getUrlPrefix().'/informacion.pl');
-            redirectTo(C4::AR::Utilidades::getUrlPrefix().'/informacion.pl');
+            redirectAndAdvice('U507');
         }
 
     }

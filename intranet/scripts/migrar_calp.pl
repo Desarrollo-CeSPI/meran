@@ -42,6 +42,10 @@ my $db_host   = 'localhost';
 my $db_user   = 'root';
 my $db_passwd = 'dev';
 
+
+open (ERROR, '>/tmp/error_migracion.txt');
+
+
 my $db_calp= DBI->connect("DBI:mysql:$db_name:$db_host",$db_user, $db_passwd);
 $db_calp->do('SET NAMES utf8');
 
@@ -175,6 +179,10 @@ sub migrar {
         	if(!$msg_object->{'error'}){
         		$registros_creados++;
         	}
+        	else{
+        		#Logueo error
+					print ERROR "Error REGISTRO: Agregando Nivel 1: ".$material->{'Titulo'}." registro número: ".$material->{'RecNo'}." \n";
+        	}
         }
 
         if ($id1){
@@ -236,6 +244,9 @@ sub migrar {
 	            				$ejemplares_creados ++;
 							}
 						}
+	                }else{
+	                	#Logueo error
+						print ERROR "Error Revista: Agregando Nivel 2: ".$material->{'Titulo'}." registro número: ".$material->{'RecNo'}." número: ".$rev->{'numero'}." \n";
 	                }
                 }
         	}
@@ -276,6 +287,12 @@ sub migrar {
 	            				$ejemplares_creados ++;
 						}
 					}
+				}
+				else{
+				#Logueo error
+
+					print ERROR "Error LIBRO: Agregando Nivel 2: ".$material->{'Titulo'}." registro número: ".$material->{'RecNo'}." \n";
+
 				}
 			}
 		}
@@ -745,9 +762,14 @@ sub generaCodigoBarraFromMarcRecord{
 	        	$analiticas_creadas++;
 		        #N2
 	        	my ($msg_object2,$id1_analitica,$id2_analitica) =  guardarNivel2DeImportacion($id1_analitica,$marc_record_n2,"ANA");
-    			
-    			#print "\n\n\n".$marc_record_n2->as_formatted."\n\n\n";
-
+				
+				#Logueo error
+				if ($msg_object2->{'error'}){
+					print ERROR "Error Analítica: Agregando Nivel 2: ".$material->{'Titulo'}." registro número: ".$material->{'RecNo'}." registro padre número: ".$recno." \n";
+				}
+    		}else{
+    			#Logueo error
+					print ERROR "Error Analítica: Agregando Nivel 1: ".$material->{'Titulo'}." registro número: ".$material->{'RecNo'}." registro padre número: ".$recno." \n";
     		}
     		
         }

@@ -432,3 +432,5 @@ INSERT INTO pref_preferencia_sistema (variable, value, explanation, options, typ
 INSERT INTO pref_preferencia_sistema (variable, value, explanation, options, type, categoria, label, explicacion_interna, revisado) VALUES
 ('user_data_validation_required_opac', '0', 'Permite o no la actualización de datos censales desde el Opac.', NULL, 'bool', 'sistema', 'Actualización de datos censales desde el Opac', 'Permite o no la actualización de datos censales desde el Opac', 0);
 
+## 26/06/2014 ##
+ALTER TABLE  pref_preferencia_sistema ADD UNIQUE (variable);
