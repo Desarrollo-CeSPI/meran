@@ -434,3 +434,7 @@ INSERT INTO pref_preferencia_sistema (variable, value, explanation, options, typ
 
 ## 26/06/2014 ##
 ALTER TABLE  pref_preferencia_sistema ADD UNIQUE (variable);
+
+## 27/06/2014 ##
+
+INSERT INTO `pref_preferencia_sistema` (`id`, `variable`, `value`, `explanation`, `options`, `type`, `categoria`, `label`, `explicacion_interna`, `revisado`) VALUES (NULL, 'verificar_duplicidad_de_registros', '1', 'Verifica la duplicidad de los registros a partir del Título, Autor y Autores secundarios', NULL, 'bool', 'sistema', 'Verificar duplicidad de registros', 'Verifica la duplicidad de los registros a partir del Título, Autor y Autores secundarios', '1');
