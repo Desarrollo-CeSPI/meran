@@ -48,24 +48,26 @@ function toggleChecks(){
 }
 
 function consultarColecciones(){
-    var ui=$("#id_ui").val();
-    var item_type=$("#tipo_nivel3_id").val();
-    var nivel_biblio=$("#id_nivel_bibliografico").val();
-    objAH=new AjaxHelper(updateInfo);
-    objAH.debug= true;
-    objAH.showOverlay = true;
-    objAH.url= URL_PREFIX+"/estadisticas/colecciones.pl";
-    objAH.ui= ui;
-    objAH.nivel_biblio= nivel_biblio;
-    objAH.item_type= item_type;
-    objAH.fecha_ini= $("#fecha_ini").val();
-    objAH.fecha_fin= $("#fecha_fin").val();
-    objAH.funcion= 'changePage';
+    var ui              = $("#id_ui").val();
+    var item_type       = $("#tipo_nivel3_id").val();
+    var nivel_biblio    = $("#id_nivel_bibliografico").val();
+    objAH               = new AjaxHelper(updateInfo);
+    objAH.debug         = true;
+    objAH.showOverlay   = true;
+    objAH.url           = URL_PREFIX+"/estadisticas/colecciones.pl";
+    objAH.ui            = ui;
+    objAH.nivel_biblio  = nivel_biblio;
+    objAH.item_type     = item_type;
+    objAH.fecha_ini     = $("#fecha_ini").val();
+    objAH.nro_socio     = $("#nro_socio_hidden").val();
+    objAH.fecha_fin     = $("#fecha_fin").val();
+    objAH.funcion       = 'changePage';
     //se envia la consulta
     objAH.sendToServer();
 }
 
 function updateInfo(responseText){
+    $("#nro_socio_hidden").val("");
     $("#result_chart").html(responseText);
 }
 

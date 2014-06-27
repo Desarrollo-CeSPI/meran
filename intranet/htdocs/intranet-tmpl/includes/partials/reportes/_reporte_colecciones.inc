@@ -22,6 +22,19 @@
              </div>            
         </div>
 
+          <div id="divInfoUsuario" class="control-group" >
+              <label for="usuario" class="control-label">[% 'Usuario' | i18n %]
+                  [% PERL %]
+                      print C4::AR::Filtros::setHelpIcon( text => "[% 'Campo autocompletable, b&uacute;squeda por nombre, apellido, nro. de documento, legajo, nro. socio' | i18n %]",);
+                  [% END %]
+              </label>
+              <div class="controls">
+                  <input type='text' id='usuario' name='usuario' value='' size=32 tabindex='3' style="float: left">
+                  <div id="estadoUsuario"></div>
+                  <input type='hidden' id='nro_socio_hidden' name="nro_socio" value='' tabindex='-1'>
+              </div>
+          </div>
+
         <div class="control-group">
             <label class="control-label"  for="nivel_bibliografico"> [% "Nivel Bibliogr&aacute;fico" | i18n %]</label>
             <div id="nivel_bibliografico" class="controls">  

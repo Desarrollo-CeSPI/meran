@@ -1310,16 +1310,18 @@ sub reporteDisponibilidad{
 }
 
 sub reporteColecciones{
-        my ($params) = @_;
+        my ($params)    = @_;
 
-        my $tipo_doc=   $params->{'item_type'};
-        my $ui=         $params->{'ui'};
+        my $tipo_doc    = $params->{'item_type'};
+        my $ui          = $params->{'ui'};
 
-        my $fecha_ini = $params->{'fecha_ini'};
-        my $fecha_fin = $params->{'fecha_fin'};
+        my $fecha_ini   = $params->{'fecha_ini'};
+        my $fecha_fin   = $params->{'fecha_fin'};
 
-        my $ini    = $params->{'ini'} || 0;
-        my $cantR  = $params->{'cantR'} || 1;
+        my $ini         = $params->{'ini'} || 0;
+        my $cantR       = $params->{'cantR'} || 1;
+
+        my $nro_socio   = $params->{'nro_socio'}; 
 
         my $catRegistroMarcN3   = C4::Modelo::CatRegistroMarcN3->new();  
         my $db = $catRegistroMarcN3->db;
@@ -1328,6 +1330,15 @@ sub reporteColecciones{
 
         if ($tipo_doc ne "" && $tipo_doc ne "ALL"){
             push (@filtros, ("t2.marc_record"    => { like   => '%acat_ref_tipo_nivel3@'.$tipo_doc.'%'}));
+        } 
+
+        if ($nro_socio ne ""){
+
+            my ($socio) = C4::AR::Usuarios::getSocioInfoPorNroSocio($nro_socio);
+
+            if ($socio){
+                push( @filtros, ( 'created_by' => { eq => $socio->getId_socio() } ) );
+            }
         } 
 
         if ($params->{'nivel_biblio'} ne ""){
