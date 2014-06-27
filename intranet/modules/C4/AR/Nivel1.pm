@@ -77,6 +77,10 @@ sub verificar_Alta_Nivel1 {
     use C4::Modelo::CatRegistroMarcN1;
     # FIXME la edicion no la puedo validar con los datos de N1
 
+    if(!C4::AR::Preferencias::getValorPreferencia("verificar_duplicidad_de_registros")){
+        return 0;
+    }
+
 
     my $catRegistroMarcN1       = C4::Modelo::CatRegistroMarcN1->new();
     my $clave_unicidad_alta     = $catRegistroMarcN1->generar_clave_unicidad($marc_record);
