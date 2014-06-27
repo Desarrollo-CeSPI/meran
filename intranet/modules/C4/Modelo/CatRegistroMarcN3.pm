@@ -34,6 +34,7 @@ __PACKAGE__->meta->setup(
         signatura               => { type => 'varchar', overflow => 'truncate' },
         updated_at              => { type => 'timestamp', not_null => 1 },
         created_at              => { type => 'timestamp' },
+        created_by              => { type => 'integer', overflow => 'truncate', not_null => 1 },
         agregacion_temp         => { type => 'varchar', overflow => 'truncate' },
         template                => { type => 'varchar', overflow => 'truncate', not_null => 1 },
     ],
@@ -71,6 +72,9 @@ sub agregar {
     $self->setCodigoBarra($marc_record->subfield("995","f"));
     $self->setSignatura($marc_record->subfield("995","t"));
     $self->setCreatedAt(C4::Date::format_date_in_iso(Date::Manip::ParseDate("now"), $dateformat));
+    my ($socio)     = C4::AR::Usuarios::getSocioInfoPorNroSocio($params->{'responsable'});
+    $self->setCreatedBy($socio->getId_socio());
+    C4::AR::Debug::debug("RESPONSABLE!!!!!!!!!! ". $params->{'responsable'});
     $self->setMarcRecord($params->{'marc_record'});
     $self->setTemplate($params->{'id_tipo_doc'});
 
@@ -458,6 +462,31 @@ sub setCreatedAt{
     my ($now)   = @_;
 
     $self->created_at($now);
+}
+
+sub getCreatedBy{
+    my ($self)  = shift;
+
+    return $self->created_by;
+}
+
+sub getCreatedByToString {
+    my ($self)  = shift;
+
+    my ($socio) = C4::AR::Usuarios::getSocioInfo($self->getCreatedBy());
+
+    if ($socio){
+        return $socio->getNro_socio();
+    } else {
+        return "---";
+    }
+}
+
+sub setCreatedBy{
+    my ($self)  = shift;
+    my ($user)   = @_;
+
+    $self->created_by($user);
 }
 
 sub getUpdatedAt{
