@@ -43,7 +43,7 @@ my $db_user   = 'root';
 my $db_passwd = 'dev';
 
 
-open (ERROR, '>/tmp/error_migracion.txt');
+open (ERROR, '>/tmp/errores_migracion.txt');
 
 
 my $db_calp= DBI->connect("DBI:mysql:$db_name:$db_host",$db_user, $db_passwd);
@@ -181,7 +181,9 @@ sub migrar {
         	}
         	else{
         		#Logueo error
-					print ERROR "Error REGISTRO: Agregando Nivel 1: ".$material->{'Titulo'}." registro número: ".$material->{'RecNo'}." \n";
+        		my $codMsg  = C4::AR::Mensajes::getFirstCodeError($msg_object);
+                my $mensaje = C4::AR::Mensajes::getMensaje($codMsg,'INTRA');
+				print ERROR "Error REGISTRO: Agregando Nivel 1: ".$material->{'Titulo'}." registro número: ".$material->{'RecNo'}." (ERROR: $mensaje )\n";
         	}
         }
 
@@ -190,6 +192,18 @@ sub migrar {
         	#Si es una Revista hay que generar el estado de colección
         	if($template eq 'REV'){
         		#Revistas
+
+        		if (!scalar(@$ejemplares)){
+        			#Revisar si tiene ejemplar, sino crear uno
+					my @nuevo_ejemplar=();
+					#UI
+					push(@nuevo_ejemplar, ['995','c', 'BLGL']);
+					push(@nuevo_ejemplar, ['995','d', 'BLGL']);
+					push(@nuevo_ejemplar, ['995','o', 'CIRC0000']);
+					push(@nuevo_ejemplar, ['995','e', 'STATE002']);
+					$ejemplares->[0] = \@nuevo_ejemplar;
+				}
+
         		#print  "REVISTAS v $volumen n $fasciculos \n";
 
         		my $fasciculos = $material->{'Serie_NumDesde'};
@@ -219,7 +233,7 @@ sub migrar {
 	            		my $cant_analiticas = agregarAnaliticas($id1,$id2,$material->{'RecNo'});
 	            		$analiticas_creadas += $cant_analiticas;
 
-	            		print "Se crearon $cant_analiticas analíticas \n";
+	            	#	print "Se crearon $cant_analiticas analíticas \n";
 
 	                	#Ejemplares
 						foreach my $ejemplar (@$ejemplares){
@@ -242,11 +256,17 @@ sub migrar {
 			                my ($msg_object3) = guardarNivel3DeImportacion($id1,$id2,$marc_record_n3,$template,'BLGL');
 							if (!$msg_object3->{'error'}){
 	            				$ejemplares_creados ++;
+							}else{
+								my $codMsg  = C4::AR::Mensajes::getFirstCodeError($msg_object3);
+                				my $mensaje = C4::AR::Mensajes::getMensaje($codMsg,'INTRA');
+                				print ERROR "Error Revista: Agregando Nivel 3: ".$material->{'Titulo'}." registro número: ".$material->{'RecNo'}." número: ".$rev->{'numero'}." (ERROR: $mensaje ) \n";
 							}
 						}
 	                }else{
 	                	#Logueo error
-						print ERROR "Error Revista: Agregando Nivel 2: ".$material->{'Titulo'}." registro número: ".$material->{'RecNo'}." número: ".$rev->{'numero'}." \n";
+	                	my $codMsg  = C4::AR::Mensajes::getFirstCodeError($msg_object2);
+                		my $mensaje = C4::AR::Mensajes::getMensaje($codMsg,'INTRA');
+						print ERROR "Error Revista: Agregando Nivel 2: ".$material->{'Titulo'}." registro número: ".$material->{'RecNo'}." número: ".$rev->{'numero'}." (ERROR: $mensaje ) \n";
 	                }
                 }
         	}
@@ -290,8 +310,9 @@ sub migrar {
 				}
 				else{
 				#Logueo error
-
-					print ERROR "Error LIBRO: Agregando Nivel 2: ".$material->{'Titulo'}." registro número: ".$material->{'RecNo'}." \n";
+        			my $codMsg  = C4::AR::Mensajes::getFirstCodeError($msg_object2);
+               		my $mensaje = C4::AR::Mensajes::getMensaje($codMsg,'INTRA');
+					print ERROR "Error LIBRO: Agregando Nivel 2: ".$material->{'Titulo'}." registro número: ".$material->{'RecNo'}." (ERROR: $mensaje) \n";
 
 				}
 			}
@@ -539,12 +560,22 @@ sub guardarNivel3DeImportacion{
     $params_n3->{'ui_origen'}=$ui;
     $params_n3->{'ui_duenio'}=$ui;
     $params_n3->{'cantEjemplares'} = 1;
-    
+    $params_n3->{'responsable'} = 'meranadmin'; #No puede no tener un responsable
+
     #Hay que autogenerar el barcode o no???
     $params_n3->{'esPorBarcode'} = 'true';
     
     my @barcodes_array=();
     $barcodes_array[0]=generaCodigoBarraFromMarcRecord($marc_record,$template);
+    
+    if ($barcodes_array[0] eq 'AUTOGENERADO'){
+    	#Se autogenera el barcode antes    
+        my %parametros;
+        $parametros{'UI'}               = $ui;
+        $parametros{'tipo_ejemplar'}    = $template;
+        @barcodes_array = C4::AR::Nivel3::generaCodigoBarra(\%parametros, $params_n3->{'cantEjemplares'});
+    }
+
     $params_n3->{'BARCODES_ARRAY'} = \@barcodes_array;
 
     my %hash_temp1 = {};
@@ -765,11 +796,15 @@ sub generaCodigoBarraFromMarcRecord{
 				
 				#Logueo error
 				if ($msg_object2->{'error'}){
-					print ERROR "Error Analítica: Agregando Nivel 2: ".$material->{'Titulo'}." registro número: ".$material->{'RecNo'}." registro padre número: ".$recno." \n";
+					my $codMsg  = C4::AR::Mensajes::getFirstCodeError($msg_object2);
+                	my $mensaje = C4::AR::Mensajes::getMensaje($codMsg,'INTRA');
+					print ERROR "Error Analítica: Agregando Nivel 2: ".$material->{'Titulo'}." registro número: ".$material->{'RecNo'}." registro padre número: ".$recno." (ERROR: $mensaje)\n";
 				}
     		}else{
     			#Logueo error
-					print ERROR "Error Analítica: Agregando Nivel 1: ".$material->{'Titulo'}." registro número: ".$material->{'RecNo'}." registro padre número: ".$recno." \n";
+    			my $codMsg  = C4::AR::Mensajes::getFirstCodeError($msg_object);
+                my $mensaje = C4::AR::Mensajes::getMensaje($codMsg,'INTRA');
+				print ERROR "Error Analítica: Agregando Nivel 1: ".$material->{'Titulo'}." registro número: ".$material->{'RecNo'}." registro padre número: ".$recno." (ERROR: $mensaje)\n";
     		}
     		
         }
