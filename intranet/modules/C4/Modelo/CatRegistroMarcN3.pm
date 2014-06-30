@@ -72,9 +72,14 @@ sub agregar {
     $self->setCodigoBarra($marc_record->subfield("995","f"));
     $self->setSignatura($marc_record->subfield("995","t"));
     $self->setCreatedAt(C4::Date::format_date_in_iso(Date::Manip::ParseDate("now"), $dateformat));
-    my ($socio)     = C4::AR::Usuarios::getSocioInfoPorNroSocio($params->{'responsable'});
-    $self->setCreatedBy($socio->getId_socio());
-    C4::AR::Debug::debug("RESPONSABLE!!!!!!!!!! ". $params->{'responsable'});
+    if($params->{'responsable'}){
+        C4::AR::Debug::debug("RESPONSABLE!!!!!!!!!! ". $params->{'responsable'});
+        my ($socio)     = C4::AR::Usuarios::getSocioInfoPorNroSocio($params->{'responsable'});
+        if ($socio) {
+            $self->setCreatedBy($socio->getId_socio());
+        }
+    }
+
     $self->setMarcRecord($params->{'marc_record'});
     $self->setTemplate($params->{'id_tipo_doc'});
 
