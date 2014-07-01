@@ -201,6 +201,8 @@ sub migrar {
 					push(@nuevo_ejemplar, ['995','d', 'BLGL']);
 					push(@nuevo_ejemplar, ['995','o', 'CIRC0000']);
 					push(@nuevo_ejemplar, ['995','e', 'STATE002']);
+					# La signatura en las revistas se encuentra en el CODEN. Ticket #9642
+					push(@nuevo_ejemplar, ['995','t', $material->{'CODEN'}]); 
 					$ejemplares->[0] = \@nuevo_ejemplar;
 				}
 
@@ -280,7 +282,7 @@ sub migrar {
 	            	#Analíticas
 	            	my $cant_analiticas = agregarAnaliticas($id1,$id2,$material->{'RecNo'});
 	            	$analiticas_creadas += $cant_analiticas;
-	            	print "Analiticas creadas? ".$cant_analiticas."\n";
+	        #   	print "Analiticas creadas? ".$cant_analiticas."\n";
 	        #    	print "Ejemplaress";
 					foreach my $ejemplar (@$ejemplares){
 						my $marc_record_n3 = $marc_record_n3_base->clone();
