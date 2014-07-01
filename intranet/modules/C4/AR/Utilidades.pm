@@ -3809,6 +3809,19 @@ sub nivel2Autocomplete{
     return ($textout eq '')?"-1|".C4::AR::Filtros::i18n("SIN RESULTADOS"):$textout;
 }
 
+sub gruposAutocomplete{
+    my ($n2Str) = @_;
+
+    my $textout;
+    my $n2_array_ref= C4::AR::Referencias::obtenerNivel2Like($n2Str);
+
+    foreach my $n2 (@$n2_array_ref){
+        $textout.= $n2->getId."|".$n2->getId."\n";
+    }
+
+    return ($textout eq '')?"-1|".C4::AR::Filtros::i18n("SIN RESULTADOS"):$textout;
+}
+
 sub bibliosAutocomplete{
 
     my ($biblioStr) = @_;
@@ -4114,6 +4127,55 @@ sub catalogoAutocompleteId{
      return ($textout eq '')?"-1|".C4::AR::Filtros::i18n("SIN RESULTADOS"):$textout;
 }
 
+
+sub gruposAutocomplete{
+
+     my ($string_utf8_encoded) = @_;
+
+     $string_utf8_encoded       = Encode::decode_utf8($string_utf8_encoded);
+     my @data_array;
+     my %params                 = {};
+
+     $params{'tipo'}            = "normal";
+     $params{'ini'}             = 0;
+     $params{'cantR'}           = 20;
+     $params{'from_suggested'}  = 1;
+
+     my $session = CGI::Session->load();
+     my ($cantidad, $resultado_busquedas, $suggested)= C4::AR::Busquedas::busquedaCombinada_newTemp($string_utf8_encoded, $session, \%params, 0);
+
+     my $textout = "";
+
+
+    foreach my $documento (@$resultado_busquedas){
+        my %has_temp;
+        $has_temp{'id'}     = $documento->{'id1'};
+        # C4::AR::Debug::debug("CANTIDAD DE NIVELES ENCONTRADOS EN AUTOCOMPLETE ==============> ".$cantidad);
+        $has_temp{'dato'}   = $documento->{'titulo'};
+        
+        if($documento->{'nomCompleto'}){ 
+                $has_temp{'dato'} .= " (".$documento->{'nomCompleto'}.")";
+        }
+        
+        my $nivel2_array_ref = C4::AR::Nivel2::getNivel2FromId1($documento->{'id1'});
+
+        foreach my $n2 (@$nivel2_array_ref){
+            my %has_temp_aux;
+
+            $has_temp_aux{'dato'}   = $has_temp{'dato'} . ' - ' . $n2->getEdicion() . " " . $n2->getAnio_publicacion() . "\n";
+            $has_temp_aux{'id'}     = $n2->getId2();#$documento->{'id1'};
+            $has_temp_aux{'id2'}    = $n2->getId2();
+            push (@data_array, \%has_temp_aux);
+        }
+
+    #              C4::AR::Debug::debug("CANTIDAD DE NIVELES ENCONTRADOS EN AUTOCOMPLETE ==============> ".$cantidad);
+    #              $textout.= $documento->{'id1'}."|".$documento->{'titulo'}."\n";
+    }
+
+    $textout= getTextOutSorted(\@data_array, {'DESC' => 1, 'ORDER_BY' => 'dato'});
+
+    return ($textout eq '')?"-1|".C4::AR::Filtros::i18n("SIN RESULTADOS"):$textout;
+}
 
 sub temasAutocomplete{
 
