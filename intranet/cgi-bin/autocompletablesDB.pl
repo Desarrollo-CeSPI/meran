@@ -113,7 +113,7 @@ elsif ($accion eq 'autocomplete_catalogo'){
     $result = C4::AR::Utilidades::catalogoAutocomplete($string);
 }
 elsif ($accion eq 'autocomplete_nivel2'){
-    $result = C4::AR::Utilidades::catalogoAutocomplete($string);
+    $result = C4::AR::Utilidades::gruposAutocomplete($string);
 }
 elsif ($accion eq 'autocomplete_catalogo_id'){
 

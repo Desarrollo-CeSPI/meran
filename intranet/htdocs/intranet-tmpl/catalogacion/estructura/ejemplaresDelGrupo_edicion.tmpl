@@ -197,8 +197,7 @@
 <script type="text/javascript">makeToggle('ejemplaresDelGrupo[% id2 %]','trigger_2_[% id2 %]',null,false);</script>
 [% ELSE %]
 
-    [% IF nivel2.getTemplate == 'ANA' %]
-
+    [% IF nivel2.getTemplate == 'ANA' and  show_asociar_registro_fuente == 1 %]
             [% PERL %]
                 print C4::AR::Filtros::link_to(   text      => "Detalle del registro padre",
                                                   url       => "[% url_prefix %]/catalogacion/estructura/detalle.pl", 
