@@ -120,7 +120,7 @@
                                 [% PERL %]
                                     print C4::AR::Filtros::link_to( 
 
-                                                        text =>     "[% contenido_estante.nivel2.nivel1.getTitulo %]",
+                                                        text =>     "[% contenido_estante.nivel2.nivel1.getTituloStringEscaped %]",
                                                         url =>      "[% url_prefix %]/opac-detail.pl", 
                                                         params =>   ["id1=[% contenido_estante.nivel2.nivel1.getId1 %]"],
                                                         title =>    "[% 'Mostrar detalle del registro' | i18n %]"
@@ -130,9 +130,9 @@
                               </td>
                               <td>
                                   [% PERL %]
-                                      print C4::AR::Filtros::link_to( text =>     "[% contenido_estante.nivel2.nivel1.getAutor %]",
+                                      print C4::AR::Filtros::link_to( text =>     "[% contenido_estante.nivel2.nivel1.getAutorStringEscaped %]",
                                                                       url =>      "[% url_prefix %]/opac-busquedasDB.pl", 
-                                                                      params =>   ["tipoAccion=BUSQUEDA_AVANZADA","autor=[% contenido_estante.nivel2.nivel1.getAutor %]"],
+                                                                      params =>   ["tipoAccion=BUSQUEDA_AVANZADA","autor=[% contenido_estante.nivel2.nivel1.getAutorStringEscaped %]"],
                                                                       title =>    "[% 'Buscar de este autor' | i18n %]"
                                                                   ) ;
                                   [% END %]                                

@@ -641,10 +641,9 @@ sub getLastValidation_formateada{
 sub updateValidation{
     my ($self) = shift;
     
-    my $today = C4::AR::Utilidades::getToday();
+    my $now = C4::AR::Utilidades::getCurrentTimestamp();
     
-    $self->setLastValidation($today);
-    
+    $self->setLastValidation($now);
     $self->save();
 }
 
@@ -652,9 +651,10 @@ sub setLastValidation{
     my ($self) = shift;
     my ($lastValidation) = @_;
 
-    my $dateformat = C4::Date::get_date_format();
-    
-    $lastValidation = C4::Date::format_date_in_iso($lastValidation,$dateformat);
+   # my $dateformat = C4::Date::get_date_format();
+    #$lastValidation = C4::Date::format_date_complete($lastValidation,);
+
+    C4::AR::Debug::debug("lastValidation: ".$lastValidation);
     $self->lastValidation($lastValidation);
 }
 

@@ -61,11 +61,11 @@ my $fields_to_check = ['nombre','apellido','direccion','numero_telefono','id_ciu
 
 if (C4::AR::Validator::checkParams('VA002',\%data_hash,$fields_to_check)){
         eval {
-            
-            $socio->load();
             # Seteamos fecha de actualización
             my ($Message_arrayref) = C4::AR::Usuarios::updateUserDataValidation($nro_socio,'opac');
-         
+            
+            # Cargamos el uaurio actualizado
+            $socio->load();
             if(C4::AR::Mensajes::hayError($Message_arrayref)){
                 $t_params->{'mensaje'}          = C4::AR::Mensajes::getMensaje(C4::AR::Mensajes::getFirstCodeError($Message_arrayref),'opac');
                 $t_params->{'mensaje_class'} = "alert-error";

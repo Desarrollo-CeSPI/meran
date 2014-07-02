@@ -105,9 +105,9 @@
                                                               [% IF contenido_estante.nivel2.nivel1  %]
                                                               
                                                               <td class="titulo_result">
-                                                              <input type="hidden" id="titulo_[% estante.getId %]" value="[% contenido_estante.nivel2.nivel1.getTitulo %]">
+                                                              <input type="hidden" id="titulo_[% estante.getId %]" value="[% contenido_estante.nivel2.nivel1.getTituloStringEscaped %]">
                                                                   [% PERL %]
-                                                                      print C4::AR::Filtros::link_to( text =>     "[% contenido_estante.nivel2.nivel1.getTitulo %]",
+                                                                      print C4::AR::Filtros::link_to( text =>     "[% contenido_estante.nivel2.nivel1.getTituloStringEscaped %]",
                                                                                                       url=>"[% url_prefix %]/catalogacion/estructura/detalle.pl", 
                                                                                                       params =>   ["id1=[% contenido_estante.nivel2.id1 %]"],
                                                                                                       title =>    "[% 'Mostrar Detalle del Ejemplar' | i18n %]"
@@ -115,7 +115,7 @@
                                                                   [% END %]
                                                               </td>
                                                               <td class="autor_result">
-                                                                      [% contenido_estante.nivel2.nivel1.getAutor %]
+                                                                      [% contenido_estante.nivel2.nivel1.getAutorStringEscaped %]
                                                               </td>
                                                               <td>
                                                               [% contenido_estante.nivel2.getCiudadObject.getNombre %]

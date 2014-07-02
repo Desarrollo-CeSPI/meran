@@ -104,7 +104,7 @@
 
                     <td [% UNLESS titulo %]style="font-weight: bold; font-size: 14px; clear:both;align:center"[% END %]>
                         [% PERL %]
-                            print C4::AR::Filtros::link_to( text    =>  "[% IF titulo %][% titulo | html %][% ELSE %]REGISTRO SIN T&Iacute;TULO - Ingresar para editarlo.[% END %]",
+                            print C4::AR::Filtros::link_to( text    =>  "[% IF titulo %][% titulo %][% ELSE %]REGISTRO SIN T&Iacute;TULO - Ingresar para editarlo.[% END %]",
                                                             url     =>  "[% url_prefix %]/catalogacion/estructura/detalle.pl", 
                                                             params  =>  ["id1=[% id1 %]"],
                                                             title   =>  "[% 'Mostrar Detalle del Registro' | i18n %]",

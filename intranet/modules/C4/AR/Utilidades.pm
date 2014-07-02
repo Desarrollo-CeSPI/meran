@@ -3348,14 +3348,15 @@ sub generarComboNivel2Detalle{
 
 
 #****************************************************Fin****Generacion de Combos**************************************************
-sub getToday{
 
-    my @datearr = localtime(time);
-    my $today =(1900+$datearr[5])."-".($datearr[4]+1)."-".$datearr[3];
-    my $dateformat = C4::Date::get_date_format();
+#sub getToday{
 
-    return (format_date($today,$dateformat));
-}
+#   my @datearr = localtime(time);
+#   my $today =(1900+$datearr[5])."-".($datearr[4]+1)."-".$datearr[3];
+#   my $dateformat = C4::Date::get_date_format();
+
+#   return (format_date($today,$dateformat));
+#}
 
 sub printARRAY{
 
