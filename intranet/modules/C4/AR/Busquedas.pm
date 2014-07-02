@@ -1010,6 +1010,8 @@ sub busquedaAvanzada_newTemp{
     
     my $only_sphinx     = $params->{'only_sphinx'};
     my $only_available  = $params->{'only_available'};
+    my $opac_only_state_available = $params->{'opac_only_state_available'} || 0;
+
     my $sphinx          = Sphinx::Search->new();
 
     if ($only_sphinx){
@@ -1088,6 +1090,12 @@ sub busquedaAvanzada_newTemp{
     C4::AR::Debug::debug("Busquedas => query string => ".$query);
 
     my $tipo_match = C4::AR::Utilidades::getSphinxMatchMode($tipo);
+
+    if ($opac_only_state_available){
+        # Se filtran los registros que posean algún ejemplar disponible o bien sean analíticas
+        $query .= ' ("ref_estado_code%'.C4::Modelo::RefEstado::estadoDisponibleValue.'" | "cat_ref_tipo_nivel3%ANA" | "cat_ref_tipo_nivel3%ELE")';
+        $tipo_match = C4::AR::Utilidades::getSphinxMatchMode('SPH_MATCH_BOOLEAN');
+    }
 
     $sphinx->SetMatchMode($tipo_match);
     
@@ -1706,17 +1714,17 @@ sub armarInfoNivel1{
         if($nivel1){
 
         # TODO ver si esto se puede sacar del resultado del indice asi no tenemos q ir a buscarlo
-            @result_array_paginado[$i]->{'titulo'}                      = $nivel1->getTitulo();
+            @result_array_paginado[$i]->{'titulo'}                      = $nivel1->getTituloStringEscaped();
             
             if ($params->{'isOAI_search'}){
                 @result_array_paginado[$i]->{'marc_record'}             = $nivel1->toMARC_OAI();
             }
 
-            @result_array_paginado[$i]->{'titulo'}              .= ($nivel1->getRestoDelTitulo() ne "")?": ".$nivel1->getRestoDelTitulo():"";
+            @result_array_paginado[$i]->{'titulo'}              .= ($nivel1->getRestoDelTituloStringEscaped() ne "")?": ".$nivel1->getRestoDelTituloStringEscaped():"";
             my $autor_object                                            = $nivel1->getAutorObject();
 
-            @result_array_paginado[$i]->{'nomCompleto'}                 = $autor_object->getCompleto();
-            @result_array_paginado[$i]->{'nomCompletoRegistroFuente'}   = $autor_object->getCompleto();
+            @result_array_paginado[$i]->{'nomCompleto'}                 = $nivel1->getAutorStringEscaped();
+            @result_array_paginado[$i]->{'nomCompletoRegistroFuente'}   = $nivel1->getAutorStringEscaped();
             @result_array_paginado[$i]->{'idAutor'}                     = $autor_object->getId();
             @result_array_paginado[$i]->{'esta_en_favoritos'}           = C4::AR::Nivel1::estaEnFavoritos($nivel1->getId1());
 

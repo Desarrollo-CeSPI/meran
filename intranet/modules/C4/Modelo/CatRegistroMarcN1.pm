@@ -455,6 +455,14 @@ sub getRestoDelTitulo{
     return $marc_record->subfield("245","b");
 }
 
+sub getRestoDelTituloStringEscaped{
+    my ($self)      = shift;
+
+    my $titulo = $self->getRestoDelTitulo();
+    return C4::AR::Utilidades::escapeData($titulo);
+}
+
+
 sub getAutorObject{
     my ($self)      = shift;
 
