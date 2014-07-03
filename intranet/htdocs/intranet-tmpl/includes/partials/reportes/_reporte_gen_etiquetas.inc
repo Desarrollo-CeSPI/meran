@@ -49,6 +49,7 @@
         objAH_repE.funcion           = 'changePage_ReporteGenEtiquetas';
         //  se envia la consulta
         objAH_repE.sendToServer();
+        $("#seleccionados").html("");
     }
 
 
