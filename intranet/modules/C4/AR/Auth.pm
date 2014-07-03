@@ -903,6 +903,7 @@ sub checkauth {
                         my $now = Date::Manip::ParseDate("now");
                         if ($session->param('type') eq "intranet"){
                             $socio->setLast_login($now);
+                            $socio->setLastLoginAll($now);
                             $socio->save();
                         }
                         C4::AR::Debug::debug("C4::AR::Auth::checkauth => fecha ".$now);
