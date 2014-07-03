@@ -16,10 +16,10 @@ function seleccionarTr(trSelected){
                   id_tr = id_tr + "_tr";
                   id1= trSelected.attr('id').substring(15);
                   id3= trSelected.val();
-                  trSelected.attr('checked', false);
-                  $('#' + id_tr).hide();
+                  // trSelected.attr('checked', false);
+                  // $('#' + id_tr).hide();
                   barcode= $('#barcode'+ trSelected.val()).html();
-                  $('#seleccionados').show();
+                  // $('#seleccionados').show();
                   $('#button-seleccionados').show();
                   $('#seleccionados').append("<div class='label label-info barcode-box' style='width:auto;' name='"+ id1  + "' id='label"+barcode+"'><input type='hidden' name='"+id3+"' value='"+id_tr+"'>" + barcode + "<span class='click' id='"+barcode+"'> X </span></div>");
               
@@ -29,23 +29,27 @@ function seleccionarTr(trSelected){
 
                   cant_visibles_tabla= $(id_tabla + ' tr:visible').length;
                  
-                  if (cant_visibles_tabla <= 1){
-                          $('#grupo' + id1).hide();
-                  } else {
-                          $('#grupo' + id1).show();
-                  }
+                  // if (cant_visibles_tabla <= 1){
+                  //         $('#grupo' + id1).hide();
+                  // } else {
+                  //         $('#grupo' + id1).show();
+                  // }
 
                   $('.click').click( function (){  
                               labelClosed=$('#label'+ $(this).attr('id')).attr('name');
                               $('#grupo' + labelClosed).show();          
                               $('#' + $(this).parent().children(":input").val()).show();                    
                               $('#label'+ $(this).attr('id')).remove(); 
-                              if ($('#seleccionados').children().size() == 0){
-                                    $('#seleccionados').hide();
-                                    $('#button-seleccionados').hide();
-                              };
+                              // if ($('#seleccionados').children().size() == 0){
+                              //       $('#seleccionados').hide();
+                              //       $('#button-seleccionados').hide();
+                              // };
                                      
                   });
+              } else {
+
+                barcode = $('#barcode'+trSelected.val()).html();
+                $('#label'+barcode).remove();
               }
 
 
@@ -60,6 +64,7 @@ function onSelectTr(){
 }
   
 function checkedAllTrs(id,nombreCheckbox){
+
             $("#"+id).toggle(
                     function(){
                           $("input[name="+nombreCheckbox+"]").each(
@@ -83,6 +88,10 @@ function checkedAllTrs(id,nombreCheckbox){
                                       );
                                   }
                             )
+
+                          if($("input[name=checkEjemplares]").size() > 0){
+                            $("#seleccionados").html("");
+                          }
                     }
             );
 }
@@ -90,7 +99,7 @@ function checkedAllTrs(id,nombreCheckbox){
 
 
 $(document).ready(function(){
-      $('#button-seleccionados').hide();
+      // $('#button-seleccionados').hide();
 });
 
 
@@ -108,46 +117,41 @@ $(document).ready(function(){
 [% IF cantidad %]
 <div class="contenedor_paginador">[% paginador %]</div> 
 <div>        
+              [% PERL %]
+                print C4::AR::Filtros::tableHeader(   
+                                  id              => "tablaResult",
+                                  class           => "",
+                                  selectAll_id    => "selectAll[% nivel3.nivel1.id1 %]",
+                                  columns         => ['[% "Título" | i18n %]', '[% "Autor" | i18n %]', '[% "Codigo de Barra" | i18n %]','[% 'Signatura' | i18n %]', '[% "Estado" | i18n %]'               
+                                                      ],
+                            
+                                  ) ;
+              [% END %]
+
+              <tbody>
     [% FOREACH SEARCH_RESULTS %]
 
-          <div id="grupo[% nivel3.nivel1.id1 %]">  
-                    <div class="page-header">
-                          <h3>[% nivel3.nivel1.getTitulo %] <small> ([% nivel3.nivel1.getAutor %]) </small> [% nivel3.nivel2.toString %]</h3>
-                    </div>                          
-                        [% PERL %]
-                          print C4::AR::Filtros::tableHeader(   
-                                            id              => "tablaResult[% nivel3.nivel1.id1 %]",
-                                            class           => "",
-                                            selectAll_id    => "selectAll[% nivel3.nivel1.id1 %]",
-                                            columns         => ['[% "Codigo de Barra" | i18n %]','[% 'Signatura' | i18n %]',
-                                                                '[% "Estado" | i18n %]'               
-                                                                ],
-                                      
-                                            ) ;
-                        [% END %]
-                        <tbody>
-                
-                                      <tr id="[% nivel3.id %]_tr">
-                                              <td><label class="checkbox">
-                                                      <input type="checkbox" value="[% nivel3.id %]" id="checkEjemplares[% nivel3.nivel2.nivel1.id1 %]" name="checkEjemplares[% nivel3.nivel2.nivel1.id1 %]">
-                                                  </label>
-                                              </td> 
-                                              <td id="barcode[% nivel3.id %]">[% nivel3.getBarcode %]</td>
-                                              <td id="signatura[% nivel3.id %]">[% nivel3.signatura %]</td>
-                                              <td id="estado[% nivel3.id %]">[% nivel3.getEstadoObject.getNombre %]</td> 
-                                      </tr>
-                                      
+                <tr id="[% nivel3.id %]_tr">
+                        <td><label class="checkbox">
+                                <input type="checkbox" value="[% nivel3.id %]" id="checkEjemplares[% nivel3.nivel2.nivel1.id1 %]" name="checkEjemplares[% nivel3.nivel2.nivel1.id1 %]">
+                            </label>
+                        </td> 
+                        <td><h3>[% nivel3.nivel1.getTitulo %] <small> [% nivel3.nivel2.toString %] </small></h3></td>
+                        <td>[% nivel3.nivel1.getAutor %]</td>
+                        <td id="barcode[% nivel3.id %]">[% nivel3.getBarcode %]</td>
+                        <td id="signatura[% nivel3.id %]">[% nivel3.signatura %]</td>
+                        <td id="estado[% nivel3.id %]">[% nivel3.getEstadoObject.getNombre %]</td> 
+                </tr>
 
-                          </tbody>
-
-                    </table>
-                  </div>  
-                <script type="text/javascript">
-                            onSelectTr(); 
-                            checkedAllTrs("selectAll"+ "[% nivel2.nivel1.id1 %]", "checkEjemplares"+"[% nivel2.nivel1.id1 %]");
-                           
-                </script>
           [% END %]
+              </tbody>
+        </table>
+        <script type="text/javascript">
+        // NO SE VA A USAR
+                    onSelectTr(); 
+                    checkedAllTrs("selectAll"+ "[% nivel2.nivel1.id1 %]", "checkEjemplares"+"[% nivel2.nivel1.id1 %]");
+                   
+        </script>
     
 </div>
 <div class="form-actions"  id="button-seleccionados"> 
