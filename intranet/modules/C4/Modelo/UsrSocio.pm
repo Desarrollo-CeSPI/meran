@@ -17,6 +17,7 @@ __PACKAGE__->meta->setup(
         flags                            => { type => 'integer', overflow => 'truncate' },
         password                         => { type => 'varchar', overflow => 'truncate', length => 255 },
         last_login                       => { type => 'timestamp' },
+        last_login_all                   => { type => 'timestamp' },
         last_change_password             => { type => 'date' },
         change_password                  => { type => 'integer', overflow => 'truncate', default => '0', not_null => 1 },
         cumple_requisito                 => { type => 'varchar', overflow => 'truncate', length=>32, not_null => 1, default => '0'},
@@ -601,6 +602,19 @@ sub setLast_login{
     my ($last_login) = @_;
 
     $self->last_login($last_login);
+
+}
+
+sub getLastLoginAll{
+    my ($self) = shift;
+    return ($self->last_login_all);
+}
+
+sub setLastLoginAll{
+    my ($self) = shift;
+    my ($last_login_all) = @_;
+
+    $self->last_login_all($last_login_all);
 
 }
 
