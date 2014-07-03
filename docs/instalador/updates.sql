@@ -440,3 +440,6 @@ ALTER TABLE  pref_preferencia_sistema ADD UNIQUE (variable);
 INSERT INTO pref_preferencia_sistema (variable, value, explanation, options, type, categoria, label, explicacion_interna, revisado) VALUES ('verificar_duplicidad_de_registros', '1', 'Verifica la duplicidad de los registros a partir del Título, Autor y Autores secundarios', NULL, 'bool', 'sistema', 'Verificar duplicidad de registros', 'Verifica la duplicidad de los registros a partir del Título, Autor y Autores secundarios', '1');
 
 ALTER TABLE  cat_registro_marc_n3 ADD  created_by INT( 11 ) NOT NULL AFTER  created_at;
+
+## 03/07/2014 ##
+ALTER TABLE  `usr_socio` ADD  `last_login_all` TIMESTAMP NOT NULL AFTER  `last_login`
