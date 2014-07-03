@@ -880,8 +880,8 @@ sub BornameSearchForCard {
 
         C4::AR::Debug::debug($fecha_fin);
 
-        push( @filtros, and => ['last_login' => { ge => $fecha_inicio },
-                                'last_login' => { le => $fecha_fin } ] ); 
+        push( @filtros, and => ['last_login_all' => { ge => $fecha_inicio },
+                                'last_login_all' => { le => $fecha_fin } ] ); 
 
     }
 
