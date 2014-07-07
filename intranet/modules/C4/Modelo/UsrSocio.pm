@@ -401,10 +401,13 @@ sub activar{
     my ($self) = shift;
 
 #    $self->forget();
+    my $now = Date::Manip::ParseDate("now");
 
     $self->setActivo(1);
     $self->persona->activar();
     $self->setCumple_requisito("0000000000:00:00");
+    #se setea nuevamente la fecha del dia al momento de activar al socio
+    $self->setFecha_alta($now);
 
     my ($credential_type) = $self->getCredentialType;
 
