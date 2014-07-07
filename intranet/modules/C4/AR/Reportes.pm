@@ -2219,8 +2219,14 @@ sub reporteGenEtiquetas{
         my $cat_registro_marc_n3_array  = C4::AR::Nivel3::getNivel3FromId1($hash->{'doc'});
         $hash_temp{'nivel2_array'}      = C4::AR::Nivel2::getNivel2FromId1($hash->{'doc'});
         $hash_temp{'nivel3_array'}      = $cat_registro_marc_n3_array;
-        
-        push (@datos, \%hash_temp);
+
+        foreach my $hash (@$cat_registro_marc_n3_array){
+            my %hash_temp = {};
+
+            $hash_temp{'nivel3'}   = $hash;
+
+            push (@datos, \%hash_temp);
+        }
 
     }  
 
