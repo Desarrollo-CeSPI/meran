@@ -183,10 +183,11 @@ if($tipoAccion eq "BUSQUEDAS"){
 
 } elsif ($tipoAccion eq "REPORTE_GEN_ETIQUETAS") {
 
-      my $tmpl = ($obj->{'tipo_reporte'} eq "sin_grupos")?"includes/partials/reportes/_reporte_gen_etiquetas_sin_grupos_result.inc":"includes/partials/reportes/_reporte_gen_etiquetas_result.inc";
+# DEPRECATED
+      # my $tmpl = ($obj->{'tipo_reporte'} eq "sin_grupos")?"includes/partials/reportes/_reporte_gen_etiquetas_sin_grupos_result.inc":"includes/partials/reportes/_reporte_gen_etiquetas_result.inc";
 
       ($template, $session, $t_params)= C4::AR::Auth::get_template_and_user({
-                                                template_name   => $tmpl,
+                                                template_name   => "includes/partials/reportes/_reporte_gen_etiquetas_sin_grupos_result.inc",
                                                 query           => $input,
                                                 type            => "intranet",
                                                 authnotrequired => 0,
