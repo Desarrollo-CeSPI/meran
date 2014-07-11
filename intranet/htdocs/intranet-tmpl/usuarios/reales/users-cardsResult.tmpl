@@ -20,8 +20,10 @@
                           selectAll_id    => "",
                           columns         => [  '[% "Apellido y Nombre"|i18n %]',
                                                 '[% "Tarjeta de Id"|i18n %]',
-                                                '[% "Legajo"|i18n %]','[% "Ingreso"|i18n %]',
-                                                '[% "Fecha ultimo acceso"|i18n %]',
+                                                '[% "Legajo"|i18n %]',
+                                                '[% "Fecha último acceso"|i18n %]',
+                                                '[% "F. Activación"|i18n %]',
+                                                '[% "Fecha alta"|i18n %]',
                                                 '[% "Categoria"|i18n %]','[% "Regularidad"|i18n %]',  
                                               ]
                         
@@ -44,6 +46,17 @@
                         
                         <td> [% socio.getNro_socio %]</td>
                         <td> [% socio.persona.legajo %]</td>
+                          <td> [% TRY %] 
+                                [% IF socio.getLastLoginAll %] 
+                                    [% socio.getLastLoginAll %] 
+                                [% ELSE %]
+                                    --------
+                                [% END %]
+                             [% CATCH %] 
+                                -------- 
+                             [% END %]
+                        </td>
+
                         <td> [% TRY %] 
                                 [% IF socio.getFecha_alta %] 
                                     [% socio.getFecha_alta %] 
@@ -54,16 +67,16 @@
                                 -------- 
                              [% END %]
                         </td>
-                          <td> [% TRY %] 
-                                [% IF socio.getLast_login %] 
-                                    [% socio.getLast_login %] 
+                        <td> [% TRY %] 
+                                [% IF socio.persona.getFecha_alta %] 
+                                    [% socio.persona.getFecha_alta %] 
                                 [% ELSE %]
                                     --------
                                 [% END %]
                              [% CATCH %] 
                                 -------- 
                              [% END %]
-                        </td>
+                        </td>                        
                         <td>
                             [% TRY %]
                               [% socio.categoria.getDescription %]
