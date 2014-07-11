@@ -26,7 +26,7 @@
         </div>
 
         <div class="control-group">
-            <label class="control-label"> [% "Fecha acceso" | i18n %] </label>
+            <label class="control-label"> [% "Fecha de último acceso" | i18n %] </label>
             <div class="controls">
                 <input type="text" id="from_last_login" name="from_last_login" data-datepicker="datepicker" placeholder="[% 'Desde' | i18n %]" value="" required>
                 <input type="text" id="to_last_login" name="to_last_login" data-datepicker="datepicker" placeholder="[% 'Hasta' | i18n %]" value="" required>
@@ -34,10 +34,30 @@
         </div>
 
          <div class="control-group">
-            <label class="control-label"> [% "Fecha de alta" | i18n %] </label>
+            <label class="control-label"> [% "Fecha de activación" | i18n %] </label>
             <div class="controls">
                 <input type="text" id="from_alta" name="from_alta" data-datepicker="datepicker" placeholder="[% 'Desde' | i18n %]" value="" required>
                 <input type="text" id="to_alta" name="to_alta" data-datepicker="datepicker" placeholder="[% 'Hasta' | i18n %]" value="" required>
+                  [% PERL %]
+                      print C4::AR::Filtros::setHelpInput(
+                                                          text =>"[% "Fecha de activación en el Sistema" | i18n %]",
+                                                            
+                      );
+                  [% END %]                
+            </div>
+        </div>
+
+         <div class="control-group">
+            <label class="control-label"> [% "Fecha de alta" | i18n %] </label>
+            <div class="controls">
+                <input type="text" id="from_alta_persona" name="from_alta_persona" data-datepicker="datepicker" placeholder="[% 'Desde' | i18n %]" value="" required>
+                <input type="text" id="to_alta_persona" name="to_alta_persona" data-datepicker="datepicker" placeholder="[% 'Hasta' | i18n %]" value="" required>
+                    [% PERL %]
+                      print C4::AR::Filtros::setHelpInput(
+                                                          text =>"[% "Fecha de alta en el Sistema" | i18n %]",
+                                                            
+                      );
+                  [% END %]
             </div>
         </div>
 
