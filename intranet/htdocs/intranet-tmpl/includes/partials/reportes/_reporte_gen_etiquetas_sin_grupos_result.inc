@@ -136,7 +136,18 @@ $(document).ready(function(){
                                 <input type="checkbox" value="[% nivel3.id %]" id="checkEjemplares[% nivel3.nivel2.nivel1.id1 %]" name="checkEjemplares[% nivel3.nivel2.nivel1.id1 %]">
                             </label>
                         </td> 
-                        <td><h3>[% nivel3.nivel1.getTitulo %] <small> [% nivel3.nivel2.toString %] </small></h3></td>
+                        <td>
+                        [% PERL %]
+                            print C4::AR::Filtros::link_to( text    =>  "[% nivel3.nivel1.getTitulo %]",
+                                                            url     =>  "[% url_prefix %]/catalogacion/estructura/detalle.pl", 
+                                                            params  =>  ["id1=[% nivel3.nivel1.getId1 %]"],
+                                                            title   =>  "[% 'Mostrar Detalle del Registro' | i18n %]",
+                                                            class   =>  "link_to_detail",
+                                                            on_click=> "startOverlay();"
+
+                                                        ) ;
+                        [% END %]
+                         <small> [% nivel3.nivel2.toString %] </small></td>
                         <td>[% nivel3.nivel1.getAutor %]</td>
                         <td id="barcode[% nivel3.id %]">[% nivel3.getBarcode %]</td>
                         <td id="signatura[% nivel3.id %]">[% nivel3.signatura %]</td>
