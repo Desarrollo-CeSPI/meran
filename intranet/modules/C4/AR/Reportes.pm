@@ -1909,7 +1909,7 @@ sub getReservasCirculacion {
 }
 
 sub reporteGenEtiquetasPorRangoFechas{
-    my ($params,$session) = @_;
+    my ($params, $session, $ini, $cantR) = @_;
 
     my @datos_array;
     my @filtros;
@@ -1921,7 +1921,13 @@ sub reporteGenEtiquetasPorRangoFechas{
     push(@filtros, ( created_at   => { eq => $f_fin, lt => $f_fin } ) );
 
     my $cat_registro_marc_n3_array = C4::Modelo::CatRegistroMarcN3::Manager->get_cat_registro_marc_n3(
-                                                                query => \@filtros,
+                                                                query           => \@filtros,
+                                                                limit           => $cantR,
+                                                                offset          => $ini,
+                                                            );
+
+    my $cat_registro_marc_n3_array_count = C4::Modelo::CatRegistroMarcN3::Manager->get_cat_registro_marc_n3_count(
+                                                                query           => \@filtros
                                                             );
 
     foreach my $hash (@$cat_registro_marc_n3_array){
@@ -1932,12 +1938,11 @@ sub reporteGenEtiquetasPorRangoFechas{
         push (@datos_array, \%hash_temp);
     }
 
-    my $total_found         = scalar(@datos_array); 
-    return ($total_found, \@datos_array);  
+    return ($cat_registro_marc_n3_array_count, \@datos_array);  
 }
 
 sub reporteGenEtiquetasPorRangoBarcode{
-    my ($params,$session) = @_;
+    my ($params, $session, $ini, $cantR) = @_;
 
     my @datos_array;
     my @filtros;
@@ -1946,8 +1951,15 @@ sub reporteGenEtiquetasPorRangoBarcode{
     push(@filtros, ( codigo_barra   => { eq => $params->{'codBarra2'}, lt => $params->{'codBarra2'} } ) );
 
     my $cat_registro_marc_n3_array = C4::Modelo::CatRegistroMarcN3::Manager->get_cat_registro_marc_n3(
-                                                                query => \@filtros,
-                                                                with_objects     => ['nivel1', 'nivel2'],
+                                                                query           => \@filtros,
+                                                                limit           => $cantR,
+                                                                offset          => $ini,
+                                                                with_objects    => ['nivel1', 'nivel2'],
+                                                            );
+
+    my $cat_registro_marc_n3_array_count = C4::Modelo::CatRegistroMarcN3::Manager->get_cat_registro_marc_n3_count(
+                                                                query           => \@filtros,
+                                                                with_objects    => ['nivel1', 'nivel2'],
                                                             );
 
 
@@ -1959,12 +1971,11 @@ sub reporteGenEtiquetasPorRangoBarcode{
         push (@datos_array, \%hash_temp);
     }
 
-    my $total_found         = scalar(@datos_array); 
-    return ($total_found, \@datos_array);  
+    return ($cat_registro_marc_n3_array_count, \@datos_array);  
 }
 
 sub reporteGenEtiquetas{
-    my ($params,$session) = @_;
+    my ($params, $session) = @_;
 
     use Sphinx::Search;
     use Text::Unaccent;
@@ -2049,12 +2060,12 @@ sub reporteGenEtiquetas{
 }
 
 sub reporteGenerarEtiquetas{
-    my ($params, $session) = @_;
+    my ($params, $session, $ini, $cantR) = @_;
 
     if( (C4::AR::Utilidades::trim($params->{'codBarra1'}) ne "") && (C4::AR::Utilidades::trim($params->{'codBarra2'}) ne "") ){
-        reporteGenEtiquetasPorRangoBarcode($params, $session);
+        reporteGenEtiquetasPorRangoBarcode($params, $session, $ini, $cantR);
     } elsif( ($params->{'fecha_ini'} ne "") && ($params->{'fecha_fin'} ne "") ){
-        reporteGenEtiquetasPorRangoFechas($params, $session);
+        reporteGenEtiquetasPorRangoFechas($params, $session, $ini, $cantR);
     } else {
         reporteGenEtiquetas($params, $session);       
     }

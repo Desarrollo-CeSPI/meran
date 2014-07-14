@@ -17,48 +17,50 @@
     }
 
     function consultar(op,orden){
-        var sur1=$("#surname1").val();
-        var sur2=$("#surname2").val();
-        var from_last_login=$("#from_last_login").val();
-        var to_last_login=$("#to_last_login").val();
-        var from_alta=$("#from_alta").val();
-        var to_alta=$("#to_alta").val();
-        var leg1=$("#legajo1").val();
-        var leg2=$("#legajo2").val();
-        var dni=$("#dni").val();
-        var cat=$("#categoria_socio_id").val();
-        var reg=$("#regular").val();
-        var ui=$("#ui_id").val();
-        var regularidad = $("#estado_id").val();
+        var sur1              = $("#surname1").val();
+        var sur2              = $("#surname2").val();
+        var from_last_login   = $("#from_last_login").val();
+        var to_last_login     = $("#to_last_login").val();
+        var from_alta         = $("#from_alta").val();
+        var to_alta           = $("#to_alta").val();
+        var from_alta_persona = $("#from_alta_persona").val();
+        var to_alta_persona   = $("#to_alta_persona").val();
+        var leg1              = $("#legajo1").val();
+        var leg2              = $("#legajo2").val();
+        var dni               = $("#dni").val();
+        var cat               = $("#categoria_socio_id").val();
+        var reg               = $("#regular").val();
+        var ui                = $("#ui_id").val();
+        var regularidad       = $("#estado_id").val();
 
          var params="surname1="+sur1+"&surname2="+sur2+"&from_last_login="+from_last_login+"&to_last_login="+to_last_login+"&to_alta="+to_alta+"&from_alta="+from_alta+"&legajo1="+leg1+"&legajo2="+leg2+"&categoria_socio="+cat+
-         "&regular="+reg+"&dni="+dni+"&ui="+ui+"&op="+op+"&orden="+orden+"&regularidad="+regularidad;
+         "&regular="+reg+"&dni="+dni+"&ui="+ui+"&op="+op+"&orden="+orden+"&regularidad="+regularidad+"&to_alta_persona="+to_alta_persona+"&from_alta_persona="+from_alta_persona;
 
          if(op == "pdf"){
              var url= "[% url_prefix %]/usuarios/reales/users-cards.pl";
              crearForm(url,params);//Funcion en util.js
          }
          else{
-              objAH=new AjaxHelper(updateInfo);
-
-              objAH.debug= true;
+              objAH                   = new AjaxHelper(updateInfo);
+              objAH.debug             = true;
               objAH.showOverlay       = true;
-              objAH.url=URL_PREFIX+"/usuarios/reales/users-cardsResult.pl";
-              objAH.surname1= sur1;
-              objAH.surname2= sur2;
-              objAH.legajo1= leg1;
-              objAH.legajo2= leg2;
-              objAH.from_last_login= from_last_login;
-              objAH.to_last_login= to_last_login;
-              objAH.from_alta= from_alta;
-              objAH.to_alta= to_alta;
-              objAH.dni= dni;
-              objAH.categoria_socio=cat;
-              objAH.ui=ui;
-              objAH.funcion = 'changePage';
-              objAH.op=op;
-
-              objAH.regularidad=regularidad;            
+              objAH.url               = URL_PREFIX+"/usuarios/reales/users-cardsResult.pl";
+              objAH.surname1          = sur1;
+              objAH.surname2          = sur2;
+              objAH.legajo1           = leg1;
+              objAH.legajo2           = leg2;
+              objAH.from_last_login   = from_last_login;
+              objAH.to_last_login     = to_last_login;
+              objAH.from_alta         = from_alta;
+              objAH.to_alta           = to_alta;
+              objAH.from_alta_persona = from_alta_persona;
+              objAH.to_alta_persona   = to_alta_persona;
+              objAH.dni               = dni;
+              objAH.categoria_socio   = cat;
+              objAH.ui                = ui;
+              objAH.funcion           = 'changePage';
+              objAH.op                = op;
+              objAH.regularidad       = regularidad;            
             //se envia la consulta
               objAH.sendToServer();
          }

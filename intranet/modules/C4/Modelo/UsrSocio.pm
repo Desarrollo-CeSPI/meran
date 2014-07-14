@@ -401,13 +401,16 @@ sub activar{
     my ($self) = shift;
 
 #    $self->forget();
-    my $now = Date::Manip::ParseDate("now");
+    my $today       = Date::Manip::ParseDate("today");
+    my $dateformat  = C4::Date::get_date_format();
 
     $self->setActivo(1);
     $self->persona->activar();
     $self->setCumple_requisito("0000000000:00:00");
-    #se setea nuevamente la fecha del dia al momento de activar al socio
-    $self->setFecha_alta($now);
+    $today = C4::Date::format_date_in_iso($today,$dateformat);
+    #se setea nuevamente la fecha del dia al momento de activar al 
+    C4::AR::Debug::debug("UsrSocio => activar => setFecha_alta => " . $today);
+    $self->setFecha_alta($today);
 
     my ($credential_type) = $self->getCredentialType;
 
@@ -610,7 +613,15 @@ sub setLast_login{
 
 sub getLastLoginAll{
     my ($self) = shift;
-    return ($self->last_login_all);
+
+    return $self->last_login_all;
+}
+
+sub getLastLoginAllFormatted{
+    my ($self)      = shift;
+    my $dateformat  = C4::Date::get_date_format();
+
+    return C4::Date::format_date(substr($self->getLastLoginAll(),0,10),$dateformat);
 }
 
 sub setLastLoginAll{
