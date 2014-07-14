@@ -876,9 +876,7 @@ sub BornameSearchForCard {
     if (($fecha_inicio) && ($fecha_inicio ne $desde) && ($fecha_fin) && ($fecha_fin ne $hasta) ) {
 
         $fecha_inicio   = C4::Date::format_date($fecha_inicio, 'iso')."00:00:00";
-        $fecha_fin      = C4::Date::format_date($fecha_fin, 'iso')." 23:59:59";
-
-        C4::AR::Debug::debug($fecha_fin);
+        $fecha_fin      = C4::Date::format_date($fecha_fin, 'iso')." 23:59:59";  
 
         push( @filtros, and => ['last_login_all' => { ge => $fecha_inicio },
                                 'last_login_all' => { le => $fecha_fin } ] ); 
@@ -898,6 +896,18 @@ sub BornameSearchForCard {
 
     }
 
+    my $fecha_inicio_alta_p    = $params->{'from_alta_persona'} || 0;
+    my $fecha_fin_alta_p       = $params->{'to_alta_persona'} || 0;
+
+    if (($fecha_inicio_alta_p) && ($fecha_inicio_alta_p ne "") && ($fecha_fin_alta_p) && ($fecha_fin_alta_p ne "") ) {
+
+        $fecha_inicio_alta_p   = C4::Date::format_date($fecha_inicio_alta_p, "iso");
+        $fecha_fin_alta_p      = C4::Date::format_date($fecha_fin_alta_p, "iso");
+
+        push( @filtros, and => ['persona.'.fecha_alta => { ge => $fecha_inicio_alta_p },
+                                'persona.'.fecha_alta => { le => $fecha_fin_alta_p } ] ); 
+
+    }
 
     if ((C4::AR::Utilidades::validateString($params->{'apellido1'})) || (C4::AR::Utilidades::validateString($params->{'apellido2'}))){
         if ((C4::AR::Utilidades::validateString($params->{'apellido1'})) && (C4::AR::Utilidades::validateString($params->{'apellido2'}))){

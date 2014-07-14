@@ -97,9 +97,9 @@ if ($obj->{'fecha_fin'} eq "Hasta"){
 my $tipoAccion= $obj->{'tipoAccion'}||"";
 
 $obj->{'ini'} = $obj->{'ini'} || 0;
-my $ini=$obj->{'ini'};
-my $funcion=$obj->{'funcion'};
-my $inicial=$obj->{'inicial'};
+my $ini       = $obj->{'ini'};
+my $funcion   = $obj->{'funcion'};
+my $inicial   = $obj->{'inicial'};
 
 
 if ($obj->{'orden'} eq "valor"){
@@ -125,7 +125,7 @@ if ($obj->{'asc'}){
 
 my ($results, $cantidad, $all_results);
 
-my ($ini,$pageNumber,$cantR)=C4::AR::Utilidades::InitPaginador($ini);
+my ($ini, $pageNumber, $cantR) = C4::AR::Utilidades::InitPaginador($ini);
 
 
 if($tipoAccion eq "BUSQUEDAS"){
@@ -197,7 +197,7 @@ if($tipoAccion eq "BUSQUEDAS"){
                                                                     entorno         => 'undefined'},
       });
 
-      my ($cantidad, $array_nivel1)   = C4::AR::Reportes::reporteGenerarEtiquetas($obj, $session);
+      my ($cantidad, $array_nivel1)   = C4::AR::Reportes::reporteGenerarEtiquetas($obj, $session, $ini, $cantR);
 
       $obj->{'cantidad'}              = $cantidad;
       $t_params->{'paginador'}        = C4::AR::Utilidades::crearPaginador($cantidad,$cantR, $pageNumber,$funcion,$t_params);
