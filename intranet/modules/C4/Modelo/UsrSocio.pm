@@ -658,7 +658,7 @@ sub getLastValidation_formateada{
 sub updateValidation{
     my ($self) = shift;
     
-    my $now = C4::AR::Utilidades::getCurrentTimestamp();
+    my $now = C4::AR::Date::getCurrentTimestamp();
     
     $self->setLastValidation($now);
     $self->save();

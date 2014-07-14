@@ -1,24 +1,30 @@
 
 [% IF cantidad %]
     <div class="well">
-        <div class="resultados_consulta">[% "La cantidad de reservas es" | i18n %]: <strong>[% cantidad %]</strong></div>
+        <div class="resultados_consulta">[% "La cantidad de resultados es" | i18n %]: <strong>[% cantidad %]</strong></div>
     </div>
 [% END %]
 
+
 [% IF cantidad %]
+  <script>
+    $(document).ready(function(){
+      $('.popover_button').popover({delay: {show: 200,  hide: 100 }, trigger: 'hover'});
+      });
+  </script>
     <div class="contenedor_paginador">[% paginador %]</div>  
     
     [% PERL %]
             print C4::AR::Filtros::tableHeader(   
                               id              => "tablaResultCirculacion",
-                              columns         => ['[% 'T&iacute;tulo' | i18n %]',
+                              columns         => ['[% 'Responsable'|i18n %]',
+                                                  '[% 'T&iacute;tulo' | i18n %]',
                                                   '[% 'Autor' | i18n %]',
-                                                  '[% 'Fecha' | i18n %]',
-                                                  '[% 'Estado' | i18n %]',
                                                   '[% "C&oacute;digo de barras" | i18n %]',
                                                   '[% 'Signatura Topogr&aacute;fica' | i18n %]',
                                                   '[% "Usuario" | i18n %]',
-                                                  
+                                                  '[% 'Fecha' | i18n %]',
+                                                  '[% 'Operaci&oacute;n' | i18n %]',
                                                   ],
                               order           => {  'T&iacute;tulo'         => 'titulo',
                                                     'Usuario'               => 'usuario',
@@ -26,37 +32,48 @@
                                                   } ,   
                               order_name_function => "reporte_circ",                            
                                     ) ;
-        [% END %]
+    [% END %]
 
         <tbody>
               [% FOREACH res IN results %]   
                 <tr>
+                   <td>
+                    [% IF res.responsable == "Sistema" %]
+                    <span class="label label-warning">
+                        [% 'SISTEMA' | i18n %]
+                    </span>
+                    [% ELSE %]
+                        [% res.responsable_ref.persona.getApeYNom %]
+                    [% END %]
+                   </td>
                   <td>
                       [% res.nivel2.nivel1.getTitulo %]
                   </td>
                   <td>
                       [% res.nivel2.nivel1.getAutor %]
                   </td>
-                  <td>
-                      [% res.getFecha_formateada %]
-                  </td>
-                  <td>
-                      [% res.tipo_operacion %]
-                  </td>
                   <td>  
-                      [% TRY %]
-                          [% res.nivel3.getCodigoBarra %]
-                      [% CATCH %]
-                          [% IF res.tipo_operacion == "espera" %]
-                            Sin Codigo de Barras
-                          [% ELSE %]
-                            Reserva de grupo
-                          [% END %]
+                  [% TRY %]
+                      [% IF res.id3 %]
+
+                          [% PERL %]
+                                  print C4::AR::Filtros::link_to( text =>   "[% res.nivel3.getBarcode %]",
+                                                                  url =>    "[% url_prefix %]/catalogacion/estructura/detalleEjemplar.pl", 
+                                                                  params => ["id3=[% res.getId3 %]"],
+                                                                  title =>  "[% "Detalle del Ejemplar" | i18n %]"
+                                                              );
+                          [% END %] 
+                          
+                      [% ELSE %]
+                          ([% 'Reserva de grupo' | i18n %])
                       [% END %]
+                  [% CATCH %]
+                      [% "Material inexistente"|i18n %]
+                  [% END %]
                   </td>
                   <td>
                       [% TRY %]
-                        [% IF res.tipo_operacion == "espera" %]
+                        [% IF res.tipo_operacion == "ESPERA" %]
                           [% res.nivel2.getPrimerSignatura %]
                         [% ELSE %]
                           [% TRY %]
@@ -69,15 +86,7 @@
                         [% 'Sin Signatura Topogr&aacute;fica' | i18n %]
                       [% END %]
                   </td>
-                  <!-- <td>
-                      [% PERL %]
-                        print C4::AR::Filtros::link_to(   text    =>  "[% res.responsable %]",
-                                                        url       =>  "[% url_prefix %]/usuarios/reales/datosUsuario.pl",
-                                                        params    =>  ["nro_socio=[% res.responsable %]"], 
-                                                        blank     =>  1, 
-                                                    ) ;
-                      [% END %]
-                  </td> -->
+
                   <td>
                       [% IF nro_socio %] 
                                 [% PERL %]
@@ -94,7 +103,38 @@
                       
 
                   </td>
-               
+                  <td>
+                      [% res.getFecha_formateada %]
+                  </td>
+                  <td>
+                     <span class="label 
+                        [% IF res.getTipo_operacion == 'CANCELACION' %]
+                            label-warning
+                        [% ELSE %]
+                            [% IF res.getTipo_operacion == 'RESERVA'  || res.getTipo_operacion == 'ASIGNACION' %]
+                            label-success
+                            [% ELSE %]
+                                label-info
+                            [% END %]
+                        [% END %]">
+                    [% res.getTipo_operacion | i18n %]
+                    </span>
+                   
+                    [% IF res.getNota %] 
+                        [% PERL %]
+                          print C4::AR::Filtros::action_button( 
+                                                          button   => "",
+                                                                    action   => '',
+                                                                    icon     => "icon-comment",
+                                                                    id       => 'text_nota_[% res.id %]',
+                                                                    popover => { title   =>'[% "Nota" | i18n %]',
+                                                                                 text    => "[% res.getNota %]",
+                                                                                 placement => "left",
+                                                                               }
+                                                      ) ;
+                      [% END %]
+                    [% END %]
+                  </td>
                 </tr>
              [% END %]
         </tbody>
