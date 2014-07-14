@@ -614,11 +614,14 @@ sub setLast_login{
 sub getLastLoginAll{
     my ($self) = shift;
 
-    my $dateformat = C4::Date::get_date_format();
-# C4::Date::format_date($fecha_inicio, 'iso')
-    C4::AR::Debug::debug("usr_socio => getLastLoginAll => dateformat => " . C4::Date::format_date_hour($self->last_login_all, 'metric'));
-
     return $self->last_login_all;
+}
+
+sub getLastLoginAllFormatted{
+    my ($self)      = shift;
+    my $dateformat  = C4::Date::get_date_format();
+
+    return C4::Date::format_date(substr($self->getLastLoginAll(),0,10),$dateformat);
 }
 
 sub setLastLoginAll{
