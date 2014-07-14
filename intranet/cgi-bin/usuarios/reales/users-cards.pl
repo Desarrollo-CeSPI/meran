@@ -35,13 +35,24 @@ my $op=$input->param('op');
 if ($op eq 'pdf') {
 
     my $obj;
-    $obj->{'orden'}=$input->param('orden')||'apellido';
-    $obj->{'apellido1'}=$input->param('surname1');
-    $obj->{'apellido2'}=$input->param('surname2');
-    $obj->{'legajo1'}=$input->param('legajo1');
-    $obj->{'legajo2'}=$input->param('legajo2');
-    $obj->{'categoria_socio'}=$input->param('categoria_socio');
-    $obj->{'export'}=1;
+    $obj->{'orden'}             = $input->param('orden')||'apellido';
+    $obj->{'apellido1'}         = $input->param('surname1');
+    $obj->{'apellido2'}         = $input->param('surname2');
+    $obj->{'legajo1'}           = $input->param('legajo1');
+    $obj->{'legajo2'}           = $input->param('legajo2');
+    $obj->{'categoria_socio'}   = $input->param('categoria_socio');
+    $obj->{'from_last_login'}   = $input->param('from_last_login');
+    $obj->{'to_last_login'}     = $input->param('to_last_login');
+    $obj->{'to_alta'}           = $input->param('to_alta');
+    $obj->{'from_alta'}         = $input->param('from_alta');
+    $obj->{'from_alta'}         = $input->param('from_alta');
+    $obj->{'regular'}           = $input->param('regular');
+    $obj->{'dni'}               = $input->param('dni');
+    $obj->{'ui'}                = $input->param('ui');
+    $obj->{'regularidad'}       = $input->param('regularidad');
+    $obj->{'to_alta_persona'}   = $input->param('to_alta_persona');
+    $obj->{'from_alta_persona'} = $input->param('from_alta_persona');
+    $obj->{'export'}            = 1;
 
     my ($cantidad,$results)=C4::AR::Usuarios::BornameSearchForCard($obj);
 
