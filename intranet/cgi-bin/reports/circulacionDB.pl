@@ -71,11 +71,7 @@ if($tipoAccion eq "EXPORT_CIRC"){
     $obj->{'estadoReserva'}     =  $obj->{'estadoReserva'};
     $obj->{'signatura'}         =  $obj->{'signatura'};
 
-    
-    C4::AR::Debug::debug("MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM");
-    C4::AR::Debug::debug($obj->{'autor'});
-
-    my ($results, $cantidad)    = C4::AR::Reportes::getReservasCirculacionToExport($obj);
+    my ($results, $cantidad)    = C4::AR::Reportes::getReservasCirculacion($obj,1);
 
     $t_params->{'cantidad'}     = $cantidad;
     $t_params->{'results'}      = $results;
@@ -137,7 +133,7 @@ elsif ($tipoAccion eq "BUSQUEDAS") {
     $obj->{'ini'}   = $obj->{'ini'} || 1;
     my $ini         = $obj->{'ini'};
     my $funcion     = $obj->{'funcion'};
-    $obj->{'orden'} = $obj->{'orden'} || 'titulo';
+    $obj->{'orden'} = $obj->{'orden'};
    
     if ($obj->{'asc'}){
        $obj->{'orden'}.= ' ASC';
@@ -146,8 +142,7 @@ elsif ($tipoAccion eq "BUSQUEDAS") {
     }
                            
     my ($ini,$pageNumber,$cantR)    = C4::AR::Utilidades::InitPaginador($ini);
-
-    my ($results, $cantidad)        = C4::AR::Reportes::getReservasCirculacion($obj,$ini,$cantR);
+    my ($results, $cantidad)        = C4::AR::Reportes::getReservasCirculacion($obj,0,$ini,$cantR);
 
     $t_params->{'paginador'}        = C4::AR::Utilidades::crearPaginador($cantidad,$cantR, $pageNumber,$funcion,$t_params);
     $t_params->{'cantidad'}         = $cantidad;

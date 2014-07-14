@@ -224,16 +224,26 @@ sub agregar {
     eval{
         $self->nivel2->nivel1->hit();
     };
-#**********************************Se registra el movimiento en rep_historial_circulacion***************************
-    my $dateformat                  = C4::Date::get_date_format();
-    my ($historial_circulacion)     = C4::Modelo::RepHistorialCirculacion->new(db=>$self->db);
-    $data_hash->{'tipo'}            = 'reserva';
-    $data_hash->{'hasta'}           = C4::Date::format_date($data_hash->{'fecha_recordatorio'}, $dateformat);
 
-#Este IF se agrega para que no se registre en historico de circulacion la reserva automatica
+#**********************************Se registra el movimiento en rep_historial_circulacion***************************
+
+    #Este IF se agrega para que no se registre en historico de circulacion la reserva automatica
     if (rindex($session_type,'intra') == -1 ){
-	    $historial_circulacion->agregar($data_hash);
-	#*******************************Fin***Se registra el movimiento en rep_historial_circulacion*************************
+        my $tipo="";
+        if ($self->getId3) {
+            #Reserva con ejemplar
+            $tipo            = 'RESERVA';
+        }else{
+            #Reserva de grupo, en espera
+            $tipo            = 'ESPERA';
+        }
+        my $hasta              = C4::Date::format_date($data_hash->{'fecha_recordatorio'}, C4::Date::get_date_format());
+        my $responsable     = $data_hash->{'nro_socio'};
+
+        $self->debug("Se loguea en historico de circulacion la reserva que viene del opac");
+        C4::AR::Reservas::agregarReservaAHistorial($self,$tipo,$responsable,$hasta);
+
+#*******************************Fin***Se registra el movimiento en rep_historial_circulacion*************************
     }
 }
 
@@ -347,6 +357,7 @@ sub cancelar_reserva{
 	my ($params)    = @_;
 	my $nro_socio   = $params->{'nro_socio'};
 	my $responsable = $params->{'responsable'};
+    my $nota        = $params->{'nota'};
 
 	if($self->getId3){
 		$self->debug("Es una reserva asignada se trata de reasignar");
@@ -357,28 +368,10 @@ sub cancelar_reserva{
 		$self->borrar_sancion_de_reserva();
 	}
 
-#FIXME y esto??? porque no se hace arriba?? solo actualiza la sancion y hace el logueo -> los paso a actualizarDatosReservaEnEspera
-#Actualizo la sancion para que refleje el id3 y asi poder informalo 
-# 	$params->{'id3'}= $self->getId3;
-# 	$params->{'id_reserva'}= $self->getId_reserva;
-# 	C4::AR::Sanciones::actualizarSancion($params);
 	$self->debug("Se loguea en historico de circulacion la cancelacion");
-#**********************************Se registra el movimiento en rep_historial_circulacion***************************
-   my $data_hash;
-   $data_hash->{'id1'}          = $self->nivel2->nivel1->getId1;
-   $data_hash->{'id2'}          = $self->getId2;
-   $data_hash->{'id3'}          = $self->getId3;
-   $data_hash->{'nro_socio'}    = $self->getNro_socio;
-   $data_hash->{'responsable'}  = $responsable;
-   $data_hash->{'hasta'}        = undef;
-   $data_hash->{'tipo_prestamo'}='-';
-   $data_hash->{'id_ui'}        = $self->getId_ui;
-   $data_hash->{'tipo'}         = 'cancelacion';
-   my ($historial_circulacion)  = C4::Modelo::RepHistorialCirculacion->new(db=>$self->db);
-   $historial_circulacion->agregar($data_hash);
-#*******************************Fin***Se registra el movimiento en rep_historial_circulacion*************************
+    C4::AR::Reservas::agregarReservaAHistorial($self,'CANCELACION',$responsable,"",$nota);
 	$self->debug("Se cancela efectivamente");
-#Haya o no uno esperando elimino el que existia porque la reserva se esta cancelando
+    #Haya o no uno esperando elimino el que existia porque la reserva se esta cancelando
 	$self->delete();
 }
 
@@ -475,6 +468,9 @@ sub cancelar_reservas_inmediatas{
 	my ($self)=shift;
 	my ($params)=@_;
 	my $socio=$params->{'nro_socio'};
+
+    $params->{'nota'} = "PRESTAMOS MÁXIMOS";
+
    	my $reservas_array_ref = C4::Modelo::CircReserva::Manager->get_circ_reserva(
 					db=>$self->db,
 					query => [ nro_socio => { eq => $socio }, estado => {ne => 'P'}, id3 => undef ]
@@ -490,11 +486,12 @@ sub cancelar_reservas_inmediatas{
 sub cancelar_reservas{
 # Este procedimiento cancela todas las reservas de los usuarios recibidos como parametro
 	my ($self)=shift;
-	my ($responsable,$nro_socios)= @_;
+	my ($responsable,$nro_socios,$nota)= @_;
 	my $params;
 	
 	$params->{'responsable'}= $responsable;
 	$params->{'tipo'}= 'INTRA';
+    $params->{'nota'} = $nota;
 
 	foreach (@$nro_socios) {
 		my $reservas_array_ref = C4::Modelo::CircReserva::Manager->get_circ_reserva( db => $self->db,
@@ -535,7 +532,7 @@ sub cancelar_reservas_sancionados {
 	      push (@socios_sancionados,$sancion->getNro_socio);
 	}
 
-	$self->cancelar_reservas($responsable,\@socios_sancionados);
+	$self->cancelar_reservas($responsable,\@socios_sancionados,"SANCION");
 }
 
 
@@ -550,6 +547,7 @@ sub cancelar_reservas_no_regulares {
     my $params;
     $params->{'responsable'}= $responsable;
     $params->{'tipo'}= 'INTRA';
+    $params->{'nota'} = "NO REGULAR";
 
     my $reservas_array_ref = C4::Modelo::CircReserva::Manager->get_circ_reserva( db => $self->db,
 										    query => [ estado => {ne => 'P'}]);
@@ -586,6 +584,9 @@ sub reasignarEjemplarASiguienteReservaEnEspera{
         $reservaGrupo->setId3($self->getId3);
         $reservaGrupo->setId_ui($self->getId_ui);
         $reservaGrupo->actualizarDatosReservaEnEspera($responsable);
+        
+        $self->debug("Se loguea en historico de circulacion la asignacion");
+        C4::AR::Reservas::agregarReservaAHistorial($reservaGrupo,'ASIGNACION',$responsable);
     }
 }
 
@@ -636,23 +637,9 @@ sub cancelar_reservas_vencidas {
         #Haya o no uno esperando elimino el que existia porque la reserva se esta cancelando
 
         $self->debug("Se loguea en historico de circulacion la cancelacion");
-        #**********************************Se registra el movimiento en rep_historial_circulacion***************************
-        my $data_hash;
-        $data_hash->{'id1'} = $reserva->nivel2->nivel1->getId1;
-        $data_hash->{'id2'} = $reserva->getId2;
-        $data_hash->{'id3'} = $reserva->getId3;
-        $data_hash->{'nro_socio'} = $reserva->getNro_socio;
-        $data_hash->{'responsable'} = $responsable;
-        $data_hash->{'hasta'} = undef;
-        $data_hash->{'tipo_prestamo'} = '-';
-        $data_hash->{'id_ui'} = $reserva->getId_ui;
-        $data_hash->{'tipo'} = 'cancelacion';
+        my $nota="RESERVA VENCIDA";
+        C4::AR::Reservas::agregarReservaAHistorial($reserva,'CANCELACION',$responsable,"",$nota);
 
-        use C4::Modelo::RepHistorialCirculacion;
-        my ($historial_circulacion) = C4::Modelo::RepHistorialCirculacion->new(db => $self->db);
-
-        $historial_circulacion->agregar($data_hash);
-        #*******************************Fin***Se registra el movimiento en rep_historial_circulacion*************************
         $self->debug("cancelar_reservas_vencidas => SE CANCELA LA RESERVA : ". $reserva->getId_reserva);
        $reserva->delete();
     }# END foreach my $reserva (@$reservasVencidas)
@@ -680,7 +667,8 @@ sub cancelar_reservas_usuarios_morosos {
 		if( $vencidos ){
 		    $self->debug("cancelar_reservas_usuarios_morosos => Usuario Moroso = ".$reserva->nro_socio." se cancelan sus reservas ");
 		    $params->{'nro_socio'}= $reserva->nro_socio;
-		    $self->cancelar_reservas_socio($params);
+		    $params->{'nota'} = "MOROSO";
+            $self->cancelar_reservas_socio($params);
 		  }
 
     }

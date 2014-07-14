@@ -240,11 +240,9 @@ sub agregar {
 
 #**********************************Se registra el movimiento en rep_historial_circulacion***************************
     $self->debug("Se loguea en historico de circulacion el prestamo");
-    C4::AR::Debug::debug( "CircPrestamo => agregar => responsable: " . $data_hash->{'responsable'} );
-    my ($historial_circulacion) = C4::Modelo::RepHistorialCirculacion->new( db => $self->db );
-    $data_hash->{'tipo'} = 'prestamo';
-    $historial_circulacion->agregar($data_hash);
-
+    my $responsable = $data_hash->{'responsable'};
+    my $tipo_operacion = "PRESTAMO";
+    C4::AR::Prestamos::agregarPrestamoAHistorialCirculacion($self,$tipo_operacion,$responsable);
 #*******************************Fin***Se registra el movimiento en rep_historial_circulacion*************************
 }
 
@@ -584,21 +582,9 @@ sub devolver {
         $self->debug("Se loguea en historico de circulacion la devolucion");
 
 #**********************************Se registra el movimiento en rep_historial_circulacion***************************
-        my $data_hash;
-        $data_hash->{'id1'}         = $self->nivel3->nivel2->nivel1->getId1;
-        $data_hash->{'id2'}         = $self->nivel3->nivel2->getId2;
-        $data_hash->{'id3'}         = $self->getId3;
-        $data_hash->{'nro_socio'}   = $self->getNro_socio;
-        $data_hash->{'responsable'} = $responsable;
-        C4::AR::Debug::debug("CircPrestamo=> devolver => responsable" . $responsable );
-        $data_hash->{'hasta'}         = undef;
-        $data_hash->{'tipo_prestamo'} = $self->getTipo_prestamo;
-        $data_hash->{'id_ui'}         = $self->getId_ui_prestamo;
-        $data_hash->{'tipo'}          = 'devolucion';
-        use C4::Modelo::RepHistorialCirculacion;
-        my ($historial_circulacion) = C4::Modelo::RepHistorialCirculacion->new( db => $self->db );
-        $historial_circulacion->agregar($data_hash);
-
+    $self->debug("Se loguea en historico de circulacion el prestamo");
+    my $tipo_operacion = "DEVOLUCION";
+    C4::AR::Prestamos::agregarPrestamoAHistorialCirculacion($self,$tipo_operacion,$responsable);
 #*******************************Fin***Se registra el movimiento en rep_historial_circulacion*************************
 
 ### SANCIONES  Se sanciona al usuario si es necesario, solo si se devolvio el item correctamente
@@ -900,23 +886,14 @@ sub renovar {
     $self->setFecha_ultima_renovacion($fechaHoy);
     $self->save();
 
-#**********************************Se registra el movimiento en rep_historial_circulacion***************************
-    my $data_hash;
-    $data_hash->{'id1'}         = $self->nivel3->nivel2->nivel1->getId1;
-    $data_hash->{'id2'}         = $self->nivel3->nivel2->getId2;
-    $data_hash->{'id3'}         = $self->getId3;
-    $data_hash->{'nro_socio'}   = $self->getNro_socio;
-    $data_hash->{'responsable'} = $responsable;
-    C4::AR::Debug::debug("CircPrestamo=> renovar => responsable" . $responsable );
-    $data_hash->{'hasta'}         = $self->getFecha_vencimiento;
-    $data_hash->{'tipo_prestamo'} = $self->getTipo_prestamo;
-    $data_hash->{'id_ui'}         = $self->getId_ui_prestamo;
-    $data_hash->{'tipo'}          = 'renovacion';
-
     if ($self->nivel3->esParaPrestamo){
-        use C4::Modelo::RepHistorialCirculacion;
-        my ($historial_circulacion) =  C4::Modelo::RepHistorialCirculacion->new( db => $self->db );
-        $historial_circulacion->agregar($data_hash);
+        #**********************************Se registra el movimiento en rep_historial_circulacion***************************
+        $self->debug("Se loguea en historico de circulacion el prestamo");
+
+        my $tipo_operacion = "RENOVACION";
+        my $hasta = $self->getFecha_vencimiento;
+        C4::AR::Prestamos::agregarPrestamoAHistorialCirculacion($self,$tipo_operacion,$responsable,$hasta);
+        #*******************************Fin***Se registra el movimiento en rep_historial_circulacion*************************
     }
 
     $self->setFecha_vencimiento_reporte($self->getFecha_vencimiento);

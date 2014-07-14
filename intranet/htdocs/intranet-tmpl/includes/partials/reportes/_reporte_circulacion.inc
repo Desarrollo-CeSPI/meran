@@ -31,7 +31,7 @@
         objAH.tipoAccion        = "BUSQUEDAS";
         objAH.funcion           = "changePageBusquedas";
         objAH.categoriaSocio    = $('#categoriaSocioReservas').val();
-        objAH.tipoDoc           = $('#tipo_documento_id').val();
+        objAH.tipoDoc           = $('#tipo_nivel3_id').val();
         objAH.titulo            = $('#titulo').val();
         objAH.autor             = $('#autor').val();
         objAH.edicion           = $('#edicion').val();
@@ -119,14 +119,15 @@
         </div>
 
         <div class="control-group" >
-            <label for="estadoReserva" class="control-label">[% 'Estado de reserva' | i18n %]</label>  
+            <label for="estadoReserva" class="control-label">[% 'Operaci&oacute;n' | i18n %]</label>  
             <div class="controls">
                 <select name="estadoReserva" id="estadoReserva">
-                    <option value="asignada">Asignada</option>
-                    <option value="espera">En espera</option>
-                    <option value="cancelada">Cancelada</option>
-                    <option value="vencida">Vencida</option>
-                    <option value="TODAS">TODAS</option>
+                    <option value="TODAS">Todas</option>
+                    <option value="RESERVA">Reserva</option>
+                    <option value="ASIGNACION">Asignaci&oacute;n</option>
+                    <option value="ESPERA">Reserva en espera</option>
+                    <option value="CANCELACION">Cancelaci&oacute;n</option>
+                    <option value="CANCELACION SISTEMA">Cancelaci&oacute;n por Sistema</option>
                 </select>
             </div>
         </div>

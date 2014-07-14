@@ -1448,34 +1448,6 @@ sub getAllPrestamosVencidos{
 }
 
 
-
-# sub OLD_getAllPrestamosVencidos{
-#     my @filtros;
-
-#     my $hoy = Date::Manip::ParseDate("today");
-#     my $dateformat = C4::Date::get_date_format();
-#     my $today = C4::Date::format_date_in_iso($hoy, $dateformat);
-    
-#     push (@filtros,(fecha_vencimiento_reporte => {lt => $today}));
-
-#     my $prestamos_array_ref = C4::Modelo::CircPrestamo::Manager->get_circ_prestamo(
-#                                                                 query => \@filtros,
-#                                                                 require_objects => ['socio','nivel3','socio.persona','tipo'],
-#                                                                 sort_by => 'fecha_vencimiento_reporte ASC',
-
-#                                                         );
-     
-#     my @arrayPrestamos;
-
-#     if(scalar(@$prestamos_array_ref) > 0){
-#         return ($prestamos_array_ref);     
-#     }else{
-#         return 0;
-#     }
-# }
-
-
-
 =item
     Funcion que devuelve todos los prestamos que esten activos.
     Hace una consulta vacia sobre la tabla porque ahi estan solo los prestamos activos
@@ -1553,6 +1525,36 @@ sub setPrestamosVencidosTemp{
 
     return ($msg_object);
       
+}
+
+
+=item
+agregarReservaAHistorial
+Agrega una reserva/asignacion/cancelacion de reserva a la tabla de historial de circulacion.
+@params: $reserva-->Object CircReserva de la reserva hecha.
+=cut
+
+sub agregarPrestamoAHistorialCirculacion{
+    my ($prestamo,$tipo_operacion,$responsable,$hasta,$nota) = @_;
+
+    use C4::Modelo::RepHistorialCirculacion;
+    
+    my %params = {};
+    $params{'nro_socio'}    = $prestamo->getNro_socio;
+    $params{'id1'}          = $prestamo->nivel3->nivel2->nivel1->getId1;
+    $params{'id2'}          = $prestamo->nivel3->nivel2->getId2;
+    $params{'id3'}          = $prestamo->getId3;
+    $params{'nro_socio'}    = $prestamo->getNro_socio;
+    $params{'responsable'}  = $responsable || $prestamo->getNro_socio;
+    $params{'fecha'}        = $prestamo->getFecha_prestamo;
+    $params{'id_ui'}        = $prestamo->getId_ui_prestamo;
+    $params{'tipo'}         = $tipo_operacion;
+    $params{'tipo_prestamo'}= $prestamo->getTipo_prestamo;
+    $params{'hasta'}        = $hasta;
+    $params{'nota'}         = $nota;
+
+    my $historial_circulacion = C4::Modelo::RepHistorialCirculacion->new(db => $prestamo->db);    
+    $historial_circulacion->agregar(\%params);
 }
 
 END { }       # module clean-up code here (global destructor)

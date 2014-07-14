@@ -45,7 +45,7 @@ $hash{'id'}                                 = 'categoriaSocioReservas';
 
 $t_params->{'comboDeCategoriasReservas'}    = C4::AR::Utilidades::generarComboCategoriasDeSocio(\%hash);
 $t_params->{'comboDeCategorias'}            = C4::AR::Utilidades::generarComboCategoriasDeSocio();
-$t_params->{'comboDeTipoDoc'}               = C4::AR::Utilidades::generarComboTipoDeDocConValuesIds();
+$t_params->{'comboDeTipoDoc'}               = C4::AR::Utilidades::generarComboTipoNivel3();
 $t_params->{'comboDeTipoPrestamos'}         = C4::AR::Utilidades::generarComboTipoPrestamo();
 
 C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);

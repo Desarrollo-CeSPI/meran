@@ -1151,84 +1151,6 @@ sub registroDeUsuarios {
 
 }
 
-
-# sub reporteColecciones{
-
-#   my ($params) = @_;
-
-#   use C4::Modelo::CatRegistroMarcN2;
-#   my ($cat_registro_n2) = C4::Modelo::CatRegistroMarcN2::Manager->get_cat_registro_marc_n2(select => ['*'] );
-
-#   my @cant;
-
-#   my %item_type_hash = {0};
-#   my $niv_biblio;
-
-#   my @result;
-#   my %hash_niveles3;
-
-#   foreach my $record (@$cat_registro_n2) {
-            
-#                   my $item_type = $record->getTipoDocumentoObject->id_tipo_doc;
-                    
-#                   my $niv_bibliografico = $record->nivel1->getNivelBibliograficoObject;
-                    
-#                   if ($niv_bibliografico){
-#                       $niv_biblio= $niv_bibliografico->getId;
-#                   } else {
-#                       $niv_biblio = "";
-#                   }
-
-#                   if ($params->{'item_type'} eq $item_type || $params->{'item_type'} eq "" || $params->{'item_type'} eq "ALL") {
-                            
-#                           if ( $params->{'nivel_biblio'} eq $niv_biblio || $params->{'nivel_biblio'} eq "" ){
-                                
-#                                   if ( !$item_type_hash{$item_type} ) {
-#                                       $item_type_hash{$item_type} = 0;
-#                                   }
-#                                   $item_type_hash{$item_type}++;
-
-#                                   my $niveles3_aux= C4::AR::Nivel3::getAllNivel3FromId2($record->id);
-
-#                                   foreach my $n3 (@$niveles3_aux){
-                            
-#                                       my $ui_poseedora= $n3->getId_ui_poseedora;
-#                                       my @niveles3;
-
-#                                       if ( $params->{'ui'} eq $ui_poseedora || $params->{'ui'} eq ""){
-#                                               push(@niveles3, $n3);
-#                                       }
-
-#                                       $hash_niveles3{
-#                                                       "results" => @niveles3,
-#                                                       "cant" => scalar(@niveles3)
-
-#                                       };
-#                                   }
-
-#                                   push(@result, %hash_niveles3);
-#                           }
-#                   }
-                    
-                    
-#   }
-
-#   # my $limit_of_view = 0;
-
-#   # foreach my $item ( keys %item_type_hash ) {
-#   #   $item_type_hash{$item} = int $item_type_hash{$item};
-#   #   if ( $item_type_hash{$item} > 0 ) {
-#   #       push( @items,   $item );
-#   #       push( @cant,    $item_type_hash{$item} );
-#   #   }
-#   # }
-
-
-#   return (\@result, scalar(@result));
-
-# }
-
-
 sub reporteDisponibilidad{
     my ($params) = @_;
 
@@ -1813,7 +1735,7 @@ sub getReporteCirculacionGeneral{
 
     # cantidad de devoluciones 
     my @filtros_tmp = @filtros;
-    push(@filtros_tmp, ('tipo_operacion' =>  {eq => 'devolucion'} ));
+    push(@filtros_tmp, ('tipo_operacion' =>  {eq => 'DEVOLUCION'} ));
     my $cant_devoluciones = C4::Modelo::RepHistorialCirculacion::Manager->get_rep_historial_circulacion( 
                                                                       query             => \@filtros_tmp,
                                                                       require_objects   => [ 'nivel3','socio', 'tipo_prestamo_ref', 'responsable_ref' ],
@@ -1822,7 +1744,7 @@ sub getReporteCirculacionGeneral{
 
     # cantidad de renovaciones
     my @filtros_tmp = @filtros;
-    push(@filtros_tmp, ('tipo_operacion' =>  {eq => 'renovacion'} ));
+    push(@filtros_tmp, ('tipo_operacion' =>  {eq => 'RENOVACION'} ));
     my $cant_renovaciones = C4::Modelo::RepHistorialCirculacion::Manager->get_rep_historial_circulacion( 
                                                                       query             => \@filtros_tmp,
                                                                       require_objects   => [ 'nivel3','socio', 'tipo_prestamo_ref', 'responsable_ref' ],
@@ -1856,124 +1778,11 @@ sub getReporteCirculacionGeneral{
 }
 
 =item
-    Funcion que retorna todas las reservas segun los filtros para exportar a pdf
-=cut
-sub getReservasCirculacionToExport {
-
-    my ($datos_busqueda) = @_;
- 
-    my $categoria       = $datos_busqueda->{'categoriaSocio'};
-    my $tipoDoc         = $datos_busqueda->{'tipoDoc'};
-    my $titulo          = $datos_busqueda->{'titulo'};
-    my $edicion         = $datos_busqueda->{'edicion'};
-    my $autor           = $datos_busqueda->{'autor'};
-    my $estadoReserva   = $datos_busqueda->{'estadoReserva'};
-    my $fecha_inicio    = $datos_busqueda->{'fecha_inicio'};
-    my $fecha_fin       = $datos_busqueda->{'fecha_fin'};
-    my $signatura       = $datos_busqueda->{'signatura'};
-
-
-    my @filtros;
-    my $resultsarray;
-
-#    my @filtro;
-
-    #OK
-    if ($categoria){
-         push(@filtros,('socio.id_categoria' =>  {eq => $categoria} ));
-    }
-    
-    #OK, forkeado el nombre de la tabla
-    if ($tipoDoc){
-         push(@filtros,('t4.id' =>  {eq => $tipoDoc} ));
-    }
-    
-    #OK, forkeado el nombre de la tabla
-    if ($titulo){
-         push(@filtros, ('t6.titulo' =>  { like => '%'.$titulo.'%'} ));
-    } 
-
-    if ($autor){
-         push(@filtros, ('t6.autor' =>  { like => '%'.$autor.'%'} ));
-    }     
-    
-    if ($edicion){
-         push(@filtros, ('nivel2.marc_record' =>  { like => '%'.$edicion.'%'} ));
-    }  
-
-    if ($signatura){
-         push(@filtros, ('t8.signatura' =>  {like => '%'.$signatura.'%'} ));
-    }  
-    
-    #OK, ver cuando se relaciona con $tipoReserva
-    
-    if ($estadoReserva ne "TODAS"){
-        if($estadoReserva eq "asignada"){         
-            push( @filtros, or => [ 'tipo_operacion'   => {  eq => 'reserva' }, #vencida !
-                                    'tipo_operacion'    => {  eq => 'reserve'}
-                                     ]); 
-                                    
-        }elsif($estadoReserva eq "cancelada"){ 
-            push( @filtros, or =>   [   and => ['tipo_operacion'   => { eq => 'cancelacion' },
-                                                'responsable'      => { ne => 'sistema'} 
-                                            ],
-                                        and => ['tipo_operacion'   => { eq => 'cancel' },
-                                                'responsable'      => { ne => 'sistema'} 
-                                            ]  
-                                    ]
-
-                );
-                                    
-        } elsif($estadoReserva eq "vencida"){ 
-            push( @filtros, and => [ 'tipo_operacion'   => { ne => undef }, #vencida !
-                                      'responsable'     => { eq => 'sistema'} ] ); 
-        }
-    } else {
-        push( @filtros, and => [ 'tipo_operacion'   => { ne => 'prestamo' }, #vencida !
-                                'tipo_operacion'    => { ne => 'devolucion'},
-                                'tipo_operacion'    => { ne => 'renovacion'}, 
-                                'tipo_operacion'    => { ne => 'notificacion'},  ]); 
-    }
-
-    my $desde = C4::AR::Filtros::i18n('Desde');
-    my $hasta = C4::AR::Filtros::i18n('Hasta');
-
-    if ($fecha_inicio ne "" && $fecha_fin ne "") {
-
-        $fecha_inicio   = C4::Date::format_date($fecha_inicio, "iso");
-        $fecha_fin      = C4::Date::format_date($fecha_fin, "iso");
-
-        push( @filtros, and => ['fecha' => { ge => $fecha_inicio },
-                                'fecha' => { le => $fecha_fin } ] ); 
-    }
-
-    my $resultsArray = C4::Modelo::RepHistorialCirculacion::Manager->get_rep_historial_circulacion( 
-                                                                      query   => \@filtros,
-                                                                      require_objects   => ['socio', 'socio.persona.documento',
-                                                                                            'nivel1', 'nivel1.IndiceBusqueda', 'nivel2',
-                                                                                            'nivel3'
-                                                                      ],
-      
-                                                        );
-    my $rep_busqueda_count = C4::Modelo::RepHistorialCirculacion::Manager->get_rep_historial_circulacion_count(
-                                                                            query   => \@filtros,
-                                                                            require_objects => ['socio', 'socio.persona.documento',
-                                                                                                'nivel1', 'nivel1.IndiceBusqueda', 'nivel2',
-                                                                                                'nivel3'
-                                                                            ],
-                                                                                                                                  
-                                                                            );
-
-    return ($resultsArray, $rep_busqueda_count);
-
-}
-
-=item
     Funcion que busca las reservas en circulacion
 =cut
 sub getReservasCirculacion {
 
-    my ( $datos_busqueda, $ini, $cantR ) = @_;
+    my ( $datos_busqueda, $para_exportar , $ini, $cantR ) = @_;
 
 
     my $limit_pref      = C4::AR::Preferencias::getValorPreferencia('paginas') || 10;
@@ -1988,12 +1797,13 @@ sub getReservasCirculacion {
     my $fecha_inicio    = $datos_busqueda->{'fecha_inicio'};
     my $fecha_fin       = $datos_busqueda->{'fecha_fin'};
     my $signatura       = $datos_busqueda->{'signatura'};
-    my $orden           = $datos_busqueda->{'orden'};
+    my $orden           = "rep_historial_circulacion.fecha DESC ";#"$datos_busqueda->{'orden'};
 
     my @filtros;
     my $resultsarray;
 
 #    my @filtro;
+    C4::AR::Debug::debug("Reportes => tipo => ".$tipoDoc);
 
     #OK
     if ($categoria){
@@ -2002,16 +1812,16 @@ sub getReservasCirculacion {
     
     #OK, forkeado el nombre de la tabla
     if ($tipoDoc){
-         push(@filtros,('t4.id' =>  {eq => $tipoDoc} ));
+       #  push(@filtros, ('nivel2.marc_record' =>  { like => '%cat_ref_tipo_nivel3%'.$tipoDoc.'%'} ));
     }
     
     #OK, forkeado el nombre de la tabla
     if ($titulo){
-         push(@filtros, ('t6.titulo' =>  { like => '%'.$titulo.'%'} ));
+         push(@filtros, ('IndiceBusqueda.titulo' =>  { like => '%'.$titulo.'%'} ));
     } 
 
     if ($autor){
-         push(@filtros, ('t6.autor' =>  { like => '%'.$autor.'%'} ));
+         push(@filtros, ('IndiceBusqueda.autor' =>  { like => '%'.$autor.'%'} ));
     }     
     
     if ($edicion){
@@ -2019,38 +1829,39 @@ sub getReservasCirculacion {
     }  
 
     if ($signatura){
-         push(@filtros, ('t8.signatura' =>  {like => '%'.$signatura.'%'} ));
+         push(@filtros, ('nivel3.signatura' =>  {like => '%'.$signatura.'%'} ));
     }  
     
     #OK, ver cuando se relaciona con $tipoReserva
     
     if ($estadoReserva ne "TODAS"){
-        if($estadoReserva eq "asignada"){         
-            push( @filtros, or => [ 'tipo_operacion'   => {  eq => 'reserva' }, #vencida !
-                                    'tipo_operacion'    => {  eq => 'reserve'}
-                                     ]); 
+        if($estadoReserva eq "RESERVA"){         
+            push( @filtros, ('tipo_operacion'   => {  eq => 'RESERVA' })); 
                                     
-        } elsif($estadoReserva eq "cancelada"){ 
-            push( @filtros, and => [or =>   [   'tipo_operacion'   => { eq => 'cancelacion' },  
-                                                'tipo_operacion'   => { eq => 'cancel' },       
-                                            ],
-                                    'responsable'  => { ne => 'sistema'}]);
+        } elsif($estadoReserva eq "ASIGNACION"){         
+            push( @filtros, ('tipo_operacion'   => {  eq => 'ASIGNACION' })); 
                                     
-        } elsif($estadoReserva eq "vencida"){ 
-            push( @filtros, and => [ or =>  [   'tipo_operacion'   => { eq => 'cancelacion' },  
-                                                'tipo_operacion'   => { eq => 'cancel' }       
-                                            ], 
-                                    'responsable'  => { eq => 'sistema'}]); 
+        } elsif($estadoReserva eq "CANCELACION"){ 
+            push( @filtros, and => [
+                                    'tipo_operacion'   => { eq => 'CANCELACION' },
+                                    'responsable'  => { ne => 'sistema'}
+                                    ]);
+                                    
+        } elsif($estadoReserva eq "CANCELACION SISTEMA"){ 
+            push( @filtros, and => [
+                                    'tipo_operacion'   => { eq => 'CANCELACION' }, 
+                                    'responsable'  => { eq => 'sistema'}
+                                    ]); 
 
-        } elsif($estadoReserva eq "espera"){ 
-            push( @filtros, ('tipo_operacion' => { eq => 'espera' })); 
+        } elsif($estadoReserva eq "ESPERA"){ 
+            push( @filtros, ('tipo_operacion' => { eq => 'ESPERA' })); 
         }
 
     } else {
-        push( @filtros, and => [ 'tipo_operacion'   => { ne => 'prestamo' }, #vencida !
-                                'tipo_operacion'    => { ne => 'devolucion'},
-                                'tipo_operacion'    => { ne => 'renovacion'}, 
-                                'tipo_operacion'    => { ne => 'notificacion'}]); 
+        push( @filtros, and => [ 'tipo_operacion'   => { ne => 'PRESTAMO' },  
+                                'tipo_operacion'    => { ne => 'DEVOLUCION'},
+                                'tipo_operacion'    => { ne => 'RENOVACION'}, 
+                                'tipo_operacion'    => { ne => 'NOTIFICACION'}]); 
     }
 
     my $desde = C4::AR::Filtros::i18n('Desde');
@@ -2065,26 +1876,30 @@ sub getReservasCirculacion {
                                 'fecha' => { le => $fecha_fin } ] ); 
     }
 
-    my @arrayTitulos;
-
-    my $resultsArray = C4::Modelo::RepHistorialCirculacion::Manager->get_rep_historial_circulacion( 
+    my $resultsArray;
+    
+    if ($para_exportar) {
+        # Todos los resultados para exportar
+        $resultsArray = C4::Modelo::RepHistorialCirculacion::Manager->get_rep_historial_circulacion( 
+                                                                      query   => \@filtros,
+                                                                      with_objects   => ['socio', 'nivel1', 'nivel1.IndiceBusqueda'],
+                                                                      sort_by           => $orden
+                                                        );
+    }else{
+        # Resultados para el paginador
+        $resultsArray = C4::Modelo::RepHistorialCirculacion::Manager->get_rep_historial_circulacion( 
                                                                       query   => \@filtros,
                                                                       limit   => $cantR,
                                                                       offset  => $ini,
-                                                                      with_objects   => ['socio', 'socio.persona.documento',
-                                                                                            'nivel1', 'nivel1.IndiceBusqueda', 'nivel2'
-                                                                                            
-                                                                      ]
-      
-                                                        );
-   
+                                                                      with_objects   => ['socio', 'nivel1', 'nivel1.IndiceBusqueda'],
+                                                                      sort_by           => $orden
+                                                        );    
+    }
+    # Cantidad total
     my ($rep_busqueda_count) = C4::Modelo::RepHistorialCirculacion::Manager->get_rep_historial_circulacion_count(
                                                                             query   => \@filtros,
-                                                                            require_objects => ['socio', 'socio.persona.documento',
-                                                                                                'nivel1', 'nivel1.IndiceBusqueda', 'nivel2'
-                                                                                                
-                                                                            ]
-                                                                                                                                  
+                                                                            with_objects => ['socio', 'nivel1', 'nivel1.IndiceBusqueda']
+                                                              
                                                                             );
 
 

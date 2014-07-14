@@ -443,3 +443,15 @@ ALTER TABLE  cat_registro_marc_n3 ADD  created_by INT( 11 ) NOT NULL AFTER  crea
 
 ## 03/07/2014 ##
 ALTER TABLE  `usr_socio` ADD  `last_login_all` TIMESTAMP NOT NULL AFTER  `last_login`
+
+## 14/07/2014 ##
+# Historial de Circulacion, de paso se acomoda que esta lo viejo en ingles y lo nuevo en español
+
+UPDATE rep_historial_circulacion SET tipo_operacion="DEVOLUCION" WHERE tipo_operacion="devolucion";
+UPDATE rep_historial_circulacion SET tipo_operacion="PRESTAMO" WHERE tipo_operacion="prestamo";
+UPDATE rep_historial_circulacion SET tipo_operacion="CANCELACION" WHERE tipo_operacion="cancelacion" OR tipo_operacion="cancel";
+UPDATE rep_historial_circulacion SET tipo_operacion="RENOVACION" WHERE tipo_operacion="renovacion" OR tipo_operacion="renew";
+UPDATE rep_historial_circulacion SET tipo_operacion="RESERVA" WHERE tipo_operacion="reserva" OR tipo_operacion="reserve";
+UPDATE rep_historial_circulacion SET tipo_operacion="ESPERA" WHERE tipo_operacion="espera" OR tipo_operacion="queue";
+UPDATE rep_historial_circulacion SET tipo_operacion="NOTIFICACION" WHERE tipo_operacion="notificacion" OR tipo_operacion="notification";
+UPDATE rep_historial_circulacion SET tipo_operacion="NOTIFICACION CANCELACION" WHERE tipo_operacion="notification cancelation";
