@@ -1571,6 +1571,8 @@ sub getBusquedasDeUsuario {
     Funcion que genera el reporte de circulacion general para el PDF, sin paginar ni nada
 =cut
 
+# TODO esto es IGUAL o deberia usarse la misma que getReporteCirculacionGeneral
+# DEPRECATD???
 sub getReporteCirculacionGeneralToExport{
 
     my ($data)          = @_;
@@ -1686,6 +1688,7 @@ sub getReporteCirculacionGeneral{
     my $orden           = $data->{'orden'};
     my $sentido         = $data->{'asc'};
     my $responsable     = $data->{'nroSocio'};
+    my $tipo_documento  = $data->{'tipo_documento'};
 
     my @filtros;
 
@@ -1713,11 +1716,15 @@ sub getReporteCirculacionGeneral{
                                 'fecha' => { le => $fecha_fin } ] ); 
     }
 
+    if($tipo_documento ne ""){
+        push(@filtros, ('nivel2.marc_record' => {like => '%cat_ref_tipo_nivel3@'.$tipo_documento.'%'}));
+    }
+
 
     # cantidad de ejemplares prestados (<> id3)
     my $total_ejemplares_array = C4::Modelo::RepHistorialCirculacion::Manager->get_rep_historial_circulacion( 
                                                                       query             => \@filtros,
-                                                                      require_objects   => [ 'nivel3','socio', 'tipo_prestamo_ref', 'responsable_ref' ],
+                                                                      require_objects   => [ 'nivel3', 'nivel2', 'socio', 'tipo_prestamo_ref', 'responsable_ref' ],
                                                                       select            => ['id3'],
                                                                       distinct          => 1,
                                                         );
@@ -1727,7 +1734,7 @@ sub getReporteCirculacionGeneral{
     # cantidad de socios (<> nro_socio)
     my $cant_nro_socio = C4::Modelo::RepHistorialCirculacion::Manager->get_rep_historial_circulacion( 
                                                                       query             => \@filtros,
-                                                                      require_objects   => ['nivel3','socio', 'tipo_prestamo_ref', 'responsable_ref' ],
+                                                                      require_objects   => ['nivel3', 'nivel2', 'socio', 'tipo_prestamo_ref', 'responsable_ref' ],
                                                                       select            => ['nro_socio'],
                                                                       distinct          => 1,
                                                         );
@@ -1738,7 +1745,7 @@ sub getReporteCirculacionGeneral{
     push(@filtros_tmp, ('tipo_operacion' =>  {eq => 'DEVOLUCION'} ));
     my $cant_devoluciones = C4::Modelo::RepHistorialCirculacion::Manager->get_rep_historial_circulacion( 
                                                                       query             => \@filtros_tmp,
-                                                                      require_objects   => [ 'nivel3','socio', 'tipo_prestamo_ref', 'responsable_ref' ],
+                                                                      require_objects   => [ 'nivel3', 'nivel2', 'socio', 'tipo_prestamo_ref', 'responsable_ref' ],
                                                                       select            => ['tipo_operacion'],
                                                         );
 
@@ -1747,7 +1754,7 @@ sub getReporteCirculacionGeneral{
     push(@filtros_tmp, ('tipo_operacion' =>  {eq => 'RENOVACION'} ));
     my $cant_renovaciones = C4::Modelo::RepHistorialCirculacion::Manager->get_rep_historial_circulacion( 
                                                                       query             => \@filtros_tmp,
-                                                                      require_objects   => [ 'nivel3','socio', 'tipo_prestamo_ref', 'responsable_ref' ],
+                                                                      require_objects   => [ 'nivel3', 'nivel2', 'socio', 'tipo_prestamo_ref', 'responsable_ref' ],
                                                                       select            => ['tipo_operacion'],
                                                         );
 

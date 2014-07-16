@@ -47,5 +47,9 @@ $t_params->{'comboDeCategoriasReservas'}    = C4::AR::Utilidades::generarComboCa
 $t_params->{'comboDeCategorias'}            = C4::AR::Utilidades::generarComboCategoriasDeSocio();
 $t_params->{'comboDeTipoDoc'}               = C4::AR::Utilidades::generarComboTipoNivel3();
 $t_params->{'comboDeTipoPrestamos'}         = C4::AR::Utilidades::generarComboTipoPrestamo();
+my %params_combo;
+$params_combo{'default'}            		= C4::AR::Preferencias::getValorPreferencia("defaultTipoNivel3");
+my $comboTiposNivel3                		= &C4::AR::Utilidades::generarComboTipoNivel3(\%params_combo);
+$t_params->{'comboTipoDocumento'}   		= $comboTiposNivel3;
 
 C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
