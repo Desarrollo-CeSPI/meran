@@ -1791,13 +1791,12 @@ sub getReservasCirculacion {
     my $categoria       = $datos_busqueda->{'categoriaSocio'};
     my $tipoDoc         = $datos_busqueda->{'tipoDoc'};
     my $titulo          = $datos_busqueda->{'titulo'};
-    my $edicion         = $datos_busqueda->{'edicion'};
     my $autor           = $datos_busqueda->{'autor'};
     my $estadoReserva   = $datos_busqueda->{'estadoReserva'};
     my $fecha_inicio    = $datos_busqueda->{'fecha_inicio'};
     my $fecha_fin       = $datos_busqueda->{'fecha_fin'};
     my $signatura       = $datos_busqueda->{'signatura'};
-    my $orden           = "rep_historial_circulacion.fecha DESC ";#"$datos_busqueda->{'orden'};
+    my $orden           = $datos_busqueda->{'orden'};
 
     my @filtros;
     my $resultsarray;
@@ -1812,24 +1811,20 @@ sub getReservasCirculacion {
     
     #OK, forkeado el nombre de la tabla
     if ($tipoDoc){
-       #  push(@filtros, ('nivel2.marc_record' =>  { like => '%cat_ref_tipo_nivel3%'.$tipoDoc.'%'} ));
+         push(@filtros, ('cat_registro_marc_n2.marc_record' =>  { like => '%cat_ref_tipo_nivel3%'.$tipoDoc.'%'} ));
     }
     
     #OK, forkeado el nombre de la tabla
     if ($titulo){
-         push(@filtros, ('IndiceBusqueda.titulo' =>  { like => '%'.$titulo.'%'} ));
+         push(@filtros, ('indice_busqueda.titulo' =>  { like => '%'.$titulo.'%'} ));
     } 
 
     if ($autor){
-         push(@filtros, ('IndiceBusqueda.autor' =>  { like => '%'.$autor.'%'} ));
+         push(@filtros, ('indice_busqueda.autor' =>  { like => '%'.$autor.'%'} ));
     }     
-    
-    if ($edicion){
-         push(@filtros, ('nivel2.marc_record' =>  { like => '%'.$edicion.'%'} ));
-    }  
 
     if ($signatura){
-         push(@filtros, ('nivel3.signatura' =>  {like => '%'.$signatura.'%'} ));
+         push(@filtros, ('cat_registro_marc_n3.signatura' =>  {like => '%'.$signatura.'%'} ));
     }  
     
     #OK, ver cuando se relaciona con $tipoReserva
@@ -1867,7 +1862,7 @@ sub getReservasCirculacion {
     my $desde = C4::AR::Filtros::i18n('Desde');
     my $hasta = C4::AR::Filtros::i18n('Hasta');
 
-    if ($fecha_inicio ne $desde && $fecha_fin ne $hasta) {
+    if ($fecha_inicio && $fecha_fin && $fecha_inicio ne $desde && $fecha_fin ne $hasta) {
 
         $fecha_inicio   = C4::Date::format_date($fecha_inicio, "iso");
         $fecha_fin      = C4::Date::format_date($fecha_fin, "iso");
@@ -1882,7 +1877,7 @@ sub getReservasCirculacion {
         # Todos los resultados para exportar
         $resultsArray = C4::Modelo::RepHistorialCirculacion::Manager->get_rep_historial_circulacion( 
                                                                       query   => \@filtros,
-                                                                      with_objects   => ['socio', 'nivel1', 'nivel1.IndiceBusqueda'],
+                                                                      with_objects   => ['socio', 'nivel1', 'nivel1.IndiceBusqueda', 'nivel2', 'nivel3'],
                                                                       sort_by           => $orden
                                                         );
     }else{
@@ -1891,14 +1886,14 @@ sub getReservasCirculacion {
                                                                       query   => \@filtros,
                                                                       limit   => $cantR,
                                                                       offset  => $ini,
-                                                                      with_objects   => ['socio', 'nivel1', 'nivel1.IndiceBusqueda'],
+                                                                      with_objects   => ['socio', 'nivel1', 'nivel1.IndiceBusqueda', 'nivel2', 'nivel3'],
                                                                       sort_by           => $orden
                                                         );    
     }
     # Cantidad total
     my ($rep_busqueda_count) = C4::Modelo::RepHistorialCirculacion::Manager->get_rep_historial_circulacion_count(
                                                                             query   => \@filtros,
-                                                                            with_objects => ['socio', 'nivel1', 'nivel1.IndiceBusqueda']
+                                                                            with_objects => ['socio', 'nivel1', 'nivel1.IndiceBusqueda', 'nivel2', 'nivel3']
                                                               
                                                                             );
 

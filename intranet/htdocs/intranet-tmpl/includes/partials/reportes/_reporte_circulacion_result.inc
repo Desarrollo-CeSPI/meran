@@ -43,14 +43,30 @@
                         [% 'SISTEMA' | i18n %]
                     </span>
                     [% ELSE %]
+                      [% TRY %]
                         [% res.responsable_ref.persona.getApeYNom %]
+                      [% CATCH %]  
+                        [% 'Usuario Inexistente' | i18n %]
+                      [% END %]
                     [% END %]
                    </td>
                   <td>
-                      [% res.nivel2.nivel1.getTitulo %]
+                  [% TRY %]
+                      [% IF res.nivel2.nivel1 %]
+                        [% res.nivel2.nivel1.getTituloStringEscaped %]
+                      [% END %]
+                  [% CATCH %]
+                      [% "Material inexistente"|i18n %]
+                  [% END %]
                   </td>
                   <td>
-                      [% res.nivel2.nivel1.getAutor %]
+                  [% TRY %]
+                      [% IF res.nivel2.nivel1 %]
+                        [% res.nivel2.nivel1.getAutorStringEscaped %]
+                      [% END %]
+                  [% CATCH %]
+                      [% "Material inexistente"|i18n %]
+                  [% END %]
                   </td>
                   <td>  
                   [% TRY %]
@@ -88,20 +104,22 @@
                   </td>
 
                   <td>
-                      [% IF nro_socio %] 
-                                [% PERL %]
-                                      print C4::AR::Filtros::link_to(   text =>     "[% res.socio.nro_socio %]",
-                                                            url=>"      [% url_prefix %]/usuarios/reales/datosUsuario.pl", 
-                                                            params =>   ["nro_socio=[% res.socio.nro_socio %]"],
-                                                            title =>    "[% 'Mostrar Detalle del Usuario' | i18n %]",
-                                                            blank =>    1
-                                                      );
-                                [% END %]             
-                      [% ELSE %]
-                                '[% "Desconocido" | i18n %]'
+                      [% TRY %]
+                        [% IF nro_socio %] 
+                                  [% PERL %]
+                                        print C4::AR::Filtros::link_to(   text =>     "[% res.socio.nro_socio %]",
+                                                              url=>"      [% url_prefix %]/usuarios/reales/datosUsuario.pl", 
+                                                              params =>   ["nro_socio=[% res.socio.nro_socio %]"],
+                                                              title =>    "[% 'Mostrar Detalle del Usuario' | i18n %]",
+                                                              blank =>    1
+                                                        );
+                                  [% END %]             
+                        [% ELSE %]
+                                  '[% "Desconocido" | i18n %]'
+                        [% END %]
+                      [% CATCH %]  
+                        [% 'Usuario Inexistente' | i18n %]
                       [% END %]
-                      
-
                   </td>
                   <td>
                       [% res.getFecha_formateada %]
