@@ -105,8 +105,11 @@ elsif($tipoAccion eq "EXPORT_CIRC_GENERAL"){
     $obj->{'categoriaSocio'}    =  $obj->{'categoria_socio_id'};
     $obj->{'fecha_inicio'}      =  $obj->{'date-from-gen'};
     $obj->{'fecha_fin'}         =  $obj->{'date-to-gen'};
+    $obj->{'tipo_documento'}    =  $obj->{'tipo_nivel3_name'};
     
-    my ($cantidad, $totales)    = C4::AR::Reportes::getReporteCirculacionGeneralToExport($obj);
+    
+    # my ($cantidad, $totales)    = C4::AR::Reportes::getReporteCirculacionGeneralToExport($obj);
+    my ($cantidad, $totales)    = C4::AR::Reportes::getReporteCirculacionGeneral($obj);
 
     $t_params->{'cantidad'}     = $cantidad;
     $t_params->{'exportar'}     = 1;
