@@ -37,6 +37,7 @@
         objAH.fecha_inicio      = $('#date-from-gen').val();
         objAH.fecha_fin         = $('#date-to-gen').val();
         objAH.statistics        = $('#statistics_check').val();
+        objAH.tipo_documento    = $('#tipo_nivel3_id').val();
         objAH.orden             = ORDEN;
         objAH.asc               = ASC;
         objAH.sendToServer();
@@ -86,6 +87,13 @@
             <label class="control-label" for="categoria_socio_id">[% 'Categor&iacute;a del usuario' | i18n %]</label>
             <div class="controls">  
                 [% comboDeCategorias %]          
+            </div>
+        </div>
+
+        <div class="control-group">
+            <label class="control-label" for="categoria_socio_id">[% 'Tipo de Documento' | i18n %]</label>
+            <div class="controls">  
+                [% comboTipoDocumento %]          
             </div>
         </div>
 
