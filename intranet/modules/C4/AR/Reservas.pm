@@ -396,26 +396,6 @@ sub Enviar_Email_Asignacion_Reserva{
 
         my ($ok, $msg_error)           = C4::AR::Mail::send_mail(\%mail);
 
-#**********************************Se registra el movimiento en rep_historial_circulacion***************************
-       # my $dateformat=C4::Date::get_date_format();
-       # $fecha= C4::Date::format_date_in_iso($fecha,$dateformat);
-
-       # my $data_hash;
-       # $data_hash->{'id1'}=$reserva->nivel2->nivel1->getId1;
-       # $data_hash->{'id2'}=$reserva->getId2;
-       # $data_hash->{'id3'}=$reserva->getId3;
-       # $data_hash->{'nro_socio'}=$reserva->getNro_socio;
-       # $data_hash->{'responsable'}=$responsable;
-       # $data_hash->{'end_date'}=$fecha;
-       # $data_hash->{'issuesType'}='-';
-       # $data_hash->{'id_ui'}=$reserva->getId_ui;
-       # $data_hash->{'tipo'}='notification';
-
-       # use C4::Modelo::RepHistorialCirculacion;
-       # my ($historial_circulacion) = C4::Modelo::RepHistorialCirculacion->new(db=>$reserva->db);
-       # $historial_circulacion->agregar($data_hash);
-    #*******************************Fin***Se registra el movimiento en rep_historial_circulacion*************************
-
     }#end if (C4::Context->preference("EnabledMailSystem"))
 }
 
@@ -470,27 +450,6 @@ sub Enviar_Email_Cancelacion_Reserva{
 
         my ($ok, $msg_error)           = C4::AR::Mail::send_mail(\%mail);
 
-#**********************************Se registra el movimiento en rep_historial_circulacion***************************
-   
-   # my $fecha= C4::Date::format_date_in_iso(Date::Manip::ParseDate("today"), $dateformat);
-
-   # my $data_hash;
-   # $data_hash->{'id1'}=$reserva->nivel2->nivel1->getId1;
-   # $data_hash->{'id2'}=$reserva->getId2;
-   # $data_hash->{'id3'}=$reserva->getId3;
-   # $data_hash->{'nro_socio'}=$reserva->getNro_socio;
-   # $data_hash->{'responsable'}=$responsable;
-   # $data_hash->{'end_date'}=$fecha;
-   # $data_hash->{'issuesType'}='-';
-   # $data_hash->{'id_ui'}=$reserva->getId_ui;
-   # $data_hash->{'tipo'}='notification cancelation';
-
-   # use C4::Modelo::RepHistorialCirculacion;
-   # my ($historial_circulacion) = C4::Modelo::RepHistorialCirculacion->new(db=>$reserva->db);
-   # $historial_circulacion->agregar($data_hash);
-
-#*******************************Fin***Se registra el movimiento en rep_historial_circulacion*************************
-
     }#end if (C4::Context->preference("EnabledMailSystem"))
 }
 
@@ -541,25 +500,6 @@ sub Enviar_Email_Reserva_A_Espera{
         $mail{'mail_message'}          = $mailMessage;
 
         my ($ok, $msg_error)           = C4::AR::Mail::send_mail(\%mail);
-
-#**********************************Se registra el movimiento en rep_historial_circulacion***************************
-    # my $fecha= C4::Date::format_date_in_iso(Date::Manip::ParseDate("today"), $dateformat);
-
-   # my $data_hash;
-   # $data_hash->{'id1'}=$reserva->nivel2->nivel1->getId1;
-   # $data_hash->{'id2'}=$reserva->getId2;
-   # $data_hash->{'id3'}=$reserva->getId3;
-   # $data_hash->{'nro_socio'}=$reserva->getNro_socio;
-   # $data_hash->{'responsable'}=$responsable;
-   # $data_hash->{'end_date'}=$fecha;
-   # $data_hash->{'issuesType'}='-';
-   # $data_hash->{'id_ui'}=$reserva->getId_ui;
-   # $data_hash->{'tipo'}='notification cancelation';
-
-   # use C4::Modelo::RepHistorialCirculacion;
-   # my ($historial_circulacion) = C4::Modelo::RepHistorialCirculacion->new(db=>$reserva->db);
-   # $historial_circulacion->agregar($data_hash);
-#*******************************Fin***Se registra el movimiento en rep_historial_circulacion*************************
 
     }#end if (C4::Context->preference("EnabledMailSystem"))
 }
@@ -1144,17 +1084,6 @@ sub t_reservarOPAC {
                 $msg_object->{'error'}= 0;
                 C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U303', 'tipo'=> 'opac', 'params' => [$socio->persona->getEmail]} ) ;
             }
-            #Se agrega la reserva al historial
-            #solo cuando tiene id3, porque ya es efectiva
-            C4::AR::Utilidades::printHASH($paramsReserva);
-            if (!$paramsReserva->{'id3'}) {
-                #si es de grupo no hay que agregar al historial
-                #arriba ya se agrego una
-                # if (($paramsReserva->{'estado'} ne 'G')){
-                    C4::AR::Reservas::agregarReservaAHistorial($reserva);
-                # }
-            }
-
         };
 
         if ($@){
@@ -1174,33 +1103,30 @@ sub t_reservarOPAC {
 
 =item
 agregarReservaAHistorial
-Agrega una reserva a la tabla de historial de reservas.
+Agrega una reserva/asignacion/cancelacion de reserva a la tabla de historial de circulacion.
 @params: $reserva-->Object CircReserva de la reserva hecha.
 =cut
 
 sub agregarReservaAHistorial{
-	my ($reserva) = @_;
+	my ($reserva,$tipo_operacion,$responsable,$hasta,$nota) = @_;
 
     use C4::Modelo::RepHistorialCirculacion;
     
     my %params = {};
-    
-
-    # C4::AR::Debug::debug( "RESERVAAAAAAAAAAAAAAAA: ".$reserva->getId3);
-
     $params{'nro_socio'}    = $reserva->getNro_socio;
-    # $params{'id1'}          = $reserva->getId1;  SE ROMPE !!!! circ_reserva no tiene id1
     $params{'id1'}          = $reserva->nivel2->getId1;
     $params{'id2'}          = $reserva->getId2;
     $params{'id3'}          = $reserva->getId3;
     $params{'nro_socio'}    = $reserva->getNro_socio;
-    $params{'responsable'}  = $reserva->getNro_socio;
+    $params{'responsable'}  = $responsable || $reserva->getNro_socio;
     $params{'fecha'}        = $reserva->getFecha_reserva;
     $params{'id_ui'}        = $reserva->getId_ui;
     $params{'estado'}       = $reserva->getEstado;
-    
-    my $historial_circulacion = C4::Modelo::RepHistorialCirculacion->new();
-    
+    $params{'tipo'}         = $tipo_operacion;
+    $params{'hasta'}        = $hasta;
+    $params{'nota'}         = $nota;
+
+    my $historial_circulacion = C4::Modelo::RepHistorialCirculacion->new(db => $reserva->db);    
     $historial_circulacion->agregar(\%params);
     
 	return ($reserva);
@@ -1414,25 +1340,6 @@ sub manejoDeDisponibilidadDomiciliaria{
    }
 }
 
-# sub conseguirEjemplarParaAsignarReserva{
-# 
-#     #buscar un ejemplar libre (del mismo grupo) para reserva 
-#     my ($nuevoId3) = getEjemplarDeGrupoParaReserva($params->{'id2'});
-# 
-#     if($nuevoId3){
-#         #EXISTE un ejemplar disponible
-#         $reserva_asignada->intercambiarId3 ($nuevoId3, $msg_object, $params->{'db'});
-#     }else{
-#     #si no existe ejemplar  
-#     #verificamos si hay disponibilidad en el grupo
-#         #a la reserva se la pasa a reserva en  espera (id3 = null) por DEFECTO
-#         #porque si no hay mas disponibilidad en el grupo, se van a eliminar todas las reservas y sanciones del grupo
-#         $reserva->pasar_a_espera();
-#         $params->{'id_reserva'} = $reserva_asignada->getId_reserva;
-#         manejoDeDisponibilidadDomiciliaria($params);
-#     }
-# }
-
 =item sub asignarEjemplarASiguienteReservaEnEspera
 
     Esta funcion asgina el ejemplar a una reserva (SI EXISTE) que se encontraba en la cola de espera para un grupo determinado
@@ -1618,7 +1525,7 @@ sub getHistorialReservasParaTemplate {
     
     my @filtros;
     push(@filtros, ( nro_socio => { eq => $nro_socio }));
-    push(@filtros, ( tipo_operacion => { eq => ['cancelacion','reserva','reserve','espera','notificacion' ] } ) );
+    push(@filtros, ( tipo_operacion => { eq => ['cancelacion','reserva','espera','asignacion'] } ) );
 
     my $reservas_array_ref = C4::Modelo::RepHistorialCirculacion::Manager->get_rep_historial_circulacion( 
                                           query             => \@filtros,

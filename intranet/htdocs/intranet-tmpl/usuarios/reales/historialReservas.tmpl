@@ -12,9 +12,13 @@
                                             id              => "tablaHistorialReservas",
                                             class           => "",
                                             selectAll_id    => "",
-                                            columns         => ['[% "Responsable"|i18n %]','[% "T&iacute;tulo"|i18n %]',
-                                                                '[% "Autor" %]','[% "Edici&oacute;n" | i18n %]','[% "C&oacute;digo" %]',
-                                                                '[% "Fecha" %]','[% "Operaci&oacute;n" %]'
+                                            columns         => ['[% "Responsable"|i18n %]',
+                                                                '[% "T&iacute;tulo"|i18n %]',
+                                                                '[% "Autor" %]',
+                                                                '[% "Edici&oacute;n" | i18n %]',
+                                                                '[% "C&oacute;digo" %]',
+                                                                '[% "Fecha" %]',
+                                                                '[% "Operaci&oacute;n" %]'
                                                               ]
                                                                             
                                                   ) ;
@@ -25,7 +29,9 @@
                         <tr>  
                             <td>
                                 [% IF reserva.responsable == "Sistema" %]
-                                    [% 'Sistema' | i18n %]
+                                <span class="label label-warning">
+                                    [% 'SISTEMA' | i18n %]
+                                </span>
                                 [% ELSE %]
                                     [% reserva.responsable_ref.persona.getApeYNom %]
                                 [% END %]
@@ -86,11 +92,18 @@
                                 [% reserva.getFecha_formateada %]
                             </td>
                             <td>
-                                [% IF reserva.getTipo_operacion == "reserva"  %]
-                                    [% 'asignacion' | i18n %]
-                                [% ELSE %]
-                                    [% reserva.getTipo_operacion | i18n %]
-                                [% END %]
+                                <span class="label 
+                                    [% IF reserva.getTipo_operacion == 'CANCELACION' %]
+                                        label-warning
+                                    [% ELSE %]
+                                        [% IF reserva.getTipo_operacion == 'RESERVA'  || reserva.getTipo_operacion == 'ASIGNACION' %]
+                                        label-success
+                                        [% ELSE %]
+                                            label-info
+                                        [% END %]
+                                    [% END %]">
+                                [% reserva.getTipo_operacion | i18n %]
+                                </span>
                             </td>
                           </tr>
                         [% END %] <!-- FOREACH PRIMERO -->

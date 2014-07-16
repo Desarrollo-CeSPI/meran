@@ -3,8 +3,8 @@
 <script type="text/javascript" src="/intranet-tmpl/includes/reports.js"></script>
 <script>
 
-    var ORDEN   = '';
-    var ASC     = 1;
+    var ORDEN   = 'fecha';
+    var ASC     = 0;
 
     function changePageBusquedas(ini){
         objAH.changePage(ini);
@@ -31,10 +31,9 @@
         objAH.tipoAccion        = "BUSQUEDAS";
         objAH.funcion           = "changePageBusquedas";
         objAH.categoriaSocio    = $('#categoriaSocioReservas').val();
-        objAH.tipoDoc           = $('#tipo_documento_id').val();
+        objAH.tipoDoc           = $('#tipo_nivel3_id').val();
         objAH.titulo            = $('#titulo').val();
         objAH.autor             = $('#autor').val();
-        objAH.edicion           = $('#edicion').val();
         objAH.estadoReserva     = $('#estadoReserva').val();
         objAH.fecha_inicio      = $('#date-from').val();
         objAH.fecha_fin         = $('#date-to').val();
@@ -111,22 +110,16 @@
             </div>
         </div>
 
-        <div class="control-group">
-            <label class="control-label" for="edicion">[% 'Edici&oacute;­n' | i18n %]</label>
-            <div class="controls">  
-                <input type="text" id="edicion" name="edicion" >       
-            </div>
-        </div>
-
         <div class="control-group" >
-            <label for="estadoReserva" class="control-label">[% 'Estado de reserva' | i18n %]</label>  
+            <label for="estadoReserva" class="control-label">[% 'Operaci&oacute;n' | i18n %]</label>  
             <div class="controls">
                 <select name="estadoReserva" id="estadoReserva">
-                    <option value="asignada">Asignada</option>
-                    <option value="espera">En espera</option>
-                    <option value="cancelada">Cancelada</option>
-                    <option value="vencida">Vencida</option>
-                    <option value="TODAS">TODAS</option>
+                    <option value="TODAS">Todas</option>
+                    <option value="RESERVA">Reserva</option>
+                    <option value="ASIGNACION">Asignaci&oacute;n</option>
+                    <option value="ESPERA">Reserva en espera</option>
+                    <option value="CANCELACION">Cancelaci&oacute;n</option>
+                    <option value="CANCELACION SISTEMA">Cancelaci&oacute;n por Sistema</option>
                 </select>
             </div>
         </div>
@@ -144,7 +137,7 @@
                 [% "Signatura Topogr&aacute;fica" | i18n %]
             </label>
             <div class="controls">
-                <input type="text" size="25" id="signatura">
+                <input type="text" size="25" id="signatura" name="signatura">
             </div>
         </div>
           
