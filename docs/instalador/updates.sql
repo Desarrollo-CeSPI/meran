@@ -455,3 +455,5 @@ UPDATE rep_historial_circulacion SET tipo_operacion="RESERVA" WHERE tipo_operaci
 UPDATE rep_historial_circulacion SET tipo_operacion="ESPERA" WHERE tipo_operacion="espera" OR tipo_operacion="queue";
 UPDATE rep_historial_circulacion SET tipo_operacion="NOTIFICACION" WHERE tipo_operacion="notificacion" OR tipo_operacion="notification";
 UPDATE rep_historial_circulacion SET tipo_operacion="NOTIFICACION CANCELACION" WHERE tipo_operacion="notification cancelation";
+
+### 0.10.2 ###
