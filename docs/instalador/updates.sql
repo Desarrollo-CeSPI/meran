@@ -442,7 +442,7 @@ INSERT INTO pref_preferencia_sistema (variable, value, explanation, options, typ
 ALTER TABLE  cat_registro_marc_n3 ADD  created_by INT( 11 ) NOT NULL AFTER  created_at;
 
 ## 03/07/2014 ##
-ALTER TABLE  `usr_socio` ADD  `last_login_all` TIMESTAMP NOT NULL AFTER  `last_login`
+ALTER TABLE  usr_socio ADD  last_login_all TIMESTAMP NOT NULL AFTER  last_login;
 
 ## 14/07/2014 ##
 # Historial de Circulacion, de paso se acomoda que esta lo viejo en ingles y lo nuevo en español

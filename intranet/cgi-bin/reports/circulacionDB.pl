@@ -59,17 +59,20 @@ if($tipoAccion eq "EXPORT_CIRC"){
                                         
     });
 
-
-
-    $obj->{'categoriaSocio'}    =  $obj->{'categoriaSocioReservas'};
-    $obj->{'tipoDoc'}           =  $obj->{'tipo_documento_id'};
-    $obj->{'fecha_inicio'}      =  $obj->{'date-from'};
-    $obj->{'fecha_fin'}         =  $obj->{'date-to'};
-    $obj->{'titulo'}            =  $obj->{'titulo'};
-    $obj->{'autor'}             =  $obj->{'autor'};
-    $obj->{'edicion'}           =  $obj->{'edicion'};
-    $obj->{'estadoReserva'}     =  $obj->{'estadoReserva'};
-    $obj->{'signatura'}         =  $obj->{'signatura'};
+    $obj->{'tipoPrestamo'}      =  $obj->{'tipo_prestamo_name'};
+    $obj->{'nroSocio'}          =  $obj->{'nro_socio_hidden'};
+    $obj->{'categoriaSocio'}    =  $obj->{'categoria_socio_id'};
+    $obj->{'tipoDoc'}           =  $obj->{'tipo_nivel3_name'};
+    $obj->{'fecha_inicio'}      =  $obj->{'date-from-gen'};
+    $obj->{'fecha_fin'}         =  $obj->{'date-to-gen'};
+    $obj->{'orden'}             = $obj->{'orden'} || 'fecha';
+   
+    if ($obj->{'asc'}){
+       $obj->{'orden'}.= ' ASC';
+    } else {
+       $obj->{'orden'}.= ' DESC';
+    }
+        
 
     my ($results, $cantidad)    = C4::AR::Reportes::getReservasCirculacion($obj,1);
 
@@ -133,7 +136,7 @@ elsif ($tipoAccion eq "BUSQUEDAS") {
     $obj->{'ini'}   = $obj->{'ini'} || 1;
     my $ini         = $obj->{'ini'};
     my $funcion     = $obj->{'funcion'};
-    $obj->{'orden'} = $obj->{'orden'};
+    $obj->{'orden'} = $obj->{'orden'} || 'fecha';
    
     if ($obj->{'asc'}){
        $obj->{'orden'}.= ' ASC';
