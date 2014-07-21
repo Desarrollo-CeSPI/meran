@@ -357,14 +357,9 @@ sub diaString{
     return ($dia);
 }
 
-sub getCurrentTimestamp(){
-
-my ($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst)=localtime(time);
-
- my $timestamp = sprintf ("%4d-%02d-%02d %02d:%02d:%02d",$year+1900,$mon+1,$mday,$hour,$min,$sec);
-
-return $timestamp;
-
-
+sub getCurrentTimestamp {
+	my ($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst)=localtime(time);
+	my $timestamp = sprintf ("%4d-%02d-%02d %02d:%02d:%02d",$year+1900,$mon+1,$mday,$hour,$min,$sec);
+	return $timestamp;
 }
 1;
