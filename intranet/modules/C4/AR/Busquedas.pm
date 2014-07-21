@@ -1014,12 +1014,15 @@ sub busquedaAvanzada_newTemp{
 
     my $sphinx          = Sphinx::Search->new();
 
+            C4::AR::Debug::debug(" only_sphinx BUSQUEDA --------------------------- : ".$only_sphinx);
+
     if ($only_sphinx){
         if ($params->{'report'}){ 
             $sphinx->SetLimits($params->{'ini'}, 100000);
  
        } else {            
             $sphinx->SetLimits($params->{'ini'}, C4::AR::Preferencias::getValorPreferencia('paginas'));  
+            C4::AR::Debug::debug("LIMITE BUSQUEDA --------------------------- : ".$params->{'ini'}." - ".C4::AR::Preferencias::getValorPreferencia('paginas'));
        }
 
     }

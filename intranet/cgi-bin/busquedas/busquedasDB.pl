@@ -136,7 +136,8 @@ if($@){
         }elsif($tipoAccion eq "BUSQUEDA_POR_BARCODE"){
             my $funcion                     = $obj->{'funcion'};
             my $ini                         = ($obj->{'ini'}||'');
-
+            $obj->{'only_sphinx'}           = 1;
+            
             my ($cantidad, $array_nivel1)   = C4::AR::Busquedas::busquedaAvanzada_newTemp($obj, $session);
             
             $obj->{'cantidad'}              = $cantidad;
@@ -158,8 +159,9 @@ if($@){
         }elsif($tipoAccion eq "BUSQUEDA_POR_TEMA"){
             my $funcion                     = $obj->{'funcion'};
             my $ini                         = ($obj->{'ini'}||'');
+            $obj->{'only_sphinx'}           = 1;
             
-            my ($cantidad, $array_nivel1)   = C4::AR::Busquedas::busquedaAvanzada_newTemp($obj, $session, $obj);
+            my ($cantidad, $array_nivel1)   = C4::AR::Busquedas::busquedaAvanzada_newTemp($obj, $session);
             
             $obj->{'cantidad'}              = $cantidad;
             $t_params->{'paginador'}        = C4::AR::Utilidades::crearPaginador($cantidad,$cantR, $pageNumber,$funcion,$t_params);
