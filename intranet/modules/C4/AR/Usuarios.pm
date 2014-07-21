@@ -1072,6 +1072,7 @@ sub updateUserDataValidation {
                 C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U415', 'params' => []});
             };
             if ($@){
+                C4::AR::Debug::debug("Usuarios => ERROR updateUserDataValidation: ".$@);
                 $msg_object->{'error'}= 1;
                 C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U416', 'params' => []} ) ;
             }
