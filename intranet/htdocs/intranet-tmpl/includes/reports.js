@@ -24,12 +24,17 @@ var report_obj;
 var result_div_id;
 
 
-function imprimirReporte(form_name){
+function imprimirReporte(form_name,format){
+
 	try{
 		$('#modal_report_long_call').modal('show');
 		setTimeout(function(){$('#modal_report_long_call').modal('hide');},5000);
 	}
 	catch(e){}
+
+	if(format){
+		$("#formatoReporte").val(format);
+	}
 	
 	$("#" + form_name).submit();
 }

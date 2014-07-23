@@ -159,16 +159,24 @@
     </table>
     [% IF !exportar %]
     <div class="form-actions" style="margin-bottom: 0;">
-       <td>
+
           [% PERL %]
                     print C4::AR::Filtros::action_set_button(    
                             button  => 'btn btn-primary',
                             title   => " [% 'Exportar a PDF' | i18n %]",
-                            action  => 'imprimirReporte("formReporteCirculacion");',
+                            action  => 'imprimirReporte("formReporteCirculacion","PDF");',
                             icon    => "icon-white icon-inbox",
                       ) ;
           [% END %]
-       </td>
+
+          [% PERL %]
+                    print C4::AR::Filtros::action_set_button(    
+                            button  => 'btn btn-primary',
+                            title   => " [% 'Exportar a XLS' | i18n %]",
+                            action  => 'imprimirReporte("formReporteCirculacion","XLS");',
+                            icon    => "icon-white icon-inbox",
+                      ) ;
+          [% END %]
     </div>
     [% END %]
 [% ELSE %]
