@@ -2,6 +2,10 @@
 [% USE HTML %]
 
 <script type="text/javascript">
+
+    var ORDEN   = 'apellido';
+    var ASC     = 0;
+
     function generarReportePrestamosVencidos(){
         objAH                   = new AjaxHelper(updateGenerarReportePrestamosVencidos);
         objAH.debug             = true;
