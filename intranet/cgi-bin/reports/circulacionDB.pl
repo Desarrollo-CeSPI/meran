@@ -31,6 +31,7 @@ use C4::AR::Reportes;
 use C4::Modelo::RepBusqueda;
 use C4::Modelo::RepHistorialBusqueda;
 use C4::AR::PdfGenerator;
+use C4::AR::XLSGenerator;
 use C4::AR::Prestamos;
 
 my $input       = new CGI;
@@ -81,12 +82,20 @@ if($tipoAccion eq "EXPORT_CIRC"){
     $t_params->{'exportar'}     = 1;
 
     $obj->{'is_report'}         = "SI";
+ 
+    if ($obj->{'formatoReporte'} eq 'XLS'){
+        #XLS
+        print C4::AR::XLSGenerator::xlsHeader(); 
+        C4::AR::XLSGenerator::exportarReporteReservasCirculacion($results);
+    }
+    elsif($obj->{'formatoReporte'} eq 'PDF'){
+        #PDF
+        my $out                     = C4::AR::Auth::get_html_content_utf8($template, $t_params);
+        my $filename                = C4::AR::PdfGenerator::pdfFromHTML($out, $obj);
 
-    my $out                     = C4::AR::Auth::get_html_content($template, $t_params);
-    my $filename                = C4::AR::PdfGenerator::pdfFromHTML($out, $obj);
-
-    print C4::AR::PdfGenerator::pdfHeader(); 
-    C4::AR::PdfGenerator::printPDF($filename);
+        print C4::AR::PdfGenerator::pdfHeader(); 
+        C4::AR::PdfGenerator::printPDF($filename);
+    }
 }
 elsif($tipoAccion eq "EXPORT_CIRC_GENERAL"){
     ($template, $session, $t_params)= C4::AR::Auth::get_template_and_user({

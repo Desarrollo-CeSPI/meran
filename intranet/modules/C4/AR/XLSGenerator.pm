@@ -3,6 +3,8 @@ package C4::AR::XLSGenerator;
 
 use strict;
 use C4::AR::Auth;
+use C4::AR::Filtros;
+use Encode;
 use Spreadsheet::WriteExcel::Simple;
 
 
@@ -111,7 +113,86 @@ sub exportarMejorPresupuesto{
 
 }
 
-      
+
+sub xlsHeader{
+
+    my ($filename) = @_;
+
+    $filename = $filename || "report_export.xls";
+
+    my $session = CGI::Session->load();
+    my $header =
+      $session->header( -type => 'application/excel', -attachment => $filename );
+
+    return ($header);
+}
+
+sub exportarReporteReservasCirculacion{
+
+     my ($rep_historial_circulacion) = @_;
+     my $msg_object= C4::AR::Mensajes::create();
+     
+
+     my @headers_tabla= (
+                decode('utf8', C4::AR::Filtros::i18n("Responsable")),
+                decode('utf8', C4::AR::Filtros::i18n("Título")),
+                decode('utf8', C4::AR::Filtros::i18n("Autor")),
+                decode('utf8', C4::AR::Filtros::i18n("Código de barras")),
+                decode('utf8', C4::AR::Filtros::i18n("Signatura Topográfica")),
+                decode('utf8', C4::AR::Filtros::i18n("Usuario")),
+                decode('utf8', C4::AR::Filtros::i18n("Fecha")),
+                decode('utf8', C4::AR::Filtros::i18n("Operación"))
+        );
+
+     my $ss = Spreadsheet::WriteExcel::Simple->new;
+#-------- Se escriben los headers en el excel con lo q contiene el array headers_tabla ------------
+     $ss->write_bold_row(\@headers_tabla);   
+
+#-------- Se escriben los datos en el excel con lo q contiene el array $tabla_a_exportar ------------
+     
+     foreach my $historial_circulacion (@$rep_historial_circulacion){
+        my @fila_tabla = ();
+
+        my $responsable="";
+        if($historial_circulacion->getResponsable() eq "Sistema") {
+            $responsable="SISTEMA";
+        }elsif($historial_circulacion->responsable_ref->persona){
+            $responsable=$historial_circulacion->responsable_ref->persona->getApeYNom();
+        }else{
+            $responsable = C4::AR::Filtros::i18n("Material inexistente");
+        }
+        $fila_tabla[0] = decode('utf8', $responsable);
+
+        if($historial_circulacion->nivel2->nivel1) {
+            $fila_tabla[1] = decode('utf8', $historial_circulacion->nivel2->nivel1->getTituloStringEscaped());
+            $fila_tabla[2] = decode('utf8', $historial_circulacion->nivel2->nivel1->getAutorStringEscaped());
+        }
+        else{
+            $fila_tabla[1] =  C4::AR::Filtros::i18n("Material inexistente");
+            $fila_tabla[2] =  C4::AR::Filtros::i18n("Material inexistente");
+        }
+
+        if($historial_circulacion->getId3) {
+            $fila_tabla[3] =  $historial_circulacion->nivel3->getBarcode();
+            $fila_tabla[4] =  $historial_circulacion->nivel3->getSignatura();
+        }
+        else{
+            $fila_tabla[3] =  C4::AR::Filtros::i18n("Reserva de grupo");
+            $fila_tabla[4] =  $historial_circulacion->nivel2->getPrimerSignatura();
+        }
+
+        $fila_tabla[5] = decode('utf8', $historial_circulacion->socio->getNro_socio());
+
+        $fila_tabla[6] = $historial_circulacion->getFecha_formateada();
+
+        $fila_tabla[7] = $historial_circulacion->getTipo_operacion();
+
+        $ss->write_row(\@fila_tabla);       
+     }
+
+        print $ss->data(); 
+}
+
 END { }       # module clean-up code here (global destructor)
 
 1;
