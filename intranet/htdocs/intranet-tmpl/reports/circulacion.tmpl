@@ -13,7 +13,10 @@
     }
 
     function updateGenerarReportePrestamosVencidos(responseText){
-      $('#reporte_prestamos_vencidos').html(responseText);
+        $('#reporte_prestamos_vencidos').html(responseText);
+        if (ORDEN){
+              cambiarSentidoOrd();
+        } 
     }
 </script>
 

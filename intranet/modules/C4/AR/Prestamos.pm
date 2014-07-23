@@ -1424,10 +1424,27 @@ sub getAllPrestamosVencidosParaMail{
     Funcion que devuelve todos los prestamos vencidos.
 =cut
 sub getAllPrestamosVencidos{
+    my ($params) = @_;
+
+    $params->{'orden'}      = ($params->{'orden'} eq "")?'fecha_prestamo':$params->{'orden'};
+    $params->{'sentido'}    = ($params->{'sentido'} eq "")?'DESC':$params->{'sentido'};
+
+    if($params->{'orden'} eq "apellido"){
+        $params->{'orden'} = "persona.apellido";
+    }
+
+    if($params->{'orden'} eq "fecha_prestamo"){
+        $params->{'orden'} = "circ_prestamo.fecha_prestamo";
+    }
+
+    if($params->{'orden'} eq "fecha_vto"){
+        $params->{'orden'} = "circ_prestamo.fecha_vencimiento_reporte"; 
+    } 
 
     my $prestamos_array_ref = C4::Modelo::CircPrestamo::Manager->get_circ_prestamo(
                                                                 require_objects => ['socio','nivel3','socio.persona','tipo'],
-                                                                sort_by => 'fecha_prestamo DESC',
+                                                                # sort_by => 'fecha_prestamo DESC',
+                                                                sort_by => $params->{'orden'} . ' ' . $params->{'sentido'},
 
                                                         );
      
