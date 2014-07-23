@@ -1129,13 +1129,12 @@ sub pdfFromHTML {
 
     my ($out,$params)  = @_;
     
-    $out               = _unformat($out);
-    
     my $is_report      = $params->{'is_report'} || "NO";   
 
     my $htmldoc        = new HTML::HTMLDoc( 'mode' => 'file', 'tmpdir' => '/tmp' );
-    $htmldoc->set_charset('UTF-8');
-    $htmldoc->set_html_content($out);
+
+    my $out_format = decode('utf8',$out);
+    $htmldoc->set_html_content($out_format);
 
     if ($is_report eq "SI") {
 

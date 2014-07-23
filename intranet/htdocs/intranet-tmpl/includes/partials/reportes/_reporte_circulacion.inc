@@ -78,7 +78,8 @@
     <form class="form-horizontal" id="formReporteCirculacion" action="[% url_prefix %]/reports/circulacionDB.pl">
 
         <input type="hidden" name="tipoAccion" value="EXPORT_CIRC">
-        
+        <input type="hidden" name="formatoReporte" id="formatoReporte"  value="PDF">
+
         <div class="control-group">
             <label class="control-label" for="categoria_socio_id">[% 'Categor&iacute;­a del usuario' | i18n %]</label>
             <div class="controls">  
