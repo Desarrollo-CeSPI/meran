@@ -200,7 +200,7 @@ elsif ($tipoAccion eq "REPORTE_PRESTAMOS_VENCIDOS") {
                                                             entorno         => 'undefined'},
     });
 
-    my $prestamos_array_ref   = C4::AR::Prestamos::getAllPrestamosVencidos();
+    my $prestamos_array_ref   = C4::AR::Prestamos::getAllPrestamosVencidos($obj);
     $t_params->{'ini'}  = 0;
 
     if(C4::AR::Preferencias::getValorPreferencia('enableMailPrestVencidos'))
