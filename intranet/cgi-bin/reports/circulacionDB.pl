@@ -64,8 +64,8 @@ if($tipoAccion eq "EXPORT_CIRC"){
     $obj->{'nroSocio'}          =  $obj->{'nro_socio_hidden'};
     $obj->{'categoriaSocio'}    =  $obj->{'categoria_socio_id'};
     $obj->{'tipoDoc'}           =  $obj->{'tipo_nivel3_name'};
-    $obj->{'fecha_inicio'}      =  $obj->{'date-from-gen'};
-    $obj->{'fecha_fin'}         =  $obj->{'date-to-gen'};
+    $obj->{'fecha_inicio'}      =  $obj->{'date-from'};
+    $obj->{'fecha_fin'}         =  $obj->{'date-to'};
     $obj->{'orden'}             = $obj->{'orden'} || 'fecha';
    
     if ($obj->{'asc'}){
