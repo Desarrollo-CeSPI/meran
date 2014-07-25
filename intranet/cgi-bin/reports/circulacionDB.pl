@@ -226,6 +226,7 @@ elsif ($tipoAccion eq "REPORTE_PRESTAMOS_VENCIDOS") {
         $t_params->{'mensaje'}  = 'Se enviar&aacute;n los mails de pr&eacute;stamos vencidos a la brevedad';
     }
 
+    $t_params->{'orden'}      = $obj->{'orden'};
     $t_params->{'prestamos'}  = $prestamos_array_ref;
     $t_params->{'cantidad'}   = $prestamos_array_ref?scalar(@$prestamos_array_ref):0;
 

@@ -3,7 +3,8 @@
 
 <script type="text/javascript">
 
-    var ORDEN   = 'apellido';
+    var ORDEN_VTO   = 'apellido';
+    var SENTIDO_ORDEN_VTO = 0;
     var ASC     = 0;
 
     function generarReportePrestamosVencidos(){
@@ -11,6 +12,8 @@
         objAH.debug             = true;
         objAH.cache             = true;
         objAH.showOverlay       = true;
+        objAH.fecha_vto_from    = $("#fecha_vto_from").val();
+        objAH.fecha_vto_to      = $("#fecha_vto_to").val();
         objAH.url               = URL_PREFIX+'/reports/circulacionDB.pl';
         objAH.tipoAccion        = "REPORTE_PRESTAMOS_VENCIDOS";
         objAH.sendToServer();
@@ -18,7 +21,7 @@
 
     function updateGenerarReportePrestamosVencidos(responseText){
         $('#reporte_prestamos_vencidos').html(responseText);
-        if (ORDEN){
+        if (ORDEN_VTO){
               cambiarSentidoOrd();
         } 
     }
@@ -43,6 +46,15 @@
             [% INCLUDE 'partials/reportes/_reporte_circulacion.inc' %]
         </div>
         <div class="tab-pane fade " id="prestamos_vencidos_tab">
+
+            <div class="control-group">
+                <label class="control-label"> [% "Rango de Fechas" | i18n %] </label>
+                <div class="controls">
+                    <input type="text" id="fecha_vto_from" name="fecha_vto_from" data-datepicker="datepicker" placeholder="[% 'Desde' | i18n %]" value="" required>
+                    <input type="text" id="fecha_vto_to" name="fecha_vto_to" data-datepicker="datepicker" placeholder="[% 'Hasta' | i18n %]" value="" required>
+                </div>
+            </div>
+
             <div class="form-actions">
               [% PERL %]
                   print C4::AR::Filtros::action_button( 
