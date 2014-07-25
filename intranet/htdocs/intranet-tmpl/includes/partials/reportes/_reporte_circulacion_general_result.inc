@@ -22,17 +22,23 @@
             </tr>
     </table>   
   [% IF !exportar %]
-    <div class="form-actions" style="margin-bottom: 0;">
-       <td>
+    <div class="form-actions"  >
           [% PERL %]
-                    print C4::AR::Filtros::action_set_button(    
-                            button  => 'btn btn-primary',
+                    print C4::AR::Filtros::action_button(    
+                            button  => 'btn click btn-primary',
                             title   => " [% 'Exportar a PDF' | i18n %]",
-                            action  => 'imprimirReporte("formReporteCiruculacionGeneral");',
+                            action  => 'imprimirReporte("formReporteCiruculacionGeneral","PDF");',
                             icon    => "icon-white icon-inbox",
                       ) ;
           [% END %]
-       </td>
+          [% PERL %]
+                    print C4::AR::Filtros::action_button(    
+                            button  => 'btn click btn-primary',
+                            title   => " [% 'Exportar a XLS' | i18n %]",
+                            action  => 'imprimirReporte("formReporteCiruculacionGeneral","XLS");',
+                            icon    => "icon-white icon-inbox",
+                      ) ;
+          [% END %]
     </div>
     [% END %]
 [% ELSE %]

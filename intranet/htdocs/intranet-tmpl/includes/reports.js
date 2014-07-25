@@ -33,7 +33,8 @@ function imprimirReporte(form_name,format){
 	catch(e){}
 
 	if(format){
-		$("#formatoReporte").val(format);
+			$("#" + form_name).find('input[name=formatoReporte]').remove();
+			$('<input>').attr({type: 'hidden', id: 'formatoReporte', name: 'formatoReporte', value: format}).appendTo($("#" + form_name));
 	}
 	
 	$("#" + form_name).submit();

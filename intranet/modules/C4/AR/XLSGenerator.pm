@@ -48,38 +48,6 @@ sub getXLS{
     return ($data);
 }
 
-sub exportarReporteCircGeneral{
-
-     my ($tabla_a_exportar, $headers_tabla) = @_;
-     my $msg_object= C4::AR::Mensajes::create();
-     
-     my $ss = Spreadsheet::WriteExcel::Simple->new;
-
-#-------- Se escriben los headers en el excel con lo q contiene el array headers_tabla ------------
-
-     $ss->write_bold_row($headers_tabla);   
-
-#-------- Se escriben los datos en el excel con lo q contiene el array $tabla_a_exportar ------------
-     
-     foreach my $celda (@$tabla_a_exportar){
-        $ss->write_row($celda);       
-     }
-
-     eval{
-          $ss->save("/usr/share/meran/intranet/htdocs/intranet-tmpl/reports/reporte_circ_general.xls"); 
-     };
-
-     if ($@){
-           $msg_object->{'error'}= 1;
-           C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'A037', 'params' => []} ) ;  
-     } else {
-           $msg_object->{'error'}= 0;
-           C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'A036', 'params' => []} ) ;  
-    }
-    return ($msg_object);
-
-}
-# ----- Exporta los datos de la tabla a un archivo .xls, recibe como parametros un array con los datos y otro con los headers de la tabla ---- 
 
 sub exportarMejorPresupuesto{
 
@@ -127,11 +95,10 @@ sub xlsHeader{
     return ($header);
 }
 
+
 sub exportarReporteReservasCirculacion{
 
-     my ($rep_historial_circulacion) = @_;
-     my $msg_object= C4::AR::Mensajes::create();
-     
+     my ($rep_historial_circulacion) = @_;     
 
      my @headers_tabla= (
                 decode('utf8', C4::AR::Filtros::i18n("Responsable")),
@@ -172,20 +139,95 @@ sub exportarReporteReservasCirculacion{
             $fila_tabla[2] =  C4::AR::Filtros::i18n("Material inexistente");
         }
 
-        if($historial_circulacion->getId3) {
-            $fila_tabla[3] =  $historial_circulacion->nivel3->getBarcode();
-            $fila_tabla[4] =  $historial_circulacion->nivel3->getSignatura();
-        }
-        else{
+        eval {
+            if($historial_circulacion->getId3 && $historial_circulacion->nivel3) {
+                $fila_tabla[3] =  $historial_circulacion->nivel3->getBarcode();
+                $fila_tabla[4] =  $historial_circulacion->nivel3->getSignatura();
+            }
+            else{
+                $fila_tabla[3] =  C4::AR::Filtros::i18n("Reserva de grupo");
+                $fila_tabla[4] =  $historial_circulacion->nivel2->getPrimerSignatura();
+            }
+        };
+
+        if ($@){
             $fila_tabla[3] =  C4::AR::Filtros::i18n("Reserva de grupo");
             $fila_tabla[4] =  $historial_circulacion->nivel2->getPrimerSignatura();
         }
+
 
         $fila_tabla[5] = decode('utf8', $historial_circulacion->socio->getNro_socio());
 
         $fila_tabla[6] = $historial_circulacion->getFecha_formateada();
 
         $fila_tabla[7] = $historial_circulacion->getTipo_operacion();
+
+        $ss->write_row(\@fila_tabla);       
+     }
+
+        print $ss->data(); 
+}
+
+
+sub exportarReporteCirculacionGeneral{
+
+     my ($rep_historial_circulacion_general) = @_;
+    
+     my @headers_tabla= (
+                decode('utf8', C4::AR::Filtros::i18n("Cantidad de Renovaciones")),
+                decode('utf8', C4::AR::Filtros::i18n("Cantidad de Usuarios")),
+                decode('utf8', C4::AR::Filtros::i18n("Cantidad de Devoluciones")),
+        );
+
+     my $ss = Spreadsheet::WriteExcel::Simple->new;
+#-------- Se escriben los headers en el excel con lo q contiene el array headers_tabla ------------
+     $ss->write_bold_row(\@headers_tabla);   
+
+#-------- Se escriben los datos en el excel con lo q contiene el array $tabla_a_exportar ------------
+     my @fila_tabla = ();
+     $fila_tabla[0] = $rep_historial_circulacion_general->{'cantidad_renovaciones'};
+     $fila_tabla[1] = $rep_historial_circulacion_general->{'cantidad_usuarios'};
+     $fila_tabla[2] = $rep_historial_circulacion_general->{'cantidad_devoluciones'};
+     $ss->write_row(\@fila_tabla);
+    
+    print $ss->data(); 
+}
+
+sub exportarReporteCirculacionPrestamosVencidos{
+
+     my ($prestamos_vencidos) = @_;     
+
+     my @headers_tabla= (
+                decode('utf8', C4::AR::Filtros::i18n("Apellido y nombre")),
+                decode('utf8', C4::AR::Filtros::i18n("Número de Socio")),
+                decode('utf8', C4::AR::Filtros::i18n("Ejemplar")),
+                decode('utf8', C4::AR::Filtros::i18n("Tipo de préstamo")),
+                decode('utf8', C4::AR::Filtros::i18n("Fecha de préstamo")),
+                decode('utf8', C4::AR::Filtros::i18n("Fecha de vencimiento")),
+
+        );
+
+     my $ss = Spreadsheet::WriteExcel::Simple->new;
+#-------- Se escriben los headers en el excel con lo q contiene el array headers_tabla ------------
+     $ss->write_bold_row(\@headers_tabla);   
+
+#-------- Se escriben los datos en el excel con lo q contiene el array $tabla_a_exportar ------------
+     
+     foreach my $prestamo_vencido (@$prestamos_vencidos){
+        my @fila_tabla = ();
+
+        eval {
+            $fila_tabla[0] =  $prestamo_vencido->socio->persona->getApeYNom();
+        };
+        if ($@){
+            $fila_tabla[0] =  C4::AR::Filtros::i18n("Usuario inexistente");
+        }
+
+        $fila_tabla[1] =  $prestamo_vencido->getNro_socio;
+        $fila_tabla[2] =  $prestamo_vencido->nivel3->codigo_barra;
+        $fila_tabla[3] =  $prestamo_vencido->tipo->getDescripcion;
+        $fila_tabla[4] =  $prestamo_vencido->getFecha_prestamo_formateada;
+        $fila_tabla[5] =  $prestamo_vencido->getFecha_vencimiento_reporte_formateada;
 
         $ss->write_row(\@fila_tabla);       
      }
