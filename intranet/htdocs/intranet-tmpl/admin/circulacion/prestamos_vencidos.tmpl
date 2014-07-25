@@ -11,22 +11,23 @@
 
     function ordenar_reporte_prestamos_vencidos(orden){
 
-          if (orden == ORDEN) {
-             if (SENTIDO_ORDEN == 1){
-                    SENTIDO_ORDEN= 0;
+          if (orden == ORDEN_VTO) {
+
+             if (SENTIDO_ORDEN_VTO == 1){
+                    SENTIDO_ORDEN_VTO= 0;
              } else {
-                    SENTIDO_ORDEN= 1;
+                    SENTIDO_ORDEN_VTO= 1;
              }
           } else {
-              SENTIDO_ORDEN= 1;
-              ORDEN = orden;
+              SENTIDO_ORDEN_VTO= 1;
+              ORDEN_VTO = orden;
           }
 
           objAH.orden = orden;
-          objAH.sentido_orden = SENTIDO_ORDEN;
+          objAH.sentido_orden = SENTIDO_ORDEN_VTO;
           objAH.sort(orden);    
 
-          if (ORDEN){
+          if (ORDEN_VTO){
                 cambiarSentidoOrd();
           } 
     }

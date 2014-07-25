@@ -450,13 +450,11 @@ sub estaVencido {
 
     if ( Date::Manip::Date_Cmp( $close, Date::Manip::ParseDate("today") ) < 0 )
     {    #Se paso la hora de cierre
-        $hoy =
-          C4::Date::format_date_in_iso(
-            Date::Manip::DateCalc( $hoy, "+ 1 day", \$err ), $dateformat );
+        $hoy = C4::Date::format_date_in_iso(Date::Manip::DateCalc( $hoy, "+ 1 day", \$err ), $dateformat);
     }
 
-    my $df =
-      C4::Date::format_date_in_iso( $self->getFecha_vencimiento, $dateformat );
+    my $df = C4::Date::format_date_in_iso( $self->getFecha_vencimiento, $dateformat );
+
     if ( Date::Manip::Date_Cmp( $df, $hoy ) < 0 ) { return 1; }
     else {
 

@@ -1426,8 +1426,12 @@ sub getAllPrestamosVencidosParaMail{
 sub getAllPrestamosVencidos{
     my ($params) = @_;
 
+    my @filtros;
+    my $fecha_inicio        = $params->{'fecha_vto_from'};
+    my $fecha_fin           = $params->{'fecha_vto_to'};
+
     $params->{'orden'}      = ($params->{'orden'} eq "")?'fecha_prestamo':$params->{'orden'};
-    $params->{'sentido'}    = ($params->{'sentido'} eq "")?'DESC':$params->{'sentido'};
+    $params->{'sentido_orden'}    = ($params->{'sentido_orden'})?'DESC':'ASC';
 
     if($params->{'orden'} eq "apellido"){
         $params->{'orden'} = "persona.apellido";
@@ -1441,10 +1445,19 @@ sub getAllPrestamosVencidos{
         $params->{'orden'} = "circ_prestamo.fecha_vencimiento_reporte"; 
     } 
 
+    if(($fecha_inicio ne "") && ($fecha_fin ne "")){
+        $fecha_inicio   = C4::Date::format_date_hour($fecha_inicio,"iso");
+        $fecha_fin      = C4::Date::format_date_hour($fecha_fin,"iso");
+
+        push( @filtros, and => [    'fecha_prestamo' => { gt => $fecha_inicio, eq => $fecha_inicio },
+                                    'fecha_prestamo' => { lt => $fecha_fin, eq => $fecha_fin} ] ); 
+    }
+
     my $prestamos_array_ref = C4::Modelo::CircPrestamo::Manager->get_circ_prestamo(
+                                                                query   => \@filtros,
                                                                 require_objects => ['socio','nivel3','socio.persona','tipo'],
                                                                 # sort_by => 'fecha_prestamo DESC',
-                                                                sort_by => $params->{'orden'} . ' ' . $params->{'sentido'},
+                                                                sort_by => $params->{'orden'} . ' ' . $params->{'sentido_orden'},
 
                                                         );
      
