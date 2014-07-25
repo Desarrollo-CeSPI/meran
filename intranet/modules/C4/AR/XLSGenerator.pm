@@ -217,7 +217,7 @@ sub exportarReporteCirculacionPrestamosVencidos{
         my @fila_tabla = ();
 
         eval {
-            $fila_tabla[0] =  $prestamo_vencido->socio->persona->getApeYNom();
+            $fila_tabla[0] =  decode('utf8', $prestamo_vencido->socio->persona->getApeYNom());
         };
         if ($@){
             $fila_tabla[0] =  C4::AR::Filtros::i18n("Usuario inexistente");
@@ -225,7 +225,7 @@ sub exportarReporteCirculacionPrestamosVencidos{
 
         $fila_tabla[1] =  $prestamo_vencido->getNro_socio;
         $fila_tabla[2] =  $prestamo_vencido->nivel3->codigo_barra;
-        $fila_tabla[3] =  $prestamo_vencido->tipo->getDescripcion;
+        $fila_tabla[3] =  decode('utf8', $prestamo_vencido->tipo->getDescripcion);
         $fila_tabla[4] =  $prestamo_vencido->getFecha_prestamo_formateada;
         $fila_tabla[5] =  $prestamo_vencido->getFecha_vencimiento_reporte_formateada;
 
