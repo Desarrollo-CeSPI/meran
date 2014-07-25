@@ -107,6 +107,10 @@
         <input class="placeholder" placeholder="Filtrar resultados" type="text" id="q" name="q">
     </form>
 
+    <form class="form-horizontal" id="formReportePrestamosVencidos" action="[% url_prefix %]/reports/circulacionDB.pl">
+      <input type="hidden" name="tipoAccion" value="EXPORT_REPORTE_PRESTAMOS_VENCIDOS">
+    </form>
+    
  [% IF cantidad  %]
 
              [% PERL %]
@@ -161,7 +165,7 @@
                                                             params  => ["id3=[% prestamo.nivel3.getId3 %]"],
                                                             title   => "[% prestamo.nivel3.codigo_barra %]"
                                                         );
-                        [% END %]
+                    [% END %]
             </td>
                 <td>
                     [% prestamo.tipo.getDescripcion %]
@@ -197,6 +201,26 @@
                                            ) ;
         
        [% END %]
+
+
+        [% PERL %]
+                    print C4::AR::Filtros::action_button(    
+                            button  => 'btn click btn-primary',
+                            title   => " [% 'Exportar a PDF' | i18n %]",
+                            action  => 'imprimirReporte("formReportePrestamosVencidos","PDF");',
+                            icon    => "icon-white icon-inbox",
+                      ) ;
+        [% END %]
+      
+        [% PERL %]
+                    print C4::AR::Filtros::action_button(    
+                            button  => 'btn click btn-primary',
+                            title   => " [% 'Exportar a XLS' | i18n %]",
+                            action  => 'imprimirReporte("formReportePrestamosVencidos","XLS");',
+                            icon    => "icon-white icon-inbox",
+                      ) ;
+        [% END %]
+
   </div>
 [% ELSE %]
         <div class="alert alert-info">[% "No hay pr&eacute;stamos vencidos" | i18n %]</div> 

@@ -66,7 +66,7 @@ if($tipoAccion eq "EXPORT_CIRC"){
     $obj->{'tipoDoc'}           =  $obj->{'tipo_nivel3_name'};
     $obj->{'fecha_inicio'}      =  $obj->{'date-from'};
     $obj->{'fecha_fin'}         =  $obj->{'date-to'};
-    $obj->{'orden'}             = $obj->{'orden'} || 'fecha';
+    $obj->{'orden'}             =  'fecha';
    
     if ($obj->{'asc'}){
        $obj->{'orden'}.= ' ASC';
@@ -117,7 +117,6 @@ elsif($tipoAccion eq "EXPORT_CIRC_GENERAL"){
     $obj->{'tipo_documento'}    =  $obj->{'tipo_nivel3_name'};
     
     
-    # my ($cantidad, $totales)    = C4::AR::Reportes::getReporteCirculacionGeneralToExport($obj);
     my ($cantidad, $totales)    = C4::AR::Reportes::getReporteCirculacionGeneral($obj);
 
     $t_params->{'cantidad'}     = $cantidad;
@@ -127,11 +126,21 @@ elsif($tipoAccion eq "EXPORT_CIRC_GENERAL"){
 
     $obj->{'is_report'}         = "SI";
 
-    my $out                     = C4::AR::Auth::get_html_content($template, $t_params);
-    my $filename                = C4::AR::PdfGenerator::pdfFromHTML($out, $obj);
 
-    print C4::AR::PdfGenerator::pdfHeader(); 
-    C4::AR::PdfGenerator::printPDF($filename);
+    if ($obj->{'formatoReporte'} eq 'XLS'){
+        #XLS
+        print C4::AR::XLSGenerator::xlsHeader(); 
+        C4::AR::XLSGenerator::exportarReporteCirculacionGeneral($totales);
+    }
+    elsif($obj->{'formatoReporte'} eq 'PDF'){
+        #PDF
+        my $out                     = C4::AR::Auth::get_html_content($template, $t_params);
+        my $filename                = C4::AR::PdfGenerator::pdfFromHTML($out, $obj);
+
+        print C4::AR::PdfGenerator::pdfHeader(); 
+        C4::AR::PdfGenerator::printPDF($filename);
+    }
+
 } 
 elsif ($tipoAccion eq "BUSQUEDAS") {
     ($template, $session, $t_params)= C4::AR::Auth::get_template_and_user({
@@ -148,7 +157,7 @@ elsif ($tipoAccion eq "BUSQUEDAS") {
     $obj->{'ini'}   = $obj->{'ini'} || 1;
     my $ini         = $obj->{'ini'};
     my $funcion     = $obj->{'funcion'};
-    $obj->{'orden'} = $obj->{'orden'} || 'fecha';
+    $obj->{'orden'} = 'fecha';
    
     if ($obj->{'asc'}){
        $obj->{'orden'}.= ' ASC';
@@ -221,4 +230,38 @@ elsif ($tipoAccion eq "REPORTE_PRESTAMOS_VENCIDOS") {
     $t_params->{'cantidad'}   = $prestamos_array_ref?scalar(@$prestamos_array_ref):0;
 
     C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
-}
+
+}elsif($tipoAccion eq "EXPORT_REPORTE_PRESTAMOS_VENCIDOS"){
+
+
+    ($template, $session, $t_params) = C4::AR::Auth::get_template_and_user({
+                                        template_name   => "includes/partials/reportes/_reporte_circulacion_prestamos_vencidos_result.inc",
+                                        query           => $input,
+                                        type            => "intranet",
+                                        authnotrequired => 0,
+                                        flagsrequired   => {  ui            => 'ANY', 
+                                                            tipo_documento  => 'ANY', 
+                                                            accion          => 'ALTA', 
+                                                            entorno         => 'undefined'},
+    });
+
+    my $prestamos_array_ref   = C4::AR::Prestamos::getAllPrestamosVencidos($obj);
+
+    if ($obj->{'formatoReporte'} eq 'XLS'){
+        #XLS
+        print C4::AR::XLSGenerator::xlsHeader(); 
+        C4::AR::XLSGenerator::exportarReporteCirculacionPrestamosVencidos($prestamos_array_ref);
+    }
+    elsif($obj->{'formatoReporte'} eq 'PDF'){
+        #PDF
+        $t_params->{'prestamos'}  = $prestamos_array_ref;
+        $t_params->{'cantidad'}   = $prestamos_array_ref?scalar(@$prestamos_array_ref):0;
+
+        my $out                     = C4::AR::Auth::get_html_content($template, $t_params);
+        my $filename                = C4::AR::PdfGenerator::pdfFromHTML($out, $obj);
+
+        print C4::AR::PdfGenerator::pdfHeader(); 
+        C4::AR::PdfGenerator::printPDF($filename);
+    }
+
+} 
