@@ -27,7 +27,7 @@ use CGI;
 use C4::AR::Utilidades;
 use C4::AR::Reportes;
 use C4::AR::PdfGenerator;
-
+use C4::AR::XLSGenerator;
 
 my $input = new CGI;
 my $obj=$input->param('obj');
@@ -79,15 +79,23 @@ $t_params->{'data'} = $data;
 
 if ($obj->{'exportar'}) {
 
-    $t_params->{'cant'} = $cant;
-    $t_params->{'exportar'} = 1;
 
-    $obj->{'is_report'}="SI";
+    if ($obj->{'formatoReporte'} eq 'XLS'){
+        #XLS
+        print C4::AR::XLSGenerator::xlsHeader(); 
+        C4::AR::XLSGenerator::exportarReporteDisponibilidad($data);
+    }
+    elsif($obj->{'formatoReporte'} eq 'PDF'){
+        #PDF
+        $t_params->{'cant'} = $cant;
+        $t_params->{'exportar'} = 1;
+        $obj->{'is_report'}="SI";
+        my $out= C4::AR::Auth::get_html_content($template, $t_params);
+        my $filename= C4::AR::PdfGenerator::pdfFromHTML($out,$obj);
+        print C4::AR::PdfGenerator::pdfHeader(); 
+        C4::AR::PdfGenerator::printPDF($filename);
 
-    my $out= C4::AR::Auth::get_html_content($template, $t_params);
-    my $filename= C4::AR::PdfGenerator::pdfFromHTML($out,$obj);
-    print C4::AR::PdfGenerator::pdfHeader(); 
-    C4::AR::PdfGenerator::printPDF($filename);
+    }
 
 } else {
 

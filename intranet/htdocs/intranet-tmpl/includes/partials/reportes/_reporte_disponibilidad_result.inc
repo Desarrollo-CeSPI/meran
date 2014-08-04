@@ -88,14 +88,23 @@ function changePageBusquedas(ini){
 [% IF !exportar && cant %]
 <div class="form-actions" id="actions_ejemplares" style="margin-bottom: 0;">
    <td>
-      [% PERL %]
-                print C4::AR::Filtros::action_set_button(    
-                        button  => 'btn btn-primary',
-                        title => " [% 'Exportar a PDF' | i18n %]",
-                        action => 'imprimirReporte("form_reporte_disponibilidad");',
-                        icon => "icon-white icon-inbox",
-                  ) ;
-      [% END %]
+        [% PERL %]
+                    print C4::AR::Filtros::action_button(    
+                            button  => 'btn click btn-primary',
+                            title   => " [% 'Exportar a PDF' | i18n %]",
+                            action  => 'imprimirReporte("form_reporte_disponibilidad","PDF");',
+                            icon    => "icon-white icon-inbox",
+                      ) ;
+        [% END %]
+      
+        [% PERL %]
+                    print C4::AR::Filtros::action_button(    
+                            button  => 'btn click btn-primary',
+                            title   => " [% 'Exportar a XLS' | i18n %]",
+                            action  => 'imprimirReporte("form_reporte_disponibilidad","XLS");',
+                            icon    => "icon-white icon-inbox",
+                      ) ;
+        [% END %]
    </td>
 </div>       
 [% END %]

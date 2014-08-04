@@ -24,6 +24,7 @@ use strict;
 require Exporter;
 use C4::AR::Auth;
 use C4::AR::PdfGenerator;
+use C4::AR::XLSGenerator;
 use C4::AR::Reportes;
 use C4::AR::Busquedas;
 use C4::Modelo::RepBusqueda;
@@ -136,16 +137,21 @@ if($tipoAccion eq "BUSQUEDAS"){
     $t_params->{'nro_socio'} = $obj->{'usuario'};
 
     if ($obj->{'exportar'}){
-
-          $obj->{'is_report'}="SI";
-
-          $t_params->{'results'} = $all_results;
-          $t_params->{'exportar'} = 1;;
-
-          my $out= C4::AR::Auth::get_html_content($template, $t_params);
-          my $filename= C4::AR::PdfGenerator::pdfFromHTML($out,$obj);
-          print C4::AR::PdfGenerator::pdfHeader(); 
-          C4::AR::PdfGenerator::printPDF($filename);
+      if ($obj->{'formatoReporte'} eq 'XLS'){
+          #XLS
+          print C4::AR::XLSGenerator::xlsHeader(); 
+          C4::AR::XLSGenerator::exportarReporteBusquedas($all_results);
+      }
+      elsif($obj->{'formatoReporte'} eq 'PDF'){
+          #PDF
+            $obj->{'is_report'}="SI";
+            $t_params->{'results'} = $all_results;
+            $t_params->{'exportar'} = 1;
+            my $out= C4::AR::Auth::get_html_content($template, $t_params);
+            my $filename= C4::AR::PdfGenerator::pdfFromHTML($out,$obj);
+            print C4::AR::PdfGenerator::pdfHeader(); 
+            C4::AR::PdfGenerator::printPDF($filename);
+      }
 
     } else {
 
