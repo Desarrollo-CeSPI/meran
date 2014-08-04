@@ -60,13 +60,14 @@
 </div>
 
 <div class="modal-footer">
+
     [% IF editing %]
         
         [% PERL %]
               print C4::AR::Filtros::action_button( 
                                                 button      => "btn btn-primary",
                                                 action      => "checkEliminarPortadasNivel2()", 
-                                                title       => "[% 'Guardar' | i18n %]",
+                                                title       => "[% 'Eliminar' | i18n %]",
                                               ) ;
 
 
