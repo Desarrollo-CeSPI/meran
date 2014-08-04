@@ -15,7 +15,7 @@
                               <img src="/includes/css/gbs_preview_button1.gif" border="0" style="margin: 0"/>
                           </a>
                       </div>
-                      <script src="http://books.google.com/books?jscmd=viewapi&bibkeys=ISBN:[% isbn %]&callback=ProcessGBSBookInfo"></script>
+                      <script src="//books.google.com/books?jscmd=viewapi&bibkeys=ISBN:[% isbn %]&callback=ProcessGBSBookInfo"></script>
                    [% END %]
                     <div class="right" style="width: 150px; margin-bottom: 20px;">
                         <!-- AddThis Button BEGIN -->

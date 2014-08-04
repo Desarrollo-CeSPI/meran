@@ -91,6 +91,7 @@ sub agregar{
 
         $msg_object->{'error'} = 1;
         C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'POR00', 'intra'} ) ;
+        C4::AR::Debug::debug("PortadaNivel2 => agregar => ERROR al cargar la tapa");
         $db->rollback;
     };
 

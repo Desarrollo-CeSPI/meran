@@ -153,7 +153,7 @@
 													<img src="/includes/css/gbs_preview_button1.gif" border="0" style="margin: 0"/>
 												</a>
 											</div>
-											<script src="http://books.google.com/books?jscmd=viewapi&bibkeys=ISSN:[% issn %]&callback=ProcessGBSBookInfo"></script>
+											<script src="//books.google.com/books?jscmd=viewapi&bibkeys=ISSN:[% issn %]&callback=ProcessGBSBookInfo"></script>
 										</div>
 									[% END %]
 							   </div>
