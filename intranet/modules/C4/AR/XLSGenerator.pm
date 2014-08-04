@@ -235,6 +235,127 @@ sub exportarReporteCirculacionPrestamosVencidos{
         print $ss->data(); 
 }
 
+sub exportarReporteColecciones {
+
+     my ($ejemplares) = @_;
+
+     my @headers_tabla= (
+                decode('utf8', C4::AR::Filtros::i18n("Título")),
+                decode('utf8', C4::AR::Filtros::i18n("Autor")),
+                decode('utf8', C4::AR::Filtros::i18n("Edición")),
+                decode('utf8', C4::AR::Filtros::i18n("Código")),
+                decode('utf8', C4::AR::Filtros::i18n("Signatura Topográfica")),
+                decode('utf8', C4::AR::Filtros::i18n("Fecha de alta")),
+                decode('utf8', C4::AR::Filtros::i18n("Operador")),
+        );
+
+     my $ss = Spreadsheet::WriteExcel::Simple->new;
+#-------- Se escriben los headers en el excel con lo q contiene el array headers_tabla ------------
+     $ss->write_bold_row(\@headers_tabla);   
+
+#-------- Se escriben los datos en el excel con lo q contiene el array $tabla_a_exportar ------------
+     
+     foreach my $ejemplar (@$ejemplares){
+        my @fila_tabla = ();
+
+        $fila_tabla[0] =  decode('utf8', $ejemplar->nivel1->getTituloStringEscaped());
+        $fila_tabla[1] =  decode('utf8', $ejemplar->nivel1->getAutorStringEscaped());
+        $fila_tabla[2] =  decode('utf8', $ejemplar->nivel2->getEdicion());
+        if ($ejemplar->nivel2->getAnio_publicacion()){
+            if($fila_tabla[2]){
+                $fila_tabla[2] .= " ";
+            }
+            $fila_tabla[2] .= "(".decode('utf8', $ejemplar->nivel2->getAnio_publicacion()).")";
+        }
+        $fila_tabla[3] =  $ejemplar->getBarcode();
+        $fila_tabla[4] =  $ejemplar->getSignatura();
+        $fila_tabla[5] =  $ejemplar->getCreatedAt_format();
+        $fila_tabla[6] =  decode('utf8', $ejemplar->getCreatedByToString());
+
+        $ss->write_row(\@fila_tabla);       
+     }
+
+        print $ss->data(); 
+}
+
+sub exportarReporteDisponibilidad {
+
+     my ($ejemplares) = @_;
+
+     my @headers_tabla= (
+                decode('utf8', C4::AR::Filtros::i18n("Título")),
+                decode('utf8', C4::AR::Filtros::i18n("Autor")),
+                decode('utf8', C4::AR::Filtros::i18n("Signatura Topográfica")),
+                decode('utf8', C4::AR::Filtros::i18n("Código")),
+                decode('utf8', C4::AR::Filtros::i18n("Edición")),
+                decode('utf8', C4::AR::Filtros::i18n("Fecha Cambio de disponibilidad")),
+                decode('utf8', C4::AR::Filtros::i18n("Estado")),
+        );
+
+     my $ss = Spreadsheet::WriteExcel::Simple->new;
+#-------- Se escriben los headers en el excel con lo q contiene el array headers_tabla ------------
+     $ss->write_bold_row(\@headers_tabla);   
+
+#-------- Se escriben los datos en el excel con lo q contiene el array $tabla_a_exportar ------------
+     
+     foreach my $ejemplar (@$ejemplares){
+        my @fila_tabla = ();
+
+        $fila_tabla[0] =  decode('utf8', $ejemplar->nivel1->getTituloStringEscaped());
+        $fila_tabla[1] =  decode('utf8', $ejemplar->nivel1->getAutorStringEscaped());
+        $fila_tabla[2] =  $ejemplar->getSignatura();
+        $fila_tabla[3] =  $ejemplar->getBarcode();
+        $fila_tabla[4] =  decode('utf8', $ejemplar->nivel2->getEdicion());        
+        $fila_tabla[5] =  $ejemplar->getFechaUltimoCambioDisp();
+        $fila_tabla[6] =  decode('utf8', $ejemplar->getEstado());
+
+        $ss->write_row(\@fila_tabla);       
+     }
+
+        print $ss->data(); 
+}
+
+sub exportarReporteBusquedas{
+
+     my ($busquedas) = @_;
+
+     my @headers_tabla= (
+                decode('utf8', C4::AR::Filtros::i18n("Valor")),
+                decode('utf8', C4::AR::Filtros::i18n("Campo")),
+                decode('utf8', C4::AR::Filtros::i18n("Intra/Opac")),
+                decode('utf8', C4::AR::Filtros::i18n("Usuario")),
+                decode('utf8', C4::AR::Filtros::i18n("Fecha")),
+
+        ); 
+
+     my $ss = Spreadsheet::WriteExcel::Simple->new;
+#-------- Se escriben los headers en el excel con lo q contiene el array headers_tabla ------------
+     $ss->write_bold_row(\@headers_tabla);   
+
+#-------- Se escriben los datos en el excel con lo q contiene el array $tabla_a_exportar ------------
+     
+     foreach my $busqueda (@$busquedas){
+        my @fila_tabla = ();
+
+        $fila_tabla[0] =  decode('utf8', $busqueda->valor);
+        $fila_tabla[1] =  decode('utf8', $busqueda->campo);
+        $fila_tabla[2] =  decode('utf8', $busqueda->tipo);
+
+        eval {
+            $fila_tabla[3] =  decode('utf8', $busqueda->busqueda->socio->persona->getApeYNom());
+        };
+        if ($@){
+            $fila_tabla[3] =  C4::AR::Filtros::i18n("Usuario inexistente");
+        }
+
+        $fila_tabla[4] = $busqueda->busqueda->getFecha_formateada();        
+
+        $ss->write_row(\@fila_tabla);       
+     }
+
+        print $ss->data(); 
+}
+
 END { }       # module clean-up code here (global destructor)
 
 1;
