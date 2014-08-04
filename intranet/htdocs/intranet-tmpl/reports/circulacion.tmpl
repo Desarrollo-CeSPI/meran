@@ -50,8 +50,11 @@
             <div class="control-group">
                 <label class="control-label"> [% "Rango de Fechas" | i18n %] </label>
                 <div class="controls">
+                  <form class="form-horizontal" id="formReportePrestamosVencidos" action="[% url_prefix %]/reports/circulacionDB.pl">
+                    <input type="hidden" name="tipoAccion" value="EXPORT_REPORTE_PRESTAMOS_VENCIDOS">
                     <input type="text" id="fecha_vto_from" name="fecha_vto_from" data-datepicker="datepicker" placeholder="[% 'Desde' | i18n %]" value="" required>
                     <input type="text" id="fecha_vto_to" name="fecha_vto_to" data-datepicker="datepicker" placeholder="[% 'Hasta' | i18n %]" value="" required>
+                  </form>
                 </div>
             </div>
 
