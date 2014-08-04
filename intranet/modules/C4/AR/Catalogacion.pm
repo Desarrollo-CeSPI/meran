@@ -714,7 +714,7 @@ sub as_stringReloaded {
         $dato                               = getDatoFromReferencia($campo, $subcampo, $dato, $itemtype, $nivel);
         $dato                               = C4::AR::Utilidades::escapeData($dato);
 
-        C4::AR::Debug::debug("Catalogacion => as_stringReloaded => campo => ".$campo." subcampo => ".$subcampo." dato => ".$dato);
+        # C4::AR::Debug::debug("Catalogacion => as_stringReloaded => campo => ".$campo." subcampo => ".$subcampo." dato => ".$dato);
         $hash_temp{'dato_link'}             = C4::AR::Filtros::show_componente( ('campo' => $campo, 'subcampo' => $subcampo, 'dato' => $dato , 'id1' => $params->{'id1'}, 'id2' => $params->{'id2'}, 'template' => $itemtype ) );
 
         if($hash_temp{'dato_link'} ne "NO_LINK"){
@@ -743,7 +743,7 @@ sub as_stringReloaded {
             }
             else{
                my $tmp = $subcampos{$subcampo}{'datos'};
-               C4::AR::Debug::debug("Catalogacion => as_stringReloaded =>".$tmp);
+               # C4::AR::Debug::debug("Catalogacion => as_stringReloaded =>".$tmp);
                push @$tmp, $dato;
                $subcampos{$subcampo}{'datos'}=$tmp;
             }
@@ -766,7 +766,7 @@ sub as_stringReloaded {
         my $ocurrencias = $subcampos{$subcampo}{'datos'};
         my $inter = $subcampos{$subcampo}{'inter'};
         my $subsJoined= join( $inter, @$ocurrencias);
-        C4::AR::Debug::debug("Catalogacion => JOINED!!! => ".$subsJoined." campo, subcampo => ".$campo.", ".$subcampo);
+        # C4::AR::Debug::debug("Catalogacion => JOINED!!! => ".$subsJoined." campo, subcampo => ".$campo.", ".$subcampo);
         $texto.=$subcampos{$subcampo}{'pre'}.$subsJoined.$subcampos{$subcampo}{'post'};
     }
     return $texto;
@@ -823,7 +823,7 @@ sub marc_record_to_meran_to_detail_view_as_not_extended {
     $type           = $type || "__NO_TYPE";
     my $itemtype    = $params->{'id_tipo_doc'};
 
-    C4::AR::Debug::debug("Catalogacion => marc_record_to_meran_to_detail_view_as_not_extended => marc_record->as_usmarc => ".$marc_record->as_formatted);
+    # C4::AR::Debug::debug("Catalogacion => marc_record_to_meran_to_detail_view_as_not_extended => marc_record->as_usmarc => ".$marc_record->as_formatted);
 
     foreach my $field ($marc_record->fields) {
         my %hash_temp_aux;
@@ -841,7 +841,7 @@ sub marc_record_to_meran_to_detail_view_as_not_extended {
             # veo que separador lleva cada subcampo para el $field dependiendo del campo y subcampo que se este procesando
             my $field_as_string                 = as_stringReloaded($field, $itemtype, $params);
 
-C4::AR::Debug::debug("Catalogacion => field_as_string => ".$field_as_string);
+# C4::AR::Debug::debug("Catalogacion => field_as_string => ".$field_as_string);
             $hash_temp_aux{'dato'}              = ($hash_temp_aux{'dato'} ne "")?$hash_temp_aux{'dato'}.";".$field_as_string:($type eq "INTRA")?$field_as_string." ":$field_as_string;
             $hash_temp_aux{'campo'}             = $campo;
             $hash_temp_aux{'orden'}             = getOrdenFromCampo($campo, $params->{'nivel'}, $itemtype, $type, $db);
