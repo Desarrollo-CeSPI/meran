@@ -90,7 +90,7 @@ if($tipoAccion eq "EXPORT_CIRC"){
     }
     elsif($obj->{'formatoReporte'} eq 'PDF'){
         #PDF
-        my $out                     = C4::AR::Auth::get_html_content_utf8($template, $t_params);
+        my $out                     = C4::AR::Auth::get_html_content($template, $t_params);
         my $filename                = C4::AR::PdfGenerator::pdfFromHTML($out, $obj);
 
         print C4::AR::PdfGenerator::pdfHeader(); 

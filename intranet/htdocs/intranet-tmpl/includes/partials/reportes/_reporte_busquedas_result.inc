@@ -53,7 +53,7 @@
                               [% END %] 
                            
                     [% ELSE %]
-                              '[% "Desconocido" | i18n %]'
+                              [% "Desconocido" | i18n %]
                              
                     [% END %]
                     

@@ -1800,15 +1800,6 @@ sub get_html_content {
     return($out);
 }
 
-
-sub get_html_content_utf8 {
-    my($template, $params) = @_;
-    my $out = '';
-    $template->process($params->{'template_name'},$params,\$out, binmode => ':utf8' ) || die "Template process failed: ", $template->error(), "\n";
-    return($out);
-}
-
-
 #LOGIN ATTEMPTS DE USUARIOS
 
 

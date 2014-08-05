@@ -9,13 +9,6 @@
     function changePageBusquedas(ini){
         objAH.changePage(ini);
     }
-
-
-    function exportarPDF(){
-        $('#accion').val('EXPORTAR_PDF');  
-        $('#form_reporte_busquedas').submit();
-    }
-
   
     function ordenar_reporte_busquedas(orden){
               if (orden == ORDEN) {
