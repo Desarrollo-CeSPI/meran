@@ -303,14 +303,14 @@
                     <tr>
 
 
-                                         <td style="width: 60px;">
+                     <td style="width: 60px;">
                       [% IF NIVEL.portadas_perzonalizadas_cant > 0 %]
                              [% FOREACH portadas IN NIVEL.portadas_perzonalizadas %]
                                [% FOREACH portada IN portadas %]
                                 [% IF loop.count < 4 %]
                                   [% FOREACH p IN portada.value %]
                                     <a class="fancylink" rel="group_[% grupo %]" href="/uploads/covers-added/[% p.image_name %]">
-                                      <img alt="coverllll" src="/uploads/covers-added/[% p.image_name %]" title="Portada" />
+                                      <img class="cover_result" alt="coverllll" src="/uploads/covers-added/[% p.image_name %]" title="Portada" />
                                    </a>
                                 [% END %]
                                [% END %]
