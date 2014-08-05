@@ -166,15 +166,3 @@ function updateInfoActualizar(responseText){
  	generarReporteRegistrosNoIndexados();
 	
 }
-
-
-
-
-
-
-
-
-
-
-
-

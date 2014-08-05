@@ -61,6 +61,7 @@ if ($input->param('obj')){
 } else {
   
     $obj->{'tipoAccion'}= $input->param('accion');
+    $obj->{'formatoReporte'}= $input->param('formatoReporte');
     $obj->{'orden'}= $input->param('orden');
     $obj->{'asc'}= $input->param('asc');
     $obj->{'usuario'}= $input->param('nro_socio');
@@ -71,13 +72,6 @@ if ($input->param('obj')){
     $obj->{'fecha_fin'}= $input->param('date-to');
     $obj->{'is_report'}= "SI";
     $obj->{'exportar'}= $input->param('exportar');
-
-
-
-    my $out= C4::AR::Auth::get_html_content($template, $t_params);
-    my $filename= C4::AR::PdfGenerator::pdfFromHTML($out,$obj);
-    print C4::AR::PdfGenerator::pdfHeader(); 
-    C4::AR::PdfGenerator::printPDF($filename);
 
 }
 
@@ -161,31 +155,6 @@ if($tipoAccion eq "BUSQUEDAS"){
         C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
     }
 
-
-} elsif ($tipoAccion eq "EXPORTAR_PDF"){
-# 
-#       my $branchcode=  C4::AR::Referencias::obtenerDefaultUI();
-#       $branchcode=  $branchcode->getId_ui;
-# 
-#       # ESCUDO UI
-#       my $escudoUI =
-#         C4::Context->config('intrahtdocs') . '/temas/'
-#       . 'default'
-#       . '/imagenes/escudo-'
-#       . $branchcode
-#       . '.jpg';
-
-#         $t_params->{'biblio'} = $branchcode;
-#         $t_params->{'escudoUI'} = $escudoUI;
-#         $t_params->{'cantidad'} = $cantidad;
-#         $t_params->{'results'} = $all_results;
-# 
-#         C4::AR::Reportes::exportarReporte();
-#         my $out         = C4::AR::Auth::get_html_content($template, $t_params, $session);
-#         my $filename    = C4::AR::PdfGenerator::pdfFromHTML($out, $obj);
-#         print C4::AR::PdfGenerator::pdfHeader();
-# # 
-#         C4::AR::PdfGenerator::printPDF($filename);
 
 } elsif ($tipoAccion eq "REPORTE_GEN_ETIQUETAS") {
 
