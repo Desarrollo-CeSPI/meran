@@ -467,10 +467,11 @@ sub estaVencido {
                 
                 my $end    = C4::Date::calc_endES();
                 my $actual = Date::Manip::ParseDate("now");
-                    $self->debug("HORA PE VENCIMIENTO ".$end." ACTUAL ".$actual);
+                $self->debug("HORA PE VENCIMIENTO ".$end." ACTUAL ".$actual);
+                
                 if ( Date::Manip::Date_Cmp( $actual, $end ) > 0 )
                 {    #Se devuelve despues del limite
-                $self->debug("PE VENCIDO");
+                    $self->debug("PE VENCIDO");
                     return (1);
                 }
             }
