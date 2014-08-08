@@ -63,6 +63,7 @@
                                 id="[% sancion.getId_sancion %]">
                     </td>
                     <td>
+                      [% TRY %]
                         [% PERL %]
                             print C4::AR::Filtros::link_to(   text =>     "[% sancion.getNro_socio %]",
                                                             url=>"[% url_prefix %]/usuarios/reales/datosUsuario.pl", 
@@ -70,8 +71,12 @@
                                                             title =>    "[% 'Mostrar Detalle del Usuario' | i18n %]"
                                                         );
                         [% END %]
+                      [% CATCH %]
+                        NO EXISTE EL SOCIO ([% sancion.getNro_socio %])
+                      [% END %]
                     </td>
                     <td>
+                      [% TRY %]
                         [% PERL %]
                             print C4::AR::Filtros::link_to(   text =>     "[% sancion.socio.persona.getApeYNom %]",
                                                             url=>"[% url_prefix %]/usuarios/reales/datosUsuario.pl", 
@@ -79,9 +84,24 @@
                                                             title =>    "[% 'Mostrar Detalle del Usuario' | i18n %]"
                                                         );
                         [% END %]
+                      [% CATCH %]
+                        NO EXISTE EL SOCIO ([% sancion.getNro_socio %])
+                      [% END %]
                     </td>
-                    <td>[% sancion.socio.persona.getLegajo %]</td>
-                    <td>[% sancion.socio.categoria.getDescription %]</td>
+                    <td>
+                      [% TRY %]
+                        [% sancion.socio.persona.getLegajo %]
+                      [% CATCH %]
+                        NO EXISTE EL SOCIO ([% sancion.getNro_socio %])
+                      [% END %]
+                    </td>
+                    <td>
+                      [% TRY %]
+                        [% sancion.socio.categoria.getDescription %]
+                      [% CATCH %]
+                        NO EXISTE EL SOCIO ([% sancion.getNro_socio %])
+                      [% END %]
+                    </td>
                     <td>
                       [% TRY %]
                         [% IF sancion.ref_tipo_sancion.ref_tipo_prestamo.getId_tipo_prestamo %]
