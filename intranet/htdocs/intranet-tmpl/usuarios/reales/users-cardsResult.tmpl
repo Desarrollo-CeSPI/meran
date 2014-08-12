@@ -109,6 +109,24 @@
                                                 action =>  "consultar(search2);",
                                             );
     [% END %]
+
+    [% PERL %]
+                    print C4::AR::Filtros::action_button(    
+                            button  => 'btn click btn-primary',
+                            title   => " [% 'Exportar a PDF' | i18n %]",
+                            action  => 'imprimirReporte("filtros_reportes","PDF");',
+                            icon    => "icon-white icon-inbox",
+                      ) ;
+    [% END %]
+      
+     [% PERL %]
+                    print C4::AR::Filtros::action_button(    
+                            button  => 'btn click btn-primary',
+                            title   => " [% 'Exportar a XLS' | i18n %]",
+                            action  => 'imprimirReporte("filtros_reportes","XLS");',
+                            icon    => "icon-white icon-inbox",
+                      ) ;
+        [% END %]
 </div>
 
  [% ELSE%]
