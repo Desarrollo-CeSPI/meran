@@ -199,7 +199,8 @@ sub migrar {
 					#UI
 					push(@nuevo_ejemplar, ['995','c', 'BLGL']);
 					push(@nuevo_ejemplar, ['995','d', 'BLGL']);
-					push(@nuevo_ejemplar, ['995','o', 'CIRC0000']);
+					# Las revistas van con disponiblidad de sala de lectura ticket #10078
+					push(@nuevo_ejemplar, ['995','o', 'CIRC0001']);
 					push(@nuevo_ejemplar, ['995','e', 'STATE002']);
 					# La signatura en las revistas se encuentra en el CODEN. Ticket #9642
 					push(@nuevo_ejemplar, ['995','t', $material->{'CODEN'}]); 

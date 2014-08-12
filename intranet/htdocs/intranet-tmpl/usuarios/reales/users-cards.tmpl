@@ -1,7 +1,8 @@
 <div class="filtros_reportes">
 
   <section class="center-section-form"> 
-    <form class="form-horizontal" name="filtros_reportes" id="filtros_reportes" onsubmit="return false;">
+    <form class="form-horizontal" name="filtros_reportes" id="filtros_reportes" action="[% url_prefix %]/usuarios/reales/users-cardsResult.pl" >
+      <input type="hidden" name="tipoAccion" value="EXPORTAR_USUARIOS">
       <fieldset>
         <div class="control-group">
                   <label class="control-label" for="apellido">[% "Apellido" | i18n %]</label>
