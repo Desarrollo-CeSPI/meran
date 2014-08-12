@@ -118,6 +118,7 @@ sub connectTwitter{
         consumer_secret     => $consumer_secret,
         access_token        => $token,
         access_token_secret => $token_secret,
+        ssl                 => 1,  ## enable SSL! ##
     );
     
     return $nt;
