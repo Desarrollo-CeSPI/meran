@@ -51,10 +51,10 @@ if (!$nivel1){
 }
 
 #si ponen un id que no existe muestra internal server error 
-eval{ 
+#eval{ 
     my ($cant_total)            =  C4::AR::Nivel3::detalleCompletoINTRA($id1, $t_params);
     $t_params->{'cant_total'}   = $cant_total;
-};
+#};
 
 if($@){
     C4::AR::Utilidades::redirectAndAdvice('U614');

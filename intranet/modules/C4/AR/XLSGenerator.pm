@@ -356,6 +356,53 @@ sub exportarReporteBusquedas{
         print $ss->data(); 
 }
 
+
+sub exportarReporteUsuarios{
+
+     my ($usuarios) = @_;
+
+     my @headers_tabla= (
+                decode('utf8', C4::AR::Filtros::i18n("Apellido y Nombre")),
+                decode('utf8', C4::AR::Filtros::i18n("Tarjeta de Id")),
+                decode('utf8', C4::AR::Filtros::i18n("Legajo")),
+                decode('utf8', C4::AR::Filtros::i18n("Fecha último acceso")),
+                decode('utf8', C4::AR::Filtros::i18n("F. Activación")),
+                decode('utf8', C4::AR::Filtros::i18n("Fecha alta")),
+                decode('utf8', C4::AR::Filtros::i18n("Categoria")),
+                decode('utf8', C4::AR::Filtros::i18n("Regularidad"))
+
+        ); 
+
+     my $ss = Spreadsheet::WriteExcel::Simple->new;
+#-------- Se escriben los headers en el excel con lo q contiene el array headers_tabla ------------
+     $ss->write_bold_row(\@headers_tabla);   
+
+#-------- Se escriben los datos en el excel con lo q contiene el array $tabla_a_exportar ------------
+     
+     foreach my $socio (@$usuarios){
+        my @fila_tabla = ();
+
+        $fila_tabla[0] =  decode('utf8', $socio->persona->getApeYNom());
+        $fila_tabla[1] =  decode('utf8', $socio->getNro_socio);
+        $fila_tabla[2] =  decode('utf8', $socio->persona->legajo);
+
+        if($socio->getLastLoginAll){
+            $fila_tabla[3] =  decode('utf8', $socio->getLastLoginAllFormatted);
+        }else{
+            $fila_tabla[3] =  C4::AR::Filtros::i18n("--------");
+        }
+
+        $fila_tabla[4] = $socio->getFecha_alta();        
+        $fila_tabla[5] = $socio->persona->getFecha_alta();   
+        $fila_tabla[6] = $socio->categoria->getDescription(); 
+        $fila_tabla[7] = $socio->esRegularToString();
+
+        $ss->write_row(\@fila_tabla);       
+     }
+
+        print $ss->data(); 
+}
+
 END { }       # module clean-up code here (global destructor)
 
 1;

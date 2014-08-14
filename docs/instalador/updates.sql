@@ -457,3 +457,6 @@ UPDATE rep_historial_circulacion SET tipo_operacion="NOTIFICACION" WHERE tipo_op
 UPDATE rep_historial_circulacion SET tipo_operacion="NOTIFICACION CANCELACION" WHERE tipo_operacion="notification cancelation";
 
 ### 0.10.2 ###
+# se rompieron los dumps por las tablas de usuarios anonimizados.
+ALTER TABLE  usr_socio_anonymous  CHANGE   cumple_requisito    cumple_requisito  VARCHAR( 255 ) NOT NULL;
+ALTER TABLE  usr_socio_anonymous ADD  last_login_all TIMESTAMP NOT NULL AFTER  last_login;

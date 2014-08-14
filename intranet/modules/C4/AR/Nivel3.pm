@@ -609,6 +609,8 @@ sub detalleCompletoINTRA {
             eval {
                 $new_id2 = $nivel2_array_ref->[$i]->getId2;
             };
+   C4::AR::Debug::debug("\n detalleNivel3 \n");
+
 
         #eval{
             my ($hash_nivel2) = detalleNivel3($new_id2,$nivel1->db);
