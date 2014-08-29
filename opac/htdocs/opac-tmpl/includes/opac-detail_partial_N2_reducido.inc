@@ -47,9 +47,19 @@
 
                                 [% ELSE %]
                                     [% IF portada_registro %]
-                                        <a class="fancylink" href="/uploads/covers/[% portada_registro_big %]">
-                                            <img src="/uploads/covers/[% portada_registro_medium %]" class="book_cover" title="Portada" alt="[% 'Portada del ejemplar' | i18n %]" />
-                                        </a>
+                                        [% IF portada_registro_big %]
+                                             <a class="fancylink" href="/uploads/covers/[% portada_registro_big %]">
+                                                 <img class="book_cover" alt="Portada" src="/uploads/covers/[% portada_registro %]" title="Portada" alt="[% 'Portada del ejemplar' | i18n %]" />
+                                             </a>
+                                         [% ELSE %]
+                                           [% IF portada_registro_medium %]
+                                               <a class="fancylink" href="/uploads/covers/[% portada_registro_medium %]">
+                                                   <img class="book_cover" alt="Portada" src="/uploads/covers/[% portada_registro %]" title="Portada" alt="[% 'Portada del ejemplar' | i18n %]" />
+                                               </a>
+                                           [% ELSE %]
+                                                   <img class="book_cover" alt="Portada" src="/uploads/covers/[% portada_registro %]" title="Portada" alt="[% 'Portada del ejemplar' | i18n %]" />
+                                           [% END %]
+                                      [% END %]
                                     [% END %]
                                 [% END %]
                                 </div>       
