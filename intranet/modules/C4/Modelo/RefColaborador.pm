@@ -11,6 +11,7 @@ __PACKAGE__->meta->setup(
         id              => { type => 'serial', overflow => 'truncate', not_null => 1 },
         codigo          => { type => 'character', overflow => 'truncate',length => 10 ,not_null => 1 },
         descripcion     => { type => 'varchar', overflow => 'truncate', length => 255, not_null => 1 },
+        abreviatura     => { type => 'character', overflow => 'truncate',length => 10 ,not_null => 1 },
     ],
 
     primary_key_columns => [ 'id' ],
@@ -50,6 +51,19 @@ sub setCodigo{
     my ($codigo) = @_;
 
     $self->codigo($codigo);
+}
+    
+sub getAbreviatura{
+    my ($self) = shift;
+
+    return (C4::AR::Utilidades::trim($self->abreviatura));
+}
+    
+sub setCodigo{
+    my ($self) = shift;
+    my ($abreviatura) = @_;
+
+    $self->abreviatura($abreviatura);
 }
 
     

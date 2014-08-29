@@ -1467,11 +1467,13 @@ sub getAllPrestamosVencidos{
     my @arrayPrestamos;
     my $fecha_vencimiento;
 
+C4::AR::Debug::debug("Prestamos => getAllPrestamosVencidos => PRESTAMOS:::::".scalar(@$prestamos_array_ref));
+
     if(scalar(@$prestamos_array_ref) > 0){
         foreach my $prestamo (@$prestamos_array_ref){
             # $prestamo->fecha_vencimiento_reporte($prestamo->getFecha_vencimiento);
             # $prestamo->save();
-            if ($prestamo->estaVencido()){  
+           if ($prestamo->estaVencido()){  
                 $fecha_vencimiento = $prestamo->getFecha_vencimiento();  
 
                 # C4::AR::Debug::debug("Prestamos => getAllPrestamosVencidos => fecha_inicio " . $fecha_inicio . " fecha vto " . $fecha_vencimiento);
@@ -1480,7 +1482,7 @@ sub getAllPrestamosVencidos{
                     # C4::AR::Debug::debug("Prestamos => getAllPrestamosVencidos => fecha de vencimiento => " . $prestamo->getFecha_vencimiento());    
                     push(@arrayPrestamos,($prestamo));
                 }  
-            }
+           }
         }  
         return (\@arrayPrestamos);     
     }else{
