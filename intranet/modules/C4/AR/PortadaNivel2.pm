@@ -59,7 +59,7 @@ sub agregar{
         if ($parametros->{'borrar_imagenes_registro'}){
             my $isbn                                = C4::AR::Nivel2::getISBNById2($parametros->{'id2'});
 
-            C4::AR::Debug::debug("PortadaNivel2 => agregar => Se eliminar las tapas del registro");
+            C4::AR::Debug::debug("PortadaNivel2 => agregar => Se eliminan las tapas del registro");
 
             if ($isbn) {
             # Elimino las portadas del Registro
