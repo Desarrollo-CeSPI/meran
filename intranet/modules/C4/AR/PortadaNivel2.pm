@@ -36,6 +36,7 @@ sub agregar{
 
     #hardcodeado
     my $path                = C4::Context->config("portadasNivel2Path");
+    my $path_covers         = C4::Context->config("covers");
 
     my @arrayImagenesSaved;
 
@@ -53,6 +54,21 @@ sub agregar{
                 unlink($path."/".$file);
             }
             
+        }
+
+        if ($parametros->{'borrar_imagenes_registro'}){
+            my $isbn                                = C4::AR::Nivel2::getISBNById2($parametros->{'id2'});
+
+            C4::AR::Debug::debug("PortadaNivel2 => agregar => Se eliminar las tapas del registro");
+
+            if ($isbn) {
+            # Elimino las portadas del Registro
+                my $portada                         = C4::AR::PortadasRegistros::getPortadaByIsbn($isbn);
+                $portada->delete();
+                unlink($path_covers."/".$portada->getSmall());
+                unlink($path_covers."/".$portada->getMedium());
+                unlink($path_covers."/".$portada->getLarge());
+            }
         }
 
         #recorremos todas las imagenes y las guardamos      
@@ -144,8 +160,7 @@ sub getPortadasEdicion{
         
     push (@filtros, (id2 => {eq => $id2}) );
     
-    my $portadas_edicion_array_ref = C4::Modelo::CatRegistroMarcN2Cover::Manager->get_cat_registro_marc_n2_cover( query => \@filtros,
-                                                                              );
+    my $portadas_edicion_array_ref = C4::Modelo::CatRegistroMarcN2Cover::Manager->get_cat_registro_marc_n2_cover( query => \@filtros );
 
     if(scalar(@$portadas_edicion_array_ref) > 0){
     
