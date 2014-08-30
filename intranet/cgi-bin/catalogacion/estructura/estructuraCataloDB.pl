@@ -977,14 +977,28 @@ elsif($tipoAccion eq "SHOW_ADD_PORTADA_EDICION"){
 
     use C4::AR::PortadaNivel2;
 
-    my $portadasEdicion = C4::AR::PortadaNivel2::getPortadasEdicion($obj->{'id2'});
+    my $portadasEdicion             = C4::AR::PortadaNivel2::getPortadasEdicion($obj->{'id2'});
 
-    if($portadasEdicion){
+    if($portadasEdicion) {
         $t_params->{'portadasEdicion'}  = $portadasEdicion;
         $t_params->{'editing'}          = 1;
     }else{
         $t_params->{'portadasEdicion'}  = 0;
         $t_params->{'editing'}          = 0;
+    }
+
+    my $isbn                        = C4::AR::Nivel2::getISBNById2($obj->{'id2'});
+
+    if ($isbn) {
+        my $portada                         = C4::AR::PortadasRegistros::getPortadaByIsbn($isbn);
+
+        if($portada){
+            $t_params->{'editing'}              = 1;
+            $t_params->{'portadasRegistro'}     = $portada;
+            $t_params->{'S'}                    = $portada->getSmall();
+            $t_params->{'M'}                    = $portada->getMedium();
+            $t_params->{'L'}                    = $portada->getLarge();
+        }
     }
 
     $t_params->{'id1'}      = $obj->{'id1'};

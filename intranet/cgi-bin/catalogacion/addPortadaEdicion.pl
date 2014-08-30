@@ -70,9 +70,10 @@ if($query->param('cantidad')){
 
 my %paramHash;
 
-$paramHash{'id2'}               = $id2;
-$paramHash{'arrayFiles'}        = \@arrayFiles;
-$paramHash{'arrayFilesDelete'}  = \@arrayDeleteImages;
+$paramHash{'id2'}                       = $id2;
+$paramHash{'borrar_imagenes_registro'}  = $query->param('eliminar_imagenes_registro');
+$paramHash{'arrayFiles'}                = \@arrayFiles;
+$paramHash{'arrayFilesDelete'}          = \@arrayDeleteImages;
 
 my $authnotrequired = 0;
 

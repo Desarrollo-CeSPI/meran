@@ -38,14 +38,16 @@
     </div>                         
 
 [% IF portadasEdicion %]
+
+    Portada(s) de la Edici&oacute;n
             
     <div class="control-group">
         <label class="control-label" >[% "Imagen/es a eliminar" | i18n %]</label>
         <div class="controls">
             [% FOREACH p IN portadasEdicion %]
                 <div class="portadaEdicionImage">
-                    <a class="fancylink" id="imagen_[% imagen.getImageName %]" rel="group" href="https://[% SERVER_ADDRESS %]/uploads/covers-added/[% p.getImageName %]">
-                        <img border="0" src="https://[% SERVER_ADDRESS %]/uploads/covers-added/[% p.getImageName %]" style="width: 60%; max-width: 120px;" >
+                    <a class="fancylink" id="imagen_[% imagen.getImageName %]" rel="group" href="/uploads/covers-added/[% p.getImageName %]">
+                        <img border="0" src="/uploads/covers-added/[% p.getImageName %]" style="width: 60%; max-width: 120px;" >
                     </a>
                     <input type="checkbox" name="eliminar_imagen_[% p.getId %]"  id="[% p.getImageName %]" />
                 </div>
@@ -56,6 +58,33 @@
     </div>
     
 [% END %]
+
+[% IF portadasRegistro %]
+
+    Portadas del Registro    
+
+    <div class="control-group">
+    
+        <div class="controls">
+                    <a class="fancylink" id="imagen_[% S %]" rel="group" href="/uploads/covers/[% S %]">
+                        <img border="0" src="/uploads/covers/[% S %]" style="width: 60%; max-width: 120px;" >
+                    </a>
+
+                    <a class="fancylink" id="imagen_[% M %]" rel="group" href="/uploads/covers/[% M %]">
+                        <img border="0" src="/uploads/covers/[% M %]" style="width: 60%; max-width: 120px;" >
+                    </a>
+
+                    <a class="fancylink" id="imagen_[% L %]" rel="group" href="/uploads/covers/[% L %]">
+                        <img border="0" src="/uploads/covers/[% L %]" style="width: 60%; max-width: 120px;" >
+                    </a>
+
+        </div>
+        
+        Eliminar portada(s) recolectadas autom&aacute;ticamente. <input type="checkbox" name="eliminar_imagenes_registro"  />
+    </div>
+    
+[% END %]
+
 
 </div>
 
