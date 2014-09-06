@@ -1848,7 +1848,7 @@ function cloneCampo(marc_group_id){
  
 }
 
-function remove(id){
+function removeCampo(id){
     var campo_temp      = _getIndexCampoMARC_conf_ById(id);       //recupero el campo segun el id pasado por parametro
     var _from           = campo_temp;            //posicion del campo en el arreglo de subcampos
     var _to             = campo_temp;
@@ -1943,7 +1943,7 @@ function crearBotonEliminarCampoRepetible(obj, show){
 // display = "block";
 
     if(obj.getRepetible() == '1'){
-        return '<li id="boton_eliminar_'+ obj.getIdCompCliente() +'" style= "display:' + display + '"><a class="click" onclick=remove("'+ obj.getIdCompCliente() +'")><i class="icon-trash"></i> Eliminar</a></li>';
+        return '<li id="boton_eliminar_'+ obj.getIdCompCliente() +'" style= "display:' + display + '"><a class="click" onclick=removeCampo("'+ obj.getIdCompCliente() +'")><i class="icon-trash"></i> Eliminar</a></li>';
     }else{  
         return "";
     }
