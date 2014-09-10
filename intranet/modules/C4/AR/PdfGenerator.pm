@@ -584,7 +584,7 @@ sub libreDeuda {
     my $nombre = $socio->persona->getApeYNom;
     my $dni    = $socio->persona->getNro_documento;
     my $categ = $socio->categoria->getDescription;
-    my $branchname = $socio->ui->getNombrePDF;
+    my $branchname = $socio->ui->getNombre;
     my $branchcode= $socio->getId_ui ||'default';
     my $biblio=  C4::AR::Referencias::obtenerDefaultUI();
     my $escudo = C4::Context->config('private_path') . '/images/escudo-DEFAULT.jpg';
@@ -595,11 +595,11 @@ sub libreDeuda {
     my $mes  = &C4::Date::mesString( $datearr[4] + 1 );
     my $dia  = $datearr[3];
     my $fecha= "La Plata ".$dia." de ".$mes." de ".$anio;
-    my $nombre = Encode::decode_utf8($socio->{'persona'}->{'nombre'});
-    my $apellido = Encode::decode_utf8($socio->{'persona'}->{'apellido'});
+    my $nombre = $socio->{'persona'}->{'nombre'};
+    my $apellido = $socio->{'persona'}->{'apellido'};
     my @cuerpo_mensaje;
 
-    $cuerpo_mensaje[0]  = Encode::decode_utf8(C4::AR::Preferencias::getValorPreferencia('libreDeudaMensaje'));
+    $cuerpo_mensaje[0]  = C4::AR::Preferencias::getValorPreferencia('libreDeudaMensaje');
     $cuerpo_mensaje[0]  =~ s/SOCIO/$nombre\ $apellido/;
     $cuerpo_mensaje[0]  =~ s/UI_NAME/$branchname/;
     $cuerpo_mensaje[0]  =~ s/DOC/$socio->{'persona'}->{'nro_documento'}/;

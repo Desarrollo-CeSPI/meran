@@ -1,7 +1,6 @@
 [% USE HTML %]
 
 <link rel="stylesheet" type="text/css" href="/intranet-tmpl/intranet-structure.css">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 
 <fieldset class="">
     <div class="encabezado">
@@ -19,7 +18,7 @@
         <br>
         [% biblio.titulo_formal %]<br>
         [% "BIBLIOTECA" | i18n  %]<br>
-        [% biblio.getNombrePDF %]<br><br>
+        [% biblio.getNombre %]<br><br>
     </div>
         [% IF print_format == "1" %] 
                 <br />
@@ -66,8 +65,8 @@
     </div>   
     <div id="pie" style="clear:both; font-size:9px">
    <br> <hr> 
-              [% "Biblioteca: " | i18n  %] [% biblio.getNombrePDF %][% "&nbsp;" %]<br> 
-              [% "Direcci&oacute;n:" | i18n  %]  [% biblio.getDireccionPDF %][% "&nbsp;" %]
+              [% "Biblioteca: " | i18n  %] [% biblio.getNombre %][% "&nbsp;" %]<br> 
+              [% "Direcci&oacute;n:" | i18n  %]  [% biblio.getDireccion %][% "&nbsp;" %]
               [% "Tel/Fax:" | i18n  %]  [% biblio.getTelefono %]  [% IF biblio.getFax %] / [% biblio.getFax %][% END %] [% "&nbsp;" %] <br>
               [% "Sitio web:" | i18n  %] [% biblio.getUrlServidor %][% "&nbsp;" %]<br>
               [% "E-mail:" | i18n  %] [% biblio.getEmail %][% "&nbsp;" %]<br>
