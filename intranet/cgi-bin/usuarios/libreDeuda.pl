@@ -58,7 +58,7 @@ if (!($msg_object->{'error'})){
 
         my ($cuerpo_mensaje, $escudo, $escudoUI, $fecha, $titulo, $biblio) = C4::AR::PdfGenerator::libreDeuda($socio);
         $t_params->{'cuerpo_mensaje'}  = @$cuerpo_mensaje[0];
-        
+
 	    $t_params->{'escudo'}  = $escudo;
 	    $t_params->{'escudoUI'}  = $escudoUI;
 	    $t_params->{'fecha'}  = $fecha;
@@ -68,6 +68,9 @@ if (!($msg_object->{'error'})){
         $t_params->{'print_format'}     = C4::AR::Preferencias::getValorPreferencia('libre_deuda_fill_a4');
 
         my $out         = C4::AR::Auth::get_html_content($template, $t_params, $session);
+        
+        C4::AR::Debug::debug($out);
+
         my $filename    = C4::AR::PdfGenerator::pdfFromHTML($out);
         print C4::AR::PdfGenerator::pdfHeader();
 # 
