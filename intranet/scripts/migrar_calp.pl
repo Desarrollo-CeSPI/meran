@@ -860,6 +860,24 @@ sub generaCodigoBarraFromMarcRecord{
     		my $fasciculos .= "-".$material->{'Serie_NumHasta'};
     	}
     	my $volumen = $material->{'Serie_Volumen'};
+
+
+ 		my $nota = $material->{'Notas'};
+		# Se limpian los <>
+		$nota=~ s/\b(<|>)\b//gi;
+
+    	if($material->{'Serie_AnioInterno'}){
+    		my $anio_interno = "Año Int.: ".$material->{'Serie_AnioInterno'};
+    
+    		if($nota){
+    			$nota .= " ".$anio_interno;
+    		}
+    		else{
+    			$nota = $anio_interno;
+    		}
+    	}
+	
+		print "NOTA ".$nota."\n";
 		#Lista de campos
 		#Tenemos Niveles 1 y 2, si ya existe el título, se agrega un nuevo 2, 
 		#sino se agregan los 2 niveles
@@ -869,7 +887,7 @@ sub generaCodigoBarraFromMarcRecord{
 			['245','a',$material->{'Titulo'}],
 			['245','b',$material->{'TituloUniforme'}],
 			['310','a',$material->{'Frecuencia'}],
-			['500','a',$material->{'Notas'}],
+			['500','a',$nota],
 			['520','a',$material->{'Resumen'}],	
 			['246','a',$material->{'TituloOriginal'}],	
 			['030','a',$material->{'CODEN'}],
