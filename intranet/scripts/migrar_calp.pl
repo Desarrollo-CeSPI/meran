@@ -876,8 +876,6 @@ sub generaCodigoBarraFromMarcRecord{
     			$nota = $anio_interno;
     		}
     	}
-	
-		print "NOTA ".$nota."\n";
 		#Lista de campos
 		#Tenemos Niveles 1 y 2, si ya existe el título, se agrega un nuevo 2, 
 		#sino se agregan los 2 niveles
@@ -908,7 +906,7 @@ sub generaCodigoBarraFromMarcRecord{
 			#Revista
 			['863','i',$material->{'Serie_AnioReal'}],
 			['863','a',$material->{'Serie_Volumen'}],
-			['362','a',$material->{'Serie_Fecha'}]
+			['863','b',$material->{'Serie_Fecha'}]
 			);
 
 		if($template eq "ANA"){
