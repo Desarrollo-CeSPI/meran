@@ -221,7 +221,11 @@ sub migrar {
                     my $marc_revista =  $marc_record_n2->clone();
                     my $field863 = $marc_revista->field('863');
                     if($field863){
-                    	$field863->add_subfields('b' => $rev->{'numero'}); 
+                    	if ($field863->subfields('b')) {
+                    		$field863->update( 'b' => $rev->{'numero'}.' '.$field863->subfields( 'b' ) );
+                    	}else{
+                    		$field863->add_subfields('b' => $rev->{'numero'}); 
+                    	}
                     } else {
                     	$field863 = MARC::Field->new('863', '', '' ,'b' => $rev->{'numero'});
                     	$marc_revista->add_fields($field863);
