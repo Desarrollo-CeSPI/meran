@@ -151,7 +151,7 @@ sub agregarDatoAMarcRecord {
             if ($fields[-1]){
                 $subf = $fields[-1]->subfield($detalle->getSubcampoDestino);
             #Hay que ver si es repetible
-                if((!$subf) || (($subf)&&($estructura->getRepetible))) {
+                if((!$subf) || (($subf)&&($estructura && $estructura->getRepetible))) {
                     #Existe el campo pero no el subcampo o existe el subcampo pero es repetible, agrego otro subcampo
                     $fields[-1]->add_subfields( $detalle->getSubcampoDestino() => $dato );
                     $done=1;
