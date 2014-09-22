@@ -686,3 +686,6 @@ INSERT INTO ref_colaborador (id, codigo, descripcion, abreviatura) VALUES
 (211, 'wdc', 'talador???', ''),
 (212, 'wde', 'grabador en madera??', ''),
 (213, 'wit', 'testigo?', '');
+
+### 0.10.3 ###
+ALTER TABLE  usr_socio CHANGE  cumple_requisito  cumple_requisito VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT  '0000000000:00:00';
