@@ -753,6 +753,8 @@ sub guardarNivel3DeImportacion{
     $params_n3->{'ui_origen'}=$nivel3->{'ui_origen'};
     $params_n3->{'ui_duenio'}=$nivel3->{'ui_duenio'};
 
+    $params_n3->{'responsable'} = 'meranadmin'; #No puede no tener un responsable
+    
     $params_n3->{'cantEjemplares'} = 1;
     
     #Hay que autogenerar el barcode o no???
