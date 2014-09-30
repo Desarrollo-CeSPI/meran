@@ -221,8 +221,8 @@ sub migrar {
                     my $marc_revista =  $marc_record_n2->clone();
                     my $field863 = $marc_revista->field('863');
                     if($field863){
-                    	if ($field863->subfields('b')) {
-                    		$field863->update( 'b' => $rev->{'numero'}.' '.$field863->subfields( 'b' ) );
+                    	if ($field863->subfield('b')) {
+                    		$field863->update( 'b' => $rev->{'numero'}.' '.$field863->subfield( 'b' ) );
                     	}else{
                     		$field863->add_subfields('b' => $rev->{'numero'}); 
                     	}

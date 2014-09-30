@@ -132,7 +132,9 @@ sub agregarDatoAMarcRecord {
     my ($self)      = shift;
     my ($marc_record, $detalle, $dato) = @_;
 
-
+        my $ind1='#';
+        my $ind2='#';
+        
         my $estructura  = C4::AR::EstructuraCatalogacionBase::getEstructuraBaseFromCampoSubCampo($detalle->getCampoDestino, $detalle->getSubcampoDestino);
         #Lo mando a un campo por ahora
         my $new_field=0;
@@ -162,17 +164,25 @@ sub agregarDatoAMarcRecord {
                 #No existe el campo o existe y no es repetible, se crea uno nuevo
                 my $campo=$detalle->getCampoDestino;
                 my $subcampo=$detalle->getSubcampoDestino;
-                if ((@fields)&&(($campo eq '100')&&($subcampo eq 'a'))){
-                   #Parche de AUTORES, si hay muchos 100 a => el resto va al 700 a
-                        $campo='700';
+
+                if($campo eq '650'){
+                    #si hay varios temas?
+                    my @temas_separados = split(',', $dato);  
+                    foreach my $tema (@temas_separados){
+                           $marc_record->append_fields(MARC::Field->new($campo, $ind1, $ind2,$subcampo => C4::AR::Utilidades::trim($tema)));
+                    }
+                }else{
+
+                    if ((@fields)&&(($campo eq '100')&&($subcampo eq 'a'))){
+                       #Parche de AUTORES, si hay muchos 100 a => el resto va al 700 a
+                            $campo='700';
+                    }
+                    if ((@fields)&&(($campo eq '110')&&($subcampo eq 'a'))) {
+                       #Parche de AUTORES, si hay muchos 110 a => el resto va al 710 a
+                            $campo='710';
+                    }
+                    $new_field= MARC::Field->new($campo, $ind1, $ind2,$subcampo => $dato);
                 }
-                if ((@fields)&&(($campo eq '110')&&($subcampo eq 'a'))) {
-                   #Parche de AUTORES, si hay muchos 110 a => el resto va al 710 a
-                        $campo='710';
-                }
-                my $ind1='#';
-                my $ind2='#';
-                $new_field= MARC::Field->new($campo, $ind1, $ind2,$subcampo => $dato);
             }
         }
         
