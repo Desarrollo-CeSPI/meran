@@ -590,7 +590,7 @@ function imprimirTicket(tickets){
     $('#ticket').load(URL_PREFIX+"/circ/ticket.pl?token="+token+"&comp="+comp,this.href);
     $('#ticket').hide();
     
-    linkComp= "<a onclick=mostrarComprobante();>Imprimir</a>";
+    linkComp= "<a href='#' class='btn btn-info click' onclick=mostrarComprobante();>Imprimir</a>";
     $('#mensajes').append(linkComp);
     
 }

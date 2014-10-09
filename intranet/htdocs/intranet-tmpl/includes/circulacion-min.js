@@ -1,25 +1,3 @@
-/*
- * Meran - MERAN UNLP is a ILS (Integrated Library System) wich provides Catalog,
- * Circulation and User's Management. It's written in Perl, and uses Apache2
- * Web-Server, MySQL database and Sphinx 2 indexing.
- * Copyright (C) 2009-2013 Grupo de desarrollo de Meran CeSPI-UNLP
- *
- * This file is part of Meran.
- *
- * Meran is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * Meran is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with Meran.  If not, see <http://www.gnu.org/licenses/>.
- */
-
 var comp;var INFO_PRESTAMOS_ARRAY=new Array();var objAH;function infoPrestamo(){this.id3='';this.id3Old='';this.tipoPrestamo;}
 function objeto_usuario(){this.text;this.ID;}
 function detalleUsuario(nro_socio){objAH=new AjaxHelper(updateInfoUsuario);objAH.debug=true;objAH.cache=true;objAH.showOverlay=true;objAH.url=URL_PREFIX+'/circ/detalleUsuario.pl';objAH.nro_socio=nro_socio;objAH.sendToServer();}
@@ -67,5 +45,5 @@ $('#confirmar_div').modal('hide');}
 function updateInfoDevolver(responseText){}
 function imprimirTicket(tickets){var comprobantes=new Array();if(tickets.length>0){for(i=0;i<tickets.length;i++){comprobantes[i]=tickets[i];}}
 comp=JSONstring.make(comprobantes);if(AUTO_GENERAR_COMPROBANTE==1){window.open(URL_PREFIX+"/circ/ticket.pl?token="+token+"&comp="+comp,this.href);window.close();}
-$('#ticket').load(URL_PREFIX+"/circ/ticket.pl?token="+token+"&comp="+comp,this.href);$('#ticket').hide();linkComp="<a onclick=mostrarComprobante();>Imprimir</a>";$('#mensajes').append(linkComp);}
+$('#ticket').load(URL_PREFIX+"/circ/ticket.pl?token="+token+"&comp="+comp,this.href);$('#ticket').hide();linkComp="<a href='#' class='btn btn-info click' onclick=mostrarComprobante();>Imprimir</a>";$('#mensajes').append(linkComp);}
 function mostrarComprobante(responseText){window.open(URL_PREFIX+"/circ/ticket.pl?token="+token+"&comp="+comp,this.href);}

@@ -627,20 +627,41 @@ sub aplicarImportacion {
         #Nuevo id1
         $id1=$n1->getId1;
 
-    $self->debug("DUPLICADO CON: ".$id1);
-    my $grupos = $n1->getGrupos();
-    my $primer_grupo=$grupos->[0];
-    if($primer_grupo){
-        $self->debug("DUPLICADO CON: ".$primer_grupo->getId2);
-            my $niveles2 = $detalle->{'nivel2'};
-            foreach my $nivel2 (@$niveles2){
+        $self->debug("DUPLICADO CON: ".$id1);
+        my $grupos = $n1->getGrupos();
+        #Se busca si ya existe el volumen o el grupo, si pasa eso se agrega solo el ejemplar, sino se agrega el nivel 2 completo
+
+           # my $primer_grupo=$grupos->[0];
+           # if($primer_grupo){
+           #    $self->debug("DUPLICADO CON: ".$primer_grupo->getId2);
+        my $niveles2 = $detalle->{'nivel2'};
+        foreach my $nivel2 (@$niveles2){
+            my $existe_grupo=0;
+            foreach my $grupo (@$grupos){
+                if ($grupo->getVolumen() && ($grupo->getVolumen() eq $nivel2->{'marc_record'}->subfield('505','g'))){                
+                    print "VOLUMEN ".$grupo->getVolumen()." EXISTE!!!\n";
+                    #Existe: Agrego ejemplares únicamente
+                    $existe_grupo=1;
                     my $niveles3 = $nivel2->{'nivel3'};
                     foreach my $nivel3 (@$niveles3){
-                        my ($msg_object3) = $self->guardarNivel3DeImportacion($id1,$primer_grupo->getId2,$nivel3);
+                     my ($msg_object3) = $self->guardarNivel3DeImportacion($id1,$grupo->getId2,$nivel3);
                     }
+                }
             }
-    }
-} else {
+            if(!$existe_grupo){
+                #Se debe crear completo niveles 2 y 3
+                my ($msg_object2,$id1,$id2) = $self->guardarNivel2DeImportacion($id1,$nivel2);
+                C4::AR::Debug::debug("Nivel 2 creado ?? ".$msg_object2->{'error'}." id=".$id2);
+                if (!$msg_object2->{'error'}){
+                  my $niveles3 = $nivel2->{'nivel3'};
+                  foreach my $nivel3 (@$niveles3){
+                    my ($msg_object3) = $self->guardarNivel3DeImportacion($id1,$id2,$nivel3);
+                    C4::AR::Debug::debug("Nivel 3 creado ?? ".$msg_object3->{'error'});
+                  }
+                } 
+            }
+        }
+    } else {
     #NO EXISTE SE IMPORTA TODO!!!
         
         $self->debug("NO EXISTE SE IMPORTA TODO!!! ");
@@ -655,7 +676,6 @@ sub aplicarImportacion {
         my $niveles2 = $detalle->{'nivel2'};
         
         foreach my $nivel2 (@$niveles2){
-            
           my ($msg_object2,$id1,$id2) = $self->guardarNivel2DeImportacion($id1,$nivel2);
            C4::AR::Debug::debug("Nivel 2 creado ?? ".$msg_object2->{'error'}." id=".$id2);
             if (!$msg_object2->{'error'}){
@@ -663,7 +683,6 @@ sub aplicarImportacion {
               my $niveles3 = $nivel2->{'nivel3'};
               
               foreach my $nivel3 (@$niveles3){
-                  
                 my ($msg_object3) = $self->guardarNivel3DeImportacion($id1,$id2,$nivel3);
                 C4::AR::Debug::debug("Nivel 3 creado ?? ".$msg_object3->{'error'});
               }

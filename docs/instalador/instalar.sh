@@ -53,11 +53,11 @@ instalacionNueva(){
       echo "Generando la Base de datos"
       if [ -z $ROOT_PASS_BASE ]
       then
-		stty -echo
-		echo "Necesitamos un password para acceder al motor con el usuario $ROOT_USER_BASE."
-		read -p "Ingreselo:" ROOT_PASS_BASE
-		stty echo
-	  fi
+    		stty -echo
+    		echo "Necesitamos un password para acceder al motor con el usuario $ROOT_USER_BASE."
+    		read -p "Ingreselo:" ROOT_PASS_BASE
+    		stty echo
+  	  fi
       generarPermisosBDD
       actualizarBDD
       #Configurar cron
@@ -164,7 +164,7 @@ generarPermisosBDD()
   sed s/reemplazarIPASS/$(escaparVariable $IPASS_BDD_MERAN)/g /tmp/$ID.permisosbdd3 > /tmp/$ID.permisosbdd2
   head -n3 /tmp/$ID.permisosbdd2 > /tmp/$ID.permisosbdd
   cat $sources_MERAN/base.sql >>  /tmp/$ID.permisosbdd
-  tail -n1 /tmp/$ID.permisosbdd2 >> /tmp/$ID.permisosbdd
+  tail -n2 /tmp/$ID.permisosbdd2 >> /tmp/$ID.permisosbdd
   echo "Creando la base de Datos..."
   mysql -h$HOST_BDD_MERAN --default-character-set=utf8 -u$ROOT_USER_BASE --password=$ROOT_PASS_BASE < /tmp/$ID.permisosbdd
   if [ $? -ne 0 ]
