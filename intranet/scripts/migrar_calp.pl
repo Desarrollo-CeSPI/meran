@@ -868,7 +868,7 @@ sub generaCodigoBarraFromMarcRecord{
 
  		my $nota = $material->{'Notas'};
 		# Se limpian los <>
-		$nota=~ s/(<|>)//gi;
+		$nota =~ s/(<|>|&lt;|&gt;)//gi;
 
     	if($material->{'Serie_AnioInterno'}){
     		my $anio_interno = "Año Int.: ".$material->{'Serie_AnioInterno'};

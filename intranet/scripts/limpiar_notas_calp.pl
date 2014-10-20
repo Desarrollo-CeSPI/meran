@@ -20,23 +20,31 @@
 # You should have received a copy of the GNU General Public License
 # along with Meran.  If not, see <http://www.gnu.org/licenses/>.
 #
-
 use MARC::Record;
 use C4::Modelo::CatRegistroMarcN1;
 use C4::Modelo::CatRegistroMarcN1::Manager;
 
-
 my $nivel1_array_ref = C4::AR::Nivel1::getNivel1Completo();
-
+my $cambios = 0;
 foreach my $nivel1 (@$nivel1_array_ref){
-    
+
     my $marc_record = MARC::Record->new_from_usmarc($nivel1->getMarcRecord());
     my $nota = C4::AR::Utilidades::escapeData($marc_record->subfield("500","a"));
-    #Quito <>
-    $nota=~ s/(<|>)//gi;
-    $marc_record->field('500')->update( "a" => $nota );
-    $nivel1->setMarcRecord($marc_record->as_usmarc());
-    $nivel1->save();
+
+
+    if ($nota){
+        #Quito <>
+        my $nota_orig = $nota;
+        $nota=~ s/(<|>|&lt;|&gt;)//gi;
+        if($nota ne $nota_orig ){
+                print $nota."\n";
+                $marc_record->field('500')->update( "a" => $nota );
+                $nivel1->setMarcRecord($marc_record->as_usmarc());
+                $nivel1->save();
+                $cambios++;
+        }
+    }
 }
 
+print "\n Se cambiaron ".$cambios." notas. \n";
 1;
