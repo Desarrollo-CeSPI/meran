@@ -522,7 +522,7 @@ sub delPortadaOpac{
 
     my $portada = getPortadaOpacById($id);
     
-    my $uploaddir       = C4::Context->config("opac_path")."/uploads/portada";
+    my $uploaddir       = C4::Context->config("opac_path")."/portada";
     
     if ($portada){
 	    my $image_name = $portada->getImagePath();
@@ -559,7 +559,7 @@ sub uploadCoverImage{
 
     use Digest::MD5;
     
-    my $uploaddir       = C4::Context->config("opac_path")."/uploads/portada";
+    my $uploaddir       = C4::Context->config("opac_path")."/portada";
     my $maxFileSize     = 1024 * 1024; # 1/2mb max file size...
     my $file            = $postdata;
     my $type            = "";
