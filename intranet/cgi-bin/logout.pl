@@ -40,6 +40,8 @@ my ($template, $session, $t_params) =  C4::AR::Auth::get_template_and_user ({
                                     tipo_documento => 'ANY', 
                                     accion => 'CONSULTA', 
                                     entorno => 'undefined'},
+            loging_out      => 1,
+            change_password => 0,
     });
 
 
