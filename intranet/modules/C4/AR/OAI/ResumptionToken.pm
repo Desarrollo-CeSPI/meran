@@ -29,10 +29,10 @@ sub new {
     }
     else {
         $metadata_prefix = $args{ metadataPrefix };
-        $from = $args{ from } || '1';
+        $from = $args{ from } || C4::Modelo::IndiceBusqueda::Manager->get_minimum_timestamp();  #Min ID
         $until = $args{ until };
         unless ( $until) {
-            $until = '100000'; #Max ID
+            $until = C4::Modelo::IndiceBusqueda::Manager->get_maximum_timestamp(); #Max ID
         }
         $offset = $args{ offset } || 0;
     }

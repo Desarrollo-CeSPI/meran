@@ -13,43 +13,52 @@ use base ("HTTP::OAI::ListRecords");
 
 sub new {
     my ($class, $repository, %args) = @_;
-
     my $self = HTTP::OAI::ListRecords->new(%args);
 
     my @bind=();
     my $token = new C4::AR::OAI::ResumptionToken( %args );
     my $dbh = C4::Context->dbh;
-    my $sql = "SELECT id
-               FROM   cat_registro_marc_n1 ";
+    my $sql = "SELECT * FROM indice_busqueda ";
 
     if($token->{from} && $token->{until}) {
-              $sql.=" WHERE  id >= ? AND id <= ? ";
+              $sql.=" WHERE  timestamp >= ? AND timestamp < ? ";
               push(@bind,$token->{from});
+              C4::AR::Debug::debug("OAI list records - from => ".$token->{from});
               push(@bind,$token->{until});
+              C4::AR::Debug::debug("OAI list records - until => ".$token->{until});
+
      }
+
+    $sql.=" ORDER BY timestamp ";
+
+    if($repository->{meran_max_count}) {
+              $sql.="LIMIT  ".$repository->{meran_max_count}." ";
+    }
     
-    if($repository->{koha_max_count} && $token->{offset}){
-                $sql.="LIMIT  ?  OFFSET ? ";
-                push(@bind,$repository->{koha_max_count});
-                push(@bind,$token->{offset});
+    if($token->{offset}){
+                $sql.=" OFFSET ".$token->{offset};
     }
 
-    $sql.=" ORDER BY id ";
+C4::AR::Debug::debug("OAI => ".$sql);
 
-    my $sth = $dbh->prepare( $sql );
+    my $sth = $dbh->prepare($sql);
     $sth->execute(@bind);
 
     my $pos = $token->{offset};
-    while ( my ($id) = $sth->fetchrow ) {
-    
+
+    while ( my $record = $sth->fetchrow_hashref ) {
         #arma dinamicamente el  marcxml
-        my $marc_record = C4::AR::Nivel1::getNivel1FromId1($id)->getMarcRecordObject();
-    
-        $self->record( C4::AR::OAI::Record->new(
-            $repository, $marc_record, 'id',
-            identifier      => $repository->{ meran_identifier } . ':' . $id,
-            metadataPrefix  => $token->{metadata_prefix}
-        ));
+        my $marc_record = MARC::Record->new_from_usmarc($record->{"marc_record"});
+        $self->record(
+          C4::AR::OAI::Record->new(
+            $repository,
+            $marc_record,
+            $record->{"timestamp"},
+            $record->{"id"},
+            identifier      => $repository->{meran_identifier} . ':' . $record->{"id"},
+            metadataPrefix  => $token->{metadata_prefix},
+          )
+        );
         $pos++;
     }
 
