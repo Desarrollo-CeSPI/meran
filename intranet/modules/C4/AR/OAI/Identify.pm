@@ -17,7 +17,7 @@ sub new {
         adminEmail          => C4::AR::Preferencias::getValorPreferencia("KohaAdminEmailAddress"),
         MaxCount            => C4::AR::Preferencias::getValorPreferencia("OAI-PMH:MaxCount"),
         granularity         => 'YYYY-MM-DD',
-        earliestDatestamp   => '1',
+        earliestDatestamp   => C4::Modelo::IndiceBusqueda::Manager->get_minimum_timestamp(),
     );
     $self->description(C4::AR::Preferencias::getValorPreferencia("OAI-PMH:archiveID"));
     $self->compression( 'gzip' );

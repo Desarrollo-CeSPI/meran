@@ -97,8 +97,9 @@ sub new {
         }  
     }
 
-    $response->set_handler( XML::SAX::Writer->new( Output => *STDOUT, EncodeFrom =>'UTF-8',EncodeTo =>'utf-8') );
-    $response->xslt("/includes/oai2.xsl");
+   $response->set_handler( XML::SAX::Writer->new( Output => *STDOUT, EncodeTo =>'UTF-8') );
+   $response->xslt("/includes/oai2.xsl");
+
     $response->generate;
 
     bless $self, $class;
