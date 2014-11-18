@@ -226,7 +226,7 @@ instalarDependencias()
         #Instalar paquetes
         #su
         apt-get update
-        apt-get install apache2 apache2-mpm-prefork mysql-server libapache2-mod-perl2 libgd2-xpm libxpm4 htmldoc libaspell15 ntpdate -y
+        apt-get install apache2 apache2-mpm-prefork mysql-server libapache2-mod-perl2 libgd2-xpm libxpm4 htmldoc libaspell15 ntpdate libhttp-oai-perl libxml-libxslt-perl libyaml-perl  -y
         #Configurar apache
         echo "Procederemos a habilitar en apache los modulos necesarios"
 	}
