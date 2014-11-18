@@ -21,6 +21,15 @@ ErrorDocument 404 /meran/informacion/404notfound.pl
       Options +ExecCGI
 </Location>
 
+
+Alias /oai reemplazarPATHBASE/reemplazarID/opac/cgi-bin/oai.pl
+<Location /oai >
+      SetHandler perl-script
+      PerlResponseHandler ModPerl::Registry
+      PerlOptions +ParseHeaders
+      Options +ExecCGI
+</Location>
+
 <Perl>
 push(@INC,"reemplazarPATHBASE/reemplazarID/intranet/modules");
 push(@INC,"reemplazarPATHBASE/reemplazarID/intranet/modules/C4/Share/share/perl/5.14.2/");
