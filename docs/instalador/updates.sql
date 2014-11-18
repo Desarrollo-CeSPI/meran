@@ -698,14 +698,14 @@ UPDATE pref_preferencia_sistema SET categoria = 'circulacion' WHERE categoria LI
 #OAI PMH
 
 INSERT INTO pref_preferencia_sistema (variable, value, explanation, options, type, categoria, label, explicacion_interna, revisado) VALUES
-('OAI-PMH', '0', '1 = OAI-PMH server is enabled - 0 = OAI-PMH server is disabled', NULL, 'bool', 'sistema', '1 = OAI-PMH server is enabled - 0 = OAI-PMH server is disabled', '1 = OAI-PMH server is enabled - 0 = OAI-PMH server is disabled', 0);
+('OAI-PMH', '0', 'OAI-PMH', NULL, 'bool', 'sistema', 'Servicio OAI-PMH', '1 = OAI-PMH server is enabled - 0 = OAI-PMH server is disabled', 0);
 
 INSERT INTO pref_preferencia_sistema (variable, value, explanation, options, type, categoria, label, explicacion_interna, revisado) VALUES
-('OAI-PMH:archiveID', 'meran_id', 'OAI-PMH:archiveID', NULL, 'text', 'OAI-PMH:archiveID', 'OAI-PMH:archiveID', 0);
+('OAI-PMH:archiveID', 'meran_id', 'OAI-PMH:archiveID', NULL, 'text', 'sistema', 'OAI-PMH:archiveID', 'OAI-PMH:archiveID', 0);
 
 
 INSERT INTO pref_preferencia_sistema (variable, value, explanation, options, type, categoria, label, explicacion_interna, revisado) VALUES
-('OAI-PMH:MaxCount', '50', 'OAI-PMH:MaxCount', NULL, 'text', 'OAI-PMH:archiveID', 'OAI-PMH:archiveID', 0);
+('OAI-PMH:MaxCount', '50', 'OAI-PMH:MaxCount', NULL, 'text', 'sistema', 'OAI-PMH:archiveID', 'OAI-PMH:archiveID', 0);
 
 
 ### Nueva traduccion de Colaboradores ###

@@ -43,7 +43,7 @@ my $db_user   = 'root';
 my $db_passwd = 'dev';
 
 
-open (ERROR, '>/tmp/errores_migracion.txt');
+open (ERROR, '>/var/log/meran/errores_migracion.txt');
 
 
 my $db_calp= DBI->connect("DBI:mysql:$db_name:$db_host",$db_user, $db_passwd);
@@ -889,7 +889,6 @@ sub generaCodigoBarraFromMarcRecord{
 			['245','a',$material->{'Titulo'}],
 			['245','b',$material->{'TituloUniforme'}],
 			['310','a',$material->{'Frecuencia'}],
-			['500','a',$nota],
 			['520','a',$material->{'Resumen'}],	
 			['246','a',$material->{'TituloOriginal'}],	
 			['030','a',$material->{'CODEN'}],
@@ -905,6 +904,7 @@ sub generaCodigoBarraFromMarcRecord{
 			['260','a',$material->{'Lugar'}],	
 			['260','c',$fecha_edicion],
 			['300','c',$dimension],
+      ['500','a',$nota],
 			['020','a',$material->{'ISBN'}],
 			
 			#Revista
