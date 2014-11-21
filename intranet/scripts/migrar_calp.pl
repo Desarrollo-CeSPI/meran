@@ -926,11 +926,6 @@ sub generaCodigoBarraFromMarcRecord{
 			elsif($desde != ''){
 				$extension =$desde;
 			}
-
-		    #Prelimiar de extrensión
-		    if ($extension && $material->{'Preliminares'}){
-		       	$extension = $material->{'Preliminares'}.", ".$extension;
-		    }
 	    	
 	    	#Unidad de Extensión
 	    	if($extension && $material->{'UnidadExtension'}){
