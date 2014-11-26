@@ -43,7 +43,7 @@ my $db_user   = 'root';
 my $db_passwd = 'dev';
 
 
-open (ERROR, '>/var/log/meran/errores_migracion.txt');
+open (ERROR, '>/var/log/meran/errores_migracion_'.$op.'.txt');
 
 
 my $db_calp= DBI->connect("DBI:mysql:$db_name:$db_host",$db_user, $db_passwd);
