@@ -850,3 +850,8 @@ INSERT INTO ref_colaborador (id, codigo, descripcion, abreviatura) VALUES
 (128, 'trl', 'Traductor', 'tr.'),
 (129, 'trc', 'Transcriptor', 'trs.'),
 (130, 'voc', 'Vocalista', 'voc.');
+
+
+### 0.10.4 ###
+#Error codigo en colaborador
+UPDATE ref_colaborador SET  codigo =  'cri' WHERE  ref_colaborador.id =39;
