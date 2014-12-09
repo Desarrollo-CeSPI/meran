@@ -46,42 +46,42 @@ sub getOAI_DCfromMARC_Record {
         if ($marc_record->subfield('245','b')) {
             $titulo.=": ".$marc_record->subfield('245','b');
         }
-        push (@title, Encode::encode_utf8($titulo));
+        push (@title, cleanStrings($titulo));
     }
     push (@{$dc->{ 'title' }}, @title);
 
     # DC:Creator => Autor
 
     if ($marc_record->subfield('100',"a")){
-        push (@{$dc->{ 'creator' }}, Encode::encode_utf8($marc_record->subfield('100',"a")));
+        push (@{$dc->{ 'creator' }}, cleanStrings($marc_record->subfield('100',"a")));
     }
     if ($marc_record->subfield('110',"a")){
-        push (@{$dc->{ 'creator' }}, Encode::encode_utf8($marc_record->subfield('110',"a")));
+        push (@{$dc->{ 'creator' }}, cleanStrings($marc_record->subfield('110',"a")));
     }
     if ($marc_record->subfield('111',"a")){
-        push (@{$dc->{ 'creator' }}, Encode::encode_utf8($marc_record->subfield('111',"a")));
+        push (@{$dc->{ 'creator' }}, cleanStrings($marc_record->subfield('111',"a")));
     }
 
     # DC:Subject => Temas
     foreach my $campo650 ($marc_record->field('650')){
         if ($campo650->subfield("a")){
-            push (@{$dc->{ 'subject' }}, Encode::encode_utf8($campo650->subfield("a")));
+            push (@{$dc->{ 'subject' }}, cleanStrings($campo650->subfield("a")));
         }
     }
     foreach my $campo651 ($marc_record->field('651')){
         if ($campo651->subfield("a")){
-            push (@{$dc->{ 'subject' }}, Encode::encode_utf8($campo651->subfield("a")));
+            push (@{$dc->{ 'subject' }}, cleanStrings($campo651->subfield("a")));
         }
     }
     foreach my $campo653 ($marc_record->field('653')){
         if ($campo653->subfield("a")){
-            push (@{$dc->{ 'subject' }}, Encode::encode_utf8($campo653->subfield("a")));
+            push (@{$dc->{ 'subject' }}, cleanStrings($campo653->subfield("a")));
         }
     }
 
     # DC:Description ==> Resumen;
     if($marc_record->subfield('520','a')) {
-        push (@{$dc->{ 'description' }}, Encode::encode_utf8($marc_record->subfield('520','a')));
+        push (@{$dc->{ 'description' }}, cleanStrings($marc_record->subfield('520','a')));
     }
 
     # DC:Publisher => Editor
@@ -90,11 +90,11 @@ sub getOAI_DCfromMARC_Record {
         if ($campo260->subfield("a")){
             $editor.=" - ".$campo260->subfield("a");
         }
-        push (@{$dc->{ 'publisher' }},Encode::encode_utf8($editor));
+        push (@{$dc->{ 'publisher' }},cleanStrings($editor));
 
         # DC:Date => Año de publicacion
         if($campo260->subfield('c')) {
-            push (@{$dc->{ 'date' }}, Encode::encode_utf8($campo260->subfield('c')));
+            push (@{$dc->{ 'date' }}, cleanStrings($campo260->subfield('c')));
         }
 
     }
@@ -108,17 +108,17 @@ sub getOAI_DCfromMARC_Record {
             if($funcion){
                $colab.=" (".$funcion.")";
             }
-            push (@{$dc->{ 'contributor' }},Encode::encode_utf8($colab));
+            push (@{$dc->{ 'contributor' }},cleanStrings($colab));
         }
     }
     # DC:Type => Tipo de Documento
     if($marc_record->subfield('910','a')) {
-        push (@{$dc->{ 'type' }}, Encode::encode_utf8($marc_record->subfield('910','a')));
+        push (@{$dc->{ 'type' }}, cleanStrings($marc_record->subfield('910','a')));
     }
 
     # DC:Format => Formato 
     if($marc_record->subfield('856','q')) {
-        push (@{$dc->{ 'format' }}, Encode::encode_utf8($marc_record->subfield('856','q')));
+        push (@{$dc->{ 'format' }}, cleanStrings($marc_record->subfield('856','q')));
     }
 
     # DC:Identifier => ISBN + ISSN + URI
@@ -129,25 +129,34 @@ sub getOAI_DCfromMARC_Record {
     if($marc_record->subfield('020','a')) {
         my @isbns=$marc_record->subfield('020','a');
         for (my $i=0; $i < scalar(@isbns); $i++){
-            push (@{$dc->{ 'identifier' }}, "ISBN: ".$isbns[$i]);
+            push (@{$dc->{ 'identifier' }}, cleanStrings("ISBN: ".$isbns[$i]));
         }
     }
     #issn
     if($marc_record->subfield('022','a')) {
-        push (@{$dc->{ 'identifier' }}, "ISSN: ".$marc_record->subfield('022','a'));
+        push (@{$dc->{ 'identifier' }}, cleanStrings("ISSN: ".$marc_record->subfield('022','a')));
     }
 
     # DC:Language => Lenguaje 
 
     foreach my $campo41 ($marc_record->field('041')){
         if ($campo41->subfield("a")){
-            push (@{$dc->{ 'language' }}, Encode::encode_utf8($campo41->subfield("a")));
+            push (@{$dc->{ 'language' }}, cleanStrings($campo41->subfield("a")));
         }
     }
 
     return $dc;
 }
 
+
+sub cleanStrings{
+    my ($data) = @_;
+    if($data){
+        $data = Encode::encode_utf8($data);
+        $data =~ s/[^[:print:]]//g;
+    }
+    return ($data);
+}
 
 # __END__ C4::AR::OAI::Record
 1;

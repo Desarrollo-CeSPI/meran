@@ -39,13 +39,12 @@ sub new {
                 $sql.=" OFFSET ".$token->{offset};
     }
 
-C4::AR::Debug::debug("OAI => ".$sql);
-
     my $sth = $dbh->prepare($sql);
     $sth->execute(@bind);
 
     my $pos = $token->{offset};
 
+  C4::AR::Debug::debug("OAI => POS Ini = ".$pos);
     while ( my $record = $sth->fetchrow_hashref ) {
         #arma dinamicamente el  marcxml
         my $marc_record = MARC::Record->new_from_usmarc($record->{"marc_record"});
@@ -61,13 +60,18 @@ C4::AR::Debug::debug("OAI => ".$sql);
         );
         $pos++;
     }
+  C4::AR::Debug::debug("OAI => POS Fin = ".$pos);
 
+  my $total = C4::Modelo::IndiceBusqueda::Manager->get_indice_busqueda_count();
+  C4::AR::Debug::debug("OAI => CANT  = ".$total);
+  
+  if($pos < $total){
     $self->resumptionToken( new C4::AR::OAI::ResumptionToken(
         metadataPrefix  => $token->{metadata_prefix},
         from            => $token->{from},
         until           => $token->{until},
         offset          => $pos ) );
-
+  }
     return $self;
 }
 
