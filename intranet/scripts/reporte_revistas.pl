@@ -30,19 +30,22 @@ use C4::Modelo::CatRegistroMarcN2::Manager;
 
 # REPORTE
 # Necesitamos un reporte de revistas en Excel que contenga los siguientes campos:
-# Título(100,a)
-# Título informativo(100,b)
+# Título(245,a)
+# Título informativo(245,b)
 # Título anterior(247,a - 247,b)
 # Nota compleja sobre título anterior(547,a)
 # Autor corporativo (110,a)
 # ISSN(022,a)
-# Frecuencia(310,a)
+# Frecuencia(310,b)
 # Lugar(260,a)
 # Editor(260,b)
 # Procedencia(541,c también buscar en 859,e. Este campo puede contener: COM, CAN, DON)
 # URL(856,u)
 
 
+my @head=('Título','Título informativo','Título anterior','Nota compleja sobre título anterior','Autor corporativo','ISSN','Frecuencia','Lugar','Editor','Procedencia','URL');
+print join('#', @head);
+print "\n";
 
 my $revistas = C4::Modelo::CatRegistroMarcN1::Manager->get_cat_registro_marc_n1(
                                                                         query => [ 
@@ -57,8 +60,8 @@ foreach my $nivel1 (@$revistas){
     #URL
     my $marc_record1 = $nivel1->getMarcRecordObject();
     
-    $revista[0] = $marc_record1->subfield('100','a');
-    $revista[1] = $marc_record1->subfield('100','b');
+    $revista[0] = $marc_record1->subfield('245','a');
+    $revista[1] = $marc_record1->subfield('245','b');
     $revista[2] = $marc_record1->subfield('247','a');
 
     if ($marc_record1->subfield('247','b') ) {
@@ -66,14 +69,13 @@ foreach my $nivel1 (@$revistas){
     }
 
     $revista[3] = $marc_record1->subfield('547','a');
-    $revista[4] = $marc_record1->subfield('110','a');
+    $revista[4] =  $nivel1->getAutor(); #$marc_record1->subfield('110','a');
 
     my $grupos = C4::AR::Nivel2::getNivel2FromId1($nivel1->getId1);
     
     if ($grupos[0]){
         my $marc_record2 = $grupos[0]->getMarcRecordObject();
         $revista[5] = $marc_record2->subfield('022','a');
-
         $revista[7] = $marc_record2->subfield('260','a');
         $revista[8] = $marc_record2->subfield('260','b');
         $revista[9] = $marc_record2->subfield('541','c');
@@ -82,11 +84,10 @@ foreach my $nivel1 (@$revistas){
             $revista[9] = $marc_record2->subfield('859','e');
         }
     }
-
     $revista[6] = $marc_record1->subfield('310','a');
     $revista[10] = $marc_record1->subfield('856','u');
 
-    print join(',', @revista);
+    print join('#', @revista);
     print "\n";
 }
 

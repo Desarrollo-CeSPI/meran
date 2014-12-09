@@ -153,7 +153,7 @@ sub cleanStrings{
     my ($data) = @_;
     if($data){
         $data = Encode::encode_utf8($data);
-        $data =~ s/[^[:print:]]//g;
+        $data =~ s/[^[\x20-\xFF]//g;
     }
     return ($data);
 }
