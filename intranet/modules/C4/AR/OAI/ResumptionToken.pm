@@ -42,8 +42,7 @@ sub new {
     $self->{ from            } = $from;
     $self->{ until           } = $until;
 
-    $self->resumptionToken(
-        join( ':', $metadata_prefix, $offset, $from, $until ) );
+    $self->resumptionToken( join( ':', $metadata_prefix, $offset, $from, $until ));
     $self->cursor( $offset );
 
     return $self;
