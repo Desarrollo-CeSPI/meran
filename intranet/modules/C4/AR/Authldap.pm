@@ -192,6 +192,13 @@ sub checkPwEncriptada{
     my $LDAP_PASS           = $preferencias_ldap->{'ldap_bind_pw'};
     my $LDAP_OU             = $preferencias_ldap->{'ldap_grupo'};
     my $LDAP_FILTER         = $LDAP_U_PREF.'='.$userid;
+
+    if ($preferencias_ldap->{'ldap_memberattribute'}){
+        $LDAP_FILTER = "&(".$LDAP_FILTER.")(".$preferencias_ldap->{'ldap_memberattribute'}."=".$preferencias_ldap->{'ldap_memberattribute_isdn'}.")";
+    }
+
+  C4::AR::Debug::debug("checkPwEncriptada >> LDAP filter ".$LDAP_FILTER );
+
     my $passwordLDAP;
     my $ldapMsg             = undef;
     my $ldap                = _conectarLDAP();
@@ -206,19 +213,29 @@ sub checkPwEncriptada{
     }
     
     my $socio           = undef;
-    
+
     if ((defined $ldapMsg )&& (!$ldapMsg->code()) ) {   
         my $entries = $ldap->search(
             base   => $LDAP_DB_PREF,
             filter => "($LDAP_FILTER)"
         );
         
+    C4::AR::Debug::debug("checkPwEncriptada >> search LDAP user  ".$LDAP_FILTER );
+        
         my $entry = $entries->entry(0);
-      
+     C4::AR::Debug::debug("checkPwEncriptada >> search LDAP user  ".$entry );  
         if (defined $entry){        
             $passwordLDAP = $entry->get_value("userPassword");
 
-     C4::AR::Debug::debug("checkPwEncriptada >> passLDAP  ".$passwordLDAP );
+            C4::AR::Debug::debug("checkPwEncriptada >> passLDAP  ".$passwordLDAP );
+            if ($preferencias_ldap->{'ldap_passtype'} eq "sha1"){
+                #Las passwords encriptadas se limpian
+                $passwordLDAP =~ s/^\{SHA\}+|=+$//g;
+            }elsif($preferencias_ldap->{'ldap_passtype'} eq "md5"){
+               #Las passwords encriptadas se limpian
+                $passwordLDAP =~ s/^\{MD5\}+|=+$//g;
+            }
+
            $socio        =_verificar_password_con_metodo($userid,$password, $passwordLDAP, $nroRandom, $ldap);           
         }
         
@@ -241,7 +258,7 @@ sub checkPwEncriptada{
 =cut
 sub _verificar_password_con_metodo {
     my ($userid, $password, $passwordLDAP, $nroRandom, $ldap) = @_;
-  
+ C4::AR::Debug::debug("checkPwEncriptada >> passwordLDAP  ".$passwordLDAP);
 #    my $passwordParaComparar    = C4::AR::Auth::hashear_password($passwordLDAP, 'MD5_B64');
     my $passwordParaComparar       = C4::AR::Auth::hashear_password($passwordLDAP, C4::AR::Auth::getMetodoEncriptacion());
     $passwordParaComparar       = C4::AR::Auth::hashear_password($passwordParaComparar.$nroRandom, C4::AR::Auth::getMetodoEncriptacion());
@@ -396,7 +413,7 @@ sub obtenerPassword{
 
     if ($LDAP_ROOT ne ''){
         $ldapMsg= $ldap->bind( $preferencias_ldap->{'ldap_bind_dn'} , password => $LDAP_PASS) or die "$@";
-        C4::AR::Debug::debug("obtenerPassword : ERROR DEL LDAP con ".$preferencias_ldap->{'ldap_bind_dn'} ." y ".$LDAP_PASS. " dio ".$ldapMsg->error);
+        C4::AR::Debug::debug("obtenerPassword : MENSAJE LDAP con ".$preferencias_ldap->{'ldap_bind_dn'} ." y ".$LDAP_PASS. " dio ".$ldapMsg->error);
     }else{
         $ldapMsg= $ldap->bind() or die "$@";
         }
