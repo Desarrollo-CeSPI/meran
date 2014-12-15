@@ -1140,26 +1140,43 @@ sub crearPersonaLDAP{
     
     my %params                      = {};
     
-    $params{'id_ui'}                = $entry->get_value("unidad_academica") || "DEO"; # C4::AR::Preferencias::getValorPreferencia("defaultUI");
-    $params{'changepassword'}       = 0;
-    $params{$ldap_field_lastname}   = $entry->get_value("apellido") || "";
-    $params{$ldap_field_mail}       = $entry->get_value("e_mail") || "";
-    $params{$ldap_field_name}       = $entry->get_value("nombres") || ""; 
-    $params{'tipo_documento'}       = $entry->get_value("tipo_documento") || "1"; # 1 es DNI
-    $params{'nro_documento'}        = $entry->get_value("nro_documento") || "99999999"; 
-    $params{'legajo'}               = $entry->get_value("legajo") || "99999";
-    $params{'cumple_condicion'}     = $entry->get_value("regular") || 0;
-    $params{'password'}             = "";   # la password no se guarda en la base 
-    $params{$ldap_field_city}       = "1";  # id de ciudad 1 o $entry->get_value("loc_per_lect");
-    $params{'credential_type'}      = "estudiante";
-    $params{'nro_socio'}            = $nro_socio;
-    $params{'id_categoria'}         = "1";
-    $params{'calle'}                = $entry->get_value("calle_per_lect") || "";
-    $params{'telefono'}             = $entry->get_value("te_per_lect") || "";
-    $params{'carrera'}              = $entry->get_value("carrera") || "";
-    $params{'sexo'}                 = $entry->get_value("sexo") || "";
-    $params{'nacimiento'}           = $entry->get_value("fecha_nacimiento") || "";
-    
+    if (C4::AR::Authldap::_getValorPreferenciaLdap('ldap_objectclass') eq 'inetOrgPerson') {
+
+        $params{$ldap_field_lastname}   = $entry->get_value("sn") || "";
+        $params{$ldap_field_mail}       = $entry->get_value("mail") || "";
+        $params{$ldap_field_name}       = $entry->get_value("cn") || ""; 
+        $params{'tipo_documento'}       = $entry->get_value("tipo_documento") || "1"; # 1 es DNI
+        $params{'nro_documento'}        = $entry->get_value("nro_documento") || "99999999"; 
+        $params{'legajo'}               = $entry->get_value("emplayeeNumber") || "99999";
+        $params{'calle'}                = $entry->get_value("street") || "";
+        $params{'telefono'}             = $entry->get_value("telephoneNumber") || "";
+        $params{'carrera'}              = $entry->get_value("title") || "";
+        $params{'sexo'}                 = $entry->get_value("sex") || "m";
+        $params{'nacimiento'}           = $entry->get_value("fecha_nacimiento") || "";
+        $params{'cumple_condicion'}     = 1;
+    }
+    else {
+        $params{$ldap_field_lastname}   = $entry->get_value("apellido") || "";
+        $params{$ldap_field_mail}       = $entry->get_value("e_mail") || "";
+        $params{$ldap_field_name}       = $entry->get_value("nombres") || ""; 
+        $params{'tipo_documento'}       = $entry->get_value("tipo_documento") || "1"; # 1 es DNI
+        $params{'nro_documento'}        = $entry->get_value("nro_documento") || "99999999"; 
+        $params{'legajo'}               = $entry->get_value("legajo") || "99999";
+        $params{'cumple_condicion'}     = $entry->get_value("regular") || 0;
+        $params{'calle'}                = $entry->get_value("calle_per_lect") || "";
+        $params{'telefono'}             = $entry->get_value("te_per_lect") || "";
+        $params{'carrera'}              = $entry->get_value("carrera") || "";
+        $params{'sexo'}                 = $entry->get_value("sexo") || "";
+        $params{'nacimiento'}           = $entry->get_value("fecha_nacimiento") || "";
+    }    
+        $params{'id_ui'}                = $entry->get_value("unidad_academica") || C4::AR::Preferencias::getValorPreferencia("defaultUI");
+        $params{'changepassword'}       = 0;
+        $params{'password'}             = "";   # la password no se guarda en la base 
+        $params{$ldap_field_city}       = "1";  # id de ciudad 1 o $entry->get_value("loc_per_lect");
+        $params{'credential_type'}      = "estudiante";
+        $params{'nro_socio'}            = $nro_socio;
+        $params{'id_categoria'}         = "1";
+
     my $person                      = C4::Modelo::UsrPersona->new();
     
     $person->agregar(\%params);
