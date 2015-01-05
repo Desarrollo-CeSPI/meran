@@ -73,17 +73,26 @@ foreach my $nivel1 (@$revistas){
 
     my $grupos = C4::AR::Nivel2::getNivel2FromId1($nivel1->getId1);
     
-    if ($grupos[0]){
-        my $marc_record2 = $grupos[0]->getMarcRecordObject();
-        $revista[5] = $marc_record2->subfield('022','a');
-        $revista[7] = $marc_record2->subfield('260','a');
-        $revista[8] = $marc_record2->subfield('260','b');
-        $revista[9] = $marc_record2->subfield('541','c');
-        
+    foreach my $grupo (@$grupos){
+        my $marc_record2 = $grupo->getMarcRecordObject();
+        if (($marc_record2->subfield('022','a')) && (!$revista[5])){
+            $revista[5] = $marc_record2->subfield('022','a');
+        }
+        if (($marc_record2->subfield('260','a')) && (!$revista[7])){
+
+            $revista[7] = $grupo->getCiudadObject()->getNombre;
+        }
+        if (($marc_record2->subfield('260','b')) && (!$revista[8])){
+            $revista[8] = $marc_record2->subfield('260','b');
+        }
+        if (($marc_record2->subfield('541','c')) && (!$revista[9])){
+            $revista[9] = $marc_record2->subfield('541','c');
+        } 
         if((!$revista[9])&&($marc_record2->subfield('859','e'))) {
             $revista[9] = $marc_record2->subfield('859','e');
         }
     }
+
     $revista[6] = $marc_record1->subfield('310','a');
     $revista[10] = $marc_record1->subfield('856','u');
 

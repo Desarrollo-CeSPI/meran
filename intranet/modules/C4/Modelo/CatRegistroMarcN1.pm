@@ -315,11 +315,25 @@ sub getAutoresSecundarios{
         my $ref         = C4::AR::Catalogacion::getRefFromStringConArrobas($campo->subfield("a"));
         my $colaborador = C4::Modelo::CatAutor->getByPk($ref);
 
-        if ($campo->subfield("e")) {
-            $autor = $colaborador->getCompleto()." (".$campo->subfield("e").")";
-        }
+        if ($colaborador){
+            if ($campo->subfield("e")) {
+                my $ref         = C4::AR::Catalogacion::getRefFromStringConArrobas($campo->subfield("e"));
+                my $funcion     = C4::Modelo::RefColaborador->getByPk($ref);
+                if ($funcion) {
+                    $funcion = $funcion->getDescripcion;
+                }
+                else{
+                    $funcion = $campo->subfield("e");
+                }
 
-        push (@colaboradores_array, $autor);
+                $autor = $colaborador->getCompleto()." (".$funcion.")";
+            }
+            else {
+                 $autor = $colaborador->getCompleto();
+            }
+
+            push (@colaboradores_array, $autor);
+        }
     }
 
     return (@colaboradores_array);
