@@ -993,7 +993,7 @@ sub generateBookLabelA4 {
     my $posicion = 0;
     foreach my $sig (@sigs) {
         if (C4::AR::Utilidades::validateString($sig)){
-          $sig=  Encode::decode_utf8($sig);
+          $sig=  _unformat($sig);
 #         $pdf->addRawText( "$sig", $x + 15, $pageheight + 50 + ( $y - 120 ) - $posicion );
           $pdf->addRawText( "$sig", $x - 5, 250 + ( $y - 90 ) - $posicion );
           $posicion += 10;
@@ -1009,7 +1009,9 @@ sub generateBookLabelA4 {
     }
     
     $posicion += 15;
-    $pdf->addRawText( $nivel3->getDisponibilidadObject()->getNombre(), $x - 5, ( $y + 145 ) - 50);
+    my $disp = $nivel3->getDisponibilidadObject()->getNombre();
+    $disp=  _unformat($disp);
+    $pdf->addRawText( "$disp", $x - 5, ( $y + 145 ) - 50);
 
 # Inserto el barcode debajo de signatura
 #     $pdf->addRawText( "$codigo", $x + 10, $y + 80);
