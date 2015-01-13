@@ -919,7 +919,7 @@ sub generateBookLabelA4 {
      		$scale = 60 / 100;
 	}
    }
-   $pdf->drawBarcode( $x + 100, $y + 75, $scale , 1, "3of9", $codigo, undef, 10,10, 25, 10, undef, undef, 12 );
+   $pdf->drawBarcode( $x + 90, $y + 78, $scale , 1, "3of9", $codigo, undef, 10,10, 25, 10, undef, undef, 12 );
 
     my $posy = 100;
 
