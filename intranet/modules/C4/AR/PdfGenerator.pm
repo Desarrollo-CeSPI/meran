@@ -911,7 +911,15 @@ sub generateBookLabelA4 {
 
     #Insert a barcode to the card
     # ($x, $y, $scale, $frame, $type, $code, $extn, $umzn, $lmzn, $zone, $quzn, $spcr, $ofwt, $fnsz, $text)
-    $pdf->drawBarcode( $x + 100, $y + 75, 70 / 100, 1, "3of9", $codigo, undef, 10,10, 25, 10, undef, undef, 12 );
+   my $scale = 70 / 100; 
+   if (length($codigo) > 15) {
+	if (length($codigo) > 20) {
+     		$scale = 50 / 100;
+   	}else{
+     		$scale = 60 / 100;
+	}
+   }
+   $pdf->drawBarcode( $x + 100, $y + 75, $scale , 1, "3of9", $codigo, undef, 10,10, 25, 10, undef, undef, 12 );
 
     my $posy = 100;
 
