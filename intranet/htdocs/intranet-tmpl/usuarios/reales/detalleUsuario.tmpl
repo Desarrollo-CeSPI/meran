@@ -89,7 +89,7 @@ var loaderPath= "";
 	<div id="acciones_usuario" class="right" style="margin-right: 60px;">
 	        [% PERL %]
 	         print C4::AR::Filtros::action_set_button(    
-                 title           => "[% socio.persona.getNombre %], [% socio.persona.getApellido %]",
+                 title           => "[% socio.persona.getApeYNom %]",
                  button          => 'btn btn-primary',
                  action 		 => 'modificarDatosDeUsuario()', 
                  modifier        => "btn-large",
