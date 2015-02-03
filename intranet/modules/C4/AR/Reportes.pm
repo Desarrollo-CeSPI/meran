@@ -1869,6 +1869,40 @@ sub reporteGenEtiquetasPorRangoBarcode{
     return ($cat_registro_marc_n3_array_count, \@datos_array);  
 }
 
+
+sub reporteGenEtiquetasPorRangoSignatura{
+    my ($params, $session, $ini, $cantR) = @_;
+
+    my @datos_array;
+    my @filtros;
+
+    push(@filtros, ( signatura   => { eq => $params->{'signatura1'}, gt => $params->{'signatura1'} } ) );
+    push(@filtros, ( signatura   => { eq => $params->{'signatura2'}, lt => $params->{'signatura2'} } ) );
+
+    my $cat_registro_marc_n3_array = C4::Modelo::CatRegistroMarcN3::Manager->get_cat_registro_marc_n3(
+                                                                query           => \@filtros,
+                                                                limit           => $cantR,
+                                                                offset          => $ini,
+                                                                with_objects    => ['nivel1', 'nivel2'],
+                                                            );
+
+    my $cat_registro_marc_n3_array_count = C4::Modelo::CatRegistroMarcN3::Manager->get_cat_registro_marc_n3_count(
+                                                                query           => \@filtros,
+                                                                with_objects    => ['nivel1', 'nivel2'],
+                                                            );
+
+
+    foreach my $hash (@$cat_registro_marc_n3_array){
+        my %hash_temp = {};
+
+        $hash_temp{'nivel3'}  = $hash;
+
+        push (@datos_array, \%hash_temp);
+    }
+
+    return ($cat_registro_marc_n3_array_count, \@datos_array);  
+}
+
 sub reporteGenEtiquetas{
     my ($params, $session) = @_;
 
@@ -1903,11 +1937,11 @@ sub reporteGenEtiquetas{
 
     }
 
-    if( $params->{'codBarra'} ne "") {
+    if( $params->{'codBarra1'} ne "") {
         $query .= ' @string "'.'barcode%'.$sphinx->EscapeString($params->{'codBarra'}).'*"';
     }
 
-    if ($params->{'signatura'}){
+    if ($params->{'signatura1'}){
         $query .= ' @string "'."signatura%".$sphinx->EscapeString($params->{'signatura'}).'*"';
     }
     
@@ -1957,7 +1991,10 @@ sub reporteGenEtiquetas{
 sub reporteGenerarEtiquetas{
     my ($params, $session, $ini, $cantR) = @_;
 
-    if( (C4::AR::Utilidades::trim($params->{'codBarra1'}) ne "") && (C4::AR::Utilidades::trim($params->{'codBarra2'}) ne "") ){
+    if( (C4::AR::Utilidades::trim($params->{'signatura1'}) ne "") && (C4::AR::Utilidades::trim($params->{'signatura2'}) ne "") ){
+        reporteGenEtiquetasPorRangoSignatura($params, $session, $ini, $cantR);
+    }
+    elsif( (C4::AR::Utilidades::trim($params->{'codBarra1'}) ne "") && (C4::AR::Utilidades::trim($params->{'codBarra2'}) ne "") ){
         reporteGenEtiquetasPorRangoBarcode($params, $session, $ini, $cantR);
     } elsif( ($params->{'fecha_ini'} ne "") && ($params->{'fecha_fin'} ne "") ){
         reporteGenEtiquetasPorRangoFechas($params, $session, $ini, $cantR);
