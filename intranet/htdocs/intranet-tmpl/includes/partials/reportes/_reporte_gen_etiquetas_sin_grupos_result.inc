@@ -138,7 +138,7 @@ $(document).ready(function(){
                         </td> 
                         <td>
                         [% PERL %]
-                            print C4::AR::Filtros::link_to( text    =>  "[% nivel3.nivel1.getTitulo %]",
+                            print C4::AR::Filtros::link_to( text    =>  "[% nivel3.nivel1.getTituloStringEscaped %]",
                                                             url     =>  "[% url_prefix %]/catalogacion/estructura/detalle.pl", 
                                                             params  =>  ["id1=[% nivel3.nivel1.getId1 %]"],
                                                             title   =>  "[% 'Mostrar Detalle del Registro' | i18n %]",

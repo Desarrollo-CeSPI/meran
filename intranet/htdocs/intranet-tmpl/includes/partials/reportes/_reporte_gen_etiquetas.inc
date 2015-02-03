@@ -15,6 +15,8 @@
           onEnter('fecha_fin',busqueda,true);
           onEnter('codBarra1',busqueda,true);
           onEnter('codBarra2',busqueda,true);
+          onEnter('signatura1',busqueda,true);
+          onEnter('signatura2',busqueda,true);
 
           $('#titulo').click(clearRangos);
           $('#signatura').click(clearRangos);
@@ -25,6 +27,9 @@
 
           $('#codBarra1').click(clearFromRangoPorBarcode);
           $('#codBarra2').click(clearFromRangoPorBarcode);
+
+          $('#signatura1').click(clearFromRangoPorSignatura);
+          $('#signatura2').click(clearFromRangoPorSignatura);
     });
 
     function busqueda(){
@@ -42,6 +47,9 @@
         objAH_repE.fecha_ini         = $('#fecha_ini').val();
         objAH_repE.fecha_fin         = $('#fecha_fin').val();
         objAH_repE.signatura         = $('#signatura').val();
+        objAH_repE.signatura1        = $('#signatura1').val();
+        objAH_repE.signatura2        = $('#signatura2').val();
+        
         objAH_repE.tipo_reporte      = TIPO;
         //  objAH_repE.asc                = ASC;
         objAH_repE.tipoAccion        = 'REPORTE_GEN_ETIQUETAS';
@@ -63,6 +71,11 @@
         $('#codBarra2').val("");
     }
 
+    function clearRangoPorSignatura(){
+        $('#signatura1').val("");
+        $('#signatura2').val("");
+    }
+
     function clearRangos(){
         clearRangoPorBarcode();
         clearRangoPorFecha();
@@ -78,12 +91,22 @@
     function clearFromRangoPorFecha(){
         clearCamposCombibables();
         clearRangoPorBarcode();
+        clearRangoPorSignatura();
         TIPO = 'sin_grupos';
     }
 
     function clearFromRangoPorBarcode(){
         clearCamposCombibables();
         clearRangoPorFecha();
+        clearRangoPorSignatura();
+        TIPO = 'sin_grupos';
+    }
+
+
+    function clearFromRangoPorSignatura(){
+        clearCamposCombibables();
+        clearRangoPorFecha();
+        clearRangoPorBarcode();
         TIPO = 'sin_grupos';
     }
 
@@ -133,7 +156,9 @@
                 (jQuery.trim($('#codBarra2').val()) != '')||
                 (jQuery.trim($('#fecha_ini').val()) != '')||
                 (jQuery.trim($('#fecha_fin').val()) != '')||
-                (jQuery.trim($('#signatura').val()) != '')
+                (jQuery.trim($('#signatura').val()) != '')||
+                (jQuery.trim($('#signatura1').val()) != '')||
+                (jQuery.trim($('#signatura2').val()) != '')
              ){ 
                 busqueda();
               }
@@ -172,15 +197,6 @@
                         </div>
                 </div>
 
-                <div class="control-group">
-                    <label class="control-label" for="signatura">
-                        [% "Signatura Topogr&aacute;fica" | i18n %]
-                    </label>
-                    <div class="controls">
-                        <input type="text" size="25" id="signatura">
-                    </div>
-                </div>
-
             <legend class="titulo_legend">Búsqueda no combinable</legend>
 
                 <div class="control-group">
@@ -190,6 +206,16 @@
                             <input type="text" id="codBarra2" name="codBarra2" placeholder="Hasta" value="" required>
                     </div>         
                 </div>
+
+
+                <div class="control-group">
+                    <label class="control-label"  for="fecha_alta"> [% "Por rango de Signatura Topogr&aacute;fica" | i18n %]</label>
+                    <div class="controls">
+                            <input type="text" id="signatura1" name="signatura1" placeholder="Desde" value="" required>
+                            <input type="text" id="signatura2" name="signatura2" placeholder="Hasta" value="" required>
+                    </div>         
+                </div>
+
                 <div class="control-group">
                     <label class="control-label"  for="fecha_alta"> [% "Por rango de Fecha de Alta" | i18n %]</label>
                     <div class="controls">
