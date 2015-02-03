@@ -3409,8 +3409,11 @@ sub escapeData{
     my ($data) = @_;
     if($data){
         # Pasa a entidades HTML los caracteres especiales, para que no sean interpretados como otra cosa
-        #$data = encode_entities($data);
+        #FIX: EL encode funciona bien con todas las vocales con diéresis menos la Ü(?)
+        $data =~ s/Ü/#U#/g;
         $data = encode_entities($data, '<>&"“”\'');
+        $data =~ s/#U#/Ü/g;
+        
     }
     return ($data);
 }
