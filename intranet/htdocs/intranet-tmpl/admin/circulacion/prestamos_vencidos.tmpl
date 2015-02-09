@@ -51,6 +51,16 @@
 
     }
     
+    function exportTo(formato){
+
+        var params="formatoReporte="+formato+"&tipoAccion=EXPORT_REPORTE_PRESTAMOS_VENCIDOS";
+
+        var url= "[% url_prefix %]/reports/circulacionDB.pl";
+        crearForm(url,params);
+        $('#modal_report_long_call').modal('show');
+        setTimeout(function(){$('#modal_report_long_call').modal('hide');},5000);
+    }   
+
     function enviarMailsASeleccionados(){
 
         objAH                   = new AjaxHelper(updateEnviarMailsASeleccionados);
@@ -204,7 +214,7 @@
                     print C4::AR::Filtros::action_button(    
                             button  => 'btn click btn-primary',
                             title   => " [% 'Exportar a PDF' | i18n %]",
-                            action  => 'imprimirReporte("formReportePrestamosVencidos","PDF");',
+                            action  => 'exportTo("PDF");',
                             icon    => "icon-white icon-inbox",
                       ) ;
         [% END %]
@@ -213,7 +223,7 @@
                     print C4::AR::Filtros::action_button(    
                             button  => 'btn click btn-primary',
                             title   => " [% 'Exportar a XLS' | i18n %]",
-                            action  => 'imprimirReporte("formReportePrestamosVencidos","XLS");',
+                            action  => 'exportTo("XLS");',
                             icon    => "icon-white icon-inbox",
                       ) ;
         [% END %]
