@@ -502,19 +502,19 @@ sub getFecha_vencimiento {
         { #quiere decir que ya fue renovado entonces tengo que calcular sobre los dias de un prestamo renovado para saber si estoy en fecha
 
 
-            $self->debug( "getFecha_vencimiento => SE RENOVO ".$self->getRenovaciones." VECES, LA ULTIMA ".$self->getFecha_ultima_renovacion ); 
+            # $self->debug( "getFecha_vencimiento => SE RENOVO ".$self->getRenovaciones." VECES, LA ULTIMA ".$self->getFecha_ultima_renovacion ); 
             $plazo_actual = $self->tipo->getDias_renovacion;
             ($desde_proximos,$vencimiento,$apertura,$cierre) = C4::Date::proximosHabiles($plazo_actual, 0, $self->getFecha_ultima_renovacion);
 
-            $self->debug( "getFecha_vencimiento => DIAS A AGREGAR ".$self->tipo->getDias_renovacion); 
-            $self->debug( "getFecha_vencimiento => VENCE  ".$vencimiento); 
+            # $self->debug( "getFecha_vencimiento => DIAS A AGREGAR ".$self->tipo->getDias_renovacion); 
+            # $self->debug( "getFecha_vencimiento => VENCE  ".$vencimiento); 
 
 
         }
         else
         { #es la primer renovacion por lo tanto tengo que ver sobre los dias de un prestamo normal para saber si estoy en fecha de renovacion
             $plazo_actual = $self->tipo->getDias_prestamo;
-            $self->debug( "PLAZO ACTUAL => DIAS ".$plazo_actual); 
+            # $self->debug( "PLAZO ACTUAL => DIAS ".$plazo_actual); 
             ($desde_proximos,$vencimiento,$apertura,$cierre) = C4::Date::proximosHabiles($plazo_actual, 0, $self->getFecha_prestamo);
         }
     };

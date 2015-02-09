@@ -1474,14 +1474,14 @@ C4::AR::Debug::debug("Prestamos => getAllPrestamosVencidos => PRESTAMOS:::::".sc
             # $prestamo->fecha_vencimiento_reporte($prestamo->getFecha_vencimiento);
             # $prestamo->save();
            if ($prestamo->estaVencido()){  
-                $fecha_vencimiento = $prestamo->getFecha_vencimiento();  
+                # $fecha_vencimiento = $prestamo->getFecha_vencimiento();  
 
                 # C4::AR::Debug::debug("Prestamos => getAllPrestamosVencidos => fecha_inicio " . $fecha_inicio . " fecha vto " . $fecha_vencimiento);
 
-                if ( ( Date::Manip::Date_Cmp( $fecha_inicio, $fecha_vencimiento ) < 0 ) && ( Date::Manip::Date_Cmp( $fecha_vencimiento, $fecha_fin ) < 0 ) ) {
+                # if ( ( Date::Manip::Date_Cmp( $fecha_inicio, $fecha_vencimiento ) < 0 ) && ( Date::Manip::Date_Cmp( $fecha_vencimiento, $fecha_fin ) < 0 ) ) {
                     # C4::AR::Debug::debug("Prestamos => getAllPrestamosVencidos => fecha de vencimiento => " . $prestamo->getFecha_vencimiento());    
                     push(@arrayPrestamos,($prestamo));
-                }  
+                # }  
            }
         }  
         return (\@arrayPrestamos);     
