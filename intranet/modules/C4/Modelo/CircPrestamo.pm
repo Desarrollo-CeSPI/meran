@@ -118,7 +118,12 @@ sub getFecha_vencimiento_reporte_formateada{
     my ($self) = shift;
     my $dateformat = C4::Date::get_date_format();
     return C4::Date::format_date( $self->fecha_vencimiento_reporte, $dateformat );
+}
 
+sub getFecha_vencimiento_reporte{
+    my ($self) = shift;
+
+    return $self->fecha_vencimiento_reporte;
 }
 
 sub getFecha_prestamo_formateada_ticket {

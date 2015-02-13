@@ -1448,13 +1448,13 @@ sub getAllPrestamosVencidos{
         $params->{'orden'} = "circ_prestamo.fecha_prestamo"; 
     } 
 
-    # if(($fecha_inicio ne "") && ($fecha_fin ne "")){
-    #     $fecha_inicio   = C4::Date::format_date_hour($fecha_inicio,"iso");
-    #     $fecha_fin      = C4::Date::format_date_hour($fecha_fin,"iso");
+    if(($fecha_inicio ne "") && ($fecha_fin ne "")){
+        $fecha_inicio   = C4::Date::format_date_hour($fecha_inicio,"iso");
+        $fecha_fin      = C4::Date::format_date_hour($fecha_fin,"iso");
 
-    #     push( @filtros, and => [    'fecha_prestamo' => { gt => $fecha_inicio, eq => $fecha_inicio },
-    #                                 'fecha_prestamo' => { lt => $fecha_fin, eq => $fecha_fin} ] ); 
-    # }
+        push( @filtros, and => [    'fecha_prestamo' => { gt => $fecha_inicio, eq => $fecha_inicio },
+                                    'fecha_prestamo' => { lt => $fecha_fin, eq => $fecha_fin} ] ); 
+    }
 
     my $prestamos_array_ref = C4::Modelo::CircPrestamo::Manager->get_circ_prestamo(
                                                                 query   => \@filtros,
@@ -1473,16 +1473,16 @@ C4::AR::Debug::debug("Prestamos => getAllPrestamosVencidos => PRESTAMOS:::::".sc
         foreach my $prestamo (@$prestamos_array_ref){
             # $prestamo->fecha_vencimiento_reporte($prestamo->getFecha_vencimiento);
             # $prestamo->save();
-           if ($prestamo->estaVencido()){  
+           # if ($prestamo->estaVencido()){  
                 # $fecha_vencimiento = $prestamo->getFecha_vencimiento();  
+                $fecha_vencimiento = $prestamo->getFecha_vencimiento_reporte();
+                C4::AR::Debug::debug("Prestamos => getAllPrestamosVencidos => fecha_inicio " . $fecha_inicio . " fecha vto " . $fecha_vencimiento);
 
-                # C4::AR::Debug::debug("Prestamos => getAllPrestamosVencidos => fecha_inicio " . $fecha_inicio . " fecha vto " . $fecha_vencimiento);
-
-                # if ( ( Date::Manip::Date_Cmp( $fecha_inicio, $fecha_vencimiento ) < 0 ) && ( Date::Manip::Date_Cmp( $fecha_vencimiento, $fecha_fin ) < 0 ) ) {
+                if ( ( Date::Manip::Date_Cmp( $fecha_inicio, $fecha_vencimiento ) < 0 ) && ( Date::Manip::Date_Cmp( $fecha_vencimiento, $fecha_fin ) < 0 ) ) {
                     # C4::AR::Debug::debug("Prestamos => getAllPrestamosVencidos => fecha de vencimiento => " . $prestamo->getFecha_vencimiento());    
                     push(@arrayPrestamos,($prestamo));
-                # }  
-           }
+                }  
+           # }
         }  
         return (\@arrayPrestamos);     
     }else{
