@@ -27,6 +27,8 @@ use CGI;
 
 use Fcntl qw(:flock);
 
+C4::AR::Debug::debug("CRON => mail_prestamos_vencidos.pl");
+
 unless (!flock(DATA, LOCK_EX|LOCK_NB)) {
 
     if(C4::AR::Preferencias::getValorPreferencia('enableMailPrestVencidos')){
@@ -39,6 +41,8 @@ unless (!flock(DATA, LOCK_EX|LOCK_NB)) {
 			    C4::AR::Debug::debug("mail_prestamos_vencidos.pl => se intento correr script de una dir. IP no local => ".$ENV{'REMOTE_ADDR'});
 		    }
 		
+    } else {
+    	C4::AR::Debug::debug("CRON => mail_prestamos_vencidos.pl => Se envian via CRON los mails de prestamos vencidos, el FLAG enableMailPrestVencidos esta DESACTIVADO!");
     }
 
 }else{
