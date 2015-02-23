@@ -1585,8 +1585,7 @@ sub getReporteCirculacionGeneral{
 
     my @filtros;
 
-    # tabla circ_ref_tipo_prestamo 
-    if ( C4::AR::Utilidades::validateString($tipoPrestamo) && $tipoPrestamo ne "SIN SELECCIONAR" ) {
+    if ( C4::AR::Utilidades::validateString($tipoPrestamo) && $tipoPrestamo ne "SIN SELECCIONAR" && $tipo_documento ne "ALL" ) {
         push(@filtros, ('tipo_prestamo_ref.id_tipo_prestamo' =>  {eq => $tipoPrestamo} ));
     }
 
@@ -1609,7 +1608,7 @@ sub getReporteCirculacionGeneral{
                                 'fecha' => { le => $fecha_fin } ] ); 
     }
 
-    if($tipo_documento ne ""){
+    if($tipo_documento ne "" && $tipo_documento ne "ALL"){
         push(@filtros, ('nivel2.marc_record' => {like => '%cat_ref_tipo_nivel3@'.$tipo_documento.'%'}));
     }
 
