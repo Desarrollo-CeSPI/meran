@@ -2676,8 +2676,8 @@ sub generarComboTipoNivel3{
     $options_hash{'multiple'}   = $params->{'multiple'}||0;
     $options_hash{'defaults'}   = $params->{'default'} || C4::AR::Preferencias::getValorPreferencia("defaultTipoNivel3");
 
-    push (@select_tipo_nivel3_array, 'ALL');
-    $select_tipo_nivel3_hash{'ALL'} = 'TODOS';
+    # push (@select_tipo_nivel3_array, 'ALL');
+    # $select_tipo_nivel3_hash{'ALL'} = 'TODOS';
 
     $options_hash{'values'}     = \@select_tipo_nivel3_array;
     $options_hash{'labels'}     = \%select_tipo_nivel3_hash;
