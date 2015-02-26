@@ -13,6 +13,7 @@ __PACKAGE__->meta->setup(
         alias_tabla         => { type => 'varchar', overflow => 'truncate', length => 20, not_null => 1 },
         campo_busqueda      => { type => 'varchar', overflow => 'truncate', length => 255, not_null => 1 },
         client_title        => { type => 'varchar', overflow => 'truncate', length => 255},
+        is_editable         => { type => 'integer', overflow => 'truncate', length => 1, not_null => 0, default => 1 },       
     ],
 
     primary_key_columns => [ 'id' ],
@@ -141,6 +142,16 @@ sub obtenerIdentTablaRef{
 	my ($alias_tabla) = @_;
 	my $ref=$self->createFromAlias($alias_tabla);
 	return ($ref->meta->primary_key);
+}
+
+sub getIsEditable{
+    my ($self) = shift;
+    return ($self->is_editable);
+}
+
+sub isEditable{
+    my ($self) = shift;
+    return ($self->is_editable == 1);
 }
 
 1;
