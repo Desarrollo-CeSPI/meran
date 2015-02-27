@@ -190,7 +190,7 @@ sub agregar{
     
     my $today = Date::Manip::ParseDate("today");
     my $cumple_requisito = $data_hash->{'cumple_requisito'};
-    
+
     if ($cumple_requisito){
         $self->setCumple_requisito($today);
     }else{
@@ -406,7 +406,7 @@ sub activar{
 
     $self->setActivo(1);
     $self->persona->activar();
-    $self->setCumple_requisito("0000000000:00:00");
+    # $self->setCumple_requisito("0000000000:00:00");
     $today = C4::Date::format_date_in_iso($today,$dateformat);
     #se setea nuevamente la fecha del dia al momento de activar al 
     C4::AR::Debug::debug("UsrSocio => activar => setFecha_alta => " . $today);

@@ -82,8 +82,8 @@ function guardarModificacionUsuario(){
     objAH.carrera           = $('#carrera').val();
     objAH.anio              = $('#anio').val();
     objAH.division          = $('#division').val();
-    objAH.changepassword    = ( $('#changepassword').attr('checked') )?'1':'0';
-    objAH.cumple_requisito	= ($('#cumple_requisito').attr('checked') )?'1':'0';    
+    objAH.changepassword    = ($('#changepassword').is(':checked') )?'1':'0';
+    objAH.cumple_requisito	= ($('#cumple_requisito').is(':checked') )?'1':'0';    
 	objAH.tipoAccion        = 'GUARDAR_MODIFICACION_USUARIO';
     objAH.auth_nombre       = $('#auth_nombre').val();
     objAH.auth_dni          = $('#auth_dni').val();
@@ -184,8 +184,8 @@ function agregarUsuario(){
       objAH.carrera         = $('#carrera').val();
       objAH.anio            = $('#anio').val();
       objAH.division        = $('#division').val();
-      objAH.cumple_requisito= ($('#cumple_requisito').attr('checked') )?'1':'0';
-      objAH.changepassword  = ($('#changepassword').attr('checked') )?'1':'0';
+      objAH.cumple_requisito= ($('#cumple_requisito').is(':checked'))?'1':'0';
+      objAH.changepassword  = ($('#changepassword').is(':checked'))?'1':'0';
       objAH.tipoAccion      = 'AGREGAR_USUARIO';
 
       objAH.sendToServer();
@@ -199,9 +199,9 @@ function updateAgregarUsuario(responseText){
 	var Messages=JSONstring.toObject(responseText);
 	setMessages(Messages);
 
-  if (!Messages.error){
-    delay(function(){window.location = URL_PREFIX+'/usuarios/reales/datosUsuario.pl?nro_socio='+Messages.messages[0].params[0]+'&token='+token;},3);
-  }
+  // if (!Messages.error){
+  //   delay(function(){window.location = URL_PREFIX+'/usuarios/reales/datosUsuario.pl?nro_socio='+Messages.messages[0].params[0]+'&token='+token;},3);
+  // }
 
 }
 
