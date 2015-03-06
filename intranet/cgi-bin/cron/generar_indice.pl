@@ -44,7 +44,7 @@ use C4::AR::CacheMeran;
 	my %mail;                    
 
 	$mail{'mail_from'}      = Encode::decode_utf8(C4::AR::Preferencias::getValorPreferencia('mailFrom'));
-	$mail{'mail_to'}        = Encode::decode_utf8(C4::AR::Preferencias::getValorPreferencia('KohaAdminEmailAddress'));  
+	$mail{'mail_to'}        = Encode::decode_utf8(C4::AR::Preferencias::getValorPreferencia('mailFrom'));  
 	$mail{'mail_subject'}   = "Generar Indice"; 
 	$mail{'mail_message'}   = "Termino de generar el indice!! \n Tardo ".$hour." horas.";
 

@@ -14,7 +14,7 @@ sub new {
     my $self = $class->SUPER::new(
         baseURL             => $baseURL,
         repositoryName      => C4::AR::Preferencias::getValorPreferencia("titulo_nombre_ui"),
-        adminEmail          => C4::AR::Preferencias::getValorPreferencia("KohaAdminEmailAddress"),
+        adminEmail          => C4::AR::Preferencias::getValorPreferencia("mailFrom"),
         MaxCount            => C4::AR::Preferencias::getValorPreferencia("OAI-PMH:MaxCount"),
         granularity         => 'YYYY-MM-DD',
         earliestDatestamp   => C4::Modelo::IndiceBusqueda::Manager->get_minimum_timestamp(),

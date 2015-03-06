@@ -855,3 +855,7 @@ INSERT INTO ref_colaborador (id, codigo, descripcion, abreviatura) VALUES
 ### 0.10.4 ###
 #Error codigo en colaborador
 UPDATE ref_colaborador SET  codigo =  'cri' WHERE  ref_colaborador.id =39;
+
+
+### 0.10.5 ###
+DELETE FROM pref_preferencia_sistema WHERE variable ="KohaAdminEmailAddress";
