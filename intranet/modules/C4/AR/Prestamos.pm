@@ -1451,10 +1451,13 @@ sub getAllPrestamosVencidos{
     if(($fecha_inicio ne "") && ($fecha_fin ne "")){
         $fecha_inicio   = C4::Date::format_date_hour($fecha_inicio,"iso");
         $fecha_fin      = C4::Date::format_date_hour($fecha_fin,"iso");
-
-        push( @filtros, and => [    'fecha_prestamo' => { gt => $fecha_inicio, eq => $fecha_inicio },
-                                    'fecha_prestamo' => { lt => $fecha_fin, eq => $fecha_fin} ] ); 
+    } else {
+        $fecha_inicio   = C4::Date::format_date_hour("1900-01-01","iso");
+        $fecha_fin      = C4::Date::format_date_hour(Date::Manip::ParseDate("now"),"iso");
     }
+
+    push( @filtros, and => [    'fecha_prestamo' => { gt => $fecha_inicio, eq => $fecha_inicio },
+                                'fecha_prestamo' => { lt => $fecha_fin, eq => $fecha_fin} ] );  
 
     my $prestamos_array_ref = C4::Modelo::CircPrestamo::Manager->get_circ_prestamo(
                                                                 query   => \@filtros,
