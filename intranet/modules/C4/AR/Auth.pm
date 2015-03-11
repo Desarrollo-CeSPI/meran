@@ -725,7 +725,7 @@ sub checkauth {
     if ($session){
         # C4::AR::Debug::debug("existe sesion en checkauth");
         # C4::AR::Debug::debug("existe sesion en checkauth, nroRandom - > " . $session->param('nroRandom') . " sessionid : " . $session->param('sessionID'));
-        $userid     = $session->param('userid');
+        $userid     = $session->param('userid') || 0;
     }else{
         # C4::AR::Debug::debug("NO existe sesion en checkauth, se generara");
         $session    = _generarSession();
