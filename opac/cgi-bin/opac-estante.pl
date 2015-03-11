@@ -50,7 +50,7 @@ if(!$id_estante){
     C4::AR::Debug::debug("OPAC ESTANTE ==> PUBLICOS");
 
     my $estantes_publicos             = C4::AR::Estantes::getListaEstantesPublicos();
-    $t_params->{'cant_subestantes'}   = @$estantes_publicos;
+    $t_params->{'cant_subestantes'}   = @$estantes_publicos || 0;
     $t_params->{'SUBESTANTES'}        = $estantes_publicos;
 }
 else{
@@ -67,7 +67,7 @@ else{
             # $t_params->{'estante'}          = $estante;
             $t_params->{'estante'}          = C4::AR::Estantes::getEstanteConContenido($id_estante);
             $t_params->{'SUBESTANTES'}      = $subEstantes ;
-            $t_params->{'cant_subestantes'} = @$subEstantes;  
+            $t_params->{'cant_subestantes'} = @$subEstantes || 0;  
 
         } else {
             $t_params->{'mensaje'}          = "No existe el estante";
