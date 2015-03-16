@@ -28,7 +28,7 @@ use C4::Date;
 use Date::Manip;
 use C4::AR::Usuarios;
 use C4::AR::Utilidades;
-
+use Encode;
 
 my $input = new CGI;
 
@@ -91,6 +91,6 @@ if($socios){
 
 }#END if($socios)
 
-$t_params->{'cantidad'}= $cantidad;
-$t_params->{'socio_busqueda'}= $socioBuscado;
+$t_params->{'cantidad'}			= $cantidad;
+$t_params->{'socio_busqueda'} 	= Encode::encode('utf8', $socioBuscado);
 C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
