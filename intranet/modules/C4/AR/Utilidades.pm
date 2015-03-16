@@ -2748,9 +2748,8 @@ sub generarComboTablasDeReferencia{
     require C4::Modelo::PrefTablaReferencia::Manager;
     my ($tabla_ref_array)= C4::Modelo::PrefTablaReferencia::Manager->get_pref_tabla_referencia();
 
-
     foreach my $tabla (@$tabla_ref_array) {
-        if($tabla->isEditable){
+        if(($tabla->isEditable) || ($params->{'ALL'})){
             push(@select_tabla_ref_array, $tabla->getAlias_tabla);
             $select_tabla_ref_array{$tabla->getAlias_tabla}= C4::AR::Filtros::i18n(Encode::decode_utf8(Encode::encode_utf8($tabla->getClient_title)));
         }

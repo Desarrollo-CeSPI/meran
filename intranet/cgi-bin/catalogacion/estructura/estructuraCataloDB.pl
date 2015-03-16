@@ -233,6 +233,7 @@ elsif($tipoAccion eq "MOSTRAR_FORM_MODIFICAR_CAMPOS"){
     my %params_combo;
     $params_combo{'default'}            = $catalogacion->getTablaFromReferencia()||'-1';
     $params_combo{'onChange'}           = 'eleccionTablaRef()';
+    $params_combo{'ALL'}                = 1; #retorno TODAS las tablas de referencia
     $t_params->{'tabla_referencias'}    = C4::AR::Utilidades::generarComboTablasDeReferencia(\%params_combo);
     $t_params->{'catalogacion'}         = $catalogacion;
     $t_params->{'OK'}                   = ($catalogacion?1:0); 
