@@ -399,7 +399,7 @@ elsif($tipoAccion eq "CIRCULACION_RAPIDA_OBTENER_DATOS_EJEMPLAR"){
                 });
 
     #obtengo el objeto de nivel3 segun el barcode que se quiere prestar
-    my ($nivel3) = C4::AR::Nivel3::getNivel3FromBarcode($obj->{'barcode'});
+    my ($nivel3) = C4::AR::Nivel3::getNivel3FromBarcode($obj->{'barcode'}, 1);
 
     if($nivel3){
 
