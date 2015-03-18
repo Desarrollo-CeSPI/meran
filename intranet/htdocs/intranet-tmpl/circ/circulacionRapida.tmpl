@@ -83,6 +83,7 @@ function obtenerDatosDelEjemplar(){
 function updateObtenerDatosDelEjemplar(responseText){
     $('#datos_ejemplar').html(responseText);
     $('#datos_ejemplar').show();
+
     if (responseText == ""){
     	alert ('[% "Hubo un problema con el ejemplar" | i18n %]');
     }
@@ -96,13 +97,14 @@ function updateObtenerTiposDePrestamos(responseText){
     var comboTipoPrestamo_html      = crearComboDeItems(tipoPrestamo_array_hash_ref, 'comboTipoPrestamo');
     
     //dependiendo si tiene sanciones o no, mostramos el combo de prestamos o un mensaje
-    $('#cambo_tipo_prestamo').show();
+    // $('#cambo_tipo_prestamo').show();
     
     if(( tieneSancion != 0 ) &&( tipoPrestamo_array_hash_ref.length == 0 )){
         $('#spanComboTipoPrestamo').html("<div class='alert alert-danger'>[% 'El usuario tiene una sanci&oacute;n del sistema. No puede realizar ning&uacute;n tipo de pr&eacute;stamo para este ejemplar' | i18n %].</div>");
         $('#cambo_tipo_prestamo label').fadeOut(0);
         $('#acciones').hide();
     }else{
+    	$('#cambo_tipo_prestamo').show();
         $('#spanComboTipoPrestamo').html(comboTipoPrestamo_html);
         $('#cambo_tipo_prestamo label').fadeIn(0);
         mostrarBotonAceptar();
@@ -239,6 +241,8 @@ function onChangeOperacion(){
 }
 
 function updateAutocompleteBarcodes(){
+	$('#cambo_tipo_prestamo').hide();
+	$('#acciones').hide();
 	refreshTipoPrestamo();
     obtenerDatosDelEjemplar();
     $('#usuario').focus();
@@ -267,7 +271,6 @@ function mostrarBotonAceptar(){
         $('#cambo_tipo_prestamo').show();
 	}
 }
-
 
 function onCompleteUsuarios(){
 	tieneApoderado();

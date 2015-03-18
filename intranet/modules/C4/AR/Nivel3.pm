@@ -363,7 +363,7 @@ sub getNivel3FromId3{
 =cut
 
 sub getNivel3FromBarcode {
-    my ($barcode) = @_;
+    my ($barcode, $all) = @_;
     
     my @filtros;
     
@@ -372,9 +372,9 @@ sub getNivel3FromBarcode {
     my $nivel3 = C4::Modelo::CatRegistroMarcN3::Manager->get_cat_registro_marc_n3( query => \@filtros ); 
 
     foreach my $n3 (@$nivel3){
-    if (!$n3->estadoCompartido) { #Sin compartidos
-      return $n3;
-    }
+        if ((!$n3->estadoCompartido) || ($all)) { #Sin compartidos a menos que se indique lo contrario
+          return $n3;
+        }
     }
     return (0);
 }
