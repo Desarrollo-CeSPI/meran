@@ -261,6 +261,14 @@ sub obtenerDefaultUI {
 
     return ($unidades_array_ref->[0]);
 }
+
+sub getFirstDefaultUI {
+
+    my $unidades_array_ref = C4::Modelo::PrefUnidadInformacion::Manager->get_pref_unidad_informacion();
+
+    return ($unidades_array_ref->[0]);
+}
+
 =item
 Devuelve un arreglo de objetos Nivel Bibliografico
 =cut
