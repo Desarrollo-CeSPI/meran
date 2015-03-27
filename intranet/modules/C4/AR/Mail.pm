@@ -336,7 +336,7 @@ sub send_mail {
     $t_params->{'link'}         = $info_smtp_hash_ref->{'link'};
     
     #nombre de la UI
-    my $ui                      = C4::AR::Referencias::obtenerDefaultUI();
+    my $ui                      = C4::AR::Referencias::obtenerDefaultUI() || C4::AR::Referencias::getFirstDefaultUI();
     my $nombre_ui               = Encode::decode_utf8($ui->getNombre());
     $t_params->{'nombre_ui'}    = $nombre_ui;
     

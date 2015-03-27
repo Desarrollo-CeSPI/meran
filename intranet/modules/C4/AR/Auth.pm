@@ -2055,19 +2055,19 @@ sub _sendRecoveryPasswordMail{
 	my ($socio,$link) = @_;
 
 	use C4::AR::Mail;
+	use C4::Modelo::PrefUnidadInformacion;
 
 	my %mail;
 
 	$mail{'mail_from'}              = Encode::decode_utf8(C4::AR::Preferencias::getValorPreferencia("reserveFrom"));
 	$mail{'mail_to'}                = $socio->persona->getEmail;
 	$mail{'mail_subject'}           = C4::AR::Filtros::i18n("Instrucciones para reestablecer su clave");
-	   
+
 	# Datos para el mail
-	use C4::Modelo::PrefUnidadInformacion;
 	
-	my $completo                    = Encode::decode_utf8($socio->persona->getNombre . " " . $socio->persona->getApellido);
+	my $completo                    = Encode::decode_utf8($socio->persona->getApeYNom );
 	my $nro_socio                   = $socio->getNro_socio;
-	my $ui                          = C4::AR::Referencias::obtenerDefaultUI();
+	my $ui                          = C4::AR::Referencias::obtenerDefaultUI() || C4::AR::Referencias::getFirstDefaultUI();
 	my $nombre_ui                   = Encode::decode_utf8($ui->getNombre());
 	my $mailMessage                 = C4::AR::Preferencias::getValorPreferencia('mailMessageForgotPass');
 						
@@ -2205,7 +2205,7 @@ sub recoverPassword{
 					C4::AR::Debug::debug("Auth => " . $@);
 					$message = C4::AR::Mensajes::getMensaje('U606','opac');
 					C4::AR::Mensajes::printErrorDB($@, 'U606',"opac");
-					# $db->rollback;
+					$db->rollback;
 				}
 
 				$db->{connect_options}->{AutoCommit} = 1;
