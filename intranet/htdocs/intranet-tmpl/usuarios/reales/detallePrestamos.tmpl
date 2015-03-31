@@ -62,7 +62,7 @@
                                 <td>
                                     [% IF prestamo.nivel3.getSignatura_topografica %] 
                                         [% PERL %]
-                                            print C4::AR::Filtros::link_to(	text => 	"[% prestamo.nivel3.getSignatura_topografica %]",
+                                            print C4::AR::Filtros::link_to(	text => 	'[% prestamo.nivel3.getSignatura_topografica %]',
                                                                             url => 		"[% url_prefix %]/catalogacion/estructura/detalle.pl", 
                                                                             params =>	["id1=[% prestamo.nivel3.nivel1.getId1 %]"],
                                                                 ) ;

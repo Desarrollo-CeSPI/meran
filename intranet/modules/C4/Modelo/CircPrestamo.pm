@@ -495,7 +495,7 @@ sub getFecha_vencimiento {
     my ($self) = shift;
 
 
-    $self->debug( "getFecha_vencimiento!!!"); 
+    #$self->debug( "getFecha_vencimiento!!!"); 
     my $plazo_actual;
     my $vencimiento;
     my $desde_proximos;

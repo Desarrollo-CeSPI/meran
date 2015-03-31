@@ -446,13 +446,16 @@ sub obtenerPrestamosDeSocio {
     my $prestamos_array_ref = C4::Modelo::CircPrestamo::Manager->get_circ_prestamo( 
                                           query => [ fecha_devolucion  => { eq => undef }, nro_socio  => { eq => $nro_socio }],
                                           require_objects => ['nivel3','socio','ui', 'nivel3.nivel2.nivel1','tipo'],
-
                                 ); 
-    my $prestamos_array_ref_count = C4::Modelo::CircPrestamo::Manager->get_circ_prestamo_count( 
-                                          query => [ fecha_devolucion  => { eq => undef }, nro_socio  => { eq => $nro_socio }],
-                                          require_objects => ['nivel3','socio','ui'],
 
-                                );     
+    # my $prestamos_array_ref_count = C4::Modelo::CircPrestamo::Manager->get_circ_prestamo_count( 
+    #                                       query => [ fecha_devolucion  => { eq => undef }, nro_socio  => { eq => $nro_socio }],
+    #                                       require_objects => ['nivel3','socio','ui'],
+
+    #                             );     
+
+    my $prestamos_array_ref_count = scalar(@$prestamos_array_ref);
+
     return ($prestamos_array_ref_count, $prestamos_array_ref);
 }
 
