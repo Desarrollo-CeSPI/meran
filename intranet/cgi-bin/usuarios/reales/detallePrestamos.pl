@@ -47,16 +47,18 @@ my $obj = $input->param('obj');
 $obj    = C4::AR::Utilidades::from_json_ISO($obj);
 C4::AR::Validator::validateParams('U389',$obj,['nro_socio'] );
 
-my $nro_socio                   = $obj->{'nro_socio'};
-my $prestamos                   = C4::AR::Prestamos::obtenerPrestamosDeSocio($nro_socio);
-C4::AR::Validator::validateObjectInstance($prestamos);
+my $nro_socio                   						= $obj->{'nro_socio'};
+my ($prestamos_array_ref_count, $prestamos_array_ref)   = C4::AR::Prestamos::obtenerPrestamosDeSocio($nro_socio);
 
-$t_params->{'PRESTAMOS'}        = $prestamos;
-$t_params->{'prestamos_cant'}   = scalar(@$prestamos);
-my $algunoSeRenueva             = 0;
-my $vencidos                    = 0;
+$t_params->{'PRESTAMOS'}        						= $prestamos_array_ref;
+$t_params->{'prestamos_cant'}   						= $prestamos_array_ref_count;
 
-foreach my $prestamo (@$prestamos) {
+C4::AR::Debug::debug("detallePrestamos => prestamos_cant => " .$prestamos_array_ref_count);
+
+my $algunoSeRenueva             						= 0;
+my $vencidos                    						= 0;
+
+foreach my $prestamo (@$prestamos_array_ref) {
 	if($prestamo->estaVencido){$vencidos++;}
 	if($prestamo->sePuedeRenovar){$algunoSeRenueva=1;}
 }
