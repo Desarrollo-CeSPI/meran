@@ -498,12 +498,13 @@ sub _verificarDatosBorrower {
     if (!($msg_object->{'error'}) && ( $checkStatus == 0)){
         $msg_object->{'error'}= 1;
         C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U336', 'params' => []} ) ;
-    }else{
-          if ( (!C4::AR::Usuarios::isUniqueDocument($documentnumber,$data)) ) {
-                $msg_object->{'error'}= 1;
-                C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U388', 'params' => []} ) ;
-          }
-    }
+    } 
+
+    if (!C4::AR::Usuarios::isUniqueDocument($documentnumber,$data)) {
+        $msg_object->{'error'}= 1;
+        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U388', 'params' => []} ) ;
+    } 
+
     return ($msg_object);
 }
 
@@ -987,15 +988,14 @@ sub isUniqueDocument {
     my ($nro_documento,$params) = @_;
     my @filtros;
 
-    push (@filtros, ( 'persona.nro_documento' => {eq => $nro_documento}, ) );
-
-    if (C4::AR::Utilidades::validateString($params->{'nro_socio'})) {
-        push (@filtros, (nro_socio => {ne => $params->{'nro_socio'} }) );
-    }
+    push (@filtros, ( 'persona.nro_documento' => { eq => $nro_documento }, ) );
+    push (@filtros, ( 'persona.tipo_documento' => { eq => $params->{'tipo_documento'} }, ) );
+    push (@filtros, ( nro_socio => { ne => $params->{'nro_socio'} }) );
 
     my $cant = C4::Modelo::UsrSocio::Manager::get_usr_socio_count( query => \@filtros,
                                                                    require_objects => ['persona']
                                                                 );
+
 
     return ($cant == 0); # SE USA 0 PARA SABER QUE NADIE TIENE ESE DOCUMENTO, Y 1 PARA SABER QUE LO TIENE UNO SOLO, SIRVE PARA MODIFICAR
 }
