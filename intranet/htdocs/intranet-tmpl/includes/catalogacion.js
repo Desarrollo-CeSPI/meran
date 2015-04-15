@@ -885,6 +885,7 @@ function updateGuardarDocumentoN1(responseText){
     var info        = JSONstring.toObject(responseText);
     var Messages    = info.Message_arrayref;
     ID_N1           = info.id1; //recupero el id desde el servidor
+    ID_N1_PADRE     = ID_N1;
 
     if (! (hayError(Messages) ) ){
         inicializar();
@@ -940,7 +941,8 @@ function updateGuardarDocumentoN2(responseText){
         inicializar();
         //carga la barra lateral con info de nivel 2
         mostrarInfoAltaNivel2(ID_N2);
-        if(ACTION != "AGREGAR_ANALITICA"){  
+        // if((ACTION != "AGREGAR_ANALITICA"){  
+        if (info.enable_nivel3 == 1) {  
             mostrarEstructuraDelNivel3(TEMPLATE_ACTUAL);    
         } else {
             disableAlert();
@@ -1093,7 +1095,10 @@ function updateGuardarModificacionDocumentoN2(responseText){
         inicializar();
         //carga la barra lateral con info de nivel 2
         mostrarInfoAltaNivel2(ID_N2);
-        mostrarEstructuraDelNivel3(TEMPLATE_ACTUAL);
+        if (info.enable_nivel3 == 1) { 
+            mostrarEstructuraDelNivel3(TEMPLATE_ACTUAL);
+        }
+        
         //se esta modificando desde el detalle del registro
         if (FROM_DETALLE_REGISTRO == 1){
             disableAlert();
