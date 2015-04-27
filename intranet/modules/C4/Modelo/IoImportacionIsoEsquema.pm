@@ -156,7 +156,7 @@ sub getDetalleByCampoSubcampoOrigen{
 
     my @filtros;
     push(@filtros,(id_importacion_esquema   => { eq => $self->getId }));
-    push(@filtros,(campo_origen            => { eq => $campo}));
+    push(@filtros,(campo_origen            => { eq => [lc($campo),uc($campo)]}));
     push(@filtros,(subcampo_origen            => { eq => $subcampo}));
     push(@filtros,(campo_destino            => { ne => undef}));
     my $detalleTemp = C4::Modelo::IoImportacionIsoEsquemaDetalle->new();
