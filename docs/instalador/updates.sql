@@ -861,3 +861,6 @@ UPDATE ref_colaborador SET  codigo =  'cri' WHERE  ref_colaborador.id =39;
 DELETE FROM pref_preferencia_sistema WHERE variable ="KohaAdminEmailAddress";
 
 UPDATE `cat_estructura_catalogacion`  SET fijo = 0 WHERE  `campo` LIKE  '910' AND  `subcampo` LIKE  'a' AND  `itemtype` LIKE  'CDR';
+
+#Socios Duplicados
+ALTER TABLE usr_socio ADD UNIQUE (id_persona);
