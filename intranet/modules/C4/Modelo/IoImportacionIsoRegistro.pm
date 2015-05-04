@@ -306,6 +306,7 @@ sub getCampoSubcampoJoined{
     my @resultado=();
     foreach my $detalle (@$detalle_completo){
         
+        #C4::AR::Debug::debug("DETALLE ORIGEN ###".$detalle->getCampoOrigen."###".$detalle->getSubcampoOrigen );
         #Pueden venis muchos campos, se los agarra en orden para armar el resultado
         my @fields = $marc->field($detalle->getCampoOrigen);
         
@@ -324,6 +325,7 @@ sub getCampoSubcampoJoined{
                 }
             
             if ($dato){
+
               #Le agrego el separado
               if($detalle->getSeparador){
                           $dato=$detalle->getSeparador.$dato;
@@ -346,6 +348,7 @@ sub getCampoSubcampoJoined{
            }
              
         }
+ 
      }
 
     return (\@resultado);
@@ -359,7 +362,6 @@ sub getIdentificacion{
 sub getTitulo{
     my ($self) = shift;
     my $titulo= $self->getCampoSubcampoJoined('245','a');
-
     if(!$titulo){
         my $padre=$self->getRegistroPadre;
         if ($padre){
@@ -382,7 +384,17 @@ sub getAutor{
         if ($padre){
             $autor=$padre->getAutor;
             }
-        }
+    }
+
+    if(!$autor){ 
+        $autor = $self->getCampoSubcampoJoined('111','a');
+    }
+
+    #Responsable
+    if(!$autor){ 
+        $autor = $self->getCampoSubcampoJoined('250','b');
+    }
+
     return $autor;
 }
 

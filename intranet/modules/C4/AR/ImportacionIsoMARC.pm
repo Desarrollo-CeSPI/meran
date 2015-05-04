@@ -1516,7 +1516,7 @@ sub detalleCompletoRegistro {
 
     #Son revistas?
     if ( C4::AR::ImportacionIsoMARC::getTipoDocumentoFromMarcRecord_Object($detalle->{'grupos'}->[0]->{'grupo'})->getId_tipo_doc() eq 'REV') {
-
+        #C4::AR::Debug::debug(" REVISTAS!!! ");
         my ($cantidad_ejemplares, $nuevos_grupos ) = procesarRevistas($detalle->{'grupos'});
         $detalle->{'grupos'} = $nuevos_grupos;
         $detalle->{'total_ejemplares'} = $cantidad_ejemplares;
@@ -1728,6 +1728,9 @@ sub procesarRevistas {
         my $ejemplares = $nivel2->{'ejemplares'};
 
             foreach my $nivel3_marc (@$ejemplares) {
+
+                #C4::AR::Debug::debug("EJEMPLAR: ".$nivel3_marc->as_formatted );
+
                 my $field995 = $nivel3_marc->field('995');
                 if ( $field995 ) {
                     foreach my $sf ($field995->subfields()){
@@ -1735,6 +1738,7 @@ sub procesarRevistas {
                         my $dato = $sf->[1];
 
                         if ($subcampo eq 't'){
+                            #C4::AR::Debug::debug("NUEVA SIGNATURA: ".$dato);
                             #signatura 
                             push (@signaturas, $dato);
                         } else {
@@ -1765,23 +1769,31 @@ sub procesarRevistas {
     my @nuevos_grupos=();
     my $total_ejemplares=0;
 
-    C4::AR::Debug::debug("REFISTRO BASE ==>  \n ".$marc_record_base->as_formatted);
+    C4::AR::Debug::debug("REGISTRO BASE ==>  \n ".$marc_record_base->as_formatted);
 
     #Porceso la colección generando los nuevos grupos
      foreach my $nivel2 (@$revistas){
+        #C4::AR::Debug::debug("REVISTA ==>  generamos estado de colección");        
         my $nivel2_marc = $nivel2->{'grupo'};
+        
+        #C4::AR::Debug::debug("GRUPO ==>  \n ".$nivel2_marc->as_formatted);
+
         my $field863 = $nivel2_marc->field('863');
 
-        if($field863) {
+        if(($field863)|| ($nivel2_marc->subfield('900','e'))) {
+
 
             my @estadoDeColeccion= (); 
 
-            if ($field863->subfield('e')){
+            if ($nivel2_marc->subfield('900','e')) {
+                #Lo saco del base
+                  $marc_record_base->field("900")->delete_subfield(code => 'e');
+
                 #Utilizo el subcampo e para indicar que se trata de el estado de colección completo.
                 #Ejemplo:
                 # 1976(1-2); 1977(3-4-5-6-7-8); 1978(9/10-11-12-13-14); 1979(15-16)
-
-                @estadoDeColeccion = _estadoDeColeccionCompleto($field863->subfield('e'));
+                #C4::AR::Debug::debug("REVISTA ==>  _estadoDeColeccionCompleto");
+                @estadoDeColeccion = _estadoDeColeccionCompleto($nivel2_marc->subfield('900','e'));
             }else{
                  #Así fue en Darwinion con Año Volumen y Número separados. 
                 @estadoDeColeccion = _estadoDeColeccionDatosSeparados($field863);
@@ -1790,29 +1802,59 @@ sub procesarRevistas {
 
              #   C4::AR::Debug::debug("ESTADO DE COLECCION ==>  \n ");
             foreach my $rev (@estadoDeColeccion){
-              #  C4::AR::Debug::debug("REVISTA ==>  \n ".$rev->{'volumen'}."-".$rev->{'numero'});
+                #C4::AR::Debug::debug("REVISTA ==>  \n ".$rev->{'anio'}."-".$rev->{'numero'});
 
-                    my $field863_final = $new_field863->clone();
-                    $field863_final->add_subfields('a' => $rev->{'volumen'});
-                    $field863_final->add_subfields('b' => $rev->{'numero'});                
+                    my $field863_final;
+
+                    if ($field863){
+                        $field863_final = $field863->clone();
+                        $field863_final->add_subfields('b' => $rev->{'numero'});
+                    }else{
+                        $field863_final = MARC::Field->new('863',' ',' ','b' => $rev->{'numero'});
+                    }
+
+                    if($rev->{'volumen'}) {
+                       $field863_final->add_subfields('a' => $rev->{'volumen'});
+                    }
+
+
                     my $marc_revista =  $marc_record_base->clone();
                     $marc_revista->add_fields($field863_final);
 
+                    #El estado posee el Año de publicación?
+                    if ($rev->{'anio'}){
+                        if (!$marc_revista->field('260')){
+                           $marc_revista->append_fields(MARC::Field->new('260',' ',' ','c' => $rev->{'anio'}));
+                        }
+                        else{
+                           $marc_revista->field('260')->add_subfields(  'c' => $rev->{'anio'} );
+                        }
+                    }
 
                     my %hash_temp;
                     $hash_temp{'grupo'}  = $marc_revista;
                     $hash_temp{'tipo_ejemplar'}  = $revistas->[0]->{'tipo_ejemplar'};
                     $hash_temp{'cant_ejemplares'}   = 0;
                     my @ejemplares;
-                    foreach my $sig (@signaturas){
+                    
+                    if (scalar(@signaturas)){
+
+                        foreach my $sig (@signaturas){
+                            #C4::AR::Debug::debug("REVISTA ==>  \n SIGNATURA: ".$sig);
+                            my $marc_record_n3 = $marc_record_ejemplares_base->clone();
+                             
+                            if (!$marc_record_n3->field('995')){
+                               $marc_record_n3->append_fields(MARC::Field->new('995',' ',' ','t' => $sig));
+                            }
+                            else{
+                               $marc_record_n3->field('995')->add_subfields(  't' => $sig );
+                            }
+                            $hash_temp{'cant_ejemplares'} ++;
+                            push(@ejemplares,$marc_record_n3);
+                        }
+                    }else{
+                        #sin signatura
                         my $marc_record_n3 = $marc_record_ejemplares_base->clone();
-                         
-                        if (!$marc_record_n3->field('995')){
-                           $marc_record_n3->append_fields(MARC::Field->new('995',' ',' ','t' => $sig));
-                        }
-                        else{
-                           $marc_record_n3->field('995')->add_subfields(  't' => $sig );
-                        }
                         $hash_temp{'cant_ejemplares'} ++;
                         push(@ejemplares,$marc_record_n3);
                     }
@@ -1844,59 +1886,11 @@ sub procesarRevistas {
         # 1976(1-2); 1977(3-4-5-6-7-8); 1978(9/10-11-12-13-14); 1979(15-16)
         
         # C4::AR::Debug::debug("COLECCION  ==>  PROCESO : $volumenes \n");
-            my @anios_separados = split(';', $estadoDeColeccionCompleto );
-            foreach my $anio (@anios_separados){
-                my $anio = C4::AR::Utilidades::trim($anio);
-                
-            }
-
-                if (index($v , '-') != -1) {
-                    #son muchos
-                    my @vsecuencia = split('-', $v);
-                    #Agarro únicamente los 2 primeros valores, el resto lo considero erroneo. Por ej: debe venir a-b y debe ser a>b, no puede ser a-b-c y desordenado
-                    if (@vsecuencia gt 1){
-                        my $vini = C4::AR::Utilidades::trim($vsecuencia[0]);
-                        my $vfin = C4::AR::Utilidades::trim($vsecuencia[1]);
-                        if (($vini < $vfin)&&( ($vfin - $vini) <= 365 )) {
-                        
-                            foreach my $vs ($vini..$vfin) {
-     #                           C4::AR::Debug::debug("COLECCION  ==>  AGREGA UNO DE SECUENCIA Volumen: $vs \n");
-                                my $volumen_limpio =C4::AR::Utilidades::trim($vs);
-                                push( @estadoDeColeccion, _generarNumerosDeVolumen($volumen_limpio,$numeros));
-                            }    
- 
-                        }
-                        else{
-                            # error en orden de secuencia, lo agrego igual
-      #                      C4::AR::Debug::debug("COLECCION  ==>  ERROR EN ORDEN DE SECUENCIA Volumen $v => $vini <= $vfin \n");
-                            my $volumen_limpio =C4::AR::Utilidades::trim($v);
-                            push( @estadoDeColeccion, _generarNumerosDeVolumen($volumen_limpio,$numeros));
-                        }
-
-                    }
-                    else{
-                        #uno solo, es un error, lo agrego igual
-       #                 C4::AR::Debug::debug("COLECCION  ==>  ERROR: posee un - y existe un solo valor $v \n");
-                        my $volumen_limpio =C4::AR::Utilidades::trim($v);
-                        push( @estadoDeColeccion, _generarNumerosDeVolumen($volumen_limpio,$numeros));
-                    }
-
-                }else{
-                    #uno solo
-        #             C4::AR::Debug::debug("COLECCION  ==>  AGREGA UNO: $v \n");
-                    my $volumen_limpio =C4::AR::Utilidades::trim($v);
-                    push( @estadoDeColeccion, _generarNumerosDeVolumen($volumen_limpio,$numeros));
-
-                }
-
-                } #foreach
-            } #if 
-
-        else {
-                    #no tiene volumen agrego los números solos, si hay!
-                    push( @estadoDeColeccion, _generarNumerosDeVolumen('',$numeros));
+        while($estadoDeColeccionCompleto =~ /(\d*)\s*\(([^\)]+)\)/g) {
+           my $anio = $1;
+           my $numeros = $2;
+           push( @estadoDeColeccion, _generarNumerosDeAnio(C4::AR::Utilidades::trim($anio),C4::AR::Utilidades::trim($numeros)));
         }
-    
 
         return  @estadoDeColeccion;
     }
@@ -2047,6 +2041,35 @@ sub procesarRevistas {
 
         return  @estadoDeColeccion;           
         } 
+
+    sub _generarNumerosDeAnio {
+        my ($anio,$numeros) = @_;
+            my @estadoDeColeccion= (); 
+
+            if ($numeros) {
+
+ #               C4::AR::Debug::debug("COLECCION  ==>  PROCESO : $numeros \n");
+                
+                my @numeros_separados = split('-', $numeros );
+
+                foreach my $n (@numeros_separados){
+                    my $numero_limpio =C4::AR::Utilidades::trim($n);
+                    my %fasciculo=();
+                    $fasciculo{'anio'} = $anio;
+                    $fasciculo{'numero'} = $numero_limpio;
+                    push(@estadoDeColeccion,\%fasciculo);
+                }
+
+            } else {
+                        #no tiene número
+                        my %fasciculo=();
+                        $fasciculo{'anio'} = $anio;
+                        $fasciculo{'numero'} = '';
+                        push(@estadoDeColeccion,\%fasciculo);
+            }
+
+        return  @estadoDeColeccion;           
+    } 
 
 sub toMARC_Array {
     my ($marc_record, $itemtype, $type, $nivel) = @_;
@@ -2358,12 +2381,12 @@ sub getIdiomaFromMarcRecord{
                     }
             }
 
-        C4::AR::Debug::debug("busco idioma =>".$texto);
+        #C4::AR::Debug::debug("busco idioma =>".$texto);
         if (length($texto) le 3 ){
             my ($cantidad, $objetos) = (C4::Modelo::RefIdioma->new())->getIdiomaById($texto);
            
             if($cantidad){
-                C4::AR::Debug::debug("encontro idioma =>".$objetos->[0]->getIdLanguage());
+         #       C4::AR::Debug::debug("encontro idioma =>".$objetos->[0]->getIdLanguage());
                  return  $objetos->[0]->getIdLanguage();
             }
         }
@@ -2371,7 +2394,7 @@ sub getIdiomaFromMarcRecord{
         #NO lo encontre por iso voy a buscar por nombre exacto
         my ($cantidad, $objetos) = (C4::Modelo::RefIdioma->new())->getIdiomaByName($texto);
         if($cantidad){
-            C4::AR::Debug::debug("encontro idioma =>".$objetos->[0]->getIdLanguage());
+          #  C4::AR::Debug::debug("encontro idioma =>".$objetos->[0]->getIdLanguage());
             return $objetos->[0]->getIdLanguage();
         }
     }
@@ -2458,14 +2481,14 @@ sub getPaisFromMarcRecord{
                 }
         }
 
-        C4::AR::Debug::debug("busco pais =>".$texto);
+        #C4::AR::Debug::debug("busco pais =>".$texto);
 
         if (length($texto) le 3 ){
             # no es un código
             my ($cantidad, $objetos) = (C4::Modelo::RefPais->new())->getPaisByIso($texto);
        
             if($cantidad){
-                C4::AR::Debug::debug("encontro pais =>".$objetos->[0]->getNombre());
+                # C4::AR::Debug::debug("encontro pais =>".$objetos->[0]->getNombre());
                  return  $objetos->[0]->getIso();
             }
         }
@@ -2473,7 +2496,7 @@ sub getPaisFromMarcRecord{
             #NO lo encontre por iso voy a buscar por nombre exacto
             my ($cantidad, $objetos) = (C4::Modelo::RefPais->new())->getPaisByName($texto);
             if($cantidad){
-                C4::AR::Debug::debug("encontro pais =>".$objetos->[0]->getNombre());
+                #C4::AR::Debug::debug("encontro pais =>".$objetos->[0]->getNombre());
                 return $objetos->[0]->getIso();
             }
     }
