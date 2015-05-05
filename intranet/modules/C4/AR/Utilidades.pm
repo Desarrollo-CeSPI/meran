@@ -1613,9 +1613,12 @@ sub UTF8toISO {
 =cut
 sub from_json_ISO {
     eval {
-        #C4::AR::Debug::debug("JSON => Utilidades.pm => " . $data);
+        # C4::AR::Debug::debug("JSON => Utilidades.pm => " . $_[0]);
         #quita el caracter tab en todo el string $data
         $_[0] =~ s/\t//g;
+        #quita campos separadores ante un eventual marc_record roto
+        $_[0] =~ s/\N{U+001E}//g;
+        $_[0] =~ s/\N{U+001D}//g;
         $_[0] = UTF8toISO($_[0]);
         #C4::AR::Debug::debug("Data JSON ===> ".$data);
         return from_json($_[0], {latin1 => 1});
