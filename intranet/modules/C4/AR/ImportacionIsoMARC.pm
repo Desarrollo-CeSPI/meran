@@ -1514,6 +1514,14 @@ sub detalleCompletoRegistro {
             }
         }
 
+        #Seteo bien el código de tipo de documento
+        if($nivel1->field('110')){
+            $nivel1->field('110')->update( 'a' => "Universidad Nacional de La Plata");
+        }else{
+                my $new_field= MARC::Field->new('110','#','#','a' => "Universidad Nacional de La Plata");
+                $nivel1->append_fields($new_field);
+        }
+
     #Son revistas?
     if ( C4::AR::ImportacionIsoMARC::getTipoDocumentoFromMarcRecord_Object($detalle->{'grupos'}->[0]->{'grupo'})->getId_tipo_doc() eq 'REV') {
         #C4::AR::Debug::debug(" REVISTAS!!! ");
@@ -2228,7 +2236,7 @@ sub getEjemplarFromMarcRecord {
 sub getTipoDocumentoFromMarcRecord {
         my ($marc_record) = @_;
     #FIXME  Debería ir a una tabla de referencia de alias o sinónimos
-        my $tipo_documento = $marc_record->subfield('910','a') || 'REV';        
+        my $tipo_documento = $marc_record->subfield('910','a') || C4::AR::Preferencias::getValorPreferencia("defaultTipoNivel3");        
         my $nivel_bibliografico = $marc_record->subfield('900','b');
 
         #C4::AR::Debug::debug(" TIPO DOCUMENTO  ".$tipo_documento );
