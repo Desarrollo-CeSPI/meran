@@ -865,6 +865,6 @@ UPDATE `cat_estructura_catalogacion`  SET fijo = 0 WHERE  `campo` LIKE  '910' AN
 #Socios Duplicados
 ALTER TABLE usr_socio ADD UNIQUE (id_persona);
 
-UPDATE cat_ref_tipo_nivel3 SET enable_nivel3 = 0 WHERE 1;
+UPDATE cat_ref_tipo_nivel3 SET enable_nivel3 = 0 WHERE 1; 
 
 UPDATE cat_ref_tipo_nivel3 SET enable_nivel3 = 1 WHERE id_tipo_doc NOT IN ('ANA', 'ELE', 'SEW', 'WEB');
