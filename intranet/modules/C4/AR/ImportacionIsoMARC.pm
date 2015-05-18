@@ -1,3 +1,23 @@
+# Meran - MERAN UNLP is a ILS (Integrated Library System) wich provides Catalog,
+# Circulation and User's Management. It's written in Perl, and uses Apache2
+# Web-Server, MySQL database and Sphinx 2 indexing.
+# Copyright (C) 2009-2015 Grupo de desarrollo de Meran CeSPI-UNLP
+#
+# This file is part of Meran.
+#
+# Meran is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# Meran is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with Meran.  If not, see <http://www.gnu.org/licenses/>.
+
 package C4::AR::ImportacionIsoMARC;
 
 #
@@ -1514,6 +1534,9 @@ sub detalleCompletoRegistro {
             }
         }
 
+    #Parche: FAU pide duplicar un campo y que el autor sea la UNLP
+    if (C4::AR::Preferencias::getValorPreferencia("defaultUI") eq "DAQ"){
+        
         #Seteo bien el código de tipo de documento
         if($nivel1->field('110')){
             $nivel1->field('110')->update( 'a' => "Universidad Nacional de La Plata");
@@ -1521,6 +1544,16 @@ sub detalleCompletoRegistro {
                 my $new_field= MARC::Field->new('110','#','#','a' => "Universidad Nacional de La Plata");
                 $nivel1->append_fields($new_field);
         }
+
+        if ($nivel1->subfield('245','a')){
+            if (!$nivel1->field('222')){
+               $nivel1->append_fields(MARC::Field->new('222',' ',' ','a' => $nivel1->subfield('245','a')));
+            }
+            else{
+               $nivel1->field('222')->add_subfields(  'a' => $nivel1->subfield('245','a') );
+            }
+        }
+    }
 
     #Son revistas?
     if ( C4::AR::ImportacionIsoMARC::getTipoDocumentoFromMarcRecord_Object($detalle->{'grupos'}->[0]->{'grupo'})->getId_tipo_doc() eq 'REV') {
@@ -1825,19 +1858,13 @@ sub procesarRevistas {
                        $field863_final->add_subfields('a' => $rev->{'volumen'});
                     }
 
+                    #El estado posee el Año de publicación?
+                    if ($rev->{'anio'}){
+                       $field863_final->add_subfields('i' => $rev->{'anio'});
+                    }
 
                     my $marc_revista =  $marc_record_base->clone();
                     $marc_revista->add_fields($field863_final);
-
-                    #El estado posee el Año de publicación?
-                    if ($rev->{'anio'}){
-                        if (!$marc_revista->field('260')){
-                           $marc_revista->append_fields(MARC::Field->new('260',' ',' ','c' => $rev->{'anio'}));
-                        }
-                        else{
-                           $marc_revista->field('260')->add_subfields(  'c' => $rev->{'anio'} );
-                        }
-                    }
 
                     my %hash_temp;
                     $hash_temp{'grupo'}  = $marc_revista;
