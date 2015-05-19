@@ -1534,17 +1534,9 @@ sub detalleCompletoRegistro {
             }
         }
 
-    #Parche: FAU pide duplicar un campo y que el autor sea la UNLP
+    #Parche: FAU pide duplicar un campo 
     if (C4::AR::Preferencias::getValorPreferencia("defaultUI") eq "DAQ"){
         
-        #Seteo bien el código de tipo de documento
-        if($nivel1->field('110')){
-            $nivel1->field('110')->update( 'a' => "Universidad Nacional de La Plata");
-        }else{
-                my $new_field= MARC::Field->new('110','#','#','a' => "Universidad Nacional de La Plata");
-                $nivel1->append_fields($new_field);
-        }
-
         if ($nivel1->subfield('245','a')){
             if (!$nivel1->field('222')){
                $nivel1->append_fields(MARC::Field->new('222',' ',' ','a' => $nivel1->subfield('245','a')));
