@@ -654,6 +654,11 @@ sub getSignatura_topografica{
     return C4::AR::Utilidades::trim($marc_record->subfield("995","t"));
 }
 
+sub getSignatura_topograficaEscaped {
+    my ($self)      = shift;
+    my $signatura = $self->getSignatura_topografica();
+    return C4::AR::Utilidades::escapeData($signatura);
+}
 
 sub getId_ui_origen{
     my ($self)      = shift;
