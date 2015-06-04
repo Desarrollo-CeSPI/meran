@@ -42,8 +42,8 @@ tar -xzvf meranunlp-vX.x.x.tar.gz
 And now proceed to install.
 
 ```
-chmod +x instalar.pl
-./instalar -i MERAN_ID
+chmod +x instalar.sh
+./instalar.sh -i MERAN_ID
 ```
 
 And follow the steps. MERAN_ID it's an identifier for the installation, since you can have multiples MERAN installed.
