@@ -25,9 +25,9 @@ __PACKAGE__->meta->setup(
     ],
 
     primary_key_columns => ['id_prestamo'],
-    
+
     unique_key          => ['id3','nro_socio'],
-    
+
     relationships => [
 
         nivel3 => {
@@ -279,7 +279,7 @@ sub prestar {
 # Si no esta prestado se puede hacer lo de abajo, lo que sigue (estaba pensado para esa situacion).
 # Tener en cuenta los prestamos especiales, $tipo_prestamo ==> ES ---> SA. **** VER!!!!!!
     my $disponibilidad = C4::AR::Reservas::getDisponibilidad($id3);
-    
+
     my $ejemplar  = C4::AR::Nivel3::getNivel3FromId3($id3);
     if ( ($cant_reservas_total >= 1) && ($ejemplar->esParaPrestamo) ) {
 
@@ -306,38 +306,38 @@ sub prestar {
         }else{
             #NO EXITE LA RESERVA -> HAY QUE RESERVAR!!!
             $self->debug("NO EXITE LA RESERVA -> HAY QUE RESERVAR!!!");
-    
+
             my $seReserva = 1;
-    
+
             #Se verifica disponibilidad del item;
             my $reserva = C4::AR::Reservas::getReservaDeId3($id3,$self->db);
-    
+
             if ($reserva) {
                 $self->debug("El item se encuentra reservado, y hay que buscar otro item del mismo grupo para asignarlo a la reserva del otro usuario");
-    
+
     #el item se encuentra reservado, y hay que buscar otro item del mismo grupo para asignarlo a la reserva del otro usuario
                 my ($nivel3) = C4::AR::Reservas::getNivel3ParaReserva( $params->{'id2'},$self->db );
                 if ($nivel3) {
-    
+
              #CAMBIAMOS EL ID3 A OTRO LIBRE Y ASI LIBERAMOS EL QUE SE QUIERE PRESTAR
                     $self->debug("CAMBIAMOS EL ID3 A OTRO LIBRE Y ASI LIBERAMOS EL QUE SE QUIERE PRESTAR : Reserva: ".$reserva->getId_reserva." Nuevo id3: ".$nivel3->getId3);
                     $reserva->setId3( $nivel3->getId3 );
                     $reserva->save();
-    
+
                     # el id3 de params quedo libre para ser reservado
-    
+
                 }
                 else {
                     $self->debug("NO HAY EJEMPLARES LIBRES PARA EL PRESTAMO");
-    
+
        # NO HAY EJEMPLARES LIBRES PARA EL PRESTAMO, SE PONE EL ID3 EN "" PARA QUE SE
        # REALIZE UNA RESERVA DE GRUPO, SI SE PERMITE.
                     $params->{'id3'} = "";
                     if (!C4::AR::Preferencias::getValorPreferencia('intranetGroupReserve')){
-    
+
                         #NO SE PERMITE LA RESERVA DE GRUPO
                         $seReserva = 0;
-    
+
                     #Hay error no se permite realizar una reserva de grupo en intra.
                         $self->debug("Hay error no se permite realizar una reserva de grupo en intra");
                         $msg_object->{'error'} = 1;
@@ -345,11 +345,11 @@ sub prestar {
                             { 'codMsg' => 'R004', 'params' => [] } );
                     }
                     else {
-    
+
                         #SE PERMITE LA RESERVA DE GRUPO
                         $self->debug(
                             "No hay error, se realiza una reserva de grupo");
-    
+
                         #No hay error, se realiza una reserva de grupo.
                         $msg_object->{'error'} = 1;
                         C4::AR::Mensajes::add( $msg_object,
@@ -357,11 +357,11 @@ sub prestar {
                     }
                 }
             }
-    
+
             #Se realiza una reserva
             if ($seReserva) {
                 $self->debug("Se realiza una reserva!! ");
-    
+
                 my ($reserva) = C4::Modelo::CircReserva->new( db => $self->db );
                 my ($paramsReserva) = $reserva->reservar($params);
                 $params->{'id_reserva'} = $reserva->getId_reserva;
@@ -464,16 +464,16 @@ sub estaVencido {
     else {
 
         if ( $self->getTipo_prestamo eq 'ES' ) {    #Prestamo especial
-            $self->debug("Prestamo Especial !!");           
+            $self->debug("Prestamo Especial !!");
             if ( Date::Manip::Date_Cmp( $df, $hoy ) == 0 )
             {                                       #Se tiene que devolver hoy
-            
+
                 $self->debug("Se tiene que devolver hoy!!!");
-                
+
                 my $end    = C4::Date::calc_endES();
                 my $actual = Date::Manip::ParseDate("now");
                 $self->debug("HORA PE VENCIMIENTO ".$end." ACTUAL ".$actual);
-                
+
                 if ( Date::Manip::Date_Cmp( $actual, $end ) > 0 )
                 {    #Se devuelve despues del limite
                     $self->debug("PE VENCIDO");
@@ -495,35 +495,35 @@ sub getFecha_vencimiento {
     my ($self) = shift;
 
 
-    #$self->debug( "getFecha_vencimiento!!!"); 
+    #$self->debug( "getFecha_vencimiento!!!");
     my $plazo_actual;
     my $vencimiento;
     my $desde_proximos;
     my $apertura;
     my $cierre;
-    
+
     eval {
         if ( $self->getRenovaciones > 0 )
         { #quiere decir que ya fue renovado entonces tengo que calcular sobre los dias de un prestamo renovado para saber si estoy en fecha
 
 
-            # $self->debug( "getFecha_vencimiento => SE RENOVO ".$self->getRenovaciones." VECES, LA ULTIMA ".$self->getFecha_ultima_renovacion ); 
+            # $self->debug( "getFecha_vencimiento => SE RENOVO ".$self->getRenovaciones." VECES, LA ULTIMA ".$self->getFecha_ultima_renovacion );
             $plazo_actual = $self->tipo->getDias_renovacion;
             ($desde_proximos,$vencimiento,$apertura,$cierre) = C4::Date::proximosHabiles($plazo_actual, 0, $self->getFecha_ultima_renovacion);
 
-            # $self->debug( "getFecha_vencimiento => DIAS A AGREGAR ".$self->tipo->getDias_renovacion); 
-            # $self->debug( "getFecha_vencimiento => VENCE  ".$vencimiento); 
+            # $self->debug( "getFecha_vencimiento => DIAS A AGREGAR ".$self->tipo->getDias_renovacion);
+            # $self->debug( "getFecha_vencimiento => VENCE  ".$vencimiento);
 
 
         }
         else
         { #es la primer renovacion por lo tanto tengo que ver sobre los dias de un prestamo normal para saber si estoy en fecha de renovacion
             $plazo_actual = $self->tipo->getDias_prestamo;
-            # $self->debug( "PLAZO ACTUAL => DIAS ".$plazo_actual); 
+            # $self->debug( "PLAZO ACTUAL => DIAS ".$plazo_actual);
             ($desde_proximos,$vencimiento,$apertura,$cierre) = C4::Date::proximosHabiles($plazo_actual, 0, $self->getFecha_prestamo);
         }
     };
-    
+
     return ($vencimiento);
 }
 
@@ -554,7 +554,7 @@ sub devolver {
     $self->debug("Actualizo la fecha de devolucion!!!!");
 
     my $fechaVencimiento = $self->getFecha_vencimiento;    # tiene que estar aca porque despues ya se marco como devuelto
-           #Actualizo la fecha de devolucion!!!!
+    #Actualizo la fecha de devolucion!!!!
     my $dateformat = C4::Date::get_date_format();
     my $fechaHoy =  C4::Date::format_date_in_iso( Date::Manip::ParseDate("today"), $dateformat );
     $self->setFecha_devolucion($fechaHoy);
@@ -708,7 +708,7 @@ sub estaEnFechaDeRenovacion {
     my $first_day_week         =C4::AR::Preferencias::getValorPreferencia("primer_dia_semana");
     my $last_day_week          =C4::AR::Preferencias::getValorPreferencia("ultimo_dia_semana");
     my ($actual,$min,$hora)    = localtime;
-    
+
     $actual=($hora).':'.$min;
     Date_Init("WorkDayBeg=".$apertura,"WorkDayEnd=".$cierre);
     Date_Init("WorkWeekBeg=".$first_day_week,"WorkWeekEnd=".$last_day_week);
@@ -759,10 +759,10 @@ sub _verificarParaRenovar {
         C4::AR::Mensajes::add( $msg_object,
             { 'codMsg' => 'U300', 'params' => [] } );
     }
-      
+
     if ($type eq "opac"){
-  
-        if ( !( $msg_object->{'error'} )  && !($self->socio->cumpleRequisito )) 
+
+        if ( !( $msg_object->{'error'} )  && !($self->socio->cumpleRequisito ))
         {
                 # El usuario cumple condicion?
                 $self->debug("_verificarParaRenovar - socio no cumple condicion");
@@ -829,7 +829,7 @@ sub _verificarParaRenovar {
             { 'codMsg' => 'P118', 'params' => [] } );
     }
 
-    #Tiene algún ejemplar prestado vencido?? 
+    #Tiene algún ejemplar prestado vencido??
     my ($vencidos,$prestados) = C4::AR::Prestamos::cantidadDePrestamosPorUsuario($self->getNro_socio);
 
     if ( !( $msg_object->{'error'} ) && ( $vencidos > 0 ) ) {
@@ -870,14 +870,14 @@ sub sePuedeRenovar_text{
     my ($msg_object) = C4::AR::Mensajes::create();
     $msg_object->{'error'} = 0;
     $self->_verificarParaRenovar($msg_object,);
-    
+
     my $cod_msg = C4::AR::Mensajes::getFirstCodeError($msg_object);
-    
+
     return ( C4::AR::Mensajes::getMensaje($cod_msg,$msg_object->{'tipo'}) );
-    
+
 }
 
-=item 
+=item
 renovar
 =cut
 
@@ -914,7 +914,7 @@ sub getInvolvedCount {
     my @filtros;
     push (@filtros, ( $campo->getCampo_referente => $value ) );
     C4::AR::Debug::debug("CircPrestamo=> getInvolvedCount => $campo || $value" );
-    
+
     my $circ_prestamo_count =  C4::Modelo::CircPrestamo::Manager->get_circ_prestamo_count(query => \@filtros );
     return ($circ_prestamo_count);
 }
