@@ -27,7 +27,7 @@ __PACKAGE__->meta->setup(
 
     relationships =>
     [
-      nivel1 => 
+      nivel1 =>
       {
 #         class       => 'C4::Modelo::CatNivel1',
         class       => 'C4::Modelo::CatRegistroMarcN1',
@@ -35,7 +35,7 @@ __PACKAGE__->meta->setup(
         type        => 'one to one',
       },
 
-      nivel2 => 
+      nivel2 =>
       {
 #         class       => 'C4::Modelo::CatNivel2',
         class       => 'C4::Modelo::CatRegistroMarcN2',
@@ -43,7 +43,7 @@ __PACKAGE__->meta->setup(
         type        => 'one to one',
       },
 
-      nivel3 => 
+      nivel3 =>
       {
 #         class       => 'C4::Modelo::CatNivel3',
         class       => 'C4::Modelo::CatRegistroMarcN3',
@@ -51,21 +51,21 @@ __PACKAGE__->meta->setup(
         type        => 'one to one',
       },
 
-     socio => 
+     socio =>
       {
         class       => 'C4::Modelo::UsrSocio',
         key_columns => { nro_socio => 'nro_socio' },
         type        => 'one to one',
       },
 
-     responsable_ref => 
+     responsable_ref =>
       {
         class       => 'C4::Modelo::UsrSocio',
         key_columns => { responsable => 'nro_socio' },
         type        => 'one to one',
       },
 
-     tipo_prestamo_ref => 
+     tipo_prestamo_ref =>
       {
         class       => 'C4::Modelo::CircRefTipoPrestamo',
         key_columns => { tipo_prestamo => 'id_tipo_prestamo' },
@@ -163,7 +163,7 @@ sub getFecha{
 }
 
 sub getFecha_formateada{
-    my ($self) = shift; 
+    my ($self) = shift;
     my $dateformat = C4::Date::get_date_format();
     return C4::Date::format_date(C4::AR::Utilidades::trim($self->getFecha),$dateformat);
 }
@@ -181,7 +181,7 @@ sub getFecha_fin{
 }
 
 sub getFecha_fin_formateada{
-    my ($self) = shift; 
+    my ($self) = shift;
     my $dateformat = C4::Date::get_date_format();
     return C4::Date::format_date(C4::AR::Utilidades::trim($self->getFecha_fin),$dateformat);
 }
@@ -243,7 +243,7 @@ sub agregar {
 	else{
     	if($data_hash->{'estado'} eq 'E'){
 		#es una reserva sobre el ITEM
-            $self->setTipo_operacion('RESERVA');           
+            $self->setTipo_operacion('RESERVA');
 		}else{
 		#es una reserva sobre el GRUPO
 		  $self->setTipo_operacion('ESPERA');
@@ -252,7 +252,7 @@ sub agregar {
    	}
 
     $self->setId1($data_hash->{'id1'});
-    $self->setId2($data_hash->{'id2'}); 
+    $self->setId2($data_hash->{'id2'});
     $self->setId3($data_hash->{'id3'});
     $self->setNro_socio($data_hash->{'nro_socio'});
 
@@ -261,7 +261,8 @@ sub agregar {
 
     my $hoy = ParseDate("today");
     my $dateformat = C4::Date::get_date_format();
-    $self->setFecha(C4::Date::format_date_in_iso($hoy, $dateformat));
+    my $fecha = $data_hash->{'fecha_devolucion'} || C4::Date::format_date_in_iso($hoy, $dateformat);
+    $self->setFecha($fecha);
 
     $self->setFecha_fin($data_hash->{'hasta'});
     $self->setTipo_prestamo($data_hash->{'tipo_prestamo'});
@@ -271,4 +272,3 @@ sub agregar {
     $self->save();
 }
 1;
-

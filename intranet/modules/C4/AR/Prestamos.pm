@@ -1599,6 +1599,7 @@ sub agregarPrestamoAHistorialCirculacion{
     $params{'nro_socio'}    = $prestamo->getNro_socio;
     $params{'responsable'}  = $responsable || $prestamo->getNro_socio;
     $params{'fecha'}        = $prestamo->getFecha_prestamo;
+    $params{'fecha_devolucion'}= $prestamo->getFecha_devolucion;
     $params{'id_ui'}        = $prestamo->getId_ui_prestamo;
     $params{'tipo'}         = $tipo_operacion;
     $params{'tipo_prestamo'}= $prestamo->getTipo_prestamo;
