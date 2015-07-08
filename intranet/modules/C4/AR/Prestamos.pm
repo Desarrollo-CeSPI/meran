@@ -93,7 +93,7 @@ sub _verificarMaxTipoPrestamo{
     if ($tipo){
         my $prestamos_maximos= $tipo->getPrestamos;
         #
-    
+
         #Obtengo la cant total de prestamos actuales de ese tipo que tiene el usuario
         my @filtros;
         push(@filtros, ( fecha_devolucion   => { eq => undef } ));
@@ -102,7 +102,7 @@ sub _verificarMaxTipoPrestamo{
 
         my $cantidad_prestamos= C4::Modelo::CircPrestamo::Manager->get_circ_prestamo_count( query => \@filtros, require_objects => ['tipo']);
 
-        
+
         if ($cantidad_prestamos >= $prestamos_maximos) {$error=1}
     }
 
@@ -120,12 +120,12 @@ sub prestamosHabilitadosPorTipo {
     my $sanciones= C4::AR::Sanciones::tieneSanciones($nro_socio);
 
     #Trae todos los tipos de prestamos que estan habilitados
-    my $tipos_habilitados_array_ref = C4::Modelo::CircRefTipoPrestamo::Manager->get_circ_ref_tipo_prestamo(   
-                                                                        query => [ 
+    my $tipos_habilitados_array_ref = C4::Modelo::CircRefTipoPrestamo::Manager->get_circ_ref_tipo_prestamo(
+                                                                        query => [
                                                                                 codigo_disponibilidad   => { eq => $codigo_disponibilidad },
                                                                                 habilitado          => { eq => 1},
                                                                                 id 					=> { ne => 0 } # No debe mostrar NUNCA el tipo RESERVA
-                                                                            ], 
+                                                                            ],
                                         );
 
 
@@ -133,12 +133,12 @@ sub prestamosHabilitadosPorTipo {
     my @tipos;
     foreach my $tipo_prestamo (@$tipos_habilitados_array_ref){
         my $estaSancionado= 0;
-        
+
 
         if($sanciones){
         #tiene sanciones
             foreach my $sancion (@$sanciones){
-                if(($sancion->getTipo_sancion ne 0)&&($sancion->getTipo_sancion ne -1)){#Si no es una sancion por una Reserva (0) o Manual (-1) 
+                if(($sancion->getTipo_sancion ne 0)&&($sancion->getTipo_sancion ne -1)){#Si no es una sancion por una Reserva (0) o Manual (-1)
                     #tipos de prestamo que afecta
                     my @tipos_prestamo_sancion=$sancion->ref_tipo_sancion->ref_tipo_prestamo_sancion;
                     foreach my $tipo_prestamo_sancion (@tipos_prestamo_sancion){
@@ -221,7 +221,7 @@ sub getCountPrestamosDelRegistro{
     retorna los datos del tipo de prestamo
 =cut
 sub getTipoPrestamo {
-    
+
     use C4::Modelo::CircRefTipoPrestamo;
     my ($tipo_prestamo)=@_;
     my @filtros;
@@ -234,13 +234,13 @@ sub getTipoPrestamo {
         return(0);
     }
 }
-#==========================================================hasta aca revisado========================================================    
+#==========================================================hasta aca revisado========================================================
 
 sub chequeoDeFechas{
     my ($cantDiasRenovacion,$fechaRenovacion,$intervalo_vale_renovacion)=@_;
     # La $fechaRenovacion es la ultima fecha de renovacion o la fecha del prestamo si nunca se renovo
     my $plazo_actual=$cantDiasRenovacion; # Cuantos dias más se puede renovar el prestamo
-    
+
     my ($desde_proximos,$vencimiento,$apertura,$cierre) = C4::Date::proximosHabiles($plazo_actual, 0, $fechaRenovacion);
 
     my $err= "Error con la fecha";
@@ -248,15 +248,15 @@ sub chequeoDeFechas{
     my $hoy=C4::Date::format_date_in_iso(DateCalc(ParseDate("today"),"+ 0 days",\$err),$dateformat);#se saco el 2 para que ande bien.
     my $desde=C4::Date::format_date_in_iso(DateCalc($vencimiento,"- ".$intervalo_vale_renovacion." business days",\$err),$dateformat);#Se cambio el 2 por business days
     my $flag = Date_Cmp($desde,$hoy);
-    #comparo la fecha de hoy con el inicio del plazo de renovacion  
-    if (!($flag gt 0)){ 
+    #comparo la fecha de hoy con el inicio del plazo de renovacion
+    if (!($flag gt 0)){
         #quiere decir que la fecha de hoy es mayor o igual al inicio del plazo de renovacion
         #ahora tengo que ver que la fecha de hoy sea anterior al vencimiento
         my $flag2=Date_Cmp($vencimiento,$hoy);
         if (!($flag2 lt 0)){
             #la fecha esta ok
             return 1;
-            
+
         }
 
     }
@@ -306,7 +306,7 @@ sub getPrestamosDeSocio {
         my @filtros;
         push(@filtros, ( fecha_devolucion => { eq => undef } ));
         push(@filtros, ( nro_socio => { eq => $nro_socio } ));
-        
+
         my $prestamos__array_ref;
         if($db){ #Si viene $db es porque forma parte de una transaccion
             $prestamos__array_ref = C4::Modelo::CircPrestamo::Manager->get_circ_prestamo(db => $db,query => \@filtros,
@@ -335,7 +335,7 @@ sub tienePrestamosDeId2 {
 
         push(@filtros, ( nro_socio      => { eq => $nro_socio } ));
         push(@filtros, ( 'nivel3.id2'   => { eq => $id2} ));
-        
+
 
         my $prestamos_count = C4::Modelo::CircPrestamo::Manager->get_circ_prestamo_count(query => \@filtros,
                                                                         require_objects => ['nivel3.nivel2','socio','ui'],
@@ -361,7 +361,7 @@ sub prestarYGenerarTicket{
 # FIXME falta verificar
 
     my ($nivel3aPrestar)= C4::AR::Nivel3::getNivel3FromBarcode($params->{'barcode'});
-    C4::AR::Debug::debug("Prestamos => prestarYGenerarTicket => barcode a prestar: ".$params->{'barcode'});   
+    C4::AR::Debug::debug("Prestamos => prestarYGenerarTicket => barcode a prestar: ".$params->{'barcode'});
 
     my @infoTickets;
     my @infoMessages;
@@ -393,7 +393,7 @@ sub prestarYGenerarTicket{
     my %infoOperacion = (
                 ticket  => $ticketObj,
     );
-    
+
     push (@infoTickets, \%infoOperacion);
 
     my %infoOperaciones;
@@ -407,7 +407,7 @@ sub prestarYGenerarTicket{
 #funcion que realiza la transaccion del Prestamo
 sub t_realizarPrestamo{
     my ($params) = @_;
-    C4::AR::Debug::debug("Antes de verificar"); 
+    C4::AR::Debug::debug("Antes de verificar");
 
     my ($msg_object)= C4::AR::Reservas::_verificaciones($params);
 
@@ -437,29 +437,29 @@ sub t_realizarPrestamo{
 }
 
 sub obtenerPrestamosDeSocio {
-    
+
     use C4::Modelo::CircPrestamo;
     use C4::Modelo::CircPrestamo::Manager;
 
     my ($nro_socio)=@_;
 
-    my $prestamos_array_ref = C4::Modelo::CircPrestamo::Manager->get_circ_prestamo( 
+    my $prestamos_array_ref = C4::Modelo::CircPrestamo::Manager->get_circ_prestamo(
                                           query => [ fecha_devolucion  => { eq => undef }, nro_socio  => { eq => $nro_socio }],
                                           require_objects => ['nivel3','socio','ui', 'nivel3.nivel2.nivel1','tipo'],
-                                ); 
+                                );
 
-    # my $prestamos_array_ref_count = C4::Modelo::CircPrestamo::Manager->get_circ_prestamo_count( 
+    # my $prestamos_array_ref_count = C4::Modelo::CircPrestamo::Manager->get_circ_prestamo_count(
     #                                       query => [ fecha_devolucion  => { eq => undef }, nro_socio  => { eq => $nro_socio }],
     #                                       require_objects => ['nivel3','socio','ui'],
 
-    #                             );     
+    #                             );
 
     my $prestamos_array_ref_count = scalar(@$prestamos_array_ref);
 
     return ($prestamos_array_ref_count, $prestamos_array_ref);
 }
 
-=head2  
+=head2
     sub tienePrestamos
     Dado un socio, devuelve si tiene ejemplares prestados
 =cut
@@ -470,7 +470,7 @@ sub tienePrestamos {
 
     my ($nro_socio)=@_;
 
-    my $prestamos_array_ref_count = C4::Modelo::CircPrestamo::Manager->get_circ_prestamo_count( 
+    my $prestamos_array_ref_count = C4::Modelo::CircPrestamo::Manager->get_circ_prestamo_count(
                                           query => [ fecha_devolucion  => { eq => undef }, nro_socio  => { eq => $nro_socio }],
                                           require_objects => ['nivel3','socio','ui'],
 
@@ -484,16 +484,16 @@ Esta funcion retorna si el ejemplar segun el id3 pasado por parametro esta prest
 =cut
 sub estaPrestado {
     my ($id3) = @_;
-    
+
     use C4::Modelo::CircPrestamo;
     use C4::Modelo::CircPrestamo::Manager;
 
-    my $nivel3_array_ref= C4::Modelo::CircPrestamo::Manager->get_circ_prestamo( 
-                                                                query => [  fecha_devolucion  => { eq => undef }, 
+    my $nivel3_array_ref= C4::Modelo::CircPrestamo::Manager->get_circ_prestamo(
+                                                                query => [  fecha_devolucion  => { eq => undef },
                                                                             id3  => { eq => $id3 },
                                                                 ],
                                                                 require_objects => ['tipo'],
-                                ); 
+                                );
 
     return (scalar(@$nivel3_array_ref) > 0);
 }
@@ -514,14 +514,14 @@ sub cantidadDePrestamosPorUsuario {
         $prestados++;
         if($prestamo->estaVencido){$vencidos++;}
     }
-    
+
     return($vencidos,$prestados);
 }
 
 sub existePrestamo{
 
     my ($prestamo_id) = @_;
-    
+
     my @filtros;
     push (@filtros,( id_prestamo => {eq => $prestamo_id}) );
 
@@ -546,7 +546,7 @@ sub validarExistenciaPrestamos{
     }
     return(\@prestamos_array_validos);
 }
-    
+
 
 =item
 Transaccion que maneja los erroes de base de datos y llama a la funcion devolver
@@ -572,12 +572,12 @@ sub t_devolver {
         if ($prestamo){
             $params->{'id3'}= $prestamo->getId3;
             $params->{'barcode'}= $prestamo->nivel3->getBarcode;
-    
+
             #se realizan las verificaciones necesarias para el prestamo que se intenta devolver
             verificarCirculacionRapida($params, $msg_object);
-    
+
             if(!$msg_object->{'error'}){
-    
+
                 eval {
                     $prestamo->devolver($db,$params);
                     $db->commit;
@@ -605,16 +605,16 @@ sub t_devolver {
 
 sub renovarYGenerarTicket{
     my ($params)=@_;
-    
+
     my ($infoTickets,$msg_object);
-     
-    #Acomodo la entrada y llamo al renovar 
+
+    #Acomodo la entrada y llamo al renovar
     my $array_id_prestamos= $params->{'datosArray'};
     my $prestamos_array_validos = C4::AR::Prestamos::validarExistenciaPrestamos($msg_object,$array_id_prestamos);
-    
+
 
     my @arrayPrestamos=();
-    
+
     foreach my $id_prestamo (@$prestamos_array_validos){
         my %datosPrestamos;
         my $prestamo            = C4::AR::Prestamos::getInfoPrestamo($id_prestamo);
@@ -623,10 +623,10 @@ sub renovarYGenerarTicket{
         $datosPrestamos{'id_prestamo'}    = $prestamo->getId_prestamo;
         push (@arrayPrestamos, \%datosPrestamos)
         }
-    
+
     $params->{'datosArray'}=\@arrayPrestamos;
     ($infoTickets,$msg_object)   = C4::AR::Prestamos::t_renovar($params);
-    
+
     my @infoMessages;
     push (@infoMessages, $msg_object);
 
@@ -719,7 +719,7 @@ sub t_renovarOPAC {
         my $prestamo = C4::AR::Prestamos::getInfoPrestamo($params->{'id_prestamo'},$db);
         if ($prestamo){
             $prestamo->_verificarParaRenovar($msg_object, $type);
-    
+
             if(!$msg_object->{'error'}){
                     eval{
                         $prestamo->renovar($params->{'nro_socio'});
@@ -749,7 +749,7 @@ sub t_renovarOPAC {
 
 sub getPrestamoPorBarcode {
     my ($barcode) = @_;
-    
+
     use C4::Modelo::CircPrestamo;
     use C4::Modelo::CircPrestamo::Manager;
 
@@ -757,14 +757,14 @@ sub getPrestamoPorBarcode {
     push(@filtros, ( barcode            => { eq => $barcode } ));
     push(@filtros, ( fecha_devolucion   => { eq => undef } ) );
 
-    my $prestamo_array_ref= C4::Modelo::CircPrestamo::Manager->get_circ_prestamo( 
+    my $prestamo_array_ref= C4::Modelo::CircPrestamo::Manager->get_circ_prestamo(
                                                                 query => \@filtros,
                                                                 require_objects => [ 'nivel3','tipo' ] #INNER JOIN
-                                ); 
+                                );
 
     if(scalar(@$prestamo_array_ref) > 0){
         return $prestamo_array_ref->[0]->getId_prestamo;
-    }else { 
+    }else {
         return 0;
     }
 }
@@ -776,7 +776,7 @@ Esta funcion verifica que el id_prestamo que se pasa por parametro exista y que 
 sub esUnPrestamo {
 
     my ($id_prestamo)=@_;
-    
+
     use C4::Modelo::CircPrestamo;
     use C4::Modelo::CircPrestamo::Manager;
 
@@ -784,22 +784,22 @@ sub esUnPrestamo {
     push(@filtros, ( id_prestamo => { eq => $id_prestamo } ));
     push(@filtros, ( fecha_devolucion => { eq => undef } ) );
 
-    my $prestamo_array_ref= C4::Modelo::CircPrestamo::Manager->get_circ_prestamo( 
+    my $prestamo_array_ref= C4::Modelo::CircPrestamo::Manager->get_circ_prestamo(
                                                                 query => \@filtros,
 #                                                               require_objects => [ 'nivel3' ] #INNER JOIN
-                                ); 
+                                );
 
     if(scalar(@$prestamo_array_ref) > 0){
 #       return $prestamo_array_ref->[0]->getId_prestamo;
         return 1;
-    }else { 
+    }else {
         return 0;
     }
 }
 
 sub getSocioFromID_Prestamo {
     my ($prestamo)=@_;
-    
+
     use C4::Modelo::CircPrestamo;
     use C4::Modelo::CircPrestamo::Manager;
 
@@ -807,14 +807,14 @@ sub getSocioFromID_Prestamo {
     push(@filtros, ( id_prestamo => { eq => $prestamo } ));
     push(@filtros, ( fecha_devolucion => { eq => undef } ) );
 
-    my $prestamo_array_ref= C4::Modelo::CircPrestamo::Manager->get_circ_prestamo( 
+    my $prestamo_array_ref= C4::Modelo::CircPrestamo::Manager->get_circ_prestamo(
                                                                 query => \@filtros,
                                                                 require_objects => [ 'socio','tipo' ] #INNER JOIN
-                                ); 
+                                );
 
     if(scalar(@$prestamo_array_ref) > 0){
         return $prestamo_array_ref->[0]->socio;
-    }else { 
+    }else {
         return 0;
     }
 }
@@ -844,7 +844,7 @@ sub verificarCirculacionRapida {
         C4::AR::Debug::debug("verificarCirculacionRapida => no existe el prestamo o ya se devolvió anteriormente");
         C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'P117', 'params' => []} ) ;
     }
-    
+
     if( !($msg_object->{'error'}) && $params->{'operacion'} ne 'devolver' && !C4::AR::Usuarios::existeSocio($params->{'nro_socio'})){
     #se verifica si la operacion es un prestamo, que EXISTA el USUARIO
     #si es una devolucion  no importa el usuario ya que lo tengo en el prestamo
@@ -928,19 +928,19 @@ sub getHistorialPrestamos {
 
     my @filtros;
 
-    my $historialPrestamos = C4::Modelo::RepHistorialPrestamo::Manager->get_rep_historial_prestamo( 
+    my $historialPrestamos = C4::Modelo::RepHistorialPrestamo::Manager->get_rep_historial_prestamo(
                                                     query => [ nro_socio => { eq => $nro_socio } ],
                                                     limit   => $cantR,
                                                     offset  => $ini,
                                                     require_objects => ['nivel3','nivel3.nivel1'],
                                                     sort_by => ['id_historial_prestamo DESC']
-           
+
 );
 
-    my $cantidad = C4::Modelo::RepHistorialPrestamo::Manager->get_rep_historial_prestamo_count( 
+    my $cantidad = C4::Modelo::RepHistorialPrestamo::Manager->get_rep_historial_prestamo_count(
                                                     query => [ nro_socio => { eq => $nro_socio } ],
-                                                    require_objects => ['nivel3','nivel3.nivel1'], 
-           
+                                                    require_objects => ['nivel3','nivel3.nivel1'],
+
 );
 
 
@@ -1008,8 +1008,8 @@ C4::AR::Debug::debug("MODIFICAR TIPO DE PRESTAMO ".$params->{'id_tipo_prestamo'}
     my $db = undef;
     my $tipo_prestamo=C4::AR::Prestamos::getTipoPrestamo($params->{'id_tipo_prestamo'});
     if ($tipo_prestamo){
-        $db = $tipo_prestamo->db;  
-    
+        $db = $tipo_prestamo->db;
+
         $db->{connect_options}->{AutoCommit} = 0;
         $db->begin_work;
         eval {
@@ -1043,8 +1043,8 @@ sub t_eliminarTipoPrestamo {
         C4::AR::Debug::debug("ELIMINAR TIPO DE PRESTAMO ".$id_tipo_prestamo);
         my $tipo_prestamo=C4::AR::Prestamos::getTipoPrestamo($id_tipo_prestamo);
         if ($tipo_prestamo){
-            $db = $tipo_prestamo->db;  
-        
+            $db = $tipo_prestamo->db;
+
             $db->{connect_options}->{AutoCommit} = 0;
             $db->begin_work;
             eval {
@@ -1113,11 +1113,11 @@ sub enviarRecordacionDePrestamo {
 
      my ($today) = @_;
 
-    # remindUser es la preferencia global que habilita el recordatorio al socio   
+    # remindUser es la preferencia global que habilita el recordatorio al socio
     if (C4::AR::Preferencias::getValorPreferencia('remindUser')){
 
-        my @array_prestamos     = getAllPrestamosActivos($today); 
-        
+        my @array_prestamos     = getAllPrestamosActivos($today);
+
         _enviarRecordatorio(@array_prestamos);
     }
 }
@@ -1133,19 +1133,19 @@ sub _limpiarTablaCircPrestamoVencidoTemp {
     my $prestamos_vencidos_temp_array_ref = C4::Modelo::CircPrestamoVencidoTemp::Manager->get_circ_prestamo_vencido_temp();
 
     if(scalar(@$prestamos_vencidos_temp_array_ref) > 0){
-        
+
         eval{
-        
+
             foreach my $id_prestamo (@$prestamos_vencidos_temp_array_ref){
-            
+
                 my $prestamo_vencido_temp = C4::Modelo::CircPrestamoVencidoTemp->new(id => $id_prestamo->{'id'});
 
                 $prestamo_vencido_temp->load();
-                
+
                 $prestamo_vencido_temp->delete();
-                
+
             }
-        };       
+        };
     }
 }
 
@@ -1156,20 +1156,20 @@ sub _limpiarTablaCircPrestamoVencidoTemp {
 =cut
 sub enviarRecordacionDePrestamoVencidos {
 
-    # remindUser es la preferencia global que habilita el recordatorio al socio   
+    # remindUser es la preferencia global que habilita el recordatorio al socio
     if (C4::AR::Preferencias::getValorPreferencia('remindUser')){
 
-        my @array_prestamos = getAllPrestamosVencidosParaMail(); 
-        
+        my @array_prestamos = getAllPrestamosVencidosParaMail();
+
         _enviarRecordatorioVencidos(@array_prestamos);
-        
-        # unseteamos el flag para el CRON                           
+
+        # unseteamos el flag para el CRON
         C4::AR::Preferencias::setVariable('enableMailPrestVencidos', 0);
-        
+
         # limpiamos la tabla prestamo_vencido_temp si es que tiene algo
         _limpiarTablaCircPrestamoVencidoTemp();
     }
-    
+
 }
 
 =item
@@ -1192,15 +1192,15 @@ sub _enviarRecordatorioVencidos{
         $fin    = 0;
         $pres   = shift @array_prestamos;
     }
-    
-    while (!$fin) {      
+
+    while (!$fin) {
 
         my $nroSocio            = $pres->getNro_socio();
         my $socio               = C4::AR::Usuarios::getSocioInfoPorNroSocio($nroSocio);
 
-        my %mail;                    
-        my $nivel3              = C4::AR::Nivel3::getNivel3FromId3($pres->{'id3'});                    
-        my $nivel1              = C4::AR::Nivel3::getNivel1FromId1($nivel3->{'id1'});     
+        my %mail;
+        my $nivel3              = C4::AR::Nivel3::getNivel3FromId3($pres->{'id3'});
+        my $nivel1              = C4::AR::Nivel3::getNivel1FromId1($nivel3->{'id1'});
         my $autor               = Encode::decode_utf8($nivel1->getAutor());
         my $titulo              = Encode::decode_utf8($nivel1->getTitulo());
         my $nombre              = Encode::decode_utf8($socio->{'persona'}->{'nombre'});
@@ -1213,10 +1213,10 @@ sub _enviarRecordatorioVencidos{
         $cuerpo_mensaje         =~ s/AUTHOR/$autor/;
         $cuerpo_mensaje         =~ s/TITLE\:UNITITLE/$titulo/;
         $cuerpo_mensaje         =~ s/\(EDICION\)//;
-        
+
         $mail{'mail_from'}      = Encode::decode_utf8(C4::AR::Preferencias::getValorPreferencia('mailFrom'));
         $mail{'mail_to'}        = $socio->{'persona'}->email;
-        $mail{'mail_subject'}   = C4::AR::Preferencias::getValorPreferencia('vencidoSubject'); 
+        $mail{'mail_subject'}   = C4::AR::Preferencias::getValorPreferencia('vencidoSubject');
         $mail{'mail_message'}   = $cuerpo_mensaje;
 
         if (scalar(@array_prestamos) == 0) {
@@ -1227,8 +1227,8 @@ sub _enviarRecordatorioVencidos{
 
         while ( ($nroSocio eq $pres->getNro_socio()) && (!$fin) ) {
 
-                my $nivel3              = C4::AR::Nivel3::getNivel3FromId3($pres->{'id3'});                    
-                my $nivel1              = C4::AR::Nivel3::getNivel1FromId1($nivel3->{'id1'});     
+                my $nivel3              = C4::AR::Nivel3::getNivel3FromId3($pres->{'id3'});
+                my $nivel1              = C4::AR::Nivel3::getNivel1FromId1($nivel3->{'id1'});
                 my $autor               = Encode::decode_utf8($nivel1->getAutor());
                 my $titulo              = Encode::decode_utf8($nivel1->getTitulo());
                 my $nombre              = Encode::decode_utf8($socio->{'persona'}->{'nombre'});
@@ -1237,7 +1237,7 @@ sub _enviarRecordatorioVencidos{
                 my $cuerpo_mensaje      = Encode::decode_utf8(C4::AR::Preferencias::getValorPreferencia('vencidoMessage'));
 
                 $cuerpo_mensaje         =~ s/Sr\.\/Sra\.\ FIRSTNAME\ SURNAME\ :\ //;
-              
+
                 $cuerpo_mensaje         =~ s/FIRSTNAME\ SURNAME/$nombre\ $apellido/;
                 $cuerpo_mensaje         =~ s/VENCIMIENTO/$fecha_prestamo/;
                 $cuerpo_mensaje         =~ s/AUTHOR/$autor/;
@@ -1254,12 +1254,12 @@ sub _enviarRecordatorioVencidos{
         }
 
         # FIXME: feo, hacer una funcion que arme el mail y aca solo mandarlo. Inmanejable cuando haya mas medios
-        if (C4::AR::Preferencias::getValorPreferencia('EnabledMailSystem')){  
+        if (C4::AR::Preferencias::getValorPreferencia('EnabledMailSystem')){
             C4::AR::Debug::debug("antessssssssssssssssssss -----------------------------");
             C4::AR::Mail::send_mail(\%mail);
         }
-        
-    } 
+
+    }
 
 }
 
@@ -1281,17 +1281,17 @@ sub _enviarRecordatorio{
         $fin    = 0;
         $pres   = shift @array_prestamos;
     }
-    
-    while (!$fin) {   
+
+    while (!$fin) {
 
         my $nroSocio            = $pres->getNro_socio();
         my $socio               = C4::AR::Usuarios::getSocioInfoPorNroSocio($nroSocio);
 
-        if($socio->getRemindFlag()){  
+        if($socio->getRemindFlag()){
 
-            my %mail;                    
-            my $nivel3              = C4::AR::Nivel3::getNivel3FromId3($pres->{'id3'});                    
-            my $nivel1              = C4::AR::Nivel3::getNivel1FromId1($nivel3->{'id1'});     
+            my %mail;
+            my $nivel3              = C4::AR::Nivel3::getNivel3FromId3($pres->{'id3'});
+            my $nivel1              = C4::AR::Nivel3::getNivel1FromId1($nivel3->{'id1'});
             my $autor               = Encode::decode_utf8($nivel1->getAutor());
             my $titulo              = Encode::decode_utf8($nivel1->getTitulo());
             my $nombre              = Encode::decode_utf8($socio->{'persona'}->{'nombre'});
@@ -1309,12 +1309,12 @@ sub _enviarRecordatorio{
             $cuerpo_mensaje         =~ s/\(EDICION\)//;
             $cuerpo_mensaje         =~ s/BRANCH/Biblioteca/;
             $cuerpo_mensaje         =~ s/LINK/$link/;
-            
+
             $mail{'mail_from'}      = Encode::decode_utf8(C4::AR::Preferencias::getValorPreferencia('mailFrom'));
             $mail{'mail_to'}        = $socio->{'persona'}->email;
-            $mail{'mail_subject'}   = C4::AR::Preferencias::getValorPreferencia('reminderSubject'); 
+            $mail{'mail_subject'}   = C4::AR::Preferencias::getValorPreferencia('reminderSubject');
             $mail{'mail_message'}   = $cuerpo_mensaje;
-        
+
 
             if (scalar(@array_prestamos) == 0) {
                 $fin    = 1;
@@ -1324,8 +1324,8 @@ sub _enviarRecordatorio{
 
             while ( ($nroSocio eq $pres->getNro_socio()) && (!$fin) ) {
 
-                my $nivel3              = C4::AR::Nivel3::getNivel3FromId3($pres->{'id3'});                    
-                my $nivel1              = C4::AR::Nivel3::getNivel1FromId1($nivel3->{'id1'});     
+                my $nivel3              = C4::AR::Nivel3::getNivel3FromId3($pres->{'id3'});
+                my $nivel1              = C4::AR::Nivel3::getNivel1FromId1($nivel3->{'id1'});
                 my $autor               = Encode::decode_utf8($nivel1->getAutor());
                 my $titulo              = Encode::decode_utf8($nivel1->getTitulo());
                 my $nombre              = Encode::decode_utf8($socio->{'persona'}->{'nombre'});
@@ -1345,7 +1345,7 @@ sub _enviarRecordatorio{
                 $cuerpo_mensaje         =~ s/\(EDICION\)//;
                 $cuerpo_mensaje         =~ s/BRANCH/Biblioteca/;
                 $cuerpo_mensaje         =~ s/LINK/$link/;
-                
+
                 $mail{'mail_message'}   .= "<br /><br />" . $cuerpo_mensaje;
 
                 if (scalar(@array_prestamos) == 0) {
@@ -1356,7 +1356,7 @@ sub _enviarRecordatorio{
 
             }
 
-            if (C4::AR::Preferencias::getValorPreferencia('EnabledMailSystem')){  
+            if (C4::AR::Preferencias::getValorPreferencia('EnabledMailSystem')){
                 C4::AR::Mail::send_mail(\%mail);
             }
 
@@ -1379,45 +1379,46 @@ sub _enviarRecordatorio{
 sub getAllPrestamosVencidosParaMail{
 
     my $prestamos_array_ref               = C4::Modelo::CircPrestamo::Manager->get_circ_prestamo(
+                                                                                                    query => [fecha_devolucion => { eq => undef}],
                                                                                                     sort_by => ['nro_socio DESC'],
                                                                                                     require_objects => ['socio','socio.persona','tipo']
                                                                                                  );
     use C4::Modelo::CircPrestamoVencidoTemp::Manager;
     my $prestamos_vencidos_temp_array_ref = C4::Modelo::CircPrestamoVencidoTemp::Manager->get_circ_prestamo_vencido_temp();
-    
+
     my @arrayPrestamos;
-    
+
     # seleccionaron solo algunos prestamos
     # vamos a enviar solo estos
     if(scalar(@$prestamos_vencidos_temp_array_ref) > 0){
-        
+
         use  C4::Modelo::CircPrestamoVencidoTemp;
-        
+
         eval{
-        
+
             foreach my $id_prestamo (@$prestamos_vencidos_temp_array_ref){
-            
+
                 # hace el new del objeto prestamo con el id del for
                 my $prestamo_vencido_temp = C4::Modelo::CircPrestamo->new(id_prestamo => $id_prestamo->{'id_prestamo'});
 
                 $prestamo_vencido_temp->load();
                 push(@arrayPrestamos,($prestamo_vencido_temp));
-                
+
             }
         };
-        return (@arrayPrestamos);  
-            
+        return (@arrayPrestamos);
+
     }
     elsif(scalar(@$prestamos_array_ref) > 0){
     # recorremos todos los prestamos, y guardamos los vencidos
         foreach my $prestamo (@$prestamos_array_ref){
-        
-            if ($prestamo->estaVencido()){        
+
+            if ($prestamo->estaVencido()){
                 push(@arrayPrestamos,($prestamo));
             }
-        }  
-        
-        return (@arrayPrestamos);     
+        }
+
+        return (@arrayPrestamos);
     }else{
         return 0;
     }
@@ -1448,8 +1449,8 @@ sub getAllPrestamosVencidos{
     }
 
     if($params->{'orden'} eq "fecha_vto"){
-        $params->{'orden'} = "circ_prestamo.fecha_prestamo"; 
-    } 
+        $params->{'orden'} = "circ_prestamo.fecha_prestamo";
+    }
 
     if(($fecha_inicio ne "") && ($fecha_fin ne "")){
         $fecha_inicio   = C4::Date::format_date_hour($fecha_inicio,"iso");
@@ -1460,7 +1461,8 @@ sub getAllPrestamosVencidos{
     }
 
     push( @filtros, and => [    'fecha_prestamo' => { gt => $fecha_inicio, eq => $fecha_inicio },
-                                'fecha_prestamo' => { lt => $fecha_fin, eq => $fecha_fin} ] );  
+                                'fecha_prestamo' => { lt => $fecha_fin, eq => $fecha_fin} ] );
+    push(@filtros, ( fecha_devolucion   => { eq => undef } ));
 
     my $prestamos_array_ref = C4::Modelo::CircPrestamo::Manager->get_circ_prestamo(
                                                                 query   => \@filtros,
@@ -1469,7 +1471,7 @@ sub getAllPrestamosVencidos{
                                                                 sort_by => $params->{'orden'} . ' ' . $params->{'sentido_orden'},
 
                                                         );
-     
+
     my @arrayPrestamos;
     my $fecha_vencimiento;
 
@@ -1479,18 +1481,18 @@ C4::AR::Debug::debug("Prestamos => getAllPrestamosVencidos => PRESTAMOS:::::".sc
         foreach my $prestamo (@$prestamos_array_ref){
             # $prestamo->fecha_vencimiento_reporte($prestamo->getFecha_vencimiento);
             # $prestamo->save();
-           # if ($prestamo->estaVencido()){  
-                # $fecha_vencimiento = $prestamo->getFecha_vencimiento();  
+           # if ($prestamo->estaVencido()){
+                # $fecha_vencimiento = $prestamo->getFecha_vencimiento();
                 $fecha_vencimiento = $prestamo->getFecha_vencimiento_reporte();
                 C4::AR::Debug::debug("Prestamos => getAllPrestamosVencidos => fecha_inicio " . $fecha_inicio . " fecha vto " . $fecha_vencimiento);
 
                 if ( ( Date::Manip::Date_Cmp( $fecha_inicio, $fecha_vencimiento ) < 0 ) && ( Date::Manip::Date_Cmp( $fecha_vencimiento, $fecha_fin ) < 0 ) ) {
-                    # C4::AR::Debug::debug("Prestamos => getAllPrestamosVencidos => fecha de vencimiento => " . $prestamo->getFecha_vencimiento());    
+                    # C4::AR::Debug::debug("Prestamos => getAllPrestamosVencidos => fecha de vencimiento => " . $prestamo->getFecha_vencimiento());
                     push(@arrayPrestamos,($prestamo));
-                }  
+                }
            # }
-        }  
-        return (\@arrayPrestamos);     
+        }
+        return (\@arrayPrestamos);
     }else{
         return 0;
     }
@@ -1506,32 +1508,33 @@ sub getAllPrestamosActivos{
     my ($today) = @_;
 
     my $prestamos_array_ref = C4::Modelo::CircPrestamo::Manager->get_circ_prestamo(
+                                                                                    query => [fecha_devolucion => { eq => undef}],
                                                                                     sort_by => ['nro_socio DESC']
                                                                                    );
     use Date::Calc qw(Delta_Days);
-    
+
     my @first;
     my @second;
     my $days;
     my @arrayPrestamos;
-      
+
     if(scalar(@$prestamos_array_ref) > 0){
     # recorremos todos los prestamos, le pedimos la fecha de vencimiento y la checkeamos con la actual
         foreach my $prestamo (@$prestamos_array_ref){
-        
+
             my $fecha_prestamo = $prestamo->getFecha_vencimiento();
-            
+
             #obtenemos la diferencia de dias entre las dos fechas
             @first  = split(/-/, $today);
             @second = split(/-/, $fecha_prestamo);
             $days   = Delta_Days(@first, @second);
 
             # si esta dentro de los dias de reminderDays y NO esta vencido el prestamo
-            if ($days <= C4::AR::Preferencias::getValorPreferencia('reminderDays') && !($prestamo->estaVencido())){        
+            if ($days <= C4::AR::Preferencias::getValorPreferencia('reminderDays') && !($prestamo->estaVencido())){
                 push(@arrayPrestamos,($prestamo));
             }
-        }  
-        return (@arrayPrestamos);     
+        }
+        return (@arrayPrestamos);
     }else{
         return 0;
     }
@@ -1544,36 +1547,36 @@ sub getAllPrestamosActivos{
 sub setPrestamosVencidosTemp{
 
     my ($ids_prestamos) = @_;
-    
+
     my $msg_object      = C4::AR::Mensajes::create();
 
     use C4::Modelo::CircPrestamoVencidoTemp;
 
     if(!$msg_object->{'error'}){
-    
+
         eval {
-        
+
             foreach my $id_prestamo (@$ids_prestamos){
-            
+
                 my $prestamo_vencido_temp = C4::Modelo::CircPrestamoVencidoTemp->new();
-                $prestamo_vencido_temp->agregarPrestamo($id_prestamo); 
-                         
-            }  
+                $prestamo_vencido_temp->agregarPrestamo($id_prestamo);
+
+            }
             C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'PV00'});
-            
+
         };
-        
+
         if ($@){
 
             #Se setea error para el usuario
             $msg_object->{'error'}= 1;
             C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'PV01'} ) ;
-            
+
         }
     }
 
     return ($msg_object);
-      
+
 }
 
 
@@ -1587,7 +1590,7 @@ sub agregarPrestamoAHistorialCirculacion{
     my ($prestamo,$tipo_operacion,$responsable,$hasta,$nota) = @_;
 
     use C4::Modelo::RepHistorialCirculacion;
-    
+
     my %params = {};
     $params{'nro_socio'}    = $prestamo->getNro_socio;
     $params{'id1'}          = $prestamo->nivel3->nivel2->nivel1->getId1;
@@ -1602,7 +1605,7 @@ sub agregarPrestamoAHistorialCirculacion{
     $params{'hasta'}        = $hasta;
     $params{'nota'}         = $nota;
 
-    my $historial_circulacion = C4::Modelo::RepHistorialCirculacion->new(db => $prestamo->db);    
+    my $historial_circulacion = C4::Modelo::RepHistorialCirculacion->new(db => $prestamo->db);
     $historial_circulacion->agregar(\%params);
 }
 

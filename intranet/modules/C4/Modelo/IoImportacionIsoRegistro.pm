@@ -53,7 +53,7 @@ sub agregar{
     if ($params->{'estado'}){
           $self->setEstado($params->{'estado'});
       }
-    
+
     $self->save();
 }
 
@@ -79,14 +79,14 @@ sub getRegistroMARCOriginal{
 sub getRegistroMARCResultado{
     my ($self)      = shift;
     my ($params) = @_;
-    
+
     my $marc_record = MARC::Record->new();
     my $marc_record_original = $self->getRegistroMARCOriginal();
-    
+
     my $importacion = C4::AR::ImportacionIsoMARC::getImportacionById($self->getIdImportacionIso());
     my $detalle_destino = $importacion->esquema->getDetalleDestino();
     my $detalle_destino_campo;
-    
+
      #   C4::AR::Debug::debug($marc_record_original->as_formatted);
 
     foreach my $field ( $marc_record_original->fields ) {
@@ -96,7 +96,7 @@ sub getRegistroMARCResultado{
             my $detalle =  $importacion->esquema->getDetalleByCampoSubcampoOrigen($campo_original,'');
             if (($detalle)&&($detalle->getCampoDestino)&&( C4::AR::Utilidades::trim($detalle->getCampoDestino) != '' )){
                     $self->agregarDatoAMarcRecord($marc_record,$detalle,$field->data);
-            }    
+            }
         }
         else{
             foreach my $subfield ( $field->subfields() ) {
@@ -104,13 +104,41 @@ sub getRegistroMARCResultado{
                 my $dato = $subfield->[1];
 
                 my $detalle =  $importacion->esquema->getDetalleByCampoSubcampoOrigen($campo_original,$subcampo_original);
-                
+
                 if (($detalle)&&($detalle->getCampoDestino)&&( C4::AR::Utilidades::trim($detalle->getCampoDestino) != '' )){
                     $self->agregarDatoAMarcRecord($marc_record,$detalle,$dato);
                 }
 
               }
             }
+          #PArche revistas mal formadas TSocial
+          if ($campo_original == '901'){
+            foreach my $subfield ( $field->subfields() ) {
+                my $subcampo_original = $subfield->[0];
+                my $dato = $subfield->[1];
+                if ($subcampo_original ne 's'){
+                  my $detalle =  $importacion->esquema->getDetalleByCampoSubcampoOrigen('901','a');
+                  if (($detalle)&&($detalle->getCampoDestino)&&( C4::AR::Utilidades::trim($detalle->getCampoDestino) != '' )){
+                      $self->agregarDatoAMarcRecord($marc_record,$detalle,$dato);
+                  }
+                }
+              }
+            }
+
+            if ($campo_original == '904'){
+              foreach my $subfield ( $field->subfields() ) {
+                  my $subcampo_original = $subfield->[0];
+                  my $dato = $subfield->[1];
+                  if (($subcampo_original ne 'n')&&($subcampo_original ne 'v')){
+                    my $detalle =  $importacion->esquema->getDetalleByCampoSubcampoOrigen('904','i');
+                    if (($detalle)&&($detalle->getCampoDestino)&&( C4::AR::Utilidades::trim($detalle->getCampoDestino) != '' )){
+                        $self->agregarDatoAMarcRecord($marc_record,$detalle,$dato);
+                    }
+                  }
+                }
+              }
+
+
         }
     #Ahora agregamos los registros hijo
     my $registros_hijo = $self->getRegistrosHijo();
@@ -124,7 +152,7 @@ sub getRegistroMARCResultado{
     return $marc_record;
 
 }
-    
+
 
 #----------------------------------- FIN - FUNCIONES DEL MODELO -------------------------------------------
 
@@ -134,7 +162,7 @@ sub agregarDatoAMarcRecord {
 
         my $ind1='#';
         my $ind2='#';
-        
+
         my $estructura  = C4::AR::EstructuraCatalogacionBase::getEstructuraBaseFromCampoSubCampo($detalle->getCampoDestino, $detalle->getSubcampoDestino);
         #Lo mando a un campo por ahora
         my $new_field=0;
@@ -146,7 +174,7 @@ sub agregarDatoAMarcRecord {
             my @fields = $marc_record->field($detalle->getCampoDestino);
 
             #Si es repetible o no existe el subcampo se agrega al final
-            #Si no encuentro lugar se crea uno nuevo 
+            #Si no encuentro lugar se crea uno nuevo
             my $subf;
             my $done=0;
 
@@ -167,7 +195,7 @@ sub agregarDatoAMarcRecord {
 
                 if($campo eq '650'){
                     #si hay varios temas?
-                    my @temas_separados = split(',', $dato);  
+                    my @temas_separados = split(',', $dato);
                     foreach my $tema (@temas_separados){
                            $marc_record->append_fields(MARC::Field->new($campo, $ind1, $ind2,$subcampo => C4::AR::Utilidades::trim($tema)));
                     }
@@ -185,7 +213,7 @@ sub agregarDatoAMarcRecord {
                 }
             }
         }
-        
+
         if($new_field){
             $marc_record->append_fields($new_field);
         }
@@ -278,14 +306,14 @@ sub getCampoDestinoJoined{
 
     my $marc = $self->getRegistroMARCOriginal;
     my $importacion = C4::AR::ImportacionIsoMARC::getImportacionById($self->getIdImportacionIso());
-    
+
     my $detalle_subcampos = $importacion->esquema->getDetalleSubcamposByCampoDestino($campo);
-   
+
     my %campo={};
     my @fields = $marc->field($campo);
     foreach my $field (@fields) {
         foreach my $subcampo (@$detalle_subcampos){
-            $campo{$subcampo->{'subcampo_destino'}} = $field->subfield($subcampo->{'subcampo_origen'});  
+            $campo{$subcampo->{'subcampo_destino'}} = $field->subfield($subcampo->{'subcampo_origen'});
         }
     }
     ########### FIXME!
@@ -305,11 +333,11 @@ sub getCampoSubcampoJoined{
 
     my @resultado=();
     foreach my $detalle (@$detalle_completo){
-        
+
         #C4::AR::Debug::debug("DETALLE ORIGEN ###".$detalle->getCampoOrigen."###".$detalle->getSubcampoOrigen );
         #Pueden venis muchos campos, se los agarra en orden para armar el resultado
         my @fields = $marc->field($detalle->getCampoOrigen);
-        
+
         if (@fields){
           #indice que mantiene el orden
           my $indice_campos=0;
@@ -323,7 +351,7 @@ sub getCampoSubcampoJoined{
                 else {
                     $dato = $field->subfield($detalle->getSubcampoOrigen);
                 }
-            
+
             if ($dato){
 
               #Le agrego el separado
@@ -331,7 +359,7 @@ sub getCampoSubcampoJoined{
                           $dato=$detalle->getSeparador.$dato;
                           #C4::AR::Debug::debug("SEPARADOR  ###".$detalle->getSeparador."###" );
               }
-              
+
               #AHORA HAY QUE AGREGARLO A LOS RESULTADOS
               if($resultado[$indice_campos]){
                   #Ya hay resultado en esa posición? concateno el dato
@@ -344,11 +372,11 @@ sub getCampoSubcampoJoined{
               #avanzo el índice
               $indice_campos++;
              }
-             
+
            }
-             
+
         }
- 
+
      }
 
     return (\@resultado);
@@ -373,9 +401,9 @@ sub getTitulo{
 
 sub getAutor{
     my ($self) = shift;
-    
+
     my $autor = $self->getCampoSubcampoJoined('100','a');
-    if(!$autor){ 
+    if(!$autor){
         $autor = $self->getCampoSubcampoJoined('110','a');
     }
 
@@ -386,12 +414,12 @@ sub getAutor{
             }
     }
 
-    if(!$autor){ 
+    if(!$autor){
         $autor = $self->getCampoSubcampoJoined('111','a');
     }
 
     #Responsable
-    if(!$autor){ 
+    if(!$autor){
         $autor = $self->getCampoSubcampoJoined('250','b');
     }
 
@@ -449,11 +477,11 @@ sub getRelacionFromRecord{
     my $marc = $self->getRegistroMARCOriginal();
 
     my $campo =$self->ref_importacion->getCampoFromCampoRelacion;
-    
+
         if(!$campo){
             $campo='005';
                 }
-                
+
     if ($campo){
         my $field = $marc->field($campo);
         if ($field->is_control_field()){
@@ -472,11 +500,11 @@ sub getRelacionFromRecord{
         if ($relacion){
             #Para identificar si es un campo de realcion debe comenzar con este string
             my $pre =$self->ref_importacion->getPreambuloFromCampoRelacion;
-            
+
             if(!$pre){
                     $pre='x';
                 }
-                
+
             if($pre){
                 #todo a  minuscula
                 $relacion=lc($relacion);
@@ -577,9 +605,9 @@ sub getDetalleCompleto{
 
 sub aplicarImportacion {
      my ($self)   = shift;
-    
+
      my $detalle = $self->getDetalleCompleto();
-	
+
 =begin DETALLE_REGISTRO
 	$detalle->{'nivel1'} 		   => MARC Array_
 												 |=> {'campo'}           		= CAMPO
@@ -605,7 +633,7 @@ sub aplicarImportacion {
 												 |												 |=> {'referencia_encontrada'}	= SE ENCONTRO EN LA BASE? (SI SE ENCUENTRA TIENE EL id)
 												 |												 |=> {'referencia_tabla'}		= TABLA DE LA REFERENCIA
 												 |												 |_
-												 |=> {'marc_record'}           		= MARC Record del Nivel 2																							 
+												 |=> {'marc_record'}           		= MARC Record del Nivel 2
 												 |=> {'nivel2_template'}       		= Template a usar por el Nivel 2
 												 |=> {'tipo_documento'}       		= Objeto Tipo de Documento (CatRefTipoNivel3)
 												 |=> {'nivel_bibliografico'}       	= Objeto Nivel Bibliográfico (RefNivelBibliografico)
@@ -624,16 +652,16 @@ sub aplicarImportacion {
 											 	 |												 |=> {'estado'}					= OBJETO Estado (RefEstado)
 												 |												 |_
 												 |_
-        
+
 =cut
-    
-    
+
+
     $self->debug("IMPORTANDO");
-    
+
     my ($msg_object, $id1);
    #SE CHEQUEA QUE NO EXISTA EL REGISTRO PRIMERO, SI EXISTE SE AGREGAN LOS EJEMPLARES
     my $n1 = $self->buscarRegistroDuplicado($detalle);
-    
+
     if ($n1){
         #Encontré el registro duplicado
         #Nuevo id1
@@ -650,7 +678,7 @@ sub aplicarImportacion {
         foreach my $nivel2 (@$niveles2){
             my $existe_grupo=0;
             foreach my $grupo (@$grupos){
-                if ($grupo->getVolumen() && ($grupo->getVolumen() eq $nivel2->{'marc_record'}->subfield('505','g'))){                
+                if ($grupo->getVolumen() && ($grupo->getVolumen() eq $nivel2->{'marc_record'}->subfield('505','g'))){
                     print "VOLUMEN ".$grupo->getVolumen()." EXISTE!!!\n";
                     #Existe: Agrego ejemplares únicamente
                     $existe_grupo=1;
@@ -670,41 +698,41 @@ sub aplicarImportacion {
                     my ($msg_object3) = $self->guardarNivel3DeImportacion($id1,$id2,$nivel3);
                     C4::AR::Debug::debug("Nivel 3 creado ?? ".$msg_object3->{'error'});
                   }
-                } 
+                }
             }
         }
     } else {
     #NO EXISTE SE IMPORTA TODO!!!
-        
+
         $self->debug("NO EXISTE SE IMPORTA TODO!!! ");
-       
+
        #Proceso el nivel 1 agregando las referencias que no existen!!
        ($msg_object, $id1) = $self->guardarNivel1DeImportacion($detalle);
-       
+
        C4::AR::Debug::debug("Nivel 1 creado ?? ".$msg_object->{'error'}." id=".$id1);
-       
+
        if (!$msg_object->{'error'}){
-           
+
         my $niveles2 = $detalle->{'nivel2'};
-        
+
         foreach my $nivel2 (@$niveles2){
           my ($msg_object2,$id1,$id2) = $self->guardarNivel2DeImportacion($id1,$nivel2);
            C4::AR::Debug::debug("Nivel 2 creado ?? ".$msg_object2->{'error'}." id=".$id2);
             if (!$msg_object2->{'error'}){
-                
+
               my $niveles3 = $nivel2->{'nivel3'};
-              
+
               foreach my $nivel3 (@$niveles3){
                 my ($msg_object3) = $self->guardarNivel3DeImportacion($id1,$id2,$nivel3);
                 C4::AR::Debug::debug("Nivel 3 creado ?? ".$msg_object3->{'error'});
               }
-             } 
+             }
           }
         }
     }
-    
+
     my $mensajes=$msg_object->{'messages'};
-    
+
     if ($msg_object->{'error'}){
                 my $detalle = $mensajes->[0]->{'message'}." (".$mensajes->[0]->{'codMsg'}.")";
                 C4::AR::Debug::debug("ERROR : ". $detalle);
@@ -713,46 +741,46 @@ sub aplicarImportacion {
     }
     else{
         my $detalle = "Importado en el registro: ".$id1;
-        
+
         if($mensajes->[0]->{'message'}){
             #Hay algún mensaje
             $detalle .="\n ".$mensajes->[0]->{'message'}." (".$mensajes->[0]->{'codMsg'}.")";
         }
-        
+
         $self->setEstado('IMPORTADO');
         $self->setDetalle($detalle);
     }
-        
+
     $self->save();
-    
+
     return $msg_object;
 }
 
 sub buscarRegistroDuplicado{
     my ($self)   = shift;
     my ($nivel1) = @_;
-    
-    
+
+
     my $infoArrayNivel1 =  $self->prepararNivelParaImportar($nivel1->{'marc_record'},$nivel1->{'nivel1_template'},1);
-    
+
     my $params_n1;
     $params_n1->{'id_tipo_doc'} = $nivel1->{'nivel1_template'};
     $params_n1->{'infoArrayNivel1'} = $infoArrayNivel1;
-    
+
      my $marc_record            = C4::AR::Catalogacion::meran_nivel1_to_meran($params_n1);
      my $catRegistroMarcN1       = C4::Modelo::CatRegistroMarcN1->new();
      my $clave_unicidad_alta    = $catRegistroMarcN1->generar_clave_unicidad($marc_record);
      my $n1 = C4::AR::Nivel1::getNivel1ByClaveUnicidad($clave_unicidad_alta);
-     
+
     return $n1;
 }
 
 sub guardarNivel1DeImportacion{
     my ($self)   = shift;
     my ($nivel1) = @_;
-    
+
     my $infoArrayNivel1 =  $self->prepararNivelParaImportar($nivel1->{'marc_record'},$nivel1->{'nivel1_template'},1);
-   
+
    my $params_n1;
     $params_n1->{'id_tipo_doc'} = $nivel1->{'nivel1_template'};
     $params_n1->{'infoArrayNivel1'} = $infoArrayNivel1;
@@ -765,8 +793,8 @@ sub guardarNivel1DeImportacion{
 sub guardarNivel2DeImportacion{
     my ($self)   = shift;
     my ($id1,$nivel2) = @_;
-    
-    my $infoArrayNivel2 =  $self->prepararNivelParaImportar($nivel2->{'marc_record'},$nivel2->{'nivel2_template'},2);   
+
+    my $infoArrayNivel2 =  $self->prepararNivelParaImportar($nivel2->{'marc_record'},$nivel2->{'nivel2_template'},2);
     my $params_n2;
     $params_n2->{'id_tipo_doc'} = $nivel2->{'nivel2_template'};
     $params_n2->{'tipo_ejemplar'} = $nivel2->{'nivel2_template'};
@@ -775,14 +803,14 @@ sub guardarNivel2DeImportacion{
     my ($msg_object2,$id1,$id2) = C4::AR::Nivel2::t_guardarNivel2($params_n2);
      # Hay que agregar el indice aca
      #  $nivel2->{'tiene_indice'}
-     
+
     return ($msg_object2,$id1,$id2);
 }
 
 sub guardarNivel3DeImportacion{
     my ($self)   = shift;
     my ($id1, $id2, $nivel3) = @_;
-    
+
     my $params_n3;
     $params_n3->{'id_tipo_doc'} = $nivel3->{'tipo_documento'};
     $params_n3->{'tipo_ejemplar'} = $nivel3->{'tipo_documento'};
@@ -790,14 +818,14 @@ sub guardarNivel3DeImportacion{
     $params_n3->{'id2'}=$id2;
     $params_n3->{'ui_origen'}=$nivel3->{'ui_origen'};
     $params_n3->{'ui_duenio'}=$nivel3->{'ui_duenio'};
-    
+
     $params_n3->{'ui_origen'}=$nivel3->{'ui_origen'};
     $params_n3->{'ui_duenio'}=$nivel3->{'ui_duenio'};
 
-    $params_n3->{'responsable'} = 'meranadmin'; #No puede no tener un responsable
-    
+    $params_n3->{'responsable'} = 'kohaadmin'; #No puede no tener un responsable
+
     $params_n3->{'cantEjemplares'} = 1;
-    
+
     #Hay que autogenerar el barcode o no???
     if (!$nivel3->{'generar_barcode'}){
       $params_n3->{'esPorBarcode'} = 'true';
@@ -805,9 +833,9 @@ sub guardarNivel3DeImportacion{
       $barcodes_array[0]=$nivel3->{'barcode'};
       $params_n3->{'BARCODES_ARRAY'} = \@barcodes_array;
     }
-    
+
     my @infoArrayNivel=();
-    
+
     my %hash_temp = {};
     $hash_temp{'indicador_primario'}  = '#';
     $hash_temp{'indicador_secundario'}  = '#';
@@ -816,7 +844,7 @@ sub guardarNivel3DeImportacion{
     $hash_temp{'cant_subcampos'}   = 0;
 
     my %hash_sub_temp = {};
-    
+
     #UI origen
     my $hash;
     $hash->{'d'}= $params_n3->{'ui_origen'};
@@ -827,50 +855,50 @@ sub guardarNivel3DeImportacion{
     $hash->{'c'}= $params_n3->{'ui_duenio'};
     $hash_sub_temp{$hash_temp{'cant_subcampos'}} = $hash;
     $hash_temp{'cant_subcampos'}++;
-    
+
     #Estado
     my $hash;
     $hash->{'e'}= $nivel3->{'estado'}->getCodigo();
     $hash_sub_temp{$hash_temp{'cant_subcampos'}} = $hash;
     $hash_temp{'cant_subcampos'}++;
-    
+
     #Disponibilidad
     my $hash;
     $hash->{'o'}= $nivel3->{'disponibilidad'}->getCodigo();
     $hash_sub_temp{$hash_temp{'cant_subcampos'}} = $hash;
     $hash_temp{'cant_subcampos'}++;
-    
+
     #Inventario
     my $hash;
     $hash->{'s'}= $nivel3->{'inventario'};
     $hash_sub_temp{$hash_temp{'cant_subcampos'}} = $hash;
     $hash_temp{'cant_subcampos'}++;
-    
+
     #Signatura
     my $hash;
     $hash->{'t'}= $nivel3->{'signatura_topografica'};
     $hash_sub_temp{$hash_temp{'cant_subcampos'}} = $hash;
     $hash_temp{'cant_subcampos'}++;
-    
+
     #ABM
     my $hash;
     $hash->{'m'}= $nivel3->{'fecha_alta'};
     $hash_sub_temp{$hash_temp{'cant_subcampos'}} = $hash;
     $hash_temp{'cant_subcampos'}++;
-    
+
     #Valor_doc
     my $hash;
     $hash->{'p'}= $nivel3->{'valor_doc'};
     $hash_sub_temp{$hash_temp{'cant_subcampos'}} = $hash;
     $hash_temp{'cant_subcampos'}++;
 
-    
-    
+
+
     $hash_temp{'subcampos_hash'} =\%hash_sub_temp;
     if ($hash_temp{'cant_subcampos'}){
       push (@infoArrayNivel,\%hash_temp)
     }
-    
+
     # Ahora TODOS los 900!
     my %hash_temp2 = {};
     $hash_temp2{'indicador_primario'}  = '#';
@@ -880,7 +908,7 @@ sub guardarNivel3DeImportacion{
     $hash_temp2{'cant_subcampos'}   = 0;
 
     my %hash_sub_temp2 = {};
-    
+
     my $marc_record_n3 = $nivel3->{'marc_record'};
 
     my $field_900 = $marc_record_n3->field('900');
@@ -888,7 +916,7 @@ sub guardarNivel3DeImportacion{
         foreach my $subfield ($field_900->subfields()) {
             my $subcampo          = $subfield->[0];
             my $dato              = $subfield->[1];
-            
+
             my $hash;
             $hash->{$subcampo}= $dato;
             $hash_sub_temp2{$hash_temp2{'cant_subcampos'}} = $hash;
@@ -899,10 +927,10 @@ sub guardarNivel3DeImportacion{
     if ($hash_temp2{'cant_subcampos'}){
       push (@infoArrayNivel,\%hash_temp2)
     }
-    
+
     $params_n3->{'infoArrayNivel3'} = \@infoArrayNivel;
     my ($msg_object3) = C4::AR::Nivel3::t_guardarNivel3($params_n3);
-    
+
     return $msg_object3;
 }
 
@@ -915,7 +943,7 @@ sub prepararNivelParaImportar{
       # $self->debug($marc_record->as_formatted);
        foreach my $field ($marc_record->fields) {
         if(! $field->is_control_field){
-            
+
             my %hash_temp                       = {};
             $hash_temp{'campo'}                 = $field->tag;
             $hash_temp{'indicador_primario'}    = $field->indicator(1);
@@ -923,21 +951,21 @@ sub prepararNivelParaImportar{
             $hash_temp{'subcampos_array'}       = ();
             $hash_temp{'subcampos_hash'}        = ();
             $hash_temp{'cant_subcampos'}        = 0;
-            
+
             my %hash_sub_temp = {};
             my @subcampos_array;
             #proceso todos los subcampos del campo
             foreach my $subfield ($field->subfields()) {
                 my $subcampo          = $subfield->[0];
                 my $dato              = $subfield->[1];
-                
-                
+
+
                 C4::AR::Debug::debug("REFERENCIA!!!  ".$hash_temp{'campo'}."  ". $subcampo);
-                
+
                 my $estructura = C4::AR::Catalogacion::_getEstructuraFromCampoSubCampo($hash_temp{'campo'} , $subcampo , $itemtype , $nivel);
-                
+
                 if(($estructura)&&($estructura->getReferencia)&&($estructura->infoReferencia)){
-                    
+
                     C4::AR::Debug::debug("REFERENCIA!!!  ".$estructura->infoReferencia);
                     #es una referencia, yo tengo el dato nomás (luego se verá si hay que crear una nueva o ya existe en la base)
                     my $tabla = $estructura->infoReferencia->getReferencia;
@@ -948,24 +976,24 @@ sub prepararNivelParaImportar{
                       #REFERENCIA ENCONTRADA
                         $dato =  $ref_valores->[0]->get_key_value;
                     }
-                    else { #no existe la referencia, hay que crearla 
+                    else { #no existe la referencia, hay que crearla
                       $dato = C4::AR::ImportacionIsoMARC::procesarReferencia($dato,$tabla,$clave_tabla_referer_involved,$tabla_referer_involved);
                     }
-                 }  
-                #ahora guardo el dato para importar 
+                 }
+                #ahora guardo el dato para importar
                 if ($dato){
                   C4::AR::Debug::debug("CAMPO: ". $hash_temp{'campo'}." SUBCAMPO: ".$subcampo." => ".$dato);
-                  my $hash; 
+                  my $hash;
                   $hash->{$subcampo}= $dato;
-                  
+
                   $hash_sub_temp{$hash_temp{'cant_subcampos'}} = $hash;
                   push(@subcampos_array, ($subcampo => $dato));
-                  
+
                   $hash_temp{'cant_subcampos'}++;
                 }
-                 
+
               }
-                    
+
           if ($hash_temp{'cant_subcampos'}){
             $hash_temp{'subcampos_hash'} =\%hash_sub_temp;
             $hash_temp{'subcampos_array'} =\@subcampos_array;
@@ -973,6 +1001,6 @@ sub prepararNivelParaImportar{
           }
         }
       }
-    
+
     return  \@infoArrayNivel;
 }
