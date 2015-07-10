@@ -36,9 +36,12 @@ use C4::Modelo::CircReserva;
     my $responsable = "meranadmin";
 
     if(scalar(@$prestamos_array_ref) > 0){
+      print "Vamos a procesar ".scalar(@$prestamos_array_ref)." préstamos con fecha de vencimiento.\n";
+
     # recorremos todos los prestamos, le pedimos la fecha de vencimiento
         foreach my $prestamo (@$prestamos_array_ref){
-
+           my $perc = (($prestamos_pasados * 100) / scalar(@$prestamos_array_ref));
+           print int($perc)." %\r\n";
             my $fechaVencimiento = $prestamo->getFecha_vencimiento();
             #Chequeamos si tiene reserva!  Por ahora no hago nada. La dejo para analizar.
 
@@ -49,7 +52,7 @@ use C4::Modelo::CircReserva;
             my $reserva = $reservas_array_ref->[0];
 
             if ($reserva) {
-              print "Reserva encontrada id:".$reserva->getId_reserva();
+              print "Reserva encontrada id:".$reserva->getId_reserva()."\n";
               $reservas_encontradas++;
               #Deberían borrarse
               #$reserva->delete();
@@ -57,7 +60,32 @@ use C4::Modelo::CircReserva;
             else{
               #**********************************Se registra el movimiento en rep_historial_circulacion***************************
                   my $tipo_operacion = "DEVOLUCION";
-                  C4::AR::Prestamos::agregarPrestamoAHistorialCirculacion($prestamo,$tipo_operacion,$responsable);
+                  use C4::Modelo::RepHistorialCirculacion;
+
+                  my %params = {};
+                  $params{'nro_socio'}    = $prestamo->getNro_socio;
+
+                  if(($prestamo->nivel3)&&($prestamo->nivel3->nivel2)){
+                    $params{'id1'}          = $prestamo->nivel3->nivel2->nivel1->getId1;
+                    $params{'id2'}          = $prestamo->nivel3->nivel2->getId2;
+                  }else{
+                    $params{'id1'}          = 0;
+                    $params{'id2'}          = 0;
+                  }
+
+                  $params{'id3'}          = $prestamo->getId3;
+                  $params{'nro_socio'}    = $prestamo->getNro_socio;
+                  $params{'responsable'}  = $responsable || $prestamo->getNro_socio;
+                  $params{'fecha'}        = $prestamo->getFecha_prestamo;
+                  $params{'fecha_devolucion'}= $prestamo->getFecha_devolucion;
+                  $params{'id_ui'}        = $prestamo->getId_ui_prestamo;
+                  $params{'tipo'}         = $tipo_operacion;
+                  $params{'tipo_prestamo'}= $prestamo->getTipo_prestamo;
+
+
+                  my $historial_circulacion = C4::Modelo::RepHistorialCirculacion->new();
+                  $historial_circulacion->agregar(\%params);
+
               #*******************************Fin***Se registra el movimiento en rep_historial_circulacion*************************
               #**********************************Se registra el movimiento en rep_historial_prestamo***************************
                       use C4::Modelo::RepHistorialPrestamo;
