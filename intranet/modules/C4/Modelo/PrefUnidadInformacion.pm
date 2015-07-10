@@ -11,6 +11,7 @@ __PACKAGE__->meta->setup(
         id                  => { type => 'serial', overflow => 'truncate'},
         id_ui               => { type => 'varchar', overflow => 'truncate', not_null => 1 , length => 4},
         nombre              => { type => 'varchar', overflow => 'truncate', not_null => 1 , length => 255},
+        nombre_largo        => { type => 'varchar', overflow => 'truncate', not_null => 1 , length => 255},
         ciudad              => { type => 'varchar', overflow => 'truncate', not_null => 1 , length => 255, default => "La Plata"},
         titulo_formal       => { type => 'varchar', overflow => 'truncate', not_null => 1 , length => 255, default => "Universidad Nacional de La Plata"},
         direccion           => { type => 'varchar', overflow => 'truncate', not_null => 1 , length => 255},
@@ -109,7 +110,26 @@ sub setNombre{
     $nombre = Encode::encode_utf8($nombre);
     $self->nombre($nombre);
 }
-    
+
+sub getNombreLargo{
+    my ($self) = shift;
+
+    return (C4::AR::Utilidades::trim($self->nombre_largo));
+}
+
+sub getNombreLargoPDF{
+    my ($self) = shift;
+
+    return (C4::AR::Utilidades::trim(Encode::decode_utf8($self->nombre_largo)));
+} 
+
+sub setNombreLargo{
+    my ($self) = shift;
+    my ($nombre) = @_;
+    $nombre = Encode::encode_utf8($nombre);
+    $self->nombre_largo($nombre);
+} 
+
 sub getDireccionPDF{
     my ($self) = shift;
 
@@ -218,6 +238,7 @@ sub agregar{
     my ($data_hash)=@_;
     
     $self->setNombre($data_hash->{'nombre'});
+    $self->setNombreLargo($data_hash->{'nombre_largo'});
     $self->setDireccion($data_hash->{'direccion'});
     $self->setAlt_direccion($data_hash->{'alt_direccion'});
     $self->setTelefono($data_hash->{'telefono'});
@@ -294,6 +315,7 @@ sub getCampo{
     
 	if ($campo eq "id_ui") {return $self->getId_ui;}
 	if ($campo eq "nombre") {return $self->getNombre;}
+  if ($campo eq "nombre_largo") {return $self->getNombreLargo;}
 	if ($campo eq "direccion") {return $self->getDireccion;}
 	if ($campo eq "alt_direccion") {return $self->getAlt_direccion;}
 	if ($campo eq "telefono") {return $self->getTelefono;}

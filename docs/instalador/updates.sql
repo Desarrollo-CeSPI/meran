@@ -868,3 +868,5 @@ ALTER TABLE usr_socio ADD UNIQUE (id_persona);
 UPDATE cat_ref_tipo_nivel3 SET enable_nivel3 = 0 WHERE 1; 
 
 UPDATE cat_ref_tipo_nivel3 SET enable_nivel3 = 1 WHERE id_tipo_doc NOT IN ('ANA', 'ELE', 'SEW', 'WEB');
+
+ALTER TABLE  `pref_unidad_informacion` ADD  `nombre_largo` VARCHAR( 255 ) NOT NULL AFTER  `nombre`;
