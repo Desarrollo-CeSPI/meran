@@ -335,6 +335,7 @@ sub tienePrestamosDeId2 {
 
         push(@filtros, ( nro_socio      => { eq => $nro_socio } ));
         push(@filtros, ( 'nivel3.id2'   => { eq => $id2} ));
+        push(@filtros, ( fecha_devolucion => { eq => "NULL"} ));
 
 
         my $prestamos_count = C4::Modelo::CircPrestamo::Manager->get_circ_prestamo_count(query => \@filtros,
