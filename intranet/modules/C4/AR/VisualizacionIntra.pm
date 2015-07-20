@@ -361,7 +361,7 @@ sub getVistaIntra{
     my $key = $nivel.$campo.$template;
 
     if (defined C4::AR::CacheMeran::obtener($key)){
-        C4::AR::Debug::debug("VisualizacionOpac::getVistaOpac => KEY ==".$key."== valor => ".C4::AR::CacheMeran::obtener($key)." CACHED!!!!!!!");
+        # C4::AR::Debug::debug("VisualizacionOpac::getVistaOpac => KEY ==".$key."== valor => ".C4::AR::CacheMeran::obtener($key)." CACHED!!!!!!!");
         return C4::AR::CacheMeran::obtener($key);
     } else {
 
@@ -537,7 +537,7 @@ sub getVisualizacionFromCampoAndNivel{
     my $cat_estruct_info_array;
 
     if (defined C4::AR::CacheMeran::obtener($key)){
-        C4::AR::Debug::debug("VisualizacionOpac::getVisualizacionFromCampoAndNivel => KEY ==".$key."== valor => ".C4::AR::CacheMeran::obtener($key)." CACHED!!!!!!!");
+        # C4::AR::Debug::debug("VisualizacionOpac::getVisualizacionFromCampoAndNivel => KEY ==".$key."== valor => ".C4::AR::CacheMeran::obtener($key)." CACHED!!!!!!!");
         $cat_estruct_info_array = C4::AR::CacheMeran::obtener($key);
 
     } else {
