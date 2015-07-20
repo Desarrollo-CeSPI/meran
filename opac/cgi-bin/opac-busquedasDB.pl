@@ -256,7 +256,7 @@ if ($to_pdf){
 		$t_params->{'keyword'}                  = $obj->{'string'};
 
 		if ($obj->{'tipoAccion'} eq 'BUSQUEDA_AVANZADA'){
-			$t_params->{'buscoPor'}                 = Encode::encode('utf8', C4::AR::Busquedas::armarBuscoPor($obj));
+			$t_params->{'buscoPor'}                 = C4::AR::Busquedas::armarBuscoPor($obj);
 		}
 
 		$t_params->{'cantidad'}                 = $cantidad || 0;
