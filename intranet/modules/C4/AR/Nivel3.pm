@@ -437,7 +437,7 @@ sub getBarcodesPrestadoLike {
 sub detalleNivel3{
     my ($id2,$db) = @_;
 
-    C4::AR::Debug::debug("detalleNivel3 => id2 => ".$id2);
+    C4::AR::Debug::debug("Nivel3 => detalleNivel3 => id2 => ".$id2);
 
     my %hash_nivel2;    
     #recupero el nivel1 segun el id1 pasado por parametro
