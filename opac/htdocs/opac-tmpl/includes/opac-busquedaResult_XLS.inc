@@ -4,9 +4,9 @@
                  print C4::AR::Filtros::tableHeader(   
                                                          id             => "tablaResult",
                                                          class          => "table table-bordered",
-                                                         columns        => ['[% "T&iacute;tulo"|i18n %]','[% "Autor"|i18n %]',
-                                                                             '[% "Edici&oacute;n"|i18n %]','[% "Disponibilidad"|i18n %]'
-                                                                            
+                                                         columns        => [ '[% "T&iacute;tulo"|i18n %]','[% "Autor"|i18n %]',
+                                                                             '[% "Signatura Topogr&aacute;fica"|i18n %]',
+                                                                             '[% "Disponibilidad"|i18n %]'
                                                                             ],                         
                              ) ;
           [% END %]                
