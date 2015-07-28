@@ -40,10 +40,12 @@ use MARC::Field;
 use C4::AR::BackgroundJob;
 
 use MARC::Moose::Record;
-use MARC::Moose::Formater::Iso2709;
-use MARC::Moose::Reader::File::Iso2709;
+
+#use MARC::Moose::Reader::File::Iso2709;
 use MARC::Moose::Reader::File::Isis;
-use MARC::Moose::Reader::File::Marcxml;
+#use MARC::Moose::Reader::File::Marcxml;
+use MARC::Moose::Formater::Iso2709;
+
 
 use Spreadsheet::Read;
 
@@ -72,7 +74,6 @@ sub guardarNuevaImportacion {
        $db->{connect_options}->{AutoCommit} = 0;
        $db->begin_work;
 
-   eval {
 
     my $Io_importacion = C4::Modelo::IoImportacionIso->new(db=> $db);
     my $nuevo_esquema =0;
@@ -110,8 +111,12 @@ sub guardarNuevaImportacion {
          $params->{'camposMovidos'}     = \%camposMovidos;
     }
 
+    C4::AR::Debug::debug("Guardar Registros !!");
+
     #Ahora los registros del archivo $params->{'write_file'}
     C4::AR::ImportacionIsoMARC::guardarRegistrosNuevaImportacion($Io_importacion,$params,$msg_object,$db);
+
+    C4::AR::Debug::debug("Nuevo Esquma !!");
 
     #Si el esquema es nuevo hay que llenarlo con los datos de los registros cargados
     if($params->{'nuevo_esquema'}){
@@ -136,7 +141,6 @@ sub guardarNuevaImportacion {
     }
 
     $db->commit;
-    };
 
      if ($@){
         #Se loguea error de Base de Datos
@@ -245,12 +249,12 @@ sub guardarRegistrosNuevaImportacion {
 
 #Leemos los registros armamos el Marc::Record
     while ( my $record = $reader->read() ) {
-  #  eval {
+    eval {
          my $marc_record = MARC::Record->new();
          my $registro_erroneo=0;
          for my $field ( @{$record->fields} ) {
              my $new_field=0;
-             if ($field->tag == '004'){next;}
+             if ($field->tag < '010'){next;}
              if(($field->tag < '010')&&(!$field->{'subf'})){
                  #CONTROL FIELD
                  $new_field = MARC::Field->new( $field->tag, $field->{'value'} );
@@ -316,7 +320,7 @@ sub guardarRegistrosNuevaImportacion {
             my $Io_registro_importacion          = C4::Modelo::IoImportacionIsoRegistro->new(db => $db);
             $Io_registro_importacion->agregar(\%parametros);
 
-   #   };
+      };
 
      if ($@){
          #Se loguea error de Base de Datos
@@ -1063,24 +1067,24 @@ sub obtenerCamposDeArchivo {
     }
     else {
         #ES UN ISO
+        C4::AR::Debug::debug( $params->{'formatoImportacion'} );
 
+        $params->{'formatoImportacion'}= "isis";
+        $params->{'write_file'}="/usr/share/meran/jaula/files/intranet/private-uploads/imports/revmed.iso";
         use Switch;
-        my $reader;
-        switch ($params->{'formatoImportacion'}) {
-            case "iso"   {$reader=MARC::Moose::Reader::File::Iso2709->new(file   => $params->{'write_file'})}
-            case "isis"  {$reader=MARC::Moose::Reader::File::Isis->new(file   => $params->{'write_file'})}
-            case "xml"   {$reader=MARC::Moose::Reader::File::Marcxml->new(file   => $params->{'write_file'})}
-        }
+        my $reader = MARC::Moose::Reader::File::Isis->new(file   => $params->{'write_file'});
+
+  C4::AR::Debug::debug( "Leer campos de ".$params->{'write_file'} );
 
         while ( my $record = $reader->read() ) {
-        eval {
+          C4::AR::Debug::debug( "registro");
              for my $field ( @{$record->fields} ) {
+               C4::AR::Debug::debug( "campo".$field->tag);
                  my $campo = $field->tag;
                  if(!$detalleCampos{$campo}){
                     $detalleCampos{$campo}= 1;
                 }
              }
-            };
         }
     }
     return(\%detalleCampos);
@@ -1549,7 +1553,7 @@ sub detalleCompletoRegistro {
 
     #Son revistas?
     if ( C4::AR::ImportacionIsoMARC::getTipoDocumentoFromMarcRecord_Object($detalle->{'grupos'}->[0]->{'grupo'})->getId_tipo_doc() eq 'REV') {
-        #C4::AR::Debug::debug(" REVISTAS!!! ");
+        C4::AR::Debug::debug(" REVISTAS!!! ");
         my ($cantidad_ejemplares, $nuevos_grupos ) = procesarRevistas($detalle->{'grupos'});
         $detalle->{'grupos'} = $nuevos_grupos;
         $detalle->{'total_ejemplares'} = $cantidad_ejemplares;
@@ -1913,10 +1917,11 @@ sub procesarRevistas {
         # 1976(1-2); 1977(3-4-5-6-7-8); 1978(9/10-11-12-13-14); 1979(15-16)
 
         # C4::AR::Debug::debug("COLECCION  ==>  PROCESO : $volumenes \n");
-        while($estadoDeColeccionCompleto =~ /(\d*)\s*\(([^\)]+)\)/g) {
-           my $anio = $1;
-           my $numeros = $2;
-           push( @estadoDeColeccion, _generarNumerosDeAnio(C4::AR::Utilidades::trim($anio),C4::AR::Utilidades::trim($numeros)));
+        while($estadoDeColeccionCompleto =~ /((\d*\/?\d*)|\s)\s*((\d*\-?\d*)|\s)\s*(\(([^\)]+)\)|;?);?/g) {
+           my $anio = $2;
+           my $volumen = $4;
+           my $numeros = $6;
+           push( @estadoDeColeccion, _generarNumerosDeAnio(C4::AR::Utilidades::trim($anio),C4::AR::Utilidades::trim($volumen),C4::AR::Utilidades::trim($numeros)));
         }
 
         return  @estadoDeColeccion;
@@ -2070,7 +2075,7 @@ sub procesarRevistas {
         }
 
     sub _generarNumerosDeAnio {
-        my ($anio,$numeros) = @_;
+        my ($anio,$volumen,$numeros) = @_;
             my @estadoDeColeccion= ();
 
             if ($numeros) {
@@ -2083,16 +2088,20 @@ sub procesarRevistas {
                     my $numero_limpio =C4::AR::Utilidades::trim($n);
                     my %fasciculo=();
                     $fasciculo{'anio'} = $anio;
+                    $fasciculo{'volumen'} = $volumen;
                     $fasciculo{'numero'} = $numero_limpio;
                     push(@estadoDeColeccion,\%fasciculo);
                 }
 
             } else {
+                    if($anio || $volumen){
                         #no tiene número
                         my %fasciculo=();
                         $fasciculo{'anio'} = $anio;
+                        $fasciculo{'volumen'} = $volumen;
                         $fasciculo{'numero'} = '';
                         push(@estadoDeColeccion,\%fasciculo);
+                      }
             }
 
         return  @estadoDeColeccion;
