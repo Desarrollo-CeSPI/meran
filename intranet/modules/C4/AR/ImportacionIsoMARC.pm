@@ -2082,7 +2082,7 @@ sub procesarRevistas {
 
  #               C4::AR::Debug::debug("COLECCION  ==>  PROCESO : $numeros \n");
 
-                my @numeros_separados = split('-', $numeros );
+                my @numeros_separados = split(',', $numeros );
 
                 foreach my $n (@numeros_separados){
                     my $numero_limpio =C4::AR::Utilidades::trim($n);
