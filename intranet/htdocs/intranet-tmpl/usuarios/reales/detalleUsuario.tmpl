@@ -204,6 +204,9 @@ var loaderPath= "";
                       
                       <dt class="inline left rightMargin">[% "Estado:" | i18n %] </dt>
                       <dd><span class="label [% IF socio.esRegular %]label-success[% ELSE %]label-important[% END %]">[% socio.esRegularToString %]</span></dd>
+
+                      <dt class="inline left rightMargin">[% "Cumple requisito?:" | i18n %] </dt>
+                      <dd><span class="label [% IF socio.cumpleRequisito %]label-success[% ELSE %]label-important[% END %]">[% IF (socio.cumpleRequisito) %] SI [% ELSE %] NO  [% END %]</span></dd>
                       
                       
 
