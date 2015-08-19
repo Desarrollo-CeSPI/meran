@@ -957,7 +957,7 @@ sub generateBookLabelA4 {
     $posy = $posy + 7;
     $pdf->setSize(6);
 #     $pdf->addRawText( C4::AR::Filtros::i18n("Biblioteca"), $x + 145, $pageheight + 65  + ( $y - $posy ) );
-    $pdf->addRawText( C4::AR::Filtros::i18n("Biblioteca"), $x + 155, 270  + ( $y - $posy ) );
+    # $pdf->addRawText( C4::AR::Filtros::i18n("Biblioteca"), $x + 155, 270  + ( $y - $posy ) );
     $posy = $posy + 7;
     $pdf->setFont("Arial");
 
