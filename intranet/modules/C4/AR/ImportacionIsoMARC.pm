@@ -198,18 +198,23 @@ sub guardarRegistrosNuevaImportacion {
         my $campo = 100;
         my $subcampo = 'a';
 
-        my $ref = Spreadsheet::Read::ReadData($params->{'write_file'}, parser => $params->{'file_ext'});
+        my $ref = Spreadsheet::Read::ReadData($params->{'write_file'}, parser => $params->{'file_ext'} , dtfmt => "dd/mm/yyyy");
 
-        my @rows = Spreadsheet::Read::rows($ref->[1]);
+        #my @rows = Spreadsheet::Read::rows($ref->[1]);
 
         my $primera_fila = $params->{'xls_first'};
         C4::AR::Debug::debug( "PRIMERA FILA?? ". $primera_fila);
-        foreach my $fila (@rows){
+
+        my $ss = $ref->[1];
+        foreach my $row (1 .. $ss->{maxrow}) {
+            
+            my @fila = Spreadsheet::Read::row($ss,$row);
+            
             if(!$primera_fila){
                 my $marc_record = MARC::Record->new();
                 my $campo = 100;
                 my $subcampo='a';
-                foreach my $dato (@$fila){
+                foreach my $dato (@fila){
 
                     my $dato_fila = C4::AR::Utilidades::trim($dato);
 
@@ -1537,6 +1542,17 @@ sub detalleCompletoRegistro {
                 $nivel1->field('041')->update( 'h' => $idioma->getDescription());
             }
         }
+
+    #Parche: Digesto Poner por defecto como autor institucional/corporativo: Universidad Nacional de La Plata en el campo 110^a
+    if (C4::AR::Preferencias::getValorPreferencia("defaultUI") eq "UNLP"){
+        if($nivel1->field('110')){
+            $nivel1->field('110')->update( 'a' => "Universidad Nacional de La Plata");
+        }else{
+                my $new_field= MARC::Field->new('110','#','#','a' => "Universidad Nacional de La Plata");
+                $nivel1->append_fields($new_field);
+        }
+    }
+
 
     #Parche: FAU pide duplicar un campo
     if (C4::AR::Preferencias::getValorPreferencia("defaultUI") eq "DAQ"){
