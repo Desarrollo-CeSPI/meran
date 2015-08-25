@@ -470,11 +470,14 @@ sub agregarAnaliticas {
 			['250','a',$material->{'libro_edicion'}],
 			['260','a',$material->{'editorial_ciudad'}],
 			['260','b',$material->{'editorial_descrip'}],
-			['260','c',$material->{'libro_fecha_publicacion'}],
-      ['520','a',$material->{'libro_contenido'}],
+            ['520','a',$material->{'libro_contenido'}],
 			['020','a',$material->{'libro_ISBN'}],
 			['300','a',$material->{'libro_paginas'}],
 			);
+
+            if($material->{'libro_fecha_publicacion'} != ""){
+                push(@campos_n2, ['260','c',$material->{'libro_fecha_publicacion'}]);
+            }
 
 			if($material->{'id_serie'} > 3){
 				push(@campos_n2, ['490','a',$material->{'serie_descrip'}]);
@@ -534,14 +537,14 @@ sub agregarAnaliticas {
 		my $cant_ejemplares=0;
 		my $ejemplares_mpf=$db_mpf->prepare("SELECT * FROM tb_ejemplar WHERE titulo_id = ?;");
 		$ejemplares_mpf->execute($material->{'titulo_id'});
-
+        my $cdu = 0;
 		while (my $ejemplar=$ejemplares_mpf->fetchrow_hashref) {
 				my @nuevo_ejemplar=();
 				#UI
 				push(@nuevo_ejemplar, ['995','c', 'MPF']);
 				push(@nuevo_ejemplar, ['995','d', 'MPF']);
 
-				push(@nuevo_ejemplar, ['995','f', $ejemplar->{'ejemplar_codigo_barra'}]);
+				push(@nuevo_ejemplar, ['995','f', 'MPF-'.$template."-".$ejemplar->{'ejemplar_codigo_barra'}]);
 				push(@nuevo_ejemplar, ['995','t', $ejemplar->{'ejemplar_topografico'}]);
 				push(@nuevo_ejemplar, ['995','o', 'CIRC0000']);
 				push(@nuevo_ejemplar, ['995','e', 'STATE002']);
@@ -549,9 +552,19 @@ sub agregarAnaliticas {
 				push(@nuevo_ejemplar, ['900','p', $ejemplar->{'ejemplar_fecha_ingreso'}]);
 
 				#TOMO?
-				if($material->{'ejemplar_tomo'} != ''){
-					push(@campos_n2, ['505','g',$material->{'ejemplar_tomo'}]);
+				if($ejemplar->{'ejemplar_tomo'} != ''){
+					push(@campos_n2, ['505','g',$ejemplar->{'ejemplar_tomo'}]);
 				}
+
+                #CDU?
+                if(($ejemplar->{'ejemplar_CDU'} != '')&&(!$cdu)){
+                    $cdu = 1;
+                    push(@campos_n1, ['080','a',$ejemplar->{'ejemplar_CDU'}]);
+                }
+
+                if($ejemplar->{'ejemplar_anio'} != ""){
+                    push(@campos_n2, ['260','c',$ejemplar->{'ejemplar_anio'}]);
+                }
 
 				$ejemplares[$cant_ejemplares] = \@nuevo_ejemplar;
 				$cant_ejemplares++;
