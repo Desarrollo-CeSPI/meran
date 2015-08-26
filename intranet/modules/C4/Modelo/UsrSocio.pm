@@ -701,9 +701,15 @@ sub setChange_password{
 sub cumpleRequisito{
   my ($self) = shift;
 
-  my $cumple = C4::AR::Preferencias::getValorPreferencia("requisito_necesario")||0;
+  my $requisito_necesario = C4::AR::Preferencias::getValorPreferencia("requisito_necesario")||0;
+  my $cumple = 1;
 
-  (C4::AR::Preferencias::getValorPreferencia("requisito_necesario"))? $cumple : $cumple = 1;	
+  # (C4::AR::Preferencias::getValorPreferencia("requisito_necesario"))? $cumple : $cumple = 1;	
+
+  if ($requisito_necesario){
+      my $cumple_condicion  = $self->getCumple_requisito||"0000000000:00:00";
+      $cumple               = ($cumple_condicion ne "0000000000:00:00");
+  }
 
   return $cumple;
 }

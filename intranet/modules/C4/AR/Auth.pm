@@ -1418,6 +1418,7 @@ sub session_destroy {
 }
 
 
+# DEPRECATED
 sub _checkRequisito{
 	my ($socio) = @_;
 
@@ -1461,12 +1462,12 @@ sub _verificarPassword {
 =cut
 
 sub _autenticar{
-	use Switch;
-	my ($userid, $password, $nroRandom,$metodo) = @_;
-	my $socio = undef;
-	eval{
-		C4::AR::Debug::debug("metodo ".$metodo." userid ".$userid . " nroRandom : " . $nroRandom);
-		switch ($metodo){
+  use Switch;
+  my ($userid, $password, $nroRandom,$metodo) = @_;
+  my $socio = undef;
+  eval{
+    C4::AR::Debug::debug("metodo ".$metodo." userid ".$userid . " nroRandom : " . $nroRandom);
+    switch ($metodo){
 			case "ldap" {
 				($socio) = C4::AR::Authldap::checkPassword($userid,$password,$nroRandom); 
 				C4::AR::Debug::debug("Devolviendo casi al final el socio".$socio);      
@@ -1476,11 +1477,13 @@ sub _autenticar{
 				C4::AR::Debug::debug("Vamos bien???".$socio);      
 			}
 			else{
-				}
-		   }
-		if ( (defined $socio) && (! _checkRequisito($socio))  ){
-			C4::AR::Debug::debug("Gaspo me esta rompiendo las pelotas- NO CUMPLE REQUISITO ".$socio);      
-			$socio=undef ;
+			}
+    } #end switch
+		# if ( (defined $socio) && (! _checkRequisito($socio))  ){
+		C4::AR::Debug::debug("Auth => socio->cumpleRequisito() " . $socio->cumpleRequisito());	
+		if ( (defined $socio) && ( !$socio->cumpleRequisito() ) ) {
+			C4::AR::Debug::debug("Auth.pm => NO CUMPLE REQUISITO ".$socio);      
+			$socio = undef ;
 	
 		}elsif (defined $socio){
 			$socio->setLastAuthMethod($metodo);
@@ -2178,7 +2181,8 @@ sub recoverPassword{
 		if ($socio){
 			my $db = $socio->db;
 
-			if ( _checkRequisito($socio) ){
+			if ($socio->cumpleRequisito()) {	
+			# if ( _checkRequisito($socio) ){
 				
 				$db->{connect_options}->{AutoCommit} = 0;
 				$db->begin_work;
