@@ -710,6 +710,7 @@ sub cumpleRequisito{
       my $cumple_condicion  = $self->getCumple_requisito||"0000000000:00:00";
       $cumple               = ($cumple_condicion ne "0000000000:00:00");
   }
+  $cumple = $cumple && ($self->getActivo);
 
   return $cumple;
 }
