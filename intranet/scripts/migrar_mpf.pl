@@ -133,7 +133,7 @@ sub migrarLibros {
 			$id1 = $n1->getId1();
 		} else {
 			($msg_object,$id1) =  guardarNivel1DeImportacion($marc_record_n1,$template);
-        print "Nivel 1 creado ?? ".$msg_object->{'error'}."\n";
+        print "Nivel 1 creado ? Error => ".$msg_object->{'error'}."\n";
         	if(!$msg_object->{'error'}){
         		$registros_creados++;
         	}
@@ -148,7 +148,7 @@ sub migrarLibros {
         if ($id1){
         		#Libros
 	        	my ($msg_object2,$id1,$id2) =  guardarNivel2DeImportacion($id1,$marc_record_n2,$template);
-		        print "Nivel 2 creado ?? ".$msg_object2->{'error'}."\n";
+		        print "Nivel 2 creado ? Error => ".$msg_object2->{'error'}."\n";
 	            if (!$msg_object2->{'error'}){
 	            	$grupos_creados ++;
 
@@ -510,27 +510,37 @@ sub agregarAnaliticas {
 			push(@campos_n1, ['650','a',$material->{'categoria_descrip'}]);
 		}
 
-		if ($material->{'libro_descriptor'} != ''){
+        print "DESCRIPTOR ".$material->{'libro_descriptor'}."\n"; 
+		
+        if ($material->{'libro_descriptor'}){
+
+            print $material->{'libro_descriptor'}; 
+             print "Antes ".scalar(@campos_n1)."\n";
 		  # Los descriptores están separados en algunos casos por . y en otros  por //
 			my $descriptores = $material->{'libro_descriptor'};
 
-	  	my @values = split('. ', $descriptores);
+	  	my @values = split(/\. /, $descriptores);
 			if (scalar(@values) > 1 ){
 				foreach my $val (@values) {
 					push(@campos_n1, ['650','a',$val]);
+                    print "Desc 1".$val."\n";
 				}
 			}else{
-				  my @values = split(' // ', $descriptores);
+				  my @values = split( / \/\/ /, $descriptores);
 
 					if (scalar(@values) > 1 ){
 						foreach my $val (@values) {
 							push(@campos_n1, ['650','a',$val]);
+                             print "Desc // ".$val."\n";
 						}
 					}else{
-						 push(@campos_n1, ['650','a',$descriptores])
+						 push(@campos_n1, ['650','a',$descriptores]);
+                         print "Desc 2".$descriptores."\n";
 					}
 			}
-		}
+		
+            print "Despues ".scalar(@campos_n1)."\n";
+        }
 
 		#Buscamos Ejemplares
 		my @ejemplares=();
