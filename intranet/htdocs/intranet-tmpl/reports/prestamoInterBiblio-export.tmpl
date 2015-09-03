@@ -6,7 +6,7 @@
             <div class="encabezado">
                 <img src="[% escudo %]" alt="escudo" width="80px" height="100px" /><img src="[% escudoUI %]" alt="escudoUI" width="120px" height="90px" align="right" /><br>
                 [% biblio.titulo_formal %]<br>
-                [% biblio.getNombreLargoPDF %]<br><br><br>
+                [% biblio.getNombreLargo %]<br><br><br>
             </div>
 
             <p id="fecha" align="right">[% fecha %]
@@ -14,7 +14,7 @@
             <p id="fecha"></p>
             <div class="contenido">
                 [% "Sr/a Director/a de la Biblioteca" | i18n  %]<br>
-                [% biblio_destino.getNombreLargoPDF  %]<br>
+                [% biblio_destino.getNombreLargo  %]<br>
                 [% director %]<br>
                 S/D <br><br>
                 [% "Tengo el agrado de dirigirme a Ud. a fin de solicitarle en car&aacute;cter de pr&eacute;stamo interbibliotecario los siguientes items: "  | 
@@ -73,7 +73,7 @@ i18n %]
             <hr>
             <div id="pie" padding:"40px">
                       [% "Biblioteca: " | i18n  %] [% biblio.getNombre %]<br>
-                      [% "Direcci&oacute;n:" | i18n  %]  [% biblio.getDireccionPDF %]<br>
+                      [% "Direcci&oacute;n:" | i18n  %]  [% biblio.getDireccion %]<br>
                       [% "Tel/Fax:" | i18n  %]  [% biblio.telefono %]  [% IF biblio.fax %] / [% biblio.fax %][% END %]  <br>
                       [% "Atenci&oacute;n: Lunes a Viernes " | i18n  %][% atencion %] <br>
                       [% "E-mail:" | i18n  %] [% biblio.email %]<br>
