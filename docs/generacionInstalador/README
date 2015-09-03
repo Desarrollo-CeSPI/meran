@@ -1,4 +1,4 @@
-Este es el README de la version 0.9.7 de MERAN publicada el 10/04/2014.
+Este es el README de la version 0.10.5 de MERAN publicada el 03/09/2015.
 
 Para mas información visite el sitio del proyecto http://cespi.unlp.edu.ar/meran .
 
@@ -7,7 +7,7 @@ Igualmente distribuimos el código fuente pero tal vez sea necesario que instale
 
 ##Instalar automatico, solo para Debian 6.0, 7.0 o derivados como Lihuen GNU/Linux###
 
-1- Baje las fuentes del sistema desde el sitio del proyecto http://meran.unlp.edu.ar
+1- Baje las fuentes del sistema desde el sitio del proyecto http://cespi.unlp.edu.ar/meran
 2- Descomprimir el tar.gz que se baja y luego
 3- Como usuario root ejecute el script de instalación pasando un identificador que se utilizará en el sitio:
 	# bash docs/instalador/instalar.sh -i identificador
