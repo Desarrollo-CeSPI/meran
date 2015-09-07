@@ -278,8 +278,6 @@ sub prepararNivelParaImportar{
 }
 
 
-
-
 sub guardarNivel1DeImportacion{
     my ($marc_record, $template,$id2_padre) = @_;
 
@@ -400,7 +398,6 @@ sub guardarNivel3DeImportacion{
 }
 
 
-
 sub buscarRegistroDuplicado{
     my ($marc_record,$template) = @_;
 
@@ -418,16 +415,19 @@ sub buscarRegistroDuplicado{
     return $n1;
 }
 
-sub agregarAnaliticas {
-        my ($id1_padre,$id2_padre, $recno) = @_;
+sub agregarAnaliticasDeRevistas {
+        my ($id1_padre,$id2_padre, $titulo_rev) = @_;
 
-		my $ana_sql= "SELECT * FROM  MATERIAL WHERE NivelBibliografico = 'A' AND Parent_RecNo = ? ; ";
+		my $ana_sql= "SELECT *  FROM tb_analitica 
+            LEFT JOIN tb_editorial ON tb_analitica.editorial_id = tb_editorial.editorial_id
+            LEFT JOIN tb_categoria ON tb_categoria.categoria_id = tb_analitica.analitica_categoria_id
+        WHERE analitica_titulo_revista  = ? ";
 		my $ana_calp=$db_mpf->prepare($ana_sql);
-		   $ana_calp->execute($recno);
+		   $ana_calp->execute($titulo_rev);
 
 		my $analiticas_creadas=0;
 		while (my $material=$ana_calp->fetchrow_hashref) {
-			my ($marc_record_n1,$marc_record_n2,$marc_record_n3_base,$ejemplares) = prepararRegistroParaMigrar($material,"ANA", "Analitico");
+			my ($marc_record_n1,$marc_record_n2,$marc_record_n3_base,$ejemplares) = prepararRegistroAnaliticoParaMigrar($material,"ANA", "Analitico");
 			#N1
 			my ($msg_object,$id1_analitica) =  guardarNivel1DeImportacion($marc_record_n1,"ANA",$id2_padre);
 	        if(!$msg_object->{'error'}){
@@ -452,191 +452,400 @@ sub agregarAnaliticas {
        	return $analiticas_creadas;
 	}
 
+sub prepararRegistroParaMigrar {
+	my ($material, $template, $nivel) = @_;
+			#Calculamos algunos campos
 
-	sub prepararRegistroParaMigrar {
-		my ($material, $template, $nivel) = @_;
-				#Calculamos algunos campos
+	#Lista de campos
+	#Tenemos Niveles 1 y 2, si ya existe el título, se agrega un nuevo 2,
+	#sino se agregan los 2 niveles
+	my @campos_n1=(
+		['245','a',$material->{'libro_nombre'}],
+		);
 
-		#Lista de campos
-		#Tenemos Niveles 1 y 2, si ya existe el título, se agrega un nuevo 2,
-		#sino se agregan los 2 niveles
-		my @campos_n1=(
-			['245','a',$material->{'libro_nombre'}],
-			);
+	my @campos_n2=(
+		['900','b',$nivel],
+		['910','a',$template],
+		['250','a',$material->{'libro_edicion'}],
+		['260','a',$material->{'editorial_ciudad'}],
+		['260','b',$material->{'editorial_descrip'}],
+        ['520','a',$material->{'libro_contenido'}],
+		['020','a',$material->{'libro_ISBN'}],
+		['300','a',$material->{'libro_paginas'}],
+		);
 
-		my @campos_n2=(
-			['900','b',$nivel],
-			['910','a',$template],
-			['250','a',$material->{'libro_edicion'}],
-			['260','a',$material->{'editorial_ciudad'}],
-			['260','b',$material->{'editorial_descrip'}],
-            ['520','a',$material->{'libro_contenido'}],
-			['020','a',$material->{'libro_ISBN'}],
-			['300','a',$material->{'libro_paginas'}],
-			);
-
-            if($material->{'libro_fecha_publicacion'} != ""){
-                push(@campos_n2, ['260','c',$material->{'libro_fecha_publicacion'}]);
-            }
-
-			if($material->{'id_serie'} > 3){
-				push(@campos_n2, ['490','a',$material->{'serie_descrip'}]);
-			}
-
-		my @campos_n3=(
-			);
-
-		#Buscamos Autores
-		my $autor_db = $db_mpf->prepare("SELECT autor_nya FROM tb_autor WHERE autor_id = ? ;");
-
-		#Autor Principal
-		if($material->{'autor_id'} > 2){
-			$autor_db->execute($material->{'autor_id'});
-			 if (my $aut=$autor_db->fetchrow_hashref){
-					push(@campos_n1, ['100','a',$aut->{'autor_nya'}]);
-			}
-		}
-
-		#Autor Institucional
-		if($material->{'autor_inst_id'} > 2){
-			$autor_db->execute($material->{'autor_inst_id'});
-			 if (my $aut=$autor_db->fetchrow_hashref){
-					push(@campos_n1, ['110','a',$aut->{'autor_nya'}]);
-			}
-		}
-
-		#Buscamos Temas
-		if($material->{'categoria_id'} > 2){
-			push(@campos_n1, ['650','a',$material->{'categoria_descrip'}]);
-		}
-
-        print "DESCRIPTOR ".$material->{'libro_descriptor'}."\n"; 
-		
-        if ($material->{'libro_descriptor'}){
-
-            print $material->{'libro_descriptor'}; 
-             print "Antes ".scalar(@campos_n1)."\n";
-		  # Los descriptores están separados en algunos casos por . y en otros  por //
-			my $descriptores = $material->{'libro_descriptor'};
-
-	  	my @values = split(/\. /, $descriptores);
-			if (scalar(@values) > 1 ){
-				foreach my $val (@values) {
-					push(@campos_n1, ['650','a',$val]);
-                    print "Desc 1".$val."\n";
-				}
-			}else{
-				  my @values = split( / \/\/ /, $descriptores);
-
-					if (scalar(@values) > 1 ){
-						foreach my $val (@values) {
-							push(@campos_n1, ['650','a',$val]);
-                             print "Desc // ".$val."\n";
-						}
-					}else{
-						 push(@campos_n1, ['650','a',$descriptores]);
-                         print "Desc 2".$descriptores."\n";
-					}
-			}
-		
-            print "Despues ".scalar(@campos_n1)."\n";
+        if($material->{'libro_fecha_publicacion'} != ""){
+            push(@campos_n2, ['260','c',$material->{'libro_fecha_publicacion'}]);
         }
 
-		#Buscamos Ejemplares
-		my @ejemplares=();
-		my $cant_ejemplares=0;
-		my $ejemplares_mpf=$db_mpf->prepare("SELECT * FROM tb_ejemplar WHERE titulo_id = ?;");
-		$ejemplares_mpf->execute($material->{'titulo_id'});
-        my $cdu = 0;
-		while (my $ejemplar=$ejemplares_mpf->fetchrow_hashref) {
-				my @nuevo_ejemplar=();
-				#UI
-				push(@nuevo_ejemplar, ['995','c', 'MPF']);
-				push(@nuevo_ejemplar, ['995','d', 'MPF']);
-
-				push(@nuevo_ejemplar, ['995','f', 'MPF-'.$template."-".$ejemplar->{'ejemplar_codigo_barra'}]);
-				push(@nuevo_ejemplar, ['995','t', $ejemplar->{'ejemplar_topografico'}]);
-				push(@nuevo_ejemplar, ['995','o', 'CIRC0000']);
-				push(@nuevo_ejemplar, ['995','e', 'STATE002']);
-				push(@nuevo_ejemplar, ['995','u', $ejemplar->{'ejemplar_observaciones'}]);
-				push(@nuevo_ejemplar, ['900','p', $ejemplar->{'ejemplar_fecha_ingreso'}]);
-
-				#TOMO?
-				if($ejemplar->{'ejemplar_tomo'} != ''){
-					push(@campos_n2, ['505','g',$ejemplar->{'ejemplar_tomo'}]);
-				}
-
-                #CDU?
-                if(($ejemplar->{'ejemplar_CDU'} != '')&&(!$cdu)){
-                    $cdu = 1;
-                    push(@campos_n1, ['080','a',$ejemplar->{'ejemplar_CDU'}]);
-                }
-
-                if($ejemplar->{'ejemplar_anio'} != ""){
-                    push(@campos_n2, ['260','c',$ejemplar->{'ejemplar_anio'}]);
-                }
-
-				$ejemplares[$cant_ejemplares] = \@nuevo_ejemplar;
-				$cant_ejemplares++;
+		if($material->{'id_serie'} > 3){
+			push(@campos_n2, ['490','a',$material->{'serie_descrip'}]);
 		}
 
+	my @campos_n3=(
+		);
 
-		my $marc_record_n1 = MARC::Record->new();
-		foreach my $campo (@campos_n1){
-			if($campo->[2]){
-				my @campos_registro = $marc_record_n1->field($campo->[0]);
-				if (($campos_registro[-1])&&(!$campos_registro[-1]->subfield($campo->[1]))){
-					#No existe el subcampo en el campo, lo agrego
-				  	$campos_registro[-1]->add_subfields($campo->[1] => $campo->[2]);
-				}
-				else{
-				  	#No existe el campo o ya existe el subcampo, se crea uno nuevo.
-					my $field= MARC::Field->new($campo->[0], '', '', $campo->[1] => $campo->[2]);
-    				$marc_record_n1->append_fields($field);
-				}
-			}
-		}
+	#Buscamos Autores
+	my $autor_db = $db_mpf->prepare("SELECT autor_nya FROM tb_autor WHERE autor_id = ? ;");
 
-		my $marc_record_n2 = MARC::Record->new();
-		foreach my $campo (@campos_n2){
-			if($campo->[2]){
-				my @campos_registro = $marc_record_n2->field($campo->[0]);
-				if (($campos_registro[-1])&&(!$campos_registro[-1]->subfield($campo->[1]))){
-					#No existe el subcampo en el campo, lo agrego
-				  	$campos_registro[-1]->add_subfields($campo->[1] => $campo->[2]);
-				}
-				else{
-				  	#No existe el campo o ya existe el subcampo, se crea uno nuevo.
-					my $field= MARC::Field->new($campo->[0], '', '', $campo->[1] => $campo->[2]);
-    				$marc_record_n2->append_fields($field);
-				}
-			}
+	#Autor Principal
+	if($material->{'autor_id'} > 2){
+		$autor_db->execute($material->{'autor_id'});
+		 if (my $aut=$autor_db->fetchrow_hashref){
+				push(@campos_n1, ['100','a',$aut->{'autor_nya'}]);
 		}
-		my $marc_record_n3_base = MARC::Record->new();
-		foreach my $campo (@campos_n3){
-			if($campo->[2]){
-				my @campos_registro = $marc_record_n3_base->field($campo->[0]);
-				if (($campos_registro[-1])&&(!$campos_registro[-1]->subfield($campo->[1]))){
-					#No existe el subcampo en el campo, lo agrego
-				  	$campos_registro[-1]->add_subfields($campo->[1] => $campo->[2]);
-				}
-				else{
-				  	#No existe el campo o ya existe el subcampo, se crea uno nuevo.
-					my $field= MARC::Field->new($campo->[0], '', '', $campo->[1] => $campo->[2]);
-    				$marc_record_n3_base->append_fields($field);
-				}
-			}
-		}
-
-		return ($marc_record_n1,$marc_record_n2,$marc_record_n3_base,\@ejemplares);
 	}
+
+	#Autor Institucional
+	if($material->{'autor_inst_id'} > 2){
+		$autor_db->execute($material->{'autor_inst_id'});
+		 if (my $aut=$autor_db->fetchrow_hashref){
+				push(@campos_n1, ['110','a',$aut->{'autor_nya'}]);
+		}
+	}
+
+	#Buscamos Temas
+	if($material->{'categoria_id'} > 2){
+		push(@campos_n1, ['650','a',$material->{'categoria_descrip'}]);
+	}
+
+    print "DESCRIPTOR ".$material->{'libro_descriptor'}."\n"; 
+	
+    if ($material->{'libro_descriptor'}){
+
+        print $material->{'libro_descriptor'}; 
+         print "Antes ".scalar(@campos_n1)."\n";
+	  # Los descriptores están separados en algunos casos por . y en otros  por //
+		my $descriptores = $material->{'libro_descriptor'};
+
+  	my @values = split(/\. /, $descriptores);
+		if (scalar(@values) > 1 ){
+			foreach my $val (@values) {
+				push(@campos_n1, ['650','a',$val]);
+                print "Desc 1".$val."\n";
+			}
+		}else{
+			  my @values = split( / \/\/ /, $descriptores);
+
+				if (scalar(@values) > 1 ){
+					foreach my $val (@values) {
+						push(@campos_n1, ['650','a',$val]);
+                         print "Desc // ".$val."\n";
+					}
+				}else{
+					 push(@campos_n1, ['650','a',$descriptores]);
+                     print "Desc 2".$descriptores."\n";
+				}
+		}
+	
+        print "Despues ".scalar(@campos_n1)."\n";
+    }
+
+	#Buscamos Ejemplares
+	my @ejemplares=();
+	my $cant_ejemplares=0;
+	my $ejemplares_mpf=$db_mpf->prepare("SELECT * FROM tb_ejemplar WHERE titulo_id = ?;");
+	$ejemplares_mpf->execute($material->{'titulo_id'});
+    my $cdu = 0;
+	while (my $ejemplar=$ejemplares_mpf->fetchrow_hashref) {
+			my @nuevo_ejemplar=();
+			#UI
+			push(@nuevo_ejemplar, ['995','c', 'MPF']);
+			push(@nuevo_ejemplar, ['995','d', 'MPF']);
+
+			push(@nuevo_ejemplar, ['995','f', 'MPF-'.$template."-".$ejemplar->{'ejemplar_codigo_barra'}]);
+			push(@nuevo_ejemplar, ['995','t', $ejemplar->{'ejemplar_topografico'}]);
+			push(@nuevo_ejemplar, ['995','o', 'CIRC0000']);
+			push(@nuevo_ejemplar, ['995','e', 'STATE002']);
+			push(@nuevo_ejemplar, ['995','u', $ejemplar->{'ejemplar_observaciones'}]);
+			push(@nuevo_ejemplar, ['900','p', $ejemplar->{'ejemplar_fecha_ingreso'}]);
+
+			#TOMO?
+			if($ejemplar->{'ejemplar_tomo'} != ''){
+				push(@campos_n2, ['505','g',$ejemplar->{'ejemplar_tomo'}]);
+			}
+
+            #CDU?
+            if(($ejemplar->{'ejemplar_CDU'} != '')&&(!$cdu)){
+                $cdu = 1;
+                push(@campos_n1, ['080','a',$ejemplar->{'ejemplar_CDU'}]);
+            }
+
+            if($ejemplar->{'ejemplar_anio'} != ""){
+                push(@campos_n2, ['260','c',$ejemplar->{'ejemplar_anio'}]);
+            }
+
+			$ejemplares[$cant_ejemplares] = \@nuevo_ejemplar;
+			$cant_ejemplares++;
+	}
+
+
+	my $marc_record_n1 = MARC::Record->new();
+	foreach my $campo (@campos_n1){
+		if($campo->[2]){
+			my @campos_registro = $marc_record_n1->field($campo->[0]);
+			if (($campos_registro[-1])&&(!$campos_registro[-1]->subfield($campo->[1]))){
+				#No existe el subcampo en el campo, lo agrego
+			  	$campos_registro[-1]->add_subfields($campo->[1] => $campo->[2]);
+			}
+			else{
+			  	#No existe el campo o ya existe el subcampo, se crea uno nuevo.
+				my $field= MARC::Field->new($campo->[0], '', '', $campo->[1] => $campo->[2]);
+				$marc_record_n1->append_fields($field);
+			}
+		}
+	}
+
+	my $marc_record_n2 = MARC::Record->new();
+	foreach my $campo (@campos_n2){
+		if($campo->[2]){
+			my @campos_registro = $marc_record_n2->field($campo->[0]);
+			if (($campos_registro[-1])&&(!$campos_registro[-1]->subfield($campo->[1]))){
+				#No existe el subcampo en el campo, lo agrego
+			  	$campos_registro[-1]->add_subfields($campo->[1] => $campo->[2]);
+			}
+			else{
+			  	#No existe el campo o ya existe el subcampo, se crea uno nuevo.
+				my $field= MARC::Field->new($campo->[0], '', '', $campo->[1] => $campo->[2]);
+				$marc_record_n2->append_fields($field);
+			}
+		}
+	}
+	my $marc_record_n3_base = MARC::Record->new();
+	foreach my $campo (@campos_n3){
+		if($campo->[2]){
+			my @campos_registro = $marc_record_n3_base->field($campo->[0]);
+			if (($campos_registro[-1])&&(!$campos_registro[-1]->subfield($campo->[1]))){
+				#No existe el subcampo en el campo, lo agrego
+			  	$campos_registro[-1]->add_subfields($campo->[1] => $campo->[2]);
+			}
+			else{
+			  	#No existe el campo o ya existe el subcampo, se crea uno nuevo.
+				my $field= MARC::Field->new($campo->[0], '', '', $campo->[1] => $campo->[2]);
+				$marc_record_n3_base->append_fields($field);
+			}
+		}
+	}
+
+	return ($marc_record_n1,$marc_record_n2,$marc_record_n3_base,\@ejemplares);
+}
+
+
+sub prepararRegistroAnaliticoParaMigrar {
+    my ($material, $template, $nivel) = @_;
+            #Calculamos algunos campos
+
+    #Lista de campos
+    #Tenemos Niveles 1 y 2, si ya existe el título, se agrega un nuevo 2,
+    #sino se agregan los 2 niveles
+    my @campos_n1=(
+        ['245','a',$material->{'analitica_titulo'}],
+        );
+
+    my @campos_n2=(
+        ['900','b',$nivel],
+        ['910','a',$template],
+        ['863','i',$material->{'analitica_tomo'}],
+        ['260','a',$material->{'editorial_ciudad'}],
+        ['260','b',$material->{'editorial_descrip'}],
+        ['500','a',$material->{'analitica_nota'}],
+        ['300','a',$material->{'analitica_paginas'}],
+        );
+    
+    my @ejemplares=();
+    my $cant_ejemplares=0;
+
+    #Buscamos Autores
+    my $autor_db = $db_mpf->prepare("SELECT * FROM tb_autor WHERE autor_id = ? ;");
+
+    #Autor
+    if($material->{'analitica_autor_id'} > 2){
+        $autor_db->execute($material->{'analitica_autor_id'});
+         if (my $aut=$autor_db->fetchrow_hashref){
+            if($aut->{'autor_institucional'}){
+                push(@campos_n1, ['110','a',$aut->{'autor_nya'}]);
+            }
+            else{
+                push(@campos_n1, ['100','a',$aut->{'autor_nya'}]);
+              }
+        }
+    }
+
+    #Buscamos Temas
+    if($material->{'analitica_categoria_id'} > 2){
+        push(@campos_n1, ['650','a',$material->{'categoria_descrip'}]);
+    }
+
+    my $marc_record_n1 = MARC::Record->new();
+    foreach my $campo (@campos_n1){
+        if($campo->[2]){
+            my @campos_registro = $marc_record_n1->field($campo->[0]);
+            if (($campos_registro[-1])&&(!$campos_registro[-1]->subfield($campo->[1]))){
+                #No existe el subcampo en el campo, lo agrego
+                $campos_registro[-1]->add_subfields($campo->[1] => $campo->[2]);
+            }
+            else{
+                #No existe el campo o ya existe el subcampo, se crea uno nuevo.
+                my $field= MARC::Field->new($campo->[0], '', '', $campo->[1] => $campo->[2]);
+                $marc_record_n1->append_fields($field);
+            }
+        }
+    }
+
+    my $marc_record_n2 = MARC::Record->new();
+    foreach my $campo (@campos_n2){
+        if($campo->[2]){
+            my @campos_registro = $marc_record_n2->field($campo->[0]);
+            if (($campos_registro[-1])&&(!$campos_registro[-1]->subfield($campo->[1]))){
+                #No existe el subcampo en el campo, lo agrego
+                $campos_registro[-1]->add_subfields($campo->[1] => $campo->[2]);
+            }
+            else{
+                #No existe el campo o ya existe el subcampo, se crea uno nuevo.
+                my $field= MARC::Field->new($campo->[0], '', '', $campo->[1] => $campo->[2]);
+                $marc_record_n2->append_fields($field);
+            }
+        }
+    }
+
+    my $marc_record_n3_base = MARC::Record->new();
+
+
+    return ($marc_record_n1,$marc_record_n2,$marc_record_n3_base,\@ejemplares);
+}
+
+
+sub migrarRevistas {
+
+    my ($registros_creados, $grupos_creados, $ejemplares_creados, $analiticas_creadas) = (0,0,0,0);
+
+    # Se van a migrar las revistas a partir de la tabla de  analíticas, agrupando por analitica_titulo_revista
+    my $template = 'REV';
+    my $nivel = "Monografico";
+
+    my $sql= "SELECT distinct(analitica_titulo_revista) FROM tb_analitica WHERE analitica_titulo_revista != '';";
+
+    #Leemos de la tabla de Materiales los que tienen nivel bibliográfico M
+    my $titulos_revistas = $db_mpf->prepare($sql);
+    $titulos_revistas->execute();
+
+    my $cant =  $titulos_revistas->rows;
+    my $count=0;
+    print "Migramos $cant revistas \n";
+
+    while (my $revista=$titulos_revistas->fetchrow_hashref) {
+
+        my @campos_n1=(
+            ['245','a',$revista->{'analitica_titulo_revista'}],
+        );
+
+        my @campos_n2=(
+            ['900','b',$nivel],
+            ['910','a',$template],
+        );
+
+
+        my $marc_record_n1 = MARC::Record->new();
+        foreach my $campo (@campos_n1){
+            if($campo->[2]){
+                my @campos_registro = $marc_record_n1->field($campo->[0]);
+                if (($campos_registro[-1])&&(!$campos_registro[-1]->subfield($campo->[1]))){
+                    #No existe el subcampo en el campo, lo agrego
+                    $campos_registro[-1]->add_subfields($campo->[1] => $campo->[2]);
+                }
+                else{
+                    #No existe el campo o ya existe el subcampo, se crea uno nuevo.
+                    my $field= MARC::Field->new($campo->[0], '', '', $campo->[1] => $campo->[2]);
+                    $marc_record_n1->append_fields($field);
+                }
+            }
+        }
+
+        my $marc_record_n2 = MARC::Record->new();
+        foreach my $campo (@campos_n2){
+            if($campo->[2]){
+                my @campos_registro = $marc_record_n2->field($campo->[0]);
+                if (($campos_registro[-1])&&(!$campos_registro[-1]->subfield($campo->[1]))){
+                    #No existe el subcampo en el campo, lo agrego
+                    $campos_registro[-1]->add_subfields($campo->[1] => $campo->[2]);
+                }
+                else{
+                    #No existe el campo o ya existe el subcampo, se crea uno nuevo.
+                    my $field= MARC::Field->new($campo->[0], '', '', $campo->[1] => $campo->[2]);
+                    $marc_record_n2->append_fields($field);
+                }
+            }
+        }
+
+        #IMPORTAMOS!!!!!!
+        #print "N1\n".$marc_record_n1->as_formatted()."\n";
+        my ($msg_object,$id1);
+
+        #Si ya existe?
+        my $n1 = buscarRegistroDuplicado($marc_record_n1,$template);
+        if ($n1){
+            #Ya existe!!!
+        print "Nivel 1 ya existe \n";
+            $id1 = $n1->getId1();
+        } else {
+            ($msg_object,$id1) =  guardarNivel1DeImportacion($marc_record_n1,$template);
+            print "Nivel 1 creado ? Error => ".$msg_object->{'error'}."\n";
+            if(!$msg_object->{'error'}){
+                $registros_creados++;
+            }
+            else{
+                #Logueo error
+                my $codMsg  = C4::AR::Mensajes::getFirstCodeError($msg_object);
+                my $mensaje = C4::AR::Mensajes::getMensaje($codMsg,'INTRA');
+                print ERROR "Error REGISTRO: Agregando Nivel 1: ".$revista->{'analitica_titulo_revista'}."(ERROR: $mensaje )\n";
+            }
+        }
+
+        if ($id1){
+                #Libros
+                my ($msg_object2,$id1,$id2) =  guardarNivel2DeImportacion($id1,$marc_record_n2,$template);
+                print "Nivel 2 creado ? Error => ".$msg_object2->{'error'}."\n";
+                if (!$msg_object2->{'error'}){
+                    $grupos_creados ++;
+
+                    #Analíticas
+                    my $cant_analiticas = agregarAnaliticasDeRevistas($id1,$id2,$revista->{'analitica_titulo_revista'});
+                    $analiticas_creadas += $cant_analiticas;
+                    print "Analiticas creadas? ".$cant_analiticas."\n";
+
+                }
+                else{
+                #Logueo error
+                    my $codMsg  = C4::AR::Mensajes::getFirstCodeError($msg_object2);
+                    my $mensaje = C4::AR::Mensajes::getMensaje($codMsg,'INTRA');
+                    print ERROR "Error LIBRO: Agregando Nivel 2:  (ERROR: $mensaje) \n";
+                }
+            }
+
+
+        $count ++;
+        my $perc = ($count * 100) / $cant;
+        my $rounded = sprintf "%.2f", $perc;
+
+        print "Registro $count de $cant ( $rounded %)  \r\n";
+    }
+
+    $titulos_revistas->finish();
+
+    print "FIN MIGRACION: \n";
+    print "Registros creados: $registros_creados \n";
+    print "Grupos creados: $grupos_creados \n";
+    print "Analíticas Creadas: $analiticas_creadas \n";
+
+}
+
 ################################################################################################################
 ################################################################################################################
 
 
     switch ($op) {
         case 0  {
-        	print "NADA? Opciones: \n1: Migrar Referencias \n2: Migrar Libros \n3: Migrar Revistas \n4: Contar Analíticas\n";
+        	print "NADA? Opciones: \n1: Migrar Referencias \n2: Migrar Libros \n3: Migrar Revistas y Analiticas\n";
         }
         case 1  {
         	print "Migrando Referencias... \n";
@@ -648,82 +857,7 @@ sub agregarAnaliticas {
         	migrarLibros();
         }
         case 3  {
-        	print "Migrando Revistas... \n";
-        	migrar('REV');
-        }
-        case 4  {
-        	print "Calculando Analíticas... \n";
-        	#migrar('ANA')
-
-
-        	#contar analiticas
-        		my $lib= "SELECT * FROM  MATERIAL WHERE NivelBibliografico = 'M' OR NivelBibliografico = 'C'; ";
-        		my $rev= "SELECT * FROM  MATERIAL WHERE NivelBibliografico = 'S' OR NivelBibliografico = 'X'; ";
-        		my $ana= "SELECT * FROM  MATERIAL WHERE NivelBibliografico = 'A'; ";
-				my $ana_calp=$db_mpf->prepare($ana);
-				$ana_calp->execute();
-
-				my $cant_ana =  $ana_calp->rows;
-        		print "Las analíticas son $cant_ana \n";
-
-        		my ($ana_lib,$ana_rev)=(0,0);
-
-				#Leemo	s de la tabla de Materiales los que tienen nivel bibliográfico M
-				my $material_calp=$db_mpf->prepare($lib);
-				$material_calp->execute();
-
-				my $cant_lib =  $material_calp->rows;
-				print "Hay $cant_lib libros \n";
-
-				my $recno1 ='';
-				while (my $material=$material_calp->fetchrow_hashref) {
-					if ( $recno1 ) { $recno1 .=",";}
-					 $recno1 .= $material->{'RecNo'};
-				 }
-
-				my $ana_rel= "SELECT * FROM  MATERIAL WHERE NivelBibliografico = 'A' AND Parent_RecNo IN ($recno1 ); ";
-			    my $ana_rel_calp=$db_mpf->prepare($ana_rel);
-				$ana_rel_calp->execute();
-				$ana_lib +=  $ana_rel_calp->rows;
-
-				print "Poseen $ana_lib analíticas \n";
-
-				#Leemo	s de la tabla de Materiales los que tienen nivel bibliográfico M
-				my $material_calp=$db_mpf->prepare($rev);
-				$material_calp->execute();
-
-				my $cant_rev =  $material_calp->rows;
-				print "Hay $cant_rev revistas \n";
-
-				my $recno2 ='';
-				while (my $material=$material_calp->fetchrow_hashref) {
-					if ( $recno2 ) { $recno2 .=",";}
-					 $recno2 .= $material->{'RecNo'};
-				 }
-
-				my $ana_rel= "SELECT * FROM  MATERIAL WHERE NivelBibliografico = 'A' AND Parent_RecNo IN ($recno2) ; ";
-			    my $ana_rel_calp=$db_mpf->prepare($ana_rel);
-				$ana_rel_calp->execute();
-				$ana_rev +=  $ana_rel_calp->rows;
-
-				print "Poseen $ana_rev analíticas \n";
-
-				my $analiticas_rel = $ana_rev + $ana_lib;
-				my $ana_hue = $cant_ana - $analiticas_rel;
-				print "Analiticas Relacionadas = $analiticas_rel \n";
-				print "Analiticas Huerfanas = $ana_hue \n";
-
-				my $ana_hue = "SELECT * FROM  MATERIAL WHERE NivelBibliografico = 'A' AND Parent_RecNo NOT IN ($recno1 , $recno2) ; ";
-			    my $ana_rel_calp=$db_mpf->prepare($ana_hue);
-				$ana_rel_calp->execute();
-				while (my $material=$ana_rel_calp->fetchrow_hashref) {
-					print "Huefano ". $material->{'RecNo'}." \n";
-				 }
-        }
-
-        case 5  {
-        	print "Migrando Libros y Revistas con sus analíticas... \n";
-          migrar('LIB');
-        	migrar('REV');
+        	print "Migrando Revistas a partir de Analiticas... \n";
+        	migrarRevistas();
         }
     }
