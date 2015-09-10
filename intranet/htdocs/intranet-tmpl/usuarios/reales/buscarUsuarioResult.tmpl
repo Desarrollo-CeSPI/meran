@@ -1,6 +1,31 @@
 
 <script type="text/javascript">
 
+  function habilitar(){
+    var checks=$("#tablaResult input[@type='checkbox']:checked");
+    var array=checks.get();
+    var theStatus="";
+    var personNumbers=new Array();
+    var cant=checks.length;
+    var accion=$("#accion").val();
+    if (cant>0){
+      theStatus= ($("#accion").val() == "HABILITAR_PERSON")?HABILITAR_POTENCIALES_CONFIRM:DESHABILITAR_POTENCIALES_CONFIRM; 
+    
+      for(i=0;i<checks.length;i++){
+        personNumbers[i]=array[i].value;
+      }
+
+      if (cant>0){
+        bootbox.confirm(theStatus, function (ok){ 
+                    if (ok)
+                      actualizarPersonas(cant,personNumbers);
+        }
+        );
+      }
+    }
+    else{ jAlert (NO_SE_SELECCIONO_NINGUN_USUARIO);}
+  } 
+
     function checkTr(){
           // click sobre los <tr>, para darle estilo
           $('tr').click(function() {
