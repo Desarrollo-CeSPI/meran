@@ -2319,10 +2319,10 @@ sub resetUserPassword{
 
 		   cambiarPasswordPropagado($socio,$password_dni,1);
 		   $socio->forzarCambioDePassword();
-		   C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U359', 'params' => [($socio->getNro_socio)]} ) ;
+		   C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U359'} ) ;
 	}else{
 		$msg_object->{'error'}= 1;
-		C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U360', 'params' => [($socio->getNro_socio)]} ) ;
+		C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U360'} ) ;
 	}
 
 	return ($msg_object);

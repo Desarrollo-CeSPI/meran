@@ -125,12 +125,10 @@ if ($editing){
                                                 "intranet"
                                     );
 
-            my %params;
-            $params{'nro_socio'}= $obj->{'nro_socio'};
 
             C4::AR::Validator::validateParams('U389',$obj,['nro_socio'] );
 
-            my ($Message_arrayref)= C4::AR::Usuarios::resetPassword(\%params);
+            my ($Message_arrayref)= C4::AR::Usuarios::resetPassword($obj);
             my $infoOperacionJSON=to_json $Message_arrayref;
 
             C4::AR::Auth::print_header($session);
