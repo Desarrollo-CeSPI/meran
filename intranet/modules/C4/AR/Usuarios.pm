@@ -304,20 +304,11 @@ sub desautorizarTercero {
 sub resetPassword {
 
     my ($params)=@_;
-    my $nro_socio = $params->{'nro_socio'};
-    my $msg_object;
+    my $nro_socio   = $params->{'nro_socio'};
+    my $msg_object  = C4::AR::Mensajes::create();
     
-    eval {
-            $msg_object = C4::AR::Auth::resetUserPassword($nro_socio);
-    };
+    $msg_object = C4::AR::Auth::resetUserPassword($nro_socio);
 
-    if ($@) {
-      $msg_object =
-      $msg_object->{'error'}= 1;
-      C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U360', 'params' => [$nro_socio]} ) ;
-
-    }
-    
     return ($msg_object);
 }
 
