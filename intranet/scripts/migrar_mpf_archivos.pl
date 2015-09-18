@@ -25,15 +25,9 @@ use DBI;
 
 use CGI::Session;
 use C4::Context;
-use Switch;
 use C4::AR::Utilidades;
 use C4::Modelo::RefPais;
 use C4::Modelo::CatAutor;
-use MARC::Record;
-use C4::AR::ImportacionIsoMARC;
-use C4::AR::Catalogacion;
-use C4::Modelo::CatRegistroMarcN2Analitica;
-use C4::AR::Nivel3;
 
 
 use File::Fetch;
@@ -52,6 +46,8 @@ my $uri = "http://www.mpf.gob.ar/repositoriosab/";
 my $uri_indice = "ImagenesIndices/";
 my $uri_tapa = "ImagenesTapas/";
 
+my $uploaddir = C4::Context->config("portadasNivel2Path");
+my $eDocsDir= C4::Context->config("edocsdir");
 
 my $db_mpf= DBI->connect("DBI:mysql:$db_name:$db_host",$db_user, $db_passwd);
 $db_mpf->do('SET NAMES utf8');
@@ -76,11 +72,15 @@ while (my $ejemplar=$ejemplares->fetchrow_hashref) {
 		if ($ejemplar->{'ejemplar_tapa'}){
 			my $fu = $uri.$uri_tapa.$ejemplar->{'ejemplar_tapa'};
 			print "Buscando Tapa... ".$fu."\n";
+
+			my $scalar;
 	  		my $ff = File::Fetch->new(uri => $fu);
-	  		$ff->fetch(to => '/usr/share/meran/dev/files/mpf/tapas/');
+	  		$ff->fetch(to => $uploaddir );
 	  		if ($ff->error()){
 	  			print $ff->error()."\n";
 	  		}else{
+	  			my $portadaNivel2 = C4::Modelo::CatRegistroMarcN2Cover->new();                 
+                $portadaNivel2->agregar($ff->output_file(), $n3->getId2);  
 	  			$tapas++;
 	  		}
 	  	}
@@ -89,14 +89,17 @@ while (my $ejemplar=$ejemplares->fetchrow_hashref) {
 			my $fu = $uri.$uri_indice.$ejemplar->{'ejemplar_indice'};
 			print "Buscando Indice... ".$fu."\n";
 	  		my $ff = File::Fetch->new(uri => $fu);
-	  		$ff->fetch(to => '/usr/share/meran/dev/files/mpf/indices/');
+	  		$ff->fetch(to => $eDocsDir);
 	  		if ($ff->error()){
 	  			print $ff->error()."\n";
 	  		}else{
+    			my $isValidFileType = 'pdf'; 
+    			my $showName ='indice.pdf';
+	  			C4::AR::Catalogacion::saveEDocument($n3->getId2,$ff->output_file(),$isValidFileType,$showName);
+
 	  			$indices++;
 	  		}
 	  	}
-
 	}else{
 		$no++;
 	}

@@ -839,6 +839,169 @@ sub migrarRevistas {
 
 }
 
+
+sub migrarAnaliticasLibros {
+
+    my ($registros_creados, $grupos_creados, $ejemplares_creados, $analiticas_creadas) = (0,0,0,0);
+
+    # Se van a migrar las revistas a partir de la tabla de  analíticas, agrupando por analitica_titulo_revista
+    my $template = 'LIB';
+    my $nivel = "Monografico";
+
+    my $sql= "SELECT distinct(analitica_titulo) FROM tb_analitica WHERE analitica_titulo_revista = '' AND analitica_titulo !=  '' ;";
+
+    #Leemos de la tabla de Materiales los que tienen nivel bibliográfico M
+    my $titulos_libros_analiticas = $db_mpf->prepare($sql);
+    $titulos_libros_analiticas->execute();
+
+    my $cant =  $titulos_libros_analiticas->rows;
+    my $count=0;
+    print "Migramos $cant libros \n";
+
+    while (my $libro=$titulos_libros_analiticas->fetchrow_hashref) {
+
+        my @campos_n1=(
+            ['245','a',$libro->{'analitica_titulo'}],
+        );
+
+        my @campos_n2=(
+            ['900','b',$nivel],
+            ['910','a',$template],
+        );
+
+
+        my $marc_record_n1 = MARC::Record->new();
+        foreach my $campo (@campos_n1){
+            if($campo->[2]){
+                my @campos_registro = $marc_record_n1->field($campo->[0]);
+                if (($campos_registro[-1])&&(!$campos_registro[-1]->subfield($campo->[1]))){
+                    #No existe el subcampo en el campo, lo agrego
+                    $campos_registro[-1]->add_subfields($campo->[1] => $campo->[2]);
+                }
+                else{
+                    #No existe el campo o ya existe el subcampo, se crea uno nuevo.
+                    my $field= MARC::Field->new($campo->[0], '', '', $campo->[1] => $campo->[2]);
+                    $marc_record_n1->append_fields($field);
+                }
+            }
+        }
+
+        my $marc_record_n2 = MARC::Record->new();
+        foreach my $campo (@campos_n2){
+            if($campo->[2]){
+                my @campos_registro = $marc_record_n2->field($campo->[0]);
+                if (($campos_registro[-1])&&(!$campos_registro[-1]->subfield($campo->[1]))){
+                    #No existe el subcampo en el campo, lo agrego
+                    $campos_registro[-1]->add_subfields($campo->[1] => $campo->[2]);
+                }
+                else{
+                    #No existe el campo o ya existe el subcampo, se crea uno nuevo.
+                    my $field= MARC::Field->new($campo->[0], '', '', $campo->[1] => $campo->[2]);
+                    $marc_record_n2->append_fields($field);
+                }
+            }
+        }
+
+        #IMPORTAMOS!!!!!!
+        #print "N1\n".$marc_record_n1->as_formatted()."\n";
+        my ($msg_object,$id1);
+
+        #Si ya existe?
+        my $n1 = buscarRegistroDuplicado($marc_record_n1,$template);
+        if ($n1){
+            #Ya existe!!!
+        print "Nivel 1 ya existe \n";
+            $id1 = $n1->getId1();
+        } else {
+            ($msg_object,$id1) =  guardarNivel1DeImportacion($marc_record_n1,$template);
+            print "Nivel 1 creado ? Error => ".$msg_object->{'error'}."\n";
+            if(!$msg_object->{'error'}){
+                $registros_creados++;
+            }
+            else{
+                #Logueo error
+                my $codMsg  = C4::AR::Mensajes::getFirstCodeError($msg_object);
+                my $mensaje = C4::AR::Mensajes::getMensaje($codMsg,'INTRA');
+                print ERROR "Error REGISTRO: Agregando Nivel 1: ".$libro->{'analitica_titulo'}."(ERROR: $mensaje )\n";
+            }
+        }
+
+        if ($id1){
+                #Libros
+                my ($msg_object2,$id1,$id2) =  guardarNivel2DeImportacion($id1,$marc_record_n2,$template);
+                print "Nivel 2 creado ? Error => ".$msg_object2->{'error'}."\n";
+                if (!$msg_object2->{'error'}){
+                    $grupos_creados ++;
+
+                    #Analíticas
+                    my $cant_analiticas = agregarAnaliticasDeLibros($id1,$id2,$libro->{'analitica_titulo'});
+                    $analiticas_creadas += $cant_analiticas;
+                    print "Analiticas creadas? ".$cant_analiticas."\n";
+
+                }
+                else{
+                #Logueo error
+                    my $codMsg  = C4::AR::Mensajes::getFirstCodeError($msg_object2);
+                    my $mensaje = C4::AR::Mensajes::getMensaje($codMsg,'INTRA');
+                    print ERROR "Error LIBRO: Agregando Nivel 2:  (ERROR: $mensaje) \n";
+                }
+            }
+
+
+        $count ++;
+        my $perc = ($count * 100) / $cant;
+        my $rounded = sprintf "%.2f", $perc;
+
+        print "Registro $count de $cant ( $rounded %)  \r\n";
+    }
+
+    $titulos_libros_analiticas->finish();
+
+    print "FIN MIGRACION: \n";
+    print "Registros creados: $registros_creados \n";
+    print "Grupos creados: $grupos_creados \n";
+    print "Analíticas Creadas: $analiticas_creadas \n";
+
+}
+
+
+
+sub agregarAnaliticasDeLibros {
+        my ($id1_padre,$id2_padre, $titulo_lib) = @_;
+
+        my $ana_sql= "SELECT *  FROM tb_analitica 
+            LEFT JOIN tb_editorial ON tb_analitica.editorial_id = tb_editorial.editorial_id
+            LEFT JOIN tb_categoria ON tb_categoria.categoria_id = tb_analitica.analitica_categoria_id
+        WHERE analitica_titulo  = ? ";
+        my $ana_calp=$db_mpf->prepare($ana_sql);
+           $ana_calp->execute($titulo_lib);
+
+        my $analiticas_creadas=0;
+        while (my $material=$ana_calp->fetchrow_hashref) {
+            my ($marc_record_n1,$marc_record_n2,$marc_record_n3_base,$ejemplares) = prepararRegistroAnaliticoParaMigrar($material,"ANA", "Analitico");
+            #N1
+            my ($msg_object,$id1_analitica) =  guardarNivel1DeImportacion($marc_record_n1,"ANA",$id2_padre);
+            if(!$msg_object->{'error'}){
+                $analiticas_creadas++;
+                #N2
+                my ($msg_object2,$id1_analitica,$id2_analitica) =  guardarNivel2DeImportacion($id1_analitica,$marc_record_n2,"ANA");
+
+                #Logueo error
+                if ($msg_object2->{'error'}){
+                    my $codMsg  = C4::AR::Mensajes::getFirstCodeError($msg_object2);
+                    my $mensaje = C4::AR::Mensajes::getMensaje($codMsg,'INTRA');
+                    print ERROR "Error Analítica: Agregando Nivel 2: ".$material->{'Titulo'}." registro número: ".$material->{'RecNo'}." registro padre número: ".$recno." (ERROR: $mensaje)\n";
+                }
+            }else{
+                #Logueo error
+                my $codMsg  = C4::AR::Mensajes::getFirstCodeError($msg_object);
+                my $mensaje = C4::AR::Mensajes::getMensaje($codMsg,'INTRA');
+                print ERROR "Error Analítica: Agregando Nivel 1: ".$material->{'Titulo'}." registro número: ".$material->{'RecNo'}." registro padre número: ".$recno." (ERROR: $mensaje)\n";
+            }
+
+        }
+        return $analiticas_creadas;
+    }
 ################################################################################################################
 ################################################################################################################
 
@@ -859,5 +1022,10 @@ sub migrarRevistas {
         case 3  {
         	print "Migrando Revistas a partir de Analiticas... \n";
         	migrarRevistas();
+        }
+
+        case 4  {
+            print "Migrando Libros a partir de Analiticas... \n";
+            migrarAnaliticasLibros();
         }
     }
