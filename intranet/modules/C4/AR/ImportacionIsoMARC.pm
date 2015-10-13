@@ -1888,6 +1888,11 @@ sub procesarRevistas {
 
                         foreach my $sig (@signaturas){
                             #C4::AR::Debug::debug("REVISTA ==>  \n SIGNATURA: ".$sig);
+                            #Parche: FAU pide agregar el nro de revista a la sigantura
+                            if (C4::AR::Preferencias::getValorPreferencia("defaultUI") eq "DAQ"){
+                                $sig .= " ".$rev->{'numero'};
+                            }
+
                             my $marc_record_n3 = $marc_record_ejemplares_base->clone();
 
                             if (!$marc_record_n3->field('995')){
