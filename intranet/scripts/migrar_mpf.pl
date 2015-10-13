@@ -61,15 +61,29 @@ sub migrarAutores {
 		my $id_autor = $autor->{'autor_id'};
 
 		if(($completo ne '') && ($completo ne '--')){
-			#YA EXISTE EL AUTOR?
-			my @filtros=();
-	    push(@filtros, (completo => {eq => $completo}) );
-	    my $existe = C4::Modelo::CatAutor::Manager->get_cat_autor_count(query => \@filtros,);
+		   print "Autor a separar: $completo\n";
+           my @autores =();
+           if ($completo =~ m/\/\//) {
+                @autores = split /\/\//, $completo;
+            } elsif ($completo =~ m/[\/;]/)  {
+                @autores = split /[\/;]/, $completo;
+            }else{
+                push(@autores, $completo );
+            }
+            
+            foreach my $autor (@autores){
+               #YA EXISTE EL AUTOR?
+               print "Existe el autor $autor ?\n";
+    		   my @filtros=();
+    	       push(@filtros, (completo => {eq => trim($autor)}) );
+    	       my $existe = C4::Modelo::CatAutor::Manager->get_cat_autor_count(query => \@filtros,);
 
-	    if (!$existe){
-				my $nuevo_autor=$dbh->prepare("INSERT into cat_autor (id,completo) values (?,?);");
-		        $nuevo_autor->execute($id_autor,$completo);
-			}
+    	       if (!$existe){
+                    print "NO EXISTE, SE AGREGA! \n";
+    				my $nuevo_autor=$dbh->prepare("INSERT into cat_autor (completo) values (?);");
+    		        $nuevo_autor->execute(trim($autor));
+    			}
+            }
 		}
 	}
 
@@ -129,11 +143,11 @@ sub migrarLibros {
 		my $n1 = buscarRegistroDuplicado($marc_record_n1,$template);
 		if ($n1){
 			#Ya existe!!!
-		print "Nivel 1 ya existe \n";
+		#print "Nivel 1 ya existe \n";
 			$id1 = $n1->getId1();
 		} else {
 			($msg_object,$id1) =  guardarNivel1DeImportacion($marc_record_n1,$template);
-        print "Nivel 1 creado ? Error => ".$msg_object->{'error'}."\n";
+            #print "Nivel 1 creado ? Error => ".$msg_object->{'error'}."\n";
         	if(!$msg_object->{'error'}){
         		$registros_creados++;
         	}
@@ -148,7 +162,7 @@ sub migrarLibros {
         if ($id1){
         		#Libros
 	        	my ($msg_object2,$id1,$id2) =  guardarNivel2DeImportacion($id1,$marc_record_n2,$template);
-		        print "Nivel 2 creado ? Error => ".$msg_object2->{'error'}."\n";
+		       # print "Nivel 2 creado ? Error => ".$msg_object2->{'error'}."\n";
 	            if (!$msg_object2->{'error'}){
 	            	$grupos_creados ++;
 
@@ -156,7 +170,7 @@ sub migrarLibros {
 	            	#my $cant_analiticas = agregarAnaliticas($id1,$id2,$material->{'RecNo'});
 	            	#$analiticas_creadas += $cant_analiticas;
 	        #   	print "Analiticas creadas? ".$cant_analiticas."\n";
-	            	print "Ejemplaress";
+	            	#print "Ejemplaress";
 					foreach my $ejemplar (@$ejemplares){
 						my $marc_record_n3 = $marc_record_n3_base->clone();
 						foreach my $campo (@$ejemplar){
@@ -492,29 +506,71 @@ sub prepararRegistroParaMigrar {
 	if($material->{'autor_id'} > 2){
 		$autor_db->execute($material->{'autor_id'});
 		 if (my $aut=$autor_db->fetchrow_hashref){
-				push(@campos_n1, ['100','a',$aut->{'autor_nya'}]);
-		}
+            my $completo = $aut->{'autor_nya'};
+            if(($completo ne '') && ($completo ne '--')){
+               my @autores =();
+               if ($completo =~ m/\/\//) {
+                    @autores = split /\/\//, $completo;
+                } elsif ($completo =~ m/[\/;]/)  {
+                    @autores = split /[\/;]/, $completo;
+                }else{
+                    push(@autores, $completo );
+                }
+                my $principal = 1;
+                foreach my $autor (@autores){
+                    if ($principal){
+                        push(@campos_n1, ['100','a',trim($autor)]);
+                        $principal = 0;
+                    } else {
+                        push(@campos_n1, ['700','a',trim($autor)]);
+                    }
+                }
+            }
+        }
 	}
 
 	#Autor Institucional
-	if($material->{'autor_inst_id'} > 2){
-		$autor_db->execute($material->{'autor_inst_id'});
-		 if (my $aut=$autor_db->fetchrow_hashref){
-				push(@campos_n1, ['110','a',$aut->{'autor_nya'}]);
-		}
-	}
+
+    if($material->{'autor_inst_id'} > 2){
+        $autor_db->execute($material->{'autor_inst_id'});
+         if (my $aut=$autor_db->fetchrow_hashref){
+            my $completo = $aut->{'autor_nya'};
+            if(($completo ne '') && ($completo ne '--')){
+               my @autores =();
+               if ($completo =~ m/\/\//) {
+                    @autores = split /\/\//, $completo;
+                } elsif ($completo =~ m/[\/;]/)  {
+                    @autores = split /[\/;]/, $completo;
+                }else{
+                    push(@autores, $completo );
+                }
+                
+                my $principal = 1;
+                foreach my $autor (@autores){
+                    if ($principal){
+                        push(@campos_n1, ['110','a',trim($autor)]);
+                        $principal = 0;
+                    } else {
+                        push(@campos_n1, ['710','a',trim($autor)]);
+                    }
+                }
+            }
+        }
+    }
+
+
 
 	#Buscamos Temas
 	if($material->{'categoria_id'} > 2){
 		push(@campos_n1, ['650','a',$material->{'categoria_descrip'}]);
 	}
 
-    print "DESCRIPTOR ".$material->{'libro_descriptor'}."\n"; 
+    #print "DESCRIPTOR ".$material->{'libro_descriptor'}."\n"; 
 	
     if ($material->{'libro_descriptor'}){
 
-        print $material->{'libro_descriptor'}; 
-         print "Antes ".scalar(@campos_n1)."\n";
+        # print $material->{'libro_descriptor'}; 
+        # print "Antes ".scalar(@campos_n1)."\n";
 	  # Los descriptores están separados en algunos casos por . y en otros  por //
 		my $descriptores = $material->{'libro_descriptor'};
 
@@ -522,7 +578,7 @@ sub prepararRegistroParaMigrar {
 		if (scalar(@values) > 1 ){
 			foreach my $val (@values) {
 				push(@campos_n1, ['650','a',$val]);
-                print "Desc 1".$val."\n";
+               # print "Desc 1".$val."\n";
 			}
 		}else{
 			  my @values = split( / \/\/ /, $descriptores);
@@ -530,15 +586,15 @@ sub prepararRegistroParaMigrar {
 				if (scalar(@values) > 1 ){
 					foreach my $val (@values) {
 						push(@campos_n1, ['650','a',$val]);
-                         print "Desc // ".$val."\n";
+                        # print "Desc // ".$val."\n";
 					}
 				}else{
 					 push(@campos_n1, ['650','a',$descriptores]);
-                     print "Desc 2".$descriptores."\n";
+                     # print "Desc 2".$descriptores."\n";
 				}
 		}
 	
-        print "Despues ".scalar(@campos_n1)."\n";
+        #print "Despues ".scalar(@campos_n1)."\n";
     }
 
 	#Buscamos Ejemplares
@@ -568,7 +624,7 @@ sub prepararRegistroParaMigrar {
             #CDU?
             if(($ejemplar->{'ejemplar_CDU'} != '')&&(!$cdu)){
                 $cdu = 1;
-                push(@campos_n1, ['080','a',$ejemplar->{'ejemplar_CDU'}]);
+                push(@campos_n1, ['082','a',$ejemplar->{'ejemplar_CDU'}]);
             }
 
             if($ejemplar->{'ejemplar_anio'} != ""){
@@ -660,15 +716,45 @@ sub prepararRegistroAnaliticoParaMigrar {
 
     #Autor
     if($material->{'analitica_autor_id'} > 2){
+
         $autor_db->execute($material->{'analitica_autor_id'});
+
          if (my $aut=$autor_db->fetchrow_hashref){
-            if($aut->{'autor_institucional'}){
-                push(@campos_n1, ['110','a',$aut->{'autor_nya'}]);
+            my $completo = $aut->{'autor_nya'};
+            if(($completo ne '') && ($completo ne '--')){
+               my @autores =();
+               if ($completo =~ m/\/\//) {
+                    @autores = split /\/\//, $completo;
+                } elsif ($completo =~ m/[\/;]/)  {
+                    @autores = split /[\/;]/, $completo;
+                }else{
+                    push(@autores, $completo );
+                }
+
+                if($aut->{'autor_institucional'}){
+                    my $principal = 1;
+                    foreach my $autor (@autores){
+                        if ($principal){
+                            push(@campos_n1, ['110','a',trim($autor)]);
+                            $principal = 0;
+                        } else {
+                            push(@campos_n1, ['710','a',trim($autor)]);
+                        }
+                    }
+                }else{
+                    my $principal = 1;
+                    foreach my $autor (@autores){
+                        if ($principal){
+                            push(@campos_n1, ['100','a',trim($autor)]);
+                            $principal = 0;
+                        } else {
+                            push(@campos_n1, ['700','a',trim($autor)]);
+                        }
+                    }
+                }
             }
-            else{
-                push(@campos_n1, ['100','a',$aut->{'autor_nya'}]);
-              }
         }
+
     }
 
     #Buscamos Temas
@@ -785,11 +871,11 @@ sub migrarRevistas {
         my $n1 = buscarRegistroDuplicado($marc_record_n1,$template);
         if ($n1){
             #Ya existe!!!
-        print "Nivel 1 ya existe \n";
+        #print "Nivel 1 ya existe \n";
             $id1 = $n1->getId1();
         } else {
             ($msg_object,$id1) =  guardarNivel1DeImportacion($marc_record_n1,$template);
-            print "Nivel 1 creado ? Error => ".$msg_object->{'error'}."\n";
+            #print "Nivel 1 creado ? Error => ".$msg_object->{'error'}."\n";
             if(!$msg_object->{'error'}){
                 $registros_creados++;
             }
@@ -797,21 +883,21 @@ sub migrarRevistas {
                 #Logueo error
                 my $codMsg  = C4::AR::Mensajes::getFirstCodeError($msg_object);
                 my $mensaje = C4::AR::Mensajes::getMensaje($codMsg,'INTRA');
-                print ERROR "Error REGISTRO: Agregando Nivel 1: ".$revista->{'analitica_titulo_revista'}."(ERROR: $mensaje )\n";
+                #print ERROR "Error REGISTRO: Agregando Nivel 1: ".$revista->{'analitica_titulo_revista'}."(ERROR: $mensaje )\n";
             }
         }
 
         if ($id1){
                 #Libros
                 my ($msg_object2,$id1,$id2) =  guardarNivel2DeImportacion($id1,$marc_record_n2,$template);
-                print "Nivel 2 creado ? Error => ".$msg_object2->{'error'}."\n";
+                #print "Nivel 2 creado ? Error => ".$msg_object2->{'error'}."\n";
                 if (!$msg_object2->{'error'}){
                     $grupos_creados ++;
 
                     #Analíticas
                     my $cant_analiticas = agregarAnaliticasDeRevistas($id1,$id2,$revista->{'analitica_titulo_revista'});
                     $analiticas_creadas += $cant_analiticas;
-                    print "Analiticas creadas? ".$cant_analiticas."\n";
+                    #print "Analiticas creadas? ".$cant_analiticas."\n";
 
                 }
                 else{
@@ -910,11 +996,11 @@ sub migrarAnaliticasLibros {
         my $n1 = buscarRegistroDuplicado($marc_record_n1,$template);
         if ($n1){
             #Ya existe!!!
-        print "Nivel 1 ya existe \n";
+        #print "Nivel 1 ya existe \n";
             $id1 = $n1->getId1();
         } else {
             ($msg_object,$id1) =  guardarNivel1DeImportacion($marc_record_n1,$template);
-            print "Nivel 1 creado ? Error => ".$msg_object->{'error'}."\n";
+            #print "Nivel 1 creado ? Error => ".$msg_object->{'error'}."\n";
             if(!$msg_object->{'error'}){
                 $registros_creados++;
             }
@@ -929,14 +1015,14 @@ sub migrarAnaliticasLibros {
         if ($id1){
                 #Libros
                 my ($msg_object2,$id1,$id2) =  guardarNivel2DeImportacion($id1,$marc_record_n2,$template);
-                print "Nivel 2 creado ? Error => ".$msg_object2->{'error'}."\n";
+                #print "Nivel 2 creado ? Error => ".$msg_object2->{'error'}."\n";
                 if (!$msg_object2->{'error'}){
                     $grupos_creados ++;
 
                     #Analíticas
                     my $cant_analiticas = agregarAnaliticasDeLibros($id1,$id2,$libro->{'analitica_titulo'});
                     $analiticas_creadas += $cant_analiticas;
-                    print "Analiticas creadas? ".$cant_analiticas."\n";
+                    #print "Analiticas creadas? ".$cant_analiticas."\n";
 
                 }
                 else{
@@ -1029,3 +1115,13 @@ sub agregarAnaliticasDeLibros {
             migrarAnaliticasLibros();
         }
     }
+
+
+sub trim{
+    my ($string) = @_;
+
+    $string =~ s/^\s+//;
+    $string =~ s/\s+$//;
+
+    return $string;
+}
