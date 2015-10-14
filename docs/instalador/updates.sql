@@ -875,3 +875,5 @@ UPDATE  `pref_unidad_informacion` SET nombre_largo =  nombre;
 
 #Para indicar si un tipo de ejemplar, permite o no ser visualizado en el OPAC (0 = no se visualiza, 1 = Si)
 ALTER TABLE  `cat_ref_tipo_nivel3` ADD  `show_from_opac_if_no_copy` INT( 1 ) NOT NULL DEFAULT  '0' AFTER  `enable_from_new_register`;
+
+INSERT INTO `meran_econo`.`pref_preferencia_sistema` (`id`, `variable`, `value`, `explanation`, `options`, `type`, `categoria`, `label`, `explicacion_interna`, `revisado`) VALUES (NULL, 'show_from_opac_if_no_copy', '0', 'Permite encontrar registros que no tienen ejemplares, dependiendo de la configuración del tipo de ejemplar', NULL, 'bool', 'sistema', 'Mostrar registros sin ejemplares', 'Permite encontrar registros que no tienen ejemplares, dependiendo de la configuración del tipo de ejemplar', '0');
