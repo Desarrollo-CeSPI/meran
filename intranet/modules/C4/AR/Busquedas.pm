@@ -1457,7 +1457,7 @@ sub busquedaCombinada_newTemp{
     
     my $only_sphinx                 = 0;
     my $only_available              = 0;
-    my $show_from_opac_if_no_copy   = 1;
+    my $show_from_opac_if_no_copy   = 0;
     my $opac_only_state_available   = 0;
 
     if ($sphinx_options){
