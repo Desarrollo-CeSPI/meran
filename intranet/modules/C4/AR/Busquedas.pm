@@ -1090,7 +1090,7 @@ sub busquedaAvanzada_newTemp{
     
     C4::AR::Debug::debug("tipo_nivel3_name BUSQUEDA_AVANZADA =================> ".$params->{'tipo_nivel3_name'});
 
-    C4::AR::Debug::debug("Busquedas => query string => ".$query);
+    C4::AR::Debug::debug("busquedaCombinada_newTemp => Busquedas => query string => ".$query);
 
     my $tipo_match = C4::AR::Utilidades::getSphinxMatchMode($tipo);
 
@@ -1144,7 +1144,7 @@ sub busquedaAvanzada_newTemp{
     $params->{'total_found'} = $total_found;
 
     C4::AR::Debug::debug("total_found: ".$total_found);
-    C4::AR::Debug::debug("Busquedas.pm => LAST ERROR: ".$sphinx->GetLastError());
+    C4::AR::Debug::debug("busquedaAvanzada_newTemp => Busquedas.pm => LAST ERROR: ".$sphinx->GetLastError());
     C4::AR::Debug::debug("MATCH_MODE => ".$tipo);
     
     foreach my $hash (@$matches){
@@ -1294,7 +1294,6 @@ sub busquedaPorTitulo{
     my $total_found             = $results->{'total_found'};
 #     C4::AR::Utilidades::printHASH($results);
     C4::AR::Debug::debug("C4::AR::Busqueda::busquedaPorTitulo => total_found: ".$total_found);
-#     C4::AR::Debug::debug("Busquedas.pm => LAST ERROR: ".$sphinx->GetLastError());
     foreach my $hash (@$matches){
       my %hash_temp         = {};
       $hash_temp{'id1'}     = $hash->{'doc'};
@@ -1329,7 +1328,6 @@ sub busquedaPorAutor{
     my $total_found             = $results->{'total_found'};
 #     C4::AR::Utilidades::printHASH($results);
     C4::AR::Debug::debug("C4::AR::Busqueda::busquedaPorAutor => total_found: ".$total_found);
-#     C4::AR::Debug::debug("Busquedas.pm => LAST ERROR: ".$sphinx->GetLastError());
     foreach my $hash (@$matches){
       my %hash_temp         = {};
       $hash_temp{'id1'}     = $hash->{'doc'};
@@ -1457,15 +1455,16 @@ sub busquedaCombinada_newTemp{
     my @searchstring_array = C4::AR::Utilidades::obtenerBusquedas($string_utf8_encoded);
     my $string_suggested;
     
-    my $only_sphinx        = 0;
-    my $only_available     = 0;
-    
-    my $opac_only_state_available     = 0;
+    my $only_sphinx                 = 0;
+    my $only_available              = 0;
+    my $show_from_opac_if_no_copy   = 1;
+    my $opac_only_state_available   = 0;
 
     if ($sphinx_options){
-        $only_sphinx        = $sphinx_options->{'only_sphinx'} || 0;
-        $only_available     = $sphinx_options->{'only_available'} || 0;
-        $opac_only_state_available     = $sphinx_options->{'opac_only_state_available'} || 0;
+        $only_sphinx                  = $sphinx_options->{'only_sphinx'} || 0;
+        $only_available               = $sphinx_options->{'only_available'} || 0;
+        $opac_only_state_available    = $sphinx_options->{'opac_only_state_available'} || 0;
+        $show_from_opac_if_no_copy    = $sphinx_options->{'show_from_opac_if_no_copy'} || 0;
     }    
     
     my $sphinx = Sphinx::Search->new();
@@ -1523,13 +1522,27 @@ sub busquedaCombinada_newTemp{
         $query .= ' "ref_disponibilidad_code%'.C4::Modelo::RefDisponibilidad::paraPrestamoValue.'"';
     }
 
-    if ($opac_only_state_available){
+    if (($opac_only_state_available) && (!$show_from_opac_if_no_copy)){
         # Se filtran los registros que posean algún ejemplar disponible o bien sean analíticas
         $query .= ' ("ref_estado_code%'.C4::Modelo::RefEstado::estadoDisponibleValue.'" | "cat_ref_tipo_nivel3%ANA" | "cat_ref_tipo_nivel3%ELE")';
         $tipo_match = C4::AR::Utilidades::getSphinxMatchMode('SPH_MATCH_BOOLEAN');
     }
 
-    C4::AR::Debug::debug("Busquedas => query string ".$query);
+    if ($show_from_opac_if_no_copy){
+        # Se filtran los registros independientemente que tengan o no ejemplares, SOLO para:
+        # Documentos electrónicos (ELE), Analíticas (ANA), Sitios web (WEB), Revista digital (web) (SEW) y Tessis (TES),
+        $tipo_match = C4::AR::Utilidades::getSphinxMatchMode('SPH_MATCH_BOOLEAN');
+        my ($tipoNivel3_array_ref)  = &C4::AR::Referencias::obtenerTiposNivel3();
+
+        foreach my $tipoNivel3 (@$tipoNivel3_array_ref) {
+            if ($tipoNivel3->getShowFromOpacIfNoCopy()){
+              $query .= ' | "cat_ref_tipo_nivel3%' . $tipoNivel3->id_tipo_doc . '" ';
+            }
+        }
+    }
+
+
+    C4::AR::Debug::debug("busquedaCombinada_newTemp => Busquedas => query string ".$query);
 
     $sphinx->SetMatchMode($tipo_match);
 
@@ -1585,14 +1598,14 @@ sub busquedaCombinada_newTemp{
     if ($only_sphinx){
         C4::AR::Debug::debug("total_found: ".$total_found);
         if ($sphinx->GetLastError()) {
-            C4::AR::Debug::info( "Busquedas.pm => LAST ERROR: ".$sphinx->GetLastError() );
+            C4::AR::Debug::info( "busquedaCombinada_newTemp => Busquedas.pm => LAST ERROR: ".$sphinx->GetLastError() );
         } 
         return ($total_found,$matches);
     }
 #arma y ordena el arreglo para enviar al cliente
     $obj_for_log->{'total_found'} = $total_found;
     C4::AR::Debug::debug("total_found: ".$total_found);
-    C4::AR::Debug::info("Busquedas.pm => LAST ERROR: ".$sphinx->GetLastError());
+    C4::AR::Debug::info("busquedaCombinada_newTemp => Busquedas.pm => LAST ERROR: ".$sphinx->GetLastError());
     foreach my $hash (@$matches){
         my %hash_temp = {};
         $hash_temp{'id1'} = $hash->{'doc'};
@@ -1857,7 +1870,7 @@ sub filtrarPorAutor{
 #         }
 #     }
     $query = '@autor '.$params->{'completo'};
-    C4::AR::Debug::debug("Busquedas => query string => ".$query);
+    C4::AR::Debug::debug("filtrarPorAutor => Busquedas => query string => ".$query);
 #     C4::AR::Debug::debug("query string ".$query);
     my $tipo = 'SPH_MATCH_EXTENDED';
     my $tipo_match = C4::AR::Utilidades::getSphinxMatchMode($tipo);
@@ -1878,7 +1891,6 @@ sub filtrarPorAutor{
     $params->{'total_found'} = $total_found;
 #     C4::AR::Utilidades::printHASH($results);
     C4::AR::Debug::debug("total_found: ".$total_found);
-#     C4::AR::Debug::debug("Busquedas.pm => LAST ERROR: ".$sphinx->GetLastError());
     foreach my $hash (@$matches){
       my %hash_temp = {};
       $hash_temp{'id1'} = $hash->{'doc'};
@@ -2360,8 +2372,6 @@ sub getRegistrosFromRange {
     my $total_found             = $results->{'total_found'};
     $params->{'total_found'}    = $total_found;
 
-    #C4::AR::Debug::debug("Busquedas.pm => total_found: ".$total_found);
-    #C4::AR::Debug::debug("Busquedas.pm => LAST ERROR: ".$sphinx->GetLastError());
     foreach my $hash (@$matches) {
         push (@id1_array, $hash->{'doc'});
     }
