@@ -873,6 +873,11 @@ ALTER TABLE  `pref_unidad_informacion` ADD  `nombre_largo` VARCHAR( 255 ) NOT NU
 
 UPDATE  `pref_unidad_informacion` SET nombre_largo =  nombre;
 
+ALTER TABLE `pref_tabla_referencia` ADD `is_editable` INT NOT NULL DEFAULT '1' AFTER `client_title`;
+UPDATE  `pref_tabla_referencia` SET  `is_editable` =  '0' WHERE  `pref_tabla_referencia`.`nombre_tabla` = 'ref_estado';
+
+INSERT INTO pref_tabla_referencia (nombre_tabla ,alias_tabla ,campo_busqueda ,client_title) SELECT 'ref_estado',  'estado',  'nombre',  'Estado' from DUAL WHERE NOT EXISTS ( SELECT nombre_tabla FROM pref_tabla_referencia WHERE nombre_tabla = 'ref_estado' ) LIMIT 1;
+
 #Para indicar si un tipo de ejemplar, permite o no ser visualizado en el OPAC (0 = no se visualiza, 1 = Si)
 ALTER TABLE  `cat_ref_tipo_nivel3` ADD  `show_from_opac_if_no_copy` INT( 1 ) NOT NULL DEFAULT  '0' AFTER  `enable_from_new_register`;
 
