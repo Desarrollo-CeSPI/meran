@@ -93,7 +93,7 @@
                                       [% IF  NIVEL.estadoDeColeccion.$anio.$volumen.keys.size > 1 || NIVEL.estadoDeColeccion.$anio.$volumen.keys.sort.first != '#' %]
                                        [% IF volumen != '#' %] <b>[% volumen %]</b>[% END %]
                                         (
-                                          [% FOREACH fasciculo IN NIVEL.estadoDeColeccion.$anio.$volumen.keys.sort %]
+                                          [% FOREACH fasciculo IN NIVEL.estadoDeColeccion.$anio.$volumen.keys.nsort %]
 
                                               [% PERL %]
                                                 print C4::AR::Filtros::link_to( text =>     "[% HTML.escape(fasciculo) %]",
