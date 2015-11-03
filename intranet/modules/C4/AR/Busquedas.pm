@@ -1022,7 +1022,7 @@ sub busquedaAvanzada_newTemp{
  
        } else {            
             $sphinx->SetLimits($params->{'ini'}, C4::AR::Preferencias::getValorPreferencia('paginas'));  
-            C4::AR::Debug::debug("LIMITE BUSQUEDA --------------------------- : ".$params->{'ini'}." - ".C4::AR::Preferencias::getValorPreferencia('paginas'));
+            C4::AR::Debug::debug("busquedaAvanzada_newTemp => LIMITE BUSQUEDA --------------------------- : ".$params->{'ini'}." - ".C4::AR::Preferencias::getValorPreferencia('paginas'));
        }
 
     }
@@ -1088,15 +1088,15 @@ sub busquedaAvanzada_newTemp{
 
     
     
-    C4::AR::Debug::debug("tipo_nivel3_name BUSQUEDA_AVANZADA =================> ".$params->{'tipo_nivel3_name'});
+    C4::AR::Debug::debug("busquedaAvanzada_newTemp => tipo_nivel3_name BUSQUEDA_AVANZADA =================> ".$params->{'tipo_nivel3_name'});
 
-    C4::AR::Debug::debug("busquedaCombinada_newTemp => Busquedas => query string => ".$query);
+    C4::AR::Debug::debug("busquedaAvanzada_newTemp => Busquedas => query string => ".$query);
 
     my $tipo_match = C4::AR::Utilidades::getSphinxMatchMode($tipo);
 
     if ($opac_only_state_available){
         # Se filtran los registros que posean algún ejemplar disponible o bien sean analíticas
-        $query .= ' ("ref_estado_code%'.C4::Modelo::RefEstado::estadoDisponibleValue.'" | "cat_ref_tipo_nivel3%ANA" | "cat_ref_tipo_nivel3%ELE")';
+        $query .= '@string ("ref_estado_code%'.C4::Modelo::RefEstado::estadoDisponibleValue.'" | "cat_ref_tipo_nivel3%ANA" | "cat_ref_tipo_nivel3%ELE")';
         $tipo_match = C4::AR::Utilidades::getSphinxMatchMode('SPH_MATCH_BOOLEAN');
     }
 
@@ -1131,21 +1131,22 @@ sub busquedaAvanzada_newTemp{
     my @id1_array;
     my $matches = $results->{'matches'};
 
-    C4::AR::Debug::debug("RESULTS ".$results);
+    C4::AR::Debug::debug("busquedaAvanzada_newTemp => query " . $query);
+    C4::AR::Debug::debug("busquedaAvanzada_newTemp => RESULTS ".$results);
     
     C4::AR::Utilidades::printARRAY($results->{'matches'});
 
     C4::AR::Utilidades::printHASH($results);
 
-    C4::AR::Debug::debug("CANTIDAD DE RESULTADOS EN DATOS ARRAY ".scalar(@$matches));
+    C4::AR::Debug::debug("busquedaAvanzada_newTemp => CANTIDAD DE RESULTADOS EN DATOS ARRAY ".scalar(@$matches));
 
     
     my $total_found = $results->{'total_found'};
     $params->{'total_found'} = $total_found;
 
-    C4::AR::Debug::debug("total_found: ".$total_found);
+    C4::AR::Debug::debug("busquedaAvanzada_newTemp => total_found: ".$total_found);
     C4::AR::Debug::debug("busquedaAvanzada_newTemp => Busquedas.pm => LAST ERROR: ".$sphinx->GetLastError());
-    C4::AR::Debug::debug("MATCH_MODE => ".$tipo);
+    C4::AR::Debug::debug("busquedaAvanzada_newTemp => MATCH_MODE => ".$tipo);
     
     foreach my $hash (@$matches){
         my %hash_temp = {};
