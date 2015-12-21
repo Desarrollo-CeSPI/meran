@@ -1167,6 +1167,7 @@ sub crearPersonaLDAP{
         $params{'credential_type'}      = "estudiante";
         $params{'nro_socio'}            = $nro_socio;
         $params{'id_categoria'}         = "1";
+        $params{'cumple_requisito'}     = C4::AR::Preferencias::getValorPreferencia("auto_activate_user_from_ldap") || 0;
 
     my $person                      = C4::Modelo::UsrPersona->new();
     
