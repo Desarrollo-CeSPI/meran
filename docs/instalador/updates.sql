@@ -882,3 +882,7 @@ INSERT INTO pref_tabla_referencia (nombre_tabla ,alias_tabla ,campo_busqueda ,cl
 ALTER TABLE  `cat_ref_tipo_nivel3` ADD  `show_from_opac_if_no_copy` INT( 1 ) NOT NULL DEFAULT  '0' AFTER  `enable_from_new_register`;
 
 INSERT INTO `pref_preferencia_sistema` (`id`, `variable`, `value`, `explanation`, `options`, `type`, `categoria`, `label`, `explicacion_interna`, `revisado`) VALUES (NULL, 'show_from_opac_if_no_copy', '0', 'Permite encontrar registros que no tienen ejemplares, dependiendo de la configuración del tipo de ejemplar', NULL, 'bool', 'sistema', 'Mostrar registros sin ejemplares', 'Permite encontrar registros que no tienen ejemplares, dependiendo de la configuración del tipo de ejemplar', '0');
+
+# Nueva preferencia, activa automaticamente o no, un usuario que se loguea por primera vez, cuando se utiliza LDAP para autenticar
+INSERT INTO  `pref_preferencia_sistema` (`id` ,`variable` ,`value` ,`explanation` ,`options` ,`type` ,`categoria` ,`label` ,`explicacion_interna` ,`revisado`)
+VALUES (NULL ,  'auto_activate_user_from_ldap',  '0',  'Activa (=1) por defecto un usuario creado al iniciar por primera vez, autenticando con LDAP.', NULL ,  'bool',  'sistema',  'Auto activar desde LDAP', 'Activa (=1) por defecto un usuario creado al iniciar por primera vez, autenticando con LDAP.',  '0');
