@@ -161,21 +161,60 @@ sub _conectarLDAP{
 =item 
     Funcion que recibe un userid y un password e intenta autenticarse ante un ldap, si lo logra devuelve un objeto Socio.
 =cut
+# sub checkPwPlana{
+#     my ($userid, $password) = @_;
+#     my $preferencias_ldap   = getLdapPreferences();
+#     my $LDAP_DB_PREF        = $preferencias_ldap->{'ldap_prefijo_base'};
+#     my $LDAP_U_PREF         = $preferencias_ldap->{'ldap_user_prefijo'};
+#     my $userDN              = $LDAP_U_PREF.'='.$userid.','.$LDAP_DB_PREF;
+#     my $ldap                =_conectarLDAP();
+#     C4::AR::Debug::debug("userid : " . $userid . " pass: " . $password . " userDN : " . $userDN);
+#     my $ldapMsg             = $ldap->bind($userDN, password => $password);
+#     C4::AR::Debug::debug("Authldap => smsj ". $ldapMsg->error. " codigo ". $ldapMsg->code() );
+#     my $socio               = undef;
+#     if (!$ldapMsg->code()) {
+#         $socio = datosUsuario($userid,$ldap);
+#     }
+#     $ldap->unbind;
+#     return $socio;
+# }
+
+# la version anterior checkPwPlana no tenia en cuenta los filtros memberOf
+
 sub checkPwPlana{
     my ($userid, $password) = @_;
     my $preferencias_ldap   = getLdapPreferences();
     my $LDAP_DB_PREF        = $preferencias_ldap->{'ldap_prefijo_base'};
     my $LDAP_U_PREF         = $preferencias_ldap->{'ldap_user_prefijo'};
     my $userDN              = $LDAP_U_PREF.'='.$userid.','.$LDAP_DB_PREF;
+    my $LDAP_FILTER         = $LDAP_U_PREF.'='.$userid;
+
+    if ($preferencias_ldap->{'ldap_memberattribute'}){
+        $LDAP_FILTER = "&(".$LDAP_FILTER.")(".$preferencias_ldap->{'ldap_memberattribute'}."=".$preferencias_ldap->{'ldap_memberattribute_isdn'}.")";
+    }
+
     my $ldap                =_conectarLDAP();
     C4::AR::Debug::debug("userid : " . $userid . " pass: " . $password . " userDN : " . $userDN);
     my $ldapMsg             = $ldap->bind($userDN, password => $password);
     C4::AR::Debug::debug("Authldap => smsj ". $ldapMsg->error. " codigo ". $ldapMsg->code() );
     my $socio               = undef;
     if (!$ldapMsg->code()) {
-        $socio = datosUsuario($userid,$ldap);
+        my $entries = $ldap->search(
+            base   => $LDAP_DB_PREF,
+            filter => "($LDAP_FILTER)"
+        );
+
+        C4::AR::Debug::debug("checkPwPlana >> search LDAP user  ".$LDAP_FILTER );
+        
+        my $entry = $entries->entry(0);
+        C4::AR::Debug::debug("checkPwPlana >> search LDAP user  ".$entry );  
+        if (defined $entry){         
+          $socio = datosUsuario($userid,$ldap);
+        }
     }
+
     $ldap->unbind;
+    
     return $socio;
 }
 
