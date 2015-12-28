@@ -94,7 +94,7 @@ while (my $ejemplar=$ejemplares->fetchrow_hashref) {
 	  			print $ff->error()."\n";
 	  		}else{
     			my $isValidFileType = 'pdf'; 
-    			my $showName ='indice.pdf';
+    			my $showName =$ejemplar->{'ejemplar_indice'};
 	  			C4::AR::Catalogacion::saveEDocument($n3->getId2,$ff->output_file(),$isValidFileType,$showName);
 
 	  			$indices++;

@@ -20,16 +20,12 @@
 # You should have received a copy of the GNU General Public License
 # along with Meran.  If not, see <http://www.gnu.org/licenses/>.
 #
-use C4::AR::Sphinx;
+use JSON::XS;
+use MARC::Record;
+use MARC::File::JSON;
+use C4::AR::Nivel1;
 use C4::Modelo::CatRegistroMarcN1;
-
-
-my $id1   = $ARGV[0] || '0'; #id1 del registro
-my $flag  = $ARGV[1] || 'R_FULL'; #id1 del registro
-my $tt1   = time();
-
-C4::AR::Debug::debug("Corriendo migración del catálogo a JSON");
-
+use Data::Dumper;
 
 my $dato;
 my $dato_ref;
@@ -39,9 +35,56 @@ my $subcampo;
 
 my $nivel1_array_ref = C4::AR::Nivel1::getNivel1Completo();
 
+my @n1_json=();
+
 foreach my $n1 (@$nivel1_array_ref){
 
-  my $marc_record       = $n1->getMarcRecordFull();
+    #obtengo el marc_record
+    my $marc_record_n1  = $n1->getMarcRecordObject();
+
+    #obtengo los grupos
+    my $grupos = $n1->getGrupos();
+    my @n2_json=();
+
+    #de los grupos saco su marc record con los ejemplares
+    foreach my $n2 (@$grupos){
+
+      #obtengo el marc_record del NIVEL 2
+      my $marc_record_n2 = $n2->getMarcRecordObject();
+
+      my $ejemplares = $n2->getEjemplares();
+      my @n3_json=();
+
+      foreach my $n3 (@$ejemplares){
+          my $marc_record_n3  =$n3->getMarcRecordObject();
+          my $marc_record_n3_datos = getMarcRecordConDatos($marc_record_n3,$n3->getTemplate);
+          my $json_n3 = $marc_record_n3_datos->as_json;
+          push @n3_json, JSON::XS->new->utf8->decode($json_n3);
+      }
+
+      my $marc_record_n2_datos = getMarcRecordConDatos($marc_record_n2,$n2->getTemplate);
+      my $json_n2 = $marc_record_n2_datos->as_json;
+      my $n2_json = JSON::XS->new->utf8->decode($json_n2);
+      $n2_json->{'items'} = \@n3_json;
+      push @n2_json, $n2_json;
+    }
+
+    my $marc_record_n1_datos = getMarcRecordConDatos($marc_record_n1,$n1->getTemplate);
+    my $json_n1 = $marc_record_n1_datos->as_json;
+    my $n1_json = JSON::XS->new->utf8->decode($json_n1);
+    $n1_json->{'editions'} = \@n2_json;
+    push @n1_json, $n1_json;
+
+    print JSON::XS->new->utf8->encode($n1_json);
+    print "\n";
+
+} #END foreach my $n1 ($nivel1_array_ref)
+
+
+
+sub getMarcRecordConDatos(){
+  my ($marc_record,$template) = @_;
+
   my $marc_record_datos = MARC::Record->new();
 
   #recorro los campos
@@ -55,8 +98,8 @@ foreach my $n1 (@$nivel1_array_ref){
           $dato         = $subfield->[1];
           # C4::AR::Debug::debug("campo, subcampo, dato: " . $field->tag . ", ". $subfield->[0] . ": " . $dato);
           my $nivel     = C4::AR::EstructuraCatalogacionBase::getNivelFromEstructuraBaseByCampoSubcampo($campo, $subcampo);
-          $dato_ref     = C4::AR::Catalogacion::getRefFromStringConArrobasByCampoSubcampo($campo, $subcampo, $dato,$n1->getTemplate,$nivel);
-          $dato         = C4::AR::Catalogacion::getDatoFromReferencia($campo, $subcampo, $dato_ref, $n1->getTemplate,$nivel);
+          $dato_ref     = C4::AR::Catalogacion::getRefFromStringConArrobasByCampoSubcampo($campo, $subcampo, $dato ,$template,$nivel);
+          $dato         = C4::AR::Catalogacion::getDatoFromReferencia($campo, $subcampo, $dato_ref, $template,$nivel);
           if (($dato)&&($dato ne 'NULL')){
               #Guardo el dato en el marc record solamente
               if ($new_field){
@@ -69,15 +112,7 @@ foreach my $n1 (@$nivel1_array_ref){
 
       } #END foreach my $subfield ($field->subfields())
   } #END foreach my $field ($marc_record->fields)
+  return $marc_record_datos;
+}
 
-  C4::AR::Debug::debug("NIVEL 1 => ID " . $n1->getId1(). " as_usmarc " . $marc_record_datos->as_usmarc);
-} #END foreach my $n1 ($nivel1_array_ref)
-
-my $end1    = time();
-my $tardo1  = ($end1 - $tt1);
-my $min     = $tardo1/60;
-my $hour    = $min/60;
-
-C4::AR::Debug::debug("Finalizó la migración del catálogo a JSON - Tiempo de ejecución: " . $hour . ":" . $min);
- 
 1;
