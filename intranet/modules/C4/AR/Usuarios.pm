@@ -1167,6 +1167,7 @@ sub crearPersonaLDAP{
         $params{'credential_type'}      = "estudiante";
         $params{'nro_socio'}            = $nro_socio;
         $params{'id_categoria'}         = "1";
+        $params{'cumple_requisito'}     = C4::AR::Preferencias::getValorPreferencia("auto_activate_user_from_ldap") || 0;
 
     my $person                      = C4::Modelo::UsrPersona->new();
     
@@ -1344,6 +1345,29 @@ sub cambiarNroSocio{
 
     return $msg_object;
 
+}
+
+=item
+    Este funcion devuelve los socios segun last_auth_method pasado por parametro
+=cut
+sub getSociosByLastAuthMethod {
+    my ($last_auth_method) = @_;
+
+    if ($last_auth_method){
+      my $socio_array_ref = C4::Modelo::UsrSocio::Manager->get_usr_socio( 
+                                                  query => [ last_auth_method => { eq => $last_auth_method } ],
+                                                  # require_objects => ['persona','persona.documento'],
+                                                  # with_objects => ['ui', 'persona.alt_ciudad_ref','persona.ciudad_ref'],
+                                                  # select       => ['persona.*','usr_socio.*','usr_ref_categoria_socio.*','ui.*'],
+                                      );
+      if($socio_array_ref){
+          return ($socio_array_ref);
+      } else {
+          return 0;
+      }
+    }
+
+    return 0;
 }
 
 END { }       # module clean-up code here (global destructor)

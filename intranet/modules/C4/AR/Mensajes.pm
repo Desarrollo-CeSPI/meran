@@ -690,11 +690,11 @@ sub getMensaje {
     if($tipo eq 'opac'){
     
         $msj = $mensajesOPAC{$codigo};
-        C4::AR::Debug::debug("mensaje de OPAC");
+        # C4::AR::Debug::debug("mensaje de OPAC");
         
     }else{
     
-        C4::AR::Debug::debug("mensaje de INTRA");
+        # C4::AR::Debug::debug("mensaje de INTRA");
         $msj = $mensajesINTRA{$codigo};
     }
 
@@ -704,9 +704,9 @@ sub getMensaje {
         $msj=~ s/\*\?\*/$p/o;
     }
 
-    C4::AR::Debug::debug("C4::AR::Mensajes => getMensaje => tipo => ".$tipo);
-    C4::AR::Debug::debug("C4::AR::Mensajes => getMensaje => codigo => ".$codigo);
-    C4::AR::Debug::debug("C4::AR::Mensajes => getMensaje => mensaje => ".$msj);
+    # C4::AR::Debug::debug("C4::AR::Mensajes => getMensaje => tipo => ".$tipo);
+    # C4::AR::Debug::debug("C4::AR::Mensajes => getMensaje => codigo => ".$codigo);
+    # C4::AR::Debug::debug("C4::AR::Mensajes => getMensaje => mensaje => ".$msj);
 
     return $msj;
 }
