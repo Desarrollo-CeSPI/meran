@@ -24,7 +24,7 @@
 use C4::Modelo::IoImportacionIsoRegistro;
 use MARC::Moose::Record;
 use MARC::Moose::Reader::File::Isis;
-use MARC::Moose::Formater::Iso2709;
+use MARC::Moose::Formater::Json;
 my $outfile= "badrecords.iso";
 my $badRecords=0;
 my $records=0;
@@ -32,14 +32,14 @@ my $exit=0;
 open (OUT,">", $outfile);
 
 
-my $reader = MARC::Moose::Reader::File::Isis->new(
-    file   =>  $ARGV[0] || 'biblio.iso');
+my $reader = MARC::Moose::Reader::File::Isis->new( file   =>  $ARGV[0] || 'biblio.iso');
+my $formater = MARC::Moose::Formater::Json->new( pretty => 1);
 
     while ( my $record = $reader->read() ) {
       $records++;
        eval {
         	# do something risky...
-        	 print $record->as('Text');
+        	 print $formater->format($record);
         };
         if ($@) {
         	# handle failure...
@@ -47,5 +47,5 @@ my $reader = MARC::Moose::Reader::File::Isis->new(
         }
      }
 print "TOTAL RECORDS!!!---> ".$records."\n";
-
+print "TOTAL BAD RECORDS!!!---> ".$badRecords."\n";
 close OUT;
