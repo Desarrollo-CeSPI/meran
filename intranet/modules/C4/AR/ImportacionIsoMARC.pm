@@ -1888,18 +1888,18 @@ sub procesarRevistas {
 
                         foreach my $sig (@signaturas){
                             #C4::AR::Debug::debug("REVISTA ==>  \n SIGNATURA: ".$sig);
+                            my $signa = $sig;
                             #Parche: FAU pide agregar el nro de revista a la sigantura
                             if (C4::AR::Preferencias::getValorPreferencia("defaultUI") eq "DAQ"){
-                                $sig .= " ".$rev->{'numero'};
-                            }
-
+                                $signa .= " ".$rev->{'numero'};
+                            }                            
                             my $marc_record_n3 = $marc_record_ejemplares_base->clone();
 
                             if (!$marc_record_n3->field('995')){
-                               $marc_record_n3->append_fields(MARC::Field->new('995',' ',' ','t' => $sig));
+                               $marc_record_n3->append_fields(MARC::Field->new('995',' ',' ','t' => $signa));
                             }
                             else{
-                               $marc_record_n3->field('995')->add_subfields(  't' => $sig );
+                               $marc_record_n3->field('995')->add_subfields(  't' => $signa );
                             }
                             $hash_temp{'cant_ejemplares'} ++;
                             push(@ejemplares,$marc_record_n3);
@@ -2102,8 +2102,8 @@ sub procesarRevistas {
             if ($numeros) {
 
  #               C4::AR::Debug::debug("COLECCION  ==>  PROCESO : $numeros \n");
-
-                my @numeros_separados = split(',', $numeros );
+	 	my @numeros_separados = split(/,|-/, $numeros );
+	
 
                 foreach my $n (@numeros_separados){
                     my $numero_limpio =C4::AR::Utilidades::trim($n);
