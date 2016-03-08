@@ -83,14 +83,14 @@ my $mes  = &C4::Date::mesString( $datearr[4] + 1 );
 my $dia  = $datearr[3];
 my $fecha= "La Plata ".$dia." de ".$mes." de ".$anio;
 
-$t_params->{'fecha'}= $fecha;
-$t_params->{'biblio'}= $biblio;
-$t_params->{'socio'}= $socio;
-$t_params->{'socio_nombre'}= Encode::decode_utf8($socio->persona->nombre);
-$t_params->{'socio_apellido'}=  Encode::decode_utf8($socio->persona->apellido);
-$t_params->{'biblio_destino'}= $biblioDestino;
-$t_params->{'director'}= $director;
-$t_params->{'atencion'}=  C4::AR::Preferencias::getValorPreferencia('open') . " a "
+$t_params->{'fecha'}            = $fecha;
+$t_params->{'biblio'}           = $biblio;
+$t_params->{'socio'}            = $socio;
+$t_params->{'socio_nombre'}     = $socio->persona->nombre;
+$t_params->{'socio_apellido'}   = $socio->persona->apellido;
+$t_params->{'biblio_destino'}   = $biblioDestino;
+$t_params->{'director'}         = $director;
+$t_params->{'atencion'}         = C4::AR::Preferencias::getValorPreferencia('open') . " a "
 . C4::AR::Preferencias::getValorPreferencia('close');
 
 my $escudo = C4::Context->config('private_path') . '/images/escudo-DEFAULT.jpg';

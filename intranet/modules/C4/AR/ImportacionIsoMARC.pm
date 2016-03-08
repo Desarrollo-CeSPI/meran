@@ -81,8 +81,8 @@ sub guardarNuevaImportacion {
 
     C4::AR::Debug::debug("Nuevo esquema?? ".$params->{'nuevo_esquema'}." o usamos uno existente: ". $params->{'esquemaImportacion'});
 
-    if (!$params->{'nombreEsquema'}) {
-        $params->{'esquemaImportacion'} = $params->{'esquemaImportacion'};
+    if ($params->{'nombreEsquema'}) {
+        $params->{'esquemaImportacion'} = $params->{'nombreEsquema'};
         }
     else{
         if($params->{'nuevo_esquema'}){

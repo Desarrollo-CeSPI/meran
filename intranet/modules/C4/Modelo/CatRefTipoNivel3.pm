@@ -14,6 +14,7 @@ __PACKAGE__->meta->setup(
         disponible                  => { type => 'integer', overflow => 'truncate', length => 1, not_null => 1, default => 1 },
         enable_nivel3               => { type => 'integer', overflow => 'truncate', length => 1, not_null => 1, default => 1 },
         enable_from_new_register    => { type => 'integer', overflow => 'truncate', length => 1, not_null => 1, default => 1 },
+        show_from_opac_if_no_copy   => { type => 'integer', overflow => 'truncate', length => 1, not_null => 1, default => 1 },
     ],
 
     primary_key_columns => [ 'id' ],
@@ -70,6 +71,11 @@ sub setId_tipo_doc{
     my ($self) = shift;
     my ($id_tipo_doc) = @_;
     $self->id_tipo_doc($id_tipo_doc);
+}
+
+sub getShowFromOpacIfNoCopy{
+    my ($self) = shift;
+    return $self->show_from_opac_if_no_copy;
 }
 
 sub getDisponible{

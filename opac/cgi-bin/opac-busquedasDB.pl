@@ -104,6 +104,8 @@ $obj->{'cantR'}             = $cantR;
 my %sphinx_options;
 $sphinx_options{'opac_only_state_available'} 	= C4::AR::Preferencias::getValorPreferencia('opac_only_state_available');
 $obj->{'opac_only_state_available'}             = $sphinx_options{'opac_only_state_available'};
+$sphinx_options{'show_from_opac_if_no_copy'} 	= C4::AR::Preferencias::getValorPreferencia('show_from_opac_if_no_copy')||0;
+$obj->{'show_from_opac_if_no_copy'}             = $sphinx_options{'show_from_opac_if_no_copy'};
 
 C4::AR::Debug::debug("SOLO DISPONIBLES EN OPAC?? ".$sphinx_options{'opac_only_state_available'});
 
