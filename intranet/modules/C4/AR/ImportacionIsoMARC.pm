@@ -1938,10 +1938,10 @@ sub procesarRevistas {
         # 1976(1-2); 1977(3-4-5-6-7-8); 1978(9/10-11-12-13-14); 1979(15-16)
 
         # C4::AR::Debug::debug("COLECCION  ==>  PROCESO : $volumenes \n");
-        while($estadoDeColeccionCompleto =~ /((\d*\/?\d*)|\s)\s*((\d*\-?\d*)|\s)\s*(\(([^\)]+)\)|;?);?/g) {
-           my $anio = $2;
-           my $volumen = $4;
-           my $numeros = $6;
+        while($estadoDeColeccionCompleto =~ /\s?(\d*\/?\d*|\s)\s*(\d*\-?\d*|\s)\s*\(([^\)]+)\);?/g) {
+           my $anio = $1;
+           my $volumen = $2;
+           my $numeros = $3;
            push( @estadoDeColeccion, _generarNumerosDeAnio(C4::AR::Utilidades::trim($anio),C4::AR::Utilidades::trim($volumen),C4::AR::Utilidades::trim($numeros)));
         }
 
