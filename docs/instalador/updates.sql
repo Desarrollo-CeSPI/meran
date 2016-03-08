@@ -872,3 +872,17 @@ UPDATE cat_ref_tipo_nivel3 SET enable_nivel3 = 1 WHERE id_tipo_doc NOT IN ('ANA'
 ALTER TABLE  `pref_unidad_informacion` ADD  `nombre_largo` VARCHAR( 255 ) NOT NULL AFTER  `nombre`;
 
 UPDATE  `pref_unidad_informacion` SET nombre_largo =  nombre;
+
+ALTER TABLE `pref_tabla_referencia` ADD `is_editable` INT NOT NULL DEFAULT '1' AFTER `client_title`;
+UPDATE  `pref_tabla_referencia` SET  `is_editable` =  '0' WHERE  `pref_tabla_referencia`.`nombre_tabla` = 'ref_estado';
+
+INSERT INTO pref_tabla_referencia (nombre_tabla ,alias_tabla ,campo_busqueda ,client_title) SELECT 'ref_estado',  'estado',  'nombre',  'Estado' from DUAL WHERE NOT EXISTS ( SELECT nombre_tabla FROM pref_tabla_referencia WHERE nombre_tabla = 'ref_estado' ) LIMIT 1;
+
+#Para indicar si un tipo de ejemplar, permite o no ser visualizado en el OPAC (0 = no se visualiza, 1 = Si)
+ALTER TABLE  `cat_ref_tipo_nivel3` ADD  `show_from_opac_if_no_copy` INT( 1 ) NOT NULL DEFAULT  '0' AFTER  `enable_from_new_register`;
+
+INSERT INTO `pref_preferencia_sistema` (`id`, `variable`, `value`, `explanation`, `options`, `type`, `categoria`, `label`, `explicacion_interna`, `revisado`) VALUES (NULL, 'show_from_opac_if_no_copy', '0', 'Permite encontrar registros que no tienen ejemplares, dependiendo de la configuración del tipo de ejemplar', NULL, 'bool', 'sistema', 'Mostrar registros sin ejemplares', 'Permite encontrar registros que no tienen ejemplares, dependiendo de la configuración del tipo de ejemplar', '0');
+
+# Nueva preferencia, activa automaticamente o no, un usuario que se loguea por primera vez, cuando se utiliza LDAP para autenticar
+INSERT INTO  `pref_preferencia_sistema` (`id` ,`variable` ,`value` ,`explanation` ,`options` ,`type` ,`categoria` ,`label` ,`explicacion_interna` ,`revisado`)
+VALUES (NULL ,  'auto_activate_user_from_ldap',  '0',  'Activa (=1) por defecto un usuario creado al iniciar por primera vez, autenticando con LDAP.', NULL ,  'bool',  'sistema',  'Auto activar desde LDAP', 'Activa (=1) por defecto un usuario creado al iniciar por primera vez, autenticando con LDAP.',  '0');

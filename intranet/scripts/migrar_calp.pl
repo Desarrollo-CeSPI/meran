@@ -35,10 +35,11 @@ use C4::AR::Catalogacion;
 use C4::Modelo::CatRegistroMarcN2Analitica;
 
 my $op = $ARGV[0] || 0;
+my $from = $ARGV[1] || 0;
 
 my $db_driver =  "mysql";
 my $db_name   = 'calp_paradox';
-my $db_host   = 'localhost';
+my $db_host   = 'db';
 my $db_user   = 'root';
 my $db_passwd = 'dev';
 
@@ -132,7 +133,7 @@ sub migrarReferenciasColaboradores {
 
 sub migrar {
 
-	my ($template)=@_;
+	my ($template, $from )=@_;
 	
 	my ($registros_creados, $grupos_creados, $ejemplares_creados, $analiticas_creadas) = (0,0,0,0);
 
@@ -140,16 +141,20 @@ sub migrar {
 	my $where ="";
 	my $nivel = "Monografico";
 	if($template eq 'LIB'){
-		$where = " WHERE NivelBibliografico = 'M' OR NivelBibliografico = 'C'; ";
+		$where = " WHERE (NivelBibliografico = 'M' OR NivelBibliografico = 'C') ";
 		$nivel = "Monografico";
 	}
 	elsif($template eq 'REV'){
-		$where = " WHERE NivelBibliografico = 'S' OR NivelBibliografico = 'X'; ";
+		$where = " WHERE (NivelBibliografico = 'S' OR NivelBibliografico = 'X') ";
 		$nivel = "Serie";
 	}
 	elsif($template eq 'ANA'){
-		$where = " WHERE NivelBibliografico = 'A'; ";
+		$where = " WHERE NivelBibliografico = 'A' ";
 		$nivel = "Analitico";	
+	}
+
+	if ($from){
+		$where .= " AND RecNo > ".$from ;
 	}
 	#Leemos de la tabla de Materiales los que tienen nivel bibliográfico M
 	my $material_calp=$db_calp->prepare($sql.$where);
@@ -330,7 +335,7 @@ sub migrar {
 		my $perc = ($count * 100) / $cant;
 		my $rounded = sprintf "%.2f", $perc;
 
-		print "Registro $count de $cant ( $rounded %)  \r\n";
+		print "Registro $count (RecNro: ".$material->{'RecNo'}.") de $cant ( $rounded %)  \r\n";
 	}
 	
 	$material_calp->finish();
@@ -1166,11 +1171,11 @@ sub generaCodigoBarraFromMarcRecord{
         }
         case 2  {
         	print "Migrando Libros... \n";
-        	migrar('LIB');
+        	migrar('LIB',$from);
         }
         case 3  {
         	print "Migrando Revistas... \n";
-        	migrar('REV');
+        	migrar('REV',$from);
         }
         case 4  {
         	print "Calculando Analíticas... \n";
@@ -1244,7 +1249,7 @@ sub generaCodigoBarraFromMarcRecord{
 
         case 5  {
         	print "Migrando Libros y Revistas con sus analíticas... \n";
-            migrar('LIB');
-        	migrar('REV');
+            migrar('LIB',$from);
+        	migrar('REV',$from);
         }
     }

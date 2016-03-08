@@ -606,7 +606,7 @@ sub uploadImport {
                     unlink($write_file);
                 }else
                 {
-                    eval {
+                   # eval {
                         #$msg= "El archivo ".$name.".$ext ($showName) se ha cargado correctamente";
                         $params->{'showName'}=$showName;
                         $params->{'isValidFileType'}=$isValidFileType;
@@ -619,7 +619,7 @@ sub uploadImport {
                             #Si no se pudo guardar la importacion, se borra el archivo.
                              unlink($write_file);
                             }
-                    };
+                    #};
                     if ($@){
                         #Se loguea error de Base de Datos
                         &C4::AR::Mensajes::printErrorDB($@, 'B454',"INTRA");

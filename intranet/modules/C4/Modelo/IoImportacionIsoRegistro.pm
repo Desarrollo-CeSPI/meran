@@ -203,13 +203,18 @@ sub agregarDatoAMarcRecord {
 
                     if ((@fields)&&(($campo eq '100')&&($subcampo eq 'a'))){
                        #Parche de AUTORES, si hay muchos 100 a => el resto va al 700 a
-                            $campo='700';
+                       my $nf = new MARC::Field($campo, $ind1, $ind2,$subcampo => $fields[-1]->subfield( 'a' ).", ".$dato);
+                        $fields[-1]->replace_with($nf);
+                        #$campo='700';
+                        $done=1;
                     }
                     if ((@fields)&&(($campo eq '110')&&($subcampo eq 'a'))) {
                        #Parche de AUTORES, si hay muchos 110 a => el resto va al 710 a
                             $campo='710';
                     }
-                    $new_field= MARC::Field->new($campo, $ind1, $ind2,$subcampo => $dato);
+                    if (!$done) {
+                        $new_field= MARC::Field->new($campo, $ind1, $ind2,$subcampo => $dato);
+                    }
                 }
             }
         }
