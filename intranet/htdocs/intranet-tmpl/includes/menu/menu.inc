@@ -474,7 +474,7 @@
                                               [% END %]
                                   </li>
               					[% END %]
-                            [% IF socio_data.object.esAdmin || socio_data.usr_credential_type == "superLibrarian" && 1 ==  2 %]
+                            [% IF 1 ==  2 %]
 	                            	<li class="nav-header">[% 'Herramientas' | i18n %]</li>	
 		              				      <li class="divider"></li>
                                 <li>
