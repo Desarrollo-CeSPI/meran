@@ -24,39 +24,20 @@
 use strict;
 use C4::AR::Auth;
 use CGI;
-use C4::AR::Novedades;
+
 my $input = new CGI;
-my $year = $input->param('year');
 
-my $result_hash = C4::AR::Utilidades::datosEstadisticosUNLP($year);
+my ($template, $session, $t_params) = get_template_and_user({
+									template_name   => "admin/estadisticas.tmpl",
+									query           => $input,
+									type            => "intranet",
+									authnotrequired => 0,
+									flagsrequired   => {  ui => 'ANY', 
+                                                        accion => 'TODOS', 
+                                                        entorno => 'usuarios'},
+									debug => 1,
+			    });
 
 
-my $query = new CGI;
-print $query->header( -type=>'text/html', 
-							 charset => C4::Context->config("charset")||'UTF-8', 
-							 "Cache-control: public",
-					);
-print "<h1> AÑO  ".$year."</h1>";
-print "<h2>CATÁLOGO: </h2><br> Cantidad total de documentos (todo tipo) IMPRESOS! ('LIB', 'TES', 'SER', 'REV', 'FOT') <br>";
-print "- TOTAL: ".$result_hash->{'cantidad_impreso_total'}." <br>";
-print "- DISPONIBLES: ".$result_hash->{'cantidad_impreso_disponible'}." <br>";
-print "- NO DISPONIBLES: ".$result_hash->{'cantidad_impreso_no_disponible'}." <br><br>";
+C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
 
-print "Cantidad de LIBROS: <br> Volúmenes: ".$result_hash->{'cantidad_libros_grupos'}." <br> Ejemplares: ".$result_hash->{'cantidad_libros_ejemplares'}." <br><br>";
-print "Cantidad de TESIS: <br> Volúmenes: ".$result_hash->{'cantidad_tesis_grupos'}." <br> Ejemplares: ".$result_hash->{'cantidad_tesis_ejemplares'}." <br><br>";
-print "Cantidad de OTRAS MONOGRAFÍAS (FOT): <br> Volúmenes: ".$result_hash->{'cantidad_otros_grupos'}." <br> Ejemplares: ".$result_hash->{'cantidad_otros_ejemplares'}." <br><br>";
-print "Cantidad de Volúmenes NO disponibles: ".$result_hash->{'cantidad_no_disponibles_grupos'}." <br><br>";
-print "Cantidad de REVISTAS: <br> Registros: ".$result_hash->{'cantidad_revistas_registros'}." <br> Volúmenes: ".$result_hash->{'cantidad_revistas_grupos'}." <br> Ejemplares: ".$result_hash->{'cantidad_revistas_ejemplares'}." <br><br>";
-
-print "<h2>	SERVICIOS: </h2><br>";
-print "PRESTAMOS: <br>";
-print "- CANTIDAD DE PRESTAMOS TOTALES: ".$result_hash->{'cantidad_prestamos_totales'}." <br>";
-print "- CANTIDAD DE PRESTAMOS DOMICILIO: ".$result_hash->{'cantidad_prestamos_domicilio'}." <br>";
-print "- CANTIDAD DE PRESTAMOS SALA: ".$result_hash->{'cantidad_prestamos_sala'}." <br><br>";
-print "- CANTIDAD DE PRESTAMOS MONOGRAFIAS: <br> DOMICILIO: ".$result_hash->{'cantidad_prestamos_domicilio_monografia'}." <br> SALA: ".$result_hash->{'cantidad_prestamos_sala_monografia'}."  <br><br>";
-print "- CANTIDAD DE PRESTAMOS REVISTA: <br> DOMICILIO: ".$result_hash->{'cantidad_prestamos_domicilio_revista'}." <br> SALA: ".$result_hash->{'cantidad_prestamos_sala_revista'}."  <br><br>";
-print "- CANTIDAD DE PRESTAMOS OTROS: <br> DOMICILIO: ".$result_hash->{'cantidad_prestamos_domicilio_otros'}." <br> SALA: ".$result_hash->{'cantidad_prestamos_sala_otros'}."  <br><br>";
-
-print "BUSQUEDAS: <br>";
-print "- CANTIDAD DE BUSQUEDAS SOCIOS: ".$result_hash->{'cantidad_busquedas_socios'}." <br>";
-print "- CANTIDAD DE BUSQUEDAS NO SOCIOS: ".$result_hash->{'cantidad_busquedas_no_socios'}." <br>";
