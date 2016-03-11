@@ -1,0 +1,60 @@
+[% INCLUDE 'intranet-top.inc' %]
+[% USE HTML %]
+
+<script type="text/javascript">
+			
+		function showAnualStats(){
+			var year 						=  $("#year").val();
+			var objAH_stats      	 		= new AjaxHelper(updateShowAnualStats);
+			objAH_stats.showOverlay       	= true;
+			objAH_stats.debug            	= true;
+			objAH_stats.url               	= '[% url_prefix %]/admin/ver_estadistica_anual.pl';
+			objAH_stats.year				= year;
+			objAH_stats.sendToServer();
+		}
+
+		function updateShowAnualStats(responseText){
+		    if (!verificarRespuesta(responseText))
+		        return(0);
+		    $('#mostrar_estadisticas').html(responseText);
+		}		
+
+
+</script>
+
+
+<section class="center-section-form">
+    <form class="form-horizontal" onsubmit="return false;">
+		<fieldset>
+		    <legend>[% "Estadísticas Anuales" | i18n %]:</legend>
+		        <div class="control-group">
+		          <div class="controls">
+		            <input type="text" id="year" name="year" value="">
+
+		                [% PERL %]
+		                    print C4::AR::Filtros::setHelpInput(   
+		                                                    text        => "[% ' Ingrese el año a calcular' | i18n %]",
+		                                                    class       => "info",
+		                                            ) ;
+		                    
+		                [% END %]
+		            
+		          </div>    
+		        </div>  
+		        <div class="form-actions">
+		        [% PERL %]
+		                            print C4::AR::Filtros::to_Button(   text    => "[% 'Buscar' | i18n %]",
+		                                                                boton   => "btn btn-primary",
+		                                                                onClick => "showAnualStats();",
+		                                                                title   => "[% 'Buscar' | i18n %]",
+		                                                                inline  => 1,
+		                                    ) ;
+		        [% END %]
+		        </div>                      
+		</fieldset>
+   </form>
+</section>
+<fieldset class="resultados">
+	<div id="mostrar_estadisticas"></div>
+</fieldset>	
+[% INCLUDE 'intranet-bottom.inc' %]

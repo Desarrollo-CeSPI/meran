@@ -383,7 +383,7 @@ sub getDisponibilidad{
 
     switch (uc($codigo)) {
         case "EX"  {return 'CIRC0000';}
-        case "PE"  {return 'CIRC0000';}
+        case "PE"  {return 'CIRC0001';}
         case "PRS"   {return 'CIRC0000';}
         case "SL"  {return 'CIRC0001';}
     }
@@ -1089,7 +1089,14 @@ sub generaCodigoBarraFromMarcRecord{
 
 				push(@nuevo_ejemplar, ['995','f', $ejemplar->{'Inventario'}]);
 				push(@nuevo_ejemplar, ['995','t', $ejemplar->{'SignaturaTopografica'}]);
-				push(@nuevo_ejemplar, ['995','o', getDisponibilidad($ejemplar->{'CodEstDisponibilidad'})]);
+
+				if($template eq 'REV') {
+					#Revistas siempre de sala
+					push(@nuevo_ejemplar, ['995','o', 'CIRC0001']);
+				}
+				else {
+					push(@nuevo_ejemplar, ['995','o', getDisponibilidad($ejemplar->{'CodEstDisponibilidad'})]);
+				}
 				push(@nuevo_ejemplar, ['995','e', getEstado($ejemplar->{'CodEstDisponibilidad'},$ejemplar->{'Disponible'})]);
 				push(@nuevo_ejemplar, ['995','p', $ejemplar->{'Precio'}]);
 				push(@nuevo_ejemplar, ['995','u', $ejemplar->{'Observaciones'}]);

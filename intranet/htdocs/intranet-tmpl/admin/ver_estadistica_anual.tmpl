@@ -1,0 +1,95 @@
+[% USE HTML %]
+
+<div class="modal-header">  
+  <h3>[% HTML.escape(page_sub_title) %]</h3>
+</div>
+<div class="modal-body">
+  <h4>CATÁLOGO</h4>
+  <h6>Cantidad total de documentos (todo tipo) IMPRESOS! ('LIB', 'TES', 'SER', 'REV', 'FOT')</h6>
+  <p>
+    <dl>
+      <dt>TOTAL:<dt><dd>[% estadisticas_hash.item('cantidad_impreso_total') %]</dd>
+      <dt>DISPONIBLES:<dt><dd>[% estadisticas_hash.item('cantidad_impreso_disponible') %]</dd>
+      <dt>NO DISPONIBLES:<dt><dd>[% estadisticas_hash.item('cantidad_impreso_no_disponible') %]</dd>
+    </dl>
+  </p>
+  <hr>
+  <h6>Cantidad de LIBROS</h6>
+  <p>
+    <dl>
+      <dt>Volúmenes:<dt><dd>[% estadisticas_hash.item('cantidad_libros_grupos') %]</dd>
+      <dt>Ejemplares:<dt><dd>[% estadisticas_hash.item('cantidad_libros_ejemplares') %]</dd>
+    </dl>
+  </p>
+  <hr>
+  <h6>Cantidad de TESIS</h6>
+  <p>
+    <dl>
+      <dt>Volúmenes:<dt><dd>[% estadisticas_hash.item('cantidad_tesis_grupos') %]</dd>
+      <dt>Ejemplares:<dt><dd>[% estadisticas_hash.item('cantidad_tesis_ejemplares') %]</dd>
+    </dl>
+  </p>
+  <hr>
+  <h6>Cantidad de OTRAS MONOGRAFÍAS (FOT)</h6>
+  <p>
+    <dl>
+      <dt>Volúmenes:<dt><dd>[% estadisticas_hash.item('cantidad_otros_grupos') %]</dd>
+      <dt>Ejemplares:<dt><dd>[% estadisticas_hash.item('cantidad_otros_ejemplares') %]</dd>
+    </dl>
+  </p>
+  <hr>
+  <h6>Cantidad de Volúmenes NO disponibles</h6>
+  <p>
+    <b>
+      [% estadisticas_hash.item('cantidad_no_disponibles_grupos') %]
+    </b>
+  </p>
+  <hr>
+  <h6>Cantidad de REVISTAS</h6>
+  <p>
+    <dl>
+      <dt>Registros:<dt><dd>[% estadisticas_hash.item('cantidad_revistas_registros') %]</dd>
+      <dt>Volúmenes:<dt><dd>[% estadisticas_hash.item('cantidad_revistas_grupos') %]</dd>
+      <dt>Ejemplares:<dt><dd>[% estadisticas_hash.item('cantidad_revistas_ejemplares') %]</dd>
+    </dl>
+  </p>
+  <hr>
+  <h4>SERVICIOS</h4>
+
+  <h5>PRESTAMOS</h5>
+  <p>
+    <dl>
+      <dt>Totales:<dt><dd>[% estadisticas_hash.item('cantidad_prestamos_totales') %]</dd>
+      <dt>Domicilio:<dt><dd>[% estadisticas_hash.item('cantidad_prestamos_domicilio') %]</dd>
+      <dt>Sala:<dt><dd>[% estadisticas_hash.item('cantidad_prestamos_sala') %]</dd>
+    </dl>
+  </p>
+  <hr>
+  <h6>Préstamos MONOGRAFIAS</h6>
+  <p>
+    <dl>
+      <dt>Domicilio:<dt><dd>[% estadisticas_hash.item('cantidad_prestamos_domicilio_monografia') %]</dd>
+      <dt>Sala:<dt><dd>[% estadisticas_hash.item('cantidad_prestamos_sala_monografia') %]</dd>
+    </dl>
+  </p>
+  <hr>
+  <h6>Préstamos REVISTA</h6>
+  <p>
+    <dl>
+      <dt>Domicilio:<dt><dd>[% estadisticas_hash.item('cantidad_prestamos_domicilio_revista') %]</dd>
+      <dt>Sala:<dt><dd>[% estadisticas_hash.item('cantidad_prestamos_sala_revista') %]</dd>
+    </dl>
+  </p>
+  <hr>
+  <h6>Préstamos OTROS</h6>
+  <p>
+    <dl>
+      <dt>Domicilio:<dt><dd>[% estadisticas_hash.item('cantidad_prestamos_domicilio_otros') %]</dd>
+      <dt>Sala:<dt><dd>[% estadisticas_hash.item('cantidad_prestamos_sala_otros') %]</dd>
+    </dl>
+  </p>
+
+</div>
+
+
+                  
