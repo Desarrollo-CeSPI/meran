@@ -1518,6 +1518,7 @@ sub getAllPrestamosActivos{
     my @second;
     my $days;
     my @arrayPrestamos;
+    my $reminderDays = C4::AR::Preferencias::getValorPreferencia('reminderDays');
 
     if(scalar(@$prestamos_array_ref) > 0){
     # recorremos todos los prestamos, le pedimos la fecha de vencimiento y la checkeamos con la actual
@@ -1531,7 +1532,7 @@ sub getAllPrestamosActivos{
             $days   = Delta_Days(@first, @second);
 
             # si esta dentro de los dias de reminderDays y NO esta vencido el prestamo
-            if ($days <= C4::AR::Preferencias::getValorPreferencia('reminderDays') && !($prestamo->estaVencido())){
+            if ($days <= $reminderDays && !($prestamo->estaVencido())){
                 push(@arrayPrestamos,($prestamo));
             }
         }
