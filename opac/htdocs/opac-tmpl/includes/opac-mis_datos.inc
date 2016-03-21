@@ -46,8 +46,8 @@
 	    <dl class="">
 		        [% IF socio.tieneFoto('opac') %]  
 				    <dt class="inline left rightMargin" id="fotoUsuario">
-				        <a class="fancylink" rel="group" href="/uploads/pictures-opac/[% socio.tieneFoto('opac') %]">
-				                <img border="0" src="/uploads/pictures-opac/[% socio.tieneFoto('opac') %]"
+				        <a class="fancylink" rel="group" href="/pictures-opac/[% socio.tieneFoto('opac') %]">
+				                <img border="0" src="/pictures-opac/[% socio.tieneFoto('opac') %]"
 				                      style="width: 60%; max-width: 120px;" 
 				                      alt="[% socio.persona.getApellido %], [% socio.persona.getNombre %] ([% socio.getNro_socio %])"
 				                      title="[% socio.persona.getApellido %], [% socio.persona.getNombre %] ([% socio.getNro_socio %])"
