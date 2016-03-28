@@ -227,8 +227,6 @@ sub migrar {
 		    	}
 		    	my $volumen = $material->{'Serie_Volumen'};
 
-				print  "REVISTAS v $volumen n $fasciculos \n";
-
         		my @estadoDeColeccion = _generarNumerosDeVolumen($volumen,$fasciculos);
         	
             	foreach my $rev (@estadoDeColeccion){
