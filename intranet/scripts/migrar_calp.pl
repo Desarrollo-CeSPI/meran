@@ -36,6 +36,7 @@ use C4::Modelo::CatRegistroMarcN2Analitica;
 
 my $op = $ARGV[0] || 0;
 my $from = $ARGV[1] || 0;
+my $to = $ARGV[2] || 0;
 
 my $db_driver =  "mysql";
 my $db_name   = 'calp_paradox';
@@ -154,8 +155,13 @@ sub migrar {
 	}
 
 	if ($from){
-		$where .= " AND RecNo > ".$from ;
+		$where .= " AND RecNo >= ".$from ;
 	}
+
+	if ($to){
+		$where .= " AND RecNo <= ".$to ;
+	}
+
 	#Leemos de la tabla de Materiales los que tienen nivel bibliográfico M
 	my $material_calp=$db_calp->prepare($sql.$where);
 	$material_calp->execute();
@@ -202,8 +208,8 @@ sub migrar {
         			#Revisar si tiene ejemplar, sino crear uno
 					my @nuevo_ejemplar=();
 					#UI
-					push(@nuevo_ejemplar, ['995','c', 'BLGL']);
-					push(@nuevo_ejemplar, ['995','d', 'BLGL']);
+					push(@nuevo_ejemplar, ['995','c', 'GL']);
+					push(@nuevo_ejemplar, ['995','d', 'GL']);
 					# Las revistas van con disponiblidad de sala de lectura ticket #10078
 					push(@nuevo_ejemplar, ['995','o', 'CIRC0001']);
 					push(@nuevo_ejemplar, ['995','e', 'STATE002']);
@@ -212,13 +218,15 @@ sub migrar {
 					$ejemplares->[0] = \@nuevo_ejemplar;
 				}
 
-        		#print  "REVISTAS v $volumen n $fasciculos \n";
+        	
 
         		my $fasciculos = $material->{'Serie_NumDesde'};
 		    	if($material->{'Serie_NumHasta'}){
 		    		my $fasciculos .= "-".$material->{'Serie_NumHasta'};
 		    	}
 		    	my $volumen = $material->{'Serie_Volumen'};
+
+				print  "REVISTAS v $volumen n $fasciculos \n";
 
         		my @estadoDeColeccion = _generarNumerosDeVolumen($volumen,$fasciculos);
         	
@@ -245,7 +253,7 @@ sub migrar {
 	            		my $cant_analiticas = agregarAnaliticas($id1,$id2,$material->{'RecNo'});
 	            		$analiticas_creadas += $cant_analiticas;
 
-	            	#	print "Se crearon $cant_analiticas analíticas \n";
+	            	    print "Se crearon $cant_analiticas analíticas de ".$material->{'RecNo'}."\n";
 
 	                	#Ejemplares
 						foreach my $ejemplar (@$ejemplares){
@@ -265,7 +273,7 @@ sub migrar {
 								}
 							}
 
-			                my ($msg_object3) = guardarNivel3DeImportacion($id1,$id2,$marc_record_n3,$template,'BLGL');
+			                my ($msg_object3) = guardarNivel3DeImportacion($id1,$id2,$marc_record_n3,$template,'GL');
 							if (!$msg_object3->{'error'}){
 	            				$ejemplares_creados ++;
 							}else{
@@ -313,7 +321,7 @@ sub migrar {
 
 						#print $marc_record_n3->as_formatted;
 
-		                my ($msg_object3) = guardarNivel3DeImportacion($id1,$id2,$marc_record_n3,$template,'BLGL');
+		                my ($msg_object3) = guardarNivel3DeImportacion($id1,$id2,$marc_record_n3,$template,'GL');
 		     #           print "Nivel 3 creado ?? ".$msg_object3->{'error'}."\n";
 		     			if (!$msg_object3->{'error'}){
 	            				$ejemplares_creados ++;
@@ -894,7 +902,8 @@ sub generaCodigoBarraFromMarcRecord{
 			['245','a',$material->{'Titulo'}],
 			['245','b',$material->{'TituloUniforme'}],
 			['310','a',$material->{'Frecuencia'}],
-			['520','a',$material->{'Resumen'}],	
+			['520','a',$material->{'Resumen'}],
+			['500','a',$nota],
 			['246','a',$material->{'TituloOriginal'}],	
 			['030','a',$material->{'CODEN'}],
 			);
@@ -909,7 +918,6 @@ sub generaCodigoBarraFromMarcRecord{
 			['260','a',$material->{'Lugar'}],	
 			['260','c',$fecha_edicion],
 			['300','c',$dimension],
-      ['500','a',$nota],
 			['020','a',$material->{'ISBN'}],
 			
 			#Revista
@@ -1084,8 +1092,8 @@ sub generaCodigoBarraFromMarcRecord{
 		while (my $ejemplar=$ejemplares_calp->fetchrow_hashref) {
 				my @nuevo_ejemplar=();
 				#UI
-				push(@nuevo_ejemplar, ['995','c', 'BLGL']);
-				push(@nuevo_ejemplar, ['995','d', 'BLGL']);
+				push(@nuevo_ejemplar, ['995','c', 'GL']);
+				push(@nuevo_ejemplar, ['995','d', 'GL']);
 
 				push(@nuevo_ejemplar, ['995','f', $ejemplar->{'Inventario'}]);
 				push(@nuevo_ejemplar, ['995','t', $ejemplar->{'SignaturaTopografica'}]);
