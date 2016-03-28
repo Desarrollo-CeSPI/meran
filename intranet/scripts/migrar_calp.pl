@@ -978,6 +978,9 @@ sub generaCodigoBarraFromMarcRecord{
 			['900','h',$material->{'FechaUltModificacion'}],
 			);
 		
+		if(($template eq "REV")&&($material->{'CODEN'})){
+			push (@campos_n3,['995','t',$material->{'CODEN'}]);
+		}
 		#Buscamos Editores
 
 		my @editores = ($material->{'CodEditor'}, $material->{'CodEditor2'}, $material->{'CodEditor3'});
@@ -1097,15 +1100,18 @@ sub generaCodigoBarraFromMarcRecord{
 				push(@nuevo_ejemplar, ['995','d', 'GL']);
 
 				push(@nuevo_ejemplar, ['995','f', $ejemplar->{'Inventario'}]);
-				push(@nuevo_ejemplar, ['995','t', $ejemplar->{'SignaturaTopografica'}]);
+
 
 				if($template eq 'REV') {
 					#Revistas siempre de sala
 					push(@nuevo_ejemplar, ['995','o', 'CIRC0001']);
+					push(@nuevo_ejemplar, ['995','t', $material->{'CODEN'}]);
 				}
 				else {
+					push(@nuevo_ejemplar, ['995','t', $ejemplar->{'SignaturaTopografica'}]);
 					push(@nuevo_ejemplar, ['995','o', getDisponibilidad($ejemplar->{'CodEstDisponibilidad'})]);
 				}
+
 				push(@nuevo_ejemplar, ['995','e', getEstado($ejemplar->{'CodEstDisponibilidad'},$ejemplar->{'Disponible'})]);
 				push(@nuevo_ejemplar, ['995','p', $ejemplar->{'Precio'}]);
 				push(@nuevo_ejemplar, ['995','u', $ejemplar->{'Observaciones'}]);
