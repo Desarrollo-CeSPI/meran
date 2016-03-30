@@ -97,9 +97,8 @@
   </p>
     <h5>USUARIOS REGISTRADOS</h5>
   <p>
-    [% estadisticas_hash.categorias_socios_registrados %]
     <dl>
-      [% FOREACH cat IN estadisticas_hash.categorias_socios_registrados %]
+      [% FOREACH cat IN estadisticas_hash.item('categorias_socios_registrados') %]
         <dt>[% cat.categoria %]<dt><dd>[% cat.cantidad %]</dd>
       [% END %]
     </dl>
