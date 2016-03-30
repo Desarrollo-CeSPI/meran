@@ -253,7 +253,7 @@ sub migrar {
 		            		my $cant_analiticas = agregarAnaliticas($id1,$id2,$material->{'RecNo'});
 		            		$analiticas_creadas += $cant_analiticas;
 
-		            	    print "Se crearon $cant_analiticas analíticas de ".$material->{'RecNo'}."\n";
+		            	    #print "Se crearon $cant_analiticas analíticas de ".$material->{'RecNo'}."\n";
 
 		                	#Ejemplares
 							foreach my $ejemplar (@$ejemplares){

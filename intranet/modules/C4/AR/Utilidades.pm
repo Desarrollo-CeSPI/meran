@@ -5513,6 +5513,18 @@ sub datosEstadisticosUNLP{
         $result_hash{'cantidad_busquedas_no_socios'}=$cantidad_busquedas_no_socios;
     }
 
+    
+    my $yca=$year+'-01-01';
+    my $ycb=$year+'-12-31';
+    
+
+    my $sth=$dbh->prepare("SELECT usr_ref_categoria_socio.description as categoria, count(*) as cantidad FROM usr_socio left join usr_ref_categoria_socio on usr_socio.id_categoria = usr_ref_categoria_socio.id WHERE fecha_alta BETWEEN  ? AND ? group by usr_socio.id_categoria");
+    $sth->execute($yca, $ycb);
+    
+   if (my $categorias_socios_registrados = $sth->fetchrow_array){
+        $result_hash{'categorias_socios_registrados'}=$categorias_socios_registrados;
+    }
+
 
     return(\%result_hash);
 }
