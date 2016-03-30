@@ -5504,6 +5504,7 @@ sub datosEstadisticosUNLP{
     if (my $cantidad_busquedas_socios = $sth->fetchrow_array){
         $result_hash{'cantidad_busquedas_socios'}=$cantidad_busquedas_socios;
     }
+    $sth->finish;
 
     #No Socios
     my $sth=$dbh->prepare("SELECT COUNT(*)  FROM rep_busqueda WHERE nro_socio IS NULL AND fecha BETWEEN  ? AND ? ");
@@ -5512,7 +5513,7 @@ sub datosEstadisticosUNLP{
     if (my $cantidad_busquedas_no_socios = $sth->fetchrow_array){
         $result_hash{'cantidad_busquedas_no_socios'}=$cantidad_busquedas_no_socios;
     }
-
+    $sth->finish;
     
     my $yca=$year+'-01-01';
     my $ycb=$year+'-12-31';
@@ -5520,11 +5521,11 @@ sub datosEstadisticosUNLP{
 
     my $sth=$dbh->prepare("SELECT usr_ref_categoria_socio.description as categoria, count(*) as cantidad FROM usr_socio left join usr_ref_categoria_socio on usr_socio.id_categoria = usr_ref_categoria_socio.id WHERE fecha_alta BETWEEN  ? AND ? group by usr_socio.id_categoria");
     $sth->execute($yca, $ycb);
-    
+
    if (my $categorias_socios_registrados = $sth->fetchrow_array){
         $result_hash{'categorias_socios_registrados'}=$categorias_socios_registrados;
     }
-
+    $sth->finish;
 
     return(\%result_hash);
 }
