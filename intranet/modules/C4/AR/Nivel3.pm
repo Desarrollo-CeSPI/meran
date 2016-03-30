@@ -121,13 +121,15 @@ sub t_guardarNivel3 {
         }
 
         if(defined $id3){
-            eval {
-                C4::AR::Sphinx::generar_indice($catRegistroMarcN3->getId1, 'R_PARTIAL', 'INSERT');
-                #ahora el indice se encuentra DESACTUALIZADO
-                C4::AR::Preferencias::setVariable('indexado', 0, $db);
-            };    
-            if ($@){
-                C4::AR::Debug::debug("ERROR AL REINDEXAR EN EL REGISTRO: ".$catRegistroMarcN3->getId1()." !!! ( ".$@." )");
+            unless($params->{'no_index'}){
+                eval {
+                    C4::AR::Sphinx::generar_indice($catRegistroMarcN3->getId1, 'R_PARTIAL', 'INSERT');
+                    #ahora el indice se encuentra DESACTUALIZADO
+                    C4::AR::Preferencias::setVariable('indexado', 0, $db);
+                };    
+                if ($@){
+                    C4::AR::Debug::debug("ERROR AL REINDEXAR EN EL REGISTRO: ".$catRegistroMarcN3->getId1()." !!! ( ".$@." )");
+                }
             }
         }
 
