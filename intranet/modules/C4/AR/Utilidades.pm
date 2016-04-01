@@ -5371,9 +5371,10 @@ sub datosEstadisticosUNLP{
     
     #Prestamos totales
     my $sth=$dbh->prepare("SELECT COUNT(*)  FROM rep_historial_prestamo WHERE fecha_devolucion BETWEEN  ? AND ? ");
-    $sth->bind_param(1, $ya, SQL_DATE);
-    $sth->bind_param(2, $yb, SQL_DATE);
+    $sth->bind_param(1, $ya);
+    $sth->bind_param(2, $yb);
     $sth->execute();
+
 
     if (my $cantidad_prestamos_totales = $sth->fetchrow_array){
         $result_hash{'cantidad_prestamos_totales'}=$cantidad_prestamos_totales;
@@ -5383,9 +5384,10 @@ sub datosEstadisticosUNLP{
 
     #Prestamos domicilio
     my $sth=$dbh->prepare("SELECT count(*) FROM rep_historial_prestamo left join circ_ref_tipo_prestamo on rep_historial_prestamo.tipo_prestamo = circ_ref_tipo_prestamo.id_tipo_prestamo WHERE circ_ref_tipo_prestamo.codigo_disponibilidad = 'CIRC0000' AND rep_historial_prestamo.fecha_devolucion BETWEEN  ? AND ? ");
-    $sth->bind_param(1, $ya, SQL_DATE);
-    $sth->bind_param(2, $yb, SQL_DATE);
+    $sth->bind_param(1, $ya);
+    $sth->bind_param(2, $yb);
     $sth->execute();
+
 
     if (my $cantidad_prestamos_domicilio = $sth->fetchrow_array){
         $result_hash{'cantidad_prestamos_domicilio'}=$cantidad_prestamos_domicilio;
@@ -5395,9 +5397,10 @@ sub datosEstadisticosUNLP{
 
     #Prestamos sala
     my $sth=$dbh->prepare("SELECT count(*) FROM rep_historial_prestamo left join circ_ref_tipo_prestamo on rep_historial_prestamo.tipo_prestamo = circ_ref_tipo_prestamo.id_tipo_prestamo WHERE circ_ref_tipo_prestamo.codigo_disponibilidad = 'CIRC0001' AND rep_historial_prestamo.fecha_devolucion BETWEEN  ? AND ? ");
-    $sth->bind_param(1, $ya, SQL_DATE);
-    $sth->bind_param(2, $yb, SQL_DATE);
+    $sth->bind_param(1, $ya);
+    $sth->bind_param(2, $yb);
     $sth->execute();
+
 
     if (my $cantidad_prestamos_sala = $sth->fetchrow_array){
         $result_hash{'cantidad_prestamos_sala'}=$cantidad_prestamos_sala;
@@ -5413,8 +5416,8 @@ sub datosEstadisticosUNLP{
             WHERE circ_ref_tipo_prestamo.codigo_disponibilidad = 'CIRC0000' 
             AND cat_registro_marc_n3.template IN ('LIB','TES','FOT')     
             AND rep_historial_prestamo.fecha_devolucion BETWEEN  ? AND ? ");
-    $sth->bind_param(1, $ya, SQL_DATE);
-    $sth->bind_param(2, $yb, SQL_DATE);
+    $sth->bind_param(1, $ya);
+    $sth->bind_param(2, $yb);
     $sth->execute();
 
     if (my $cantidad_prestamos_domicilio_monografia = $sth->fetchrow_array){
@@ -5430,9 +5433,10 @@ sub datosEstadisticosUNLP{
             WHERE circ_ref_tipo_prestamo.codigo_disponibilidad = 'CIRC0001' 
             AND cat_registro_marc_n3.template IN ('LIB','TES','FOT')     
             AND rep_historial_prestamo.fecha_devolucion BETWEEN  ? AND ? ");
-    $sth->bind_param(1, $ya, SQL_DATE);
-    $sth->bind_param(2, $yb, SQL_DATE);
+    $sth->bind_param(1, $ya);
+    $sth->bind_param(2, $yb);
     $sth->execute();
+
 
     if (my $cantidad_prestamos_sala_monografia = $sth->fetchrow_array){
         $result_hash{'cantidad_prestamos_sala_monografia'}=$cantidad_prestamos_sala_monografia;
@@ -5448,9 +5452,10 @@ sub datosEstadisticosUNLP{
             WHERE circ_ref_tipo_prestamo.codigo_disponibilidad = 'CIRC0000' 
             AND cat_registro_marc_n3.template = 'REV'     
             AND rep_historial_prestamo.fecha_devolucion BETWEEN  ? AND ? ");
-    $sth->bind_param(1, $ya, SQL_DATE);
-    $sth->bind_param(2, $yb, SQL_DATE);
+    $sth->bind_param(1, $ya);
+    $sth->bind_param(2, $yb);
     $sth->execute();
+
 
     if (my $cantidad_prestamos_domicilio_revista = $sth->fetchrow_array){
         $result_hash{'cantidad_prestamos_domicilio_revista'}=$cantidad_prestamos_domicilio_revista;
