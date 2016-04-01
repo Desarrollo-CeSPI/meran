@@ -5368,9 +5368,7 @@ sub datosEstadisticosUNLP{
     # SERVICIOS: 
     my $ya=$year+'-01-01';
     my $yb=$year+'-12-31';
-
-    print $ya."\n";
-    print $yb."\n";
+ 
     #Prestamos totales
     my $sth=$dbh->prepare("SELECT COUNT(*)  FROM rep_historial_prestamo WHERE fecha_devolucion BETWEEN  ? AND ? ");
     $sth->bind_param(1, $ya);
