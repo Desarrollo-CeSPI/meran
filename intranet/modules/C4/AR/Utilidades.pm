@@ -5545,7 +5545,7 @@ sub datosEstadisticosUNLP{
     $sth->execute();
 
 
-   if (my $categorias_socios_registrados = $sth->fetchrow_array){
+   if (my $categorias_socios_registrados = $sth->fetchall_arrayref){
         $result_hash{'categorias_socios_registrados'}=$categorias_socios_registrados;
     }
     $sth->finish;
