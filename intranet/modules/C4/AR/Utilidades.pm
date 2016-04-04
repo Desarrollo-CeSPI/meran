@@ -5366,13 +5366,9 @@ sub datosEstadisticosUNLP{
 
 
     # SERVICIOS: 
-    my $ya=$year+'-01-01';
-    my $yb=$year+'-12-31';
  
     #Prestamos totales
-    my $sth=$dbh->prepare("SELECT COUNT(*)  FROM rep_historial_prestamo WHERE fecha_devolucion BETWEEN  ? AND ? ");
-    $sth->bind_param(1, $ya);
-    $sth->bind_param(2, $yb);
+    my $sth=$dbh->prepare("SELECT COUNT(*)  FROM rep_historial_prestamo WHERE fecha_devolucion like '$year%'");
     $sth->execute();
 
 
@@ -5383,9 +5379,7 @@ sub datosEstadisticosUNLP{
     $sth->finish;
 
     #Prestamos domicilio
-    my $sth=$dbh->prepare("SELECT count(*) FROM rep_historial_prestamo left join circ_ref_tipo_prestamo on rep_historial_prestamo.tipo_prestamo = circ_ref_tipo_prestamo.id_tipo_prestamo WHERE circ_ref_tipo_prestamo.codigo_disponibilidad = 'CIRC0000' AND rep_historial_prestamo.fecha_devolucion BETWEEN  ? AND ? ");
-    $sth->bind_param(1, $ya);
-    $sth->bind_param(2, $yb);
+    my $sth=$dbh->prepare("SELECT count(*) FROM rep_historial_prestamo left join circ_ref_tipo_prestamo on rep_historial_prestamo.tipo_prestamo = circ_ref_tipo_prestamo.id_tipo_prestamo WHERE circ_ref_tipo_prestamo.codigo_disponibilidad = 'CIRC0000' AND rep_historial_prestamo.fecha_devolucion like '$year%'");
     $sth->execute();
 
 
@@ -5396,9 +5390,7 @@ sub datosEstadisticosUNLP{
     $sth->finish;
 
     #Prestamos sala
-    my $sth=$dbh->prepare("SELECT count(*) FROM rep_historial_prestamo left join circ_ref_tipo_prestamo on rep_historial_prestamo.tipo_prestamo = circ_ref_tipo_prestamo.id_tipo_prestamo WHERE circ_ref_tipo_prestamo.codigo_disponibilidad = 'CIRC0001' AND rep_historial_prestamo.fecha_devolucion BETWEEN  ? AND ? ");
-    $sth->bind_param(1, $ya);
-    $sth->bind_param(2, $yb);
+    my $sth=$dbh->prepare("SELECT count(*) FROM rep_historial_prestamo left join circ_ref_tipo_prestamo on rep_historial_prestamo.tipo_prestamo = circ_ref_tipo_prestamo.id_tipo_prestamo WHERE circ_ref_tipo_prestamo.codigo_disponibilidad = 'CIRC0001' AND rep_historial_prestamo.fecha_devolucion like '$year%' ");
     $sth->execute();
 
 
@@ -5415,9 +5407,7 @@ sub datosEstadisticosUNLP{
             LEFT JOIN cat_registro_marc_n3 ON rep_historial_prestamo.id3 = cat_registro_marc_n3.id
             WHERE circ_ref_tipo_prestamo.codigo_disponibilidad = 'CIRC0000' 
             AND cat_registro_marc_n3.template IN ('LIB','TES','FOT')     
-            AND rep_historial_prestamo.fecha_devolucion BETWEEN  ? AND ? ");
-    $sth->bind_param(1, $ya);
-    $sth->bind_param(2, $yb);
+            AND rep_historial_prestamo.fecha_devolucion like '$year%' ");
     $sth->execute();
 
     if (my $cantidad_prestamos_domicilio_monografia = $sth->fetchrow_array){
@@ -5432,9 +5422,8 @@ sub datosEstadisticosUNLP{
             LEFT JOIN cat_registro_marc_n3 ON rep_historial_prestamo.id3 = cat_registro_marc_n3.id
             WHERE circ_ref_tipo_prestamo.codigo_disponibilidad = 'CIRC0001' 
             AND cat_registro_marc_n3.template IN ('LIB','TES','FOT')     
-            AND rep_historial_prestamo.fecha_devolucion BETWEEN  ? AND ? ");
-    $sth->bind_param(1, $ya);
-    $sth->bind_param(2, $yb);
+            AND rep_historial_prestamo.fecha_devolucion like '$year%' ");
+
     $sth->execute();
 
 
@@ -5451,9 +5440,7 @@ sub datosEstadisticosUNLP{
             LEFT JOIN cat_registro_marc_n3 ON rep_historial_prestamo.id3 = cat_registro_marc_n3.id
             WHERE circ_ref_tipo_prestamo.codigo_disponibilidad = 'CIRC0000' 
             AND cat_registro_marc_n3.template = 'REV'     
-            AND rep_historial_prestamo.fecha_devolucion BETWEEN  ? AND ? ");
-    $sth->bind_param(1, $ya);
-    $sth->bind_param(2, $yb);
+            AND rep_historial_prestamo.fecha_devolucion like '$year%' ");
     $sth->execute();
 
 
@@ -5469,9 +5456,8 @@ sub datosEstadisticosUNLP{
             LEFT JOIN cat_registro_marc_n3 ON rep_historial_prestamo.id3 = cat_registro_marc_n3.id
             WHERE circ_ref_tipo_prestamo.codigo_disponibilidad = 'CIRC0001' 
             AND cat_registro_marc_n3.template = 'REV'   
-            AND rep_historial_prestamo.fecha_devolucion BETWEEN  ? AND ? ");
-    $sth->bind_param(1, $ya);
-    $sth->bind_param(2, $yb);
+            AND rep_historial_prestamo.fecha_devolucion  like '$year%' ");
+
     $sth->execute();
 
     if (my $cantidad_prestamos_sala_revista = $sth->fetchrow_array){
@@ -5487,9 +5473,8 @@ sub datosEstadisticosUNLP{
             LEFT JOIN cat_registro_marc_n3 ON rep_historial_prestamo.id3 = cat_registro_marc_n3.id
             WHERE circ_ref_tipo_prestamo.codigo_disponibilidad = 'CIRC0000' 
             AND cat_registro_marc_n3.template NOT IN ('LIB','TES','FOT', 'REV')     
-            AND rep_historial_prestamo.fecha_devolucion BETWEEN  ? AND ? ");
-    $sth->bind_param(1, $ya);
-    $sth->bind_param(2, $yb);
+            AND rep_historial_prestamo.fecha_devolucion like '$year%' ");
+
     $sth->execute();
 
     if (my $cantidad_prestamos_domicilio_otros = $sth->fetchrow_array){
@@ -5504,9 +5489,8 @@ sub datosEstadisticosUNLP{
             LEFT JOIN cat_registro_marc_n3 ON rep_historial_prestamo.id3 = cat_registro_marc_n3.id
             WHERE circ_ref_tipo_prestamo.codigo_disponibilidad = 'CIRC0001' 
             AND cat_registro_marc_n3.template NOT IN ('LIB','TES','FOT', 'REV')   
-            AND rep_historial_prestamo.fecha_devolucion BETWEEN  ? AND ? ");
-    $sth->bind_param(1, $ya);
-    $sth->bind_param(2, $yb);
+            AND rep_historial_prestamo.fecha_devolucion like '$year%'");
+
     $sth->execute();
 
     if (my $cantidad_prestamos_sala_otros = $sth->fetchrow_array){
@@ -5517,13 +5501,8 @@ sub datosEstadisticosUNLP{
 
     #Consultas OPAC
     
-    my $yba=$year+'-01-01 00:00:00';
-    my $ybb=$year+'-12-31 23:59:59';
-    
     #Socios
-    my $sth=$dbh->prepare("SELECT COUNT(*)  FROM rep_busqueda WHERE nro_socio IS NOT NULL AND fecha BETWEEN  ? AND ? ");
-    $sth->bind_param(1, $yba);
-    $sth->bind_param(2, $ybb);
+    my $sth=$dbh->prepare("SELECT COUNT(*)  FROM rep_busqueda WHERE nro_socio IS NOT NULL AND fecha like '$year%'");
     $sth->execute();
 
     if (my $cantidad_busquedas_socios = $sth->fetchrow_array){
@@ -5532,9 +5511,7 @@ sub datosEstadisticosUNLP{
     $sth->finish;
 
     #No Socios
-    my $sth=$dbh->prepare("SELECT COUNT(*)  FROM rep_busqueda WHERE nro_socio IS NULL AND fecha BETWEEN  ? AND ? ");
-    $sth->bind_param(1, $yba);
-    $sth->bind_param(2, $ybb);
+    my $sth=$dbh->prepare("SELECT COUNT(*)  FROM rep_busqueda WHERE nro_socio IS NULL AND fecha like '$year%' ");
     $sth->execute();
 
 
@@ -5544,12 +5521,10 @@ sub datosEstadisticosUNLP{
     $sth->finish;
 
 
-    my $sth=$dbh->prepare("SELECT usr_ref_categoria_socio.description as categoria, count(*) as cantidad FROM usr_socio left join usr_ref_categoria_socio on usr_socio.id_categoria = usr_ref_categoria_socio.id WHERE fecha_alta BETWEEN  ? AND ? group by usr_socio.id_categoria");
-    $sth->bind_param(1, $ya);
-    $sth->bind_param(2, $yb);
+    my $sth=$dbh->prepare("SELECT usr_ref_categoria_socio.description as categoria, count(*) as cantidad FROM usr_socio left join usr_ref_categoria_socio on usr_socio.id_categoria = usr_ref_categoria_socio.id WHERE fecha_alta like '$year%' group by usr_socio.id_categoria");
     $sth->execute();
 
-   if (my $categorias_socios_registrados = $sth->fetchall_arrayref){
+   if (my $categorias_socios_registrados = $sth->fetchrow_arrayref){
         $result_hash{'categorias_socios_registrados'}=$categorias_socios_registrados;
     }
     $sth->finish;
