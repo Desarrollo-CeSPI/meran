@@ -58,9 +58,9 @@ print "- CANTIDAD DE BUSQUEDAS NO SOCIOS: ".$result_hash->{'cantidad_busquedas_n
 
 print "USUARIOS REGISTRADO: \n";
 
-
-foreach my $cat ($result_hash->{'categorias_socios_registrados'}) {
-	print "- ".$cat->{'categoria'}." = ".$cat->{'cantidad'}." \n";
+if ($result_hash->{'categorias_socios_registrados'}){
+	foreach my $cat ($result_hash->{'categorias_socios_registrados'}) {
+		print "- ".$cat->{'categoria'}." = ".$cat->{'cantidad'}." \n";
+	}
 }
-
 print "============================================================================================================================================= \n";

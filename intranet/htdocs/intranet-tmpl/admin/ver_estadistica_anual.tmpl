@@ -95,11 +95,11 @@
       <dt>No Socios:<dt><dd>[% estadisticas_hash.item('cantidad_busquedas_no_socios') %]</dd>
     </dl>
   </p>
-    <h5>USUARIOS REGISTRADOS</h5>
+    <h5>USUARIOS REGISTRADOS </h5>
   <p>
     <dl>
       [% FOREACH cat IN estadisticas_hash.item('categorias_socios_registrados') %]
-        <dt>[% cat.categoria %]<dt><dd>[% cat.cantidad %]</dd>
+        <dt>[% cat.first %]<dt><dd>[% cat.last %]</dd>
       [% END %]
     </dl>
   </p>
