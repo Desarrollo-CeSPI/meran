@@ -137,15 +137,17 @@ sub guardarRealmente{
                 C4::AR::Estantes::agregarContenidoAEstante($estante_id, $id2);                
             }
 
-            eval {
-                C4::AR::Sphinx::generar_indice($catRegistroMarcN2->getId1, 'R_PARTIAL', 'INSERT');
-                #ahora el indice se encuentra DESACTUALIZADO
-                C4::AR::Preferencias::setVariable('indexado', 0, $db);
-            };    
-            if ($@){
-                C4::AR::Debug::debug("ERROR AL REINDEXAR EN EL REGISTRO: ".$catRegistroMarcN2->getId1()." !!! ( ".$@." )");
+            unless($params->{'no_index'}){
+                eval {
+                    C4::AR::Sphinx::generar_indice($catRegistroMarcN2->getId1, 'R_PARTIAL', 'INSERT');
+                    #ahora el indice se encuentra DESACTUALIZADO
+                    C4::AR::Preferencias::setVariable('indexado', 0, $db);
+                };    
+                if ($@){
+                    C4::AR::Debug::debug("ERROR AL REINDEXAR EN EL REGISTRO: ".$catRegistroMarcN2->getId1()." !!! ( ".$@." )");
+                }
             }
-
+            
             #se cambio el permiso con exito
             $msg_object->{'error'} = 0;
             C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U369', 'params' => [$id2]} ) ;
