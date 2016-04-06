@@ -23,6 +23,8 @@
 
 use strict;
 require Exporter;
+use lib qw(/usr/local/share/meran/main/intranet/modules/ /usr/local/share/meran/main/intranet/modules/C4/Share/share/perl/5.10.1/ /usr/local/share/meran/main/intranet/modules/C4/Share/lib/perl/5.10.1/ /usr/local/share/meran/main/intranet/modules/C4/Share/share/perl/5.10/ /usr/local/share/meran/main/intranet/modules/C4/Share/share/perl/5.10.1/ /usr/local/share/meran/main/intranet/modules/C4/Share/lib/perl5/);
+
 use C4::Context;
 use C4::AR::Utilidades;
 
@@ -54,4 +56,11 @@ print "BUSQUEDAS: \n";
 print "- CANTIDAD DE BUSQUEDAS SOCIOS: ".$result_hash->{'cantidad_busquedas_socios'}." \n";
 print "- CANTIDAD DE BUSQUEDAS NO SOCIOS: ".$result_hash->{'cantidad_busquedas_no_socios'}." \n";
 
+print "USUARIOS REGISTRADO: \n";
+
+if ($result_hash->{'categorias_socios_registrados'}){
+	foreach my $cat ($result_hash->{'categorias_socios_registrados'}) {
+		print "- ".$cat->{'categoria'}." = ".$cat->{'cantidad'}." \n";
+	}
+}
 print "============================================================================================================================================= \n";

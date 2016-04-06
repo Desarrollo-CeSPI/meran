@@ -157,15 +157,18 @@ sub guardarRealmente{
             $db->commit;
             #recupero el id1 recien agregado
             $id1 = $catRegistroMarcN1->getId1;
-            eval {
-                C4::AR::Sphinx::generar_indice($id1, 'R_PARTIAL', 'INSERT');
-                #ahora el indice se encuentra DESACTUALIZADO
-                C4::AR::Preferencias::setVariable('indexado', 0, $db);
-            };
-            if ($@){
-                C4::AR::Debug::debug("ERROR AL REINDEXAR EN EL REGISTRO: ".$id1." !!! ( ".$@." )");
-            }
 
+            unless($params->{'no_index'}){
+                eval {
+                    C4::AR::Sphinx::generar_indice($id1, 'R_PARTIAL', 'INSERT');
+                    #ahora el indice se encuentra DESACTUALIZADO
+                    C4::AR::Preferencias::setVariable('indexado', 0, $db);
+                };
+                if ($@){
+                    C4::AR::Debug::debug("ERROR AL REINDEXAR EN EL REGISTRO: ".$id1." !!! ( ".$@." )");
+                }
+            }
+            
             #se cambio el permiso con exito
             $msg_object->{'error'} = 0;
             C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U368', 'params' => [$id1]} ) ;

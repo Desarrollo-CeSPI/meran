@@ -20,6 +20,7 @@
 # You should have received a copy of the GNU General Public License
 # along with Meran.  If not, see <http://www.gnu.org/licenses/>.
 #
+use lib qw(/usr/local/share/meran/main/intranet/modules/ /usr/local/share/meran/main/intranet/modules/C4/Share/share/perl/5.10.1/ /usr/local/share/meran/main/intranet/modules/C4/Share/lib/perl/5.10.1/ /usr/local/share/meran/main/intranet/modules/C4/Share/share/perl/5.10/ /usr/local/share/meran/main/intranet/modules/C4/Share/share/perl/5.10.1/ /usr/local/share/meran/main/intranet/modules/C4/Share/lib/perl5/);
 
 use DBI;
 
@@ -36,6 +37,7 @@ use C4::Modelo::CatRegistroMarcN2Analitica;
 
 my $op = $ARGV[0] || 0;
 my $from = $ARGV[1] || 0;
+my $to = $ARGV[2] || 0;
 
 my $db_driver =  "mysql";
 my $db_name   = 'calp_paradox';
@@ -154,8 +156,13 @@ sub migrar {
 	}
 
 	if ($from){
-		$where .= " AND RecNo > ".$from ;
+		$where .= " AND RecNo >= ".$from ;
 	}
+
+	if ($to){
+		$where .= " AND RecNo <= ".$to ;
+	}
+
 	#Leemos de la tabla de Materiales los que tienen nivel bibliográfico M
 	my $material_calp=$db_calp->prepare($sql.$where);
 	$material_calp->execute();
@@ -197,90 +204,92 @@ sub migrar {
         	#Si es una Revista hay que generar el estado de colección
         	if($template eq 'REV'){
         		#Revistas
+        		if ($material->{'NivelBibliografico'} ne 'S'){
+        			# Los que tienen NB = S no poseen datos del ejemplar
+	        		if (!scalar(@$ejemplares)){
+	        			#Revisar si tiene ejemplar, sino crear uno
+						my @nuevo_ejemplar=();
+						#UI
+						push(@nuevo_ejemplar, ['995','c', 'GL']);
+						push(@nuevo_ejemplar, ['995','d', 'GL']);
+						# Las revistas van con disponiblidad de sala de lectura ticket #10078
+						push(@nuevo_ejemplar, ['995','o', 'CIRC0001']);
+						push(@nuevo_ejemplar, ['995','e', 'STATE002']);
+						# La signatura en las revistas se encuentra en el CODEN. Ticket #9642
+						push(@nuevo_ejemplar, ['995','t', $material->{'CODEN'}]); 
+						$ejemplares->[0] = \@nuevo_ejemplar;
+					}
 
-        		if (!scalar(@$ejemplares)){
-        			#Revisar si tiene ejemplar, sino crear uno
-					my @nuevo_ejemplar=();
-					#UI
-					push(@nuevo_ejemplar, ['995','c', 'BLGL']);
-					push(@nuevo_ejemplar, ['995','d', 'BLGL']);
-					# Las revistas van con disponiblidad de sala de lectura ticket #10078
-					push(@nuevo_ejemplar, ['995','o', 'CIRC0001']);
-					push(@nuevo_ejemplar, ['995','e', 'STATE002']);
-					# La signatura en las revistas se encuentra en el CODEN. Ticket #9642
-					push(@nuevo_ejemplar, ['995','t', $material->{'CODEN'}]); 
-					$ejemplares->[0] = \@nuevo_ejemplar;
-				}
+	        	
 
-        		#print  "REVISTAS v $volumen n $fasciculos \n";
+	        		my $fasciculos = $material->{'Serie_NumDesde'};
+			    	if($material->{'Serie_NumHasta'}){
+			    		my $fasciculos .= "-".$material->{'Serie_NumHasta'};
+			    	}
+			    	my $volumen = $material->{'Serie_Volumen'};
 
-        		my $fasciculos = $material->{'Serie_NumDesde'};
-		    	if($material->{'Serie_NumHasta'}){
-		    		my $fasciculos .= "-".$material->{'Serie_NumHasta'};
-		    	}
-		    	my $volumen = $material->{'Serie_Volumen'};
+	        		my @estadoDeColeccion = _generarNumerosDeVolumen($volumen,$fasciculos);
+	        	
+	            	foreach my $rev (@estadoDeColeccion){
+	                    my $marc_revista =  $marc_record_n2->clone();
+	                    my $field863 = $marc_revista->field('863');
+	                    if($field863){
+	                    	if ($field863->subfield('b')) {
+	                    		$field863->update( 'b' => $rev->{'numero'}.' '.$field863->subfield( 'b' ) );
+	                    	}else{
+	                    		$field863->add_subfields('b' => $rev->{'numero'}); 
+	                    	}
+	                    } else {
+	                    	$field863 = MARC::Field->new('863', '', '' ,'b' => $rev->{'numero'});
+	                    	$marc_revista->add_fields($field863);
+	                    }
 
-        		my @estadoDeColeccion = _generarNumerosDeVolumen($volumen,$fasciculos);
-        	
-            	foreach my $rev (@estadoDeColeccion){
-                    my $marc_revista =  $marc_record_n2->clone();
-                    my $field863 = $marc_revista->field('863');
-                    if($field863){
-                    	if ($field863->subfield('b')) {
-                    		$field863->update( 'b' => $rev->{'numero'}.' '.$field863->subfield( 'b' ) );
-                    	}else{
-                    		$field863->add_subfields('b' => $rev->{'numero'}); 
-                    	}
-                    } else {
-                    	$field863 = MARC::Field->new('863', '', '' ,'b' => $rev->{'numero'});
-                    	$marc_revista->add_fields($field863);
-                    }
+	                	my ($msg_object2,$id1,$id2) =  guardarNivel2DeImportacion($id1,$marc_revista,$template);
 
-                	my ($msg_object2,$id1,$id2) =  guardarNivel2DeImportacion($id1,$marc_revista,$template);
+		            	if (!$msg_object2->{'error'}){
+		            		$grupos_creados ++;
 
-	            	if (!$msg_object2->{'error'}){
-	            		$grupos_creados ++;
+		            		#Analíticas
+		            		my $cant_analiticas = agregarAnaliticas($id1,$id2,$material->{'RecNo'});
+		            		$analiticas_creadas += $cant_analiticas;
 
-	            		#Analíticas
-	            		my $cant_analiticas = agregarAnaliticas($id1,$id2,$material->{'RecNo'});
-	            		$analiticas_creadas += $cant_analiticas;
+		            	    #print "Se crearon $cant_analiticas analíticas de ".$material->{'RecNo'}."\n";
 
-	            	#	print "Se crearon $cant_analiticas analíticas \n";
+		                	#Ejemplares
+							foreach my $ejemplar (@$ejemplares){
+								my $marc_record_n3 = $marc_record_n3_base->clone();
+								foreach my $campo (@$ejemplar){
+								
+									if($campo->[2]){
+										  if ($marc_record_n3->field($campo->[0])){
+										  	#Existe el campo agrego subcampo
+										  	$marc_record_n3->field($campo->[0])->add_subfields($campo->[1] => $campo->[2]);
+										  }
+										  else{
+										  	#No existe el campo
+											my $field= MARC::Field->new($campo->[0], '', '', $campo->[1] => $campo->[2]);
+						    				$marc_record_n3->append_fields($field);
+										  }
+									}
+								}
 
-	                	#Ejemplares
-						foreach my $ejemplar (@$ejemplares){
-							my $marc_record_n3 = $marc_record_n3_base->clone();
-							foreach my $campo (@$ejemplar){
-							
-								if($campo->[2]){
-									  if ($marc_record_n3->field($campo->[0])){
-									  	#Existe el campo agrego subcampo
-									  	$marc_record_n3->field($campo->[0])->add_subfields($campo->[1] => $campo->[2]);
-									  }
-									  else{
-									  	#No existe el campo
-										my $field= MARC::Field->new($campo->[0], '', '', $campo->[1] => $campo->[2]);
-					    				$marc_record_n3->append_fields($field);
-									  }
+				                my ($msg_object3) = guardarNivel3DeImportacion($id1,$id2,$marc_record_n3,$template,'GL');
+								if (!$msg_object3->{'error'}){
+		            				$ejemplares_creados ++;
+								}else{
+									my $codMsg  = C4::AR::Mensajes::getFirstCodeError($msg_object3);
+	                				my $mensaje = C4::AR::Mensajes::getMensaje($codMsg,'INTRA');
+	                				print ERROR "Error Revista: Agregando Nivel 3: ".$material->{'Titulo'}." registro número: ".$material->{'RecNo'}." número: ".$rev->{'numero'}." (ERROR: $mensaje ) \n";
 								}
 							}
-
-			                my ($msg_object3) = guardarNivel3DeImportacion($id1,$id2,$marc_record_n3,$template,'BLGL');
-							if (!$msg_object3->{'error'}){
-	            				$ejemplares_creados ++;
-							}else{
-								my $codMsg  = C4::AR::Mensajes::getFirstCodeError($msg_object3);
-                				my $mensaje = C4::AR::Mensajes::getMensaje($codMsg,'INTRA');
-                				print ERROR "Error Revista: Agregando Nivel 3: ".$material->{'Titulo'}." registro número: ".$material->{'RecNo'}." número: ".$rev->{'numero'}." (ERROR: $mensaje ) \n";
-							}
-						}
-	                }else{
-	                	#Logueo error
-	                	my $codMsg  = C4::AR::Mensajes::getFirstCodeError($msg_object2);
-                		my $mensaje = C4::AR::Mensajes::getMensaje($codMsg,'INTRA');
-						print ERROR "Error Revista: Agregando Nivel 2: ".$material->{'Titulo'}." registro número: ".$material->{'RecNo'}." número: ".$rev->{'numero'}." (ERROR: $mensaje ) \n";
+		                }else{
+		                	#Logueo error
+		                	my $codMsg  = C4::AR::Mensajes::getFirstCodeError($msg_object2);
+	                		my $mensaje = C4::AR::Mensajes::getMensaje($codMsg,'INTRA');
+							print ERROR "Error Revista: Agregando Nivel 2: ".$material->{'Titulo'}." registro número: ".$material->{'RecNo'}." número: ".$rev->{'numero'}." (ERROR: $mensaje ) \n";
+		                }
 	                }
-                }
+            	}
         	}
         	elsif($template eq 'LIB'){
         		#Libros
@@ -313,7 +322,7 @@ sub migrar {
 
 						#print $marc_record_n3->as_formatted;
 
-		                my ($msg_object3) = guardarNivel3DeImportacion($id1,$id2,$marc_record_n3,$template,'BLGL');
+		                my ($msg_object3) = guardarNivel3DeImportacion($id1,$id2,$marc_record_n3,$template,'GL');
 		     #           print "Nivel 3 creado ?? ".$msg_object3->{'error'}."\n";
 		     			if (!$msg_object3->{'error'}){
 	            				$ejemplares_creados ++;
@@ -533,7 +542,7 @@ sub guardarNivel1DeImportacion{
    my $params_n1;
     $params_n1->{'id_tipo_doc'} = $template;
     $params_n1->{'infoArrayNivel1'} = $infoArrayNivel1;
-
+    $params_n1->{'no_index'}=1;
    if(($template eq 'ANA')&&($id2_padre)){
     	$params_n1->{'id2_padre'} = $id2_padre;
    }
@@ -553,6 +562,7 @@ sub guardarNivel2DeImportacion{
     $params_n2->{'tipo_ejemplar'} = $template;
     $params_n2->{'infoArrayNivel2'} = $infoArrayNivel2;
     $params_n2->{'id1'}=$id1;
+    $params_n2->{'no_index'}=1;
 
     my ($msg_object2,$id1,$id2) = C4::AR::Nivel2::t_guardarNivel2($params_n2);
     return ($msg_object2,$id1,$id2);
@@ -573,7 +583,7 @@ sub guardarNivel3DeImportacion{
     $params_n3->{'ui_duenio'}=$ui;
     $params_n3->{'cantEjemplares'} = 1;
     $params_n3->{'responsable'} = 'meranadmin'; #No puede no tener un responsable
-
+    $params_n3->{'no_index'}=1;
     #Hay que autogenerar el barcode o no???
     $params_n3->{'esPorBarcode'} = 'true';
     
@@ -894,7 +904,8 @@ sub generaCodigoBarraFromMarcRecord{
 			['245','a',$material->{'Titulo'}],
 			['245','b',$material->{'TituloUniforme'}],
 			['310','a',$material->{'Frecuencia'}],
-			['520','a',$material->{'Resumen'}],	
+			['520','a',$material->{'Resumen'}],
+			['500','a',$nota],
 			['246','a',$material->{'TituloOriginal'}],	
 			['030','a',$material->{'CODEN'}],
 			);
@@ -909,7 +920,6 @@ sub generaCodigoBarraFromMarcRecord{
 			['260','a',$material->{'Lugar'}],	
 			['260','c',$fecha_edicion],
 			['300','c',$dimension],
-      ['500','a',$nota],
 			['020','a',$material->{'ISBN'}],
 			
 			#Revista
@@ -969,6 +979,9 @@ sub generaCodigoBarraFromMarcRecord{
 			['900','h',$material->{'FechaUltModificacion'}],
 			);
 		
+		if(($template eq "REV")&&($material->{'CODEN'})){
+			push (@campos_n3,['995','t',$material->{'CODEN'}]);
+		}
 		#Buscamos Editores
 
 		my @editores = ($material->{'CodEditor'}, $material->{'CodEditor2'}, $material->{'CodEditor3'});
@@ -1084,19 +1097,22 @@ sub generaCodigoBarraFromMarcRecord{
 		while (my $ejemplar=$ejemplares_calp->fetchrow_hashref) {
 				my @nuevo_ejemplar=();
 				#UI
-				push(@nuevo_ejemplar, ['995','c', 'BLGL']);
-				push(@nuevo_ejemplar, ['995','d', 'BLGL']);
+				push(@nuevo_ejemplar, ['995','c', 'GL']);
+				push(@nuevo_ejemplar, ['995','d', 'GL']);
 
 				push(@nuevo_ejemplar, ['995','f', $ejemplar->{'Inventario'}]);
-				push(@nuevo_ejemplar, ['995','t', $ejemplar->{'SignaturaTopografica'}]);
+
 
 				if($template eq 'REV') {
 					#Revistas siempre de sala
 					push(@nuevo_ejemplar, ['995','o', 'CIRC0001']);
+					push(@nuevo_ejemplar, ['995','t', $material->{'CODEN'}]);
 				}
 				else {
+					push(@nuevo_ejemplar, ['995','t', $ejemplar->{'SignaturaTopografica'}]);
 					push(@nuevo_ejemplar, ['995','o', getDisponibilidad($ejemplar->{'CodEstDisponibilidad'})]);
 				}
+
 				push(@nuevo_ejemplar, ['995','e', getEstado($ejemplar->{'CodEstDisponibilidad'},$ejemplar->{'Disponible'})]);
 				push(@nuevo_ejemplar, ['995','p', $ejemplar->{'Precio'}]);
 				push(@nuevo_ejemplar, ['995','u', $ejemplar->{'Observaciones'}]);
