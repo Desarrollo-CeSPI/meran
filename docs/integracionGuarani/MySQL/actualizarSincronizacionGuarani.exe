@@ -1,4 +1,4 @@
 #!/bin/sh
-cd /home/soporte/Conjunta
-sed 's/\\|//' < guarani.txt > guaraniLimpio.txt
-./sincronizarUsuariosGuarani.pl guaraniLimpio.txt 0 DAV
+cd /home/guarani/
+sed 's/\\|//' < salida > guaraniLimpio.txt
+bash sincronizarUsuariosGuarani.pl guaraniLimpio.txt 0 DAQ 1
