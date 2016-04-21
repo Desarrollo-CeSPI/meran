@@ -149,6 +149,13 @@ sub getRegistroMARCResultado{
         }
     }
 
+    #Si no tiene ejemplares agrego un dato para que se genere un ejemplar
+  #  if(!$marc_record->field('995')){
+      my $ind1='#';
+      my $ind2='#';
+      $marc_record->append_fields(MARC::Field->new('995', $ind1, $ind2,'m' => "-"));
+  #  }
+
     return $marc_record;
 
 }

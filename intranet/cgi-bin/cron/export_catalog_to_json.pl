@@ -20,6 +20,8 @@
 # You should have received a copy of the GNU General Public License
 # along with Meran.  If not, see <http://www.gnu.org/licenses/>.
 #
+use lib qw(/usr/local/share/meran/dev/intranet/modules/ /usr/local/share/meran/main/intranet/modules/C4/Share/share/perl/5.10.1/ /usr/local/share/meran/main/intranet/modules/C4/Share/lib/perl/5.10.1/ /usr/local/share/meran/main/intranet/modules/C4/Share/share/perl/5.10/ /usr/local/share/meran/main/intranet/modules/C4/Share/share/perl/5.10.1/ /usr/local/share/meran/main/intranet/modules/C4/Share/lib/perl5/);
+
 use JSON::XS;
 use MARC::Record;
 use MARC::File::JSON;
@@ -38,7 +40,7 @@ my $nivel1_array_ref = C4::AR::Nivel1::getNivel1Completo();
 my @n1_json=();
 
 foreach my $n1 (@$nivel1_array_ref){
-
+  eval{
     #obtengo el marc_record
     my $marc_record_n1  = $n1->getMarcRecordObject();
 
@@ -57,27 +59,27 @@ foreach my $n1 (@$nivel1_array_ref){
 
       foreach my $n3 (@$ejemplares){
           my $marc_record_n3  =$n3->getMarcRecordObject();
-          my $marc_record_n3_datos = getMarcRecordConDatos($marc_record_n3,$n3->getTemplate);
-          my $json_n3 = $marc_record_n3_datos->as_json;
+          #my $marc_record_n3_datos = getMarcRecordConDatos($marc_record_n3,$n3->getTemplate);
+          my $json_n3 = $marc_record_n3->as_json;
           push @n3_json, JSON::XS->new->utf8->decode($json_n3);
       }
 
-      my $marc_record_n2_datos = getMarcRecordConDatos($marc_record_n2,$n2->getTemplate);
-      my $json_n2 = $marc_record_n2_datos->as_json;
+      #my $marc_record_n2_datos = getMarcRecordConDatos($marc_record_n2,$n2->getTemplate);
+      my $json_n2 = $marc_record_n2->as_json;
       my $n2_json = JSON::XS->new->utf8->decode($json_n2);
       $n2_json->{'items'} = \@n3_json;
       push @n2_json, $n2_json;
     }
 
-    my $marc_record_n1_datos = getMarcRecordConDatos($marc_record_n1,$n1->getTemplate);
-    my $json_n1 = $marc_record_n1_datos->as_json;
+    #my $marc_record_n1_datos = getMarcRecordConDatos($marc_record_n1,$n1->getTemplate);
+    my $json_n1 = $marc_record_n1->as_json;
     my $n1_json = JSON::XS->new->utf8->decode($json_n1);
     $n1_json->{'editions'} = \@n2_json;
     push @n1_json, $n1_json;
 
     print JSON::XS->new->utf8->encode($n1_json);
     print "\n";
-
+  }
 } #END foreach my $n1 ($nivel1_array_ref)
 
 
