@@ -207,9 +207,9 @@ sub guardarRegistrosNuevaImportacion {
 
         my $ss = $ref->[1];
         foreach my $row (1 .. $ss->{maxrow}) {
-            
+
             my @fila = Spreadsheet::Read::row($ss,$row);
-            
+
             if(!$primera_fila){
                 my $marc_record = MARC::Record->new();
                 my $campo = 100;
@@ -1892,7 +1892,7 @@ sub procesarRevistas {
                             #Parche: FAU pide agregar el nro de revista a la sigantura
                             if (C4::AR::Preferencias::getValorPreferencia("defaultUI") eq "DAQ"){
                                 $signa .= " ".$rev->{'numero'};
-                            }                            
+                            }
                             my $marc_record_n3 = $marc_record_ejemplares_base->clone();
 
                             if (!$marc_record_n3->field('995')){
@@ -2103,7 +2103,7 @@ sub procesarRevistas {
 
  #               C4::AR::Debug::debug("COLECCION  ==>  PROCESO : $numeros \n");
 	 	my @numeros_separados = split(/,|-/, $numeros );
-	
+
 
                 foreach my $n (@numeros_separados){
                     my $numero_limpio =C4::AR::Utilidades::trim($n);
