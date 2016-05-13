@@ -2371,8 +2371,11 @@ sub cambiarPasswordForzadoEnMetodo{
 	$isReset = $isReset || 0;
 	
 	switch ($auth_method){
+
 		case "ldap" {
-				C4::AR::Authldap::setearPassword($socio,$password_md5_b64,$isReset);   
+        if(C4::AR::Preferencias::getValorPreferencia("ldapenabled")){
+          C4::AR::Authldap::setearPassword($socio,$password_md5_b64,$isReset);   
+        }
 		}
 		case "mysql" {
 				$password_md5_b64 =  C4::AR::Auth::hashear_password($password_md5_b64,'SHA_256_B64');
@@ -2381,16 +2384,13 @@ sub cambiarPasswordForzadoEnMetodo{
 
 		else{}
 	}
-	
 		#Se limpian los login_attempts
 		eval{
 			
-			C4::AR::Debug::debug("\n\n\n\n AHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH ".$socio->getNro_socio."\n\n\n\n");
 			my $attempts_object = _getAttemptsObject($socio->getNro_socio);    
 			
 			$attempts_object->reset();
 		}
-		
 }
 
 sub printValue{
