@@ -460,7 +460,7 @@ sub uploadDocument {
 
     if (C4::AR::Preferencias::getPreferencia("e_documents")){
 
-        my @extensiones_permitidas=("bmp","jpg","gif","png","jpeg","doc","docx","odt","ods","pdf","xls","xlsx","zip","rar","mp3");
+        my @extensiones_permitidas=("bmp","jpg","gif","png","jpeg","doc","docx","odt","ods","pdf","xls","xlsx","zip","rar","mp3", "epub");
         my $size = scalar(@nombreYextension) - 1;
         my $ext= @nombreYextension[$size];
 
