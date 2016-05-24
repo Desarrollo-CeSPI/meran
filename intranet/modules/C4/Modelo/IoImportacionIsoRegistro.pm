@@ -796,6 +796,7 @@ sub guardarNivel1DeImportacion{
    my $params_n1;
     $params_n1->{'id_tipo_doc'} = $nivel1->{'nivel1_template'};
     $params_n1->{'infoArrayNivel1'} = $infoArrayNivel1;
+    $params_n1->{'no_index'}=1;
    my ($msg_object, $id1) = C4::AR::Nivel1::t_guardarNivel1($params_n1);
 
     return ($msg_object,$id1);
@@ -812,6 +813,7 @@ sub guardarNivel2DeImportacion{
     $params_n2->{'tipo_ejemplar'} = $nivel2->{'nivel2_template'};
     $params_n2->{'infoArrayNivel2'} = $infoArrayNivel2;
     $params_n2->{'id1'}=$id1;
+    $params_n2->{'no_index'}=1;
     my ($msg_object2,$id1,$id2) = C4::AR::Nivel2::t_guardarNivel2($params_n2);
      # Hay que agregar el indice aca
      #  $nivel2->{'tiene_indice'}
@@ -830,7 +832,7 @@ sub guardarNivel3DeImportacion{
     $params_n3->{'id2'}=$id2;
     $params_n3->{'ui_origen'}=$nivel3->{'ui_origen'};
     $params_n3->{'ui_duenio'}=$nivel3->{'ui_duenio'};
-
+    $params_n3->{'no_index'}=1;
     $params_n3->{'ui_origen'}=$nivel3->{'ui_origen'};
     $params_n3->{'ui_duenio'}=$nivel3->{'ui_duenio'};
 

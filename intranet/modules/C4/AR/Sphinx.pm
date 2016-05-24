@@ -32,11 +32,11 @@ use vars qw(@EXPORT @ISA);
 sub reindexar{
     C4::AR::Debug::debug("Sphinx => reindexar => run_indexer => indexado => ".C4::AR::Preferencias::getValorPreferencia('indexado'));
 
-#    if(C4::AR::Preferencias::getValorPreferencia('indexado')){
- #       C4::AR::Debug::debug("Sphinx => reindexar => EL INDICE SE ENCUENTRA ACTUALIZADO!!!!!!!");
-  #  } else {
-	C4::AR::Debug::debug("Sphinx => reindexar => EL INDICE SE ENCUENTRA DESACTUALIZADO!!!!!!!!");
-	my $mgr = Sphinx::Manager->new({ config_file => C4::Context->config("sphinx_conf") , bindir => C4::Context->config("sphinx_bin_dir"), searchd_bin=> C4::Context->config("sphinx_bin_dir")});
+  if(C4::AR::Preferencias::getValorPreferencia('indexado')){
+       C4::AR::Debug::debug("Sphinx => reindexar => EL INDICE SE ENCUENTRA ACTUALIZADO!!!!!!!");
+  } else {
+	 C4::AR::Debug::debug("Sphinx => reindexar => EL INDICE SE ENCUENTRA DESACTUALIZADO!!!!!!!!");
+	 my $mgr = Sphinx::Manager->new({ config_file => C4::Context->config("sphinx_conf") , bindir => C4::Context->config("sphinx_bin_dir"), searchd_bin=> C4::Context->config("sphinx_bin_dir")});
         sphinx_start($mgr);
         my $index_to_use = C4::AR::Preferencias::getValorPreferencia("nombre_indice_sphinx") || 'test1';
         my @args;
@@ -48,7 +48,7 @@ sub reindexar{
         C4::AR::Debug::debug("Sphinx => reindexar => --all --ro/tate => ");
         C4::AR::Debug::debug("Sphinx => reindexando indice =>". $index_to_use);
         C4::AR::Preferencias::setVariable('indexado', 1);
-    # }
+    }
 
 }
 
