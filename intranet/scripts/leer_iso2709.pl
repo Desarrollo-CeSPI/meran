@@ -20,7 +20,9 @@
 # You should have received a copy of the GNU General Public License
 # along with Meran.  If not, see <http://www.gnu.org/licenses/>.
 #
+use lib qw(/usr/local/share/meran/dev/intranet/modules/ /usr/local/share/meran/main/intranet/modules/C4/Share/share/perl/5.10.1/ /usr/local/share/meran/main/intranet/modules/C4/Share/lib/perl/5.10.1/ /usr/local/share/meran/main/intranet/modules/C4/Share/share/perl/5.10/ /usr/local/share/meran/main/intranet/modules/C4/Share/share/perl/5.10.1/ /usr/local/share/meran/main/intranet/modules/C4/Share/lib/perl5/);
 
+    
 use C4::Modelo::IoImportacionIsoRegistro;
 use MARC::Moose::Record;
 use MARC::Moose::Reader::File::Isis;
@@ -95,7 +97,7 @@ my $reader = MARC::Moose::Reader::File::Isis->new(
              }
          }
        
-  print $marc_record->as_formatted();
+#  print $marc_record->as_formatted();
 #Se guarda!
                 my %parametros;
                 $parametros{'id_importacion_iso'}   = '2';

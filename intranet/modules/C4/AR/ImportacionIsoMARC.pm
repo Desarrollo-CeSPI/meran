@@ -1936,13 +1936,19 @@ sub procesarRevistas {
 
         #Ejemplo:
         # 1976(1-2); 1977(3-4-5-6-7-8); 1978(9/10-11-12-13-14); 1979(15-16)
-
+         my $anio = '';
         # C4::AR::Debug::debug("COLECCION  ==>  PROCESO : $volumenes \n");
-        while($estadoDeColeccionCompleto =~ /\s?(\d*\/?\d*|\s)\s*(\d*\-?\d*|\s)\s*\(([^\)]+)\);?/g) {
-           my $anio = $1;
+        while($estadoDeColeccionCompleto =~ /(?:\s?)(\d{4}\/?\d*)*(?:\s?)(\d*\-?\d*)(?:\s?)(?:\(([^\)]*)\))*;?/g) {
+           if($1) {
+            $anio = $1;
+            }
            my $volumen = $2;
            my $numeros = $3;
-           push( @estadoDeColeccion, _generarNumerosDeAnio(C4::AR::Utilidades::trim($anio),C4::AR::Utilidades::trim($volumen),C4::AR::Utilidades::trim($numeros)));
+
+           if ($1 || $2 || $3) {
+                       C4::AR::Debug::debug("COLECCION  ==>  PROCESO :$1 $2 $3 \n");
+                push( @estadoDeColeccion, _generarNumerosDeAnio(C4::AR::Utilidades::trim($anio),C4::AR::Utilidades::trim($volumen),C4::AR::Utilidades::trim($numeros)));
+            }
         }
 
         return  @estadoDeColeccion;
@@ -2026,7 +2032,7 @@ sub procesarRevistas {
 
             if ($numeros) {
 
- #               C4::AR::Debug::debug("COLECCION  ==>  PROCESO : $numeros \n");
+                C4::AR::Debug::debug("COLECCION  ==>  PROCESO : $numeros \n");
 
                 my @numeros_separados = split(',', $numeros );
 
@@ -2042,7 +2048,7 @@ sub procesarRevistas {
                             if (($ini < $fin)&&( ($fin - $ini) <= 365 )) {
 
                                 foreach my $ns ($ini..$fin) {
-  #                                  C4::AR::Debug::debug("COLECCION  ==>  AGREGA UNO DE SECUENCIA: $ns \n");
+                                    C4::AR::Debug::debug("COLECCION  ==>  AGREGA UNO DE SECUENCIA: $ns \n");
                                     my $numero_limpio =C4::AR::Utilidades::trim($ns);
                                     my %fasciculo=();
                                     $fasciculo{'volumen'} = $volumen;
@@ -2052,7 +2058,7 @@ sub procesarRevistas {
                             }
                             else{
                                 # error en orden de secuencia, lo agrego igual
-   #                             C4::AR::Debug::debug("COLECCION  ==>  ERROR EN ORDEN DE SECUENCIA $n => $ini <= $fin \n");
+                               C4::AR::Debug::debug("COLECCION  ==>  ERROR EN ORDEN DE SECUENCIA $n => $ini <= $fin \n");
                                 my $numero_limpio =C4::AR::Utilidades::trim($n);
                                      my %fasciculo=();
                                     $fasciculo{'volumen'} = $volumen;
@@ -2063,7 +2069,7 @@ sub procesarRevistas {
                         }
                         else{
                             #uno solo, es un error, lo agrego igual
-    #                        C4::AR::Debug::debug("COLECCION  ==>  ERROR: posee un - y existe un solo valor $n \n");
+                            C4::AR::Debug::debug("COLECCION  ==>  ERROR: posee un - y existe un solo valor $n \n");
                             my $numero_limpio =C4::AR::Utilidades::trim($n);
                             my %fasciculo=();
                             $fasciculo{'volumen'} = $volumen;
@@ -2073,7 +2079,7 @@ sub procesarRevistas {
 
                     }else{
                         #uno solo
-    #                     C4::AR::Debug::debug("COLECCION  ==>  AGREGA UNO: $n \n");
+                         C4::AR::Debug::debug("COLECCION  ==>  AGREGA UNO: $n \n");
                         my $numero_limpio =C4::AR::Utilidades::trim($n);
                         my %fasciculo=();
                         $fasciculo{'volumen'} = $volumen;
@@ -2100,29 +2106,97 @@ sub procesarRevistas {
             my @estadoDeColeccion= ();
 
             if ($numeros) {
-
- #               C4::AR::Debug::debug("COLECCION  ==>  PROCESO : $numeros \n");
-	 	my @numeros_separados = split(/,|-/, $numeros );
-
+                # C4::AR::Debug::debug("COLECCION  ==>  PROCESO : $numeros \n");
+	 	         my @numeros_separados = split(/,/, $numeros );
 
                 foreach my $n (@numeros_separados){
                     my $numero_limpio =C4::AR::Utilidades::trim($n);
-                    my %fasciculo=();
-                    $fasciculo{'anio'} = $anio;
-                    $fasciculo{'volumen'} = $volumen;
-                    $fasciculo{'numero'} = $numero_limpio;
-                    push(@estadoDeColeccion,\%fasciculo);
-                }
+                    if (index($numero_limpio , '-') != -1) {
+                        #son muchos
+                        my @secuencia = split('-', $numero_limpio);
+                        #Agarro únicamente los 2 primeros valores, el resto lo considero erroneo. Por ej: debe venir a-b y debe ser a>b, no puede ser a-b-c y desordenado
+                        if (@secuencia gt 1){
+                            my $ini = C4::AR::Utilidades::trim($secuencia[0]);
+                            my $fin = C4::AR::Utilidades::trim($secuencia[1]);
+                            # Errores en las secuencias, secuencia inicial mayor ala final o que la diferencia sea de más de un nro por día. Hay registros erroneos y hay que evitarlos.
+                            if (($ini < $fin)&&( ($fin - $ini) <= 365 )) {
 
-            } else {
-                    if($anio || $volumen){
-                        #no tiene número
+                                foreach my $ns ($ini..$fin) {
+                                    my $numero_limpio =C4::AR::Utilidades::trim($ns);
+                                    my %fasciculo=();
+                                    $fasciculo{'anio'} = $anio;
+                                    $fasciculo{'volumen'} = $volumen;
+                                    $fasciculo{'numero'} = $ns;
+                                    push(@estadoDeColeccion,\%fasciculo);
+                                }
+                            }
+                            else{
+                                my %fasciculo=();
+                                $fasciculo{'anio'} = $anio;
+                                $fasciculo{'volumen'} = $volumen;
+                                $fasciculo{'numero'} = $numero_limpio;
+                                push(@estadoDeColeccion,\%fasciculo);
+                            }
+                        } else {
+                            #Tiene un - pero un solo número
+                                my %fasciculo=();
+                                $fasciculo{'anio'} = $anio;
+                                $fasciculo{'volumen'} = $volumen;
+                                $fasciculo{'numero'} = $numero_limpio;
+                                push(@estadoDeColeccion,\%fasciculo);
+                        }
+                    }
+                    else{
+                        #Número único
+                        my $numero_limpio =C4::AR::Utilidades::trim($n);
                         my %fasciculo=();
                         $fasciculo{'anio'} = $anio;
                         $fasciculo{'volumen'} = $volumen;
-                        $fasciculo{'numero'} = '';
-                        push(@estadoDeColeccion,\%fasciculo);
-                      }
+                        $fasciculo{'numero'} = $numero_limpio;
+                        push(@estadoDeColeccion,\%fasciculo);   
+                    }
+                }
+            } else {
+                    if($anio || $volumen){
+                        #no tiene número
+                        my $volumen_limpio =C4::AR::Utilidades::trim($volumen);
+                        if (index($volumen_limpio , '-') != -1) {
+                            #son muchos
+                            my @secuencia = split('-', $volumen_limpio);
+                            #Agarro únicamente los 2 primeros valores, el resto lo considero erroneo. Por ej: debe venir a-b y debe ser a>b, no puede ser a-b-c y desordenado
+                            if (@secuencia gt 1){
+                                my $ini = C4::AR::Utilidades::trim($secuencia[0]);
+                                my $fin = C4::AR::Utilidades::trim($secuencia[1]);
+                                # Errores en las secuencias, secuencia inicial mayor ala final o que la diferencia sea de más de un nro por día. Hay registros erroneos y hay que evitarlos.
+                                if (($ini < $fin)&&( ($fin - $ini) <= 365 )) {
+
+                                    foreach my $vs ($ini..$fin) {
+                                        my %fasciculo=();
+                                        $fasciculo{'anio'} = $anio;
+                                        $fasciculo{'volumen'} = $vs;
+                                        $fasciculo{'numero'} = '';
+                                        push(@estadoDeColeccion,\%fasciculo);
+                                    }
+                                }
+                                else{
+                                    # error en orden de secuencia, lo agrego igual
+                                    my %fasciculo=();
+                                    $fasciculo{'anio'} = $anio;
+                                    $fasciculo{'volumen'} = $volumen_limpio;
+                                    $fasciculo{'numero'} = '';
+                                    push(@estadoDeColeccion,\%fasciculo);
+                                }
+                            }
+                        }
+                        else{
+                            #volumen único
+                            my %fasciculo=();
+                            $fasciculo{'anio'} = $anio;
+                            $fasciculo{'volumen'} = $volumen_limpio;
+                            $fasciculo{'numero'} = '';
+                            push(@estadoDeColeccion,\%fasciculo);
+                        }
+                    }
             }
 
         return  @estadoDeColeccion;
