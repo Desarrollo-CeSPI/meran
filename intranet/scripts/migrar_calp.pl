@@ -118,7 +118,7 @@ sub migrarReferenciasColaboradores {
 
 	while (my $ref_colaborador=$ref_autores_calp->fetchrow_hashref) {
 		
-		#YA EXISTE EL AUTOR?
+		#YA EXISTE LA REFERENCIA?
 		my @filtros=();
         push(@filtros, (codigo => {eq => $ref_colaborador->{'CodTResponsabilidad'}}) );
         my $existe = C4::Modelo::RefColaborador::Manager->get_ref_colaborador_count(query => \@filtros,);
@@ -210,8 +210,8 @@ sub migrar {
 	        			#Revisar si tiene ejemplar, sino crear uno
 						my @nuevo_ejemplar=();
 						#UI
-						push(@nuevo_ejemplar, ['995','c', 'GL']);
-						push(@nuevo_ejemplar, ['995','d', 'GL']);
+						push(@nuevo_ejemplar, ['995','c', 'BG']);
+						push(@nuevo_ejemplar, ['995','d', 'BG']);
 						# Las revistas van con disponiblidad de sala de lectura ticket #10078
 						push(@nuevo_ejemplar, ['995','o', 'CIRC0001']);
 						push(@nuevo_ejemplar, ['995','e', 'STATE002']);
@@ -273,7 +273,7 @@ sub migrar {
 									}
 								}
 
-				                my ($msg_object3) = guardarNivel3DeImportacion($id1,$id2,$marc_record_n3,$template,'GL');
+				                my ($msg_object3) = guardarNivel3DeImportacion($id1,$id2,$marc_record_n3,$template,'BG');
 								if (!$msg_object3->{'error'}){
 		            				$ejemplares_creados ++;
 								}else{
@@ -322,7 +322,7 @@ sub migrar {
 
 						#print $marc_record_n3->as_formatted;
 
-		                my ($msg_object3) = guardarNivel3DeImportacion($id1,$id2,$marc_record_n3,$template,'GL');
+		                my ($msg_object3) = guardarNivel3DeImportacion($id1,$id2,$marc_record_n3,$template,'BG');
 		     #           print "Nivel 3 creado ?? ".$msg_object3->{'error'}."\n";
 		     			if (!$msg_object3->{'error'}){
 	            				$ejemplares_creados ++;
@@ -884,17 +884,12 @@ sub generaCodigoBarraFromMarcRecord{
  		my $nota = $material->{'Notas'};
 		# Se limpian los <>
 		$nota =~ s/(<|>|&lt;|&gt;)//gi;
-
-    	if($material->{'Serie_AnioInterno'}){
-    		my $anio_interno = "Año Int.: ".$material->{'Serie_AnioInterno'};
-    
-    		if($nota){
-    			$nota .= " ".$anio_interno;
-    		}
-    		else{
-    			$nota = $anio_interno;
-    		}
+		
+		my $anio_interno = $material->{'Serie_AnioInterno'};
+		if ($anio_interno){
+    		$anio_interno = "Año Int.: ".$anio_interno;
     	}
+
 		#Lista de campos
 		#Tenemos Niveles 1 y 2, si ya existe el título, se agrega un nuevo 2, 
 		#sino se agregan los 2 niveles
@@ -919,6 +914,7 @@ sub generaCodigoBarraFromMarcRecord{
 			['041','a',$idioma],	
 			['260','a',$material->{'Lugar'}],	
 			['260','c',$fecha_edicion],
+			['500','a',$anio_interno],
 			['300','c',$dimension],
 			['020','a',$material->{'ISBN'}],
 			
@@ -1097,8 +1093,8 @@ sub generaCodigoBarraFromMarcRecord{
 		while (my $ejemplar=$ejemplares_calp->fetchrow_hashref) {
 				my @nuevo_ejemplar=();
 				#UI
-				push(@nuevo_ejemplar, ['995','c', 'GL']);
-				push(@nuevo_ejemplar, ['995','d', 'GL']);
+				push(@nuevo_ejemplar, ['995','c', 'BG']);
+				push(@nuevo_ejemplar, ['995','d', 'BG']);
 
 				push(@nuevo_ejemplar, ['995','f', $ejemplar->{'Inventario'}]);
 
