@@ -34,7 +34,7 @@ sub getObjeto{
 	my ($self) = shift;
 	my ($id) = @_;
 
-	my $objecto= C4::Modelo::RefLocalidad->new(id => $id);
+	my $objecto= C4::Modelo::RefColaborador->new(codigo => $id);
 	$objecto->load();
 	return $objecto;
 }
@@ -59,7 +59,7 @@ sub getAbreviatura{
     return (C4::AR::Utilidades::trim($self->abreviatura));
 }
     
-sub setCodigo{
+sub setAbreviatura{
     my ($self) = shift;
     my ($abreviatura) = @_;
 
