@@ -805,8 +805,7 @@ sub batchBookLabelGenerator {
     my $pag = 1;
     my $pdf; 
 #   my $pdf = new PDF::Report();
-    
- C4::AR::Debug::debug($count);
+    C4::AR::Debug::debug("PdfGenerator => batchBookLabelGenerator => " . $count);
        if (!(C4::AR::Preferencias::getValorPreferencia('BookLabelPage'))){
           $pdf= new PDF::Report();
           $pdf->{PageWidth}  = '270';
@@ -820,8 +819,11 @@ sub batchBookLabelGenerator {
 
           }
 
+          C4::AR::Debug::debug("PdfGenerator => batchBookLabelGenerator => NO esta seteada la preferencia BookLabelPage");
+
         } else {
               $pdf= new PDF::Report( PageSize => "A4");
+              C4::AR::Debug::debug("PdfGenerator => batchBookLabelGenerator => esta seteada la preferencia BookLabelPage");
               my $i=0;
 
                     while ( $i <= $count - 1 ) {
@@ -831,47 +833,61 @@ sub batchBookLabelGenerator {
 
                             #Hoja A4 :  X diferencia 254 - Y diferencia 160
                             if ( $i < $count ) {
-                                generateBookLabelA4(@$results[$i], 25, 654, $pdf );
+                              generateBookLabelA4(@$results[$i], 25, 654, $pdf );
+                              if(C4::AR::Preferencias::getValorPreferencia('right_top_x') <= 265){
                                 generateBookLabelA4(@$results[$i], 312, 654, $pdf );
-                                $i++;
+                              }
+                              
+                              $i++;
                             }
                             if ( $i < $count ) {
-                                generateBookLabelA4(@$results[$i], 25, 554, $pdf );
+                              generateBookLabelA4(@$results[$i], 25, 554, $pdf );
+                              if(C4::AR::Preferencias::getValorPreferencia('right_top_x') <= 265){
                                 generateBookLabelA4(@$results[$i], 312, 554, $pdf );
-                                $i++;
+                              }
+
+                              $i++;
                             }
                             if ( $i < $count ) { 
-                                generateBookLabelA4(@$results[$i], 25, 454, $pdf );
+                              generateBookLabelA4(@$results[$i], 25, 454, $pdf );
+                              if(C4::AR::Preferencias::getValorPreferencia('right_top_x') <= 265){
                                 generateBookLabelA4(@$results[$i], 312, 454, $pdf );
-                                $i++;
+                              }
+
+                              $i++;
+                            }
+                            if ( $i < $count ) {      
+                              generateBookLabelA4(@$results[$i], 25, 354, $pdf );
+                              if(C4::AR::Preferencias::getValorPreferencia('right_top_x') <= 265){
+                                generateBookLabelA4(@$results[$i], 312, 354, $pdf );    
+                              }
+
+                              $i++;
                             }
                             if ( $i < $count ) {
-#                                     
-                                  generateBookLabelA4(@$results[$i], 25, 354, $pdf );
-                                  generateBookLabelA4(@$results[$i], 312, 354, $pdf );    
-                                $i++;
-                            }
-                            if ( $i < $count ) {
-                                 generateBookLabelA4(@$results[$i], 25, 254, $pdf);
-                                 generateBookLabelA4(@$results[$i], 312,254, $pdf );
-#                               
-                                 
-                                $i++;
+                              generateBookLabelA4(@$results[$i], 25, 254, $pdf);
+                              if(C4::AR::Preferencias::getValorPreferencia('right_top_x') <= 265){
+                                generateBookLabelA4(@$results[$i], 312,254, $pdf );
+                              }
+
+                              $i++;
                             }
 
                             if ( $i < $count ) {
-                                 generateBookLabelA4(@$results[$i], 25, 154, $pdf);
-                                 generateBookLabelA4(@$results[$i], 312,154, $pdf );
-#                               
-                                 
-                                $i++;
+                              generateBookLabelA4(@$results[$i], 25, 154, $pdf);
+                              if(C4::AR::Preferencias::getValorPreferencia('right_top_x') <= 265){
+                                generateBookLabelA4(@$results[$i], 312,154, $pdf );
+                              }
+
+                              $i++;
                             }
                             if ( $i < $count ) {
-                                 generateBookLabelA4(@$results[$i], 25, 54, $pdf);
-                                 generateBookLabelA4(@$results[$i], 312,54, $pdf );
-#                               
-                                 
-                                $i++;
+                              generateBookLabelA4(@$results[$i], 25, 54, $pdf);
+                              if(C4::AR::Preferencias::getValorPreferencia('right_top_x') <= 265){
+                                generateBookLabelA4(@$results[$i], 312,54, $pdf );
+                              }
+
+                              $i++;
                             }
                   
                             $pag++;
@@ -899,14 +915,16 @@ sub generateBookLabelA4 {
     my ( $pagewidth, $pageheight ) = $pdf->getPageDimensions();    #(210x297 - A4)
     $pdf->setSize(7);
       
-
+    my $right_top_x = C4::AR::Preferencias::getValorPreferencia('right_top_x') || 265;
     #Insert a rectangle to delimite the card
-    $pdf->drawRect( $x - 7, $y + 80, $x + 265, ( $y + 172 ) );
+    $pdf->drawRect( $x - 7, $y + 80, $x + $right_top_x, ( $y + 172 ) );
 
 
     C4::AR::Debug::debug($branchcode);
 
-    $pdf->drawLine( $x + 80, $y + 80, $x + 80, $y +  172 );
+    #para CALP $left_top_x = 150
+    my $left_top_x = C4::AR::Preferencias::getValorPreferencia('left_top_x') || 80;
+    $pdf->drawLine( $x + $left_top_x, $y + 80, $x + $left_top_x, $y +  172 );
 
 
     #Insert a barcode to the card
@@ -919,7 +937,9 @@ sub generateBookLabelA4 {
      		$scale = 60 / 100;
 	}
    }
-   $pdf->drawBarcode( $x + 90, $y + 78, $scale , 1, "3of9", $codigo, undef, 10,10, 25, 10, undef, undef, 12 );
+
+    $left_top_x = ($left_top_x == 80)?90:$left_top_x;
+    $pdf->drawBarcode( $x + $left_top_x, $y + 78, $scale , 1, "3of9", $codigo, undef, 10,10, 25, 10, undef, undef, 12 );
 
     my $posy = 100;
 
