@@ -14,45 +14,31 @@
     </dl>
   </p>
   <hr>
-  <h6>Cantidad de LIBROS</h6>
-  <p>
-    <dl>
-      <dt>Volúmenes:<dt><dd>[% estadisticas_hash.item('cantidad_libros_grupos') %]</dd>
-      <dt>Ejemplares:<dt><dd>[% estadisticas_hash.item('cantidad_libros_ejemplares') %]</dd>
-    </dl>
-  </p>
-  <hr>
-  <h6>Cantidad de TESIS</h6>
-  <p>
-    <dl>
-      <dt>Volúmenes:<dt><dd>[% estadisticas_hash.item('cantidad_tesis_grupos') %]</dd>
-      <dt>Ejemplares:<dt><dd>[% estadisticas_hash.item('cantidad_tesis_ejemplares') %]</dd>
-    </dl>
-  </p>
-  <hr>
-  <h6>Cantidad de OTRAS MONOGRAFÍAS (FOT)</h6>
-  <p>
-    <dl>
-      <dt>Volúmenes:<dt><dd>[% estadisticas_hash.item('cantidad_otros_grupos') %]</dd>
-      <dt>Ejemplares:<dt><dd>[% estadisticas_hash.item('cantidad_otros_ejemplares') %]</dd>
-    </dl>
-  </p>
-  <hr>
-  <h6>Cantidad de Volúmenes NO disponibles</h6>
-  <p>
-    <b>
-      [% estadisticas_hash.item('cantidad_no_disponibles_grupos') %]
-    </b>
-  </p>
-  <hr>
-  <h6>Cantidad de REVISTAS</h6>
-  <p>
-    <dl>
-      <dt>Registros:<dt><dd>[% estadisticas_hash.item('cantidad_revistas_registros') %]</dd>
-      <dt>Volúmenes:<dt><dd>[% estadisticas_hash.item('cantidad_revistas_grupos') %]</dd>
-      <dt>Ejemplares:<dt><dd>[% estadisticas_hash.item('cantidad_revistas_ejemplares') %]</dd>
-    </dl>
-  </p>
+    <h5>CANTIDADES </h5>
+    <p>
+      <h6>Registros: </h6>
+    <ul>
+    [% FOREACH cr IN estadisticas_hash.cantidades_registros %]
+       <li> <b>[% cr.first %]:</b> [% cr.last %] </li>
+    [% END %]
+    </ul>
+    </p>
+    <p>
+      <h6>Grupos: </h6>
+    <ul>
+    [% FOREACH cr IN estadisticas_hash.cantidades_grupos %]
+       <li> <b>[% cr.first %]:</b>  [% cr.last %] </li>
+    [% END %]
+    </ul>
+    </p>
+    <p>
+      <h6>Ejemplares: </h6>
+    <ul>
+    [% FOREACH cr IN estadisticas_hash.cantidades_ejemplares %]
+       <li> <b>[% cr.first %]:</b>  [% cr.last %] </li>
+    [% END %]
+    </ul>
+    </p> 
   <hr>
   <h4>SERVICIOS</h4>
 
@@ -103,6 +89,7 @@
       [% END %]
     </dl>
   </p>
+
 </div>
 
 

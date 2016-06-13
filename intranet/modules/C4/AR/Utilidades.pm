@@ -5222,77 +5222,33 @@ sub datosEstadisticosUNLP{
     $sth->finish;
 
     #Cantidades!
-    #Libros ejemplares
-    my $sth=$dbh->prepare("Select count(*) from cat_registro_marc_n3 where template = 'LIB' and created_at < ?;");
+    #Registros
+    my $sth=$dbh->prepare("SELECT cat_ref_tipo_nivel3.nombre as template, count(distinct(cat_registro_marc_n1.id)) as cant
+        FROM cat_registro_marc_n1
+        LEFT JOIN cat_registro_marc_n3 ON cat_registro_marc_n3.id1 = cat_registro_marc_n1.id
+        LEFT JOIN cat_ref_tipo_nivel3 ON cat_ref_tipo_nivel3.id_tipo_doc = cat_registro_marc_n1.template
+        WHERE cat_registro_marc_n3.created_at < ? GROUP BY cat_registro_marc_n1.template;");
     $sth->execute($year + 1);
-
-    if (my $cantidad_libros_ejemplares = $sth->fetchrow_array){
-        $result_hash{'cantidad_libros_ejemplares'}=$cantidad_libros_ejemplares;
-    }
-
+    $result_hash{'cantidades_registros'} = $sth->fetchall_arrayref;
     $sth->finish;
 
-    #Libros grupos
-    my $sth=$dbh->prepare("SELECT count(distinct(cat_registro_marc_n2.id))
+    #Grupos
+    my $sth=$dbh->prepare("SELECT  cat_ref_tipo_nivel3.nombre as template, count(distinct(cat_registro_marc_n2.id)) as cant
         FROM cat_registro_marc_n2
         LEFT JOIN cat_registro_marc_n3 ON cat_registro_marc_n3.id2 = cat_registro_marc_n2.id
-        WHERE cat_registro_marc_n2.template =  'LIB'
-        AND cat_registro_marc_n3.created_at < ? ;");
+        LEFT JOIN cat_ref_tipo_nivel3 ON cat_ref_tipo_nivel3.id_tipo_doc = cat_registro_marc_n2.template
+        WHERE cat_registro_marc_n3.created_at < ? GROUP BY cat_registro_marc_n2.template;");
     $sth->execute($year + 1);
-
-    if (my $cantidad_libros_grupos = $sth->fetchrow_array){
-        $result_hash{'cantidad_libros_grupos'}=$cantidad_libros_grupos;
-    }
-
+    $result_hash{'cantidades_grupos'} = $sth->fetchall_arrayref;
     $sth->finish;
 
 
-    #Tesis ejemplares
-    my $sth=$dbh->prepare("Select count(*) from cat_registro_marc_n3 where template = 'TES' and created_at < ?;");
+    #Ejemplares
+    my $sth=$dbh->prepare("Select cat_ref_tipo_nivel3.nombre as template ,count(*)as cant from cat_registro_marc_n3 
+        LEFT JOIN cat_ref_tipo_nivel3 ON cat_ref_tipo_nivel3.id_tipo_doc = cat_registro_marc_n3.template
+        where created_at < ? GROUP BY template;");
     $sth->execute($year + 1);
-
-    if (my $cantidad_tesis_ejemplares = $sth->fetchrow_array){
-        $result_hash{'cantidad_tesis_ejemplares'}=$cantidad_tesis_ejemplares;
-    }
-
-    $sth->finish;
-
-    #Tesis grupos
-    my $sth=$dbh->prepare("SELECT count(distinct(cat_registro_marc_n2.id))
-        FROM cat_registro_marc_n2
-        LEFT JOIN cat_registro_marc_n3 ON cat_registro_marc_n3.id2 = cat_registro_marc_n2.id
-        WHERE cat_registro_marc_n2.template =  'TES'
-        AND cat_registro_marc_n3.created_at < ? ;");
-    $sth->execute($year + 1);
-
-    if (my $cantidad_tesis_grupos = $sth->fetchrow_array){
-        $result_hash{'cantidad_tesis_grupos'}=$cantidad_tesis_grupos;
-    }
-
-    $sth->finish;
-
-    #Otros ejemplares
-    my $sth=$dbh->prepare("Select count(*) from cat_registro_marc_n3 where template = 'FOT' and created_at < ?;");
-    $sth->execute($year + 1);
-
-    if (my $cantidad_otros_ejemplares = $sth->fetchrow_array){
-        $result_hash{'cantidad_otros_ejemplares'}=$cantidad_otros_ejemplares;
-    }
-
-    $sth->finish;
-
-    #Otros grupos
-    my $sth=$dbh->prepare("SELECT count(distinct(cat_registro_marc_n2.id))
-        FROM cat_registro_marc_n2
-        LEFT JOIN cat_registro_marc_n3 ON cat_registro_marc_n3.id2 = cat_registro_marc_n2.id
-        WHERE cat_registro_marc_n2.template =  'FOT'
-        AND cat_registro_marc_n3.created_at < ? ;");
-    $sth->execute($year + 1);
-
-    if (my $cantidad_otros_grupos = $sth->fetchrow_array){
-        $result_hash{'cantidad_otros_grupos'}=$cantidad_otros_grupos;
-    }
-
+    $result_hash{'cantidades_ejemplares'} = $sth->fetchall_arrayref;
     $sth->finish;
 
 
@@ -5309,61 +5265,6 @@ sub datosEstadisticosUNLP{
     }
 
     $sth->finish;
-
-    #REVISTAS
-
-    #Revistas ejemplares
-    my $sth=$dbh->prepare("Select count(*) from cat_registro_marc_n3 where template = 'REV' and created_at < ?;");
-    $sth->execute($year + 1);
-
-    if (my $cantidad_revistas_ejemplares = $sth->fetchrow_array){
-        $result_hash{'cantidad_revistas_ejemplares'}=$cantidad_revistas_ejemplares;
-    }
-
-    $sth->finish;
-
-    #Revistas grupos
-    my $sth=$dbh->prepare("SELECT count(distinct(cat_registro_marc_n2.id))
-        FROM cat_registro_marc_n2
-        LEFT JOIN cat_registro_marc_n3 ON cat_registro_marc_n3.id2 = cat_registro_marc_n2.id
-        WHERE cat_registro_marc_n2.template =  'REV'
-        AND cat_registro_marc_n3.created_at < ? ;");
-    $sth->execute($year + 1);
-
-    if (my $cantidad_revistas_grupos = $sth->fetchrow_array){
-        $result_hash{'cantidad_revistas_grupos'}=$cantidad_revistas_grupos;
-    }
-
-    $sth->finish;
-
-    #Revistas registros
-    my $sth=$dbh->prepare("SELECT count(distinct(cat_registro_marc_n1.id))
-        FROM cat_registro_marc_n1
-        LEFT JOIN cat_registro_marc_n3 ON cat_registro_marc_n3.id1 = cat_registro_marc_n1.id
-        WHERE cat_registro_marc_n1.template =  'REV'
-        AND cat_registro_marc_n3.created_at < ? ;");
-    $sth->execute($year + 1);
-
-    if (my $cantidad_revistas_registros = $sth->fetchrow_array){
-        $result_hash{'cantidad_revistas_registros'}=$cantidad_revistas_registros;
-    }
-
-    $sth->finish;
-
-    #Recursos electrónicos registros
-    my $sth=$dbh->prepare("SELECT count(distinct(cat_registro_marc_n1.id))
-        FROM cat_registro_marc_n1
-        LEFT JOIN cat_registro_marc_n3 ON cat_registro_marc_n3.id1 = cat_registro_marc_n1.id
-        WHERE cat_registro_marc_n1.template =  'REV'
-        AND cat_registro_marc_n3.created_at < ? ;");
-    $sth->execute($year + 1);
-
-    if (my $cantidad_revistas_registros = $sth->fetchrow_array){
-        $result_hash{'cantidad_revistas_registros'}=$cantidad_revistas_registros;
-    }
-
-    $sth->finish;
-
 
     # SERVICIOS: 
  
@@ -5524,7 +5425,7 @@ sub datosEstadisticosUNLP{
     my $sth=$dbh->prepare("SELECT usr_ref_categoria_socio.description as categoria, count(*) as cantidad FROM usr_socio left join usr_ref_categoria_socio on usr_socio.id_categoria = usr_ref_categoria_socio.id WHERE fecha_alta like '$year%' group by usr_socio.id_categoria");
     $sth->execute();
 
-   if (my $categorias_socios_registrados = $sth->fetchrow_arrayref){
+   if (my $categorias_socios_registrados = $sth->fetchall_arrayref){
         $result_hash{'categorias_socios_registrados'}=$categorias_socios_registrados;
     }
     $sth->finish;
