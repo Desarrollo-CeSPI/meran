@@ -46,6 +46,6 @@ my $result_hash = C4::AR::Utilidades::datosEstadisticosUNLP($year);
 
 $t_params->{'estadisticas_hash'}   = $result_hash;    
 $t_params->{'year'}    = $year;
-$t_params->{'page_sub_title'}   = C4::AR::Filtros::i18n("Estadísticas Anuales (".$year.")");
+$t_params->{'page_sub_title'}   = C4::AR::Filtros::i18n("Reporte Anual (".$year.")");
 
 C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
