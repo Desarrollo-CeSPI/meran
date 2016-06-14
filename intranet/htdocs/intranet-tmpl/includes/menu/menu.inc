@@ -473,6 +473,14 @@
                                                                               ) ;
                                               [% END %]
                                   </li>
+                                  <li>
+                                              [% PERL %]
+                                                  print C4::AR::Filtros::link_to( text =>     "<i class='icon-print'></i> [% 'Reporte Anual' | i18n %]",
+                                                                                  url =>      "[% url_prefix %]/admin/estadisticas.pl",
+                                                                                  title =>    "[% 'Reporte Anual' | i18n %]"
+                                                                              ) ;
+                                              [% END %]
+                                  </li>
               					[% END %]
                             [% IF 1 ==  2 %]
 	                            	<li class="nav-header">[% 'Herramientas' | i18n %]</li>	
