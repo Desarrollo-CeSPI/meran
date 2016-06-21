@@ -103,7 +103,7 @@ var loaderPath= "";
                                        [% ELSE %]
                                              {title => "Eliminar Usuario Adicional", action=>'desautorizarTercero()', icon=>"icon-eye-close"},
                                        [% END %]
-                                       [% IF socio_data.usr_nro_socio != nro_socio %]
+                                       [% IF (socio_data.usr_nro_socio != nro_socio) && (ldapenabled == 1)  %]
                                              {title => "Reestablecer contrase&ntilde;a", action=>'resetPassword()', icon=>"icon-warning-sign"},
                                        [% ELSE %]
                                              {title => "Cambio de Contrase&ntilde;a", action=>'cambiarPassword()', icon=>"icon-warning-sign"},

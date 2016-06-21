@@ -84,5 +84,6 @@ $t_params->{'socio'}                    = $socio;
 $t_params->{'relativePicturesDir'}      = C4::Context->config("relativePicturesDir");
 $t_params->{'needsDataValidation'}      = C4::AR::Usuarios::needsDataValidation($nro_socio);
 $t_params->{'requisitoNecesario_pref'}  = C4::AR::Preferencias::getValorPreferencia('requisito_necesario');
+$t_params->{'ldapenabled'}              = C4::AR::Preferencias::getValorPreferencia('ldapenabled');
 
 C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
