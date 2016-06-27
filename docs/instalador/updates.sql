@@ -886,3 +886,6 @@ INSERT INTO `pref_preferencia_sistema` (`id`, `variable`, `value`, `explanation`
 # Nueva preferencia, activa automaticamente o no, un usuario que se loguea por primera vez, cuando se utiliza LDAP para autenticar
 INSERT INTO  `pref_preferencia_sistema` (`id` ,`variable` ,`value` ,`explanation` ,`options` ,`type` ,`categoria` ,`label` ,`explicacion_interna` ,`revisado`)
 VALUES (NULL ,  'auto_activate_user_from_ldap',  '0',  'Activa (=1) por defecto un usuario creado al iniciar por primera vez, autenticando con LDAP.', NULL ,  'bool',  'sistema',  'Auto activar desde LDAP', 'Activa (=1) por defecto un usuario creado al iniciar por primera vez, autenticando con LDAP.',  '0');
+
+# Nueva preferencia para la configuración del LDAP, que niega la pertenecia de un usuario a un grupo en particular
+INSERT INTO `pref_preferencia_sistema` (`id`, `variable`, `value`, `explanation`, `options`, `type`, `categoria`, `label`, `explicacion_interna`, `revisado`) VALUES (NULL, 'ldap_not_memberattribute', 'LDAP_YES_MEMBERATTRIBUTE', 'Niega la inclusión de los usuarios que integran un grupo', NULL, 'bool', 'auth', NULL, 'Niega la inclusión de los usuarios que integran un grupo', '0');
