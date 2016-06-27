@@ -61,6 +61,7 @@ if($input->param('adding') == 1){
     C4::AR::Authldap::setVariableLdap('ldap_opt_deref',$input->param('opt_deref'));
     C4::AR::Authldap::setVariableLdap('ldap_user_attribute',$input->param('user_attribute'));
     C4::AR::Authldap::setVariableLdap('ldap_memberattribute',$input->param('memberattribute'));
+    C4::AR::Authldap::setVariableLdap('ldap_not_memberattribute',$input->param('ldap_not_memberattribute'));
     C4::AR::Authldap::setVariableLdap('ldap_memberattribute_isdn',$input->param('memberattribute_isdn'));
     C4::AR::Authldap::setVariableLdap('ldap_objectclass',$input->param('objectclass'));
     C4::AR::Authldap::setVariableLdap('ldap_passtype',$input->param('passtype'));
