@@ -204,8 +204,12 @@ sub memberOf{
         $ldapMsg = $ldap->bind() or die "$@";        
     }
 
-    # (&(uid=mariela.perez)(memberOf=cn=Meran,ou=Grupos,dc=calp,dc=org,dc=ar))
-    $LDAP_FILTER = "&(".$LDAP_FILTER.")(memberOf=cn=".$group.",".$LDAP_OU.")";    
+    if($preferencias_ldap->{'ldap_not_memberattribute'} == "LDAP_NOT_MEMBERATTRIBUTE"){
+        # Se niega la inclusión de un usuario en un grupo
+        $LDAP_FILTER = "&(".$LDAP_FILTER.")(!(memberOf=cn=".$group.",".$LDAP_OU."))";    
+    } else {
+        $LDAP_FILTER = "&(".$LDAP_FILTER.")(memberOf=cn=".$group.",".$LDAP_OU.")";    
+    }
 
     if ((defined $ldapMsg )&& (!$ldapMsg->code()) ) {   
         my $entries = $ldap->search(

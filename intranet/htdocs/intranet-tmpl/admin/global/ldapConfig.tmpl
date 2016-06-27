@@ -253,6 +253,24 @@
 	            [% END %]
 	        </div>
 	    </div>
+
+	    <div class="control-group">
+	        <label class="control-label" for="ldap_not_memberattribute">[% 'Negar atributo de miembro' | i18n %]: </label>
+	        <div class="controls">
+
+	            <select id="ldap_not_memberattribute" class="select menuopt_deref" name="ldap_not_memberattribute"> 
+	               <option value="LDAP_NOT_MEMBERATTRIBUTE" [% IF preferencias.ldap_not_memberattribute == 'LDAP_NOT_MEMBERATTRIBUTE' %] selected="selected" [% END %]>No</option> 
+	               <option value="LDAP_YES_MEMBERATTRIBUTE" [% IF preferencias.ldap_not_memberattribute == 'LDAP_YES_MEMBERATTRIBUTE' %] selected="selected" [% END %]>Si</option> 
+	            </select>  	
+
+	            [% PERL %]
+	                print C4::AR::Filtros::setHelpInput(   
+	                                    text        => "[% 'Niega la inclusión de los usuarios que integran un grupo.' | i18n %]",
+	                            ) ;
+	                
+	            [% END %]
+	        </div>
+	    </div>
 	    
 	    <div class="control-group">
 	        <label class="control-label" for="memberattribute_isdn">[% 'Atributo de miembro utilizan dn' | i18n %]: </label>
