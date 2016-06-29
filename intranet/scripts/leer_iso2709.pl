@@ -97,10 +97,10 @@ my $reader = MARC::Moose::Reader::File::Isis->new(
              }
          }
        
-#  print $marc_record->as_formatted();
+  print $marc_record->as_formatted()."\n\n";
 #Se guarda!
                 my %parametros;
-                $parametros{'id_importacion_iso'}   = '2';
+                $parametros{'id_importacion_iso'}   = '1';
                 $parametros{'marc_record'}          = $marc_record->as_usmarc();
                 my $Io_registro_importacion         = C4::Modelo::IoImportacionIsoRegistro->new(db => $db);
                 $Io_registro_importacion->agregar(\%parametros);
