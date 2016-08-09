@@ -136,11 +136,11 @@ sub datosUsuario{
 sub _conectarLDAP{
 
     my $preferencias_ldap   = getLdapPreferences();
-    
+
     my $LDAP_SERVER = $preferencias_ldap->{'ldap_server'};
     my $LDAP_PORT   = $preferencias_ldap->{'ldap_port'};
     my $LDAP_TYPE   = $preferencias_ldap->{'ldap_type'};
-
+    C4::AR::Debug::debug("Authldap =>_conectarLDAP".$LDAP_SERVER); 
     my $ldap;
     if ($LDAP_TYPE ne 'SSL'){
         $ldap = Net::LDAP->new($LDAP_SERVER, port => $LDAP_PORT) or die "Coult not create LDAP object because:\n$!";
@@ -204,7 +204,7 @@ sub memberOf{
         $ldapMsg = $ldap->bind() or die "$@";        
     }
 
-    if($preferencias_ldap->{'ldap_not_memberattribute'} == "LDAP_NOT_MEMBERATTRIBUTE"){
+    if($preferencias_ldap->{'ldap_not_memberattribute'} eq "LDAP_NOT_MEMBERATTRIBUTE"){
         # Se niega la inclusión de un usuario en un grupo
         $LDAP_FILTER = "&(".$LDAP_FILTER.")(!(memberOf=cn=".$group.",".$LDAP_OU."))";    
     } else {
@@ -230,15 +230,28 @@ sub memberOf{
 
 sub checkPwPlana{
     my ($userid, $password) = @_;
+
+    C4::AR::Debug::debug("EN CHECKAUT LDAP userid: ".$userid." pass: ".$password);
+
     my $preferencias_ldap   = getLdapPreferences();
     my $LDAP_DB_PREF        = $preferencias_ldap->{'ldap_prefijo_base'};
     my $LDAP_U_PREF         = $preferencias_ldap->{'ldap_user_prefijo'};
     my $userDN              = $LDAP_U_PREF.'='.$userid.','.$LDAP_DB_PREF;
     my $LDAP_FILTER         = $LDAP_U_PREF.'='.$userid;
 
+    C4::AR::Debug::debug("checkPwEncriptada >> LDAP ldap_memberattribute ".$preferencias_ldap->{'ldap_memberattribute'} );
+    C4::AR::Debug::debug("checkPwEncriptada >> LDAP ldap_not_memberattribute ".$preferencias_ldap->{'ldap_not_memberattribute'} );
+
     if ($preferencias_ldap->{'ldap_memberattribute'}){
-        $LDAP_FILTER = "&(".$LDAP_FILTER.")(".$preferencias_ldap->{'ldap_memberattribute'}."=".$preferencias_ldap->{'ldap_memberattribute_isdn'}.")";
+        if($preferencias_ldap->{'ldap_not_memberattribute'} eq "LDAP_NOT_MEMBERATTRIBUTE"){
+            $LDAP_FILTER = "&(".$LDAP_FILTER.")(".$preferencias_ldap->{'ldap_memberattribute'}."=".$preferencias_ldap->{'ldap_memberattribute_isdn'}.")";
+        } else {
+            # Se niega la inclusión de un usuario en un grupo
+            $LDAP_FILTER = "&(".$LDAP_FILTER.")(!(".$preferencias_ldap->{'ldap_memberattribute'}."=".$preferencias_ldap->{'ldap_memberattribute_isdn'}."))";  
+        }
     }
+  
+  C4::AR::Debug::debug("checkPwPlana >> LDAP filter ".$LDAP_FILTER );
 
     my $ldap                =_conectarLDAP();
     C4::AR::Debug::debug("userid : " . $userid . " pass: " . $password . " userDN : " . $userDN);
@@ -279,8 +292,17 @@ sub checkPwEncriptada{
     my $LDAP_OU             = $preferencias_ldap->{'ldap_grupo'};
     my $LDAP_FILTER         = $LDAP_U_PREF.'='.$userid;
 
+  C4::AR::Debug::debug("checkPwEncriptada >> LDAP ldap_memberattribute ".$preferencias_ldap->{'ldap_memberattribute'} );
+  C4::AR::Debug::debug("checkPwEncriptada >> LDAP ldap_not_memberattribute ".$preferencias_ldap->{'ldap_not_memberattribute'} );
+
+
     if ($preferencias_ldap->{'ldap_memberattribute'}){
-        $LDAP_FILTER = "&(".$LDAP_FILTER.")(".$preferencias_ldap->{'ldap_memberattribute'}."=".$preferencias_ldap->{'ldap_memberattribute_isdn'}.")";
+        if($preferencias_ldap->{'ldap_not_memberattribute'} eq "LDAP_NOT_MEMBERATTRIBUTE"){
+            $LDAP_FILTER = "&(".$LDAP_FILTER.")(".$preferencias_ldap->{'ldap_memberattribute'}."=".$preferencias_ldap->{'ldap_memberattribute_isdn'}.")";
+        } else {
+            # Se niega la inclusión de un usuario en un grupo
+            $LDAP_FILTER = "&(".$LDAP_FILTER.")(!(".$preferencias_ldap->{'ldap_memberattribute'}."=".$preferencias_ldap->{'ldap_memberattribute_isdn'}."))";  
+        }
     }
 
   C4::AR::Debug::debug("checkPwEncriptada >> LDAP filter ".$LDAP_FILTER );
