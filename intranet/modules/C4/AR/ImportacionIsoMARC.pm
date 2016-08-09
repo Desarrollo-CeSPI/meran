@@ -116,10 +116,10 @@ sub guardarNuevaImportacion {
     #Ahora los registros del archivo $params->{'write_file'}
     C4::AR::ImportacionIsoMARC::guardarRegistrosNuevaImportacion($Io_importacion,$params,$msg_object,$db);
 
-    C4::AR::Debug::debug("Nuevo Esquma !!");
-
     #Si el esquema es nuevo hay que llenarlo con los datos de los registros cargados
     if($params->{'nuevo_esquema'}){
+
+        C4::AR::Debug::debug("Nuevo Esquema !!");
        #Armar nuevo esquema (hash de hashes)
         my $detalle_esquema = $Io_importacion->obtenerCamposSubcamposDeRegistros();
 
@@ -1075,7 +1075,7 @@ sub obtenerCamposDeArchivo {
         C4::AR::Debug::debug( $params->{'formatoImportacion'} );
 
         $params->{'formatoImportacion'}= "isis";
-        $params->{'write_file'}="/usr/share/meran/jaula/files/intranet/private-uploads/imports/revmed.iso";
+        #$params->{'write_file'}="/usr/share/meran/jaula/files/intranet/private-uploads/imports/revmed.iso";
         use Switch;
         my $reader = MARC::Moose::Reader::File::Isis->new(file   => $params->{'write_file'});
 
@@ -1084,7 +1084,7 @@ sub obtenerCamposDeArchivo {
         while ( my $record = $reader->read() ) {
           C4::AR::Debug::debug( "registro");
              for my $field ( @{$record->fields} ) {
-               C4::AR::Debug::debug( "campo".$field->tag);
+               C4::AR::Debug::debug( "campo ".$field->tag);
                  my $campo = $field->tag;
                  if(!$detalleCampos{$campo}){
                     $detalleCampos{$campo}= 1;
