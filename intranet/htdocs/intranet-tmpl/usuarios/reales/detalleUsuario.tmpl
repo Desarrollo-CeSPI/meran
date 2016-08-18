@@ -103,10 +103,10 @@ var loaderPath= "";
                                        [% ELSE %]
                                              {title => "Eliminar Usuario Adicional", action=>'desautorizarTercero()', icon=>"icon-eye-close"},
                                        [% END %]
-                                       [% IF (socio_data.usr_nro_socio != nro_socio) && (ldapenabled != 1)  %]
+                                       [% IF (socio_data.usr_nro_socio != nro_socio) && (last_auth_method == 'mysql')  %]
                                              {title => "Reestablecer contrase&ntilde;a", action=>'resetPassword()', icon=>"icon-warning-sign"},
                                        [% ELSE %]
-                                          [% IF (ldapenabled != 1)  %]
+                                          [% IF (ldapenabled != 1) && (last_auth_method == 'mysql')  %]
                                              {title => "Cambio de Contrase&ntilde;a", action=>'cambiarPassword()', icon=>"icon-warning-sign"},
                                           [% END %]
                                        [% END %]
