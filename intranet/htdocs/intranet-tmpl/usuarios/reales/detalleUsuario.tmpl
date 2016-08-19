@@ -106,7 +106,7 @@ var loaderPath= "";
                                        [% IF (socio_data.usr_nro_socio != nro_socio) && (last_auth_method == 'mysql')  %]
                                              {title => "Reestablecer contrase&ntilde;a", action=>'resetPassword()', icon=>"icon-warning-sign"},
                                        [% ELSE %]
-                                          [% IF (ldapenabled != 1) && (last_auth_method == 'mysql')  %]
+                                          [% IF (last_auth_method == 'mysql')  %]
                                              {title => "Cambio de Contrase&ntilde;a", action=>'cambiarPassword()', icon=>"icon-warning-sign"},
                                           [% END %]
                                        [% END %]
