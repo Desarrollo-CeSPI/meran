@@ -30,12 +30,12 @@ use vars qw(@ISA @EXPORT_OK );
 
 sub _checkPwPlana{
     my ($userid, $password, $nroRandom) = @_;
-    C4::AR::Debug::debug("AuthMysql => _checkPwPlana => busco el socio ".$userid."\n");
-    C4::AR::Debug::debug("AuthMysql => _checkPwPlana => busco el password ".$password."\n");
-    C4::AR::Debug::debug("AuthMysql => _checkPwPlana => busco el nroRandom ".$nroRandom."\n");
+    #C4::AR::Debug::debug("AuthMysql => _checkPwPlana => busco el socio ".$userid."\n");
+    #C4::AR::Debug::debug("AuthMysql => _checkPwPlana => busco el password ".$password."\n");
+    #C4::AR::Debug::debug("AuthMysql => _checkPwPlana => busco el nroRandom ".$nroRandom."\n");
     my ($socio) = C4::AR::Usuarios::getSocioInfoPorNroSocio($userid);
     if ($socio){
-         C4::AR::Debug::debug("AuthMysql => _checkPwPlana => lo encontre!!! ".$userid."\n");
+         #C4::AR::Debug::debug("AuthMysql => _checkPwPlana => lo encontre!!! ".$userid."\n");
          return _verificar_password_con_metodo($password, $socio, $nroRandom);
     }
 
@@ -47,11 +47,11 @@ sub _checkPwPlana{
 =cut
 sub _checkPwEncriptada{
     my ($userid, $password, $nroRandom) = @_;
-    C4::AR::Debug::debug("_checkpw=> busco el socio ".$userid."\n");
-    C4::AR::Debug::debug("_checkpw=> busco el password ".$password."\n");
+    #C4::AR::Debug::debug("_checkpw=> busco el socio ".$userid."\n");
+    #C4::AR::Debug::debug("_checkpw=> busco el password ".$password."\n");
     my ($socio)= C4::AR::Usuarios::getSocioInfoPorNroSocio($userid);
     if ($socio){
-         C4::AR::Debug::debug("_checkpw=> lo encontre!!! ".$userid."\n");
+         #C4::AR::Debug::debug("_checkpw=> lo encontre!!! ".$userid."\n");
          return _verificar_password_con_metodo($password, $socio, $nroRandom);
     }
     return undef;
