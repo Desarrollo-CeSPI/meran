@@ -83,12 +83,12 @@ sub _checkPwEncriptada{
 
 sub _verificar_password_con_metodo {
     my ($password, $socio, $nroRandom) = @_;
-    C4::AR::Debug::debug("AuthMysql.pm => _verificar_password_con_metodo => metodo? " . C4::AR::Auth::getMetodoEncriptacion());
+    #C4::AR::Debug::debug("AuthMysql.pm => _verificar_password_con_metodo => metodo? " . C4::AR::Auth::getMetodoEncriptacion());
     my $socio_password      = (C4::Context->config('plainPassword'))?$socio->getPassword():C4::AR::Auth::hashear_password($socio->getPassword().$nroRandom, C4::AR::Auth::getMetodoEncriptacion());
     my $password_ingresada  = (C4::Context->config('plainPassword'))?C4::AR::Auth::hashear_password($password, C4::AR::Auth::getMetodoEncriptacion()):$password;
-    C4::AR::Debug::debug("AuthMysql.pm => _verificar_password_con_metodo => Password del socio $socio_password");
-    C4::AR::Debug::debug("AuthMysql.pm => _verificar_password_con_metodo => Password del socio ingresado hasheada $password_ingresada");
-    C4::AR::Debug::debug("AuthMysql.pm => _verificar_password_con_metodo => Password ingresado $password --- Nro_random $nroRandom");
+    #C4::AR::Debug::debug("AuthMysql.pm => _verificar_password_con_metodo => Password del socio $socio_password");
+    #C4::AR::Debug::debug("AuthMysql.pm => _verificar_password_con_metodo => Password del socio ingresado hasheada $password_ingresada");
+    #C4::AR::Debug::debug("AuthMysql.pm => _verificar_password_con_metodo => Password ingresado $password --- Nro_random $nroRandom");
     
     if ($password_ingresada eq $socio_password) {
         C4::AR::Debug::debug("ES VALIDO");
