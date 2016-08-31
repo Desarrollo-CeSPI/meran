@@ -142,6 +142,8 @@ sub send_mail_PLANO {
     my ($mail_hash_ref) = @_;
 
 
+    C4::AR::Debug::debug("Mail => send_mail_PLANO => mail_to => ".$mail_hash_ref->{'mail_to'});
+
     my $mailer          = 0;
     my $ok              = 0;
     my $msg_error       = 0;
@@ -182,9 +184,12 @@ sub send_mail_PLANO {
             $mailer->data();  
 
             if ($html_mail){
-                $mailer->datasend($mail_data->as_string());
+                $ok = $mailer->datasend($mail_data->as_string());
+                C4::AR::Debug::debug("Mail => send_mail_PLANO => mail_data->as_string() => ".$mail_data->as_string());
+                C4::AR::Debug::debug("Mail => send_mail_PLANO => despues de mail_data->as_string() => ".$ok);
             }else{
                 $mailer->datasend($mail_data);
+                C4::AR::Debug::debug("Mail => send_mail_PLANO => mail_data => ".$mail_data);
             }
 
             $mailer->quit;
@@ -253,20 +258,19 @@ sub send_mail_TEST {
     my $ok          = 0;
     my $msg_error   = "Error inesperado";
 
-    $mail{'mail_from'}              =   Encode::decode_utf8(C4::AR::Preferencias::getValorPreferencia('mailFrom'));
-    $mail{'mail_to'}                = $mail_to;
+    $mail{'mail_from'}              = C4::AR::Preferencias::getValorPreferencia('mailFrom');
+    $mail{'mail_to'}                = Encode::decode_utf8($mail_to);
     $mail{'mail_subject'}           = "Prueba de configuración de mail";
-    $mail{'mail_message'}           = "Esta es una prueba de configuración del mail";
-
-    $mail{'page_title'} = C4::AR::Filtros::i18n("Titulo header del mail");
-    $mail{'link'} = "google.com";
+    $mail{'mail_message'}           = Encode::decode_utf8("Esta es una prueba de configuración del mail");
+    $mail{'page_title'}             = C4::AR::Filtros::i18n("Titulo header del mail");
+    $mail{'link'}                   = "google.com";
 
     eval {
 
         ($ok, $msg_error)           = C4::AR::Mail::send_mail(\%mail);
 
         if($ok){    
-            $msg_error              = Encode::decode('utf8',"Se envió el mail a la cuenta (".$mail_to.")");
+            $msg_error              = "Se envió el mail a la cuenta (".$mail_to.")";
         }
 
     };
