@@ -2062,8 +2062,8 @@ sub _sendRecoveryPasswordMail{
 
 	my %mail;
 
-	$mail{'mail_from'}              = Encode::decode_utf8(C4::AR::Preferencias::getValorPreferencia("reserveFrom"));
-	$mail{'mail_to'}                = $socio->persona->getEmail;
+	$mail{'mail_from'}              = C4::AR::Preferencias::getValorPreferencia("reserveFrom");
+	$mail{'mail_to'}                = Encode::decode_utf8($socio->persona->getEmail);
 	$mail{'mail_subject'}           = C4::AR::Filtros::i18n("Instrucciones para reestablecer su clave");
 
 	# Datos para el mail
@@ -2072,7 +2072,7 @@ sub _sendRecoveryPasswordMail{
 	my $nro_socio                   = $socio->getNro_socio;
 	my $ui                          = C4::AR::Referencias::obtenerDefaultUI() || C4::AR::Referencias::getFirstDefaultUI();
 	my $nombre_ui                   = Encode::decode_utf8($ui->getNombre());
-	my $mailMessage                 = C4::AR::Preferencias::getValorPreferencia('mailMessageForgotPass');
+	my $mailMessage                 = Encode::decode_utf8(C4::AR::Preferencias::getValorPreferencia('mailMessageForgotPass'));
 						
 	$mailMessage                    =~ s/SOCIO/$completo/;
 	#hay 2 NOMBRE_UI por eso repetido
