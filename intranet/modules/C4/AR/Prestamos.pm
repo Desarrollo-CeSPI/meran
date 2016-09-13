@@ -1123,6 +1123,36 @@ sub enviarRecordacionDePrestamo {
 		}
 }
 
+sub _getCircPrestamoVencidoTempById {
+
+		my ($id_prestamo) = @_;
+
+		my $prestamo = C4::Modelo::CircPrestamoVencidoTemp::Manager->get_circ_prestamo_vencido_temp(
+																																											query => [id_prestamo => { eq => $id_prestamo}],																																											
+																																									 );
+		if (scalar(@$prestamo)){
+				return ($prestamo->[0]);
+		}
+
+		return (0);
+}
+
+sub _eliminarPrestamoCircPrestamoVencidoTemp {
+
+		my ($id_prestamo) = @_;
+
+		use C4::Modelo::CircPrestamoVencidoTemp::Manager;
+		use C4::Modelo::CircPrestamoVencidoTemp;
+
+		my $pv = _getCircPrestamoVencidoTempById($id_prestamo);
+
+		C4::AR::Debug::debug("Prestamos => _eliminarPrestamoCircPrestamoVencidoTemp => pv " . $pv);
+
+		if($pv){
+			$pv->delete();
+		}
+}
+
 =item
 		Funcion que limpia la data de la tabla circ_prestamo_vencido_temp
 =cut
@@ -1258,6 +1288,8 @@ sub _enviarRecordatorioVencidos{
 				if (C4::AR::Preferencias::getValorPreferencia('EnabledMailSystem')){
 						C4::AR::Debug::debug("antessssssssssssssssssss -----------------------------");
 						C4::AR::Mail::send_mail(\%mail);
+						# se van eliminando los prestamos vencidos en circ_prestamos_venido_temp
+						_eliminarPrestamoCircPrestamoVencidoTemp($pres->getId_prestamo);
 				}
 
 		}
@@ -1409,7 +1441,7 @@ sub getAllPrestamosVencidosParaMail{
 								}
 						}
 				};
-				
+
 				return (@arrayPrestamos);
 
 		}
