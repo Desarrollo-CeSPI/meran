@@ -335,13 +335,13 @@ sub send_mail {
 
     my ($template, $t_params) = C4::Output::gettemplate("includes/opac-mail.tmpl", "OPAC", 1);
 
-    $t_params->{'mail_content'} = Encode::decode_utf8($info_smtp_hash_ref->{'mail_message'});
+    $t_params->{'mail_content'} = $info_smtp_hash_ref->{'mail_message'};
     $t_params->{'page_title'}   = $info_smtp_hash_ref->{'page_title'};
     $t_params->{'link'}         = $info_smtp_hash_ref->{'link'};
     
     #nombre de la UI
     my $ui                      = C4::AR::Referencias::obtenerDefaultUI() || C4::AR::Referencias::getFirstDefaultUI();
-    my $nombre_ui               = Encode::decode_utf8($ui->getNombre());
+    my $nombre_ui               = $ui->getNombre();
     $t_params->{'nombre_ui'}    = $nombre_ui;
     
     #link de la pagina web

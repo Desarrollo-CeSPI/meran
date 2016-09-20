@@ -1232,12 +1232,12 @@ sub _enviarRecordatorioVencidos{
 				my %mail;
 				my $nivel3              = C4::AR::Nivel3::getNivel3FromId3($pres->{'id3'});
 				my $nivel1              = C4::AR::Nivel3::getNivel1FromId1($nivel3->{'id1'});
-				my $autor               = Encode::decode_utf8($nivel1->getAutor());
-				my $titulo              = Encode::decode_utf8($nivel1->getTitulo());
-				my $nombre              = Encode::decode_utf8($socio->{'persona'}->{'nombre'});
-				my $apellido            = Encode::decode_utf8($socio->{'persona'}->{'apellido'});
+				my $autor               = $nivel1->getAutor();
+				my $titulo              = $nivel1->getTitulo();
+				my $nombre              = $socio->{'persona'}->{'nombre'};
+				my $apellido            = $socio->{'persona'}->{'apellido'};
 				my $fecha_prestamo      = $pres->getFecha_vencimiento_formateada();
-				my $cuerpo_mensaje      = Encode::decode_utf8(C4::AR::Preferencias::getValorPreferencia('vencidoMessage'));
+				my $cuerpo_mensaje      = C4::AR::Preferencias::getValorPreferencia('vencidoMessage');
 
 				$cuerpo_mensaje         =~ s/FIRSTNAME\ SURNAME/$nombre\ $apellido/;
 				$cuerpo_mensaje         =~ s/VENCIMIENTO/$fecha_prestamo/;
@@ -1245,7 +1245,7 @@ sub _enviarRecordatorioVencidos{
 				$cuerpo_mensaje         =~ s/TITLE\:UNITITLE/$titulo/;
 				$cuerpo_mensaje         =~ s/\(EDICION\)//;
 
-				$mail{'mail_from'}      = Encode::decode_utf8(C4::AR::Preferencias::getValorPreferencia('mailFrom'));
+				$mail{'mail_from'}      = Encode::encode_utf8(C4::AR::Preferencias::getValorPreferencia('mailFrom'));
 				$mail{'mail_to'}        = $socio->{'persona'}->email;
 				$mail{'mail_subject'}   = C4::AR::Preferencias::getValorPreferencia('vencidoSubject');
 				$mail{'mail_message'}   = $cuerpo_mensaje;
@@ -1260,12 +1260,12 @@ sub _enviarRecordatorioVencidos{
 
 								my $nivel3              = C4::AR::Nivel3::getNivel3FromId3($pres->{'id3'});
 								my $nivel1              = C4::AR::Nivel3::getNivel1FromId1($nivel3->{'id1'});
-								my $autor               = Encode::decode_utf8($nivel1->getAutor());
-								my $titulo              = Encode::decode_utf8($nivel1->getTitulo());
-								my $nombre              = Encode::decode_utf8($socio->{'persona'}->{'nombre'});
-								my $apellido            = Encode::decode_utf8($socio->{'persona'}->{'apellido'});
+								my $autor               = $nivel1->getAutor();
+								my $titulo              = $nivel1->getTitulo();
+								my $nombre              = $socio->{'persona'}->{'nombre'};
+								my $apellido            = $socio->{'persona'}->{'apellido'};
 								my $fecha_prestamo      = $pres->getFecha_vencimiento_formateada();
-								my $cuerpo_mensaje      = Encode::decode_utf8(C4::AR::Preferencias::getValorPreferencia('vencidoMessage'));
+								my $cuerpo_mensaje      = C4::AR::Preferencias::getValorPreferencia('vencidoMessage');
 
 								$cuerpo_mensaje         =~ s/Sr\.\/Sra\.\ FIRSTNAME\ SURNAME\ :\ //;
 
@@ -1325,12 +1325,12 @@ sub _enviarRecordatorio{
 						my %mail;
 						my $nivel3              = C4::AR::Nivel3::getNivel3FromId3($pres->{'id3'});
 						my $nivel1              = C4::AR::Nivel3::getNivel1FromId1($nivel3->{'id1'});
-						my $autor               = Encode::decode_utf8($nivel1->getAutor());
-						my $titulo              = Encode::decode_utf8($nivel1->getTitulo());
-						my $nombre              = Encode::decode_utf8($socio->{'persona'}->{'nombre'});
-						my $apellido            = Encode::decode_utf8($socio->{'persona'}->{'apellido'});
+						my $autor               = $nivel1->getAutor();
+						my $titulo              = $nivel1->getTitulo();
+						my $nombre              = $socio->{'persona'}->{'nombre'};
+						my $apellido            = $socio->{'persona'}->{'apellido'};
 						my $fecha_prestamo      = $pres->getFecha_vencimiento_formateada();
-						my $cuerpo_mensaje      = Encode::decode_utf8(C4::AR::Preferencias::getValorPreferencia('reminderMessage'));
+						my $cuerpo_mensaje      = C4::AR::Preferencias::getValorPreferencia('reminderMessage');
 						my $opac_port           = ":".(C4::Context->config('opac_port')||'80');
 						my $link                = "http://" . C4::AR::Utilidades::serverName() . $opac_port
 																			. C4::AR::Utilidades::getUrlPrefix() . "/modificarDatos.pl";
@@ -1343,7 +1343,7 @@ sub _enviarRecordatorio{
 						$cuerpo_mensaje         =~ s/BRANCH/Biblioteca/;
 						$cuerpo_mensaje         =~ s/LINK/$link/;
 
-						$mail{'mail_from'}      = Encode::decode_utf8(C4::AR::Preferencias::getValorPreferencia('mailFrom'));
+						$mail{'mail_from'}      = Encode::encode_utf8(C4::AR::Preferencias::getValorPreferencia('mailFrom'));
 						$mail{'mail_to'}        = $socio->{'persona'}->email;
 						$mail{'mail_subject'}   = C4::AR::Preferencias::getValorPreferencia('reminderSubject');
 						$mail{'mail_message'}   = $cuerpo_mensaje;
@@ -1359,12 +1359,12 @@ sub _enviarRecordatorio{
 
 								my $nivel3              = C4::AR::Nivel3::getNivel3FromId3($pres->{'id3'});
 								my $nivel1              = C4::AR::Nivel3::getNivel1FromId1($nivel3->{'id1'});
-								my $autor               = Encode::decode_utf8($nivel1->getAutor());
-								my $titulo              = Encode::decode_utf8($nivel1->getTitulo());
-								my $nombre              = Encode::decode_utf8($socio->{'persona'}->{'nombre'});
-								my $apellido            = Encode::decode_utf8($socio->{'persona'}->{'apellido'});
+								my $autor               = $nivel1->getAutor();
+								my $titulo              = $nivel1->getTitulo();
+								my $nombre              = $socio->{'persona'}->{'nombre'};
+								my $apellido            = $socio->{'persona'}->{'apellido'};
 								my $fecha_prestamo      = $pres->getFecha_vencimiento_formateada();
-								my $cuerpo_mensaje      = Encode::decode_utf8(C4::AR::Preferencias::getValorPreferencia('reminderMessage'));
+								my $cuerpo_mensaje      = C4::AR::Preferencias::getValorPreferencia('reminderMessage');
 								my $opac_port           = ":".(C4::Context->config('opac_port')||'80');
 								my $link                = "http://" . C4::AR::Utilidades::serverName() . $opac_port
 																					 . C4::AR::Utilidades::getUrlPrefix() . "/modificarDatos.pl";
