@@ -34,9 +34,9 @@ foreach my $socio (@$socios_array_ref){
   # verifico si son miembros del grupo MERAN
   # si no son miembros, se desactivan
 
-  my $s = C4::AR::Authldap::memberOf($socio, "meran");
+  my $s = C4::AR::Authldap::memberOf($socio, "no-meran");
 
-  if(!$s){
+  if($s){
     C4::AR::Debug::debug("Socio " . $socio->getNro_socio() . " NO PERTENECE AL GRUPO MERAN!!!");
     $socio->setCumple_requisito("0000000000:00:00");  
     $socio->save();
