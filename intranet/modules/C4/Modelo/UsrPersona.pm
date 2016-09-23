@@ -153,15 +153,19 @@ sub convertirEnSocio{
 
     $self->log($data_hash,'convertirEnSocio');
 
-#    $self->forget();
-
-    my $db = $self->db;
+    my $db    = $self->db;
     my $socio = C4::Modelo::UsrSocio->new(db => $db);
-        $data_hash->{'id_persona'} = $self->getId_persona;
+    
+    $data_hash->{'id_persona'} = $self->getId_persona;
 
-        $socio->agregar($data_hash);
-        $socio->setId_estado(($data_hash->{'id_estado'}));
-        $socio->setThemeINTRA($data_hash->{'tema'} || 'default');
+    $socio->agregar($data_hash);
+    $socio->setId_estado(($data_hash->{'id_estado'}));
+    $socio->setThemeINTRA($data_hash->{'tema'} || 'default');
+
+    if($data_hash->{'auth_method'} eq 'ldap'){
+      $socio->setLastAuthMethod('ldap');
+    }
+
     return $socio;
 }
 
