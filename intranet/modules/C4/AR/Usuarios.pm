@@ -1168,6 +1168,7 @@ sub crearPersonaLDAP{
         $params{'nro_socio'}            = $nro_socio;
         $params{'id_categoria'}         = "1";
         $params{'cumple_requisito'}     = C4::AR::Preferencias::getValorPreferencia("auto_activate_user_from_ldap") || 0;
+        $params{'auth_method'}          = 'ldap';
 
     my $person                      = C4::Modelo::UsrPersona->new();
     
