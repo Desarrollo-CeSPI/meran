@@ -38,7 +38,7 @@ my $op = $ARGV[0] || 0;
 
 my $db_driver =  "mysql";
 my $db_name   = 'base_mpf';
-my $db_host   = 'localhost';
+my $db_host   = 'db';
 my $db_user   = 'root';
 my $db_passwd = 'dev';
 
@@ -300,6 +300,7 @@ sub guardarNivel1DeImportacion{
    my $params_n1;
     $params_n1->{'id_tipo_doc'} = $template;
     $params_n1->{'infoArrayNivel1'} = $infoArrayNivel1;
+    $params_n1->{'no_index'}=1;
 
    if(($template eq 'ANA')&&($id2_padre)){
     	$params_n1->{'id2_padre'} = $id2_padre;
@@ -320,6 +321,7 @@ sub guardarNivel2DeImportacion{
     $params_n2->{'tipo_ejemplar'} = $template;
     $params_n2->{'infoArrayNivel2'} = $infoArrayNivel2;
     $params_n2->{'id1'}=$id1;
+    $params_n2->{'no_index'}=1;
 
     my ($msg_object2,$id1,$id2) = C4::AR::Nivel2::t_guardarNivel2($params_n2);
     return ($msg_object2,$id1,$id2);
@@ -340,6 +342,7 @@ sub guardarNivel3DeImportacion{
     $params_n3->{'ui_duenio'}=$ui;
     $params_n3->{'cantEjemplares'} = 1;
     $params_n3->{'responsable'} = 'meranadmin'; #No puede no tener un responsable
+    $params_n3->{'no_index'}=1;
 
     #Hay que autogenerar el barcode o no???
     $params_n3->{'esPorBarcode'} = 'true';

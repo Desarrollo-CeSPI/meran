@@ -49,6 +49,11 @@ if ($post){
     use C4::Modelo::Contacto;
     my ($contacto)  = C4::Modelo::Contacto->new();
     my $params_hash = $query->Vars;
+    #Limpiamos parámetros
+    foreach my $key (keys %$params_hash) { 
+        $params_hash->{$key} = CGI::escapeHTML($params_hash->{$key});
+    }
+
     $t_params->{'mensaje_error'} = 0;
         #verificamos que los campos requeridos tengan valor
     if( ($params_hash->{'nombre'} eq "") || ($params_hash->{'apellido'} eq "") || ($params_hash->{'email'} eq "") || ($params_hash->{'mensaje'} eq "") ){
