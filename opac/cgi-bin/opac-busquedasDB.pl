@@ -33,7 +33,11 @@ use URI::Escape;
 use C4::AR::PdfGenerator;
 
 my $input                   = new CGI;
-my $string                  = CGI::escapeHTML($input->param('string')) || "";
+
+# Sanitize input params
+C4::AR::Utilidades::sanitize_input_vars($input);
+
+my $string                  = $input->param('string') || "";
 my $to_pdf;
 
 
@@ -52,21 +56,21 @@ my ($template, $session, $t_params);
 my $obj; 
 $obj->{'string'}            = $string;
 $obj->{'keyword'}           = $obj->{'string'};
-$obj->{'tipoAccion'}        = CGI::escapeHTML($input->param('tipoAccion'));
-$obj->{'titulo'}            = CGI::escapeHTML($input->param('titulo'));
-$obj->{'autor'}             = CGI::escapeHTML($input->param('autor'));
-$obj->{'isbn'}              = CGI::escapeHTML($input->param('isbn'));
-$obj->{'estantes'}          = CGI::escapeHTML($input->param('estantes'));
-$obj->{'estantes_grupo'}    = CGI::escapeHTML($input->param('estantes_grupo'));
-$obj->{'tema'}              = CGI::escapeHTML($input->param('tema'));
-$obj->{'tipo'}              = CGI::escapeHTML($input->param('tipo'));    
-$obj->{'only_available'}    = CGI::escapeHTML($input->param('only_available')) || 0;
-$obj->{'from_suggested'}    = CGI::escapeHTML($input->param('from_suggested'));
-$obj->{'tipo_nivel3_name'}  = CGI::escapeHTML($input->param('tipo_nivel3_name'));
+$obj->{'tipoAccion'}        = $input->param('tipoAccion');
+$obj->{'titulo'}            = $input->param('titulo');
+$obj->{'autor'}             = $input->param('autor');
+$obj->{'isbn'}              = $input->param('isbn');
+$obj->{'estantes'}          = $input->param('estantes');
+$obj->{'estantes_grupo'}    = $input->param('estantes_grupo');
+$obj->{'tema'}              = $input->param('tema');
+$obj->{'tipo'}              = $input->param('tipo');    
+$obj->{'only_available'}    = $input->param('only_available') || 0;
+$obj->{'from_suggested'}    = $input->param('from_suggested');
+$obj->{'tipo_nivel3_name'}  = $input->param('tipo_nivel3_name');
 $obj->{'tipoBusqueda'}      = 'all';
-$obj->{'token'}             = CGI::escapeHTML($input->param('token'));
-$obj->{'orden'}             = CGI::escapeHTML($input->param('orden'))|| undef;
-$obj->{'primera_vez'}       = CGI::escapeHTML($input->param('primera_vez')) || "2";
+$obj->{'token'}             = $input->param('token');
+$obj->{'orden'}             = $input->param('orden')|| undef;
+$obj->{'primera_vez'}       = $input->param('primera_vez') || "2";
 
 
 
@@ -74,13 +78,13 @@ if ($obj->{'primera_vez'} eq "2"){
 		  $obj->{'sentido_orden'}   = 0;
 		  $obj->{'primera_vez'} = "1";
 } else {
-		  $obj->{'sentido_orden'}     = CGI::escapeHTML($input->param('sentido_orden'));
+		  $obj->{'sentido_orden'}     = $input->param('sentido_orden');
 } 
 
 C4::AR::Validator::validateParams('U389',$obj,['tipoAccion']);
 
 #se corta el parametro page en 6 numeros nada mas, sino rompe error 500
-my $page                    = CGI::escapeHTML($input->param('page'));
+my $page                    = $input->param('page');
 my $ini                     = $obj->{'ini'} = substr($page,0,5);
 
 #se toma el tiempo de inicio de la búsqueda
