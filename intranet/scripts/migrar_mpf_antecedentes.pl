@@ -37,7 +37,7 @@ my $op = $ARGV[0] || 0;
 
 my $db_driver =  "mysql";
 my $db_name   = 'ant_mpf';
-my $db_host   = 'meran_db';
+my $db_host   = 'db';
 my $db_user   = 'root';
 my $db_passwd = 'dev';
 
