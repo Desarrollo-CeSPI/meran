@@ -41,7 +41,7 @@ my ($template, $session, $t_params) = get_template_and_user({
 			     });
 
 
-my $idNivel1 = CGI::escapeHTML($input->param('id1'));
+my $idNivel1 = $input->param('id1');
 
 $t_params->{'id2'} = CGI::escapeHTML($input->param('id2')) || 0;
 my $cant_total      = 0;

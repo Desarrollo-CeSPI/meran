@@ -191,6 +191,29 @@ sub crearRadioButtonBootstrap{
 }
 
 =item
+  Recibe el input generado por CGI, se recorren las variables recibidas y se escapa HTML para evitar XSS
+=cut
+sub sanitize_input_vars {
+
+  my ($input) = @_;
+
+  my $params_hash = $input->Vars;
+  my $value;
+  #Limpiamos parámetros
+  foreach my $key (keys %$params_hash) { 
+      if(!$input->param('obj')){
+        $value = CGI::escapeHTML($input->param($key));
+        # TODO add more bad words
+        $value =~ s/javascript//;
+        #C4::AR::Debug::debug("opac-detail => key => $key");
+        $input->param($key, $value);
+        #C4::AR::Debug::debug("opac-detail => sanitized => " . $value);
+      }
+  }
+
+}
+
+=item
     Recibe un archivo y devuelve el magic number.
     Tambien recibe un array con los tipos de archivos permitidos.
     Lo escribe en /temp para esto.

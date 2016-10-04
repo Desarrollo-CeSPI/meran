@@ -533,6 +533,9 @@ sub get_template_and_user {
 																		 $in->{'change_password'},
 																		 $in->{'template_params'}
 															 );
+
+    C4::AR::Utilidades::sanitize_input_vars($in->{'query'});
+
 	#C4::AR::Debug::debug("la SESSION en el get template and user ".$session);    
 	my ($template, $params)     = C4::Output::gettemplate($in->{'template_name'}, $in->{'type'}, $in->{'loging_out'}, $usuario_logueado);
   
