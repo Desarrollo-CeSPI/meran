@@ -27,10 +27,10 @@ use C4::AR::Debug;
 use C4::AR::Auth;
 use C4::AR::Usuarios;
 
-my $db_name   = 'DB_NAME';
-my $db_host   = 'DB_HOST';
-my $db_user   = 'DB_USER';
-my $db_passwd = 'DB_PASSWORD';
+my $db_name   = C4::Context->config("database");
+my $db_host   = C4::Context->config("hostname");
+my $db_user   = C4::Context->config("user");
+my $db_passwd = C4::Context->config("pass");
 
 my $db_exactas = DBI->connect("DBI:mysql:$db_name:$db_host",$db_user, $db_passwd);
 $db_exactas->do('SET NAMES utf8');
