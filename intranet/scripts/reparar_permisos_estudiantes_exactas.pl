@@ -32,12 +32,6 @@ my $db_host   = 'DB_HOST';
 my $db_user   = 'DB_USER';
 my $db_passwd = 'DB_PASSWORD';
 
-
-my $db_name   = $context->{"config"}{"database"};
-my $db_host   = $context->{"config"}{"hostname"};
-my $db_user   = $context->{"config"}{"user"};
-my $db_passwd = $context->{"config"}{"pass"};
-
 my $db_exactas = DBI->connect("DBI:mysql:$db_name:$db_host",$db_user, $db_passwd);
 $db_exactas->do('SET NAMES utf8');
 
