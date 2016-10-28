@@ -203,7 +203,7 @@ sub agregar{
 
     #si estoy guardano una analica, guardo en la tabla cat_registro_marc_n2_analitica el id1 que estoy generando
     #y la referencia al nivel 2, grupo al que pertenece la analitica
-    if($params->{'id_tipo_doc'} eq "ANA"){
+    if(($params->{'id_tipo_doc'} eq "ANA")&&($params->{'id2_padre'})){
         my $cat_registro_n2_analitica = C4::Modelo::CatRegistroMarcN2Analitica->new( db => $db );
         $cat_registro_n2_analitica->setId2Padre($params->{'id2_padre'});
         $cat_registro_n2_analitica->setId1($self->getId1());

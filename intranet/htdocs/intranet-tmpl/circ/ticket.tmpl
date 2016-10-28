@@ -5,7 +5,13 @@
 
 
 <!--LO QUE ESTA COMENTADO ES COMO ESTA ANTES!!!!!!! -->
-<body onload="javascript:window.print();window.close();">
+<body>
+  <script>
+    window.onload = function () {
+      window.print();
+      setTimeout(function(){window.close();}, 1);
+    }
+  </script>
 [% FOREACH comprobantes %]
     <div class="comprob">
         <p >PR&Eacute;STAMO - RENOVACI&Oacute;N</p>
