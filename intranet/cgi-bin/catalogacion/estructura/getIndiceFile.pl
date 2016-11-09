@@ -44,7 +44,7 @@ my ($template, $session, $t_params)  = get_template_and_user({
                     });
 
 # por si meten por URL un id no valido                   
-#eval{                
+eval{                
 
     my $file_id         = $input->param('id2');
     my $eDocsDir        = C4::Context->config('edocsdir');
@@ -63,13 +63,13 @@ my ($template, $session, $t_params)  = get_template_and_user({
     #SE ESCRIBE EL ARCHIVO EN EL CLIENTE
     while (read (INF, $buffer, 65536) and print $buffer ) {};
 
-#};
+};
 
 # redirigimos
-#if($@){
+if($@){
 
-#    my $session = CGI::Session->load();
+    my $session = CGI::Session->load();
 
-#    C4::AR::Auth::redirectTo(C4::AR::Utilidades::getUrlPrefix() . '/mainpage.pl?token=' . $session->param('token'));
+    C4::AR::Auth::redirectTo(C4::AR::Utilidades::getUrlPrefix() . '/mainpage.pl?token=' . $session->param('token'));
   
-#}
+}
