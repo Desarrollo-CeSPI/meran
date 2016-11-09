@@ -44,17 +44,18 @@ my ($template, $session, $t_params)  = get_template_and_user({
                     });
 
 # por si meten por URL un id no valido                   
-eval{                
+#eval{                
 
     my $file_id         = $input->param('id2');
     my $eDocsDir        = C4::Context->config('edocsdir');
     my ($nivel2,$file)  = C4::AR::Catalogacion::getIndiceFile($file_id);
     my $tmpFileName     = $eDocsDir.'/'.$file;
+    my $ext             = C4::AR::Utilidades::getFileExtension($tmpFileName);
 
     open INF, $tmpFileName or die "\nCan't open $tmpFileName for reading: $!\n";
 
     print $input->header(       -type           => $nivel2->getIndiceFileType,
-                                -attachment     => C4::AR::Filtros::i18n("Indice")." - #".$nivel2->id." - ".$nivel2->nivel1->getTitulo,
+                                -attachment     => C4::AR::Filtros::i18n("Indice")." - #".$nivel2->id." - ".$nivel2->nivel1->getTitulo . "." . $ext,
                                 -expires        => '0',
                         );
     my $buffer;
@@ -62,13 +63,13 @@ eval{
     #SE ESCRIBE EL ARCHIVO EN EL CLIENTE
     while (read (INF, $buffer, 65536) and print $buffer ) {};
 
-};
+#};
 
 # redirigimos
-if($@){
+#if($@){
 
-    my $session = CGI::Session->load();
+#    my $session = CGI::Session->load();
 
-    C4::AR::Auth::redirectTo(C4::AR::Utilidades::getUrlPrefix() . '/mainpage.pl?token=' . $session->param('token'));
+#    C4::AR::Auth::redirectTo(C4::AR::Utilidades::getUrlPrefix() . '/mainpage.pl?token=' . $session->param('token'));
   
-}
+#}
