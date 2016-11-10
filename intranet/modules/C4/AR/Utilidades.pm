@@ -236,7 +236,7 @@ sub checkFileMagic{
     open ( FILE_TO_CHECK, ">$path/$hash_unique" ) or die "$!"; 
     binmode FILE_TO_CHECK; 
     while ( <$file> ) { 
-    	print FILE_TO_CHECK; 
+      print FILE_TO_CHECK; 
     }
     close(FILE_TO_CHECK);
     
@@ -4811,9 +4811,9 @@ sub isValidFile{
     my @extensiones_permitidas=("bmp","jpg","gif","png","jpeg","msword","docx","odt","pdf","xls","xlsx","zip","rar");
     my @nombreYextension=split('\.',$file_path);
 
-    C4::AR::Debug::debug("UploadDocument ====== > FileType: ".$file_type);
-    C4::AR::Debug::debug("UploadDocument ====== > FilePath: ".$file_path);
-    C4::AR::Debug::debug("UploadDocument ====== > Extension: ".@nombreYextension[1]);
+    C4::AR::Debug::debug("Utilidades => isValidFile => UploadDocument ====== > FileType: ".$file_type);
+    C4::AR::Debug::debug("Utilidades => isValidFile => UploadDocument ====== > FilePath: ".$file_path);
+    C4::AR::Debug::debug("Utilidades => isValidFile => UploadDocument ====== > Extension: ".@nombreYextension[1]);
     my $size = scalar(@nombreYextension) - 1;
 
     if (!( @nombreYextension[$size] =~ m/bmp|jpg|gif|png|jpeg|msword|docx|odt|ods|pdf|xls|xlsx|zip/i) ) {
@@ -4821,8 +4821,42 @@ sub isValidFile{
     }
 
     $return_value = trim(split(';', $file_type));
-    C4::AR::Debug::debug("FILE TYPE RESULT: ".$return_value);
-    C4::AR::Debug::debug("FILE PATH ///////////////: ".$file_path);
+    C4::AR::Debug::debug("Utilidades => isValidFile => FILE TYPE RESULT: ".$return_value);
+    C4::AR::Debug::debug("Utilidades => isValidFile => FILE PATH ///////////////: ".$file_path);
+    return ($return_value);
+}
+
+sub getFileExtension{
+
+    my ($file_path) = @_;
+    my $return_value = 1;
+    my $file_type;
+
+    use File::LibMagic;
+    my $flm = File::LibMagic->new();
+
+    open(FILE, "<$file_path") or die "Can't open $file_path : $!\n";
+    close(FILE);
+
+    $file_type = $flm->checktype_filename($file_path);
+
+    # my @extensiones_permitidas=("bmp","jpg","gif","png","jpeg","msword","docx","odt","pdf","xls","xlsx","zip","rar");
+    my @extensiones_permitidas = C4::AR::UploadFile::getAllowedExtensionsArray();
+    my @nombreYextension=split('\.',$file_path);
+
+    C4::AR::Debug::debug("Utilidades => getFileExtension => UploadDocument ====== > FileType: ".$file_type);
+    C4::AR::Debug::debug("Utilidades => getFileExtension => UploadDocument ====== > FilePath: ".$file_path);
+    C4::AR::Debug::debug("Utilidades => getFileExtension => UploadDocument ====== > Extension: ".@nombreYextension[1]);
+    my $size = scalar(@nombreYextension) - 1;
+
+    if (!( @nombreYextension[$size] =~ m/bmp|jpg|gif|png|jpeg|msword|docx|odt|ods|pdf|xls|xlsx|zip/i) ) {
+      $return_value = 0;
+    } else {
+      $return_value = @nombreYextension[1];   
+    }
+
+    C4::AR::Debug::debug("Utilidades => getFileExtension => FILE TYPE RESULT: ".$return_value);
+    C4::AR::Debug::debug("Utilidades => getFileExtension => FILE PATH ///////////////: ".$file_path);
     return ($return_value);
 }
 
@@ -5040,13 +5074,13 @@ sub translateYesNo_toNumber{
 }
 
 sub printAjaxPercent{
-	my ($total,$actual) = @_;
-	
-	my $percent = 0;
-	
-	eval{
-	   $percent = ($actual * 100) / $total;
-	};
+  my ($total,$actual) = @_;
+  
+  my $percent = 0;
+  
+  eval{
+     $percent = ($actual * 100) / $total;
+  };
     
     my $session = CGI::Session->load();
 
@@ -5076,10 +5110,10 @@ sub demo_test{
 }
 
 sub generarComboDeEstados{
-	
+  
     my ($params) = @_;
 
-	my ($estados) = C4::AR::Referencias::obtenerEstados();
+  my ($estados) = C4::AR::Referencias::obtenerEstados();
 
     my @select_estados_array;
     my %select_estados_hash;
@@ -5116,8 +5150,8 @@ sub generarComboDeEstados{
     my $comboDeDisponibilidades= CGI::scrolling_list(\%options_hash);
 
     return $comboDeDisponibilidades;
-	
-	
+  
+  
 }
 
 sub generarComboEstadoEjemplares{
