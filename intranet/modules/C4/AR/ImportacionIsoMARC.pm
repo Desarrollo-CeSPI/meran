@@ -2765,6 +2765,12 @@ sub procesarReferencia {
                     C4::AR::Debug::debug("NUEVA CIUDAD: ".$dato." => ".$tabla_referer_involved->getId());
                     return $tabla_referer_involved->getIdLocalidad();
                     }
+                case 'editorial' {
+                    $tabla_referer_involved->setEditorial($dato);
+                    $tabla_referer_involved->save();
+                    C4::AR::Debug::debug("NUEVA EDITORIAL: ".$dato." => ".$tabla_referer_involved->getId());
+                    return $tabla_referer_involved->getId();
+                    }
             }
 
         }
