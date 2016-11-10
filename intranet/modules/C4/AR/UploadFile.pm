@@ -234,7 +234,7 @@ sub uploadAdjuntoNovedadOpac{
             open ( WRITEIT, ">$uploaddir/$hash_unique.$mime_type" ) or die "Cant write to $uploaddir/$hash_unique.$mime_type. Reason: $!"; 
             binmode WRITEIT; 
             while ( <$adjunto> ) { 
-            	print WRITEIT; 
+              print WRITEIT; 
             }
             close(WRITEIT);
             
@@ -285,7 +285,7 @@ sub uploadFotoNovedadOpac{
             open ( WRITEIT, ">$uploaddir/$hash_unique.$file_type" ) or die "Cant write to $uploaddir/$hash_unique.$file_type. Reason: $!"; 
             binmode WRITEIT; 
             while ( <$imagen> ) { 
-            	print WRITEIT; 
+              print WRITEIT; 
             }
             close(WRITEIT);
         
@@ -355,9 +355,9 @@ sub uploadPhoto{
     if($type){
 
         eval{
-	        if ($name){
-	            unlink($uploaddir . "/" . $name);
-	        }
+          if ($name){
+              unlink($uploaddir . "/" . $name);
+          }
         };
 
         open(WRITEIT, ">$uploaddir/$name") or die "Cant write to $uploaddir/$name. Reason: $!";
@@ -413,7 +413,8 @@ sub uploadFile{
     my $msg                     = '';
     my $size                    = 0;
     my $msg_object              = C4::AR::Mensajes::create();
-    my @extensiones_permitidas  = ("doc","docx","odt","ods","pdf","xls","xlsx","zip");
+    #my @extensiones_permitidas  = ("doc","docx","odt","ods","pdf","xls","xlsx","zip");
+    my @extensiones_permitidas  = getAllowedExtensionsArray();
 
     my @nombreYextension        = split('\.',$filepath);
 
@@ -432,6 +433,12 @@ sub uploadFile{
                     close(WFD);
               }
     }
+}
+
+sub getAllowedExtensionsArray {
+  my @allowed_extensions_array = ("bmp","jpg","gif","png","jpeg","msword","doc","docx","odt","ods","pdf","xls","xlsx","zip","rar","mp3", "epub");
+
+  return @allowed_extensions_array;
 }
 
 sub uploadDocument {
@@ -460,7 +467,9 @@ sub uploadDocument {
 
     if (C4::AR::Preferencias::getPreferencia("e_documents")){
 
-        my @extensiones_permitidas=("bmp","jpg","gif","png","jpeg","doc","docx","odt","ods","pdf","xls","xlsx","zip","rar","mp3", "epub");
+        # my @extensiones_permitidas=("bmp","jpg","gif","png","jpeg","doc","docx","odt","ods","pdf","xls","xlsx","zip","rar","mp3", "epub");
+        my @extensiones_permitidas = getAllowedExtensionsArray();
+
         my $size = scalar(@nombreYextension) - 1;
         my $ext= @nombreYextension[$size];
 
@@ -719,7 +728,7 @@ sub uploadIndiceFile{
         $name           = @nombreYextension[0];
         my $file_type   = $ext;
         my $hash_unique = Digest::MD5::md5_hex(localtime());
-        my $file_name   = $name.".".$ext."_".$hash_unique;
+        my $file_name   = $name."_".$hash_unique.".".$ext;
         my $write_file  = $eDocsDir."/".$file_name;
 
         if (!open(WFD,">$write_file")) {
