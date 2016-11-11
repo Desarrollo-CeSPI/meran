@@ -52,6 +52,7 @@ foreach my $nivel2 (@$niveles2){
                       $creados++;
                     }
         if($dato){
+          $modificados++;
           $marc_record->field($campo)->update($subcampo => 'cat_editorial@'.$dato);
           $nivel2->setMarcRecord($marc_record->as_usmarc());
           $nivel2->save();
