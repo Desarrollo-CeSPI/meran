@@ -367,7 +367,7 @@
 	                <div id="estado_coleccion[% id1 %]" class="estado_coleccion[% id1 %]">
 	                
 						  <ul class="listado_sin_margen estado_coleccion">
-							[% FOREACH anio IN estadoDeColeccion.keys.sort %]
+							[% FOREACH anio IN estadoDeColeccion.keys.nsort %]
                             [% IF estadoDeColeccion.$anio.keys %]
                             <li>
                                 [% IF  (estadoDeColeccion.$anio.size > 1 || (estadoDeColeccion.$anio.keys.first && estadoDeColeccion.$anio.keys.first != '#'))||
@@ -375,12 +375,12 @@
                                        %]
                                    [% IF anio != '#' %] <b>[% anio %]</b>  [% END %]
 
-                                  [% FOREACH volumen IN estadoDeColeccion.$anio.keys.sort %]
+                                  [% FOREACH volumen IN estadoDeColeccion.$anio.keys.nsort %]
                                     
                                       [% IF  estadoDeColeccion.$anio.$volumen.keys.size > 1 || estadoDeColeccion.$anio.$volumen.keys.sort.first != '#' %]
                                        [% IF volumen != '#' %] <b>[% volumen %]</b>[% END %]
                                         (
-                                          [% FOREACH fasciculo IN estadoDeColeccion.$anio.$volumen.keys.sort %]
+                                          [% FOREACH fasciculo IN estadoDeColeccion.$anio.$volumen.keys.nsort %]
 
 								 			[% PERL %]
 											print C4::AR::Filtros::link_to( text =>     "[% fasciculo %]",
