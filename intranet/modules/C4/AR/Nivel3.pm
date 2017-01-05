@@ -465,7 +465,7 @@ sub detalleNivel3{
         $hash_nivel2{'nivel2_array'}            = $nivel2_object->toMARC_Intra; #arreglo de los campos fijos de Nivel 2 mapeado a MARC
 
         $hash_nivel2{'nivel2_template'}         = $nivel2_object->getTemplate();
-        $hash_nivel2{'tiene_indice'}            = $nivel2_object->tiene_indice;
+        $hash_nivel2{'tiene_indice'}            = $nivel2_object->tiene_indice || $nivel2_object->tieneArchivoIndice;
         $hash_nivel2{'hay_indice_file'}         = $nivel2_object->tieneArchivoIndice;
         $hash_nivel2{'indice'}                  = $hash_nivel2{'tiene_indice'}?$nivel2_object->getIndice:0;
         $hash_nivel2{'esta_en_estante_virtual'} = C4::AR::Estantes::estaEnEstanteVirtual($id2);
@@ -862,7 +862,7 @@ sub detalleCompletoOPAC{
 			#Se supone que no cambian dentro de la misma publicación seriada, se toma solo el primero
 				$t_params->{'issn'}        				= C4::AR::Utilidades::trim($nivel2_array_ref->[$i]->getISSN);
 			}
-            $hash_nivel2->{'tiene_indice'}              = $nivel2_array_ref->[$i]->tiene_indice;
+            $hash_nivel2->{'tiene_indice'}              = $nivel2_array_ref->[$i]->tiene_indice || $nivel2_array_ref->[$i]->tieneArchivoIndice;
             $hash_nivel2->{'esta_en_estante_virtual'}   = C4::AR::Estantes::estaEnEstanteVirtual($hash_nivel2->{'id2'});
             $hash_nivel2->{'indice'}                    = $hash_nivel2->{'tiene_indice'}?$nivel2_array_ref->[$i]->getIndice:0;
             $hash_nivel2->{'hay_indice_file'}           = $nivel2_array_ref->[$i]->tieneArchivoIndice;
