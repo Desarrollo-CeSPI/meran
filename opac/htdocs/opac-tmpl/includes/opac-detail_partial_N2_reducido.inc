@@ -88,9 +88,7 @@
                                                                                 title   => "[% 'Ver &iacute;ndice' | i18n %]",
                                                     ) ;
                                     [% END %]
-                                [% END %]
 
-                                [% IF indice %]
                                     <div id="indice_data[% id2 %]"  class="modal hide fade">
                                           <div class="modal-header">
                                             <a href="#" class="close" data-dismiss="modal">×</a>
