@@ -960,7 +960,8 @@ sub _verificaciones {
 
 #Se verifica si es un prestamo especial este dentro de los horarios que corresponde.
 #SOLO PARA INTRA, ES UN PRESTAMO ESPECIAL.
-    if(!$msg_object->{'error'} && $tipo eq "INTRA" && $tipo_prestamo eq 'ES' &&  C4::AR::Reservas::_verificarHorarioES()){
+    #if(!$msg_object->{'error'} && $tipo eq "INTRA" && $tipo_prestamo eq 'ES' &&  C4::AR::Reservas::_verificarHorarioES()){
+    if(!$msg_object->{'error'} && $tipo eq "INTRA" && $tipo_prestamo eq 'ES') {
         $msg_object->{'error'}= 1;
         C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'P102', 'params' => []} ) ;
         C4::AR::Debug::debug("Reservas.pm => _verificaciones => Entro al if de prestamos especiales");
@@ -968,7 +969,8 @@ sub _verificaciones {
 
 #Se verifica que la operación este dentro del horario de funcionamiento de la biblioteca.
 #SOLO PARA INTRA, ES UN PRESTAMO.
-    if(!$msg_object->{'error'} && $tipo eq "INTRA" && $tipo_prestamo ne 'ES' && !C4::AR::Preferencias::getValorPreferencia("operacion_fuera_horario") && C4::AR::Reservas::_verificarHorario()){
+    #if(!$msg_object->{'error'} && $tipo eq "INTRA" && $tipo_prestamo ne 'ES' && !C4::AR::Preferencias::getValorPreferencia("operacion_fuera_horario") && C4::AR::Reservas::_verificarHorario()){
+    if(!$msg_object->{'error'} && $tipo eq "INTRA" && $tipo_prestamo ne 'ES' && !C4::AR::Preferencias::getValorPreferencia("operacion_fuera_horario") ){      
         $msg_object->{'error'}= 1;
         C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'P127', 'params' => []} ) ;
         C4::AR::Debug::debug("Reservas.pm => _verificaciones => Entro al if de operacion fuera de horario");
