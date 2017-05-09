@@ -844,7 +844,8 @@ sub _verificarParaRenovar {
 
     #Se verifica que la operación este dentro del horario de funcionamiento de la biblioteca.
     #SOLO PARA INTRA
-    if(!$msg_object->{'error'} && $msg_object->{'tipo'} eq 'INTRA' && !C4::AR::Preferencias::getValorPreferencia("operacion_fuera_horario") && C4::AR::Reservas::_verificarHorario()){
+    #if(!$msg_object->{'error'} && $msg_object->{'tipo'} eq 'INTRA' && !C4::AR::Preferencias::getValorPreferencia("operacion_fuera_horario") && C4::AR::Reservas::_verificarHorario()){
+    if(!$msg_object->{'error'} && $msg_object->{'tipo'} eq 'INTRA' && !C4::AR::Preferencias::getValorPreferencia("operacion_fuera_horario") ){
         $msg_object->{'error'}= 1;
         C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'P127', 'params' => []} ) ;
         C4::AR::Debug::debug("CircPrestamo.pm => _verificarParaRenovar => Entro al if de operacion fuera de horario");
