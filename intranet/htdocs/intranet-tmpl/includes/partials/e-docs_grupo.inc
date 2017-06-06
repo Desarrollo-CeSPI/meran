@@ -107,7 +107,7 @@
 							    </div>  
 							  </div>
 							  <div class="control-group">
-								  <label class="control-label" for="filename">[% "T&iacute;tulo del arhivo"| i18n %]: </label>
+								  <label class="control-label" for="filename">[% "T&iacute;tulo del archivo"| i18n %]: </label>
 								  <div class="controls">
 								  	<input type="text" name="filename" id="filename_[% id2 %]" required /><br />
 							  	  </div>
