@@ -190,7 +190,7 @@ sub uploadAdjuntoNovedadOpac{
                                         docx
                                         xlsx
                                         zip
-                                        rft
+                                        rtf
                                         odt
                                         ods
                                         msword
