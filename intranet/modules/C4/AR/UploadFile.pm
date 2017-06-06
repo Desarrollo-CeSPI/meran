@@ -482,7 +482,8 @@ sub uploadDocument {
             $name = @nombreYextension[0];
             my $file_type = $ext;
             my $hash_unique = Digest::MD5::md5_hex(localtime());
-            my $file_name = $name.".".$ext."_".$hash_unique;
+            #my $file_name = $name.".".$ext."_".$hash_unique;
+            my $file_name = $name."_".$hash_unique".".$ext;
             my $write_file= $eDocsDir."/".$file_name;
 
             if (!open(WFD,">$write_file")) {
