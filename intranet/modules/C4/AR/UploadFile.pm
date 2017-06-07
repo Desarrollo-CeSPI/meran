@@ -456,6 +456,8 @@ sub uploadDocument {
         $showName = $file_name;
     }
 
+    $showName = Encode::decode_utf8($showName);
+
     my @nombreYextension=split('\.',$file_name);
 
     use Digest::MD5;
@@ -467,7 +469,6 @@ sub uploadDocument {
 
     if (C4::AR::Preferencias::getPreferencia("e_documents")){
 
-        # my @extensiones_permitidas=("bmp","jpg","gif","png","jpeg","doc","docx","odt","ods","pdf","xls","xlsx","zip","rar","mp3", "epub");
         my @extensiones_permitidas = getAllowedExtensionsArray();
 
         my $size = scalar(@nombreYextension) - 1;
@@ -475,16 +476,15 @@ sub uploadDocument {
 
         if (!grep(/$ext/i,@extensiones_permitidas)) {
                 $msg= "Solo se permiten archivos del tipo (".join(", ",@extensiones_permitidas).") [Fallo de extension]";
-        }elsif (scalar(@nombreYextension)>=2) { # verifica que el nombre del archivo tenga el punto (.)
-            my $ext= @nombreYextension[$size];
-            my $buff='';
-
-            $name = @nombreYextension[0];
-            my $file_type = $ext;
+        } elsif (scalar(@nombreYextension) >= 2) { 
+            # verifica que el nombre del archivo tenga el punto (.)
+            my $ext         = @nombreYextension[$size];
+            my $buff        = '';
+            $name           = @nombreYextension[0];
+            my $file_type   = $ext;
             my $hash_unique = Digest::MD5::md5_hex(localtime());
-            #my $file_name = $name.".".$ext."_".$hash_unique;
-            my $file_name = $name."_".$hash_unique".".$ext;
-            my $write_file= $eDocsDir."/".$file_name;
+            my $file_name   = $hash_unique.".".$ext;
+            my $write_file  = $eDocsDir."/".$file_name;
 
             if (!open(WFD,">$write_file")) {
                     $msg="Hay un error y el archivo no puede escribirse en el servidor.";
@@ -537,7 +537,7 @@ sub deleteDocument {
                 $msg_object->{'error'}= 1;
         }else{
             unlink($write_file);
-            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'UP06', 'params' => [$file->getTitle]} ) ;
+            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'UP06', 'params' => [Encode::decode_utf8($file->getTitle)]} ) ;
             $file->delete();
         }
     }else{
