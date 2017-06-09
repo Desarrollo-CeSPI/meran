@@ -55,7 +55,7 @@ eval{
     open INF, $tmpFileName or die "\nCan't open $tmpFileName for reading: $!\n";
 
     print $input->header(       -type           => $nivel2->getIndiceFileType,
-                                -attachment     => C4::AR::Filtros::i18n("Indice")." - #".$nivel2->id." - ".$nivel2->nivel1->getTitulo . "." . $ext,
+                                -attachment     => $nivel2->nivel1->getTitulo . "." . $ext,
                                 -expires        => '0',
                         );
     my $buffer;
