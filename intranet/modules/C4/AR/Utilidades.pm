@@ -4839,14 +4839,10 @@ sub getFileExtension{
     close(FILE);
 
     $file_type = $flm->checktype_filename($file_path);
-
-    # my @extensiones_permitidas=("bmp","jpg","gif","png","jpeg","msword","docx","odt","pdf","xls","xlsx","zip","rar");
+    
     my @extensiones_permitidas = C4::AR::UploadFile::getAllowedExtensionsArray();
     my @nombreYextension=split('\.',$file_path);
 
-    C4::AR::Debug::debug("Utilidades => getFileExtension => UploadDocument ====== > FileType: ".$file_type);
-    C4::AR::Debug::debug("Utilidades => getFileExtension => UploadDocument ====== > FilePath: ".$file_path);
-    C4::AR::Debug::debug("Utilidades => getFileExtension => UploadDocument ====== > Extension: ".@nombreYextension[1]);
     my $size = scalar(@nombreYextension) - 1;
 
     if (!( @nombreYextension[$size] =~ m/bmp|jpg|gif|png|jpeg|msword|docx|odt|ods|pdf|xls|xlsx|zip/i) ) {
@@ -4855,8 +4851,7 @@ sub getFileExtension{
       $return_value = @nombreYextension[1];   
     }
 
-    C4::AR::Debug::debug("Utilidades => getFileExtension => FILE TYPE RESULT: ".$return_value);
-    C4::AR::Debug::debug("Utilidades => getFileExtension => FILE PATH ///////////////: ".$file_path);
+
     return ($return_value);
 }
 
