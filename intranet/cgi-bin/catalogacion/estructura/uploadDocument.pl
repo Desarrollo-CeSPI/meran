@@ -38,10 +38,6 @@ my $file_name   = $query->param('fileToUpload');
 my $file_data   = $query->upload('fileToUpload');
 my $authnotrequired = 0;
 
-C4::AR::Debug::debug("E-DOCUMENT PARA GRUPO:                 ".$id2);
-C4::AR::Debug::debug("E-DOCUMENT FILENAME:                 ".$file_data);
-
-
 my ($template, $session, $t_params) = get_template_and_user({
                             template_name   => ('catalogacion/estructura/detalle.tmpl'),
                             query           => $query,
