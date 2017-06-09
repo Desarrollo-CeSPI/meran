@@ -566,6 +566,9 @@ sub uploadImport {
         $showName = $params->{'file_name'};
     }
 
+
+    $showName = Encode::decode_utf8($showName);
+
     my @nombreYextension=split('\.',$params->{'file_name'});
 
     use Digest::MD5;
@@ -688,6 +691,8 @@ sub uploadIndiceFile{
     if (!C4::AR::Utilidades::validateString($showName)){
         $showName = $file_name;
     }
+
+    $showName = Encode::decode_utf8($showName);
 
     my @nombreYextension=split('\.',$file_name);
 
