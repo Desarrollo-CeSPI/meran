@@ -50,12 +50,13 @@ eval{
     my $eDocsDir        = C4::Context->config('edocsdir');
     my $file            = C4::AR::Catalogacion::getDocumentById($file_id);
     my $tmpFileName     = $eDocsDir.'/'.$file->getFilename;
+    my $ext             = C4::AR::Utilidades::getFileExtension($tmpFileName);
 
     open INF, $tmpFileName or die "\nCan't open $tmpFileName for reading: $!\n";
 
     print $input->header(
                               -type           => $file->getFileType, 
-                              -attachment     => $file->getTitle . "." . $file->getFileExtension($file->getFilename),
+                              -attachment     => $file->getTitle . "." . $ext),
                               -expires        => '0',
                       );
     my $buffer;
