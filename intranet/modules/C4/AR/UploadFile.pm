@@ -450,13 +450,12 @@ sub uploadDocument {
     my $bytes_read;
     my $size= 0;
 
+    $name     = Encode::decode_utf8($name);
     my $showName = $name;
 
     if (!C4::AR::Utilidades::validateString($showName)){
         $showName = $file_name;
-    }
-
-    $showName = Encode::decode_utf8($showName);
+    }    
 
     my @nombreYextension=split('\.',$file_name);
 
@@ -686,13 +685,12 @@ sub uploadIndiceFile{
     my $msg='';
     my $bytes_read;
     my $size= 0;
+    $name     = Encode::decode_utf8($name);
     my $showName = $name;
 
     if (!C4::AR::Utilidades::validateString($showName)){
         $showName = $file_name;
-    }
-
-    $showName = Encode::decode_utf8($showName);
+    }    
 
     my @nombreYextension=split('\.',$file_name);
 
