@@ -60,13 +60,6 @@ sub getIconType(){
 	
 }
 
-sub getFileExtension() {
-    my ($self) = shift;
-    my ($filename) = @_;
-    my ($ext) = $filename =~ /((\.[^.\s]+)+)$/;
-
-    return $ext;
-}
 # ------GETTERS--------------------
 sub getId{
     my ($self) = shift;
