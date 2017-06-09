@@ -35,9 +35,7 @@ my $file_data   = $query->upload('fileToUpload');
 my $name        = $file_name;
 my $authnotrequired = 0;
 
-C4::AR::Debug::debug("INDICE PARA GRUPO:                 ".$id2);
-C4::AR::Debug::debug("INDICE FILENAME:                 ".$file_name);
-C4::AR::Debug::debug("INDICE FILEDATA:                 ".$file_data);
+
 
 my ($template, $session, $t_params) = get_template_and_user({
                             template_name   => ('catalogacion/estructura/detalle.tmpl'),
