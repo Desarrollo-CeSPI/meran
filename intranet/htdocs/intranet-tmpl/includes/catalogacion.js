@@ -684,9 +684,9 @@ function updateGuardarEsquema(responseText){
     
 }
 
-function editarIndice(id2){
-    
-ID_N2 = id2;
+function editarIndice(id1, id2){
+    ID_N1 = id1;
+    ID_N2 = id2;
    
     $('#datos_indice').modal({   containerCss:{
                 backgroundColor:"#fff",
@@ -699,7 +699,8 @@ ID_N2 = id2;
 
 
 
-function agregarIndice(id2){
+function agregarIndice(id1, id2){
+    ID_N1 = id1;
     ID_N2 = id2;
    
     $('#datos_indice').modal({   containerCss:{
@@ -733,7 +734,8 @@ function updateGuadarIndice(responseText){
     var info        = JSONstring.toObject(responseText);
     var Messages    = info.Message_arrayref;
     
-    setMessages(Messages);  
+    setMessages(Messages);
+    window.location = "detalle.pl?id1=" + ID_N1;
 }
 
 function close_window_indice(){
