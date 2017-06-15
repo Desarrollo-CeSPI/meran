@@ -780,7 +780,7 @@ sub deleteIndice{
                 $msg=C4::AR::Filtros::i18n("Hay un error y el archivo no puede eliminarse del servidor.");
         }else{
             unlink($write_file);
-            $msg= C4::AR::Filtros::i18n("El archivo del indice ").C4::AR::Filtros::i18n(" se ha eliminado correctamente");
+            $msg= C4::AR::Filtros::i18n("El archivo del indice se ha eliminado correctamente");
             $nivel2->getIndiceFilePath(undef);
             $nivel2->save();
         }
