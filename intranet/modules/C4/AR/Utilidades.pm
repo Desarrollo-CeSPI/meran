@@ -4845,7 +4845,7 @@ sub getFileExtension{
 
     my $size = scalar(@nombreYextension) - 1;
 
-    if (!( @nombreYextension[$size] =~ m/bmp|jpg|gif|png|jpeg|msword|docx|odt|ods|pdf|xls|xlsx|zip/i) ) {
+    if (!( @nombreYextension[$size] =~ m/bmp|jpg|gif|png|jpeg|msword|docx|doc|odt|ods|pdf|xls|xlsx|zip/i) ) {
       $return_value = 0;
     } else {
       $return_value = @nombreYextension[1];   
