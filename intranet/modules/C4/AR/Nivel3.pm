@@ -467,7 +467,7 @@ sub detalleNivel3{
         $hash_nivel2{'nivel2_template'}         = $nivel2_object->getTemplate();
         $hash_nivel2{'tiene_indice'}            = $nivel2_object->tiene_indice || $nivel2_object->tieneArchivoIndice;
         $hash_nivel2{'hay_indice_file'}         = $nivel2_object->tieneArchivoIndice;
-        $hash_nivel2{'indice'}                  = $hash_nivel2{'tiene_indice'}?$nivel2_object->getIndice:0;
+        $hash_nivel2{'indice'}                  = $hash_nivel2{'tiene_indice'}?$nivel2_object->getIndice:"";
         $hash_nivel2{'esta_en_estante_virtual'} = C4::AR::Estantes::estaEnEstanteVirtual($id2);
         my ($totales_nivel3, @result)           = detalleDisponibilidadNivel3($id2,$nivel2_object->db);
         $hash_nivel2{'nivel3'}                  = \@result;
@@ -864,7 +864,7 @@ sub detalleCompletoOPAC{
 			}
             $hash_nivel2->{'tiene_indice'}              = $nivel2_array_ref->[$i]->tiene_indice || $nivel2_array_ref->[$i]->tieneArchivoIndice;
             $hash_nivel2->{'esta_en_estante_virtual'}   = C4::AR::Estantes::estaEnEstanteVirtual($hash_nivel2->{'id2'});
-            $hash_nivel2->{'indice'}                    = $hash_nivel2->{'tiene_indice'}?$nivel2_array_ref->[$i]->getIndice:0;
+            $hash_nivel2->{'indice'}                    = $hash_nivel2->{'tiene_indice'}?$nivel2_array_ref->[$i]->getIndice:"";
             $hash_nivel2->{'hay_indice_file'}           = $nivel2_array_ref->[$i]->tieneArchivoIndice;
 
             $hash_nivel2->{'nivel2_array'}              = ($nivel2_array_ref->[$i])->toMARC_Opac; #arreglo de los campos fijos de Nivel 2 mapeado a MARC
