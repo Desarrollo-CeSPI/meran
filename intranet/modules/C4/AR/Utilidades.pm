@@ -4829,26 +4829,6 @@ sub isValidFile{
 sub getFileExtension{
 
     my ($file_path) = @_;
-    # my $return_value = 1;
-    # my $file_type;
-
-    # use File::LibMagic;
-    # my $flm = File::LibMagic->new();
-
-    # $file_type = $flm->checktype_filename($file_path);
-    
-    # my @extensiones_permitidas = C4::AR::UploadFile::getAllowedExtensionsArray();
-    # my @nombreYextension=split('\.',$file_path);
-
-    # my $size = scalar(@nombreYextension) - 1;
-
-    # if (!( @nombreYextension[$size] =~ m/bmp|jpg|gif|png|jpeg|msword|docx|doc|odt|ods|pdf|xls|xlsx|zip/i) ) {
-    #   $return_value = 0;
-    # } else {
-    #   $return_value = @nombreYextension[1];   
-    # }
-
-
 
     my ($ext) = $file_path =~ /(\.[^.]+)$/;
     return ($ext);
