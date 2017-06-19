@@ -56,7 +56,7 @@ eval{
 
     print $input->header(
                               -type           => $file->getFileType, 
-                              -attachment     => $file->getTitle . "." . $ext),
+                              -attachment     => $file->getTitle . $ext),
                               -expires        => '0',
                       );
     my $buffer;
