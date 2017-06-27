@@ -41,9 +41,12 @@ my ($template, $session, $t_params) = get_template_and_user({
 
 my $obj                         = $input->param('obj');
 $obj                            = C4::AR::Utilidades::from_json_ISO($obj);
-my ($year)             		    = $obj->{'year'};
-my $result_hash = C4::AR::Utilidades::datosEstadisticosUNLP($year);
+my ($sec,$min,$hour,$mday,$mon,$current_year,$wday,$yday,$isdst) = localtime();
+$current_year = $current_year+1900;
+my ($year)             		    = $obj->{'year'} || $current_year ;
+my ($result_hash,$categorias) = C4::AR::Utilidades::datosEstadisticosUNLP($year);
 
+$t_params->{'categorias'}   = $categorias;  
 $t_params->{'estadisticas_hash'}   = $result_hash;    
 $t_params->{'year'}    = $year;
 $t_params->{'page_sub_title'}   = C4::AR::Filtros::i18n("Reporte Anual (".$year.")");

@@ -139,7 +139,7 @@ sub getDetalleDestino{
                                                                                         distinct => 1,
                                                                                         select => [ 'campo_destino','subcampo_destino' ],
                                                                                         query => \@filtros,
-                                                                                        sort_by => $ordenAux,
+                                                                                      #  sort_by => $ordenAux,
      );
 
     return $detalle_completo;
