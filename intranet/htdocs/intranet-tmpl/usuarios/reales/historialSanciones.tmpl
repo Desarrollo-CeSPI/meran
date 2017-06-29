@@ -39,7 +39,11 @@
                     [% IF historial_sancion.responsable == "Sistema" %]
                         [% 'Sistema' | i18n %]
                     [% ELSE %]
+                      [% TRY %]
                         [% historial_sancion.usr_responsable.persona.getApeYNom %]
+                      [% CATCH %]
+                          Responsable ([% historial_sancion.responsable %]) eliminado
+                      [% END %]
                     [% END %]
                 </td>
                 <td>
