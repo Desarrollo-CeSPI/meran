@@ -4826,6 +4826,10 @@ sub isValidFile{
     return ($return_value);
 }
 
+=item
+ Retorna la extensión de un archivo, CON el punto, ej. .pdf
+=cut
+
 sub getFileExtension{
 
     my ($file_path) = @_;
