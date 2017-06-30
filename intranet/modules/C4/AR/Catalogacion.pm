@@ -1600,12 +1600,12 @@ sub t_guardarEnEstructuraCatalogacion {
         # enable transactions, if possible
         $db->{connect_options}->{AutoCommit} = 0;
 
-        eval {
+#        eval {
             $estrCatalogacion->agregar($params);
             $db->commit;
             $msg_object->{'error'} = 0;
             C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U364', 'params' => []} ) ;
-        };
+#        };
 
         if ($@){
             $msg_object          = C4::AR::Mensajes::create();

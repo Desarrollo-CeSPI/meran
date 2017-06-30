@@ -4,93 +4,21 @@
   <h3>[% HTML.escape(page_sub_title) %]</h3>
 </div>
 <div class="modal-body">
-  <h4>CATÁLOGO</h4>
-  <h6>Cantidad total de documentos (todo tipo) IMPRESOS! ('LIB', 'TES', 'SER', 'REV', 'FOT')</h6>
-  <p>
-    <dl>
-      <dt>TOTAL:<dt><dd>[% estadisticas_hash.item('cantidad_impreso_total') %]</dd>
-      <dt>DISPONIBLES:<dt><dd>[% estadisticas_hash.item('cantidad_impreso_disponible') %]</dd>
-      <dt>NO DISPONIBLES:<dt><dd>[% estadisticas_hash.item('cantidad_impreso_no_disponible') %]</dd>
-    </dl>
-  </p>
-  <hr>
-    <h5>CANTIDADES </h5>
-    <p>
-      <h6>Registros: </h6>
-    <ul>
-    [% FOREACH cr IN estadisticas_hash.cantidades_registros %]
-       <li> <b>[% cr.first %]:</b> [% cr.last %] </li>
+[% FOREACH categoria IN categorias %]
+  <div>
+ <h4>[% categoria %]</h4>
+  <table style="width:100%">
+  <tr>
+    <th>Dato</th>
+    <th>Valor</th> 
+  </tr>
+  [% FOREACH pair IN estadisticas_hash.$categoria.pairs %]
+  <tr>
+    <td>[% pair.key %]</td>
+    <td>[% pair.value %]</td> 
+  </tr>
     [% END %]
-    </ul>
-    </p>
-    <p>
-      <h6>Grupos: </h6>
-    <ul>
-    [% FOREACH cr IN estadisticas_hash.cantidades_grupos %]
-       <li> <b>[% cr.first %]:</b>  [% cr.last %] </li>
-    [% END %]
-    </ul>
-    </p>
-    <p>
-      <h6>Ejemplares: </h6>
-    <ul>
-    [% FOREACH cr IN estadisticas_hash.cantidades_ejemplares %]
-       <li> <b>[% cr.first %]:</b>  [% cr.last %] </li>
-    [% END %]
-    </ul>
-    </p> 
-  <hr>
-  <h4>SERVICIOS</h4>
-
-  <h5>PRESTAMOS</h5>
-  <p>
-    <dl>
-      <dt>Totales:<dt><dd>[% estadisticas_hash.item('cantidad_prestamos_totales') %]</dd>
-      <dt>Domicilio:<dt><dd>[% estadisticas_hash.item('cantidad_prestamos_domicilio') %]</dd>
-      <dt>Sala:<dt><dd>[% estadisticas_hash.item('cantidad_prestamos_sala') %]</dd>
-    </dl>
-  </p>
-  <hr>
-  <h6>Préstamos MONOGRAFIAS</h6>
-  <p>
-    <dl>
-      <dt>Domicilio:<dt><dd>[% estadisticas_hash.item('cantidad_prestamos_domicilio_monografia') %]</dd>
-      <dt>Sala:<dt><dd>[% estadisticas_hash.item('cantidad_prestamos_sala_monografia') %]</dd>
-    </dl>
-  </p>
-  <hr>
-  <h6>Préstamos REVISTA</h6>
-  <p>
-    <dl>
-      <dt>Domicilio:<dt><dd>[% estadisticas_hash.item('cantidad_prestamos_domicilio_revista') %]</dd>
-      <dt>Sala:<dt><dd>[% estadisticas_hash.item('cantidad_prestamos_sala_revista') %]</dd>
-    </dl>
-  </p>
-  <hr>
-  <h6>Préstamos OTROS</h6>
-  <p>
-    <dl>
-      <dt>Domicilio:<dt><dd>[% estadisticas_hash.item('cantidad_prestamos_domicilio_otros') %]</dd>
-      <dt>Sala:<dt><dd>[% estadisticas_hash.item('cantidad_prestamos_sala_otros') %]</dd>
-    </dl>
-  </p>
-    <h5>CONSULTAS AL OPAC</h5>
-  <p>
-    <dl>
-      <dt>Socios:<dt><dd>[% estadisticas_hash.item('cantidad_busquedas_socios') %]</dd>
-      <dt>No Socios:<dt><dd>[% estadisticas_hash.item('cantidad_busquedas_no_socios') %]</dd>
-    </dl>
-  </p>
-    <h5>USUARIOS REGISTRADOS </h5>
-  <p>
-    <dl>
-      [% FOREACH cat IN estadisticas_hash.item('categorias_socios_registrados') %]
-        <dt>[% cat.first %]<dt><dd>[% cat.last %]</dd>
-      [% END %]
-    </dl>
-  </p>
-
+</table>
 </div>
-
-
-                  
+[% END %]
+</div>
