@@ -325,8 +325,11 @@ sub getAutoresSecundarios{
                 else{
                     $funcion = $campo->subfield("e");
                 }
-
-                $autor = $colaborador->getCompleto()." (".$funcion.")";
+                if($funcion){
+                    $autor = $colaborador->getCompleto()." (".$funcion.")";
+                } else {
+                    $autor = $colaborador->getCompleto();
+                }
             }
             else {
                  $autor = $colaborador->getCompleto();
