@@ -48,6 +48,7 @@ use MARC::Moose::Formater::Iso2709;
 
 
 use Spreadsheet::Read;
+use Spreadsheet::ParseExcel; 
 
 use vars qw(@EXPORT @ISA);
 @ISA=qw(Exporter);
@@ -177,7 +178,7 @@ sub releerEsquemaDeRegistrosDeImportacion {
             my %detalle=();
             $detalle{'campo'}=$campo;
             $detalle{'subcampo'}=$subcampo;
-            $detalle{'id_importacion_esquema'} = $importacion->getEsquema();
+            $detalle{'id_importacion_esquema'} = $importacion->getEsquema()->getId();
             $nuevo_esquema_detalle->agregar(\%detalle);
         }
     }
@@ -254,7 +255,7 @@ sub guardarRegistrosNuevaImportacion {
 
 #Leemos los registros armamos el Marc::Record
     while ( my $record = $reader->read() ) {
-    eval {
+  #  eval {
          my $marc_record = MARC::Record->new();
          my $registro_erroneo=0;
          for my $field ( @{$record->fields} ) {
@@ -325,7 +326,7 @@ sub guardarRegistrosNuevaImportacion {
             my $Io_registro_importacion          = C4::Modelo::IoImportacionIsoRegistro->new(db => $db);
             $Io_registro_importacion->agregar(\%parametros);
 
-      };
+ #     };
 
      if ($@){
          #Se loguea error de Base de Datos
@@ -1486,22 +1487,31 @@ sub getNivelesFromRegistro {
         my %hash_temp;
         $hash_temp{'grupo'}  = $marc_record_n2;
         $hash_temp{'tipo_ejemplar'}  = $tipo_ejemplar;
-        $hash_temp{'cant_ejemplares'}   = scalar(@ejemplares);
+        
+        if ($tipo_ejemplar eq "ANA"){
+            $hash_temp{'cant_ejemplares'}   = 0;
+        }else{
+            $hash_temp{'cant_ejemplares'}   = scalar(@ejemplares);
+        }
+
         $total_ejemplares+=$hash_temp{'cant_ejemplares'};
         my @ejemplares_grupo =   @ejemplares; #esto hace la copia del arreglo
+        if ($tipo_ejemplar eq "ANA"){ 
+            @ejemplares_grupo=();
+        }
         $hash_temp{'ejemplares'}   = \@ejemplares_grupo;
         @ejemplares=();
         push (@grupos, \%hash_temp);
 
         #C4::AR::Debug::debug("###########################################################################################");
-        foreach my $grupo (@grupos){
+        #foreach my $grupo (@grupos){
             #my $ej = $grupo->{'ejemplares'};
             #C4::AR::Debug::debug(" GRUPO con ".scalar(@$ej)." ej");
-            C4::AR::Debug::debug(" Grupo  ".$grupo->{'grupo'}->as_formatted);
+            #C4::AR::Debug::debug(" Grupo  ".$grupo->{'grupo'}->as_formatted);
                 #foreach my $ejemplar (@$ej){
                         #C4::AR::Debug::debug(" Ejemplar  ".$ejemplar->as_formatted);
                 #}
-        }
+        #}
         #C4::AR::Debug::debug("###########################################################################################");
 
         my %hash_temp;
@@ -1573,6 +1583,12 @@ sub detalleCompletoRegistro {
         my ($cantidad_ejemplares, $nuevos_grupos ) = procesarRevistas($detalle->{'grupos'});
         $detalle->{'grupos'} = $nuevos_grupos;
         $detalle->{'total_ejemplares'} = $cantidad_ejemplares;
+    }
+
+    #Son analiticas?
+    if ( C4::AR::ImportacionIsoMARC::getTipoDocumentoFromMarcRecord_Object($detalle->{'grupos'}->[0]->{'grupo'})->getId_tipo_doc() eq 'ANA') {
+        C4::AR::Debug::debug(" Analiticas !!! ");
+        $detalle->{'total_ejemplares'} = 0;
     }
 
     my $grupos = $detalle->{'grupos'};
@@ -1826,15 +1842,14 @@ sub procesarRevistas {
 
     #Porceso la colección generando los nuevos grupos
      foreach my $nivel2 (@$revistas){
-        #C4::AR::Debug::debug("REVISTA ==>  generamos estado de colección");
+        C4::AR::Debug::debug("REVISTA ==>  generamos estado de colección");
         my $nivel2_marc = $nivel2->{'grupo'};
 
-        #C4::AR::Debug::debug("GRUPO ==>  \n ".$nivel2_marc->as_formatted);
+        C4::AR::Debug::debug("GRUPO ==>  \n ".$nivel2_marc->as_formatted);
 
         my $field863 = $nivel2_marc->field('863');
 
         if(($field863)|| ($nivel2_marc->subfield('900','e'))) {
-
 
             my @estadoDeColeccion= ();
 
@@ -1845,7 +1860,7 @@ sub procesarRevistas {
                 #Utilizo el subcampo e para indicar que se trata de el estado de colección completo.
                 #Ejemplo:
                 # 1976(1-2); 1977(3-4-5-6-7-8); 1978(9/10-11-12-13-14); 1979(15-16)
-                #C4::AR::Debug::debug("REVISTA ==>  _estadoDeColeccionCompleto");
+                C4::AR::Debug::debug("REVISTA ==>  _estadoDeColeccionCompleto");
                 @estadoDeColeccion = _estadoDeColeccionCompleto($nivel2_marc->subfield('900','e'));
             }else{
                  #Así fue en Darwinion con Año Volumen y Número separados.
@@ -1853,9 +1868,9 @@ sub procesarRevistas {
 
             }
 
-             #   C4::AR::Debug::debug("ESTADO DE COLECCION ==>  \n ");
+              C4::AR::Debug::debug("ESTADO DE COLECCION ==>  \n ");
             foreach my $rev (@estadoDeColeccion){
-                #C4::AR::Debug::debug("REVISTA ==>  \n ".$rev->{'anio'}."-".$rev->{'numero'});
+              C4::AR::Debug::debug("REVISTA ==>  \n ".$rev->{'anio'}."-".$rev->{'numero'});
 
                     my $field863_final;
 
@@ -1919,10 +1934,9 @@ sub procesarRevistas {
     }        #if existe el campo 863
     else {
            #no tiene el campo
-#           C4::AR::Debug::debug("COLECCION  ==>  ERROR: grupo sin campo 863 \n");
+           C4::AR::Debug::debug("COLECCION  ==>  ERROR: grupo sin campo 863 \n");
 
     }
-
 
     } #foreach
 
@@ -1937,7 +1951,7 @@ sub procesarRevistas {
         #Ejemplo:
         # 1976(1-2); 1977(3-4-5-6-7-8); 1978(9/10-11-12-13-14); 1979(15-16)
          my $anio = '';
-        # C4::AR::Debug::debug("COLECCION  ==>  PROCESO : $volumenes \n");
+       C4::AR::Debug::debug("COLECCION  ==>  PROCESO :  \n");
         while($estadoDeColeccionCompleto =~ /(?:\s?)(\d{4}\/?\d*)*(?:\s?)(\d*\-?\d*)(?:\s?)(?:\(([^\)]*)\))*;?/g) {
            if($1) {
             $anio = $1;
@@ -2106,7 +2120,7 @@ sub procesarRevistas {
             my @estadoDeColeccion= ();
 
             if ($numeros) {
-                # C4::AR::Debug::debug("COLECCION  ==>  PROCESO : $numeros \n");
+             C4::AR::Debug::debug("COLECCION  ==>  PROCESO : $numeros \n");
 	 	         my @numeros_separados = split(/,/, $numeros );
 
                 foreach my $n (@numeros_separados){
@@ -2153,7 +2167,7 @@ sub procesarRevistas {
                         $fasciculo{'anio'} = $anio;
                         $fasciculo{'volumen'} = $volumen;
                         $fasciculo{'numero'} = $numero_limpio;
-                        push(@estadoDeColeccion,\%fasciculo);   
+                        push(@estadoDeColeccion,\%fasciculo);
                     }
                 }
             } else {

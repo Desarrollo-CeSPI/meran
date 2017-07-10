@@ -5217,256 +5217,327 @@ sub generarComboEstadoEjemplaresTexto{
     return $combo_estados;
 }
 
+sub obtenerConsultasEstadisticas{
+    
+    use C4::Modelo::RepEstadistica;
+    use C4::Modelo::RepEstadistica::Manager;
+
+
+    my @filtros;
+    my $estantes_array_ref = C4::Modelo::RepEstadistica::Manager->get_rep_estadistica( query => \@filtros, 
+                                           sort_by => 'orden');
+
+    return ($estantes_array_ref);
+}
+
+sub obtenerCategorias {
+    use C4::Modelo::RepEstadistica;
+    use C4::Modelo::RepEstadistica::Manager;
+    my $dbh = C4::Context->dbh;
+    my $sth=$dbh->prepare("Select distinct(category) from rep_estadistica where category is NOT null;");
+    $sth->execute();
+
+    my @categorias;
+    while (my $cat = $sth->fetchrow_array) {
+        push(@categorias, $cat);
+    }
+
+   return (\@categorias);
+}
+sub obtenerConsultasEstadisticasPorCategoria{
+    my ($categoria)=@_;
+    
+    use C4::Modelo::RepEstadistica;
+    use C4::Modelo::RepEstadistica::Manager;
+
+
+    my @filtros;
+    push(@filtros, ( category => { eq => $categoria }));
+
+    my $est_array_ref = C4::Modelo::RepEstadistica::Manager->get_rep_estadistica( query => \@filtros, 
+                                           sort_by => 'orden');
+
+    return ($est_array_ref);
+}
+sub obtenerEstadisticasPorCategoria{
+    my ($categoria,$year)=@_;
+    my $dbh = C4::Context->dbh;
+
+    my $consultas = C4::AR::Utilidades::obtenerConsultasEstadisticasPorCategoria($categoria);
+    my %partial_hash;
+    foreach my $consulta (@$consultas) {
+         my $sth=$dbh->prepare($consulta->getQuery());
+         if ($consulta->getParams() == 2){ 
+             $sth->execute($year, $year+1);
+         } else {
+            if ($consulta->getParams() == 1){ 
+                $sth->execute($year + 1);
+            }else{
+                $sth->execute();
+            }
+         }
+         my $cantidad = $sth->fetchrow_array;
+         $partial_hash{$consulta->getName()}=$cantidad;
+        
+         $sth->finish;
+    }
+   return (\%partial_hash);
+}
+
 
 sub datosEstadisticosUNLP{
-
     my ($year)=@_;
-    my $dbh = C4::Context->dbh;
+    
+    my $categorias =  C4::AR::Utilidades::obtenerCategorias();
     my %result_hash;
-
-    # CATÁLOGO: - cantidad total de documentos (todo tipo) IMPRESOS!
-
-    #TOTAL
-    my $sth=$dbh->prepare("Select count(*) from cat_registro_marc_n3 where template in ('LIB', 'TES', 'SER', 'REV', 'FOT') and created_at < ? ;");
-    $sth->execute($year + 1);
-    
-    if (my $cantidad_impreso_total = $sth->fetchrow_array){
-        $result_hash{'cantidad_impreso_total'}=$cantidad_impreso_total;
-    }
-    
-    $sth->finish;
-
-    #DISPONIBLE
-    my $sth=$dbh->prepare("Select count(*) from cat_registro_marc_n3 where template in ('LIB', 'TES', 'SER', 'REV', 'FOT') and created_at < ?  and marc_record like '%ref_estado\@STATE002%' ;");
-    $sth->execute($year + 1);
-
-    if (my $cantidad_impreso_disponible = $sth->fetchrow_array){
-        $result_hash{'cantidad_impreso_disponible'}=$cantidad_impreso_disponible;
+    foreach my $cat (@$categorias){
+    $result_hash{$cat}     =  C4::AR::Utilidades::obtenerEstadisticasPorCategoria($cat,$year);
     }
 
-    $sth->finish;
-
-    #NO DISPONIBLE
-    my $sth=$dbh->prepare("Select count(*) from cat_registro_marc_n3 where template in ('LIB', 'TES', 'SER', 'REV', 'FOT') and created_at < ? and marc_record not like '%ref_estado\@STATE002%' ;");
-    $sth->execute($year + 1);
-
-    if (my $cantidad_impreso_no_disponible = $sth->fetchrow_array){
-        $result_hash{'cantidad_impreso_no_disponible'}=$cantidad_impreso_no_disponible;
-    }
-
-    $sth->finish;
-
-    #Cantidades!
-    #Registros
-    my $sth=$dbh->prepare("SELECT cat_ref_tipo_nivel3.nombre as template, count(distinct(cat_registro_marc_n1.id)) as cant
-        FROM cat_registro_marc_n1
-        LEFT JOIN cat_registro_marc_n3 ON cat_registro_marc_n3.id1 = cat_registro_marc_n1.id
-        LEFT JOIN cat_ref_tipo_nivel3 ON cat_ref_tipo_nivel3.id_tipo_doc = cat_registro_marc_n1.template
-        WHERE cat_registro_marc_n3.created_at < ? GROUP BY cat_registro_marc_n1.template;");
-    $sth->execute($year + 1);
-    $result_hash{'cantidades_registros'} = $sth->fetchall_arrayref;
-    $sth->finish;
-
-    #Grupos
-    my $sth=$dbh->prepare("SELECT  cat_ref_tipo_nivel3.nombre as template, count(distinct(cat_registro_marc_n2.id)) as cant
-        FROM cat_registro_marc_n2
-        LEFT JOIN cat_registro_marc_n3 ON cat_registro_marc_n3.id2 = cat_registro_marc_n2.id
-        LEFT JOIN cat_ref_tipo_nivel3 ON cat_ref_tipo_nivel3.id_tipo_doc = cat_registro_marc_n2.template
-        WHERE cat_registro_marc_n3.created_at < ? GROUP BY cat_registro_marc_n2.template;");
-    $sth->execute($year + 1);
-    $result_hash{'cantidades_grupos'} = $sth->fetchall_arrayref;
-    $sth->finish;
-
-
-    #Ejemplares
-    my $sth=$dbh->prepare("Select cat_ref_tipo_nivel3.nombre as template ,count(*)as cant from cat_registro_marc_n3 
-        LEFT JOIN cat_ref_tipo_nivel3 ON cat_ref_tipo_nivel3.id_tipo_doc = cat_registro_marc_n3.template
-        where created_at < ? GROUP BY template;");
-    $sth->execute($year + 1);
-    $result_hash{'cantidades_ejemplares'} = $sth->fetchall_arrayref;
-    $sth->finish;
-
-
-    #Volumenes no disponibles impresos
-    my $sth=$dbh->prepare("SELECT count(distinct(cat_registro_marc_n2.id))
-        FROM cat_registro_marc_n2
-        LEFT JOIN cat_registro_marc_n3 ON cat_registro_marc_n3.id2 = cat_registro_marc_n2.id
-        WHERE cat_registro_marc_n2.template in ('LIB', 'TES', 'SER', 'REV', 'FOT') and cat_registro_marc_n3.marc_record not like '%ref_estado\@STATE002%'
-        AND cat_registro_marc_n3.created_at < ? ;");
-    $sth->execute($year + 1);
-
-    if (my $cantidad_no_disponibles_grupos = $sth->fetchrow_array){
-        $result_hash{'cantidad_no_disponibles_grupos'}=$cantidad_no_disponibles_grupos;
-    }
-
-    $sth->finish;
-
-    # SERVICIOS: 
- 
-    #Prestamos totales
-    my $sth=$dbh->prepare("SELECT COUNT(*)  FROM rep_historial_prestamo WHERE fecha_devolucion like '$year%'");
-    $sth->execute();
-
-
-    if (my $cantidad_prestamos_totales = $sth->fetchrow_array){
-        $result_hash{'cantidad_prestamos_totales'}=$cantidad_prestamos_totales;
-    }
-
-    $sth->finish;
-
-    #Prestamos domicilio
-    my $sth=$dbh->prepare("SELECT count(*) FROM rep_historial_prestamo left join circ_ref_tipo_prestamo on rep_historial_prestamo.tipo_prestamo = circ_ref_tipo_prestamo.id_tipo_prestamo WHERE circ_ref_tipo_prestamo.codigo_disponibilidad = 'CIRC0000' AND rep_historial_prestamo.fecha_devolucion like '$year%'");
-    $sth->execute();
-
-
-    if (my $cantidad_prestamos_domicilio = $sth->fetchrow_array){
-        $result_hash{'cantidad_prestamos_domicilio'}=$cantidad_prestamos_domicilio;
-    }
-
-    $sth->finish;
-
-    #Prestamos sala
-    my $sth=$dbh->prepare("SELECT count(*) FROM rep_historial_prestamo left join circ_ref_tipo_prestamo on rep_historial_prestamo.tipo_prestamo = circ_ref_tipo_prestamo.id_tipo_prestamo WHERE circ_ref_tipo_prestamo.codigo_disponibilidad = 'CIRC0001' AND rep_historial_prestamo.fecha_devolucion like '$year%' ");
-    $sth->execute();
-
-
-    if (my $cantidad_prestamos_sala = $sth->fetchrow_array){
-        $result_hash{'cantidad_prestamos_sala'}=$cantidad_prestamos_sala;
-    }
-
-    $sth->finish;
-
-
-    #Prestamos monografia domicilio
-    my $sth=$dbh->prepare("SELECT count(*) FROM rep_historial_prestamo 
-            left join circ_ref_tipo_prestamo on rep_historial_prestamo.tipo_prestamo = circ_ref_tipo_prestamo.id_tipo_prestamo 
-            LEFT JOIN cat_registro_marc_n3 ON rep_historial_prestamo.id3 = cat_registro_marc_n3.id
-            WHERE circ_ref_tipo_prestamo.codigo_disponibilidad = 'CIRC0000' 
-            AND cat_registro_marc_n3.template IN ('LIB','TES','FOT')     
-            AND rep_historial_prestamo.fecha_devolucion like '$year%' ");
-    $sth->execute();
-
-    if (my $cantidad_prestamos_domicilio_monografia = $sth->fetchrow_array){
-        $result_hash{'cantidad_prestamos_domicilio_monografia'}=$cantidad_prestamos_domicilio_monografia;
-    }
-
-    $sth->finish;
-
-    #Prestamos monografia sala
-    my $sth=$dbh->prepare("SELECT count(*) FROM rep_historial_prestamo 
-            left join circ_ref_tipo_prestamo on rep_historial_prestamo.tipo_prestamo = circ_ref_tipo_prestamo.id_tipo_prestamo 
-            LEFT JOIN cat_registro_marc_n3 ON rep_historial_prestamo.id3 = cat_registro_marc_n3.id
-            WHERE circ_ref_tipo_prestamo.codigo_disponibilidad = 'CIRC0001' 
-            AND cat_registro_marc_n3.template IN ('LIB','TES','FOT')     
-            AND rep_historial_prestamo.fecha_devolucion like '$year%' ");
-
-    $sth->execute();
-
-
-    if (my $cantidad_prestamos_sala_monografia = $sth->fetchrow_array){
-        $result_hash{'cantidad_prestamos_sala_monografia'}=$cantidad_prestamos_sala_monografia;
-    }
-
-    $sth->finish;
-
-
-    #Prestamos revistas domicilio
-    my $sth=$dbh->prepare("SELECT count(*) FROM rep_historial_prestamo 
-            left join circ_ref_tipo_prestamo on rep_historial_prestamo.tipo_prestamo = circ_ref_tipo_prestamo.id_tipo_prestamo 
-            LEFT JOIN cat_registro_marc_n3 ON rep_historial_prestamo.id3 = cat_registro_marc_n3.id
-            WHERE circ_ref_tipo_prestamo.codigo_disponibilidad = 'CIRC0000' 
-            AND cat_registro_marc_n3.template = 'REV'     
-            AND rep_historial_prestamo.fecha_devolucion like '$year%' ");
-    $sth->execute();
-
-
-    if (my $cantidad_prestamos_domicilio_revista = $sth->fetchrow_array){
-        $result_hash{'cantidad_prestamos_domicilio_revista'}=$cantidad_prestamos_domicilio_revista;
-    }
-
-    $sth->finish;
-
-    #Prestamos monografia sala
-    my $sth=$dbh->prepare("SELECT count(*) FROM rep_historial_prestamo 
-            left join circ_ref_tipo_prestamo on rep_historial_prestamo.tipo_prestamo = circ_ref_tipo_prestamo.id_tipo_prestamo 
-            LEFT JOIN cat_registro_marc_n3 ON rep_historial_prestamo.id3 = cat_registro_marc_n3.id
-            WHERE circ_ref_tipo_prestamo.codigo_disponibilidad = 'CIRC0001' 
-            AND cat_registro_marc_n3.template = 'REV'   
-            AND rep_historial_prestamo.fecha_devolucion  like '$year%' ");
-
-    $sth->execute();
-
-    if (my $cantidad_prestamos_sala_revista = $sth->fetchrow_array){
-        $result_hash{'cantidad_prestamos_sala_revista'}=$cantidad_prestamos_sala_revista;
-    }
-
-    $sth->finish;
-
-
-    #Prestamos domicilio otros
-    my $sth=$dbh->prepare("SELECT count(*) FROM rep_historial_prestamo 
-            left join circ_ref_tipo_prestamo on rep_historial_prestamo.tipo_prestamo = circ_ref_tipo_prestamo.id_tipo_prestamo 
-            LEFT JOIN cat_registro_marc_n3 ON rep_historial_prestamo.id3 = cat_registro_marc_n3.id
-            WHERE circ_ref_tipo_prestamo.codigo_disponibilidad = 'CIRC0000' 
-            AND cat_registro_marc_n3.template NOT IN ('LIB','TES','FOT', 'REV')     
-            AND rep_historial_prestamo.fecha_devolucion like '$year%' ");
-
-    $sth->execute();
-
-    if (my $cantidad_prestamos_domicilio_otros = $sth->fetchrow_array){
-        $result_hash{'cantidad_prestamos_domicilio_otros'}=$cantidad_prestamos_domicilio_otros;
-    }
-
-    $sth->finish;
-
-    #Prestamos sala otros
-    my $sth=$dbh->prepare("SELECT count(*) FROM rep_historial_prestamo 
-            left join circ_ref_tipo_prestamo on rep_historial_prestamo.tipo_prestamo = circ_ref_tipo_prestamo.id_tipo_prestamo 
-            LEFT JOIN cat_registro_marc_n3 ON rep_historial_prestamo.id3 = cat_registro_marc_n3.id
-            WHERE circ_ref_tipo_prestamo.codigo_disponibilidad = 'CIRC0001' 
-            AND cat_registro_marc_n3.template NOT IN ('LIB','TES','FOT', 'REV')   
-            AND rep_historial_prestamo.fecha_devolucion like '$year%'");
-
-    $sth->execute();
-
-    if (my $cantidad_prestamos_sala_otros = $sth->fetchrow_array){
-        $result_hash{'cantidad_prestamos_sala_otros'}=$cantidad_prestamos_sala_otros;
-    }
-
-    $sth->finish;
-
-    #Consultas OPAC
-    
-    #Socios
-    my $sth=$dbh->prepare("SELECT COUNT(*)  FROM rep_busqueda WHERE nro_socio IS NOT NULL AND fecha like '$year%'");
-    $sth->execute();
-
-    if (my $cantidad_busquedas_socios = $sth->fetchrow_array){
-        $result_hash{'cantidad_busquedas_socios'}=$cantidad_busquedas_socios;
-    }
-    $sth->finish;
-
-    #No Socios
-    my $sth=$dbh->prepare("SELECT COUNT(*)  FROM rep_busqueda WHERE nro_socio IS NULL AND fecha like '$year%' ");
-    $sth->execute();
-
-
-    if (my $cantidad_busquedas_no_socios = $sth->fetchrow_array){
-        $result_hash{'cantidad_busquedas_no_socios'}=$cantidad_busquedas_no_socios;
-    }
-    $sth->finish;
-
-
-    my $sth=$dbh->prepare("SELECT usr_ref_categoria_socio.description as categoria, count(*) as cantidad FROM usr_socio left join usr_ref_categoria_socio on usr_socio.id_categoria = usr_ref_categoria_socio.id WHERE fecha_alta like '$year%' group by usr_socio.id_categoria");
-    $sth->execute();
-
-   if (my $categorias_socios_registrados = $sth->fetchall_arrayref){
-        $result_hash{'categorias_socios_registrados'}=$categorias_socios_registrados;
-    }
-    $sth->finish;
-
-    return(\%result_hash);
+    return(\%result_hash,$categorias);
 }
+
+   #  # CATÁLOGO: - cantidad total de documentos (todo tipo) IMPRESOS!
+
+   #  #TOTAL
+   #  my $sth=$dbh->prepare("Select count(*) from cat_registro_marc_n3 where template in ('LIB', 'TES', 'SER', 'REV', 'FOT') and created_at < ? ;");
+   #  $sth->execute($year + 1);
+    
+   #  if (my $cantidad_impreso_total = $sth->fetchrow_array){
+   #      $result_hash{'cantidad_impreso_total'}=$cantidad_impreso_total;
+   #  }
+    
+   #  $sth->finish;
+
+   #  #DISPONIBLE
+   #  my $sth=$dbh->prepare("Select count(*) from cat_registro_marc_n3 where template in ('LIB', 'TES', 'SER', 'REV', 'FOT') and created_at < ?  and marc_record like '%ref_estado\@STATE002%' ;");
+   #  $sth->execute($year + 1);
+
+   #  if (my $cantidad_impreso_disponible = $sth->fetchrow_array){
+   #      $result_hash{'cantidad_impreso_disponible'}=$cantidad_impreso_disponible;
+   #  }
+
+   #  $sth->finish;
+
+   #  #NO DISPONIBLE
+   #  my $sth=$dbh->prepare("Select count(*) from cat_registro_marc_n3 where template in ('LIB', 'TES', 'SER', 'REV', 'FOT') and created_at < ? and marc_record not like '%ref_estado\@STATE002%' ;");
+   #  $sth->execute($year + 1);
+
+   #  if (my $cantidad_impreso_no_disponible = $sth->fetchrow_array){
+   #      $result_hash{'cantidad_impreso_no_disponible'}=$cantidad_impreso_no_disponible;
+   #  }
+
+   #  $sth->finish;
+
+   #  #Cantidades!
+   #  #Registros
+   #  my $sth=$dbh->prepare("SELECT cat_ref_tipo_nivel3.nombre as template, count(distinct(cat_registro_marc_n1.id)) as cant
+   #      FROM cat_registro_marc_n1
+   #      LEFT JOIN cat_registro_marc_n3 ON cat_registro_marc_n3.id1 = cat_registro_marc_n1.id
+   #      LEFT JOIN cat_ref_tipo_nivel3 ON cat_ref_tipo_nivel3.id_tipo_doc = cat_registro_marc_n1.template
+   #      WHERE cat_registro_marc_n3.created_at < ? GROUP BY cat_registro_marc_n1.template;");
+   #  $sth->execute($year + 1);
+   #  $result_hash{'cantidades_registros'} = $sth->fetchall_arrayref;
+   #  $sth->finish;
+
+   #  #Grupos
+   #  my $sth=$dbh->prepare("SELECT  cat_ref_tipo_nivel3.nombre as template, count(distinct(cat_registro_marc_n2.id)) as cant
+   #      FROM cat_registro_marc_n2
+   #      LEFT JOIN cat_registro_marc_n3 ON cat_registro_marc_n3.id2 = cat_registro_marc_n2.id
+   #      LEFT JOIN cat_ref_tipo_nivel3 ON cat_ref_tipo_nivel3.id_tipo_doc = cat_registro_marc_n2.template
+   #      WHERE cat_registro_marc_n3.created_at < ? GROUP BY cat_registro_marc_n2.template;");
+   #  $sth->execute($year + 1);
+   #  $result_hash{'cantidades_grupos'} = $sth->fetchall_arrayref;
+   #  $sth->finish;
+
+
+   #  #Ejemplares
+   #  my $sth=$dbh->prepare("Select cat_ref_tipo_nivel3.nombre as template ,count(*)as cant from cat_registro_marc_n3 
+   #      LEFT JOIN cat_ref_tipo_nivel3 ON cat_ref_tipo_nivel3.id_tipo_doc = cat_registro_marc_n3.template
+   #      where created_at < ? GROUP BY template;");
+   #  $sth->execute($year + 1);
+   #  $result_hash{'cantidades_ejemplares'} = $sth->fetchall_arrayref;
+   #  $sth->finish;
+
+
+   #  #Volumenes no disponibles impresos
+   #  my $sth=$dbh->prepare("SELECT count(distinct(cat_registro_marc_n2.id))
+   #      FROM cat_registro_marc_n2
+   #      LEFT JOIN cat_registro_marc_n3 ON cat_registro_marc_n3.id2 = cat_registro_marc_n2.id
+   #      WHERE cat_registro_marc_n2.template in ('LIB', 'TES', 'SER', 'REV', 'FOT') and cat_registro_marc_n3.marc_record not like '%ref_estado\@STATE002%'
+   #      AND cat_registro_marc_n3.created_at < ? ;");
+   #  $sth->execute($year + 1);
+
+   #  if (my $cantidad_no_disponibles_grupos = $sth->fetchrow_array){
+   #      $result_hash{'cantidad_no_disponibles_grupos'}=$cantidad_no_disponibles_grupos;
+   #  }
+
+   #  $sth->finish;
+
+   #  # SERVICIOS: 
+ 
+   #  #Prestamos totales
+   #  my $sth=$dbh->prepare("SELECT COUNT(*)  FROM rep_historial_prestamo WHERE fecha_devolucion like '$year%'");
+   #  $sth->execute();
+
+
+   #  if (my $cantidad_prestamos_totales = $sth->fetchrow_array){
+   #      $result_hash{'cantidad_prestamos_totales'}=$cantidad_prestamos_totales;
+   #  }
+
+   #  $sth->finish;
+
+   #  #Prestamos domicilio
+   #  my $sth=$dbh->prepare("SELECT count(*) FROM rep_historial_prestamo left join circ_ref_tipo_prestamo on rep_historial_prestamo.tipo_prestamo = circ_ref_tipo_prestamo.id_tipo_prestamo WHERE circ_ref_tipo_prestamo.codigo_disponibilidad = 'CIRC0000' AND rep_historial_prestamo.fecha_devolucion like '$year%'");
+   #  $sth->execute();
+
+
+   #  if (my $cantidad_prestamos_domicilio = $sth->fetchrow_array){
+   #      $result_hash{'cantidad_prestamos_domicilio'}=$cantidad_prestamos_domicilio;
+   #  }
+
+   #  $sth->finish;
+
+   #  #Prestamos sala
+   #  my $sth=$dbh->prepare("SELECT count(*) FROM rep_historial_prestamo left join circ_ref_tipo_prestamo on rep_historial_prestamo.tipo_prestamo = circ_ref_tipo_prestamo.id_tipo_prestamo WHERE circ_ref_tipo_prestamo.codigo_disponibilidad = 'CIRC0001' AND rep_historial_prestamo.fecha_devolucion like '$year%' ");
+   #  $sth->execute();
+
+
+   #  if (my $cantidad_prestamos_sala = $sth->fetchrow_array){
+   #      $result_hash{'cantidad_prestamos_sala'}=$cantidad_prestamos_sala;
+   #  }
+
+   #  $sth->finish;
+
+
+   #  #Prestamos monografia domicilio
+   #  my $sth=$dbh->prepare("SELECT count(*) FROM rep_historial_prestamo 
+   #          left join circ_ref_tipo_prestamo on rep_historial_prestamo.tipo_prestamo = circ_ref_tipo_prestamo.id_tipo_prestamo 
+   #          LEFT JOIN cat_registro_marc_n3 ON rep_historial_prestamo.id3 = cat_registro_marc_n3.id
+   #          WHERE circ_ref_tipo_prestamo.codigo_disponibilidad = 'CIRC0000' 
+   #          AND cat_registro_marc_n3.template IN ('LIB','TES','FOT')     
+   #          AND rep_historial_prestamo.fecha_devolucion like '$year%' ");
+   #  $sth->execute();
+
+   #  if (my $cantidad_prestamos_domicilio_monografia = $sth->fetchrow_array){
+   #      $result_hash{'cantidad_prestamos_domicilio_monografia'}=$cantidad_prestamos_domicilio_monografia;
+   #  }
+
+   #  $sth->finish;
+
+   #  #Prestamos monografia sala
+   #  my $sth=$dbh->prepare("SELECT count(*) FROM rep_historial_prestamo 
+   #          left join circ_ref_tipo_prestamo on rep_historial_prestamo.tipo_prestamo = circ_ref_tipo_prestamo.id_tipo_prestamo 
+   #          LEFT JOIN cat_registro_marc_n3 ON rep_historial_prestamo.id3 = cat_registro_marc_n3.id
+   #          WHERE circ_ref_tipo_prestamo.codigo_disponibilidad = 'CIRC0001' 
+   #          AND cat_registro_marc_n3.template IN ('LIB','TES','FOT')     
+   #          AND rep_historial_prestamo.fecha_devolucion like '$year%' ");
+
+   #  $sth->execute();
+
+
+   #  if (my $cantidad_prestamos_sala_monografia = $sth->fetchrow_array){
+   #      $result_hash{'cantidad_prestamos_sala_monografia'}=$cantidad_prestamos_sala_monografia;
+   #  }
+
+   #  $sth->finish;
+
+
+   #  #Prestamos revistas domicilio
+   #  my $sth=$dbh->prepare("SELECT count(*) FROM rep_historial_prestamo 
+   #          left join circ_ref_tipo_prestamo on rep_historial_prestamo.tipo_prestamo = circ_ref_tipo_prestamo.id_tipo_prestamo 
+   #          LEFT JOIN cat_registro_marc_n3 ON rep_historial_prestamo.id3 = cat_registro_marc_n3.id
+   #          WHERE circ_ref_tipo_prestamo.codigo_disponibilidad = 'CIRC0000' 
+   #          AND cat_registro_marc_n3.template = 'REV'     
+   #          AND rep_historial_prestamo.fecha_devolucion like '$year%' ");
+   #  $sth->execute();
+
+
+   #  if (my $cantidad_prestamos_domicilio_revista = $sth->fetchrow_array){
+   #      $result_hash{'cantidad_prestamos_domicilio_revista'}=$cantidad_prestamos_domicilio_revista;
+   #  }
+
+   #  $sth->finish;
+
+   #  #Prestamos monografia sala
+   #  my $sth=$dbh->prepare("SELECT count(*) FROM rep_historial_prestamo 
+   #          left join circ_ref_tipo_prestamo on rep_historial_prestamo.tipo_prestamo = circ_ref_tipo_prestamo.id_tipo_prestamo 
+   #          LEFT JOIN cat_registro_marc_n3 ON rep_historial_prestamo.id3 = cat_registro_marc_n3.id
+   #          WHERE circ_ref_tipo_prestamo.codigo_disponibilidad = 'CIRC0001' 
+   #          AND cat_registro_marc_n3.template = 'REV'   
+   #          AND rep_historial_prestamo.fecha_devolucion  like '$year%' ");
+
+   #  $sth->execute();
+
+   #  if (my $cantidad_prestamos_sala_revista = $sth->fetchrow_array){
+   #      $result_hash{'cantidad_prestamos_sala_revista'}=$cantidad_prestamos_sala_revista;
+   #  }
+
+   #  $sth->finish;
+
+
+   #  #Prestamos domicilio otros
+   #  my $sth=$dbh->prepare("SELECT count(*) FROM rep_historial_prestamo 
+   #          left join circ_ref_tipo_prestamo on rep_historial_prestamo.tipo_prestamo = circ_ref_tipo_prestamo.id_tipo_prestamo 
+   #          LEFT JOIN cat_registro_marc_n3 ON rep_historial_prestamo.id3 = cat_registro_marc_n3.id
+   #          WHERE circ_ref_tipo_prestamo.codigo_disponibilidad = 'CIRC0000' 
+   #          AND cat_registro_marc_n3.template NOT IN ('LIB','TES','FOT', 'REV')     
+   #          AND rep_historial_prestamo.fecha_devolucion like '$year%' ");
+
+   #  $sth->execute();
+
+   #  if (my $cantidad_prestamos_domicilio_otros = $sth->fetchrow_array){
+   #      $result_hash{'cantidad_prestamos_domicilio_otros'}=$cantidad_prestamos_domicilio_otros;
+   #  }
+
+   #  $sth->finish;
+
+   #  #Prestamos sala otros
+   #  my $sth=$dbh->prepare("SELECT count(*) FROM rep_historial_prestamo 
+   #          left join circ_ref_tipo_prestamo on rep_historial_prestamo.tipo_prestamo = circ_ref_tipo_prestamo.id_tipo_prestamo 
+   #          LEFT JOIN cat_registro_marc_n3 ON rep_historial_prestamo.id3 = cat_registro_marc_n3.id
+   #          WHERE circ_ref_tipo_prestamo.codigo_disponibilidad = 'CIRC0001' 
+   #          AND cat_registro_marc_n3.template NOT IN ('LIB','TES','FOT', 'REV')   
+   #          AND rep_historial_prestamo.fecha_devolucion like '$year%'");
+
+   #  $sth->execute();
+
+   #  if (my $cantidad_prestamos_sala_otros = $sth->fetchrow_array){
+   #      $result_hash{'cantidad_prestamos_sala_otros'}=$cantidad_prestamos_sala_otros;
+   #  }
+
+   #  $sth->finish;
+
+   #  #Consultas OPAC
+    
+   #  #Socios
+   #  my $sth=$dbh->prepare("SELECT COUNT(*)  FROM rep_busqueda WHERE nro_socio IS NOT NULL AND fecha like '$year%'");
+   #  $sth->execute();
+
+   #  if (my $cantidad_busquedas_socios = $sth->fetchrow_array){
+   #      $result_hash{'cantidad_busquedas_socios'}=$cantidad_busquedas_socios;
+   #  }
+   #  $sth->finish;
+
+   #  #No Socios
+   #  my $sth=$dbh->prepare("SELECT COUNT(*)  FROM rep_busqueda WHERE nro_socio IS NULL AND fecha like '$year%' ");
+   #  $sth->execute();
+
+
+   #  if (my $cantidad_busquedas_no_socios = $sth->fetchrow_array){
+   #      $result_hash{'cantidad_busquedas_no_socios'}=$cantidad_busquedas_no_socios;
+   #  }
+   #  $sth->finish;
+
+
+   #  my $sth=$dbh->prepare("SELECT usr_ref_categoria_socio.description as categoria, count(*) as cantidad FROM usr_socio left join usr_ref_categoria_socio on usr_socio.id_categoria = usr_ref_categoria_socio.id WHERE fecha_alta like '$year%' group by usr_socio.id_categoria");
+   #  $sth->execute();
+
+   # if (my $categorias_socios_registrados = $sth->fetchall_arrayref){
+   #      $result_hash{'categorias_socios_registrados'}=$categorias_socios_registrados;
+   #  }
+   #  $sth->finish;
+
 
 
 END { }       # module clean-up code here (global destructor)
