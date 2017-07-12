@@ -889,3 +889,81 @@ VALUES (NULL ,  'auto_activate_user_from_ldap',  '0',  'Activa (=1) por defecto 
 
 # Nueva preferencia para la configuración del LDAP, que niega la pertenecia de un usuario a un grupo en particular
 INSERT INTO `pref_preferencia_sistema` (`id`, `variable`, `value`, `explanation`, `options`, `type`, `categoria`, `label`, `explicacion_interna`, `revisado`) VALUES (NULL, 'ldap_not_memberattribute', 'LDAP_YES_MEMBERATTRIBUTE', 'Niega la inclusión de los usuarios que integran un grupo', NULL, 'bool', 'auth', NULL, 'Niega la inclusión de los usuarios que integran un grupo', '0');
+
+
+--
+-- Estructura de tabla para la tabla `rep_estadistica`
+--
+
+DROP TABLE IF EXISTS `rep_estadistica`;
+CREATE TABLE `rep_estadistica` (
+  `id` int(11) NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `query` text NOT NULL,
+  `params` int(11) NOT NULL DEFAULT '1',
+  `category` varchar(255) DEFAULT NULL,
+  `orden` int(10) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Volcado de datos para la tabla `rep_estadistica`
+--
+
+INSERT INTO `rep_estadistica` (`id`, `name`, `query`, `params`, `category`, `orden`) VALUES
+(1, 'Cantidad Totales por Tipos de documento (Libro)', 'Select count(*) from cat_registro_marc_n3 where template = \'LIB\' and created_at < ? ;', 1, 'Cantidades Totales', 1),
+(2, 'Cantidad Totales por Tipos de documento (Fotocopia)', 'Select count(*) from cat_registro_marc_n3 where template = \'FOT\' and created_at < ? ;', 1, 'Cantidades Totales', 2),
+(3, 'Cantidad Totales por Tipos de documento (Documento de cátedra docente)', 'Select count(*) from cat_registro_marc_n3 where template = \'DCD\' and created_at < ? ;', 1, 'Cantidades Totales', 3),
+(4, 'Cantidad Totales por Tipos de documento (Revista)', 'Select count(*) from cat_registro_marc_n3 where template = \'REV\' and created_at < ? ;', 1, 'Cantidades Totales', 4),
+(5, 'Cantidad Totales por Tipos de documento (CD-ROM)', 'Select count(*) from cat_registro_marc_n3 where template = \'CDR\' and created_at < ? ;', 1, 'Cantidades Totales', 5),
+(6, 'Cantidad Totales por Tipos de documento (Artículo)', 'Select count(*) from cat_registro_marc_n3 where template = \'ART\' and created_at < ? ;', 1, 'Cantidades Totales', 6),
+(7, 'Cantidad Totales por Tipos de documento (Tesis)', 'Select count(*) from cat_registro_marc_n3 where template = \'TES\' and created_at < ? ;', 1, 'Cantidades Totales', 7),
+(8, 'Cantidad Totales por Tipos de documento (Seminarios)', 'Select count(*) from cat_registro_marc_n3 where template = \'SEM\' and created_at < ? ;', 1, 'Cantidades Totales', 8),
+(9, 'Cantidad Totales por Tipos de documento (Documento de cátedra)', 'Select count(*) from cat_registro_marc_n3 where template = \'DCA\' and created_at < ? ;', 1, 'Cantidades Totales', 9),
+(10, 'Cantidad Totales por Tipos de documento (Documentos electrónicos)', 'Select count(*) from cat_registro_marc_n3 where template = \'ELE\' and created_at < ? ;', 1, 'Cantidades Totales', 10),
+(11, 'Cantidad de libros (ejemplares) impresos', 'SELECT count(distinct(cat_registro_marc_n3.id)) as cant FROM cat_registro_marc_n1 LEFT JOIN cat_registro_marc_n3 ON cat_registro_marc_n3.id1 = cat_registro_marc_n1.id WHERE cat_registro_marc_n3.template = \'LIB\' AND cat_registro_marc_n3.created_at < ? ;', 1, 'Impresos', 11),
+(12, 'Cantidad de libros (volumenes) impresos', 'SELECT count(distinct(cat_registro_marc_n3.id2)) as cant FROM cat_registro_marc_n1 LEFT JOIN cat_registro_marc_n3 ON cat_registro_marc_n3.id1 = cat_registro_marc_n1.id WHERE cat_registro_marc_n3.template = \'LIB\' AND cat_registro_marc_n3.created_at < ? ;', 1, 'Impresos', 12),
+(14, 'Cantidad de libros (ediciones) impresos', 'SELECT count(distinct(cat_registro_marc_n3.id2)) as cant FROM cat_registro_marc_n1 LEFT JOIN cat_registro_marc_n3 ON cat_registro_marc_n3.id1 = cat_registro_marc_n1.id WHERE cat_registro_marc_n3.template = \'LIB\' AND cat_registro_marc_n3.created_at < ? ;', 1, 'Impresos', 14),
+(15, 'Cantidad de tesis (ejemplares) impresos', 'SELECT count(distinct(cat_registro_marc_n3.id)) as cant FROM cat_registro_marc_n1 LEFT JOIN cat_registro_marc_n3 ON cat_registro_marc_n3.id1 = cat_registro_marc_n1.id WHERE cat_registro_marc_n3.template = \'TES\' AND cat_registro_marc_n3.created_at < ? ;', 1, 'Impresos', 15),
+(16, 'Cantidad de tesis (volumenes) impresos', 'SELECT count(distinct(cat_registro_marc_n3.id2)) as cant FROM cat_registro_marc_n1 LEFT JOIN cat_registro_marc_n3 ON cat_registro_marc_n3.id1 = cat_registro_marc_n1.id WHERE cat_registro_marc_n3.template = \'TES\' AND cat_registro_marc_n3.created_at < ? ;', 1, 'Impresos', 16),
+(17, 'Cantidad de otras monografías (FOTOCOPIAS)', 'SELECT count(distinct(cat_registro_marc_n3.id1)) as cant FROM cat_registro_marc_n1 LEFT JOIN cat_registro_marc_n3 ON cat_registro_marc_n3.id1 = cat_registro_marc_n1.id WHERE cat_registro_marc_n3.template = \'FOT\' AND cat_registro_marc_n3.created_at < ? ;', 1, 'Impresos', 17),
+(18, 'Cantidad de volúmenes no disponibles impresos (Baja)', 'SELECT count(distinct(cat_registro_marc_n3.id))  as cant FROM cat_registro_marc_n2 LEFT JOIN cat_registro_marc_n3 ON cat_registro_marc_n3.id2 = cat_registro_marc_n2.id WHERE cat_registro_marc_n2.template in (\'LIB\', \'TES\', \'SER\', \'REV\', \'FOT\') and cat_registro_marc_n3.marc_record like \'%ref_estado@STATE000%\' AND cat_registro_marc_n3.created_at < ? ;', 1, 'Volúmenes Impresos No Disponibles', 18),
+(19, 'Cantidad de volúmenes no disponibles impresos (Ejemplar deteriorado)', 'SELECT count(distinct(cat_registro_marc_n3.id))  as cant FROM cat_registro_marc_n2 LEFT JOIN cat_registro_marc_n3 ON cat_registro_marc_n3.id2 = cat_registro_marc_n2.id WHERE cat_registro_marc_n2.template in (\'LIB\', \'TES\', \'SER\', \'REV\', \'FOT\') and cat_registro_marc_n3.marc_record like \'%ref_estado@STATE003%\' AND cat_registro_marc_n3.created_at < ? ;', 1, 'Volúmenes Impresos No Disponibles', 19),
+(20, 'Cantidad de volúmenes no disponibles impresos (En encuadernación)', 'SELECT count(distinct(cat_registro_marc_n3.id)) as cant FROM cat_registro_marc_n2 LEFT JOIN cat_registro_marc_n3 ON cat_registro_marc_n3.id2 = cat_registro_marc_n2.id WHERE cat_registro_marc_n2.template in (\'LIB\', \'TES\', \'SER\', \'REV\', \'FOT\') and cat_registro_marc_n3.marc_record like \'%ref_estado@STATE004%\' AND cat_registro_marc_n3.created_at < ? ;', 1, 'Volúmenes Impresos No Disponibles', 20),
+(21, 'Cantidad de volúmenes no disponibles impresos (En etiquetado)', 'SELECT count(distinct(cat_registro_marc_n3.id)) as cant FROM cat_registro_marc_n2 LEFT JOIN cat_registro_marc_n3 ON cat_registro_marc_n3.id2 = cat_registro_marc_n2.id WHERE cat_registro_marc_n2.template in (\'LIB\', \'TES\', \'SER\', \'REV\', \'FOT\') and cat_registro_marc_n3.marc_record like \'%ref_estado@STATE006%\' AND cat_registro_marc_n3.created_at < ? ;', 1, 'Volúmenes Impresos No Disponibles', 21),
+(22, 'Cantidad de volúmenes no disponibles impresos (En impresiones)', 'SELECT count(distinct(cat_registro_marc_n3.id)) as cant FROM cat_registro_marc_n2 LEFT JOIN cat_registro_marc_n3 ON cat_registro_marc_n3.id2 = cat_registro_marc_n2.id WHERE cat_registro_marc_n2.template in (\'LIB\', \'TES\', \'SER\', \'REV\', \'FOT\') and cat_registro_marc_n3.marc_record like \'%ref_estado@STATE007%\' AND cat_registro_marc_n3.created_at < ? ;', 1, 'Volúmenes Impresos No Disponibles', 22),
+(23, 'Cantidad de volúmenes no disponibles impresos (En procesos técnicos)', 'SELECT count(distinct(cat_registro_marc_n3.id)) as cant FROM cat_registro_marc_n2 LEFT JOIN cat_registro_marc_n3 ON cat_registro_marc_n3.id2 = cat_registro_marc_n2.id WHERE cat_registro_marc_n2.template in (\'LIB\', \'TES\', \'SER\', \'REV\', \'FOT\') and cat_registro_marc_n3.marc_record like \'%ref_estado@STATE008%\' AND cat_registro_marc_n3.created_at < ? ;', 1, 'Volúmenes Impresos No Disponibles', 23),
+(24, 'Cantidad de volúmenes no disponibles impresos (Perdido)', 'SELECT count(distinct(cat_registro_marc_n3.id)) as cant FROM cat_registro_marc_n2 LEFT JOIN cat_registro_marc_n3 ON cat_registro_marc_n3.id2 = cat_registro_marc_n2.id WHERE cat_registro_marc_n2.template in (\'LIB\', \'TES\', \'SER\', \'REV\', \'FOT\') and cat_registro_marc_n3.marc_record like \'%ref_estado@STATE005%\' AND cat_registro_marc_n3.created_at < ? ;', 1, 'Volúmenes Impresos No Disponibles', 24),
+(25, 'Cantidad Anual por Tipos de documento (Libro)', 'Select count(*) from cat_registro_marc_n3 where template = \'LIB\'  and created_at BETWEEN ? AND ? ;', 2, 'Cantidades Anuales', 1),
+(26, 'Cantidad Anual por Tipos de documento (Fotocopia)', 'Select count(*) from cat_registro_marc_n3 where template = \'FOT\' and created_at BETWEEN ? AND ? ;', 2, 'Cantidades Anuales', 2),
+(27, 'Cantidad Anual por Tipos de documento (Documento de cátedra docente)', 'Select count(*) from cat_registro_marc_n3 where template = \'DCD\' and created_at BETWEEN ? AND ? ;', 2, 'Cantidades Anuales', 3),
+(28, 'Cantidad Anual por Tipos de documento (Revista)', 'Select count(*) from cat_registro_marc_n3 where template = \'REV\'  and created_at BETWEEN ? AND ? ;', 2, 'Cantidades Anuales', 4),
+(29, 'Cantidad Anual por Tipos de documento (CD-ROM)', 'Select count(*) from cat_registro_marc_n3 where template = \'CDR\'  and created_at BETWEEN ? AND ? ;', 2, 'Cantidades Anuales', 5),
+(30, 'Cantidad Anual por Tipos de documento (Artículo)', 'Select count(*) from cat_registro_marc_n3 where template = \'ART\'  and created_at BETWEEN ? AND ? ;', 2, 'Cantidades Anuales', 6),
+(31, 'Cantidad Anual por Tipos de documento (Tesis)', 'Select count(*) from cat_registro_marc_n3 where template = \'TES\'  and created_at BETWEEN ? AND ? ;', 2, 'Cantidades Anuales', 7),
+(32, 'Cantidad Anual por Tipos de documento (Seminarios)', 'Select count(*) from cat_registro_marc_n3 where template = \'SEM\'  and created_at BETWEEN ? AND ? ;', 2, 'Cantidades Anuales', 8),
+(33, 'Cantidad Anual por Tipos de documento (Documento de cátedra)', 'Select count(*) from cat_registro_marc_n3 where template = \'DCA\'  and created_at BETWEEN ? AND ? ;', 2, 'Cantidades Anuales', 9),
+(34, 'Cantidad Anual por Tipos de documento (Documentos electrónicos)', 'Select count(*) from cat_registro_marc_n3 where template = \'ELE\'  and created_at BETWEEN ? AND ? ;', 2, 'Cantidades Anuales', 10),
+(35, 'Cantidad de Analíticas', 'SELECT count(*) FROM `cat_registro_marc_n2` WHERE `template` LIKE \'ANA\';', 0, 'Analíticas', 1),
+(36, 'Cantidad Anual de Ejemplares de Revistas', 'Select count(*) from cat_registro_marc_n3 where template = \'REV\'  and created_at BETWEEN ? AND ? ;', 2, 'Revistas', 2),
+(37, 'Cantidad Total de Ejemplares de Revistas', 'Select count(*) from cat_registro_marc_n3 where template = \'REV\'  and created_at < ? ;', 1, 'Revistas', 1),
+(38, 'Cantidad Total de Títulos de Revistas', 'Select count(distinct(id1)) from cat_registro_marc_n3 where template = \'REV\'  and created_at < ? ;', 1, 'Revistas', 3),
+(39, 'Cantidad Anual de Títulos de Revistas', 'Select count(distinct(id1)) from cat_registro_marc_n3 where template = \'REV\'  and created_at BETWEEN ? AND ? ;', 2, 'Revistas', 2),
+(40, 'Cantidad de Enlaces a Recursos web (856^u)', 'SELECT count(*) FROM `cat_registro_marc_n1` WHERE `marc_record` LIKE \'%u%\' AND `marc_record` NOT LIKE \'%u %\';', 0, 'Enlaces', 3),
+(41, 'Totales Libros - Fuente de adquisición: COM', 'Select count(*) from cat_registro_marc_n3 where template = \'LIB\'  and marc_record like \"%cCOM%\" and created_at < ? ;', 1, 'Desarrollo de colecciones', 1),
+(42, 'Anuales Libros - Fuente de adquisición: COM', 'Select count(*) from cat_registro_marc_n3 where template = \'LIB\'  and marc_record like \"%cCOM%\" and created_at BETWEEN ? AND ? ;', 2, 'Desarrollo de colecciones', 4),
+(43, 'Totales Libros - Fuente de adquisición: CAN', 'Select count(*) from cat_registro_marc_n3 where template = \'LIB\'  and marc_record like \"%cCAN%\" and created_at < ? ;', 1, 'Desarrollo de colecciones', 2),
+(44, 'Anuales Libros - Fuente de adquisición: CAN', 'Select count(*) from cat_registro_marc_n3 where template = \'LIB\'  and marc_record like \"%cCAN%\" and created_at BETWEEN ? AND ? ;', 2, 'Desarrollo de colecciones', 5),
+(45, 'Totales Libros - Fuente de adquisición: DON', 'Select count(*) from cat_registro_marc_n3 where template = \'LIB\'  and marc_record like \"%cDON%\" and created_at < ? ;', 1, 'Desarrollo de colecciones', 3),
+(46, 'Anuales Libros - Fuente de adquisición: DON', 'Select count(*) from cat_registro_marc_n3 where template = \'LIB\'  and marc_record like \"%cDON%\" and created_at BETWEEN ? AND ? ;', 2, 'Desarrollo de colecciones', 6),
+(47, 'Totales Revistas - Fuente de adquisición: COM', 'Select count(*) from cat_registro_marc_n3 where template = \'REV\'  and marc_record like \"%cCOM%\" and created_at < ? ;', 1, 'Desarrollo de colecciones', 7),
+(48, 'Anuales Revistas - Fuente de adquisición: COM', 'Select count(*) from cat_registro_marc_n3 where template = \'REV\'  and marc_record like \"%cCOM%\" and created_at BETWEEN ? AND ? ;', 2, 'Desarrollo de colecciones', 10),
+(49, 'Totales Revistas - Fuente de adquisición: CAN', 'Select count(*) from cat_registro_marc_n3 where template = \'REV\'  and marc_record like \"%cCAN%\" and created_at < ? ;', 1, 'Desarrollo de colecciones', 8),
+(50, 'Anuales Revistas - Fuente de adquisición: CAN', 'Select count(*) from cat_registro_marc_n3 where template = \'REV\'  and marc_record like \"%cCAN%\" and created_at BETWEEN ? AND ? ;', 2, 'Desarrollo de colecciones', 11),
+(51, 'Totales Revistas - Fuente de adquisición: DON', 'Select count(*) from cat_registro_marc_n3 where template = \'REV\'  and marc_record like \"%cDON%\" and created_at < ? ;', 1, 'Desarrollo de colecciones', 9),
+(52, 'Anuales Revistas - Fuente de adquisición: DON', 'Select count(*) from cat_registro_marc_n3 where template = \'REV\'  and marc_record like \"%cDON%\" and created_at BETWEEN ? AND ? ;', 2, 'Desarrollo de colecciones', 12);
+
+ALTER TABLE `rep_estadistica`
+  ADD PRIMARY KEY (`id`);
+
+ALTER TABLE `rep_estadistica`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=53;
