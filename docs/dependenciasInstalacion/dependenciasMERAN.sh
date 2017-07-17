@@ -34,6 +34,7 @@ cpan -i WWW::Google::URLShortener
 cpan -i Apache::Session::Lock::Semaphore
 cpan -i Moose
 cpan -i Date::Manip
+cpan -i HTML::StripTags
 
 # ESTA DA ERROR AUN EN SQUEEZE (anda la 0.18) bajarla y compilar a mano ==>  http://search.cpan.org/CPAN/authors/id/F/FR/FREDERICD/marc-moose-0.018.tar.gz
 cpan -i MARC::Moose::Record

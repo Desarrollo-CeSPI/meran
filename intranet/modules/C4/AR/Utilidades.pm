@@ -194,15 +194,19 @@ sub crearRadioButtonBootstrap{
   Recibe el input generado por CGI, se recorren las variables recibidas y se escapa HTML para evitar XSS
 =cut
 sub sanitize_input_vars {
+  use HTML::StripTags qw(strip_tags);    
 
   my ($input) = @_;
 
   my $params_hash = $input->Vars;
   my $value;
+  my $allowed_tags = '<u><b><a><br><p>';
   #Limpiamos parámetros
   foreach my $key (keys %$params_hash) { 
       if(!$input->param('obj')){
-        $value = CGI::escapeHTML($input->param($key));
+        # $value = CGI::escapeHTML($input->param($key));
+        
+        $value = strip_tags( $input->param($key), $allowed_tags );
         # TODO add more bad words
         $value =~ s/javascript//;
         #C4::AR::Debug::debug("opac-detail => key => $key");
