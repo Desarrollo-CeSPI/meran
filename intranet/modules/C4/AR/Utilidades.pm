@@ -205,13 +205,14 @@ sub sanitize_input_vars {
   foreach my $key (keys %$params_hash) { 
       if(!$input->param('obj')){
         # $value = CGI::escapeHTML($input->param($key));
-        
-        $value = strip_tags( $input->param($key), $allowed_tags );
+        # C4::AR::Debug::debug("Utilidades => sanitize_input_vars => key => $key");
+        # C4::AR::Debug::debug("Utilidades => sanitize_input_vars => input->param($key) => " . $input->param($key));
+        if (ref($input->param($key)) eq "VSTRING") {
+          $value = strip_tags( $input->param($key), $allowed_tags );
+        }        
         # TODO add more bad words
         $value =~ s/javascript//;
-        #C4::AR::Debug::debug("opac-detail => key => $key");
         $input->param($key, $value);
-        #C4::AR::Debug::debug("opac-detail => sanitized => " . $value);
       }
   }
 
