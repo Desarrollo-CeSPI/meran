@@ -869,10 +869,11 @@ sub crearTicket {
 
 		my %ticket;
 
-		$ticket{'adicional_selected'}       = $adicional_selected;
 		$ticket{'socio'}                    = $nro_socio;
 		$ticket{'responsable'}              = $responsable;
 		$ticket{'id3'}                      = $id3;
+		
+		if ($adicional_selected) { $ticket{'adicional_selected'} = '1'; } else { $ticket{'adicional_selected'} = '0';}
 
 		return(\%ticket);
 }
@@ -1128,7 +1129,7 @@ sub _getCircPrestamoVencidoTempById {
 		my ($id_prestamo) = @_;
 
 		my $prestamo = C4::Modelo::CircPrestamoVencidoTemp::Manager->get_circ_prestamo_vencido_temp(
-																																											query => [id_prestamo => { eq => $id_prestamo}],																																											
+																																											query => [id_prestamo => { eq => $id_prestamo}],
 																																									 );
 		if (scalar(@$prestamo)){
 				return ($prestamo->[0]);
@@ -1436,8 +1437,8 @@ sub getAllPrestamosVencidosParaMail{
 										C4::AR::Debug::debug("Prestmos => getAllPrestamosVencidosParaMail => prestamo " . $prestamo->{'id_prestamo'});
 										my $prestamo_vencido_temp = C4::Modelo::CircPrestamo->new(id_prestamo => $prestamo->{'id_prestamo'});
 										$prestamo_vencido_temp->load();
-										
-										push(@arrayPrestamos,($prestamo_vencido_temp));    
+
+										push(@arrayPrestamos,($prestamo_vencido_temp));
 								}
 						}
 				};
