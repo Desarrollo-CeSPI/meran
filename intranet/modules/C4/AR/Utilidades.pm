@@ -3439,14 +3439,17 @@ sub escapeHashData{
 sub escapeData{
 
     my ($data) = @_;
+
     if($data){
         # Pasa a entidades HTML los caracteres especiales, para que no sean interpretados como otra cosa
         #FIX: EL encode funciona bien con todas las vocales con diéresis menos la Ü(?)
         $data =~ s/Ü/#U#/g;
-        $data = encode_entities($data, '<>&"“”\'');
+        $data = encode_entities($data, '<>&"\'');
         $data =~ s/#U#/Ü/g;
         
     }
+
+    C4::AR::Debug::debug("salida data: " . $data);
     return ($data);
 }
 
