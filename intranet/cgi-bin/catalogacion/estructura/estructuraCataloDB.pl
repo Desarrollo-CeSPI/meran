@@ -885,10 +885,10 @@ elsif($tipoAccion eq "ELIMINAR_NIVEL"){
     my ($Message_arrayref);
    
     if ($nivel == 1){
-      ($Message_arrayref)= C4::AR::Nivel1::t_eliminarNivel1($id);
+      ($Message_arrayref)= C4::AR::Nivel1::t_eliminarNivel1($id,$user);
     }
     elsif($nivel == 2){
-      ($Message_arrayref)= C4::AR::Nivel2::t_eliminarNivel2($id);
+      ($Message_arrayref)= C4::AR::Nivel2::t_eliminarNivel2($id,$user);
     }
     elsif($nivel == 3){
 		($Message_arrayref)= C4::AR::Nivel3::t_eliminarNivel3($obj);
