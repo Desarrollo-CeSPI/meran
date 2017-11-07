@@ -3,7 +3,7 @@ package C4::AR::Auth;
 
 =head1 NAME
 
-  C4::AR::Auth 
+  C4::AR::Auth
 
 =head1 SYNOPSIS
 
@@ -71,7 +71,7 @@ my $defaultCodMSG = 'U000';
 $VERSION = 1.0;
 @ISA = qw(Exporter);
 @EXPORT = qw(
-		checkauth       
+		checkauth
 		get_template_and_user
 		output_html_with_http_headers
 		getSessionUserID
@@ -94,7 +94,7 @@ $VERSION = 1.0;
 		getSessionSocioObject
 		getSessionType
 		printValue
-		
+
 );
 
 =item
@@ -106,7 +106,7 @@ sub addMethod{
 	my $msg_object      = C4::AR::Mensajes::create();
 	my $db              = $metodo->db;
 	$db->begin_work;
-	
+
 	eval{
 		$metodo->agregarMetodo($nameMetodo);
 		$msg_object->{'error'} = 0;
@@ -128,11 +128,11 @@ sub addMethod{
 =cut
 sub updateNameMetodo{
 	my ($idMetodo,$value)    = @_;
-	
-	my $metodo = C4::Modelo::SysMetodoAuth::Manager::get_sys_metodo_auth( 
-									 query   => [ id => { eq => $idMetodo}], 
+
+	my $metodo = C4::Modelo::SysMetodoAuth::Manager::get_sys_metodo_auth(
+									 query   => [ id => { eq => $idMetodo}],
 							   );
-							   
+
 	$metodo->[0]->setMetodo($value);
 }
 
@@ -143,13 +143,13 @@ sub updateNameMetodo{
 sub changeEnable{
 	my ($newValue,$idMetodo)    = @_;
 	my $msg_object      = C4::AR::Mensajes::create();
-	
+
 	C4::AR::Debug::debug("entro : id : ".$idMetodo. "  : newValue : ".$newValue);
-	
-	my $metodo = C4::Modelo::SysMetodoAuth::Manager::get_sys_metodo_auth( 
-									 query   => [ id => { eq => $idMetodo}], 
+
+	my $metodo = C4::Modelo::SysMetodoAuth::Manager::get_sys_metodo_auth(
+									 query   => [ id => { eq => $idMetodo}],
 							   );
-							   
+
 	C4::AR::Debug::debug("metodo : ".$metodo->[0]);
 	my $objMetodo;
 	$objMetodo = $metodo->[0];
@@ -157,11 +157,11 @@ sub changeEnable{
 		$objMetodo->enable();
 	}else{
 		$objMetodo->disable();
-	}    
-	
-	
+	}
+
+
 	C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'M000', 'params' => []} ) ;
-	return ($msg_object);              
+	return ($msg_object);
 }
 
 =item
@@ -170,31 +170,31 @@ sub changeEnable{
 sub updateAuthOrder{
 	my ($newOrderArray) = @_;
 	my $msg_object      = C4::AR::Mensajes::create();
-	
+
 	# ordeno los ids que llegan desordenados primero, para obtener un clon de los ids, y ahora usarlo de indice para el orden
 	# esto es porque no todos los campos de cat_visualizacion_intra se muestran en el template a ordenar ( ej 8 y 9 )
 	# entonces no puedo usar un simple indice como id.
 	my @array = sort { $a <=> $b } @$newOrderArray;
-	
+
 	my $i = 0;
 	my @filtros;
-	
+
 	# hay que hacer update de todos los campos porque si viene un nuevo orden y es justo ordenado (igual que @array : 1,2,3...)
 	# tambien hay que actualizarlo
 	foreach my $campo (@$newOrderArray){
-	
-		my $config_temp   = C4::Modelo::SysMetodoAuth::Manager::get_sys_metodo_auth( 
-																	query   => [ id => { eq => $campo}], 
+
+		my $config_temp   = C4::Modelo::SysMetodoAuth::Manager::get_sys_metodo_auth(
+																	query   => [ id => { eq => $campo}],
 							   );
 		my $configuracion = $config_temp->[0];
-		
+
 #        C4::AR::Debug::debug("nuevo orden de id : ".$campo." es :  ".@array[$i]);
-		
+
 		$configuracion->setOrden($array[$i]);
-	
+
 		$i++;
 	}
-	
+
 	C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'M000', 'params' => []} ) ;
 
 	return ($msg_object);
@@ -203,7 +203,7 @@ sub updateAuthOrder{
 }
 
 
-=item 
+=item
 	DEPRECATED
 	Checkea si el browser es uno ideal
 	Chromium Browser y Google Chrome lo detecta con el mismo user agent
@@ -231,39 +231,39 @@ sub checkBrowser{
 #   my $browser_major   = $browser->major();
 #   my $search          = $browser_string."_".$browser_major;
 
-#   
+#
 #   if ($search ~~ @blacklist){
 #       if (!$session->param('check_browser_allowed')){
 #            if($session->param('type') eq "opac"){
 #                redirectTo(C4::AR::Utilidades::getUrlPrefix().'/checkBrowser.pl?token='.$session->param('token'));
 #            }else{
 #                redirectTo(C4::AR::Utilidades::getUrlPrefix().'/checkBrowser.pl?token='.$session->param('token'));
-#            }    
+#            }
 #       }
-#       
+#
 #   }
 }
 
 =item sub _generarNroRandom
 
 	Función que devuelve un nro random entre 0 100000
-	
+
 
 =cut
 
 sub _generarNroRandom {
 	my $nroRandom = (int(rand()*100000));
 	C4::AR::Debug::debug("generarNroRandom -> nro generado : " . $nroRandom);
-	return $nroRandom;  
+	return $nroRandom;
 }
-=item sub 
-	Función que devuelve el codigo de mensaje 
+=item sub
+	Función que devuelve el codigo de mensaje
 =cut
 
 sub getMsgCode{
 	my ($session) = CGI::Session->load();
 	return ($session->param('codMsg') or $defaultCodMSG);
- 
+
 }
 
 =item sub _getExpireStatus
@@ -283,7 +283,7 @@ sub _getExpireStatus{
 
 	genera una sesion nueva y carga los parametros a la misma y la devuelve
 	Parametros:
-	$params: (HASH) con los parametros 
+	$params: (HASH) con los parametros
 
 =cut
 sub _generarSession {
@@ -311,12 +311,12 @@ sub _generarSession {
 
 =cut
 sub _actualizarSession {
-  
-  
+
+
 	my ($sessionID, $userid, $socioNro, $time, $nroRandom, $type, $flagsrequired, $token, $session)= @_;
 #     C4::AR::Debug::debug("userid en actualizarSession".$sessionID);
 	$type   =   $type || 'opac';
-	
+
 	$session->param('sessionID', $sessionID);
 	$session->param('userid', $userid);
    #C4::AR::Debug::debug("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! userid en actualizarSession actualizado".$session->param('userid'));
@@ -325,7 +325,7 @@ sub _actualizarSession {
 	$session->param('ip', $ENV{'REMOTE_ADDR'});
 	$session->param('lasttime', $time);
 	$session->param('nroRandom', $nroRandom);
-	$session->param('type', $type); 
+	$session->param('type', $type);
 	$session->param('secure', ($type eq 'intranet')?1:0); #OPAC o INTRA
 	$session->param('flagsrequired', $flagsrequired);
 	$session->param('browser', $ENV{'HTTP_USER_AGENT'});
@@ -340,7 +340,7 @@ sub _actualizarSession {
 
 	Esta funcion modifica el flag de todos las sessiones con usuarios duplicados, seteando el mismo a LOGUIN_DUPLICADO
 	cuando el usuario remoto con session duplicada intente navegar, sera redireccionado al loguin
-	Parametros: 
+	Parametros:
 	$userid, $ip
 
 =cut
@@ -348,7 +348,7 @@ sub _setLoguinDuplicado {
 	my ($userid, $ip) = @_;
 	#Verifica si existe sesiones abiertas con el mismo userid, pero con <> ip, si es asi se les setea un flag de LOGUIN_DIPLICADO
 	#y ni bien intente navegar el usuario será redireccionado al loguin.
-	my ($sist_sesion_array_ref) = C4::Modelo::SistSesion::Manager->get_sist_sesion( query => [ 
+	my ($sist_sesion_array_ref) = C4::Modelo::SistSesion::Manager->get_sist_sesion( query => [
 																								ip => { ne => $ip },
 																								userid => { eq => $userid }
 																					 ]);
@@ -361,7 +361,7 @@ sub _setLoguinDuplicado {
 }
 
 =item _session_log
-	
+
 	Hace log de la sesion
 
 =cut
@@ -375,7 +375,7 @@ sub _session_log {
 =item sub _save_session_db
 
 	Esta funcion guarda una session en la base
-	Parametros: 
+	Parametros:
 	$sessionID, $userid, $remote_addr, $nroRandom, $token
 
 =cut
@@ -414,17 +414,17 @@ Funcion que destruye la sesion actual, genera una nueva vacia y despues redirige
 
 
 sub _destruirSession{
-	
+
 	my ($cod_Msg,$template_params) = @_;
 
 	$cod_Msg = $cod_Msg || 'U406';
 
 	my ($session) = CGI::Session->load();
-#     
-#    C4::AR::Debug::debug("Template params". $template_params);   
- 
+#
+#    C4::AR::Debug::debug("Template params". $template_params);
+
 	_eliminarSession($session);
-	
+
 	$session = C4::AR::Auth::_generarSession();
 	$session->param('sessionID', undef);
 
@@ -439,7 +439,7 @@ sub _destruirSession{
 =item sub inicializarAuth
 
 	Esta funcion inicializa la session para autenticar un usuario, se usa en OPAC e INTRA siempre q se quiere autenticar
-	Parametros: 
+	Parametros:
 	$query: CGI
 	$t_params: parametros para el template
 
@@ -449,21 +449,21 @@ sub inicializarAuth{
 	#recupero los datos de la sesion anterior que voy a necesitar y luego la destruyo
 	my ($session) = CGI::Session->load();
 	my $msjCode = getMsgCode();
-	 
+
 #     $t_params->{'mensaje'}= C4::AR::Mensajes::getMensaje($msjCode,'INTRA',[]);
 
 	$t_params->{'mensaje'}= C4::AR::Mensajes::getMensaje($msjCode,$t_params->{'type'},[]);
 
 	C4::AR::Debug::debug($t_params->{'mensaje'});
 	#se destruye la session anterior
-	
+
 	my $locale                      =  $session->param('usr_locale');
 
 	$locale                         = $locale || C4::Context->config('defaultLang');
-	
-	
-	
-	
+
+
+
+
 	C4::AR::Debug::debug("LOCALE ANTES DE ELIMIAR LA SESSION: ".$locale);
 	_eliminarSession($session);
 	#Genero una nueva sesion.
@@ -484,7 +484,7 @@ sub inicializarAuth{
 	$t_params->{"nroRandom"}        = $params{'nroRandom'};
 	$t_params->{"plainPassword"}    = C4::Context->config('plainPassword');
 	$t_params->{'socio_data'}       = undef;
-	
+
 	$session->param('usr_locale',$locale);
 
 	return ($session);
@@ -525,20 +525,20 @@ sub inicializarAuth{
 =cut
 sub get_template_and_user {
 	my $in = shift;
-	
-	my ($user, $session, $flags, $usuario_logueado) = checkauth(         $in->{'query'}, 
-																		 $in->{'authnotrequired'}, 
-																		 $in->{'flagsrequired'}, 
-																		 $in->{'type'}, 
+
+	my ($user, $session, $flags, $usuario_logueado) = checkauth(         $in->{'query'},
+																		 $in->{'authnotrequired'},
+																		 $in->{'flagsrequired'},
+																		 $in->{'type'},
 																		 $in->{'change_password'},
 																		 $in->{'template_params'}
 															 );
 
     C4::AR::Utilidades::sanitize_input_vars($in->{'query'});
 
-	#C4::AR::Debug::debug("la SESSION en el get template and user ".$session);    
+	#C4::AR::Debug::debug("la SESSION en el get template and user ".$session);
 	my ($template, $params)     = C4::Output::gettemplate($in->{'template_name'}, $in->{'type'}, $in->{'loging_out'}, $usuario_logueado);
-  
+
 	$in->{'template_params'}    = $params;
 
 	if ( $session->param('userid') ) {
@@ -547,16 +547,16 @@ sub get_template_and_user {
 		if (!$usuario_logueado) {
 			$usuario_logueado = C4::Modelo::UsrSocio->new();
 		}
-	
+
 		C4::AR::Auth::updateLoggedUserTemplateParams($session,$params, $usuario_logueado);
-	
+
 		$params->{'socio_data'}                 = buildSocioDataHashFromSession();
 		$params->{'token'}                      = $session->param('token');
 		#para mostrar o no algun submenu del menu principal
 		$params->{'menu_preferences'}           = C4::AR::Preferencias::getMenuPreferences();
 	}
 
-	#Logueo de estadísticas piwik desde el opac 
+	#Logueo de estadísticas piwik desde el opac
 	if ($in->{'type'} eq 'opac'){
 		$params->{'piwik_code'} = C4::AR::Preferencias::getValorPreferencia("piwik_code");
 	}
@@ -575,13 +575,13 @@ Funcion que devuelve el token, hay diferencias enter las llamadas tradicionales,
 sub _obtenerToken{
 	my $query=shift;
 	#Pregunto si es AJAX
-	if(defined($ENV{'HTTP_X_REQUESTED_WITH'}) && ($ENV{'HTTP_X_REQUESTED_WITH'} eq 'XMLHttpRequest')){ 
+	if(defined($ENV{'HTTP_X_REQUESTED_WITH'}) && ($ENV{'HTTP_X_REQUESTED_WITH'} eq 'XMLHttpRequest')){
 		my $obj = $query->param('obj');
 		#PREGUNTO Si ES PARA LAS LLAMADAS AJAX QUE PASSAN UN OBJETO JSON (HELPER DE AJAX)
 		if ( defined($obj) ){
 			$obj = C4::AR::Utilidades::from_json_ISO($obj);
 			C4::AR::Debug::debug("C4::AR::Auth::OBJ".$obj);
-			
+
 			#cuando se compre C4::AR::Utilidades::from_json_ISO devuelve un 0
 			eval{
 				return $obj->{'token'};
@@ -590,7 +590,7 @@ sub _obtenerToken{
 			if($@){
 				redirectAndAdvice('B460');
 			}
-	  
+
 		}
 	}
 	#ESTO ES PARA LAS LLAMADAS AJAX TRADICIONALES (PARAMETROS POR URL) o llamados transaccionales habituales
@@ -607,7 +607,7 @@ sub getUserLocale{
 	my $locale = $session->param('usr_locale') || C4::Context->config("defaultLang") || 'es_ES';
 
 	return C4::AR::Utilidades::trim($locale);
-	
+
 }
 
 =item
@@ -628,14 +628,14 @@ sub _init_i18n {
 Funcion que devuelve si se cambio la ip o no para la misma session
 =cut
 
-sub _cambioIp{ 
+sub _cambioIp{
 	my $session=shift;
 	if ($session->param('ip') ne $ENV{'REMOTE_ADDR'}) {
 				my $time=localtime(time());
-				_session_log(sprintf "%20s from logged out at %30s (ip changed from %16s to %16s).\n", 
-															$session->param('userid'), 
-															$time, 
-															$session->param('ip'), 
+				_session_log(sprintf "%20s from logged out at %30s (ip changed from %16s to %16s).\n",
+															$session->param('userid'),
+															$time,
+															$session->param('ip'),
 															$ENV{'REMOTE_ADDR'}
 				 );
 			return 1;}
@@ -654,53 +654,53 @@ sub _verificarSession {
 	my $code_MSG;
 
 	C4::AR::Debug::debug("C4::AR::Auth::_verificarSession => type ($type) != type_session (".$session->param('type').")");
-	  
+
 	if(defined $session and $session->is_expired()){
 		#EXPIRO LA SESION
-		$code_MSG='U355';     
-		C4::AR::Debug::debug("C4::AR::Auth::_verificarSession => expiro");    
+		$code_MSG='U355';
+		C4::AR::Debug::debug("C4::AR::Auth::_verificarSession => expiro");
 	} else {
 		#NO EXPIRO LA SESION
-		   
+
 		my $type_session    = C4::AR::Utilidades::capitalizarString($session->param('type'));
 		$type               = C4::AR::Utilidades::capitalizarString($type);
-		
+
 		if ($type ne $type_session){
 			#Esta pasando de la intra al opac o al revés
 			C4::AR::Debug::debug("C4::AR::Auth::_verificarSession => SESSION INVALIDA, VENIA DESDE OPAC/INTRA HACIA INTRA/OPAC -- type ($type) != type_session ($type_session)");
-		
+
 			if ($type eq "Opac"){
 				$code_MSG = "U607";
 			}else{
 				$code_MSG = "U601";
 			}
-			
+
 			return ($code_MSG,"sesion_invalida");
 		}
-		
+
 		_init_i18n({ type => $type });
 		if ($session->param('userid')) {
 
-#             C4::AR::Debug::debug("no hay userid");    
+#             C4::AR::Debug::debug("no hay userid");
 			#Quiere decir que la sesion existe ahora hay q Verificar condiciones
 			if (_cambioIp($session)){
-				$code_MSG='U356';             
-				C4::AR::Debug::debug("C4::AR::Auth::_verificarSession => sesion invalido => cambio la ip");  
+				$code_MSG='U356';
+				C4::AR::Debug::debug("C4::AR::Auth::_verificarSession => sesion invalido => cambio la ip");
 			} elsif (defined($session->param('flag')) && ($session->param('flag') eq 'LOGUIN_DUPLICADO')){
-					$code_MSG='U359';            
-					C4::AR::Debug::debug("C4::AR::Auth::_verificarSession => sesion invalido => loguin duplicado");  
+					$code_MSG='U359';
+					C4::AR::Debug::debug("C4::AR::Auth::_verificarSession => sesion invalido => loguin duplicado");
 			} elsif ((C4::AR::Utilidades::validateString($token)) && (($session->param('token') ne $token) and ($valido_token))){
-					$code_MSG='U354';            
-					C4::AR::Debug::debug("C4::AR::Auth::_verificarSession => sesion invalido => token invalido");    
+					$code_MSG='U354';
+					C4::AR::Debug::debug("C4::AR::Auth::_verificarSession => sesion invalido => token invalido");
 				  } else {
 						 #ESTA TODO OK
-#                        C4::AR::Debug::debug("valida");    
-						 return ($code_MSG,"sesion_valida"); 
+#                        C4::AR::Debug::debug("valida");
+						 return ($code_MSG,"sesion_valida");
 				  }
 
 		} else {
 			#Esto quiere decir que la sesion esta bien pero que no hay nadie logueado
-	
+
 			  $code_MSG='000';
 			  return ($code_MSG,"sin_sesion");
 		}
@@ -715,7 +715,7 @@ sub _verificarSession {
 
 sub checkauth {
 	C4::AR::Debug::debug("desde checkauth==================================================================================================");
-	
+
 	my $socio;
 	$_[3]           = 'opac' unless $_[3];
 	my $demo        = C4::Context->config("demo") || 0;
@@ -724,7 +724,7 @@ sub checkauth {
 	my ($session)   = CGI::Session->load();
   # C4::AR::Debug::debug("antes del if existe sesion en checkauth, nroRandom - > " . $session->param('nroRandom') . " sessionid : " . $session->param('sessionID'));
 	my $userid      = undef;
-   
+
 	if ($session){
 		# C4::AR::Debug::debug("existe sesion en checkauth");
 		# C4::AR::Debug::debug("existe sesion en checkauth, nroRandom - > " . $session->param('nroRandom') . " sessionid : " . $session->param('sessionID'));
@@ -736,11 +736,11 @@ sub checkauth {
 	my $flags       = 0;
 	my $sin_captcha = 0;
 	my $time        = localtime(time());
-	
+
 	if ($_[1]) {
 
-		C4::AR::Debug::debug("C4::AR::Auth::checkauth => Autorización Requerida");    
-		C4::AR::Debug::debug("C4::AR::Auth::checkauth => userid  $userid"); 
+		C4::AR::Debug::debug("C4::AR::Auth::checkauth => Autorización Requerida");
+		C4::AR::Debug::debug("C4::AR::Auth::checkauth => userid  $userid");
 		my $socio_object = getSessionSocioObject();
 		if ($userid){
 
@@ -750,16 +750,16 @@ sub checkauth {
 					  if ( ($userid) && ( new_password_is_needed($userid, $socio) ) && !$_[4] ) {
 						  _change_Password_Controller($_[0], $userid, $_[3], $token);
 					  }
-			
+
 					  #Se deben actualizar los datos censales? se redirige a editar el perfil
 					  if ( (!$session->param('modificar_datos_censales')) &&  (C4::AR::Usuarios::needsDataValidation($session->param('userid')) != 0)) {
-										
-						 C4::AR::Debug::debug("C4::AR::Auth::_verificarSession => datos censales invalidos");    
+
+						 C4::AR::Debug::debug("C4::AR::Auth::_verificarSession => datos censales invalidos");
 						 $session->param('codMsg', 'U505');
-						 #Marcamos para evitar loop de redirecciones 
+						 #Marcamos para evitar loop de redirecciones
 						 $session->param('modificar_datos_censales', 1);
 						 _update_Data_Controller($_[0], $userid, $_[3], $token,$session);
-					  } 
+					  }
 
 			buildSocioData($session,$socio_object);
 		}
@@ -776,17 +776,17 @@ sub checkauth {
 		return ($userid, $session, $flags, $socio);
 	} else {
 		#No es DEMO hay q hacer todas las comprobaciones de la sesion
- 
+
 				  my ($code_MSG,$estado) = _verificarSession($session, $_[3], $token);
 					C4::AR::Debug::debug("C4::AR::Auth::checkauth => estado?? $estado");
-				  if ($estado eq "sesion_valida"){ 
-				
+				  if ($estado eq "sesion_valida"){
+
 					  C4::AR::Debug::debug("C4::AR::Auth::checkauth => session_valida");
 					  $socio = C4::AR::Usuarios::getSocioInfoPorNroSocio($session->param('userid'));
 					  $flags = $socio->tienePermisos($_[2]);
 					  loginSuccess($socio->getNro_socio);
 					  _init_i18n({ type => $_[3] });
-					  
+
 					  #Se verifica si el usuario tiene que cambiar la password
 					  if ( ($userid) && ( new_password_is_needed($userid, $socio) ) && !$_[4] ) {
 						  _change_Password_Controller($_[0], $userid, $_[3], $token);
@@ -794,13 +794,13 @@ sub checkauth {
 
 					  #Se deben actualizar los datos censales? se redirige a editar el perfil
 					  if ( (!$session->param('modificar_datos_censales')) &&  (C4::AR::Usuarios::needsDataValidation($session->param('userid')) != 0)) {
-										
-						 C4::AR::Debug::debug("C4::AR::Auth::_verificarSession => datos censales invalidos");    
+
+						 C4::AR::Debug::debug("C4::AR::Auth::_verificarSession => datos censales invalidos");
 						 $session->param('codMsg', 'U505');
-						 #Marcamos para evitar loop de redirecciones 
+						 #Marcamos para evitar loop de redirecciones
 						 $session->param('modificar_datos_censales', 1);
 						 _update_Data_Controller($_[0], $userid, $_[3], $token,$session);
-					  } 
+					  }
 
 					  if ($flags) {
 						  $loggedin = 1;
@@ -809,41 +809,41 @@ sub checkauth {
 						  $session->param('codMsg', 'U354');
 						  $session->param('redirectTo', C4::AR::Utilidades::getUrlPrefix().'/informacion.pl');
 						  redirectTo(C4::AR::Utilidades::getUrlPrefix().'/informacion.pl');
-					} 
+					}
 				  }
-				  elsif ($estado eq "sesion_invalida") { 
+				  elsif ($estado eq "sesion_invalida") {
 					  # C4::AR::Debug::debug("C4::AR::Auth::checkauth => session_invalida");
 					  $_[6] = C4::AR::Utilidades::getUrlPrefix().'/auth.pl';
 					  $session->param('codMsg', $code_MSG);
 					  $session->param('redirectTo', $_[6]);
-					  redirectTo($_[6]); 
-				  } 
-				  elsif ($estado eq "sin_sesion") { 
+					  redirectTo($_[6]);
+				  }
+				  elsif ($estado eq "sin_sesion") {
 					  # C4::AR::Debug::debug("C4::AR::Auth::checkauth => sin_sesion");
 					  #ESTO DEBERIA PASAR solo cuando la sesion esta sin iniciar
 					  #_destruirSession('U406', $_[5]);
 					  inicializarAuth($_[5]);
 					  $session->param('codMsg', $code_MSG);
 					  }
-				  else { 
+				  else {
 					  #ESTO MENOS
 					  # C4::AR::Debug::debug("C4::AR::Auth::checkauth => ESTO MENOS ???");
 					  _destruirSession(($code_MSG || 'U406'), $_[5]);
 					  $session->param('codMsg', $code_MSG);
 					  $session->param('redirectTo', C4::AR::Utilidades::getUrlPrefix().'/error.pl');
-					  redirectTo(C4::AR::Utilidades::getUrlPrefix().'/error.pl'); 
+					  redirectTo(C4::AR::Utilidades::getUrlPrefix().'/error.pl');
 				  }
-				  
+
 				  #por aca se permite llegar a paginas que no necesitan autenticarse
 				  my $insecure = C4::AR::Preferencias::getValorPreferencia('insecure');
 				  if ($loggedin || $_[1] || (defined($insecure) && $insecure)) {
-					  
+
 					  # que se hace aca ?
-					C4::AR::Debug::debug("C4::AR::Auth::checkauth => por aca se permite llegar a paginas que no necesitan autenticarse");    
+					C4::AR::Debug::debug("C4::AR::Auth::checkauth => por aca se permite llegar a paginas que no necesitan autenticarse");
 
 				  return ($userid, $session, $flags, $socio);
 				  }
-				unless ($userid) { 
+				unless ($userid) {
 					#si no hay userid, hay que autentificarlo y no existe sesion
 					#No genero un nuevo sessionID
 					#con este sessionID puedo recuperar el nroRandom (si existe) guardado en la base, para verificar la password
@@ -859,30 +859,30 @@ sub checkauth {
 					my $cant_fallidos;
 					#se verifica la password ingresada
 					my ($socio)        = _verificarPassword($userid,$password,$nroRandom);
-					my $login_attempts = getSocioAttempts($userid); 
+					my $login_attempts = getSocioAttempts($userid);
 					my $captchaResult;
-					if (($login_attempts > 2) && (!$_[0]->url_param('welcome')) && 
+					if (($login_attempts > 2) && (!$_[0]->url_param('welcome')) &&
 						( C4::AR::Utilidades::trim(C4::AR::Preferencias::getValorPreferencia('re_captcha_private_key')) && C4::AR::Utilidades::trim(C4::AR::Preferencias::getValorPreferencia('re_captcha_public_key')))) {
 						# se logueo mal mas de 3 veces y se tiene configuración de recaptcha, debo verificar captcha
-						
+
 						my $reCaptchaPrivateKey =  C4::AR::Preferencias::getValorPreferencia('re_captcha_private_key');
 						my $reCaptchaChallenge  = $_[0]->param('recaptcha_challenge_field');
 						my $reCaptchaResponse   = $_[0]->param('recaptcha_response_field');
 						use Captcha::reCAPTCHA;
-						
+
 						my $c = Captcha::reCAPTCHA->new;
-						
+
 						eval{
 						   $captchaResult = $c->check_answer($reCaptchaPrivateKey, $ENV{'REMOTE_ADDR'},$reCaptchaChallenge, $reCaptchaResponse);
 						};
 
 						C4::AR::Debug::debug("ERROR DE CAPTCHA: ".$captchaResult->{error});
-						
-						
-					} else {  
+
+
+					} else {
 						#else del  if ($login_attempts > 2 ) que revisa si hay captcha configurado
-						$sin_captcha = 1; 
-					}  
+						$sin_captcha = 1;
+					}
 					if (($sin_captcha || $captchaResult->{is_valid}) && $socio){
 						#se valido el captcha, la pass y el user y son validos
 						#setea loguins duplicados si existe, dejando logueado a un solo usuario a la vez
@@ -899,9 +899,9 @@ sub checkauth {
 						if( $flags = $socio->tienePermisos($_[2]) ){
 							_realizarOperacionesLogin($_[3],$socio);
 						}
-						
+
 						# C4::AR::Debug::debug("C4::AR::Auth::checkauth => fin operaciones login");
-						
+
 						#Si se logueo correctamente en intranet entonces guardo la fecha
 						my $now = Date::Manip::ParseDate("now");
 						if ($session->param('type') eq "intranet"){
@@ -910,16 +910,16 @@ sub checkauth {
 							$socio->save();
 						}
 						C4::AR::Debug::debug("C4::AR::Auth::checkauth => fecha ".$now);
-						
+
 						my $referer  = $ENV{'HTTP_REFERER'};
 						my $fromAuth = index($referer,'auth.pl');
 						$referer     = C4::AR::Utilidades::addParamToUrl($referer,"token",$session->param('token'));
-						  
+
 						if ($_[3] eq 'opac') {
 							$session->param('redirectTo', C4::AR::Utilidades::getUrlPrefix().'/opac-main.pl?token='.$session->param('token'));
 							if ($fromAuth eq "-1"){
 								redirectTo($referer);
-							}else{                                                              
+							}else{
 								redirectToNoHTTPS(C4::AR::Utilidades::getUrlPrefix().'/opac-main.pl?token='.$session->param('token'));
 							}
 							# #                               $session->secure(0);
@@ -932,12 +932,12 @@ sub checkauth {
 								$session->param('redirectTo', C4::AR::Utilidades::getUrlPrefix().'/mainpage.pl?token='.$session->param('token'));
 								redirectTo(C4::AR::Utilidades::getUrlPrefix().'/mainpage.pl?token='.$session->param('token'));
 							}
-							
+
 						}
 					} else {  # if ($sin_captcha || $captchaResult->{is_valid} ) - INGRESA CAPTCHA INVALIDO
 						if ($socio) {$code_MSG='U425';}
-						elsif ($userid) {     
-							   
+						elsif ($userid) {
+
 							   $code_MSG='U357';
 						}
 						$session->param('codMsg', $code_MSG);
@@ -948,7 +948,7 @@ sub checkauth {
 						}
 						if (!$sin_captcha && $cant_fallidos >= 3){
 								$_[5]->{'mostrar_captcha'} = 1;
-						}  
+						}
 					}
 			if ($_[0]->url_param('welcome')){
 				$_[5]->{'loginAttempt'} = 0;
@@ -956,14 +956,14 @@ sub checkauth {
 			}
 			_destruirSession($mensaje, $_[5]);
 	  }# end unless ($userid)
-				  
+
 	}# el else de DEMO
 }# end checkauth
 
 =item sub _realizarOperacionesLogin
 
 Funcion que realiza todas las operaciones asociadas a un inicio de sesion como ser:
-- revisar si los dias anteriores huubo actividad en la biblioteca, en aso de no haberla se marcan en la base como días feriados 
+- revisar si los dias anteriores huubo actividad en la biblioteca, en aso de no haberla se marcan en la base como días feriados
 - Dar de baja reservas de acuerdo a las sanciones
 
 =cut
@@ -980,7 +980,7 @@ sub _realizarOperacionesLogin{
 		my $enter=0;
 		if ($lastlogin){
 			while (Date::Manip::Date_Cmp($auxlastlogin,$prevWorkDate)<0) {
-				
+
 				C4::AR::Debug::debug("_realizarOperacionesLOGIN=> COMPARACION ll=".$auxlastlogin." prev=".$prevWorkDate);
 				#Se recorren todos los dias entre el lastlogin y el dia previo laboral a hoy, si en esos dias no hubo actividad se marca como no activo al dia en la bdd
 				my $dias=Date::Manip::Date_IsWorkDay($auxlastlogin);
@@ -997,7 +997,7 @@ sub _realizarOperacionesLogin{
 				$enter=1;
 			}
 			if ($enter) {
-				#Se actuliza el archivo con los feriados (.DateManip.cfg) solo si se dieron de alta nuevos feriados en 
+				#Se actuliza el archivo con los feriados (.DateManip.cfg) solo si se dieron de alta nuevos feriados en
 				#el while anterior
 				my ($count,@holidays)= C4::AR::Utilidades::getholidays();
 				C4::AR::Utilidades::savedatemanip(@holidays);
@@ -1012,14 +1012,14 @@ sub _realizarOperacionesLogin{
 				# lastlogin es anterior a hoy
 				##Si es un usuario de intranet entonces se borran las reservas de todos los usuarios sancionados
 					 C4::AR::Debug::debug("_realizarOperaciones=> t_operacionesDeINTRA\n");
-					_operacionesDeINTRA($socio);     
+					_operacionesDeINTRA($socio);
 			}
 		}#end if ($lastlogin)
 	}# end if ($type eq 'intra')
 	elsif ($type eq 'opac') {
 		#Si es un usuario de opac que esta sancionado entonces se borran sus reservas
 		_operacionesDeOPAC($socio);
-	} 
+	}
 }
 
 
@@ -1028,8 +1028,8 @@ sub getSessionSocioObject {
 	unless($session){
 		$session = CGI::Session->load();
 	}
-	
-	
+
+
 	if ($session->param('nro_socio')){
 		return C4::AR::Usuarios::getSocioInfoPorNroSocio(getSessionNroSocio());
 	}else{
@@ -1047,7 +1047,7 @@ sub getSessionType{
 	if ($session->param('type')){
 		return ($session->param('type'));
 	}
-	
+
 	return ('opac');
 }
 
@@ -1056,11 +1056,11 @@ sub getSessionNroRandom {
 	unless($session){
 		$session = CGI::Session->load() || CGI::Session->new();
 	}
-	
+
 	if ($session->param('nroRandom')){
 		return $session->param('nroRandom');
 	} else {
-		my $nroRandom = _generarNroRandom();        
+		my $nroRandom = _generarNroRandom();
 		$session->param('nroRandom',$nroRandom);
 
 		return $nroRandom;
@@ -1071,7 +1071,7 @@ sub getSessionNroRandom {
 =item sub getSessionUserID
 
 	obtiene el userid de la session
-	Parametros: 
+	Parametros:
 	$session
 
 =cut
@@ -1095,7 +1095,7 @@ sub getSessionAuthMethod{
 =item sub getSessionNroSocio
 
 	obtiene el nroSocio de la session
-	Parametros: 
+	Parametros:
 	$session
 
 =cut
@@ -1108,7 +1108,7 @@ sub getSessionNroSocio {
 =item sub output_html_with_http_headers
 
 	imprime el header y procesa el template
-	Parametros: 
+	Parametros:
 	$template: template que se creo anteriomente
 	$params: parametros para el template
 	$session: sesion acutal
@@ -1137,15 +1137,15 @@ sub print_header {
 	}else{
 		$secure = 1;
 	}
-	$cookie = new CGI::Cookie(  
-								-secure     => $secure, 
-								-httponly   => 1, 
-								-name       => $session->name, 
-								-value      => $session->id, 
-								-expires    => $session->expire ? '+' .$session->expire. 's' : 0, 
+	$cookie = new CGI::Cookie(
+								-secure     => $secure,
+								-httponly   => 1,
+								-name       => $session->name,
+								-value      => $session->id,
+								-expires    => $session->expire ? '+' .$session->expire. 's' : 0,
 							);
-							
-#En el header podría ir esto para la parte de las user pictures, 
+
+#En el header podría ir esto para la parte de las user pictures,
 # pero no vale la pena no cachear me parece por algo que se hace una vez cada tanto
 #                         -Cache_Control => join(', ', qw(
 #                                                            private
@@ -1156,10 +1156,10 @@ sub print_header {
 #                                                            pre-check=0
 #                                                            post-check=0
 #                                                        )),
-							
-	print $query->header(   -cookie=>$cookie, 
-							-type=>'text/html', 
-							 charset => C4::Context->config("charset")||'UTF-8', 
+
+	print $query->header(   -cookie=>$cookie,
+							-type=>'text/html',
+							 charset => C4::Context->config("charset")||'UTF-8',
 							 "Cache-control: public",
 						 );
 }
@@ -1168,7 +1168,7 @@ sub print_header {
 =item sub _isOPAC
 
 	Indica si es un requerimiento desde el OPAC o desde la INTRA
-	Parametros: 
+	Parametros:
 	$template: template que se creo anteriomente
 
 =cut
@@ -1189,7 +1189,7 @@ sub buildSocioData{
 
 	my ($session,$socio) = @_;
 	use C4::Modelo::UsrSocio;
-	
+
 	$session->flush();
 	$session->param('urs_theme', $socio->getTheme());
 	$session->param('usr_theme_intra', $socio->getThemeINTRA());
@@ -1206,9 +1206,9 @@ sub buildSocioData{
 	if($socio->persona->getCiudad){
 		$session->param('usr_ciudad_nombre', $socio->persona->ciudad_ref->getNombre());
 		$session->param('usr_ciudad_id',$socio->persona->ciudad_ref->id);
-	} 
+	}
 
-	
+
 	$session->param('usr_categoria_desc', $socio->categoria->getDescription());
 	$session->param('usr_fecha_nac', $socio->persona->getNacimiento());
 	$session->param('usr_sexo', $socio->persona->getSexo());
@@ -1219,14 +1219,14 @@ sub buildSocioData{
 	$session->param('usr_credential_type', $socio->getCredentialType());
 	$session->param('usr_permisos_opac', $socio->tienePermisosOPAC);
 	$session->param('remindFlag', $socio->getRemindFlag());
-	
+
 	$session->flush();
 }
 
 sub buildSocioDataHashFromSession{
 
-	my ($session) = CGI::Session->load();    
-	
+	my ($session) = CGI::Session->load();
+
 	my %socio_data;
 	$socio_data{'usr_apellido'}             = $session->param('usr_apellido');
 	$socio_data{'usr_nombre'}               = $session->param('usr_nombre');
@@ -1245,17 +1245,17 @@ sub buildSocioDataHashFromSession{
 	$socio_data{'usr_alt_telefono'}         = $session->param('usr_alt_telefono');
 	$socio_data{'usr_email'}                = $session->param('usr_email');
 	$socio_data{'usr_legajo'}               = $session->param('usr_legajo');
-	$socio_data{'ciudad_ref'}{'id'}         = $session->param('usr_ciudad_id'); 
-	$socio_data{'remindFlag'}               = $session->param('remindFlag'); 
-	$socio_data{'usr_credential_type'}      = $session->param('usr_credential_type'); 
+	$socio_data{'ciudad_ref'}{'id'}         = $session->param('usr_ciudad_id');
+	$socio_data{'remindFlag'}               = $session->param('remindFlag');
+	$socio_data{'usr_credential_type'}      = $session->param('usr_credential_type');
 	$socio_data{'object'}                   = C4::AR::Usuarios::getSocioInfoPorNroSocio($socio_data{'usr_nro_socio'});
-	
+
 	return (\%socio_data);
 }
 
 sub updateLoggedUserTemplateParams{
 	my ($session,$t_params,$socio) = @_;
-	
+
 	buildSocioData($session,$socio);
 	$t_params->{'socio_data'} = buildSocioDataHashFromSession();
 }
@@ -1264,7 +1264,7 @@ sub updateLoggedUserTemplateParams{
 
 	TimeOut para la sesion
 
-	Parametros: 
+	Parametros:
 
 =cut
 sub _getTimeOut {
@@ -1279,7 +1279,7 @@ sub _getTimeOut {
 	este es el tratamiento actual que se le esta dando a la password antes de guardar en la base de datos,
 	si cambia, solo deberia cambiarse este metodo
 
-	Parametros: 
+	Parametros:
 	$password
 
 =cut
@@ -1296,7 +1296,7 @@ sub prepare_password{
 =item sub desencriptar
 
 	Esta funcion desencripta el texto_a_desencriptar con la clave $key usando AES
-	Parametros: 
+	Parametros:
 	$texto_a_desencriptar
 	$key= clave para desencriptar
 
@@ -1305,14 +1305,14 @@ sub desencriptar{
 	my ($texto_a_desencriptar, $key) = @_;
 	use Crypt::CBC;
 	use MIME::Base64;
-	my  $cipher = Crypt::CBC->new( 
+	my  $cipher = Crypt::CBC->new(
 									-key    => $key,
 									-cipher => 'Rijndael',
 									-salt   => 1,
 							);
 
 
-	my $plaintext = $cipher->decrypt(decode_base64($texto_a_desencriptar));    
+	my $plaintext = $cipher->decrypt(decode_base64($texto_a_desencriptar));
 
 	return C4::AR::Utilidades::trim($plaintext);
 }
@@ -1320,7 +1320,7 @@ sub desencriptar{
 =item sub _change_Password_Controller
 
 	Esta funcion se encarga de manejar el cambio de la password
-	Parametros: 
+	Parametros:
 	$dbh, $query, $userid, $type
 
 =cut
@@ -1337,7 +1337,7 @@ sub _change_Password_Controller {
 =item sub _update_Data_Controller
 
 	Esta funcion se encarga de manejar la actualización de datos censales
-	Parametros: 
+	Parametros:
 	$dbh, $query, $userid, $type
 
 =cut
@@ -1373,14 +1373,14 @@ Funcion que cierra la sesion generando una nueva
 sub cerrarSesion{
 	my ($t_params) = @_;
 
- 
+
 	#se genera un nuevo nroRandom para que se autentique el usuario
 	my $nroRandom       = C4::AR::Auth::_generarNroRandom();
 	#genero una nueva session
 	my ($session)           = CGI::Session->load();
 	my $msjCode             = 'U358';
 	my $type                = $t_params->{'type'} || 'OPAC';
-	
+
 	$t_params->{'mensaje'}  = C4::AR::Mensajes::getMensaje($msjCode,$type,[]);
 	#se destruye la session anterior
 	_eliminarSession($session);
@@ -1396,20 +1396,20 @@ sub cerrarSesion{
 	$t_params->{'sessionClose'}     = 1;
 	$session = C4::AR::Auth::_generarSession(\%params);
 	$session->param('codMsg', 'U358');
-   
+
 	redirectToAuth($t_params);
 }
 
 =item sub _generarToken
 
 	genera el token para evitar CSRF a partir del sessionID, le hace un SHA(sessionID)
-	Parametros: 
+	Parametros:
 
 =cut
 sub _generarToken {
 	my $session = CGI::Session->load();
 	my $digest;
-	#se le hace SHA al sessionID para generar el TOKEN 
+	#se le hace SHA al sessionID para generar el TOKEN
 	$digest = sha1_hex($session->id);
 	my $token= $digest;
 	return $token;
@@ -1426,16 +1426,16 @@ sub _checkRequisito{
 	my ($socio) = @_;
 
 	my $status = 1;
-	
+
 	if (C4::AR::Preferencias::getValorPreferencia("requisito_necesario") ){
 		my $cumple_condicion = $socio->getCumple_requisito;
 		$status = $status && ($cumple_condicion && ($cumple_condicion ne "0000000000:00:00"));
 	}
-	
+
 	$status = $status && ($socio->getActivo);
 
 	return($status);
-	
+
 }
 
 =item sub _verificarPassword
@@ -1472,37 +1472,37 @@ sub _autenticar{
     C4::AR::Debug::debug("metodo ".$metodo." userid ".$userid . " nroRandom : " . $nroRandom);
     switch ($metodo){
 			case "ldap" {
-				($socio) = C4::AR::Authldap::checkPassword($userid,$password,$nroRandom); 
-				C4::AR::Debug::debug("Devolviendo casi al final el socio".$socio);      
+				($socio) = C4::AR::Authldap::checkPassword($userid,$password,$nroRandom);
+				C4::AR::Debug::debug("Devolviendo casi al final el socio".$socio);
 			}
 			case "mysql"{
-				($socio) = C4::AR::AuthMysql::checkPassword($userid,$password,$nroRandom);       
-				C4::AR::Debug::debug("Vamos bien???".$socio);      
+				($socio) = C4::AR::AuthMysql::checkPassword($userid,$password,$nroRandom);
+				C4::AR::Debug::debug("Vamos bien???".$socio);
 			}
 			else{
 			}
     } #end switch
 		# if ( (defined $socio) && (! _checkRequisito($socio))  ){
-		C4::AR::Debug::debug("Auth => socio->cumpleRequisito() " . $socio->cumpleRequisito());	
+		C4::AR::Debug::debug("Auth => socio->cumpleRequisito() " . $socio->cumpleRequisito());
 		if ( (defined $socio) && ( !$socio->cumpleRequisito() ) ) {
-			C4::AR::Debug::debug("Auth.pm => NO CUMPLE REQUISITO ".$socio);      
+			C4::AR::Debug::debug("Auth.pm => NO CUMPLE REQUISITO ".$socio);
 			$socio = undef ;
-	
+
 		}elsif (defined $socio){
 			$socio->setLastAuthMethod($metodo);
 		}
 	};
-		
+
 	return ($socio);
 }
 
 sub redirectTo {
 	my ($url) = @_;
-#     C4::AR::Debug::debug("redirectTo=>");  
+#     C4::AR::Debug::debug("redirectTo=>");
 	#para saber si fue un llamado con AJAX
 	if(C4::AR::Utilidades::isAjaxRequest()){
 	#redirijo en el cliente
-#      C4::AR::Debug::debug("redirectTo=> CLIENT_REDIRECT");        
+#      C4::AR::Debug::debug("redirectTo=> CLIENT_REDIRECT");
 		my $session = CGI::Session->load();
 		# send proper HTTP header with cookies:
 		$session->param('redirectTo', $url);
@@ -1511,14 +1511,14 @@ sub redirectTo {
 		print 'CLIENT_REDIRECT';
 		exit;
 	}else{
-		my $session = CGI::Session->load();  
-		C4::AR::Debug::debug($url);   
-#        C4::AR::Debug::debug("redirectTo=> SERVER_REDIRECT");       
-		my $input = CGI->new(); 
-		print $input->redirect( 
-			-location => $url, 
+		my $session = CGI::Session->load();
+		C4::AR::Debug::debug($url);
+#        C4::AR::Debug::debug("redirectTo=> SERVER_REDIRECT");
+		my $input = CGI->new();
+		print $input->redirect(
+			-location => $url,
 			-status => 301,
-		); 
+		);
 #       C4::AR::Debug::debug("redirectTo=> url: ".$url);
 		exit;
 	}
@@ -1526,22 +1526,22 @@ sub redirectTo {
 
 sub redirectToAuth {
 	my ($template_params) = @_;
-		
+
 	my $url;
 	$url = C4::AR::Utilidades::getUrlPrefix().'/auth.pl';
 	if($template_params->{'loginAttempt'}){
 		$url = C4::AR::Utilidades::addParamToUrl($url,'loginAttempt',1);
 	}elsif($template_params->{'sessionClose'}){
 		$url = C4::AR::Utilidades::addParamToUrl($url,'sessionClose',1);
-	} 
+	}
 	if($template_params->{'mostrar_captcha'}){
 		$url = C4::AR::Utilidades::addParamToUrl($url,'mostrarCaptcha',1);
-	} 
+	}
 	if($template_params->{'loginFailed'}){
 		$url = C4::AR::Utilidades::addParamToUrl($url,'loginFailed',1);
 	}
 
-	redirectTo($url);    
+	redirectTo($url);
 }
 
 sub redirectToNoHTTPS {
@@ -1555,12 +1555,13 @@ sub redirectToNoHTTPS {
 	my $url_server      = C4::AR::Preferencias::getValorPreferencia('serverName');
 	my $opac_port       = ":".(C4::Context->config('opac_port')||'80');
 	my $server_port     = ":".$ENV{'SERVER_PORT'};
+	my $protocolo       = ($ENV{'HTTPS'} eq 'on')? 'https':'http';
 	my $SERVER_URL       =(C4::AR::Utilidades::trim($url_server)||($ENV{'SERVER_NAME'})).$server_port;
 	my $SERVER_URL_OPAC  =(C4::AR::Utilidades::trim($url_server)||($ENV{'SERVER_NAME'})).$opac_port;
 
 	if(C4::AR::Utilidades::isAjaxRequest()){
 	#redirijo en el cliente
-#      C4::AR::Debug::debug("redirectToNoHTTPS=> CLIENT_REDIRECT");         
+#      C4::AR::Debug::debug("redirectToNoHTTPS=> CLIENT_REDIRECT");
 		my $session = CGI::Session->load();
 		# send proper HTTP header with cookies:
 		$session->param('redirectTo', $url);
@@ -1571,12 +1572,12 @@ sub redirectToNoHTTPS {
 		exit;
 	}else{
 		#redirijo en el servidor
-		 C4::AR::Debug::debug("redirectToNoHTTPS=> SERVER_REDIRECT \n\n\n");    
-		my $input = CGI->new(); 
-		print $input->redirect( 
-			-location => "http://".$SERVER_URL_OPAC.$url, 
+		 C4::AR::Debug::debug("redirectToNoHTTPS=> SERVER_REDIRECT \n\n\n");
+		my $input = CGI->new();
+		print $input->redirect(
+			-location => $protocolo."://".$SERVER_URL_OPAC.$url,
 			-status => 301,
-		); 
+		);
 #         C4::AR::Debug::debug("redirectTo=> url: ".$url);
 		exit;
 	}
@@ -1601,12 +1602,12 @@ sub redirectToHTTPS {
 	my ($url) = @_;
 #     C4::AR::Debug::debug("\n");
 #     C4::AR::Debug::debug("redirectToHTTPS=> \n");
-	my $puerto = C4::AR::Preferencias::getValorPreferencia("puerto_para_https")||'80';
-	my $protocolo = "https";
+	my $puerto 		= C4::AR::Preferencias::getValorPreferencia("puerto_para_https")||'80';
+	my $protocolo	= ($ENV{'HTTPS'} eq 'on')? 'https':'http';
 	#para saber si fue un llamado con AJAX
 	if(C4::AR::Utilidades::isAjaxRequest()){
 	#redirijo en el cliente
-#         C4::AR::Debug::debug("redirectToHTTPS=> CLIENT_REDIRECT\n");         
+#         C4::AR::Debug::debug("redirectToHTTPS=> CLIENT_REDIRECT\n");
 		my $session = CGI::Session->load();
 		# send proper HTTP header with cookies:
 		$session->param('redirectTo', $url);
@@ -1615,12 +1616,12 @@ sub redirectToHTTPS {
 		print 'CLIENT_REDIRECT';
 	}else{
 	#redirijo en el servidor
-#         C4::AR::Debug::debug("redirectToHTTPS=> SERVER_REDIRECT\n");    
-		my $input = CGI->new(); 
-		print $input->redirect( 
-			-location => $protocolo."://".$ENV{'SERVER_NAME'}.":".$puerto.$url,  
+#         C4::AR::Debug::debug("redirectToHTTPS=> SERVER_REDIRECT\n");
+		my $input = CGI->new();
+		print $input->redirect(
+			-location => $protocolo."://".$ENV{'SERVER_NAME'}.":".$puerto.$url,
 			-status => 301,
-		); 
+		);
 #         C4::AR::Debug::debug("redirectTo=> url: ".$url."\n");
 	}
 }
@@ -1641,9 +1642,9 @@ sub _operacionesDeOPAC{
 	eval{
 		#Si es un usuario de opac que esta sancionado entonces se borran sus reservas
 		my ($status_hash)= C4::AR::Sanciones::permisoParaPrestamo($socio, C4::AR::Preferencias::getValorPreferencia("defaultissuetype"));
-		
+
 		my $isSanction           =$status_hash->{'deudaSancion'};
-		
+
 		my $regular = $socio->esRegular;
 		my $userid = $socio->getNro_socio();
 		if ($isSanction || !$regular ){
@@ -1668,7 +1669,7 @@ sub _operacionesDeOPAC{
 	- borrar las reservas de los usuarios sancionados
 	- se borran las reservas de los usuarios que no son alumnos regulares
 	- se borran las reservas vencidas
-	
+
 =cut
 
 sub _operacionesDeINTRA{
@@ -1698,7 +1699,7 @@ sub _operacionesDeINTRA{
 		#Ademas, se borran las reservas de los usuarios que no son alumnos regulares
 		C4::AR::Debug::debug("_operacionesDeINTRA=> Se cancelan las reservas de los usuarios que no son alumnos regulares ");
 		$reserva->cancelar_reservas_no_regulares($responsable);
-	
+
 		$db->commit;
 	};
 	if ($@){
@@ -1741,7 +1742,7 @@ sub getMetodoEncriptacion {
 
 	Hashea una password segun el metodo pasado por parametro
 	si se agrega otro metodo de encriptacion se debe agregar aca
-	
+
 	Parametros:
 	$password: password del usuario a hashear
 	$metodo: MD5, SHA
@@ -1762,8 +1763,8 @@ sub hashear_password {
 =item sub new_password_is_needed
 
 	Verifica si el usuario tiene que cambiar o no la password
-	
-	Hay dos campos (lastchangepassword, changepassword) en urs_socio 
+
+	Hay dos campos (lastchangepassword, changepassword) en urs_socio
 	lastchangepassword: fecha en la que el socio cambio la password por ultima vez
 	changepassword: booleano, indica si la password debe ser cambiada o no
 	Parametros:
@@ -1812,34 +1813,34 @@ sub get_html_content {
 #METODO STATIC
 sub loginFailed{
 	my ($nro_socio) = shift;
-	
-	eval{    
+
+	eval{
 		my $attempts_object = _getAttemptsObject($nro_socio);
-	
+
 		$attempts_object->increase;
 	};
-	
+
 }
 
 #METODO STATIC
 sub _getAttemptsObject{
-	
+
 	my ($nro_socio) = shift;
 
 	use C4::Modelo::UsrLoginAttempts::Manager;
-	
+
 	my @filtros;
-	
+
 	push (@filtros, (nro_socio => {eq => $nro_socio}));
-	
+
 	my ($socio_array) = C4::Modelo::UsrLoginAttempts::Manager->get_usr_login_attempts(query => \@filtros,);
-	
-	
+
+
 	if (scalar(@$socio_array)){
 		return ($socio_array->[0]);
 	}else{
 		my $object = C4::Modelo::UsrLoginAttempts->new(nro_socio => $nro_socio);
-		
+
 		return ($object);
 	}
 }
@@ -1847,20 +1848,20 @@ sub _getAttemptsObject{
 #METODO STATIC
 sub loginSuccess{
 	my ($nro_socio) = shift;
-	
+
 	my $attempts_object = _getAttemptsObject($nro_socio);
-	
+
 	$attempts_object->reset;
-	
+
 }
 
 #METODO STATIC
 sub getSocioAttempts{
-	
+
 	my ($nro_socio) = shift;
-	
+
 	my $object = _getAttemptsObject($nro_socio);
-	
+
 	return ($object->attempts);
 }
 
@@ -1871,7 +1872,7 @@ sub getSocioAttempts{
 =cut
 sub cambiarPassword {
 	my ($params)=@_;
-	
+
 	my $session = CGI::Session->load();
 
 	my  ($msg_object,$socio) = _validarCambioPassword($params);
@@ -1894,60 +1895,60 @@ sub _validarCambioPassword {
 	my $socio       = undef;
 	my $msg_object  = C4::AR::Mensajes::create();
 	my $new_password_1;
-	my $new_password_2; 
-	my $passPlana; 
-	my $key;  
-	
+	my $new_password_2;
+	my $passPlana;
+	my $key;
+
    ($socio,$msg_object)=_validarPasswordActual($params->{'actual_password'},C4::AR::Auth::getSessionNroSocio(),$params->{'new_password1'},C4::AR::Auth::getSessionNroRandom());
 
 	if ($socio && !$msg_object->{'error'}) {
 
 		$new_password_1 = $params->{'new_password1'};
 		$new_password_2 = $params->{'new_password2'};
-		
+
 		if (_passwordsIguales($new_password_1, $new_password_2, $socio)) {
-			
+
 			#comun a todos los metodos
 			$key            = $params->{'key'};
 			$passPlana      = C4::AR::Auth::desencriptar($new_password_1, $key);
-			($msg_object)   = C4::AR::Validator::checkPassword($passPlana); 
- 
+			($msg_object)   = C4::AR::Validator::checkPassword($passPlana);
+
 		}else{
-		
+
 			#las nuevas password son distintas
 			$msg_object->{'error'} = 1;
-			C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U315', 'params' => []} ) ;  
-				
-		}          
-		
+			C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U315', 'params' => []} ) ;
+
+		}
+
 	}else{
-	
+
 		#no es valida la pass actual
 		$msg_object->{'error'} = 1;
 		C4::AR::Debug::debug("ENTRA EN #no es valida la pass actual");
-		C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U357', 'params' => []} ) ;    
-				 
+		C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U357', 'params' => []} ) ;
+
 	}
 
 	if ( !($msg_object->{'error'}) && ( C4::AR::Auth::getSessionNroSocio() != $params->{'nro_socio'} ) ){
-	
+
 		#no coincide el usuario logueado con el usuario al que se le va a cambiar la password
 		$msg_object->{'error'}= 1;
 		C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U362', 'params' => [$params->{'nro_socio'}]} ) ;
-		
+
 	}
-	
+
 	if (!($msg_object->{'error'})) {
 	C4::AR::Debug::debug("PASSpLANA : $passPlana");
 		_setearPassword($socio,$new_password_1,C4::AR::Auth::getSessionNroRandom(),$passPlana);
 		my $today = Date::Manip::ParseDate("today");
 		$socio->setLast_change_password($today);
 		$socio->setChange_password(0);
-		
+
 		$socio->save();
-		
+
 	}
-	   
+
 	return ($msg_object);
 }
 
@@ -1963,15 +1964,15 @@ sub _validarPasswordActual{
 	my $auth_method = getSessionAuthMethod();
 	my $msg_object;
 	my $socio       = undef;
-	
+
 	use Switch;
 	switch ($auth_method){
 		case "ldap" {
-				($socio,$msg_object) = C4::AR::Authldap::validarPassword($userid,$password,$nuevaPassword,$nroRandom);       
+				($socio,$msg_object) = C4::AR::Authldap::validarPassword($userid,$password,$nuevaPassword,$nroRandom);
 		}
 		case "mysql"{
-				($socio,$msg_object) = C4::AR::AuthMysql::validarPassword($userid,$password,$nuevaPassword,$nroRandom);       
-			
+				($socio,$msg_object) = C4::AR::AuthMysql::validarPassword($userid,$password,$nuevaPassword,$nroRandom);
+
 		}
 		else{}
 	}
@@ -1988,19 +1989,19 @@ $passPlana es usada para LDAP
 sub _setearPassword{
 	my ($socio,$nuevaPassword,$nroRandom,$passPlana)   = @_;
 	my $auth_method                         = $socio->getLastAuthMethod();
-	
+
 	use Switch;
 	switch ($auth_method){
 		case "ldap" {
-				($socio) = C4::AR::Authldap::setearPassword($socio,$passPlana);       
+				($socio) = C4::AR::Authldap::setearPassword($socio,$passPlana);
 		}
 		case "mysql"{
-				($socio) = C4::AR::AuthMysql::setearPassword($socio,$nuevaPassword);       
-			
+				($socio) = C4::AR::AuthMysql::setearPassword($socio,$nuevaPassword);
+
 		}
 		else{}
 	}
-	
+
 	return $socio;
 }
 
@@ -2010,19 +2011,19 @@ sub _passwordsIguales{
 	my ($nuevaPassword1,$nuevaPassword2,$socio) = @_;
 	my $auth_method                             = $socio->getLastAuthMethod();
 	my $result                                  = 0;
-	
+
 	use Switch;
 	switch ($auth_method){
 		case "ldap" {
-				($result) = C4::AR::Authldap::passwordsIguales($nuevaPassword1,$nuevaPassword2,$socio);       
+				($result) = C4::AR::Authldap::passwordsIguales($nuevaPassword1,$nuevaPassword2,$socio);
 		}
 		case "mysql"{
-				($result) = C4::AR::AuthMysql::passwordsIguales($nuevaPassword1,$nuevaPassword2,$socio);       
-			
+				($result) = C4::AR::AuthMysql::passwordsIguales($nuevaPassword1,$nuevaPassword2,$socio);
+
 		}
 		else{}
 	}
-	
+
 	return $result;
 }
 
@@ -2041,16 +2042,16 @@ Esta funcion devuelve el password del socio desde el ultimo mecanismo utilizado 
 	use Switch;
 	switch ($auth_method){
 		case {"ldap" && C4::AR::Utilidades::existeInArray("ldap",@$metodosDeAutenticacion)} {
-			   ($password) = C4::AR::Authldap::obtenerPassword($socio);  
+			   ($password) = C4::AR::Authldap::obtenerPassword($socio);
 		}
 		else{
 			#en este caso devuelve lo que tiene el obejto en la base de datos.
-			($password) = $socio->password;   
+			($password) = $socio->password;
 			}
 	}
-	
+
 	return $password;
-}   
+}
 
 
 
@@ -2070,13 +2071,13 @@ sub _sendRecoveryPasswordMail{
 	$mail{'mail_subject'}           = C4::AR::Filtros::i18n("Instrucciones para reestablecer su clave");
 
 	# Datos para el mail
-	
+
 	my $completo                    = Encode::decode_utf8($socio->persona->getApeYNom );
 	my $nro_socio                   = $socio->getNro_socio;
 	my $ui                          = C4::AR::Referencias::obtenerDefaultUI() || C4::AR::Referencias::getFirstDefaultUI();
 	my $nombre_ui                   = Encode::decode_utf8($ui->getNombre());
 	my $mailMessage                 = Encode::decode_utf8(C4::AR::Preferencias::getValorPreferencia('mailMessageForgotPass'));
-						
+
 	$mailMessage                    =~ s/SOCIO/$completo/;
 	#hay 2 NOMBRE_UI por eso repetido
 	$mailMessage                    =~ s/NOMBRE_UI/$nombre_ui/;
@@ -2085,13 +2086,13 @@ sub _sendRecoveryPasswordMail{
 	$mailMessage                    =~ s/LINK/$link/;
 	$mailMessage                    =~ s/LINK/$link/;
 	$mailMessage                    =~ s/LINK/$link/;
-	
+
 	$mail{'mail_message'}           = $mailMessage;
 	$mail{'page_title'}             = C4::AR::Filtros::i18n("Olvido de su contrase&ntilde;a");
 	$mail{'link'}                   = $link;
-	
+
 	my ($ok, $msg_error)            = C4::AR::Mail::send_mail(\%mail);
-	
+
 	return (!$ok,$msg_error);
 
 }
@@ -2107,10 +2108,10 @@ sub _sendRecoveryPasswordMail_Unactive{
 	$mail{'mail_from'}              = Encode::decode_utf8(C4::AR::Preferencias::getValorPreferencia("reserveFrom"));
 	$mail{'mail_to'}                = $socio->persona->getEmail;
 	$mail{'mail_subject'}           = C4::AR::Filtros::i18n("Instrucciones para reestablecer su clave");
-	  
+
 	# Datos para el mail
 	use C4::Modelo::PrefUnidadInformacion;
-						
+
 	my $completo                    = Encode::decode_utf8($socio->persona->getNombre . " " . $socio->persona->getApellido);
 	my $nro_socio                   = $socio->getNro_socio;
 
@@ -2118,7 +2119,7 @@ sub _sendRecoveryPasswordMail_Unactive{
 	my $nombre_ui                   = Encode::decode_utf8($ui->getNombre());
 
 	my $mailMessage                 = C4::AR::Preferencias::getValorPreferencia('mailMessageForgotPassUnactive');
-	
+
 	$mailMessage                    =~ s/SOCIO/$completo/;
 
 	#hay 2 NOMBRE_UI por eso repetido
@@ -2127,9 +2128,9 @@ sub _sendRecoveryPasswordMail_Unactive{
 
 	$mail{'mail_message'}           = $mailMessage;
 	$mail{'page_title'}             = C4::AR::Filtros::i18n("Olvido de su clave de ingreso");
-	
+
 	my ($ok, $msg_error)            = C4::AR::Mail::send_mail(\%mail);
-	
+
 	return (!$ok,$msg_error);
 
 }
@@ -2139,9 +2140,9 @@ sub _buildPasswordRecoverLink{
 	my $hash = sha256_base64(localtime().$socio->getPassword().$socio->getLastValidation());
 	my $encoded_hash    = C4::AR::Utilidades::escapeURL($hash);
 	my $link = "http://".$ENV{'SERVER_NAME'}.C4::AR::Utilidades::getUrlPrefix()."/opac-recover-password.pl?key=".$encoded_hash;
-	return ($link,$hash,$encoded_hash); 
-	
-	
+	return ($link,$hash,$encoded_hash);
+
+
 }
 
 sub _logClientIpAddress{
@@ -2152,11 +2153,11 @@ sub _logClientIpAddress{
 
 	$socio->client_ip_recover_pwd($client_id);
 	$socio->recover_date_of($today);
-	
+
 	$socio->save();
 
-	
-	
+
+
 }
 
 sub recoverPassword{
@@ -2169,7 +2170,7 @@ sub recoverPassword{
 	my $reCaptchaResponse   = $params->{'recaptcha_response_field'};
 	my $isError             = 0;
 	use HTML::Entities;
-	
+
 	use Captcha::reCAPTCHA;
 	my $c = Captcha::reCAPTCHA->new;
 
@@ -2180,17 +2181,17 @@ sub recoverPassword{
 
 	if ( $captchaResult->{is_valid} ){
 		my $user_id = C4::AR::Utilidades::trim($params->{'user-id'});
-		my $socio   = C4::AR::Usuarios::getSocioInfoPorMixed($user_id);       
+		my $socio   = C4::AR::Usuarios::getSocioInfoPorMixed($user_id);
 		if ($socio){
 			my $db = $socio->db;
 
-			if ($socio->cumpleRequisito()) {	
+			if ($socio->cumpleRequisito()) {
 			# if ( _checkRequisito($socio) ){
-				
+
 				$db->{connect_options}->{AutoCommit} = 0;
 				$db->begin_work;
-				
-				C4::AR::Debug::debug("Auth => recoverPassword => usuario activo ");   
+
+				C4::AR::Debug::debug("Auth => recoverPassword => usuario activo ");
 
 				eval{
 					_logClientIpAddress('recover_password',$socio);
@@ -2199,9 +2200,9 @@ sub recoverPassword{
 					($isError)                      = _sendRecoveryPasswordMail($socio,$link);
 
 					if($isError){
-						C4::AR::Debug::debug("Auth => recoverPassword => usuario activo ERROR al enviar el correo " . $isError);   
+						C4::AR::Debug::debug("Auth => recoverPassword => usuario activo ERROR al enviar el correo " . $isError);
 						$message = C4::AR::Mensajes::getMensaje('U606','opac');
-						$db->rollback;                        
+						$db->rollback;
 					} else {
 						$socio->setRecoverPasswordHash($hash);
 						$db->commit;
@@ -2218,8 +2219,8 @@ sub recoverPassword{
 				$db->{connect_options}->{AutoCommit} = 1;
 			}else{
 				#NO ES ACTIVO, LE MANDO UN MAIL DICIENDOLE QUE VAYA A LA BIBLIOTECA
-					
-				C4::AR::Debug::debug("Auth => recoverPassword => usuario inactivo ");    
+
+				C4::AR::Debug::debug("Auth => recoverPassword => usuario inactivo ");
 				eval{
 					_logClientIpAddress('recover_password',$socio);
 					$message                    = C4::AR::Mensajes::getMensaje('U600','opac');
@@ -2227,14 +2228,14 @@ sub recoverPassword{
 
 					if($isError){
 						$message = C4::AR::Mensajes::getMensaje('U606','opac');
-						$db->rollback;                        
-					} 
-				};    
+						$db->rollback;
+					}
+				};
 				if ($@){
 					$message = C4::AR::Mensajes::getMensaje('U606','opac');
 					C4::AR::Mensajes::printErrorDB($@, 'U606',"opac");
 				}
-				
+
 			}
 		}else{
 			$message = C4::AR::Mensajes::getMensaje('U601','opac');
@@ -2253,54 +2254,54 @@ sub checkRecoverLink{
 	my ($key) = @_;
 
 	my $status = 0;
-	
+
 	if (C4::AR::Utilidades::validateString($key)){
-		my $socio_array_ref = C4::Modelo::UsrSocio::Manager->get_usr_socio( 
+		my $socio_array_ref = C4::Modelo::UsrSocio::Manager->get_usr_socio(
 													 query              => [ 'recover_password_hash' => { eq => $key } ],
 										 );
-	
+
 		if(scalar(@$socio_array_ref)){
 			$status = 1;
 			my $socio          = $socio_array_ref->[0];
 			my $dateformat     = C4::Date::get_date_format();
 			my $hoy            = Date::Manip::ParseDate("now");
-			my $fecha_link     = $socio->recover_date_of;        
+			my $fecha_link     = $socio->recover_date_of;
 			my $err;
-	
+
 			$fecha_link        = Date::Manip::DateCalc( $fecha_link, "+ 1 day", \$err );
-	
+
 			my $cmp_result = Date::Manip::Date_Cmp($fecha_link,$hoy);
-			
-			$status = $cmp_result >= 0; 
-			
+
+			$status = $cmp_result >= 0;
+
 			if (!$status){
 				$socio->unsetRecoverPasswordHash();
 				$status = 0;
 			}
-					
-			 
+
+
 		}
-	}    
+	}
 	return ($status)
 }
 
 
 sub changePasswordFromRecover{
 	my ($params) = @_;
-	my $socio_array_ref = C4::Modelo::UsrSocio::Manager->get_usr_socio( 
+	my $socio_array_ref = C4::Modelo::UsrSocio::Manager->get_usr_socio(
 												 query              => [ 'recover_password_hash' => { eq => $params->{'key'} } ],
 									 );
 
 	my $message;
-	
+
 	if(scalar(@$socio_array_ref)){
 		my $socio = $socio_array_ref->[0];
-		
+
 		if ($params->{'new_password1'} eq $params->{'new_password2'}){
 		   cambiarPasswordPropagado($socio,$params->{'new_password1'},1);
 		   $socio->unsetRecoverPasswordHash();
 		   $message = C4::AR::Mensajes::getMensaje('U603','opac');
-		   
+
 		}else{
 			$message = C4::AR::Mensajes::getMensaje('U604','opac');
 		}
@@ -2309,13 +2310,13 @@ sub changePasswordFromRecover{
 	}
 
 	return ($message);
-}   
+}
 
 
 sub resetUserPassword{
 	my ($nro_socio) = @_;
 	my $msg_object= C4::AR::Mensajes::create();
-	
+
 	my $socio = C4::AR::Usuarios::getSocioInfoPorNroSocio($nro_socio);
 	if($socio){
 		   my $password_dni = C4::AR::Auth::hashear_password($socio->persona->getNro_documento, 'MD5_B64');;
@@ -2329,7 +2330,7 @@ sub resetUserPassword{
 	}
 
 	return ($msg_object);
-}   
+}
 
 sub cambiarPasswordPropagado{
 	my ($socio,$password_md5_b64,$isReset)=@_;
@@ -2345,20 +2346,20 @@ sub cambiarPasswordPropagado{
 		cambiarPasswordForzadoEnMetodo($socio,$password_md5_b64,$metodo,$isReset);
 		C4::AR::Debug::debug("Socio ".$socio." PASSWORD ".$password_md5_b64." METODO ".$metodo);
 	}
- 
-}  
-	
+
+}
+
 	#DEBERIA SER SOLO EN EL ULTIMO AUTH_METHOD O EN TODOS LOS HABILITADOS??????
 =item
 
 #CODIGO PARA CAMBIAR EL PASS SOLAMENTE DEL ULTIMO AUTH METHOD
-   
+
 	switch ($auth_method){
 		case "ldap" {
-				#C4::AR::Authldap::obetenerPassword($socio);   
+				#C4::AR::Authldap::obetenerPassword($socio);
 		}
 		case "mysql" {
-				$socio->cambiarPassword($password);   
+				$socio->cambiarPassword($password);
 		}
 
 		else{}
@@ -2366,43 +2367,43 @@ sub cambiarPasswordPropagado{
 =cut
 
 
- 
+
 
 sub cambiarPasswordForzadoEnMetodo{
 	my ($socio,$password_md5_b64,$auth_method,$isReset) = @_;
 
 	$isReset = $isReset || 0;
-	
+
 	switch ($auth_method){
 
 		case "ldap" {
         if(C4::AR::Preferencias::getValorPreferencia("ldapenabled")){
-          C4::AR::Authldap::setearPassword($socio,$password_md5_b64,$isReset);   
+          C4::AR::Authldap::setearPassword($socio,$password_md5_b64,$isReset);
         }
 		}
 		case "mysql" {
 				$password_md5_b64 =  C4::AR::Auth::hashear_password($password_md5_b64,'SHA_256_B64');
-				$socio->cambiarPassword($password_md5_b64);   
+				$socio->cambiarPassword($password_md5_b64);
 		}
 
 		else{}
 	}
 		#Se limpian los login_attempts
 		eval{
-			
-			my $attempts_object = _getAttemptsObject($socio->getNro_socio);    
-			
+
+			my $attempts_object = _getAttemptsObject($socio->getNro_socio);
+
 			$attempts_object->reset();
 		}
 }
 
 sub printValue{
 	my ($value) = @_;
-	
+
 	my $session = CGI::Session->load();
 	C4::AR::Auth::print_header($session);
 	print $value;
-		
+
 }
 
 
