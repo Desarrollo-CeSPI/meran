@@ -1135,7 +1135,8 @@ sub print_header {
 		#si la conexion no es segura no se envía la cookie, en el OPAC la conexion no es segura
 		$secure = 0;
 	}else{
-		$secure = 1;
+		#$secure = 1;
+		$secure = 0;
 	}
 	$cookie = new CGI::Cookie(
 								-secure     => $secure,
