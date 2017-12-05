@@ -482,7 +482,7 @@
                                               [% END %]
                                   </li>
               					[% END %]
-                            [% IF 1 ==  2 %]
+                        [% IF menu_preferences.showMenuItem_herramientas %]
 	                            	<li class="nav-header">[% 'Herramientas' | i18n %]</li>	
 		              				      <li class="divider"></li>
                                 <li>
