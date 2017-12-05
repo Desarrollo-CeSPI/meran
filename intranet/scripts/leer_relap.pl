@@ -47,5 +47,6 @@ my $reader = MARC::Moose::Reader::File::Isis->new(
         }
      }
 print "TOTAL RECORDS!!!---> ".$records."\n";
+print "BAD RECORDS!!!---> ".$badRecords."\n";
 
 close OUT;
