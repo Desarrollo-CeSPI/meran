@@ -975,3 +975,6 @@ ALTER TABLE `rep_registro_modificacion` CHANGE `id` `id_rec` INT(11) NOT NULL;
 ALTER TABLE `rep_registro_modificacion` ADD `nivel_rec` INT NOT NULL AFTER `tipo`, ADD `prev_rec` TEXT NOT NULL AFTER `nivel_rec`, ADD `final_rec` TEXT NOT NULL AFTER `prev_rec`;
 ALTER TABLE `rep_registro_modificacion` CHANGE `id_rec` `id_rec` INT(11) NOT NULL AFTER `nivel_rec`;
 ALTER TABLE `rep_registro_modificacion` ADD PRIMARY KEY(`idModificacion`);
+
+
+INSERT INTO `pref_preferencia_sistema` (`id`, `variable`, `value`, `explanation`, `options`, `type`, `categoria`, `label`, `explicacion_interna`, `revisado`) VALUES (NULL, 'showMenuItem_herramientas', '0', 'Preferencia que configura si el menu item dado se muestra o no en el menu (1 sí  0 no).', NULL, 'bool', 'interna', "Menú de Herramientas de Importación/Exportación", 'Preferencia que configura si el menu item dado se muestra o no en el menu (1 sí  0 no).', '0');
