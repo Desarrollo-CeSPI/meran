@@ -6,34 +6,34 @@ use C4::Date;
 
 use vars qw(@EXPORT @ISA);
 @ISA=qw(Exporter);
-@EXPORT=qw(	
+@EXPORT=qw(
 
 		t_insertSinonimosAutor
-		t_insertSinonimosTemas 
+		t_insertSinonimosTemas
 		t_insertSinonimosEditoriales
 
-		t_insertSeudonimosAutor 
+		t_insertSeudonimosAutor
 		t_insertSeudonimosTemas
-		t_insertSeudonimosEditoriales 
+		t_insertSeudonimosEditoriales
 
-		t_eliminarSinonimosAutor 
-		t_eliminarSinonimosTema 
-		t_eliminarSinonimosEditorial 
+		t_eliminarSinonimosAutor
+		t_eliminarSinonimosTema
+		t_eliminarSinonimosEditorial
 
 		t_eliminarSeudonimosAutor
-		t_eliminarSeudonimosTema 
+		t_eliminarSeudonimosTema
 		t_eliminarSeudonimosEditorial
 
 		t_updateSinonimosAutores
 		t_updateSinonimosEditoriales
 		t_updateSinonimosTemas
 
-		traerSeudonimosAutor 
-		traerSeudonimosTemas 
-		traerSeudonimosEditoriales 
-		traerSinonimosAutor 
-		traerSinonimosTemas 
-		traerSinonimosEditoriales 
+		traerSeudonimosAutor
+		traerSeudonimosTemas
+		traerSeudonimosEditoriales
+		traerSinonimosAutor
+		traerSinonimosTemas
+		traerSinonimosEditoriales
 
 		search_temas
 		search_autores
@@ -41,11 +41,8 @@ use vars qw(@EXPORT @ISA);
 );
 
 
-# FIXME los search son para los auto_complete, PASAR A ROSE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-#*************************************Sinonimos*************************************************
-
 sub search_temas{
-	my ($tema)=@_; 
+	my ($tema)=@_;
     my @filtros;
 
     push(@filtros, ( nombre => { like => '%'.$tema.'%'}) );
@@ -57,25 +54,8 @@ sub search_temas{
         limit   => C4::AR::Preferencias::getValorPreferencia("limite_resultados_autocompletables"),
     );
 
-    return (scalar(@$temas_array_ref), $temas_array_ref);
-
-    #my $dbh = C4::Context->dbh;
-    #my $sth=$dbh->prepare("	SELECT id, nombre
-#			       	FROM cat_tema
-#				WHERE nombre like ?
-#			       	ORDER BY nombre");
-
-#	$sth->execute('%'.$tema.'%');
-
-#	my @results;
-#	my $cant= 0;
-#	while (my $data=$sth->fetchrow_hashref){
-#		push (@results, $data);
-#		$cant++;
-#	}
-#	$sth->finish;
-#	return ($cant, @results);
-
+    my @sorted_words = sort { length($a->getNombre) <=> length($b->getNombre) } @$temas_array_ref;
+    return (scalar(@$temas_array_ref), \@sorted_words);
 }
 
 =head2
@@ -92,10 +72,10 @@ sub search_autores{
     push(@filtros_or, ( apellido => { like => $autor.'%'}) );
 
     push(@filtros, (or => \@filtros_or) );
-    
+
     use C4::AR::Preferencias;
     my $limit = C4::AR::Preferencias::getValorPreferencia('limite_resultados_autocompletables') || 20;
-    
+
     my $autores_array_ref = C4::Modelo::CatAutor::Manager->get_cat_autor(
 
                                         query   => \@filtros,
@@ -109,7 +89,7 @@ sub search_autores{
 }
 
 sub search_editoriales{
-	my ($editorial)=@_; 
+	my ($editorial)=@_;
     my @filtros;
 
     push(@filtros, ( editorial => { like => '%'.$editorial.'%'}) );
@@ -148,7 +128,7 @@ sub traerSinonimosAutor{
     my @filtros;
 
     push(@filtros, ( id => { eq => $autor}) );
-    
+
     my $sinonimos_autor = C4::Modelo::CatControlSinonimoAutor::Manager->get_cat_control_sinonimo_autor(
 
                                                                                     query => \@filtros,
@@ -164,7 +144,7 @@ sub traerSinonimosTemas{
     my @filtros;
 
     push(@filtros, ( id => { eq => $autor}) );
-    
+
     my $sinonimos_tema = C4::Modelo::CatControlSinonimoTema::Manager->get_cat_control_sinonimo_tema(
 
                                                                                     query => \@filtros,
@@ -182,7 +162,7 @@ sub traerSinonimosEditoriales{
     my @filtros;
 
     push(@filtros, ( id => { eq => $editorial}) );
-    
+
     my $sinonimos_editorial = C4::Modelo::CatControlSinonimoEditorial::Manager->get_cat_control_sinonimo_editorial(
 
                                                                                     query => \@filtros,
@@ -204,7 +184,7 @@ sub t_insertSinonimosAutor {
     my $db = $sinonimo_dbo->db;
 	$db->{connect_options}->{AutoCommit} = 0;
   	$db->begin_work;
-	
+
 	eval{
         foreach my $sinonimo (@$sinonimos_arrayref){
 			my $sinonimo_temp = C4::Modelo::CatControlSinonimoAutor->new(db => $db);
@@ -222,10 +202,10 @@ sub t_insertSinonimosAutor {
         C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U391', 'params' => []} ) ;
 		$db->rollback;
 	}
-  
+
 	$db->{connect_options}->{AutoCommit} = 1;
 
-		
+
 	return ($msg_object)
 }
 
@@ -256,7 +236,7 @@ sub t_insertSinonimosTemas {
         C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U391', 'params' => []} ) ;
 		$db->rollback;
 	}
-  
+
 	$db->{connect_options}->{AutoCommit} = 1;
 
 
@@ -291,10 +271,10 @@ sub t_insertSinonimosEditoriales {
         C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U391', 'params' => []} ) ;
 		$db->rollback;
 	}
-  
+
 	$db->{connect_options}->{AutoCommit} = 1;
 
-    
+
     return ($msg_object)
 }
 
@@ -321,18 +301,18 @@ sub t_updateSinonimosAutores {
 		#Se setea error para el usuario
         C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'CA605', 'params' => [$nombre]} ) ;
     }
-	
+
 	return ($msg_object)
 }
 
 sub getSinonimoAutor{
 	my($idSinonimo, $autor)=@_;
-	
+
 	my @filtros;
 
     push(@filtros, ( id => { eq => $idSinonimo}) );
 	push(@filtros, ( autor => { eq => $autor}) );
-    
+
     my $sinonimos_autores = C4::Modelo::CatControlSinonimoAutor::Manager->get_cat_control_sinonimo_autor(
                                                                                     query => \@filtros,
                                                                          );
@@ -346,12 +326,12 @@ sub getSinonimoAutor{
 
 sub getSinonimoTema{
 	my($idSinonimo, $tema)=@_;
-	
+
 	my @filtros;
 
     push(@filtros, ( id => { eq => $idSinonimo}) );
 	push(@filtros, ( tema => { eq => $tema}) );
-    
+
     my $sinonimos_temas = C4::Modelo::CatControlSinonimoTema::Manager->get_cat_control_sinonimo_tema(
                                                                                     query => \@filtros,
                                                                          );
@@ -365,12 +345,12 @@ sub getSinonimoTema{
 
 sub getSinonimoEditorial{
 	my($idSinonimo, $editorial)=@_;
-	
+
 	my @filtros;
 
     push(@filtros, ( id => { eq => $idSinonimo}) );
 	push(@filtros, ( editorial => { eq => $editorial}) );
-    
+
     my $sinonimos_editoriales = C4::Modelo::CatControlSinonimoEditorial::Manager->get_cat_control_sinonimo_editorial(
                                                                                     query => \@filtros,
                                                                          );
@@ -383,13 +363,13 @@ sub getSinonimoEditorial{
 }
 
 sub t_updateSinonimosTemas {
-    
+
     my($idSinonimo, $nombre, $nombreViejo)=@_;
 
     use C4::Modelo::CatControlSinonimoTema;
 
     my $msg_object= C4::AR::Mensajes::create();
-    
+
 # FIXME no actualiza ver!!!!!!!!!!
     eval {
 		my $sinonimo_tema = getSinonimoTema($idSinonimo, $nombreViejo);
@@ -397,7 +377,7 @@ sub t_updateSinonimosTemas {
 		$sinonimo_tema->agregar($nombre,$idSinonimo);
 		C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U395', 'params' => [$nombre]});
     };
-   
+
 	if ($@){
 		#Se loguea error de Base de Datos
 		&C4::AR::Mensajes::printErrorDB($@, 'B444',"INTRA");
@@ -406,19 +386,19 @@ sub t_updateSinonimosTemas {
         C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'CA605', 'params' => [$nombre]} ) ;
     }
 
-    
+
     return ($msg_object)
 }
 
 sub t_updateSinonimosEditoriales {
-    
+
     my($idSinonimo, $nombre, $nombreViejo)=@_;
 
     use C4::Modelo::CatControlSinonimoEditorial;
 
     my $msg_object= C4::AR::Mensajes::create();
 # FIXME no actualiza ver!!!!!!!!!!
-    
+
     eval {
 		my $sinonimo_editorial = getSinonimoEditorial($idSinonimo, $nombreViejo);
 		$sinonimo_editorial->load();
@@ -438,14 +418,14 @@ sub t_updateSinonimosEditoriales {
 
 
 sub t_eliminarSinonimosAutor {
-	
+
 # FIXME la clave son los 2, o sea, un string, habria que poner un serial no???? (@Gaspar)
 
 
 	my($idAutor,$sinonimo)=@_;
 
 	my $msg_object= C4::AR::Mensajes::create();
-	
+
 	eval {
         use C4::Modelo::CatControlSinonimoAutor::Manager;
         my @filtros;
@@ -471,14 +451,14 @@ sub t_eliminarSinonimosAutor {
 # Esta funcion elimina el sinonimo del autor pasados por parametro
 # =cut
 sub t_eliminarSinonimosTema {
-    
+
 # FIXME la clave son los 2, o sea, un string, habria que poner un serial no???? (@Gaspar)
 
 
     my($idTema,$sinonimo)=@_;
 
     my $msg_object= C4::AR::Mensajes::create();
-    
+
     eval {
         use C4::Modelo::CatControlSinonimoTema::Manager;
         my @filtros;
@@ -495,20 +475,20 @@ sub t_eliminarSinonimosTema {
 		#Se setea error para el usuario
         C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'CA604', 'params' => [$sinonimo]} ) ;
     }
-	
+
     return ($msg_object)
 }
 
 
 sub t_eliminarSinonimosEditorial {
-	
-    
+
+
 # FIXME la clave son los 2, o sea, un string, habria que poner un serial no???? (@Gaspar)
 
     my($idEditorial,$sinonimo)=@_;
 
 	my $msg_object= C4::AR::Mensajes::create();
-    
+
     eval {
         use C4::Modelo::CatControlSinonimoEditorial::Manager;
         my @filtros;
@@ -525,7 +505,7 @@ sub t_eliminarSinonimosEditorial {
 		#Se setea error para el usuario
         C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'CA604', 'params' => [$sinonimo]} ) ;
     }
-    
+
     return ($msg_object)
 }
 
@@ -535,7 +515,7 @@ sub traerSeudonimosAutor{
     my @filtros;
 
     push(@filtros, ( id_autor => { eq => $autor}) );
-    
+
     my $sinonimos_autor = C4::Modelo::CatControlSeudonimoAutor::Manager->get_cat_control_seudonimo_autor(
 
                                                                                     query => \@filtros,
@@ -585,7 +565,7 @@ sub t_insertSeudonimosAutor {
 	my $db= $seudonimo->db;
 	$db->{connect_options}->{AutoCommit} = 0;
  	$db->begin_work;
-    
+
     eval {
         foreach my $seudonimo (@$seudonimos_arrayref){
             my $seudonimo_temp = C4::Modelo::CatControlSeudonimoAutor->new(db => $db);
@@ -614,7 +594,7 @@ sub t_insertSeudonimosAutor {
 
 
 sub t_eliminarSeudonimosAutor {
-	
+
 	my($idAutor,$seudonimo)=@_;
 
         my $msg_object= C4::AR::Mensajes::create();
@@ -662,14 +642,14 @@ sub t_insertSeudonimosTemas {
  	$db->begin_work;
 
 	eval {
-	
+
 		foreach my $seudonimo (@$seudonimos_arrayref){
 			my $seudonimo_temp = C4::Modelo::CatControlSeudonimoTema->new( db => $db );
 			$seudonimo_temp->agregar($idTema,$seudonimo->{'ID'});
 			C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U392', 'params' => []});
 		}
 		$db->commit;
-	
+
 	};
 
 	if ($@){
@@ -680,15 +660,15 @@ sub t_insertSeudonimosTemas {
         C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U390', 'params' => []} ) ;
 		$db->rollback;
 	}
-  
+
 	$db->{connect_options}->{AutoCommit} = 1;
-	 
+
 	return ($msg_object)
 }
 
 
 sub t_eliminarSeudonimosTema {
-  
+
   my($idTema,$seudonimo)=@_;
 
   my $msg_object= C4::AR::Mensajes::create();
@@ -712,30 +692,30 @@ sub t_eliminarSeudonimosTema {
       C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'B400', 'params' => []} );
   }
 
-  
+
   return ($msg_object)
 }
 
 
 sub t_insertSeudonimosEditoriales {
   	my($seudonimos_arrayref, $idEditorial)=@_;
-	
+
 	my $msg_object= C4::AR::Mensajes::create();
-	
+
 	my $db = C4::Modelo::CatControlSeudonimoEditorial->new()->db;
-	
+
 	$db->{connect_options}->{AutoCommit} = 0;
 	$db->begin_work;
 
 	eval {
-	
+
 		foreach my $seudonimo (@$seudonimos_arrayref){
 			my $seudonimo_temp = C4::Modelo::CatControlSeudonimoEditorial->new( db => $db );
 			$seudonimo_temp->agregar($idEditorial,$seudonimo->{'ID'});
 			C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U392', 'params' => []} );
 		}
 		$db->commit;
-	
+
 	};
 
 	if ($@){
@@ -746,14 +726,14 @@ sub t_insertSeudonimosEditoriales {
         C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U390', 'params' => []} ) ;
 		$db->rollback;
 	}
-  
+
 	$db->{connect_options}->{AutoCommit} = 1;
 
  	return ($msg_object)
 }
 
 sub t_eliminarSeudonimosEditorial {
-  
+
   my($idEditorial,$seudonimo)=@_;
 
   my $msg_object= C4::AR::Mensajes::create();
@@ -777,7 +757,7 @@ sub t_eliminarSeudonimosEditorial {
       C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'B400', 'params' => []} );
   }
 
-  
+
   return ($msg_object)
 }
 
