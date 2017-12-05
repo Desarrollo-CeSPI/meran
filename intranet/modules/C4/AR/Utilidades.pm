@@ -2680,8 +2680,8 @@ sub generarComboTipoNivel3{
         $select_tipo_nivel3_hash{$tipoNivel3->id_tipo_doc}= $tipoNivel3->nombre;
     }
 
-    push (@select_tipo_nivel3_array, '');
-    $select_tipo_nivel3_hash{''}    = 'SIN SELECCIONAR';
+    push (@select_tipo_nivel3_array, "");
+    $select_tipo_nivel3_hash{""}    = "SIN SELECCIONAR";
 
     my %options_hash;
 
