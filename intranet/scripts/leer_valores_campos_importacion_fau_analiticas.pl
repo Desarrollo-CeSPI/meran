@@ -33,6 +33,8 @@ my $id = $ARGV[0] || 1;
     my $importacion = C4::AR::ImportacionIsoMARC::getImportacionById($id);
     my $conCampo773=0;
     my $registroPadreEncontrado=0;
+    my $registroPadreEncontradoExacta=0;
+    my $registroPadreEncontradoLazy=0;
     my $registroSinTitulo=0;
     my $registroTotales=0;
 
@@ -47,8 +49,37 @@ my $id = $ARGV[0] || 1;
                 my $titulo = $marc->field('773')->subfield('a');
                 my $numero = $marc->field('773')->subfield('d');
                 if ($titulo){
-                    my ($resultados) = buscar_titulo($titulo);
+
+                    $titulo = arreglar_titulo($titulo);
+                    my ($resultados) = buscar_titulo($titulo,1);
+                    print $registroTotales." - $titulo - BUSQUEDA EXACTA=".scalar(@$resultados) ;
                     
+                    if (scalar(@$resultados) == 0){
+                        ($resultados) = buscar_titulo($titulo,0);
+
+                        print " - BUSQUEDA LAZY=".scalar(@$resultados);
+
+                         if (scalar(@$resultados) == 0) {
+                             $hash->{$titulo}{$campo}{'BUSQUEDA'}="NO ENCONTRADO";
+                        }else{
+                            if (scalar(@$resultados) == 1) {
+                                $hash->{$titulo}{$campo}{'BUSQUEDA'}="LAZY UNICA";
+                            }else{
+                                $hash->{$titulo}{$campo}{'BUSQUEDA'}="LAZY";
+                            }
+                        $registroPadreEncontradoLazy++;
+                        }
+                    }else{
+
+                        if (scalar(@$resultados) == 1) {
+                            $hash->{$titulo}{$campo}{'BUSQUEDA'}="EXACTA UNICA";
+                        }else{
+                            $hash->{$titulo}{$campo}{'BUSQUEDA'}="EXACTA";
+                        }
+
+                        $registroPadreEncontradoExacta++;
+                    }
+                    print " \n";
                     $hash->{$titulo}{$campo}{'encontrados'}=scalar(@$resultados);
                     if(scalar(@$resultados) > 0 ){
                         $registroPadreEncontrado++;
@@ -66,6 +97,7 @@ my $id = $ARGV[0] || 1;
                         #print "Quedó padre => ".$hash->{$titulo}{$campo}{'id_grupo_padre'}."\n\n\n";
                           my $marc = $registro->getRegistroMARCOriginal();
                           my $field = $marc->field("053");
+                          $field->delete_subfields("g");
                           $field->add_subfields( "g" => $hash->{$titulo}{$campo}{'id_grupo_padre'});
                           $registro->setMarcRecord($marc->as_usmarc());
                           $registro->save();
@@ -96,21 +128,20 @@ my $id = $ARGV[0] || 1;
     }
 
 
+# print "ID Registro Importado ## Titulo ## Campo 773 ## Ocurrencias ## Padre Encontrado? ## ID1 Registro padre ## Tipo Busqueda \n";
 
-
-
-	#print "ID Registro Importado ## Titulo ## Campo 773 ## Ocurrencias ## Padre Encontrado? ## ID1 Registro padre \n";
-
-#	for $c4 ( keys %$hash ) {
-#	    for $c5 ( keys %{$hash->{$c4} } ) {
-#		        print $hash->{$c4}{$c5}{'id_registro_importacion'}." ## $c4 ## $c5 ## ".$hash->{$c4}{$c5}{'ocurrencias'}." ## ".$hash->{$c4}{$c5}{'encontrados'}."## ".$hash->{$c4}{$c5}{'id_registro_padre'}." ##\n";
-#	    }
-#	}
+# 	for my $c4 ( keys %$hash ) {
+# 	    for my $c5 ( keys %{$hash->{$c4} } ) {
+# 		        print $hash->{$c4}{$c5}{'id_registro_importacion'}." ## $c4 ## $c5 ## ".$hash->{$c4}{$c5}{'ocurrencias'}." ## ".$hash->{$c4}{$c5}{'encontrados'}."## ".$hash->{$c4}{$c5}{'id_registro_padre'}."## ".$hash->{$c4}{$c5}{'BUSQUEDA'}." ## \n";
+# 	    }
+# 	}
 
 print "REGISTROS TOTALES = $registroTotales \n";
 print "REGISTROS CON 773 = $conCampo773 \n";
 print "REGISTROS CON 773 pero sin titulo (subcampo t) = $registroSinTitulo \n";
 print "REGISTROS CON PADRES ENCONTRADOS = $registroPadreEncontrado \n";
+print "REGISTROS CON PADRES ENCONTRADOS EXACTO= $registroPadreEncontradoExacta \n";
+print "REGISTROS CON PADRES ENCONTRADOS LAZY = $registroPadreEncontradoLazy \n";
 
 1;
 
@@ -130,14 +161,19 @@ sub getDato {
 }   
 
 sub buscar_titulo{
-    my ($titulo) = @_;
+    my ($titulo,$exacto) = @_;
 
     my $db = C4::Modelo::IndiceBusqueda->new()->db();
+
+    if (!$exacto){
+        $titulo=$titulo."%";
+    }
 
     my $indice_array_ref = C4::Modelo::IndiceBusqueda::Manager->get_indice_busqueda (
                                                                         db => $db,
                                                                         query => [
-                                                                                    titulo => { like => "%".$titulo."%" },
+                                                                                    titulo => { like => $titulo },
+                                                                                    string => { like => "%cat_ref_tipo_nivel3\%REV%" },
                                                                             ]
                                                                 );
 
@@ -145,3 +181,18 @@ sub buscar_titulo{
         return $indice_array_ref;
 
 }
+
+
+
+sub arreglar_titulo {
+    my($titulo) = @_;
+
+   use Switch;
+    switch ($titulo) {
+    case 'Anales del Instituto de Arte Americano e Investigaciones Estéticas "Mario J.Buschiazzo'    { return "Anales del Instituto de Arte Americano e Investigaciones Estéticas Mario J. Buschiazzo"; }
+    case 'Mérida: Excavaciones arqueológicas'    { return "Mérida; Excavaciones arqueológicas"; }
+    case 'TC cuadernos: serie dedalo'    { return "TC cuadernos : Serie Dédalo"; }
+    case "rchitecture d'aujourd'hui"    { return "L'architecture d'aujourd'hui"; }
+    else        { return  $titulo;}
+    }
+}   
