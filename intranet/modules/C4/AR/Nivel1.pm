@@ -158,6 +158,24 @@ sub guardarRealmente{
             #recupero el id1 recien agregado
             $id1 = $catRegistroMarcN1->getId1;
 
+            ###Guardamos en registro de modificación###
+            use C4::Modelo::RepRegistroModificacion;
+            my ($registro_modificacion) = C4::Modelo::RepRegistroModificacion->new(db=>$db);
+            my $data_hash;
+            $data_hash->{'responsable'}= $params->{'responsable'}; #Usuario logueado
+            $data_hash->{'nota'}    = '';
+            $data_hash->{'tipo'}    = 'CATALOGO';
+            $data_hash->{'operacion'} = 'ALTA';
+            $data_hash->{'id_rec'}    = $id1;
+            $data_hash->{'nivel_rec'} = '1';
+            $data_hash->{'prev_rec'} = '';
+            $data_hash->{'final_rec'} = $catRegistroMarcN1->getMarcRecordConDatos()->as_usmarc();
+            my $dateformat = C4::Date::get_date_format();
+            my $hoy = C4::Date::format_date_in_iso(Date::Manip::ParseDate("today"),$dateformat);
+            $data_hash->{'fecha'}    = $hoy;
+            $registro_modificacion->agregar($data_hash);
+            ###Guardamos en registro de modificación###
+
             unless($params->{'no_index'}){
                 eval {
                     C4::AR::Sphinx::generar_indice($id1, 'R_PARTIAL', 'INSERT');
@@ -357,7 +375,10 @@ sub t_modificarNivel1 {
 
     if(!$msg_object->{'error'}){
     #No hay error
-
+        my $old_marc_record = "";
+        if ($cat_registro_marc_n1){
+            $old_marc_record = $cat_registro_marc_n1->getMarcRecordConDatos()->as_usmarc();
+        }
         my $db = $cat_registro_marc_n1->db;
         # enable transactions, if possible
         $db->{connect_options}->{AutoCommit} = 0;
@@ -367,6 +388,25 @@ sub t_modificarNivel1 {
             my $marc_record = C4::AR::Catalogacion::meran_nivel1_to_meran($params);
 
             $cat_registro_marc_n1->modificar($marc_record->as_usmarc, $params);
+
+            ###Guardamos en registro de modificación###
+            use C4::Modelo::RepRegistroModificacion;
+            my ($registro_modificacion) = C4::Modelo::RepRegistroModificacion->new(db=>$db);
+            my $data_hash;
+            $data_hash->{'responsable'}= $params->{'responsable'}; #Usuario logueado
+            $data_hash->{'nota'}    = '';
+            $data_hash->{'tipo'}    = 'CATALOGO';
+            $data_hash->{'operacion'} = 'MODIFICACION';
+            $data_hash->{'id_rec'}    = $params->{'id1'};
+            $data_hash->{'nivel_rec'} = '1';
+            $data_hash->{'prev_rec'} = $old_marc_record;
+            $data_hash->{'final_rec'} = $cat_registro_marc_n1->getMarcRecordConDatos()->as_usmarc();
+            my $dateformat = C4::Date::get_date_format();
+            my $hoy = C4::Date::format_date_in_iso(Date::Manip::ParseDate("today"),$dateformat);
+            $data_hash->{'fecha'}    = $hoy;
+            $registro_modificacion->agregar($data_hash);
+            ###Guardamos en registro de modificación###
+
             $db->commit;
 
             eval {
@@ -433,7 +473,7 @@ sub _verificarDeleteNivel1 {
     Elimina el nivel 1 pasado por parametro
 =cut
 sub t_eliminarNivel1{
-   my ($id1) = @_;
+   my ($id1,$responsable) = @_;
 
    my $msg_object = C4::AR::Mensajes::create();
 
@@ -459,6 +499,12 @@ sub t_eliminarNivel1{
     if(!$msg_object->{'error'}){
     #No hay error
 #         my $db = $cat_registro_marc_n1->db;
+
+        my $old_marc_record = "";
+        if ($cat_registro_marc_n1){
+            $old_marc_record = $cat_registro_marc_n1->getMarcRecordConDatos()->as_usmarc();
+        }
+        
         # enable transactions, if possible
         $db->{connect_options}->{AutoCommit} = 0;
         $db->begin_work;
@@ -466,6 +512,25 @@ sub t_eliminarNivel1{
         eval {
             $cat_registro_marc_n1->eliminar;
             $db->commit;
+
+            ###Guardamos en registro de modificación###
+            use C4::Modelo::RepRegistroModificacion;
+            my ($registro_modificacion) = C4::Modelo::RepRegistroModificacion->new(db=>$db);
+            my $data_hash;
+            $data_hash->{'responsable'}= $responsable; #Usuario logueado
+            $data_hash->{'nota'}    = '';
+            $data_hash->{'tipo'}    = 'CATALOGO';
+            $data_hash->{'operacion'} = 'BAJA';
+            $data_hash->{'id_rec'}    = $id1;
+            $data_hash->{'nivel_rec'} = '1';
+            $data_hash->{'prev_rec'} = $old_marc_record;
+            $data_hash->{'final_rec'} = '';
+            my $dateformat = C4::Date::get_date_format();
+            my $hoy = C4::Date::format_date_in_iso(Date::Manip::ParseDate("today"),$dateformat);
+            $data_hash->{'fecha'}    = $hoy;
+            $registro_modificacion->agregar($data_hash);
+            ###Guardamos en registro de modificación###
+
             eval {
                 #Se eliminar del indice el registro eliminado
                 C4::AR::Sphinx::generar_indice($cat_registro_marc_n1->getId1(), 'R_PARTIAL', 'DELETE');
