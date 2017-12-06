@@ -112,7 +112,25 @@ sub t_guardarNivel3 {
             #recupero el id3 recien agregado
             $id3 = $catRegistroMarcN3->getId3;
             C4::AR::Debug::debug("t_guardarNivel3 => ID 3 => ".$id3);
-        
+            
+            ###Guardamos en registro de modificación###
+            use C4::Modelo::RepRegistroModificacion;
+            my ($registro_modificacion) = C4::Modelo::RepRegistroModificacion->new(db=>$db);
+            my $data_hash;
+            $data_hash->{'responsable'}= $params->{'responsable'}; #Usuario logueado
+            $data_hash->{'nota'}    = '';
+            $data_hash->{'tipo'}    = 'CATALOGO';
+            $data_hash->{'operacion'} = 'ALTA';
+            $data_hash->{'id_rec'}    = $id3;
+            $data_hash->{'nivel_rec'} = '3';
+            $data_hash->{'prev_rec'} = '';
+            $data_hash->{'final_rec'} = $catRegistroMarcN3->getMarcRecordConDatos()->as_usmarc();
+            my $dateformat = C4::Date::get_date_format();
+            my $hoy = C4::Date::format_date_in_iso(Date::Manip::ParseDate("today"),$dateformat);
+            $data_hash->{'fecha'}    = $hoy;
+            $registro_modificacion->agregar($data_hash);
+            ###Guardamos en registro de modificación###
+
             #se agregaron los barcodes con exito
             if(!$msg_object->{'error'}){
                 C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U370', 'params' => [$catRegistroMarcN3->getBarcode]} );
@@ -179,11 +197,35 @@ sub t_modificarNivel3 {
 
             $params->{'id3'}        = $params->{'ID3_ARRAY'}->[$i];
             ($cat_registro_marc_n3) = getNivel3FromId3($params->{'ID3_ARRAY'}->[$i], $db);
+
+            my $old_marc_record = "";
+            if ($cat_registro_marc_n3){
+                $old_marc_record = $cat_registro_marc_n3->getMarcRecordConDatos()->as_usmarc();
+            }
+
             $params->{'barcode'}    = $cat_registro_marc_n3->getBarcode();
             #verifico las condiciones para actualizar los datos            
             $params->{'marc_record'}    = $marc_record->as_usmarc;
             $cat_registro_marc_n3->modificar($db, $params, $msg_object);  #si es mas de un ejemplar, a todos les setea la misma info
             
+            ###Guardamos en registro de modificación###
+            use C4::Modelo::RepRegistroModificacion;
+            my ($registro_modificacion) = C4::Modelo::RepRegistroModificacion->new(db=>$db);
+            my $data_hash;
+            $data_hash->{'responsable'}= $params->{'responsable'}; #Usuario logueado
+            $data_hash->{'nota'}    = '';
+            $data_hash->{'tipo'}    = 'CATALOGO';
+            $data_hash->{'operacion'} = 'MODIFICACION';
+            $data_hash->{'id_rec'}    = $params->{'id3'};
+            $data_hash->{'nivel_rec'} = '3';
+            $data_hash->{'prev_rec'} = $old_marc_record;
+            $data_hash->{'final_rec'} = $cat_registro_marc_n3->getMarcRecordConDatos()->as_usmarc();
+            my $dateformat = C4::Date::get_date_format();
+            my $hoy = C4::Date::format_date_in_iso(Date::Manip::ParseDate("today"),$dateformat);
+            $data_hash->{'fecha'}    = $hoy;
+            $registro_modificacion->agregar($data_hash);
+            ###Guardamos en registro de modificación###
+
             if(!$msg_object->{'error'}){
                 C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U382', 'params' => [$cat_registro_marc_n3->getBarcode]} ) ;
             }
@@ -291,10 +333,32 @@ sub t_eliminarNivel3{
 
                 $cat_registro_marc_n3 = getNivel3FromId3($id3_array->[$i], $db);
                 if ($cat_registro_marc_n3){
+                    
+                    my $old_marc_record = $cat_registro_marc_n3->getMarcRecordConDatos()->as_usmarc();
+
                     $id1 = $cat_registro_marc_n3->getId1();
                     my $barcode = $cat_registro_marc_n3->getBarcode;   
                     $cat_registro_marc_n3->eliminar();
                     #se eliminó con exito
+
+                    ###Guardamos en registro de modificación###
+                    use C4::Modelo::RepRegistroModificacion;
+                    my ($registro_modificacion) = C4::Modelo::RepRegistroModificacion->new(db=>$db);
+                    my $data_hash;
+                    $data_hash->{'responsable'}= $params->{'responsable'}; #Usuario logueado
+                    $data_hash->{'nota'}    = '';
+                    $data_hash->{'tipo'}    = 'CATALOGO';
+                    $data_hash->{'operacion'} = 'BAJA';
+                    $data_hash->{'id_rec'}    = $id3_array->[$i];
+                    $data_hash->{'nivel_rec'} = '3';
+                    $data_hash->{'prev_rec'} = $old_marc_record;
+                    $data_hash->{'final_rec'} = '';
+                    my $dateformat = C4::Date::get_date_format();
+                    my $hoy = C4::Date::format_date_in_iso(Date::Manip::ParseDate("today"),$dateformat);
+                    $data_hash->{'fecha'}    = $hoy;
+                    $registro_modificacion->agregar($data_hash);
+                    ###Guardamos en registro de modificación###
+
                     $msg_object->{'error'} = 0;
                     C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U376', 'params' => [$barcode]} ) ;
                 }else{
