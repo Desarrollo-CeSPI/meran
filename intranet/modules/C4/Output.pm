@@ -49,7 +49,7 @@ sub gettemplate {
 
     my $htdocs;
     my $tema_opac   = C4::AR::Preferencias::getValorPreferencia('tema_opac_default') || C4::AR::Preferencias::getValorPreferencia('defaultUI');
-    my $tema_intra  = C4::Context->config('tema');; #para volver a tener temas, poner la linea de arriba 
+    my $tema_intra  = C4::Context->config('tema');; #para volver a tener temas, poner la linea de arriba
     my $temas       = C4::Context->config('temas');
     my $tema;
     my $type;
@@ -87,8 +87,9 @@ sub gettemplate {
                     RELATIVE        => 1,
                     EVAL_PERL       => 1,
                     LOAD_FILTERS    => [ $filter ],
+                    ENCODING        => 'utf8',
 #                   RELATIVE => 1,
-                    }); 
+                    });
 
     #se inicializa la hash de los parametros para el template
     my %params = ();
