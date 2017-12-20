@@ -179,7 +179,7 @@ sub generar_clave_unicidad {
     my $titulo_k = $marc_record->subfield("245","k");
     my $titulo_n = $marc_record->subfield("245","n");
     my $titulo_p = $marc_record->subfield("245","p");
-
+    my $titulo_p = $marc_record->subfield("222","a");
 
     $clave = $clave.$titulo_b.$titulo_c.$titulo_f.$titulo_g.$titulo_h.$titulo_k.$titulo_n.$titulo_p;
 
@@ -452,10 +452,12 @@ sub getTitulo{
     my ($self)      = shift;
 
     my $marc_record = MARC::Record->new_from_usmarc($self->getMarcRecord());
-
+    my $titulo = $marc_record->subfield("245","a");
 #     C4::AR::Debug::debug("CatRegistroMarcN1 => titulo ".$marc_record->subfield("245","a"));
-
-    return $marc_record->subfield("245","a");
+    if(!$titulo){
+        $titulo = $marc_record->subfield("222","a");
+    }
+    return $titulo;
 }
 
 sub getTituloStringEscaped {
@@ -988,7 +990,7 @@ sub generarIndice {
 
 
     #Titulo
-    my $titulo                  = $marc_record->subfield("245","a");
+    my $titulo                  = $self->getTitulo();
     #Armo el superstring
     my $superstring             = "";
 

@@ -2680,8 +2680,8 @@ sub generarComboTipoNivel3{
         $select_tipo_nivel3_hash{$tipoNivel3->id_tipo_doc}= $tipoNivel3->nombre;
     }
 
-    push (@select_tipo_nivel3_array, '');
-    $select_tipo_nivel3_hash{''}    = 'SIN SELECCIONAR';
+    push (@select_tipo_nivel3_array, "");
+    $select_tipo_nivel3_hash{""}    = "SIN SELECCIONAR";
 
     my %options_hash;
 
@@ -2705,8 +2705,12 @@ sub generarComboTipoNivel3{
     $options_hash{'id'}         = $params->{'id'}||'tipo_nivel3_id';
     $options_hash{'size'}       = $params->{'size'}||1;
     $options_hash{'multiple'}   = $params->{'multiple'}||0;
-    $options_hash{'defaults'}   = $params->{'default'} || C4::AR::Preferencias::getValorPreferencia("defaultTipoNivel3");
-
+    if ($params->{'default'} eq "ALL"){
+        $options_hash{'defaults'}   = "";
+    }
+    else{
+        $options_hash{'defaults'}   = $params->{'default'} || C4::AR::Preferencias::getValorPreferencia("defaultTipoNivel3");
+    }
     # push (@select_tipo_nivel3_array, 'ALL');
     # $select_tipo_nivel3_hash{'ALL'} = 'TODOS';
 

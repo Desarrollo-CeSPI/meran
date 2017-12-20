@@ -42,7 +42,7 @@ my ($template, $session, $t_params) = get_template_and_user ({
 
 #combo itemtype
 my %params_combo;
-$params_combo{'default'}            = C4::AR::Preferencias::getValorPreferencia("defaultTipoNivel3");
+$params_combo{'default'}            = C4::AR::Preferencias::getValorPreferencia("defaultTypeAdvancedSearch");
 my $comboTiposNivel3                = &C4::AR::Utilidades::generarComboTipoNivel3(\%params_combo);
 $t_params->{'comboTipoDocumento'}   = $comboTiposNivel3;
 $t_params->{'type'}                 = 'intranet';
