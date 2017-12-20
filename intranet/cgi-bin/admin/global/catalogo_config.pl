@@ -110,6 +110,12 @@ foreach my $preferencia (@$preferenciasCatalogo){
                $labels{$val->{"clave"}} = $val->{"valor"};     
                push(@values,$val->{"clave"});
         }
+        
+        if($tabla eq "tipo_ejemplar"){
+            push (@values, "ALL");
+            $labels{"ALL"}    = "SIN SELECCIONAR";
+        }
+
         $nuevoCampo = C4::AR::Utilidades::crearComponentes("combo",$preferencia->getVariable,\@values,\%labels,$preferencia->getValue);
         $hash{'tabla'} = $tabla;
         $hash{'campo'} = $campo;

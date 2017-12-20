@@ -27,7 +27,10 @@ use  C4::AR::ImportacionIsoMARC;
 
 my $id = $ARGV[0] || 1;
 
+ print arreglar_titulo('TC cuadernos: serie dedalo');
+ die; 
 #campos 004 005 006
+
 
     my $hash = ();
     my $importacion = C4::AR::ImportacionIsoMARC::getImportacionById($id);
@@ -47,6 +50,7 @@ my $id = $ARGV[0] || 1;
                 my $titulo = $marc->field('773')->subfield('t');
 
                 if ($titulo){
+                    $titulo = arreglar_titulo($titulo);
                     my ($resultados) = buscar_titulo($titulo);
                     
                     $hash->{$titulo}{$campo}{'encontrados'}=scalar(@$resultados);
@@ -130,3 +134,17 @@ sub buscar_titulo{
         return $indice_array_ref;
 
 }
+
+
+sub arreglar_titulo {
+    my($titulo) = @_;
+
+   use Switch;
+    switch ($titulo) {
+    case 'Anales del Instituto de Arte Americano e Investigaciones Estéticas "Mario J.Buschiazzo'    { return "Anales del Instituto de Arte Americano e Investigaciones Estéticas Mario J. Buschiazzo"; }
+    case 'Mérida: Excavaciones arqueológicas'    { return "Mérida; Excavaciones arqueológicas"; }
+    case 'TC cuadernos: serie dedalo'    { return "TC cuadernos : Serie Dédalo"; }
+    case "rchitecture d'aujourd'hui"    { return "L'architecture d'aujourd'hui"; }
+    else        { return  $titulo;}
+    }
+}   
