@@ -322,7 +322,7 @@ sub send_mail {
 
     if (!$existe) {
       $msg_error   = "NO EXISTE la preferencia ".$variable;
-	C4::AR::Debug::debug("Mail => send_mail  ERROR=>".$msg_error);
+      C4::AR::Debug::debug("Mail => send_mail  ERROR=>".$msg_error);
       return (0, $msg_error);
     }
 
