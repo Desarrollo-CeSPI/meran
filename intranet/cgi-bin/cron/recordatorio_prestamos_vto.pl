@@ -39,12 +39,12 @@ unless (!flock(DATA, LOCK_EX|LOCK_NB)) {
 	    } else {
 	        C4::AR::Debug::debug("recordatorio_prestamos => se intento correr script de una dir. IP no local => ".$ENV{'REMOTE_ADDR'});
 	    }
-	 
-	    C4::AR::Debug::debug("REMOTE ADDRESS DE ENVIAR RECORDATORIO PRESTAMOS: ".$ENV{'REMOTE_ADDR'});
+
+	    C4::AR::Debug::debug("recordatorio_prestamos => REMOTE ADDRESS DE ENVIAR RECORDATORIO PRESTAMOS: ".$ENV{'REMOTE_ADDR'});
 
 	}
 }else{
-	C4::AR::Debug::debug("reindexar => se intento correr script pero otra instancia se esta ejecutando. FALLO");
+	C4::AR::Debug::debug("recordatorio_prestamos => se intento correr script pero otra instancia se esta ejecutando. FALLO");
 }
 
 __DATA__
