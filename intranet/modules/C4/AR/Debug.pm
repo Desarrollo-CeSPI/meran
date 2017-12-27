@@ -139,7 +139,7 @@ sub debug{
 
     if (($enabled >= 1024) && ($data)) {
       _write_debug("[debug] ".$data);
-      _write_debug("[debug] $filename \n");
+      #_write_debug("[debug] $filename \n");
     }
 }
 
