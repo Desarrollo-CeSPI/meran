@@ -43,9 +43,9 @@ sub toString{
 
 sub getId_tipo_prestamo{
     my ($self) = shift;
-    return ($self->id_tipo_prestamo);
+    return (C4::AR::Utilidades::trim($self->id_tipo_prestamo));
 }
-    
+
 sub setId_tipo_prestamo{
     my ($self) = shift;
     my ($id_tipo_prestamo) = @_;
@@ -57,7 +57,7 @@ sub getDescripcion{
 
     return ($self->descripcion);
 }
-    
+
 sub setDescripcion{
     my ($self) = shift;
     my ($descripcion) = @_;
@@ -70,7 +70,7 @@ sub getCodigo_disponibilidad{
 
     return ($self->codigo_disponibilidad);
 }
-    
+
 sub setCodigo_disponibilidad{
     my ($self) = shift;
     my ($disponibilidad) = @_;
@@ -82,7 +82,7 @@ sub getPrestamos{
     my ($self) = shift;
     return ($self->prestamos);
 }
-    
+
 sub setPrestamos{
     my ($self) = shift;
     my ($prestamos) = @_;
@@ -93,7 +93,7 @@ sub getDias_prestamo{
     my ($self) = shift;
     return ($self->dias_prestamo);
 }
-    
+
 sub setDias_prestamo{
     my ($self) = shift;
     my ($dias_prestamo) = @_;
@@ -105,7 +105,7 @@ sub getRenovaciones{
     my ($self) = shift;
     return ($self->renovaciones);
 }
-    
+
 sub setRenovaciones{
     my ($self) = shift;
     my ($renovaciones) = @_;
@@ -117,7 +117,7 @@ sub getDias_renovacion{
     my ($self) = shift;
     return ($self->dias_renovacion);
 }
-    
+
 sub setDias_renovacion{
     my ($self) = shift;
     my ($dias_renovacion) = @_;
@@ -128,7 +128,7 @@ sub getDias_antes_renovacion{
     my ($self) = shift;
     return ($self->dias_antes_renovacion);
 }
-    
+
 sub setDias_antes_renovacion{
     my ($self) = shift;
     my ($dias_antes_renovacion) = @_;
@@ -139,7 +139,7 @@ sub getHabilitado{
     my ($self) = shift;
     return ($self->habilitado);
 }
-    
+
 sub setHabilitado{
     my ($self) = shift;
     my ($habilitado) = @_;
@@ -167,7 +167,7 @@ sub obtenerValoresCampo {
             push (@array_valores, $valor);
         }
     }
-	
+
     return (scalar(@array_valores), \@array_valores);
 }
 
@@ -177,7 +177,7 @@ sub obtenerValorCampo {
  	my $ref_valores = C4::Modelo::CircRefTipoPrestamo::Manager->get_circ_ref_tipo_prestamo
 						( select   => [$campo],
 						  query =>[ id_tipo_prestamo => { eq => $id} ]);
-    	
+
 # 	return ($ref_valores->[0]->getCampo($campo));
   if(scalar(@$ref_valores) > 0){
     return ($ref_valores->[0]->getCampo($campo));
@@ -254,9 +254,9 @@ sub getAll{
         $ref_valores = C4::Modelo::CircRefTipoPrestamo::Manager->get_circ_ref_tipo_prestamo(query => \@filtros,);
     }else{
         $ref_valores = C4::Modelo::CircRefTipoPrestamo::Manager->get_circ_ref_tipo_prestamo(query => \@filtros,
-                                                                    limit => $limit, 
-                                                                    offset => $offset, 
-                                                                    sort_by => ['descripcion'] 
+                                                                    limit => $limit,
+                                                                    offset => $offset,
+                                                                    sort_by => ['descripcion']
                                                                    );
     }
     my $ref_cant = C4::Modelo::CircRefTipoPrestamo::Manager->get_circ_ref_tipo_prestamo_count(query => \@filtros,);
@@ -276,6 +276,17 @@ sub getAll{
     else{
       return($ref_cant,$ref_valores);
     }
+}
+
+sub getAllTipoPrestamo{
+    my ($self) = shift;
+    my @filtros;
+
+    my $id_tipo_prestamos = C4::Modelo::CircRefTipoPrestamo::Manager->get_circ_ref_tipo_prestamo( select  => ['id_tipo_prestamo'], query => \@filtros );
+
+    my @id_tipo_prestamos_array = map { $_->getId_tipo_prestamo } @$id_tipo_prestamos;
+
+    return @id_tipo_prestamos_array;
 }
 
 1;
