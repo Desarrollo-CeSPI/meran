@@ -179,7 +179,7 @@ sub crearRadioButtonBootstrap{
         }
 
         $i++;
-        
+
     }
 
     $radio = $radio . '</div>';
@@ -194,7 +194,7 @@ sub crearRadioButtonBootstrap{
   Recibe el input generado por CGI, se recorren las variables recibidas y se escapa HTML para evitar XSS
 =cut
 sub sanitize_input_vars {
-  use HTML::StripTags qw(strip_tags);    
+  use HTML::StripTags qw(strip_tags);
 
   my ($input) = @_;
 
@@ -202,14 +202,14 @@ sub sanitize_input_vars {
   my $value;
   my $allowed_tags = '<u><b><a><br><p>';
   #Limpiamos parámetros
-  foreach my $key (keys %$params_hash) { 
+  foreach my $key (keys %$params_hash) {
       if(!$input->param('obj')){
         # $value = CGI::escapeHTML($input->param($key));
         # C4::AR::Debug::debug("Utilidades => sanitize_input_vars => key => $key");
         # C4::AR::Debug::debug("Utilidades => sanitize_input_vars => input->param($key) => " . $input->param($key));
         if (ref($input->param($key)) eq "VSTRING") {
           $value = strip_tags( $input->param($key), $allowed_tags );
-        }        
+        }
         # TODO add more bad words
         $value =~ s/javascript//;
         $input->param($key, $value);
@@ -231,42 +231,42 @@ sub checkFileMagic{
     my ($file, @filesAllowed) = @_;
 
     use File::LibMagic;
-    
+
     my $flm         = File::LibMagic->new();
-    my $hash_unique = Digest::MD5::md5_hex(localtime());   
+    my $hash_unique = Digest::MD5::md5_hex(localtime());
     my $path        = "/tmp";
     my $notBinary   = 0;
 
     #escribimos el archivo
-    open ( FILE_TO_CHECK, ">$path/$hash_unique" ) or die "$!"; 
-    binmode FILE_TO_CHECK; 
-    while ( <$file> ) { 
-      print FILE_TO_CHECK; 
+    open ( FILE_TO_CHECK, ">$path/$hash_unique" ) or die "$!";
+    binmode FILE_TO_CHECK;
+    while ( <$file> ) {
+      print FILE_TO_CHECK;
     }
     close(FILE_TO_CHECK);
-    
+
     my $mime    = $flm->checktype_filename($path . "/" . $hash_unique);
-    
+
     #el archivo vino en binario, hay que escribirlo de otra forma
     if($mime =~ m/application\/x-empty; charset=binary/i){
-    
+
         #indicamos que hay que escribirlo sin modo binario
         $notBinary = 1;
         #borramos el archivo y lo escribimos de nuevo
         unlink($path . "/" . $hash_unique);
-    
+
         open(FILE_TO_CHECK, ">$path/$hash_unique") or die "Cant write to $path/$hash_unique. Reason: $!";
             print FILE_TO_CHECK $file;
         close(FILE_TO_CHECK);
-    
+
     }
-    
+
     $mime    = $flm->checktype_filename($path . "/" . $hash_unique);
 
     #vemos si esta en la whitelist
     my $ok      = 0;
     my $type    = '';
-    
+
     foreach my $t (@filesAllowed){
 
         C4::AR::Debug::debug("mime del archivo : " . $mime . " type : " . $t);
@@ -274,21 +274,21 @@ sub checkFileMagic{
         if($mime =~ m/$t/i) {
             $ok = 1;
             $type = $t;
-            
+
         }
-    
+
     }
-    
+
     unlink($path . "/" . $hash_unique);
-    
+
     if (!$ok){
         C4::AR::Debug::debug("el tipo de archivo no estaba en la whitelist");
         #no esta, borramos el archivo y devolvemos 0
         return 0;
-    
+
     }
-    
-    return ($type,$notBinary); 
+
+    return ($type,$notBinary);
 
 }
 
@@ -617,7 +617,7 @@ sub crearComponentes{
         if ( ($id ne "google_map") && ($id ne "twitter_follow_button") && ($id ne "piwik_code") ){
             $class_texta = "input-xxlarge editable_wysiwyg",
         }else{
-            $class_texta = "input-xxlarge",    
+            $class_texta = "input-xxlarge",
         }
 
         $inputCampos=CGI::textarea(
@@ -626,7 +626,7 @@ sub crearComponentes{
             -value   =>$valor,
             -rows    =>10,
             -cols    =>$values,
-            -class   => $class_texta,    
+            -class   => $class_texta,
         );
     }
     else{
@@ -3249,7 +3249,7 @@ sub generarComboFormatosImportacion {
     $select_formatosImportacion_Labels{'isis'}            ='ISIS';
     push (@select_formatosImportacion_Values, 'xml');
     $select_formatosImportacion_Labels{'xml'}            ='XML';
-    
+
     push (@select_formatosImportacion_Values, 'xls');
     $select_formatosImportacion_Labels{'xls'}            ='Planilla de Cálculo';
 
@@ -3450,10 +3450,10 @@ sub escapeData{
         $data =~ s/Ü/#U#/g;
         $data = encode_entities($data, '<>&"\'');
         $data =~ s/#U#/Ü/g;
-        
+
     }
 
-    C4::AR::Debug::debug("salida data: " . $data);
+    #C4::AR::Debug::debug("salida data: " . $data);
     return ($data);
 }
 
@@ -3462,7 +3462,7 @@ sub cleanPunctuation{
     my ($data) = @_;
     if($data){
         # Pasa a entidades HTML los caracteres especiales, para que no sean interpretados como otra cosa
-        $data =~ s/[[:punct:]]/ /g; 
+        $data =~ s/[[:punct:]]/ /g;
         $data =~ s/[¿,¡,“,”]/ /g; # estos no lo elimina el anterior
     }
     return ($data);
@@ -3689,7 +3689,7 @@ sub capitalizarString{
 
     my @words = split(/ /,$string);
     my $final_string = "";
-    
+
     foreach my $word (@words){
         $final_string .= ucfirst(lc($word))." ";
     }
@@ -4116,11 +4116,11 @@ sub catalogoAutocomplete{
             $has_temp{'id'}     = $documento->{'id1'};
             # C4::AR::Debug::debug("CANTIDAD DE NIVELES ENCONTRADOS EN AUTOCOMPLETE ==============> ".$cantidad);
             $has_temp{'dato'}   = $documento->{'titulo'};
-            
-            if($documento->{'nomCompleto'}){ 
+
+            if($documento->{'nomCompleto'}){
                     $has_temp{'dato'} .= " (".$documento->{'nomCompleto'}.")";
             }
-            
+
             $has_temp{'dato'} .= "\n";
             push (@data_array, \%has_temp);
 
@@ -4195,11 +4195,11 @@ sub gruposAutocomplete{
         $has_temp{'id'}     = $documento->{'id1'};
         # C4::AR::Debug::debug("CANTIDAD DE NIVELES ENCONTRADOS EN AUTOCOMPLETE ==============> ".$cantidad);
         $has_temp{'dato'}   = $documento->{'titulo'};
-        
-        if($documento->{'nomCompleto'}){ 
+
+        if($documento->{'nomCompleto'}){
                 $has_temp{'dato'} .= " (".$documento->{'nomCompleto'}.")";
         }
-        
+
         my $nivel2_array_ref = C4::AR::Nivel2::getNivel2FromId1($documento->{'id1'});
 
         foreach my $n2 (@$nivel2_array_ref){
@@ -4327,7 +4327,7 @@ sub usuarioAutocompleteByCredentialType{
             $has_temp{'id'}     = $usuario->getNro_socio;
 
             $has_temp{'dato'}   = $usuario->persona->getApeYNom." (".$usuario->getNro_socio.")"."\n";
-            
+
             push (@data_array, \%has_temp);
         }
 
@@ -4627,7 +4627,7 @@ sub setFeriado{
             $feriado->agregar($fecha,$status,$texto_feriado);
         };
     }
-    
+
     return (1);
 }
 
@@ -5065,42 +5065,42 @@ sub translateYesNo_toNumber{
 
 sub printAjaxPercent{
   my ($total,$actual) = @_;
-  
+
   my $percent = 0;
-  
+
   eval{
      $percent = ($actual * 100) / $total;
   };
-    
+
     my $session = CGI::Session->load();
 
     C4::AR::Auth::print_header($session);
     print $percent;
-    
+
     return ($percent);
 }
 
 sub demo_test{
-    
+
     my ($job) = @_;
-    
+
     use C4::AR::BackgroundJob;
-    
+
     if (!$job){
-        $job = C4::AR::BackgrounJob->new("DEMO","NULL",10);        
+        $job = C4::AR::BackgrounJob->new("DEMO","NULL",10);
     }
-     
+
     for (my $x=1; $x<=30; $x++){
         sleep(1);
         my $percent = printAjaxPercent(30,$x);
         $job->progress($percent);
         C4::AR::Debug::debug("-------------------------- JOB -------------- \n\n\n\n\n");
     }
-    
+
 }
 
 sub generarComboDeEstados{
-  
+
     my ($params) = @_;
 
   my ($estados) = C4::AR::Referencias::obtenerEstados();
@@ -5140,8 +5140,8 @@ sub generarComboDeEstados{
     my $comboDeDisponibilidades= CGI::scrolling_list(\%options_hash);
 
     return $comboDeDisponibilidades;
-  
-  
+
+
 }
 
 sub generarComboEstadoEjemplares{
@@ -5230,13 +5230,13 @@ sub generarComboEstadoEjemplaresTexto{
 }
 
 sub obtenerConsultasEstadisticas{
-    
+
     use C4::Modelo::RepEstadistica;
     use C4::Modelo::RepEstadistica::Manager;
 
 
     my @filtros;
-    my $estantes_array_ref = C4::Modelo::RepEstadistica::Manager->get_rep_estadistica( query => \@filtros, 
+    my $estantes_array_ref = C4::Modelo::RepEstadistica::Manager->get_rep_estadistica( query => \@filtros,
                                            sort_by => 'orden');
 
     return ($estantes_array_ref);
@@ -5258,7 +5258,7 @@ sub obtenerCategorias {
 }
 sub obtenerConsultasEstadisticasPorCategoria{
     my ($categoria)=@_;
-    
+
     use C4::Modelo::RepEstadistica;
     use C4::Modelo::RepEstadistica::Manager;
 
@@ -5266,7 +5266,7 @@ sub obtenerConsultasEstadisticasPorCategoria{
     my @filtros;
     push(@filtros, ( category => { eq => $categoria }));
 
-    my $est_array_ref = C4::Modelo::RepEstadistica::Manager->get_rep_estadistica( query => \@filtros, 
+    my $est_array_ref = C4::Modelo::RepEstadistica::Manager->get_rep_estadistica( query => \@filtros,
                                            sort_by => 'orden');
 
     return ($est_array_ref);
@@ -5279,10 +5279,10 @@ sub obtenerEstadisticasPorCategoria{
     my %partial_hash;
     foreach my $consulta (@$consultas) {
          my $sth=$dbh->prepare($consulta->getQuery());
-         if ($consulta->getParams() == 2){ 
+         if ($consulta->getParams() == 2){
              $sth->execute($year, $year+1);
          } else {
-            if ($consulta->getParams() == 1){ 
+            if ($consulta->getParams() == 1){
                 $sth->execute($year + 1);
             }else{
                 $sth->execute();
@@ -5290,7 +5290,7 @@ sub obtenerEstadisticasPorCategoria{
          }
          my $cantidad = $sth->fetchrow_array;
          $partial_hash{$consulta->getName()}=$cantidad;
-        
+
          $sth->finish;
     }
    return (\%partial_hash);
@@ -5299,7 +5299,7 @@ sub obtenerEstadisticasPorCategoria{
 
 sub datosEstadisticosUNLP{
     my ($year)=@_;
-    
+
     my $categorias =  C4::AR::Utilidades::obtenerCategorias();
     my %result_hash;
     foreach my $cat (@$categorias){
@@ -5314,11 +5314,11 @@ sub datosEstadisticosUNLP{
    #  #TOTAL
    #  my $sth=$dbh->prepare("Select count(*) from cat_registro_marc_n3 where template in ('LIB', 'TES', 'SER', 'REV', 'FOT') and created_at < ? ;");
    #  $sth->execute($year + 1);
-    
+
    #  if (my $cantidad_impreso_total = $sth->fetchrow_array){
    #      $result_hash{'cantidad_impreso_total'}=$cantidad_impreso_total;
    #  }
-    
+
    #  $sth->finish;
 
    #  #DISPONIBLE
@@ -5364,7 +5364,7 @@ sub datosEstadisticosUNLP{
 
 
    #  #Ejemplares
-   #  my $sth=$dbh->prepare("Select cat_ref_tipo_nivel3.nombre as template ,count(*)as cant from cat_registro_marc_n3 
+   #  my $sth=$dbh->prepare("Select cat_ref_tipo_nivel3.nombre as template ,count(*)as cant from cat_registro_marc_n3
    #      LEFT JOIN cat_ref_tipo_nivel3 ON cat_ref_tipo_nivel3.id_tipo_doc = cat_registro_marc_n3.template
    #      where created_at < ? GROUP BY template;");
    #  $sth->execute($year + 1);
@@ -5386,8 +5386,8 @@ sub datosEstadisticosUNLP{
 
    #  $sth->finish;
 
-   #  # SERVICIOS: 
- 
+   #  # SERVICIOS:
+
    #  #Prestamos totales
    #  my $sth=$dbh->prepare("SELECT COUNT(*)  FROM rep_historial_prestamo WHERE fecha_devolucion like '$year%'");
    #  $sth->execute();
@@ -5423,11 +5423,11 @@ sub datosEstadisticosUNLP{
 
 
    #  #Prestamos monografia domicilio
-   #  my $sth=$dbh->prepare("SELECT count(*) FROM rep_historial_prestamo 
-   #          left join circ_ref_tipo_prestamo on rep_historial_prestamo.tipo_prestamo = circ_ref_tipo_prestamo.id_tipo_prestamo 
+   #  my $sth=$dbh->prepare("SELECT count(*) FROM rep_historial_prestamo
+   #          left join circ_ref_tipo_prestamo on rep_historial_prestamo.tipo_prestamo = circ_ref_tipo_prestamo.id_tipo_prestamo
    #          LEFT JOIN cat_registro_marc_n3 ON rep_historial_prestamo.id3 = cat_registro_marc_n3.id
-   #          WHERE circ_ref_tipo_prestamo.codigo_disponibilidad = 'CIRC0000' 
-   #          AND cat_registro_marc_n3.template IN ('LIB','TES','FOT')     
+   #          WHERE circ_ref_tipo_prestamo.codigo_disponibilidad = 'CIRC0000'
+   #          AND cat_registro_marc_n3.template IN ('LIB','TES','FOT')
    #          AND rep_historial_prestamo.fecha_devolucion like '$year%' ");
    #  $sth->execute();
 
@@ -5438,11 +5438,11 @@ sub datosEstadisticosUNLP{
    #  $sth->finish;
 
    #  #Prestamos monografia sala
-   #  my $sth=$dbh->prepare("SELECT count(*) FROM rep_historial_prestamo 
-   #          left join circ_ref_tipo_prestamo on rep_historial_prestamo.tipo_prestamo = circ_ref_tipo_prestamo.id_tipo_prestamo 
+   #  my $sth=$dbh->prepare("SELECT count(*) FROM rep_historial_prestamo
+   #          left join circ_ref_tipo_prestamo on rep_historial_prestamo.tipo_prestamo = circ_ref_tipo_prestamo.id_tipo_prestamo
    #          LEFT JOIN cat_registro_marc_n3 ON rep_historial_prestamo.id3 = cat_registro_marc_n3.id
-   #          WHERE circ_ref_tipo_prestamo.codigo_disponibilidad = 'CIRC0001' 
-   #          AND cat_registro_marc_n3.template IN ('LIB','TES','FOT')     
+   #          WHERE circ_ref_tipo_prestamo.codigo_disponibilidad = 'CIRC0001'
+   #          AND cat_registro_marc_n3.template IN ('LIB','TES','FOT')
    #          AND rep_historial_prestamo.fecha_devolucion like '$year%' ");
 
    #  $sth->execute();
@@ -5456,11 +5456,11 @@ sub datosEstadisticosUNLP{
 
 
    #  #Prestamos revistas domicilio
-   #  my $sth=$dbh->prepare("SELECT count(*) FROM rep_historial_prestamo 
-   #          left join circ_ref_tipo_prestamo on rep_historial_prestamo.tipo_prestamo = circ_ref_tipo_prestamo.id_tipo_prestamo 
+   #  my $sth=$dbh->prepare("SELECT count(*) FROM rep_historial_prestamo
+   #          left join circ_ref_tipo_prestamo on rep_historial_prestamo.tipo_prestamo = circ_ref_tipo_prestamo.id_tipo_prestamo
    #          LEFT JOIN cat_registro_marc_n3 ON rep_historial_prestamo.id3 = cat_registro_marc_n3.id
-   #          WHERE circ_ref_tipo_prestamo.codigo_disponibilidad = 'CIRC0000' 
-   #          AND cat_registro_marc_n3.template = 'REV'     
+   #          WHERE circ_ref_tipo_prestamo.codigo_disponibilidad = 'CIRC0000'
+   #          AND cat_registro_marc_n3.template = 'REV'
    #          AND rep_historial_prestamo.fecha_devolucion like '$year%' ");
    #  $sth->execute();
 
@@ -5472,11 +5472,11 @@ sub datosEstadisticosUNLP{
    #  $sth->finish;
 
    #  #Prestamos monografia sala
-   #  my $sth=$dbh->prepare("SELECT count(*) FROM rep_historial_prestamo 
-   #          left join circ_ref_tipo_prestamo on rep_historial_prestamo.tipo_prestamo = circ_ref_tipo_prestamo.id_tipo_prestamo 
+   #  my $sth=$dbh->prepare("SELECT count(*) FROM rep_historial_prestamo
+   #          left join circ_ref_tipo_prestamo on rep_historial_prestamo.tipo_prestamo = circ_ref_tipo_prestamo.id_tipo_prestamo
    #          LEFT JOIN cat_registro_marc_n3 ON rep_historial_prestamo.id3 = cat_registro_marc_n3.id
-   #          WHERE circ_ref_tipo_prestamo.codigo_disponibilidad = 'CIRC0001' 
-   #          AND cat_registro_marc_n3.template = 'REV'   
+   #          WHERE circ_ref_tipo_prestamo.codigo_disponibilidad = 'CIRC0001'
+   #          AND cat_registro_marc_n3.template = 'REV'
    #          AND rep_historial_prestamo.fecha_devolucion  like '$year%' ");
 
    #  $sth->execute();
@@ -5489,11 +5489,11 @@ sub datosEstadisticosUNLP{
 
 
    #  #Prestamos domicilio otros
-   #  my $sth=$dbh->prepare("SELECT count(*) FROM rep_historial_prestamo 
-   #          left join circ_ref_tipo_prestamo on rep_historial_prestamo.tipo_prestamo = circ_ref_tipo_prestamo.id_tipo_prestamo 
+   #  my $sth=$dbh->prepare("SELECT count(*) FROM rep_historial_prestamo
+   #          left join circ_ref_tipo_prestamo on rep_historial_prestamo.tipo_prestamo = circ_ref_tipo_prestamo.id_tipo_prestamo
    #          LEFT JOIN cat_registro_marc_n3 ON rep_historial_prestamo.id3 = cat_registro_marc_n3.id
-   #          WHERE circ_ref_tipo_prestamo.codigo_disponibilidad = 'CIRC0000' 
-   #          AND cat_registro_marc_n3.template NOT IN ('LIB','TES','FOT', 'REV')     
+   #          WHERE circ_ref_tipo_prestamo.codigo_disponibilidad = 'CIRC0000'
+   #          AND cat_registro_marc_n3.template NOT IN ('LIB','TES','FOT', 'REV')
    #          AND rep_historial_prestamo.fecha_devolucion like '$year%' ");
 
    #  $sth->execute();
@@ -5505,11 +5505,11 @@ sub datosEstadisticosUNLP{
    #  $sth->finish;
 
    #  #Prestamos sala otros
-   #  my $sth=$dbh->prepare("SELECT count(*) FROM rep_historial_prestamo 
-   #          left join circ_ref_tipo_prestamo on rep_historial_prestamo.tipo_prestamo = circ_ref_tipo_prestamo.id_tipo_prestamo 
+   #  my $sth=$dbh->prepare("SELECT count(*) FROM rep_historial_prestamo
+   #          left join circ_ref_tipo_prestamo on rep_historial_prestamo.tipo_prestamo = circ_ref_tipo_prestamo.id_tipo_prestamo
    #          LEFT JOIN cat_registro_marc_n3 ON rep_historial_prestamo.id3 = cat_registro_marc_n3.id
-   #          WHERE circ_ref_tipo_prestamo.codigo_disponibilidad = 'CIRC0001' 
-   #          AND cat_registro_marc_n3.template NOT IN ('LIB','TES','FOT', 'REV')   
+   #          WHERE circ_ref_tipo_prestamo.codigo_disponibilidad = 'CIRC0001'
+   #          AND cat_registro_marc_n3.template NOT IN ('LIB','TES','FOT', 'REV')
    #          AND rep_historial_prestamo.fecha_devolucion like '$year%'");
 
    #  $sth->execute();
@@ -5521,7 +5521,7 @@ sub datosEstadisticosUNLP{
    #  $sth->finish;
 
    #  #Consultas OPAC
-    
+
    #  #Socios
    #  my $sth=$dbh->prepare("SELECT COUNT(*)  FROM rep_busqueda WHERE nro_socio IS NOT NULL AND fecha like '$year%'");
    #  $sth->execute();
