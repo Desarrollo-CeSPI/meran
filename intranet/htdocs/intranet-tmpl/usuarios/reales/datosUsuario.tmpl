@@ -1,4 +1,4 @@
-[% INCLUDE "intranet-top.inc" %] 
+[% INCLUDE "intranet-top.inc" %]
 
 <script type="text/javascript">
       TYPE_FILE= "picture";
@@ -111,23 +111,23 @@ function updateInfoRenovar(responseText){
 	cancelarDiv();
 
 	var infoHash= JSONstring.toObject(responseText);
-	var messageArray= infoHash.messages; 
+	var messageArray= infoHash.messages;
 	var ticketsArray= infoHash.tickets;
     var hayError=0;
 
     setMessages(messageArray);
-    
+
    for(i=0; i<messageArray.length;i++){
 //         imprimirTicket(ticketsArray[i].ticket,i);
         setMessages(messageArray[i]);
     }
-     
+
     for(i=0; i<messageArray.length;i++){
        if  (messageArray[i].error){
            hayError= 1;
        }
     }
-    
+
     if (!hayError){
          imprimirTicket(ticketsArray);
     }
@@ -157,19 +157,19 @@ function updateInfoPrestarReserva(responseText){
     for(i=0; i<messageArray.length;i++){
             messageHash.error= messageArray[i].error;
             messageHash.messages[i]= {"message": messageArray[i].messages[0].message};
-          
+
 //         imprimirTicket(ticketsArray[i].ticket,i);
-           
+
     }
-    
+
     setMessages(messageHash);
-    
+
     for(i=0; i<messageArray.length;i++){
        if  (messageArray[i].error){
            hayError= 1;
        }
     }
-    
+
     if (!hayError){
          imprimirTicket(ticketsArray);
     }
@@ -238,7 +238,7 @@ function generarLibreDeuda(){
 function updateGenerarLibreDeuda(responseText){
     if (!verificarRespuesta(responseText))
         return(0);
-    var Messages=JSONstring.toObject(responseText);   
+    var Messages=JSONstring.toObject(responseText);
     if(Messages){
         setMessages(Messages);
     }
@@ -256,7 +256,7 @@ function detallePrestamos(socio){
 function updateDetallePrestamos(responseText){
 	$('#prestamos').html(responseText);
 	zebra('prestamosResult');
-	checkedAll('checkAllPrestamos','chkboxPrestamos');	
+	checkedAll('checkAllPrestamos','chkboxPrestamos');
 	detalleSanciones(USUARIO.ID);
 }
 
@@ -309,14 +309,14 @@ function updateDetalleSanciones(responseText){
 //**********************************Fin**Para manejar la circulacion********************************************
 
 $(document).ready(function(){
-	
+
 	//definido en circulacion.js
 	USUARIO         = new objeto_usuario();
 	USUARIO.text    = "[% socio_modificar.persona.getApeYNom %]";
     USUARIO.ID      = '[% socio_modificar.getNro_socio %]';
 	detalleUsuario();
 
-    
+
     $('#historico_prestamos_usuario').on('show', function () {
         mostrarHistorialDePrestamos();
     })
@@ -325,7 +325,7 @@ $(document).ready(function(){
     $('#historico_reservas_usuario').on('show', function () {
     	mostrarHistorialDeReservas();
     })
-    
+
 
     $('#historico_sanciones_usuario').on('show', function () {
     	mostrarHistorialDeSanciones();
@@ -341,13 +341,13 @@ $(document).ready(function(){
     <div id="datos_usuario">
     	<!-- 	DETALLE USUARIO -->
     	<section id="detalleUsuario"></section>
-    		
+
     	<!--DETALLE DE PRESTAMOS-->
     	<section id="prestamos"></section>
-    	
+
     	<!-- DETALLE DE RESERVAS -->
     	<section id="reservas"></section>
-    	
+
     	<!-- DETALLE DE SANCIONES -->
     	<section id="sanciones"></section>
 
@@ -390,7 +390,7 @@ $(document).ready(function(){
                 </div>
             </div>
         </div>
-        
+
         <div class="ticket" id="ticket" ></div>
 </div>
 [% INCLUDE "intranet-bottom.inc" %]
