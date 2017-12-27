@@ -33,23 +33,23 @@ use Text::LevenshteinXS;
 
 =item
     Returns true (1) if the row was loaded successfully
-    undef if the row could not be loaded due to an error, 
+    undef if the row could not be loaded due to an error,
     zero (0) if the row does not exist.
 =cut
 sub load{
     my $self = $_[0]; # Copy, not shift
-    
+
 
     my $error = 1;
 
     eval {
-    
+
          unless( $self->SUPER::load(speculative => 1) ){
-                 C4::AR::Debug::debug("CatAutor=>  dentro del unless, no existe el objeto SUPER load");
+                C4::AR::Debug::debug("CatAutor=>  dentro del unless, no existe el objeto SUPER load");
                 $error = 0;
          }
 
-        C4::AR::Debug::debug("CatAutor=>  SUPER load");
+        #C4::AR::Debug::debug("CatAutor=>  SUPER load");
         return $self->SUPER::load(@_);
     };
 
@@ -124,7 +124,7 @@ sub getNacionalidad{
 
     return (C4::AR::Utilidades::trim($self->nacionalidad));
 }
-    
+
 sub setNacionalidad{
     my ($self) = shift;
     my ($nacionalidad) = @_;
@@ -139,25 +139,25 @@ sub getCompleto{
 
     if ( (!$completo) || ($completo eq "_SIN_VALOR_") ){
         if($self->getApellido){
-            
+
             $completo = $self->getApellido;
-            
+
             if($self->getNombre){
                 $completo .= ", ".$self->getNombre;
             }
-            
+
         }else{
-            
+
             if($self->getNombre){
                 $completo = $self->getNombre;
             }
-            
+
         }
     }
-    
+
     return ($completo);
 }
-    
+
 sub setCompleto{
     my ($self) = shift;
     my ($completo) = shift;
@@ -166,22 +166,22 @@ sub setCompleto{
 
     if ( (!C4::AR::Utilidades::validateString($completo))||($completo eq "_SIN_VALOR_")){
         if($self->getApellido){
-            
+
             $completo = $self->getApellido;
-            
+
             if($self->getNombre){
                 $completo .= ", ".$self->getNombre;
             }
-            
+
         }else{
-            
+
             if($self->getNombre){
                 $completo = $self->getNombre;
             }
-            
+
         }
     }
-    
+
     $self->completo($completo);
     $self->save();
 
@@ -213,7 +213,7 @@ sub obtenerValoresCampo {
             push (@array_valores, $valor);
         }
     }
-      
+
     return (scalar(@array_valores), \@array_valores);
 }
 
@@ -237,7 +237,7 @@ sub obtenerValorCampo {
 sub getCampo{
   my ($self) = shift;
 	my ($campo)=@_;
-    
+
 	if ($campo eq "id") {return $self->getId;}
 	if ($campo eq "nombre") {return $self->getNombre;}
 	if ($campo eq "apellido") {return $self->getApellido;}
@@ -266,9 +266,9 @@ sub getAll{
         $ref_valores = C4::Modelo::CatAutor::Manager->get_cat_autor(query => \@filtros,);
     }else{
         $ref_valores = C4::Modelo::CatAutor::Manager->get_cat_autor(query => \@filtros,
-                                                                    limit => $limit, 
-                                                                    offset => $offset, 
-                                                                    sort_by => ['nombre'] 
+                                                                    limit => $limit,
+                                                                    offset => $offset,
+                                                                    sort_by => ['nombre']
                                                                    );
     }
 

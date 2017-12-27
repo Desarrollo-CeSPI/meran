@@ -7,7 +7,7 @@ require Exporter;
 use vars qw(@EXPORT_OK @ISA);
 @ISA = qw(Exporter);
 @EXPORT_OK = qw(
-                log      
+                log
                 debug
                 warn
                 info
@@ -48,7 +48,7 @@ sub debugObject{
     my $nro_socio = C4::AR::Auth::getSessionNroSocio() || 'SIN_SOCIO_EN_SESION';
 
     debug($nro_socio."-- $type -- Object: ".$object->toString."=> ".$data."\n");
-       
+
 }
 
 
@@ -58,13 +58,13 @@ sub debug_date_time{
 
 =head2
     sub _str_debug_date_time
-    
+
     genera el string con la fecha y hora
 =cut
 sub _str_debug_date_time{
 
     my ($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) = localtime(time);
-    #     dia-mes-año    
+    #     dia-mes-año
     return $mday."-".($mon+1)."-".($year+1900)." ".$hour.":".$min.":".$sec;
 }
 
@@ -87,7 +87,7 @@ sub _write_debug{
 
     	print DEBUG_FILE $nro_socio."$type --("._str_debug_date_time().") => ".$data."\n";
 
-    	close(DEBUG_FILE);        
+    	close(DEBUG_FILE);
     };
 }
 
@@ -96,8 +96,8 @@ sub _debugStatus{
   my $context = new C4::Context;
 
   C4::AR::Auth::getSessionType();
-    
-  return ($context->config('debug'));    
+
+  return ($context->config('debug'));
 }
 
 sub error{
@@ -135,8 +135,12 @@ sub debug{
     my ($data) = @_;
 
     my $enabled = _debugStatus();
+    my ($package, $filename, $line) = caller;
 
-    ($enabled >= 1024) && ($data) && (_write_debug("[debug] ".$data));
+    if (($enabled >= 1024) && ($data)) {
+      _write_debug("[debug] ".$data);
+      #_write_debug("[debug] $filename \n");
+    }
 }
 
 sub _printHASH {

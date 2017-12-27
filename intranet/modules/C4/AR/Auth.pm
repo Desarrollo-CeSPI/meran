@@ -1804,7 +1804,7 @@ sub redirectAndAdvice{
 sub get_html_content {
 	my($template, $params) = @_;
 	my $out = '';
-	$template->process($params->{'template_name'},$params,\$out) || die "Template process failed: ", $template->error(), "\n";
+	$template->process($params->{'template_name'},$params,\$out, binmode => ':utf8') || die "Template process failed: ", $template->error(), "\n";
 	return($out);
 }
 
@@ -2068,16 +2068,16 @@ sub _sendRecoveryPasswordMail{
 	my %mail;
 
 	$mail{'mail_from'}              = C4::AR::Preferencias::getValorPreferencia("reserveFrom");
-	$mail{'mail_to'}                = Encode::decode_utf8($socio->persona->getEmail);
+	$mail{'mail_to'}                = $socio->persona->getEmail;
 	$mail{'mail_subject'}           = C4::AR::Filtros::i18n("Instrucciones para reestablecer su clave");
 
 	# Datos para el mail
 
-	my $completo                    = Encode::decode_utf8($socio->persona->getApeYNom );
+	my $completo                    = $socio->persona->getApeYNom;
 	my $nro_socio                   = $socio->getNro_socio;
 	my $ui                          = C4::AR::Referencias::obtenerDefaultUI() || C4::AR::Referencias::getFirstDefaultUI();
-	my $nombre_ui                   = Encode::decode_utf8($ui->getNombre());
-	my $mailMessage                 = Encode::decode_utf8(C4::AR::Preferencias::getValorPreferencia('mailMessageForgotPass'));
+	my $nombre_ui                   = $ui->getNombre();
+	my $mailMessage                 = C4::AR::Preferencias::getValorPreferencia('mailMessageForgotPass');
 
 	$mailMessage                    =~ s/SOCIO/$completo/;
 	#hay 2 NOMBRE_UI por eso repetido
@@ -2089,7 +2089,7 @@ sub _sendRecoveryPasswordMail{
 	$mailMessage                    =~ s/LINK/$link/;
 
 	$mail{'mail_message'}           = $mailMessage;
-	$mail{'page_title'}             = C4::AR::Filtros::i18n("Olvido de su contrase&ntilde;a");
+	$mail{'page_title'}             = "Olvido de su contrase&ntilde;a";
 	$mail{'link'}                   = $link;
 
 	my ($ok, $msg_error)            = C4::AR::Mail::send_mail(\%mail);
@@ -2106,18 +2106,18 @@ sub _sendRecoveryPasswordMail_Unactive{
 
 	my %mail;
 
-	$mail{'mail_from'}              = Encode::decode_utf8(C4::AR::Preferencias::getValorPreferencia("reserveFrom"));
+	$mail{'mail_from'}              = C4::AR::Preferencias::getValorPreferencia("reserveFrom");
 	$mail{'mail_to'}                = $socio->persona->getEmail;
-	$mail{'mail_subject'}           = C4::AR::Filtros::i18n("Instrucciones para reestablecer su clave");
+	$mail{'mail_subject'}           = "Instrucciones para reestablecer su clave";
 
 	# Datos para el mail
 	use C4::Modelo::PrefUnidadInformacion;
 
-	my $completo                    = Encode::decode_utf8($socio->persona->getNombre . " " . $socio->persona->getApellido);
+	my $completo                    = $socio->persona->getNombre . " " . $socio->persona->getApellido;
 	my $nro_socio                   = $socio->getNro_socio;
 
 	my $ui                          = C4::AR::Referencias::obtenerDefaultUI();
-	my $nombre_ui                   = Encode::decode_utf8($ui->getNombre());
+	my $nombre_ui                   = $ui->getNombre();
 
 	my $mailMessage                 = C4::AR::Preferencias::getValorPreferencia('mailMessageForgotPassUnactive');
 
@@ -2128,7 +2128,7 @@ sub _sendRecoveryPasswordMail_Unactive{
 	$mailMessage                    =~ s/NOMBRE_UI/$nombre_ui/;
 
 	$mail{'mail_message'}           = $mailMessage;
-	$mail{'page_title'}             = C4::AR::Filtros::i18n("Olvido de su clave de ingreso");
+	$mail{'page_title'}             = "Olvido de su clave de ingreso";
 
 	my ($ok, $msg_error)            = C4::AR::Mail::send_mail(\%mail);
 

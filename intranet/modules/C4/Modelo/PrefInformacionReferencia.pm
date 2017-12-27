@@ -16,10 +16,10 @@ __PACKAGE__->meta->setup(
     ],
 
     primary_key_columns => [ 'idinforef' ],
-    
+
      relationships =>
     [
-        tipoItem => 
+        tipoItem =>
         {
             class       => 'C4::Modelo::CatEstructuraCatalogacion',
             key_columns => { idinforef => 'idestcat' },
@@ -32,23 +32,23 @@ use C4::Modelo::CatAutor;
 
 sub load{
     my $self = $_[0]; # Copy, not shift
-    
+
 
     my $error = 1;
 
     eval {
-    
+
          unless( $self->SUPER::load(speculative => 1) ){
-                 C4::AR::Debug::debug("PrefInformacionReferencia =>  dentro del unless, no existe el objeto SUPER load");
+                 #C4::AR::Debug::debug("PrefInformacionReferencia =>  dentro del unless, no existe el objeto SUPER load");
                 $error = 0;
          }
 
-        C4::AR::Debug::debug("PrefInformacionReferencia =>  SUPER load");
+        #C4::AR::Debug::debug("PrefInformacionReferencia =>  SUPER load");
         return $self->SUPER::load(@_);
     };
 
     if($@){
-        C4::AR::Debug::debug("PrefInformacionReferencia =>  no existe el objeto");
+        #C4::AR::Debug::debug("PrefInformacionReferencia =>  no existe el objeto");
         $error = undef;
     }
 

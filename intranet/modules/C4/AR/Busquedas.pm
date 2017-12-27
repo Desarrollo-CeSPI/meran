@@ -106,7 +106,7 @@ sub buscarTodosLosDatosFromNivel2ByCampoSubcampo {
 
         foreach my $field ($marc_record->field($campo)) {
 #             C4::AR::Debug::debug("field => ".$field->tag);
-        
+
             foreach my $subfield ($field->subfields()) {
                 if ($subfield->[0] eq $subcampo){
 #                     C4::AR::Debug::debug("subfield => ".$subfield->[0]);
@@ -141,7 +141,7 @@ sub getLibrarianEstCat{
 
     if($data && $data->{'visible'}){
         if($data->{'referencia'} && $dato ne ""){
-        #DA ERROR FIXME 
+        #DA ERROR FIXME
         #$nuevoDato=&buscarDatoReferencia($dato,$data->{'tabla'},$data->{'campos'},$data->{'separador'});
             $data->{'dato'}=$nuevoDato;
         }
@@ -153,7 +153,7 @@ sub getLibrarianEstCat{
         $data->{'liblibrarian'}=0;
         $data->{'dato'}="";
         $data->{'visible'}=0;
-        
+
     }
 #0 si no trae nada
     return $data;
@@ -228,7 +228,7 @@ $query .= " and (eio.itemtype = ?)";
 #         return $textPred." ";
           return $data;
         }
-        
+
 #       return $textPred." ".$data->{'dato'}." ".$textSucc;
 #       return $textPred." ";
 
@@ -243,7 +243,7 @@ $query .= " and (eio.itemtype = ?)";
 # close(A);
 
 #0 si no trae nada
-#   return $sth->fetchrow_hashref; 
+#   return $sth->fetchrow_hashref;
 }
 
 
@@ -279,7 +279,7 @@ sub getLibrarianIntra{
     if(!$librarian->{'liblibrarian'}){
         $librarian= &getLibrarianEstCat($campo, $subcampo, $dato,'ALL');
     }
-    
+
     if($librarian->{'liblibrarian'} && !$librarian->{'visible'} && !$detalleMARC){
         #Si esta catalogado y pero no esta visible retorna 0 para que no se vea el dato
         $librarian->{'liblibrarian'}=0;
@@ -299,7 +299,7 @@ Busca para un campo y subcampo, dependiendo el itemtype, como esta catalogado pa
 =cut
 sub getLibrarianOpac{
     my ($campo, $subcampo,$dato, $itemtype,$detalleMARC) = @_;
-    my $textPred;   
+    my $textPred;
     my $textSucc;
 #busca librarian segun campo, subcampo e itemtype
     my $librarian= &getLibrarianEstCatOpac($campo, $subcampo, $dato, $itemtype);
@@ -323,7 +323,7 @@ sub getLibrarian{
         $librarian=&getLibrarianIntra($campo, $subcampo,$dato, $itemtype,$detalleMARC);
     }else{
         $librarian=&getLibrarianOpac($campo, $subcampo,$dato, $itemtype,$detalleMARC);
-    } 
+    }
     return $librarian;
 }
 
@@ -337,7 +337,7 @@ sub buscarMapeo{
     my %mapeo;
     my $llave;
     my $query = " SELECT * FROM cat_pref_mapeo_koha_marc WHERE tabla = ? ";
-    
+
     my $sth=$dbh->prepare($query);
     $sth->execute($tabla);
     while(my $data=$sth->fetchrow_hashref){
@@ -359,7 +359,7 @@ sub buscarMapeoTotal{
     my %mapeo;
     my $llave;
     my $query = " SELECT * FROM cat_pref_mapeo_koha_marc WHERE tabla like 'cat_nivel%' ORDER BY tabla";
-    
+
     my $sth=$dbh->prepare($query);
     $sth->execute();
     while(my $data=$sth->fetchrow_hashref){
@@ -397,7 +397,7 @@ sub buscarSubCamposMapeo{
     my %mapeo;
     my $llave;
     my $query = " SELECT * FROM cat_pref_mapeo_koha_marc WHERE tabla like 'cat_nivel%' AND campo = ?";
-    
+
     my $sth=$dbh->prepare($query);
     $sth->execute($campo);
     while(my $data=$sth->fetchrow_hashref){
@@ -442,12 +442,12 @@ Esta funcion devuelve los datos de los grupos a mostrar en una busaqueda dado un
 =cut
 sub obtenerGrupos {
     my ($id1,$itemtype,$type,$niveles2)=@_;
-    
+
     #Obtenemos los niveles 2
     if (!$niveles2){
         $niveles2 = C4::AR::Nivel2::getNivel2FromId1($id1);
     }
-    
+
     my @result;
     my $res=0;
     foreach my $nivel2 (@$niveles2){
@@ -467,37 +467,37 @@ Esta funcion devuelve los datos de los fasciculos agrupados para años .
 =cut
 sub obtenerEstadoDeColeccion {
     my ($id1,$itemtype,$type, $niveles2)=@_;
-    
+
     my $cant_revistas=0;
     #Obtenemos los niveles 2
 
     if (!$niveles2){
        $niveles2 = C4::AR::Nivel2::getNivel2FromId1($id1);
     }
-    
-    my %HoH = {}; 
+
+    my %HoH = {};
     foreach my $nivel2 (@$niveles2){
-        
+
         if($nivel2->getTipoDocumento eq 'REV'){
             $cant_revistas++;
-            
+
             my $anio='#';
             if(($nivel2->getAnioRevista ne undef)&&(C4::AR::Utilidades::trim($nivel2->getAnioRevista) ne '')){
                 $anio = C4::AR::Utilidades::trim($nivel2->getAnioRevista);
             }
-            
+
             my $volumen='#';
             if(($nivel2->getVolumenRevista ne undef)&&(C4::AR::Utilidades::trim($nivel2->getVolumenRevista) ne '')){
                 $volumen = C4::AR::Utilidades::trim($nivel2->getVolumenRevista);
             }
-            
+
             my $numero='#';
             if(($nivel2->getNumeroRevista ne undef)&&(C4::AR::Utilidades::trim($nivel2->getNumeroRevista) ne '')){
                 $numero = C4::AR::Utilidades::trim($nivel2->getNumeroRevista);
             }
-            
+
             $HoH{$anio}->{$volumen}->{$numero}=$nivel2->getId2;
-            
+
         }
     }
 
@@ -512,7 +512,7 @@ sub obtenerDisponibilidadTotal{
 
     my ($cat_ref_tipo_nivel3_array_ref) = C4::AR::Nivel3::getNivel3FromId1($id1);
 
-    
+
     my $cant_para_domicilio     = 0;
     my $cant_para_sala          = 0;
     my $cant_no_disponible      = 0;
@@ -522,7 +522,7 @@ sub obtenerDisponibilidadTotal{
         # C4::AR::Debug::debug("Busquedas => obtenerDisponibilidadTotal => BARCODE => ".$n3->getBarcode());
         if($n3->estadoDisponible){
             if ($n3->esParaPrestamo) {
-            #DOMICILIO    
+            #DOMICILIO
                 # C4::AR::Debug::debug("Busquedas => obtenerDisponibilidadTotal => DOMICILIO");
                 $cant_para_domicilio++;
             } elsif($n3->esParaSala) {
@@ -645,7 +645,7 @@ sub buscarNivel2EnMARC{
 
 sub buscarDatoDeCampoRepetible {
     my ($id,$campo,$subcampo,$nivel)=@_;
-    
+
     my $niveln;
     my $idn;
     if ($nivel eq "1") {$niveln='cat_nivel1_repetible';$idn='id1';} elsif ($nivel eq "2"){$niveln='cat_nivel2_repetible';$idn='id2';} else {$niveln='cat_nivel3_repetible';$idn='id3';}
@@ -699,7 +699,7 @@ sub getCountryTypes{
      my %resultslabels;
     $sth->execute;
     while (my $data = $sth->fetchrow_hashref) {
-        $resultslabels{$data->{'iso'}}= $data->{'printable_name'};  
+        $resultslabels{$data->{'iso'}}= $data->{'printable_name'};
     }
     $sth->finish;
     return(%resultslabels);
@@ -723,7 +723,7 @@ sub getSupportTypes{
     my %resultslabels;
     $sth->execute;
     while (my $data = $sth->fetchrow_hashref) {
-            $resultslabels{$data->{'idSupport'}}= $data->{'description'};   
+            $resultslabels{$data->{'idSupport'}}= $data->{'description'};
     }
     $sth->finish;
     return(%resultslabels);
@@ -746,7 +746,7 @@ sub getLanguages{
     my %resultslabels;
     $sth->execute;
     while (my $data = $sth->fetchrow_hashref) {
-            $resultslabels{$data->{'idLanguage'}}= $data->{'description'};  
+            $resultslabels{$data->{'idLanguage'}}= $data->{'description'};
     }
     $sth->finish;
     return(%resultslabels);
@@ -858,8 +858,8 @@ sub getBranches {
 # returns a reference to a hash of references to branches...
     my %branches;
     my $dbh = C4::Context->dbh;
-    my $sth=$dbh->prepare(" SELECT pref_unidad_informacion.*,categorycode 
-                FROM pref_unidad_informacion INNER JOIN pref_relacion_unidad_informacion 
+    my $sth=$dbh->prepare(" SELECT pref_unidad_informacion.*,categorycode
+                FROM pref_unidad_informacion INNER JOIN pref_relacion_unidad_informacion
                 ON pref_unidad_informacion.id_ui=pref_relacion_unidad_informacion.branchcode");
     $sth->execute;
     while (my $branch=$sth->fetchrow_hashref) {
@@ -918,14 +918,14 @@ sub getSuggestion{
     my $only_sphinx        = 0;
     my $only_available     = 0;
     my $session = CGI::Session->load();
-    
+
     if ($sphinx_options){
         $only_sphinx        = $sphinx_options->{'only_sphinx'} || 0;
         $only_available     = $sphinx_options->{'only_available'} || 0;
     }
 
     $speller->set_option('lang',$lang);
-    
+
     $obj_for_log->{'from_suggested'} = 1;
     my $suggestion = "";
     my @words = split(/ /,$search);
@@ -938,7 +938,7 @@ sub getSuggestion{
             my @suggestions = $speller->suggest($word);
             $suggestion.= @suggestions[$cont]." ";
         }
-        
+
         $suggestion = Encode::encode_utf8($suggestion);
         $obj_for_log->{'no_log_search'} = 1;
         ($total_found) = C4::AR::Busquedas::busquedaCombinada_newTemp($suggestion,$session,$obj_for_log,$sphinx_options);
@@ -967,7 +967,7 @@ sub buildTrigrams {
 
 sub suggestion {
     my ($keyword) = @_;
-    
+
     use Sphinx::Search;
     use Text::LevenshteinXS qw(distance);
 
@@ -1007,7 +1007,7 @@ sub busquedaAvanzada_newTemp{
     my ($params,$session) = @_;
 
     use Sphinx::Search;
-    
+
     my $only_sphinx     = $params->{'only_sphinx'};
     my $only_available  = $params->{'only_available'};
     my $opac_only_state_available = $params->{'opac_only_state_available'} || 0;
@@ -1017,11 +1017,11 @@ sub busquedaAvanzada_newTemp{
             C4::AR::Debug::debug(" only_sphinx BUSQUEDA --------------------------- : ".$only_sphinx);
 
     if ($only_sphinx){
-        if ($params->{'report'}){ 
+        if ($params->{'report'}){
             $sphinx->SetLimits($params->{'ini'}, 100000);
- 
-       } else {            
-            $sphinx->SetLimits($params->{'ini'}, C4::AR::Preferencias::getValorPreferencia('paginas'));  
+
+       } else {
+            $sphinx->SetLimits($params->{'ini'}, C4::AR::Preferencias::getValorPreferencia('paginas'));
             C4::AR::Debug::debug("busquedaAvanzada_newTemp => LIMITE BUSQUEDA --------------------------- : ".$params->{'ini'}." - ".C4::AR::Preferencias::getValorPreferencia('paginas'));
        }
 
@@ -1032,7 +1032,7 @@ sub busquedaAvanzada_newTemp{
     my $orden   = $params->{'orden'} || 'titulo';
     my $sentido_orden   = $params->{'sentido_orden'};
     my $keyword;
-   
+
     if($params->{'titulo'} ne ""){
         $keyword = unac_string('utf8',$params->{'titulo'});
         #le sacamos los acentos para que busque indistintamente
@@ -1071,11 +1071,11 @@ sub busquedaAvanzada_newTemp{
     if ($only_available){
         $query .= ' @string "ref_disponibilidad_code%'.C4::Modelo::RefDisponibilidad::paraPrestamoValue.'"';
     }
-    
+
     if ($params->{'signatura'}){
         $query .= ' @string "'."signatura%".$sphinx->EscapeString($params->{'signatura'}).'*"';
     }
-    
+
     if ($params->{'isbn'}){
         $query .= ' @string "'."isbn%".$sphinx->EscapeString($params->{'isbn'}).'*"';
     }
@@ -1086,8 +1086,8 @@ sub busquedaAvanzada_newTemp{
         $query .= ' @string "'."cat_tema%".$sphinx->EscapeString($keyword).'*"';
     }
 
-    
-    
+
+
     C4::AR::Debug::debug("busquedaAvanzada_newTemp => tipo_nivel3_name BUSQUEDA_AVANZADA =================> ".$params->{'tipo_nivel3_name'});
 
     C4::AR::Debug::debug("busquedaAvanzada_newTemp => Busquedas => query string => ".$query);
@@ -1101,8 +1101,8 @@ sub busquedaAvanzada_newTemp{
     }
 
     $sphinx->SetMatchMode($tipo_match);
-    
-    
+
+
     if ($orden eq 'autor'){
             if ($sentido_orden){
                 $sphinx->SetSortMode(SPH_SORT_ATTR_DESC,"autor_local");
@@ -1118,36 +1118,26 @@ sub busquedaAvanzada_newTemp{
     } else {
             $sphinx->SetSortMode(SPH_SORT_EXTENDED,"promoted DESC, hits DESC, titulo_local ASC");
     }
-    
+
     $sphinx->SetEncoders(\&Encode::encode_utf8, \&Encode::decode_utf8);
 #     $sphinx->SetLimits($params->{'ini'}, $params->{'cantR'});
 
     # NOTA: sphinx necesita el string decode_utf8
-   
+
     my $index_to_use = C4::AR::Preferencias::getValorPreferencia("nombre_indice_sphinx") || 'test1';
-    
+
     my $results = $sphinx->Query($query, $index_to_use);
 
     my @id1_array;
     my $matches = $results->{'matches'};
 
-    C4::AR::Debug::debug("busquedaAvanzada_newTemp => query " . $query);
-    C4::AR::Debug::debug("busquedaAvanzada_newTemp => RESULTS ".$results);
-    
-    C4::AR::Utilidades::printARRAY($results->{'matches'});
-
-    C4::AR::Utilidades::printHASH($results);
-
-    C4::AR::Debug::debug("busquedaAvanzada_newTemp => CANTIDAD DE RESULTADOS EN DATOS ARRAY ".scalar(@$matches));
-
-    
     my $total_found = $results->{'total_found'};
     $params->{'total_found'} = $total_found;
 
-    C4::AR::Debug::debug("busquedaAvanzada_newTemp => total_found: ".$total_found);
-    C4::AR::Debug::debug("busquedaAvanzada_newTemp => Busquedas.pm => LAST ERROR: ".$sphinx->GetLastError());
-    C4::AR::Debug::debug("busquedaAvanzada_newTemp => MATCH_MODE => ".$tipo);
-    
+    #C4::AR::Debug::debug("busquedaAvanzada_newTemp => total_found: ".$total_found);
+    #C4::AR::Debug::debug("busquedaAvanzada_newTemp => Busquedas.pm => LAST ERROR: ".$sphinx->GetLastError());
+    #C4::AR::Debug::debug("busquedaAvanzada_newTemp => MATCH_MODE => ".$tipo);
+
     foreach my $hash (@$matches){
         my %hash_temp = {};
         $hash_temp{'id1'} = $hash->{'doc'};
@@ -1163,6 +1153,8 @@ sub busquedaAvanzada_newTemp{
 
     C4::AR::Busquedas::logBusqueda($params, $session);
 
+    C4::AR::Debug::debug("Busquedas => busquedaAvanzada_newTemp => total_found " . $total_found);
+    C4::AR::Debug::debug("Busquedas => busquedaAvanzada_newTemp => scalar(resultsarray) " . scalar(@$resultsarray));
     return ($total_found, $resultsarray);
 }
 
@@ -1171,29 +1163,29 @@ sub busquedaPorId{
     my ($string,$session) = @_;
 
     use Sphinx::Search;
-    
+
     my $sphinx          = Sphinx::Search->new();
 
     my $query   = '';
     my $tipo    = 'SPH_MATCH_EXTENDED';
     my $keyword;
-   
+
     $keyword = unac_string('utf8',$string);
     $query .= ' @id "'.$sphinx->EscapeString($keyword).'"';
-    
+
 
     my $tipo_match = C4::AR::Utilidades::getSphinxMatchMode($tipo);
 
     $sphinx->SetMatchMode($tipo_match);
-    
-    
+
+
     $sphinx->SetEncoders(\&Encode::encode_utf8, \&Encode::decode_utf8);
 #     $sphinx->SetLimits($params->{'ini'}, $params->{'cantR'});
 
     # NOTA: sphinx necesita el string decode_utf8
-   
+
     my $index_to_use = C4::AR::Preferencias::getValorPreferencia("nombre_indice_sphinx") || 'test1';
-    
+
     my $results = $sphinx->Query($query, $index_to_use);
 
     my @id1_array;
@@ -1221,55 +1213,55 @@ sub busquedaPorId{
 }
 
 sub busquedaPorTema{
-    
+
     my ($tema, $session, $obj_for_log) = @_;
-    
+
     $obj_for_log->{'match_mode'} = 'SPH_MATCH_PHRASE';
-    
+
     $tema = "tema@".$tema; #FIXME ES ASI????????????????????????
-    
+
     my ($cantidad, $resultId1, $suggested) = C4::AR::Busquedas::busquedaCombinada_newTemp($tema, $session, $obj_for_log);
 
 
 
-    return ($cantidad, $resultId1, $suggested); 
+    return ($cantidad, $resultId1, $suggested);
 }
 
 sub busquedaPorISBN{
-    
-    my ($isbn, $session, $obj_for_log) = @_;
-    
-    
-    $obj_for_log->{'match_mode'} = 'SPH_MATCH_PHRASE';
-    
-    $isbn = "isbn@".$isbn;
-    
-    my ($cantidad, $resultId1, $suggested) = C4::AR::Busquedas::busquedaCombinada_newTemp($isbn, $session, $obj_for_log);
-    
 
-    return ($cantidad, $resultId1, $suggested); 
+    my ($isbn, $session, $obj_for_log) = @_;
+
+
+    $obj_for_log->{'match_mode'} = 'SPH_MATCH_PHRASE';
+
+    $isbn = "isbn@".$isbn;
+
+    my ($cantidad, $resultId1, $suggested) = C4::AR::Busquedas::busquedaCombinada_newTemp($isbn, $session, $obj_for_log);
+
+
+    return ($cantidad, $resultId1, $suggested);
 }
 
 sub busquedaPorEstante{
-    
+
     my ($estante, $session, $obj) = @_;
     my ($cantidad, $resultEstante) = C4::AR::Estantes::buscarEstante($estante,$obj->{'ini'},$obj->{'cantR'});
-    return ($cantidad, $resultEstante, 0);  
+    return ($cantidad, $resultEstante, 0);
 }
 
 sub busquedaEstanteDeGrupo{
-    
+
     my ($id2, $session, $obj) = @_;
     my ($cantidad, $resultEstante) = C4::AR::Estantes::getEstantesById2($id2,$obj->{'ini'},$obj->{'cantR'});
-    return ($cantidad, $resultEstante, 0);  
+    return ($cantidad, $resultEstante, 0);
 }
 
-# TODO ver si se puede centralizar 
+# TODO ver si se puede centralizar
 sub busquedaPorTitulo{
     my ($titulo) = @_;
 
     use Sphinx::Search;
-    
+
     my $sphinx      = Sphinx::Search->new();
     my $query       = '@titulo '.$titulo;
     my $tipo        = 'SPH_MATCH_EXTENDED';
@@ -1287,13 +1279,13 @@ sub busquedaPorTitulo{
     $sphinx->SetEncoders(\&Encode::encode_utf8, \&Encode::decode_utf8);
     # NOTA: sphinx necesita el string decode_utf8
     my $index_to_use = C4::AR::Preferencias::getValorPreferencia("nombre_indice_sphinx") || 'test1';
-    
+
     my $results = $sphinx->Query($query, $index_to_use);
 
     my @id1_array;
     my $matches                 = $results->{'matches'};
     my $total_found             = $results->{'total_found'};
-#     C4::AR::Utilidades::printHASH($results);
+
     C4::AR::Debug::debug("C4::AR::Busqueda::busquedaPorTitulo => total_found: ".$total_found);
     foreach my $hash (@$matches){
       my %hash_temp         = {};
@@ -1321,13 +1313,13 @@ sub busquedaPorAutor{
     $sphinx->SetEncoders(\&Encode::encode_utf8, \&Encode::decode_utf8);
     # NOTA: sphinx necesita el string decode_utf8
     my $index_to_use = C4::AR::Preferencias::getValorPreferencia("nombre_indice_sphinx") || 'test1';
-    
+
     my $results = $sphinx->Query($query, $index_to_use);
 
     my @id1_array;
     my $matches                 = $results->{'matches'};
     my $total_found             = $results->{'total_found'};
-#     C4::AR::Utilidades::printHASH($results);
+
     C4::AR::Debug::debug("C4::AR::Busqueda::busquedaPorAutor => total_found: ".$total_found);
     foreach my $hash (@$matches){
       my %hash_temp         = {};
@@ -1348,28 +1340,28 @@ sub busquedaCombinada_ROSE{
 
     $string_utf8_encoded    = unac_string('utf8',$string_utf8_encoded);
     $session    =   $session || CGI::Session->load();
-    
+
     my $from_suggested = $obj_for_log->{'from_suggested'} || 0;
     my @searchstring_array = C4::AR::Utilidades::obtenerBusquedas($string_utf8_encoded);
     my $string_suggested;
-    my @filtros;    
+    my @filtros;
     my $only_sphinx        = 0;
     my $only_available     = 0;
-    
+
     if ($sphinx_options){
         $only_sphinx        = $sphinx_options->{'only_sphinx'} || 0;
         $only_available     = $sphinx_options->{'only_available'} || 0;
-    }    
+    }
     my $sphinx = Sphinx::Search->new();
     my $ini    = $obj_for_log->{'ini'} || 0;
     my $cantR  = $obj_for_log->{'cantR'} || 0;
 
     if ($only_sphinx){
-        if ($sphinx_options->{'report'}){ 
+        if ($sphinx_options->{'report'}){
             $ini    = 0;
             $cantR  = 0;
        }
-            
+
     }
 
 
@@ -1388,7 +1380,7 @@ sub busquedaCombinada_ROSE{
 
         if($tipo eq 'SPH_MATCH_PHRASE'){
             push(@filtros, ( string => { like => '%'.$string.'%'}));
-        } 
+        }
         elsif ($tipo eq 'SPH_MATCH_BOOLEAN'){
             if ($string eq "AND"){
                 $string = " AND ";
@@ -1428,10 +1420,10 @@ sub busquedaCombinada_ROSE{
 
     my ($total_found_paginado, $resultsarray) = C4::AR::Busquedas::armarInfoNivel1($obj_for_log, @id1_array);
     #se loquea la busqueda
-    
+
     C4::AR::Busquedas::logBusqueda($obj_for_log, $session);
 
-  
+
     return ($total_found, $resultsarray,$string_suggested);
 }
 
@@ -1445,17 +1437,17 @@ sub busquedaCombinada_newTemp{
     # Se agregó para sacar los acentos y que no se mame el suggest, total es lo mismo porque
     # Sphinx busca con o sin acentos
     $string_utf8_encoded    = unac_string('utf8',$string_utf8_encoded);
-    # no se encodea nunca a utf8 antes de llegar aca    
+    # no se encodea nunca a utf8 antes de llegar aca
     # $string_utf8_encoded    = Encode::decode_utf8($string_utf8_encoded);
     # limpiamos puntuación
     $string_utf8_encoded    = C4::AR::Utilidades::cleanPunctuation($string_utf8_encoded);
 
     $session    =   $session || CGI::Session->load();
-    
+
     my $from_suggested = $obj_for_log->{'from_suggested'} || 0;
     my @searchstring_array = C4::AR::Utilidades::obtenerBusquedas($string_utf8_encoded);
     my $string_suggested;
-    
+
     my $only_sphinx                 = 0;
     my $only_available              = 0;
     my $show_from_opac_if_no_copy   = 0;
@@ -1466,19 +1458,19 @@ sub busquedaCombinada_newTemp{
         $only_available               = $sphinx_options->{'only_available'} || 0;
         $opac_only_state_available    = $sphinx_options->{'opac_only_state_available'} || 0;
         $show_from_opac_if_no_copy    = $sphinx_options->{'show_from_opac_if_no_copy'} || 0;
-    }    
-    
+    }
+
     my $sphinx = Sphinx::Search->new();
 
     if ($only_sphinx){
-        if ($sphinx_options->{'report'}){ 
-        
+        if ($sphinx_options->{'report'}){
+
             $sphinx->SetLimits($obj_for_log->{'ini'}, 100000);
- 
+
        } else {
-            $sphinx->SetLimits($obj_for_log->{'ini'}, C4::AR::Preferencias::getValorPreferencia('paginas'));  
+            $sphinx->SetLimits($obj_for_log->{'ini'}, C4::AR::Preferencias::getValorPreferencia('paginas'));
        }
-            
+
     }
 
     my $query = "";
@@ -1496,7 +1488,7 @@ sub busquedaCombinada_newTemp{
 
         if($tipo eq 'SPH_MATCH_PHRASE'){
             $query .=  " '".$string."'";
-        } 
+        }
         elsif ($tipo eq 'SPH_MATCH_BOOLEAN'){
             if ($string eq "AND"){
                 $string = "&";
@@ -1575,12 +1567,12 @@ sub busquedaCombinada_newTemp{
     if (!$only_sphinx){
         $sphinx->SetLimits($obj_for_log->{'ini'}, $obj_for_log->{'cantR'},100000);
     }
-  
+
     # C4::AR::Debug::debug("C4::AR::Busquedas::busquedaCombinada_newTemp => ini => ".$obj_for_log->{'ini'});
     # C4::AR::Debug::debug("C4::AR::Busquedas::busquedaCombinada_newTemp => cantR => ".$obj_for_log->{'cantR'});
 
     # NOTA: sphinx necesita el string decode_utf8
-    
+
     my $index_to_use = C4::AR::Preferencias::getValorPreferencia("nombre_indice_sphinx") || 'test1';
 
 =item
@@ -1600,7 +1592,7 @@ sub busquedaCombinada_newTemp{
         C4::AR::Debug::debug("total_found: ".$total_found);
         if ($sphinx->GetLastError()) {
             C4::AR::Debug::info( "busquedaCombinada_newTemp => Busquedas.pm => LAST ERROR: ".$sphinx->GetLastError() );
-        } 
+        }
         return ($total_found,$matches);
     }
 #arma y ordena el arreglo para enviar al cliente
@@ -1616,7 +1608,7 @@ sub busquedaCombinada_newTemp{
 
     ($total_found_paginado, $resultsarray) = C4::AR::Busquedas::armarInfoNivel1($obj_for_log, @id1_array);
     #se loquea la busqueda
-        
+
     if (!$obj_for_log->{'no_log_search'}){
         C4::AR::Busquedas::logBusqueda($obj_for_log, $session);
     }
@@ -1624,8 +1616,8 @@ sub busquedaCombinada_newTemp{
     if ( (!$from_suggested) && ($total_found == 0) && ($tipo ne 'SPH_MATCH_PHRASE') ){
         $string_suggested = suggestion($string_utf8_encoded);
     }
-    
-  
+
+
     return ($total_found, $resultsarray,$string_suggested);
 }
 
@@ -1634,32 +1626,32 @@ sub busquedaSinPaginar {
      my ($session,$obj) = @_;
 
      my %sphinx_options;
-     
 
-     
+
+
      my  ($total_found,$matches);
- 
+
      C4::AR::Debug::debug("stringgg : ----------------------------------------------------------ffffffffffffffffffffffffffff----- : ".$obj->{'string'});
 
      if ($obj->{'tipoAccion'} eq "BUSQUEDA_COMBINABLE"){
                 $sphinx_options{'only_sphinx'} = 1;
                 $sphinx_options{'report'} = 1;
                 $sphinx_options{'opac_only_state_available'} = $obj->{'opac_only_state_available'};
-    
+
                ($total_found,$matches) = C4::AR::Busquedas::busquedaCombinada_newTemp($obj->{'string'},$session,$obj,\%sphinx_options);
       } else {
             $obj->{'only_sphinx'}=1;
             $obj->{'report'}=1;
-     
+
             ($total_found,$matches) = C4::AR::Busquedas::busquedaAvanzada_newTemp($obj,$session);
       }
-    
+
 
     my @id1_array=();
 
     C4::AR::Debug::debug("total_found SIN PAGINAR: ".$total_found);
-    
-   
+
+
     my ($total_found_paginado, $resultsarray);
 
     if ($obj->{'tipoAccion'} eq "BUSQUEDA_COMBINABLE"){
@@ -1669,26 +1661,26 @@ sub busquedaSinPaginar {
               $hash_temp{'hits'} = $hash->{'weight'};
               push (@id1_array, \%hash_temp);
         }
-        ($total_found_paginado, $resultsarray) = C4::AR::Busquedas::armarInfoNivel1($obj, @id1_array);      
+        ($total_found_paginado, $resultsarray) = C4::AR::Busquedas::armarInfoNivel1($obj, @id1_array);
         C4::AR::Debug::debug("total_found_paginado: ".$total_found_paginado);
     } else  {
            $total_found_paginado=$total_found;
-           $resultsarray= $matches; 
+           $resultsarray= $matches;
     }
-        
-  
+
+
 
     return ($total_found, $resultsarray);
 }
 
 sub toOAI{
-    
+
     my ($resultId1)    = @_;
     use MARC::Crosswalk::DublinCore;
     use MARC::File::XML;
 
     my $dc_xml = C4::AR::Catalogacion::headerDCXML();
-    
+
     foreach my $record (@$resultId1){
         my $crosswalk = MARC::Crosswalk::DublinCore->new;
         my $marc =  $record->{'marc_record'} ;
@@ -1697,17 +1689,17 @@ sub toOAI{
           # Convert a MARC record to Dublin Core (simple)
             $dc   = $crosswalk->as_dublincore( $marc );
         };
-                
+
         $dc_xml .= C4::AR::Catalogacion::toOAIXML($dc,$record->{'id1'});
-        
+
     }
-    
+
     $dc_xml .= C4::AR::Catalogacion::footerDCXML();
-    
+
     C4::AR::Debug::debug("XML DUBLINCORE DE LA BUSQUEDA: ");
-    
+
     C4::AR::Debug::debug($dc_xml);
-    
+
     return ($dc_xml);
 }
 
@@ -1732,7 +1724,7 @@ sub armarInfoNivel1{
 
         # TODO ver si esto se puede sacar del resultado del indice asi no tenemos q ir a buscarlo
             @result_array_paginado[$i]->{'titulo'}                      = $nivel1->getTituloStringEscaped();
-            
+
             if ($params->{'isOAI_search'}){
                 @result_array_paginado[$i]->{'marc_record'}             = $nivel1->toMARC_OAI();
             }
@@ -1764,14 +1756,11 @@ sub armarInfoNivel1{
                 if($cant_revistas > 0){
                     @result_array_paginado[$i]->{'estadoDeColeccion'}  = $estadoDeColeccion;
                 }
-            
-                        
+
+
             @result_array_paginado[$i]->{'cat_ref_tipo_nivel3'}     = C4::AR::Nivel2::getFirstItemTypeFromN1($nivel1->getId1,$nivel2_array_ref);
             @result_array_paginado[$i]->{'cat_ref_tipo_nivel3_name'}= C4::AR::Referencias::translateTipoNivel3(@result_array_paginado[$i]->{'cat_ref_tipo_nivel3'});
             
-
-            C4::AR::Debug::debug("armarInfoNivel1 ==>".C4::AR::Nivel2::getFirstItemTypeFromN1($nivel1->getId1,$nivel2_array_ref));
-
             if (@result_array_paginado[$i]->{'cat_ref_tipo_nivel3'} eq "ANA"){
  
             C4::AR::Debug::debug("armarInfoNivel1 ==> ANALITICAS");
@@ -1832,7 +1821,6 @@ sub armarInfoNivel1{
                 @result_array_paginado[$i]->{'portadas_perzonalizadas_cant'}  = $portadas_perzonalizadas_cant;
                 @result_array_paginado[$i]->{'portadas_perzonalizadas'}  = \@nivel2_portadas_personalizadas;
             }
-            
 
 
 
@@ -1840,13 +1828,14 @@ sub armarInfoNivel1{
 
 
 
-            #se obtine la disponibilidad total 
+
+            #se obtine la disponibilidad total
             @result_array_paginado[$i]->{'rating'}              =  C4::AR::Nivel2::getRatingPromedio($nivel2_array_ref);
 
             my @disponibilidad = C4::AR::Busquedas::obtenerDisponibilidadTotal(@result_array_paginado[$i]->{'id1'}, $tipo_nivel3_name);
-        
+
             @result_array_paginado[$i]->{'disponibilidad'}= 0;
-          
+
             if (scalar(@disponibilidad) > 0){
                 @result_array_paginado[$i]->{'disponibilidad'}  = \@disponibilidad;
             }
@@ -1857,6 +1846,7 @@ sub armarInfoNivel1{
 
     $cant_total             = scalar(@result_array_paginado_temp);
     @result_array_paginado  = @result_array_paginado_temp;
+    C4::AR::Debug::debug("Busquedas =>  armarInfoNivel1 => scalar " . scalar(@result_array_paginado_temp));
 
 
     return ($cant_total, \@result_array_paginado);
@@ -1874,7 +1864,7 @@ sub filtrarPorAutor{
 #             $query .= "*";
 #         }
 #     }
-# 
+#
 #     if($params->{'autor'} ne ""){
 #         $query .= ' @autor '.$params->{'autor'};
 #         if($params->{'tipo'} eq "normal"){
@@ -1894,14 +1884,14 @@ sub filtrarPorAutor{
     # NOTA: sphinx necesita el string decode_utf8
 
     my $index_to_use = C4::AR::Preferencias::getValorPreferencia("nombre_indice_sphinx") || 'test1';
-    
+
     my $results = $sphinx->Query($query,$index_to_use);
 
     my @id1_array;
     my $matches = $results->{'matches'};
     my $total_found = $results->{'total_found'};
     $params->{'total_found'} = $total_found;
-#     C4::AR::Utilidades::printHASH($results);
+
     C4::AR::Debug::debug("total_found: ".$total_found);
     foreach my $hash (@$matches){
       my %hash_temp = {};
@@ -1924,84 +1914,41 @@ sub filtrarPorAutor{
 # DEPRECATED
 # sub busquedaPorBarcode{
 #     my ($string_utf8_encoded,$session,$obj_for_log) = @_;
-# 
-# 
+#
+#
 #     my @id1_array;
 #     my $nivel3 = C4::AR::Nivel3::getNivel3FromBarcode($string_utf8_encoded);
-# 
+#
 #     if($nivel3){
 #         my %hash_temp = {};
 #         $hash_temp{'id1'} = $nivel3->getId1();
 #         $hash_temp{'hits'} = undef;
-# 
+#
 #         push (@id1_array, \%hash_temp);
 #     }
-# 
+#
 #     my ($total_found_paginado, $resultsarray);
 #     #arma y ordena el arreglo para enviar al cliente
 #     ($total_found_paginado, $resultsarray) = C4::AR::Busquedas::armarInfoNivel1($obj_for_log, @id1_array);
 #     #se loquea la busqueda
 #     C4::AR::Busquedas::logBusqueda($obj_for_log, $session);
-# 
+#
 #     return ($total_found_paginado, $resultsarray);
 # }
 
 sub busquedaPorBarcodeBySphinx{
-    
+
     my ($barcode, $session, $obj_for_log) = @_;
-    
-    
+
+
     #$obj_for_log->{'match_mode'} = 'SPH_MATCH_PHRASE';
-    
-    
+
+
     my ($cantidad, $resultId1, $suggested) = C4::AR::Busquedas::busquedaCombinada_newTemp($barcode, $session, $obj_for_log, 0);
-    
 
-    return ($cantidad, $resultId1, $suggested); 
+
+    return ($cantidad, $resultId1, $suggested);
 }
-
-
-
-# TODO 
-# sub busquedaSignaturaBetween{
-# 
-#     my ($obj) = @_;
-# 
-#     my $min= $obj->{'desde_signatura'};
-#     my $max= $obj->{'hasta_signatura'};
-# 
-#     C4::AR::Debug::debug("---------------------------HOLAGOLAGOALFSADOFD---------------------------");
-# 
-#     use Sphinx::Search;
-#     
-#     my $sphinx  = Sphinx::Search->new();
-#     my $query   = '';
-#     my $tipo    = 'SPH_MATCH_PHRASE';
-# #     my $orden   = $params->{'orden'};
-#    
-#     $query .= ' @string "'.$min.'"';
-#     
-# #     $sphinx->SetLimits($params->{'ini'}, $params->{'cantR'});
-#     $sphinx->SetEncoders(\&Encode::encode_utf8, \&Encode::decode_utf8);
-# #     $sphinx->SetIDRange($min, $max);
-#     
-#     # NOTA: sphinx necesita el string decode_utf8
-#    
-#     my $results = $sphinx->Query($query);
-#  
-#     C4::AR::Utilidades::printHASH($results);
-# 
-#     my $matches = $results->{'matches'};
-#     my $total_found = $results->{'total_found'};
-#   
-# 
-#     C4::AR::Debug::debug("TOTAL FOUND".$total_found);
-# 
-#     return ($total_found, $results );
-# 
-# }
-
-
 
 
 sub t_loguearBusqueda {
@@ -2022,8 +1969,8 @@ sub t_loguearBusqueda {
         #Se setea error para el usuario
         &C4::AR::Mensajes::printErrorDB($@, 'B407',"INTRA");
         $msg_object->{'error'}= 1;
-        #no se debe informar nada al usuario, no debería saber de esto      
-#         C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'R011', 'params' => []} ) ;        
+        #no se debe informar nada al usuario, no debería saber de esto
+#         C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'R011', 'params' => []} ) ;
         $db->rollback;
     }
     $db->{connect_options}->{AutoCommit} = 1;
@@ -2034,7 +1981,7 @@ sub t_loguearBusqueda {
 sub logBusqueda{
     my ($params,$session) = @_;
     #esta funcion loguea las busquedas relizadas desde la INTRA u OPAC si:
-    #la preferencia del OPAC es 1 y estoy buscando desde OPAC  
+    #la preferencia del OPAC es 1 y estoy buscando desde OPAC
     #la preferencia de la INTRA es 1 y estoy buscando desde la INTRA
 
     my @search_array;
@@ -2042,10 +1989,10 @@ sub logBusqueda{
     my $valorINTRA= C4::AR::Preferencias::getValorPreferencia("logSearchINTRA");
 
     $session = $session || CGI::Session->load();
- 
-    
+
+
     if( (($valorOPAC == 1)&&($params->{'type'} eq 'OPAC')) || (($valorINTRA == 1)&&($params->{'type'} eq 'INTRA')) ){
-       
+
         if($params->{'codBarra'} ne ""){
             my $search;
             $search->{'barcode'}= $params->{'codBarra'};
@@ -2057,20 +2004,20 @@ sub logBusqueda{
             $search->{'autor'}= $params->{'autor'};
             push (@search_array, $search);
         }
-    
+
         if($params->{'titulo'} ne ""){
             my $search;
             $search->{'titulo'}= $params->{'titulo'};
             push(@search_array, $search);
         }
-    
+
         if($params->{'tipo_nivel3_name'} != -1 && $params->{'tipo_nivel3_name'} ne ""){
             my $search;
             $search->{'tipo_documento'}= $params->{'tipo_nivel3_name'};
             push (@search_array, $search);
         }
 
-      
+
         if($params->{'keyword'} != -1 && $params->{'keyword'} ne ""){
             my $search;
             $search->{'keyword'}= $params->{'keyword'};
@@ -2112,12 +2059,12 @@ sub logBusqueda{
 
 
 =item
-Esta funcion arma el string para mostrar en el cliente lo que a buscado, 
+Esta funcion arma el string para mostrar en el cliente lo que a buscado,
 ademas escapa para evitar XSS
 =cut
 sub armarBuscoPor{
     my ($params) = @_;
-    
+
     my $buscoPor="";
     my $str;
 
@@ -2135,9 +2082,9 @@ sub armarBuscoPor{
     }
 
     if( C4::AR::Utilidades::validateString($params->{'titulo'})){
-        $buscoPor.= ($params->{'titulo'})."&";  
+        $buscoPor.= ($params->{'titulo'})."&";
     }
-    
+
     if( C4::AR::Utilidades::validateString($params->{'completo'})){
         $buscoPor.= (C4::AR::Filtros::i18n("Autor").": ".$params->{'completo'})."&";
     }
@@ -2152,46 +2099,46 @@ sub armarBuscoPor{
 
     if( C4::AR::Utilidades::validateString($params->{'isbn'})){
         $buscoPor.= "ISBN: ".($params->{'isbn'})."&";
-    }       
+    }
 
     if( C4::AR::Utilidades::validateString($params->{'tema'})){
         $buscoPor.= "Tema: ".($params->{'tema'})."&";
-    }       
+    }
 
     if( C4::AR::Utilidades::validateString($params->{'estante'})){
         $buscoPor.= "Estantes Virtuales: ".($params->{'estante'})."&";
-    }   
+    }
     if( C4::AR::Utilidades::validateString($params->{'estantes'})){
         $buscoPor.= "Estantes Virtuales: ".($params->{'estantes'})."&";
     }
 
     if( C4::AR::Utilidades::validateString($params->{'estantes_grupo'})){
         $buscoPor.= "Estantes virtuales de: ".($params->{'titulo_nivel_1'})."&";
-    }   
+    }
 
     if( C4::AR::Utilidades::validateString($params->{'codBarra'})){
         $buscoPor.= Encode::decode_utf8((C4::AR::Filtros::i18n("Barcode").": ".$params->{'codBarra'}))."&";
-    }       
+    }
 
     if( C4::AR::Utilidades::validateString($params->{'date_begin'})){
-        $buscoPor.= Encode::decode_utf8(C4::AR::Filtros::i18n("desde")." ".$params->{'date_begin'})."&";  
+        $buscoPor.= Encode::decode_utf8(C4::AR::Filtros::i18n("desde")." ".$params->{'date_begin'})."&";
     }
-    
+
     if( C4::AR::Utilidades::validateString($params->{'date_end'})){
-        $buscoPor.= Encode::decode_utf8(C4::AR::Filtros::i18n("hasta")." ".$params->{'date_end'})."&";  
+        $buscoPor.= Encode::decode_utf8(C4::AR::Filtros::i18n("hasta")." ".$params->{'date_end'})."&";
     }
 
     if(($params->{'only_available'})){
-        $buscoPor.= C4::AR::Filtros::i18n("Solo disponibles")."&";  
+        $buscoPor.= C4::AR::Filtros::i18n("Solo disponibles")."&";
     }
 
     my @busqueda    = split(/&/,$buscoPor);
     $buscoPor       = " ";
-    
+
     foreach my $str (@busqueda){
         $buscoPor.=", ".$str;
     }
-    
+
     $buscoPor = substr($buscoPor,2,length($buscoPor));
 
     return $buscoPor;
@@ -2206,12 +2153,12 @@ sub MARCRecordById3 {
         my $nivel3= C4::AR::Nivel3::getNivel3FromId3($id3);
         my $marc_record = MARC::Record->new_from_usmarc($nivel3->nivel1->getMarcRecord());
         $marc_record->append_fields(MARC::Record->new_from_usmarc($nivel3->nivel2->getMarcRecord())->fields());
-        
+
         ##Agregamos el indice
         if ($nivel3->nivel2->tiene_indice){
             $marc_record->append_fields(MARC::Field->new(865, '', '', 'a' => $nivel3->nivel2->getIndice));
         }
-        
+
         $marc_record->append_fields(MARC::Record->new_from_usmarc($nivel3->getMarcRecord())->fields());
     return $marc_record;
 }
@@ -2220,7 +2167,7 @@ sub MARCRecordById3WithReferences {
     my ($id3)= @_;
 
     my $marc_record = C4::AR::Busquedas::MARCRecordById3($id3);
-    
+
     my $tipo_doc    = C4::AR::Catalogacion::getRefFromStringConArrobas($marc_record->subfield("910","a"));
     foreach my $field ($marc_record->fields) {
         if(! $field->is_control_field){
@@ -2270,12 +2217,12 @@ sub MARCDetail{
     push(@result, @$marc_array_nivel1);
     push(@result, @$marc_array_nivel2);
     push(@result, @$marc_array_nivel3);
-    
+
     my @MARC_result_array;
 # FIXME no es muy eficiente pero funciona, ver si se puede mejorar, orden cuadrado
-    
+
     for(my $i=0; $i< scalar(@result); $i++){
-        my %hash;   
+        my %hash;
         my $campo= @result[$i]->{'campo'};
         my @info_campo_array;
         C4::AR::Debug::debug("Proceso todos los subcampos del campo: ".$campo);
@@ -2303,7 +2250,7 @@ sub MARCDetail{
         #}
     }
 
-    #EL INDICE. Hay que ver si se puede subir, asi no queda desordenado. 
+    #EL INDICE. Hay que ver si se puede subir, asi no queda desordenado.
     if($nivel3_object->nivel2->tiene_indice){
         my %hash;
         my @info_campo_array;
@@ -2317,9 +2264,9 @@ sub MARCDetail{
         $hash{'info_campo_array'}= \@info_campo_array;
         push(@MARC_result_array, \%hash);
     }
-    
+
     return (\@MARC_result_array);
-    
+
 }
 
 =item
@@ -2353,17 +2300,17 @@ sub getRegistrosFromRange {
     if ($cgi->param('tipo_nivel3_name') ne "") {
         #filtro por tipo de ejemplar
         $query .= " cat_ref_tipo_nivel3@".$cgi->param('tipo_nivel3_name');
-    } 
+    }
 
     if ($cgi->param('name_nivel_bibliografico') ne "") {
         #filtro por el nivel bibliográfico
         $query .= " ref_nivel_bibliografico@".$cgi->param('name_nivel_bibliografico');
-    } 
+    }
 
     if ($cgi->param('name_ui') ne "") {
         #filtro por homebranch
         $query .= " pref_unidad_informacion@".$cgi->param('name_ui');
-    } 
+    }
 
     my $tipo = 'SPH_MATCH_EXTENDED';
     my $tipo_match = C4::AR::Utilidades::getSphinxMatchMode($tipo);
@@ -2375,7 +2322,7 @@ sub getRegistrosFromRange {
     # NOTA: sphinx necesita el string decode_utf8
     C4::AR::Debug::debug("Busquedas.pm => query: ".$query);
     my $index_to_use = C4::AR::Preferencias::getValorPreferencia("nombre_indice_sphinx") || 'test1';
-    
+
     my $results = $sphinx->Query($query, $index_to_use);
 
     my @id1_array;
@@ -2391,7 +2338,7 @@ sub getRegistrosFromRange {
     if ($cgi->param('limit') ne "") {
         #muesrto los primeros "limit" registros
         @id1_array = @id1_array[0..$cgi->param('limit') - 1];
-    }   
+    }
 
     if ( ($cgi->param('biblio_ini') ne "") && ($cgi->param('biblio_fin') ne "") ){
         #filtro por rango de id1
@@ -2404,7 +2351,7 @@ sub getRegistrosFromRange {
 
         @id1_array = @id1_array_aux;
     }
-    
+
 
     C4::AR::Debug::debug("Busquedas.pm => TOTAL FINAL =============== : ".scalar(@id1_array));
 
