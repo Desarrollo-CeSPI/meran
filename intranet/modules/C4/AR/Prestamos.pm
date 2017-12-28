@@ -872,7 +872,7 @@ sub crearTicket {
 		$ticket{'socio'}                    = $nro_socio;
 		$ticket{'responsable'}              = $responsable;
 		$ticket{'id3'}                      = $id3;
-		
+
 		if ($adicional_selected) { $ticket{'adicional_selected'} = '1'; } else { $ticket{'adicional_selected'} = '0';}
 
 		return(\%ticket);
@@ -1246,7 +1246,7 @@ sub _enviarRecordatorioVencidos{
 				$cuerpo_mensaje         =~ s/TITLE\:UNITITLE/$titulo/;
 				$cuerpo_mensaje         =~ s/\(EDICION\)//;
 
-				$mail{'mail_from'}      = Encode::encode_utf8(C4::AR::Preferencias::getValorPreferencia('mailFrom'));
+				$mail{'mail_from'}      = C4::AR::Preferencias::getValorPreferencia('mailFrom');
 				$mail{'mail_to'}        = $socio->{'persona'}->email;
 				$mail{'mail_subject'}   = C4::AR::Preferencias::getValorPreferencia('vencidoSubject');
 				$mail{'mail_message'}   = $cuerpo_mensaje;
@@ -1306,6 +1306,8 @@ sub _enviarRecordatorio{
 
 		use C4::AR::Usuarios;
 
+		C4::AR::Debug::debug("Prestamos = _enviarRecordatorio = scalar array_prestamos " . scalar @array_prestamos);
+
 		my $fin;
 		my $pres;
 
@@ -1319,6 +1321,7 @@ sub _enviarRecordatorio{
 		while (!$fin) {
 
 				my $nroSocio            = $pres->getNro_socio();
+				C4::AR::Debug::debug("Prestamos = _enviarRecordatorio = nro_socio " . $pres->getNro_socio() 	);
 				my $socio               = C4::AR::Usuarios::getSocioInfoPorNroSocio($nroSocio);
 
 				if($socio->getRemindFlag()){
@@ -1344,7 +1347,7 @@ sub _enviarRecordatorio{
 						$cuerpo_mensaje         =~ s/BRANCH/Biblioteca/;
 						$cuerpo_mensaje         =~ s/LINK/$link/;
 
-						$mail{'mail_from'}      = Encode::encode_utf8(C4::AR::Preferencias::getValorPreferencia('mailFrom'));
+						$mail{'mail_from'}      = C4::AR::Preferencias::getValorPreferencia('mailFrom');
 						$mail{'mail_to'}        = $socio->{'persona'}->email;
 						$mail{'mail_subject'}   = C4::AR::Preferencias::getValorPreferencia('reminderSubject');
 						$mail{'mail_message'}   = $cuerpo_mensaje;
@@ -1544,11 +1547,29 @@ sub getAllPrestamosActivos{
 
 		my ($today) = @_;
 
+		my @circ_ref_tipo_prestamo_array 	= C4::Modelo::CircRefTipoPrestamo::getAllTipoPrestamo();
+		#my $tipo_prestamos_str = "";
+
+		# foreach  my $str (@circ_ref_tipo_prestamo_array) {
+		# 	$tipo_prestamos_str = $tipo_prestamos_str . ", " . $str;
+		# }
+
+		#my @circ_ref_tipos_prestamos 			= join(',', @circ_ref_tipo_prestamo_array);
+		#C4::AR::Debug::debug("Prestamos = getAllPrestamosActivos = " . \@circ_ref_tipos_prestamos);
+
+#TODO terminar el WHERE tipo_prestamo IN C4::Modelo::CircRefTipoPrestamo::getAllTipoPrestamo()
 		my $prestamos_array_ref = C4::Modelo::CircPrestamo::Manager->get_circ_prestamo(
-																																										query => [fecha_devolucion => { eq => undef}],
+																																										query => [
+																																												'tipo_prestamo' => [ @circ_ref_tipo_prestamo_array ],
+																																												fecha_devolucion => { eq => undef},
+																																										],
 																																										sort_by => ['nro_socio DESC']
 																																									 );
+
+
 		use Date::Calc qw(Delta_Days);
+
+		C4::AR::Debug::debug("Prestamos = prestamos_array_ref = " . scalar @$prestamos_array_ref);
 
 		my @first;
 		my @second;
@@ -1561,7 +1582,7 @@ sub getAllPrestamosActivos{
 				foreach my $prestamo (@$prestamos_array_ref){
 
 						my $fecha_prestamo = $prestamo->getFecha_vencimiento();
-
+						C4::AR::Debug::debug("Prestamos = prestamo ID " . $prestamo->getId_prestamo);
 						#obtenemos la diferencia de dias entre las dos fechas
 						@first  = split(/-/, $today);
 						@second = split(/-/, $fecha_prestamo);
@@ -1569,13 +1590,13 @@ sub getAllPrestamosActivos{
 
 						# si esta dentro de los dias de reminderDays y NO esta vencido el prestamo
 						if ($days <= $reminderDays && !($prestamo->estaVencido())){
+								C4::AR::Debug::debug("Prestamos = por vencer!!! " . $prestamo->getId_prestamo);
 								push(@arrayPrestamos,($prestamo));
 						}
 				}
-				return (@arrayPrestamos);
-		}else{
-				return 0;
 		}
+
+		return @arrayPrestamos;
 }
 
 =item
