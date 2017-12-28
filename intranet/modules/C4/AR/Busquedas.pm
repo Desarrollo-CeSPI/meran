@@ -1760,11 +1760,16 @@ sub armarInfoNivel1{
 
             @result_array_paginado[$i]->{'cat_ref_tipo_nivel3'}     = C4::AR::Nivel2::getFirstItemTypeFromN1($nivel1->getId1,$nivel2_array_ref);
             @result_array_paginado[$i]->{'cat_ref_tipo_nivel3_name'}= C4::AR::Referencias::translateTipoNivel3(@result_array_paginado[$i]->{'cat_ref_tipo_nivel3'});
-
+            
             if (@result_array_paginado[$i]->{'cat_ref_tipo_nivel3'} eq "ANA"){
+ 
+            C4::AR::Debug::debug("armarInfoNivel1 ==> ANALITICAS");
+            
+                my $cat_reg_analiticas_array_ref = C4::AR::Nivel2::getAllAnaliticasById1($nivel1->getId1);
 
-                my $cat_reg_analiticas_array_ref = C4::AR::Nivel2::getAllAnaliticasById1($nivel2_array_ref->[0]->getId1());
 
+                C4::AR::Debug::debug("armarInfoNivel1 ==> CANT ANALITICAS".scalar(@$cat_reg_analiticas_array_ref));
+                
                 if( ($cat_reg_analiticas_array_ref) && (scalar(@$cat_reg_analiticas_array_ref) > 0) ){
                     my $n2 = C4::AR::Nivel2::getNivel2FromId2($cat_reg_analiticas_array_ref->[0]->getId2Padre());
 
@@ -1776,6 +1781,9 @@ sub armarInfoNivel1{
                         @result_array_paginado[$i]->{'titulo_registro_padre'}       = $n2->nivel1->getTituloStringEscaped();
                         @result_array_paginado[$i]->{'detalle_grupo_registro_padre'}= $n2->getDetalleGrupo();
                         @result_array_paginado[$i]->{'primer_signatura'}            = $n2->getSignaturas->[0];
+
+                        C4::AR::Debug::debug("armarInfoNivel1 ==> PADRE ANALITICAS". $n2->nivel1->getTituloStringEscaped());
+                       
                     }
                 }
             }
