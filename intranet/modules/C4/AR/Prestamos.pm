@@ -1548,16 +1548,6 @@ sub getAllPrestamosActivos{
 		my ($today) = @_;
 
 		my @circ_ref_tipo_prestamo_array 	= C4::Modelo::CircRefTipoPrestamo::getAllTipoPrestamo();
-		#my $tipo_prestamos_str = "";
-
-		# foreach  my $str (@circ_ref_tipo_prestamo_array) {
-		# 	$tipo_prestamos_str = $tipo_prestamos_str . ", " . $str;
-		# }
-
-		#my @circ_ref_tipos_prestamos 			= join(',', @circ_ref_tipo_prestamo_array);
-		#C4::AR::Debug::debug("Prestamos = getAllPrestamosActivos = " . \@circ_ref_tipos_prestamos);
-
-#TODO terminar el WHERE tipo_prestamo IN C4::Modelo::CircRefTipoPrestamo::getAllTipoPrestamo()
 		my $prestamos_array_ref = C4::Modelo::CircPrestamo::Manager->get_circ_prestamo(
 																																										query => [
 																																												'tipo_prestamo' => [ @circ_ref_tipo_prestamo_array ],
