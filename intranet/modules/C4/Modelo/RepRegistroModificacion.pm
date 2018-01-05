@@ -23,15 +23,6 @@ __PACKAGE__->meta->setup(
     ],
 
     primary_key_columns => [ 'idModificacion' ],
-
-
-   relationships => [
-    socio_responsable => {
-            class       => 'C4::Modelo::UsrSocio',
-            key_columns => { responsable => 'nro_socio' },
-            type        => 'one to one',
-    },
-   ]
 );
 
 # Operacion = ALTA,BAJA,MODIFICACION
