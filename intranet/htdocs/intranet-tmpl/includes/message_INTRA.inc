@@ -165,11 +165,11 @@
 
     ADMIN_TITLE= "[% 'Advertencia de Administraci&oacute;n' | i18n %]";
 
-    TITLE_FIRST_ASSIGN_REFERENCIES = "[% 'Desea asignar el elemento con clave ' | i18n %]";
+    TITLE_FIRST_ASSIGN_REFERENCIES = "[% 'Desea asignar el elemento ' | i18n %]";
 
-    TITLE_FIRST_ASSIGN_DELETE_REFERENCIES = "[% 'Desea asignar y eliminar el elemento con clave ' | i18n %]";
+    TITLE_FIRST_ASSIGN_DELETE_REFERENCIES = "[% 'Desea asignar el elemento ' | i18n %]";
 
-    TITLE_TO_ASSIGN_REFERENCIES = "[% ' a este otro? ' | i18n %]";
+    TITLE_TO_ASSIGN_REFERENCIES = "[% ' a los registros que poseen ' | i18n %]";
 
     TITLE_DELETE_REFERENCE = "[% ' Desea eliminar ' | i18n %]";
 
