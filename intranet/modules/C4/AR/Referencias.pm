@@ -36,7 +36,7 @@ use C4::Modelo::AdqPresupuesto::Manager;
 use C4::Modelo::RefColaborador;
 use C4::Modelo::RefSignatura;
 use C4::Modelo::RefAcm;
-
+use C4::Modelo::RepRegistroModificacion;
 
 use JSON;
 use Switch;
@@ -665,6 +665,7 @@ sub mostrarReferencias{
                 $involved_count = $tabla_referente->getInvolvedCount($tabla,$value_id);
                 C4::AR::Debug::debug("EXITING INVOLVED COUNT ");
                 $table_data{"tabla"} = $tabla->getTabla_referente;
+                $table_data{"alias_tabla"} = $alias_tabla;
                 $table_data{"tabla_object"} = $tabla;
                 $table_data{"cantidad"} = $involved_count;
                 $global_references_count += $involved_count;
@@ -697,7 +698,7 @@ sub mostrarSimilares{
 
 sub asignarReferencia{
 
-    my ($alias_tabla,$related_id,$referer_involved) = @_;
+    my ($alias_tabla,$related_id,$referer_involved,$responsable) = @_;
 
     my ($clave,$tabla) = getTablaInstanceByAlias($alias_tabla);
 
@@ -711,9 +712,31 @@ sub asignarReferencia{
         $related_id =   $new_instance->get_key_value();
         
         $status = $old_pk->replaceByThis($related_id);
-    }
     
-    asignarReferenciaParaCatalogo($alias_tabla,$related_id,$referer_involved);
+            ###Guardamos en registro de modificación###
+            my ($registro_modificacion) = C4::Modelo::RepRegistroModificacion->new();
+            my $data_hash;
+            $data_hash->{'responsable'}= $responsable; #Usuario logueado
+            $data_hash->{'tipo'}    = 'REFERENCIAS';
+            $data_hash->{'operacion'} = 'ASIGNACION';
+            $data_hash->{'id_rec'}    = '0';
+            $data_hash->{'nivel_rec'} ='0';
+            $data_hash->{'prev_rec'} = $old_pk->toString." (id:".$alias_tabla."@".$old_pk->get_key_value().")";
+            $data_hash->{'final_rec'} = $new_instance->toString." (id:".$alias_tabla."@".$new_instance->get_key_value().")";
+            my $dateformat = C4::Date::get_date_format();
+            my $hoy = C4::Date::format_date_in_iso(Date::Manip::ParseDate("today"),$dateformat);
+            $data_hash->{'fecha'}    = $hoy;
+
+            ### Asignamos Referencias ###
+            my $registros_modificados = asignarReferenciaParaCatalogo($alias_tabla,$related_id,$referer_involved);            
+            ### Asignamos Referencias Fin ###
+
+            my $json_str = encode_json($registros_modificados); 
+            $data_hash->{'nota'}    = scalar(@$registros_modificados).' registros modificados => '.$json_str;
+
+            $registro_modificacion->agregar($data_hash);
+            ###Guardamos en registro de modificación###
+    }
 
     return ($status);
 }
@@ -774,13 +797,15 @@ sub asignarReferenciaParaCatalogo{
   foreach my $id1 (@id1_to_generate){
         C4::AR::Sphinx::generar_indice($id1, 'R_PARTIAL', 'UPDATE');
   }
-  
+ 
+    #Retorno los registros modificados
+    return (\@id1_to_generate); 
 }
 
 
 sub eliminarReferencia{
 
-    my ($alias_tabla,$referer_involved) = @_;
+    my ($alias_tabla,$referer_involved, $responsable) = @_;
 
     my ($clave,$tabla) = getTablaInstanceByAlias($alias_tabla);
     my $status = 0;
@@ -791,9 +816,25 @@ sub eliminarReferencia{
         if (!$used_or_not){
 
             my $old_pk = $tabla->getByPk($referer_involved);
-
   
             $status = $old_pk->delete();
+
+            ###Guardamos en registro de modificación###
+            my ($registro_modificacion) = C4::Modelo::RepRegistroModificacion->new();
+            my $data_hash;
+            $data_hash->{'responsable'}= $responsable; #Usuario logueado
+            $data_hash->{'tipo'}    = 'REFERENCIAS';
+            $data_hash->{'operacion'} = 'ELIMINACION';
+            $data_hash->{'id_rec'}    = '0';
+            $data_hash->{'nivel_rec'} ='0';
+            $data_hash->{'prev_rec'} = $old_pk->toString." (id:".$alias_tabla."@".$old_pk->get_key_value().")";
+            $data_hash->{'final_rec'} = "";
+            my $dateformat = C4::Date::get_date_format();
+            my $hoy = C4::Date::format_date_in_iso(Date::Manip::ParseDate("today"),$dateformat);
+            $data_hash->{'fecha'}    = $hoy;
+            $data_hash->{'nota'}    = '';
+            $registro_modificacion->agregar($data_hash);
+            ###Guardamos en registro de modificación###
 
             C4::AR::Debug::debug("===============================SE ELIMINO LA REFERENCIA============================");
         }else{
@@ -815,11 +856,11 @@ sub eliminarReferencia{
 
 sub asignarYEliminarReferencia{
 
-    my ($alias_tabla,$related_id,$referer_involved) = @_;
+    my ($alias_tabla,$related_id,$referer_involved,$responsable) = @_;
 
-    my $status_asignar = asignarReferencia($alias_tabla,$related_id,$referer_involved);
+    my $status_asignar = asignarReferencia($alias_tabla,$related_id,$referer_involved, $responsable);
     
-    my $status_eliminar = eliminarReferencia($alias_tabla,$referer_involved);
+    my $status_eliminar = eliminarReferencia($alias_tabla,$referer_involved, $responsable);
 
     return ($status_asignar && $status_eliminar);
 }

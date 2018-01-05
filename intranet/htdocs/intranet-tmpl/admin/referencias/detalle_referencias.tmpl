@@ -47,7 +47,7 @@
                           <td>[% "Campos" | i18n %]</td>
                       </tr>
                       <tr>
-                          <td>[% "No existe ninguna tabla que haga uso de esta tabla de referencia" | i18n %]</td>
+                          <td>[% "No existe ningún registro que haga uso de esta tabla de referencia" | i18n %]</td>
                       </tr>
                     [% END %]
                 </tbody>
@@ -63,7 +63,7 @@
             <table id="tablaResult_relacionados" class="table table-striped">
                 <thead>
                     <tr class="titulo_tabla_resultado" id="related_header_title_temp">
-                            <th> [% "Tablas relacionadas " | i18n %]</th>
+                            <th> [% "Registros relacionadas " | i18n %]</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -72,12 +72,12 @@
                                 [% IF data.cantidad > 0%]
                                   [% write = 1 %]
                                   <tr>
-                                      <td> [% "El registro tiene " | i18n %] [% data.cantidad %] [% " tupla(s) relacionada(s) en la tabla " | i18n %] [% data.tabla %]</td>
+                                      <td> [% "El registro tiene " | i18n %] [% data.cantidad %] [% " entradas(s) relacionada(s) en los registros de " | i18n %]  [% IF data.alias_tabla %] [% data.alias_tabla %] [% ELSE %] [% data.tabla %] [% END %]</td>
                                   </tr>
                                 [% END %]
                             [% END %]
                             [% IF !write %]
-                                  <div class="alert alert-info">[% "No existe ninguna tabla que haga uso de esta tabla de referencia" | i18n %]</div>
+                                  <div class="alert alert-info">[% "No existe ningún registro que haga uso de esta tabla de referencia" | i18n %]</div>
                                   <script>
                                     $('#related_header_title_temp').hide();
                                   </script>
@@ -85,7 +85,7 @@
                 </tbody>
             </table>
           [% ELSE %]
-                <div class="alert alert-info">[% "No existe ninguna tabla que haga uso de esta tabla de referencia" | i18n %]</div>
+                <div class="alert alert-info">[% "No existe ningún registro que haga uso de esta tabla de referencia" | i18n %]</div>
           [% END %]
         </div>
 </fieldset>
@@ -118,21 +118,20 @@
                                     [% PERL %]
                                         print C4::AR::Filtros::action_button( 
                                                 button      => "btn btn-warning click",
-                                                action      => 'asignarReferencia("[% tabla_related %]","[% related.getPkValue %]","[% referer_involved.getPkValue %]","[% referer_involved.get_key_value %]");', 
+                                                action      => 'asignarReferencia("[% tabla_related %]","[% related.getPkValue %]","[% referer_involved.getPkValue %]","[% referer_involved.toString %]","[% related.toString.squote %]");', 
                                                 icon        => "icon-move icon-white",
                                           ) ;
 
 
                                     [% END %]
-                          
-                          
+
                                 </td>
                                 <td>                                    
                                     
                                     [% PERL %]
                                         print C4::AR::Filtros::action_button( 
                                                 button      => "btn btn-danger click",
-                                                action      => 'asignarEliminarReferencia("[% tabla_related %]","[% related.getPkValue %]","[% referer_involved.getPkValue %]","[% referer_involved.get_key_value %]");', 
+                                                action      => 'asignarEliminarReferencia("[% tabla_related %]","[% related.getPkValue %]","[% referer_involved.getPkValue %]","[% referer_involved.toString %]","[% related.toString.squote %]");', 
                                                 icon        => "icon-move icon-white",
                                           ) ;
 
@@ -145,7 +144,7 @@
               </tbody>
           </table>
         [% ELSE %]
-              <div class="alert alert-warning">[% "No existe ninguna tabla que haga uso de esta tabla de referencia" | i18n %]</div>
+              <div class="alert alert-warning">[% "No existe ningún registro que haga uso de esta tabla de referencia" | i18n %]</div>
         [% END %]
       </div>
 </fieldset>
