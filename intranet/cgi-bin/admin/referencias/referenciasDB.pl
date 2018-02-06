@@ -179,7 +179,7 @@ elsif ($accion eq "ASIGNAR_REFERENCIA"){
     my $related_id = $obj->{'related_id'};
     my $referer_involved = $obj->{'referer_involved'};
 
-    my ($template, $session, $t_params)  = get_template_and_user({  
+    my ($template, $session, $t_params, $usuario_logueado)  = get_template_and_user({  
                             template_name => "admin/referencias/detalle_referencias.tmpl",
                             query => $input,
                             type => "intranet",
@@ -192,16 +192,18 @@ elsif ($accion eq "ASIGNAR_REFERENCIA"){
                             debug => 1,
                     });
 
-    C4::AR::Referencias::asignarReferencia($alias_tabla,$related_id,$referer_involved);
+    C4::AR::Referencias::asignarReferencia($alias_tabla,$related_id,$referer_involved,$usuario_logueado->getNro_socio);
     my ($used_or_not,$referer_involved,$items_involved)=C4::AR::Referencias::mostrarReferencias($alias_tabla,$related_id);
     my ($tabla_related,$related_referers) = C4::AR::Referencias::mostrarSimilares($alias_tabla,$related_id);
 
 
     $t_params->{'involved'} = $items_involved;
+    $t_params->{'involved_count'} = scalar(@$items_involved);
     $t_params->{'used'} = $used_or_not;
     $t_params->{'mostrar_asignar'} = $obj->{'asignar'} || 0;
     $t_params->{'referer_involved'} = $referer_involved;
     $t_params->{'related_referers'} = $related_referers;
+    $t_params->{'related_referers_count'} = scalar(@$related_referers);
     $t_params->{'tabla_related'} = $tabla_related;
 
     C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
@@ -212,7 +214,7 @@ elsif ($accion eq "ASIGNAR_Y_ELIMINAR_REFERENCIA"){
     my $related_id = $obj->{'related_id'};
     my $referer_involved = $obj->{'referer_involved'};
 
-    my ($template, $session, $t_params)  = get_template_and_user({  
+    my ($template, $session, $t_params,$usuario_logueado)  = get_template_and_user({  
                             template_name => "admin/referencias/detalle_referencias.tmpl",
                             query => $input,
                             type => "intranet",
@@ -224,16 +226,17 @@ elsif ($accion eq "ASIGNAR_Y_ELIMINAR_REFERENCIA"){
                                                 tipo_permiso => 'general'},
                             debug => 1,
                     });
-    C4::AR::Referencias::asignarYEliminarReferencia($alias_tabla,$related_id,$referer_involved);
+    C4::AR::Referencias::asignarYEliminarReferencia($alias_tabla,$related_id,$referer_involved,$usuario_logueado->getNro_socio);
     my ($used_or_not,$referer_involved,$items_involved)=C4::AR::Referencias::mostrarReferencias($alias_tabla,$related_id);
     my ($tabla_related,$related_referers) = C4::AR::Referencias::mostrarSimilares($alias_tabla,$related_id);
 
     $t_params->{'mostrar_asignar'} = $obj->{'asignar'} || 0;
     $t_params->{'involved'} = $items_involved;
+    $t_params->{'involved_count'} = scalar(@$items_involved);
     $t_params->{'used'} = $used_or_not;
-
     $t_params->{'referer_involved'} = $referer_involved;
     $t_params->{'related_referers'} = $related_referers;
+    $t_params->{'related_referers_count'} = scalar(@$related_referers);
     $t_params->{'tabla_related'} = $tabla_related;
 
     C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
