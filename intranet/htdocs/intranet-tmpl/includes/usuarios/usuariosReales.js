@@ -36,7 +36,7 @@ function modificarDatosDeUsuario(){
     objAH.showOverlay       = true;
 	objAH.debug             = true;
 	objAH.url               = URL_PREFIX+'/usuarios/reales/usuariosRealesDB.pl';
-	objAH.debug             = true; 
+	objAH.debug             = true;
 	objAH.nro_socio         = USUARIO.ID;
     nro_socio_temp          = objAH.nro_socio; // SETEO LA VARIABLE GLOBAL TEMP
 	objAH.tipoAccion        = 'MODIFICAR_USUARIO';
@@ -59,7 +59,7 @@ function guardarModificacionUsuario(){
 	objAH.url               = URL_PREFIX+'/usuarios/reales/usuariosRealesDB.pl';
 	objAH.debug             = true;
     objAH.showOverlay       = true;
-	objAH.nro_socio         = nro_socio_temp; 
+	objAH.nro_socio         = nro_socio_temp;
     objAH.sexo              = $("input[@name=sexo]:checked").val();
     objAH.calle             = $('#calle').val();
     objAH.nombre            = $('#nombre').val();
@@ -83,7 +83,7 @@ function guardarModificacionUsuario(){
     objAH.anio              = $('#anio').val();
     objAH.division          = $('#division').val();
     objAH.changepassword    = ($('#changepassword').is(':checked') )?'1':'0';
-    objAH.cumple_requisito	= ($('#cumple_requisito').is(':checked') )?'1':'0';    
+    objAH.cumple_requisito	= ($('#cumple_requisito').is(':checked') )?'1':'0';
 	objAH.tipoAccion        = 'GUARDAR_MODIFICACION_USUARIO';
     objAH.auth_nombre       = $('#auth_nombre').val();
     objAH.auth_dni          = $('#auth_dni').val();
@@ -118,7 +118,7 @@ function save_modif(){
 //************************************************Eliminar Usuario**********************************************
 function eliminarUsuario(){
 
-	bootbox.confirm(CONFIRMA_LA_BAJA, function (ok){ 
+	bootbox.confirm(CONFIRMA_LA_BAJA, function (ok){
 		if (ok){
 			objAH=new AjaxHelper(updateEliminarUsuario);
 			objAH.url=URL_PREFIX+'/usuarios/reales/usuariosRealesDB.pl';
@@ -235,7 +235,7 @@ function confirmarAgregarAutorizado(){
         objAH.url               = URL_PREFIX+'/usuarios/reales/usuariosRealesDB.pl';
         objAH.debug             = true;
         objAH.showOverlay       = true;
-        objAH.nro_socio         = NRO_SOCIO_AUTH; 
+        objAH.nro_socio         = NRO_SOCIO_AUTH;
         objAH.auth_nombre       = $('#nombreAutorizado').val();
         objAH.auth_dni          = $('#dniAutorizado').val();
         objAH.auth_telefono     = $('#telefonoAutorizado').val();
@@ -249,12 +249,12 @@ function updateConfirmarAgregarAutorizado(responseText){
     setMessages(Messages);
     $('#basic-modal-content').modal('hide');
     detalleUsuario();
-        
+
 }
 
 function desautorizarTercero(claveUsuario, confirmeClave){
 
-    	bootbox.confirm(CONFIRMAR_ELIMINAR_AFILIADO, function (ok){ 
+    	bootbox.confirm(CONFIRMAR_ELIMINAR_AFILIADO, function (ok){
     		if (ok){
 	        	objAH=new AjaxHelper(updateDesautorizarTercero);
 		        objAH.debug= true;
@@ -279,7 +279,7 @@ function updateDesautorizarTercero(responseText){
 
 
 function resetPassword(claveUsuario, confirmeClave){
-	bootbox.confirm(RESET_PASSWORD, function (ok){ 
+	bootbox.confirm(RESET_PASSWORD, function (ok){
 		if (ok){
     		objAH=new AjaxHelper(updateResetPassword);
             objAH.showOverlay       = true;
@@ -326,7 +326,7 @@ function eliminarFoto(foto){
 			objAH.nro_socio     = USUARIO.ID;
 			objAH.sendToServer();
 		}
-	});	
+	});
 }
 
 function updateEliminarFoto(responseText){
@@ -348,7 +348,7 @@ function validarDatosCensales(){
 	objAH.debug             = true;
     objAH.showOverlay       = true;
 	objAH.url               = URL_PREFIX+'/usuarios/reales/usuariosRealesDB.pl';
-	objAH.debug             = true; 
+	objAH.debug             = true;
 	objAH.nro_socio         = USUARIO.ID;
     nro_socio_temp          = objAH.nro_socio; // SETEO LA VARIABLE GLOBAL TEMP
 	objAH.tipoAccion        = 'VALIDAR_DATOS_CENSALES';
@@ -363,7 +363,7 @@ function updateValidarDatosCensales(responseText){
     	var Messages = JSONstring.toObject(responseText);
     	setMessages(Messages);
     	detalleUsuario();
-    	
+
 }
 
 /************************************* Cambiar credenciales **********************************/
@@ -388,7 +388,7 @@ function updateCambiarCredencial(responseText){
 
 function guardarModificacionCredenciales(){
 	 $('#basic-modal-content').modal('hide');
-	 
+
     objAH               = new AjaxHelper(updateModificacionCredenciales);
     objAH.url           = URL_PREFIX+'/usuarios/reales/usuariosRealesDB.pl';
     objAH.showOverlay   = true;
@@ -429,8 +429,8 @@ function cambiarNroSocio(nuevo_nro_socio){
   objAH.url               = URL_PREFIX+'/usuarios/reales/usuariosRealesDB.pl';
   objAH.debug             = true;
   objAH.showOverlay       = true;
-  objAH.nro_socio         = USUARIO.ID; 
-  objAH.nuevo_nro_socio   = nuevo_nro_socio; 
+  objAH.nro_socio         = USUARIO.ID;
+  objAH.nuevo_nro_socio   = nuevo_nro_socio;
   objAH.tipoAccion        = 'CAMBIAR_NRO_SOCIO';
 
   nro_socio_temp          = USUARIO.ID;
@@ -463,7 +463,7 @@ function verPermisosActuales(){
         objAH               = new AjaxHelper(updateVerPermisosActuales);
         objAH.url           = URL_PREFIX+'/admin/permisos/permisosDB.pl';
         objAH.cache         = false;
-        objAH.showOverlay   = true;  
+        objAH.showOverlay   = true;
         objAH.nro_socio     = usuario;
         objAH.accion            = "VER_PERMISOS_ACTUALES"
         objAH.sendToServer();
@@ -510,9 +510,9 @@ function aplicarSancionManual(){
   objAH.url               = URL_PREFIX+'/usuarios/reales/usuariosRealesDB.pl';
   objAH.debug             = true;
   objAH.showOverlay       = true;
-  objAH.nro_socio         = USUARIO.ID; 
+  objAH.nro_socio         = USUARIO.ID;
   objAH.dias              = dias;
-  objAH.motivo            = motivo; 
+  objAH.motivo            = motivo;
   objAH.tipoAccion        = 'APLICAR_SANCION_MANUAL';
 
   objAH.sendToServer();
