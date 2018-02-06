@@ -122,9 +122,9 @@ function mostrarReferencias(tabla,value_id){
 }
 
 
-function asignarReferencia(tabla,related_id,referer_involved,referer_involved_show){
+function asignarReferencia(tabla,related_id,referer_involved,referer_involved_show,related_show){
     $('#fieldset_tablaResult_involved').addClass("warning");
-    bootbox.confirm(TITLE_FIRST_ASSIGN_REFERENCIES+referer_involved_show+TITLE_TO_ASSIGN_REFERENCIES+related_id,function(confirmed){
+    bootbox.confirm("Referencia de <b>"+tabla+"</b>:<br>"+TITLE_FIRST_ASSIGN_REFERENCIES+" <b>"+referer_involved_show+"</b> (id:"+referer_involved+") "+TITLE_TO_ASSIGN_REFERENCIES+" <b>"+related_show+"</b> (id:"+related_id+")?" ,function(confirmed){
         if (confirmed){
             objAH=new AjaxHelper(updateObtenerTabla);
             objAH.url= URL_PREFIX+'/admin/referencias/referenciasDB.pl';
@@ -141,9 +141,9 @@ function asignarReferencia(tabla,related_id,referer_involved,referer_involved_sh
     });
 }
 
-function asignarEliminarReferencia(tabla,related_id,referer_involved,referer_involved_show){
+function asignarEliminarReferencia(tabla,related_id,referer_involved,referer_involved_show,related_show){
     $('#fieldset_tablaResult_involved').addClass("warning");
-    bootbox.confirm(TITLE_FIRST_ASSIGN_DELETE_REFERENCIES+referer_involved_show+TITLE_TO_ASSIGN_REFERENCIES+related_id,function(confirmed){
+    bootbox.confirm("Referencia de <b>"+tabla+"</b>:<br>"+TITLE_FIRST_ASSIGN_DELETE_REFERENCIES+" <b>"+referer_involved_show+"</b> (id:"+referer_involved+") "+TITLE_TO_ASSIGN_REFERENCIES+" <b>"+related_show+"</b> (id:"+related_id+") y luego eliminarlo?",function(confirmed){
         if (confirmed){
             objAH=new AjaxHelper(updateObtenerTabla);
             objAH.url= URL_PREFIX+'/admin/referencias/referenciasDB.pl';
