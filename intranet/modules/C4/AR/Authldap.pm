@@ -1,7 +1,7 @@
 package C4::AR::Authldap;
 
 =head1 NAME
-  C4::AR::Authldap 
+  C4::AR::Authldap
 =head1 SYNOPSIS
   use C4::AR::Authldap;
 =head1 DESCRIPTION
@@ -38,9 +38,9 @@ use vars qw(@ISA @EXPORT_OK );
 sub setVariableLdap {
     my ($variable, $valor, $db) = @_;
     my  $preferencia;
-    
+
     $preferencia = C4::Modelo::PrefPreferenciaSistema::Manager->get_pref_preferencia_sistema( query => [variable => {eq => $variable}] );
-    
+
     if(scalar(@$preferencia) > 0){
         $preferencia->[0]->setValue($valor);
         $preferencia->[0]->save();
@@ -55,17 +55,17 @@ sub getLdapPreferences{
     my $preferencias_array_ref;
     my @filtros;
     my $prefTemp = C4::Modelo::PrefPreferenciaSistema->new();
-  
-    $preferencias_array_ref = C4::Modelo::PrefPreferenciaSistema::Manager->get_pref_preferencia_sistema( 
+
+    $preferencias_array_ref = C4::Modelo::PrefPreferenciaSistema::Manager->get_pref_preferencia_sistema(
                                         query => [ categoria => { eq => 'auth' } ],
-                                ); 
-                                
+                                );
+
     my %hash;
     foreach my $pref (@$preferencias_array_ref){
         $hash{$pref->getVariable} = $pref->getValue();
     }
 
-    return (\%hash);                    
+    return (\%hash);
 }
 
 =item
@@ -74,7 +74,7 @@ sub getLdapPreferences{
 sub _getValorPreferenciaLdap{
 
     my ($variable)              = @_;
-    my $preferencia_ldap_array_ref   = C4::Modelo::PrefPreferenciaSistema::Manager->get_pref_preferencia_sistema( 
+    my $preferencia_ldap_array_ref   = C4::Modelo::PrefPreferenciaSistema::Manager->get_pref_preferencia_sistema(
                                                             query => [  variable => { eq => $variable} ,
                                                                         categoria => { eq => 'auth'}
                                                                      ]
@@ -87,50 +87,50 @@ sub _getValorPreferenciaLdap{
     }
 }
 
-=item 
+=item
     Esa funcion devuelve un objeto socio a partir de los datos que estan en la base de Meran una vez que fue autenticado por el ldap,
     en caso de no existir en la base de MERAN lo agrega a la misma siempre y cuando la variable agregarDesdeLDAP este habilitada.
-    Si no existe en la base y la variable esta en 0 devuelve 0. 
-    
+    Si no existe en la base y la variable esta en 0 devuelve 0.
+
     Recibe el userid y un ldap con el bind ya realizado.
 =cut
 sub datosUsuario{
     my ($userid,$ldap)  = @_;
     my $socio           = C4::AR::Usuarios::getSocioInfoPorNroSocio($userid);
 
-    if ($socio) { 
+    if ($socio) {
         return $socio;
     }
     else {
         # DATOS OBLIGATORIOS PARA CREAR UN NUEVO SOCIO
-        # nro_socio , id_ui, cod_categoria, change_password (dejala en 0), id_estado (uno de UsrEstado), is_super_user 
+        # nro_socio , id_ui, cod_categoria, change_password (dejala en 0), id_estado (uno de UsrEstado), is_super_user
 
         my $preferencias_ldap   = getLdapPreferences();
-        my $agregar_ldap        = $preferencias_ldap->{'ldap_agregar_user'} || 0; 
-        
+        my $agregar_ldap        = $preferencias_ldap->{'ldap_agregar_user'} || 0;
+
         if ($agregar_ldap){
-                
+
                 my $LDAP_DB_PREF    = $preferencias_ldap->{'ldap_prefijo_base'};
                 my $LDAP_U_PREF     = $preferencias_ldap->{'ldap_user_prefijo'};
                 my $LDAP_FILTER     = $LDAP_U_PREF.'='.$userid;
-                
+
                 my $entries         = $ldap->search(
                         base   => $LDAP_DB_PREF,
                         filter => "($LDAP_FILTER)"
-                );  
+                );
                 my $entry           = $entries->entry(0);
 
                 if ($entry){
                     $socio = C4::AR::Usuarios::crearPersonaLDAP($userid,$entry);
-                    C4::AR::Debug::debug("Authldap =>datosUsuario".$LDAP_FILTER . ' entry '.$entry->ldif); 
-                }                
-        }  
+                    C4::AR::Debug::debug("Authldap =>datosUsuario".$LDAP_FILTER . ' entry '.$entry->ldif);
+                }
+        }
     }
         ######FIXME agregarSocio como inactivo o no???? preferencia???
         return $socio;
 }
 
-=item 
+=item
     Funcion interna al modulo q se conecta al sevidor LDAP y devuelve un objeto Net::LDAP o NET::LDAPS de acuerdo a la configuracion.
 =cut
 sub _conectarLDAP{
@@ -140,7 +140,7 @@ sub _conectarLDAP{
     my $LDAP_SERVER = $preferencias_ldap->{'ldap_server'};
     my $LDAP_PORT   = $preferencias_ldap->{'ldap_port'};
     my $LDAP_TYPE   = $preferencias_ldap->{'ldap_type'};
-    C4::AR::Debug::debug("Authldap =>_conectarLDAP".$LDAP_SERVER); 
+    C4::AR::Debug::debug("Authldap =>_conectarLDAP ".$LDAP_SERVER);
     my $ldap;
     if ($LDAP_TYPE ne 'SSL'){
         $ldap = Net::LDAP->new($LDAP_SERVER, port => $LDAP_PORT) or die "Coult not create LDAP object because:\n$!";
@@ -150,7 +150,7 @@ sub _conectarLDAP{
             C4::AR::Debug::debug("Authldap =>Server does not support TLS\n") unless($doesSupportTLS);
             my $startTLSMsg     = $ldap->start_tls();
             C4::AR::Debug::debug("Authldap =>".$startTLSMsg->error) if $startTLSMsg->is_error;
-        } 
+        }
     }
     else{
         $ldap = Net::LDAPS->new($LDAP_SERVER, port => $LDAP_PORT) or die "Coult not create LDAP object because:\n$!";
@@ -158,7 +158,7 @@ sub _conectarLDAP{
     return $ldap;
 }
 
-=item 
+=item
     Funcion que recibe un userid y un password e intenta autenticarse ante un ldap, si lo logra devuelve un objeto Socio.
 =cut
 # sub checkPwPlana{
@@ -182,8 +182,10 @@ sub _conectarLDAP{
 # la version anterior checkPwPlana no tenia en cuenta los filtros memberOf
 
 sub memberOf{
-    
+
     my ($socio, $group)             = @_;
+
+    C4::AR::Debug::debug("AuthLdap.pm => memberOf >> bind LDAP");
 
     my $preferencias_ldap   = getLdapPreferences();
     my $LDAP_DB_PREF        = $preferencias_ldap->{'ldap_prefijo_base'};
@@ -197,41 +199,41 @@ sub memberOf{
     my $ldap                =_conectarLDAP();
 
 
-    if ($LDAP_ROOT ne ''){    
+    if ($LDAP_ROOT ne ''){
         $ldapMsg = $ldap->bind( $LDAP_ROOT , password => $LDAP_PASS) or die "$@";
-        C4::AR::Debug::debug("memberOf >> bind LDAP con ".$LDAP_ROOT ." y ".$LDAP_PASS. " dio ".$ldapMsg->error);        
-    }else{    
-        $ldapMsg = $ldap->bind() or die "$@";        
+        C4::AR::Debug::debug("AuthLdap.pm => memberOf >> bind LDAP con ".$LDAP_ROOT ." y ".$LDAP_PASS. " dio ".$ldapMsg->error);
+    }else{
+        $ldapMsg = $ldap->bind() or die "$@";
     }
 
     if($preferencias_ldap->{'ldap_not_memberattribute'} eq "LDAP_NOT_MEMBERATTRIBUTE"){
         # Se niega la inclusión de un usuario en un grupo
-        $LDAP_FILTER = "&(".$LDAP_FILTER.")(!(memberOf=cn=".$group.",".$LDAP_OU."))";    
+        $LDAP_FILTER = "&(".$LDAP_FILTER.")(!(memberOf=cn=".$group.",".$LDAP_OU."))";
     } else {
-        $LDAP_FILTER = "&(".$LDAP_FILTER.")(memberOf=cn=".$group.",".$LDAP_OU.")";    
+        $LDAP_FILTER = "&(".$LDAP_FILTER.")(memberOf=cn=".$group.",".$LDAP_OU.")";
     }
 
-    if ((defined $ldapMsg )&& (!$ldapMsg->code()) ) {   
+    if ((defined $ldapMsg )&& (!$ldapMsg->code()) ) {
         my $entries = $ldap->search(
             base   => $LDAP_DB_PREF,
             filter => "($LDAP_FILTER)"
         );
-        
+
         my $entry = $entries->entry(0);
-        C4::AR::Debug::debug("memberOf >> search LDAP user  ".$entry );  
-        if (defined $entry){ 
+        C4::AR::Debug::debug("AuthLdap.pm => memberOf >> search LDAP user  ".$entry );
+        if (defined $entry){
           return 1;
         }
 
     }
-     
+
     return 0;
 }
 
 sub checkPwPlana{
     my ($userid, $password) = @_;
 
-    C4::AR::Debug::debug("EN CHECKAUT LDAP userid: ".$userid." pass: ".$password);
+    C4::AR::Debug::debug("AuthLdap.pm => EN CHECKAUT LDAP userid: ".$userid." pass: ".$password);
 
     my $preferencias_ldap   = getLdapPreferences();
     my $LDAP_DB_PREF        = $preferencias_ldap->{'ldap_prefijo_base'};
@@ -239,22 +241,22 @@ sub checkPwPlana{
     my $userDN              = $LDAP_U_PREF.'='.$userid.','.$LDAP_DB_PREF;
     my $LDAP_FILTER         = $LDAP_U_PREF.'='.$userid;
 
-    C4::AR::Debug::debug("checkPwEncriptada >> LDAP ldap_memberattribute ".$preferencias_ldap->{'ldap_memberattribute'} );
-    C4::AR::Debug::debug("checkPwEncriptada >> LDAP ldap_not_memberattribute ".$preferencias_ldap->{'ldap_not_memberattribute'} );
+    C4::AR::Debug::debug("AuthLdap.pm => checkPwEncriptada >> LDAP ldap_memberattribute ".$preferencias_ldap->{'ldap_memberattribute'} );
+    C4::AR::Debug::debug("AuthLdap.pm => checkPwEncriptada >> LDAP ldap_not_memberattribute ".$preferencias_ldap->{'ldap_not_memberattribute'} );
 
     if ($preferencias_ldap->{'ldap_memberattribute'}){
         if($preferencias_ldap->{'ldap_not_memberattribute'} eq "LDAP_NOT_MEMBERATTRIBUTE"){
             $LDAP_FILTER = "&(".$LDAP_FILTER.")(".$preferencias_ldap->{'ldap_memberattribute'}."=".$preferencias_ldap->{'ldap_memberattribute_isdn'}.")";
         } else {
             # Se niega la inclusión de un usuario en un grupo
-            $LDAP_FILTER = "&(".$LDAP_FILTER.")(!(".$preferencias_ldap->{'ldap_memberattribute'}."=".$preferencias_ldap->{'ldap_memberattribute_isdn'}."))";  
+            $LDAP_FILTER = "&(".$LDAP_FILTER.")(!(".$preferencias_ldap->{'ldap_memberattribute'}."=".$preferencias_ldap->{'ldap_memberattribute_isdn'}."))";
         }
     }
-  
-  C4::AR::Debug::debug("checkPwPlana >> LDAP filter ".$LDAP_FILTER );
+
+    C4::AR::Debug::debug("AuthLdap.pm => checkPwPlana >> LDAP filter ".$LDAP_FILTER );
 
     my $ldap                =_conectarLDAP();
-    C4::AR::Debug::debug("userid : " . $userid . " pass: " . $password . " userDN : " . $userDN);
+    C4::AR::Debug::debug("AuthLdap.pm => userid : " . $userid . " pass: " . $password . " userDN : " . $userDN);
     my $ldapMsg             = $ldap->bind($userDN, password => $password);
     C4::AR::Debug::debug("Authldap => smsj ". $ldapMsg->error. " codigo ". $ldapMsg->code() );
     my $socio               = undef;
@@ -264,17 +266,17 @@ sub checkPwPlana{
             filter => "($LDAP_FILTER)"
         );
 
-        C4::AR::Debug::debug("checkPwPlana >> search LDAP user  ".$LDAP_FILTER );
-        
+        C4::AR::Debug::debug("AuthLdap.pm => checkPwPlana >> search LDAP user  ".$LDAP_FILTER );
+
         my $entry = $entries->entry(0);
-        C4::AR::Debug::debug("checkPwPlana >> search LDAP user  ".$entry );  
-        if (defined $entry){         
+        C4::AR::Debug::debug("AuthLdap.pm => checkPwPlana >> search LDAP user  ".$entry );
+        if (defined $entry){
           $socio = datosUsuario($userid,$ldap);
         }
     }
 
     $ldap->unbind;
-    
+
     return $socio;
 }
 
@@ -283,7 +285,7 @@ sub checkPwPlana{
 =cut
 sub checkPwEncriptada{
     my ($userid, $password, $nroRandom) = @_;
-    C4::AR::Debug::debug("EN CHECKAUT LDAP userid: ".$userid." pass: ".$password." nroRandom : ".$nroRandom);
+    C4::AR::Debug::debug("AuthLdap.pm => EN CHECKAUT LDAP userid: ".$userid." pass: ".$password." nroRandom : ".$nroRandom);
     my $preferencias_ldap   = getLdapPreferences();
     my $LDAP_DB_PREF        = $preferencias_ldap->{'ldap_prefijo_base'};
     my $LDAP_U_PREF         = $preferencias_ldap->{'ldap_user_prefijo'};
@@ -292,8 +294,8 @@ sub checkPwEncriptada{
     my $LDAP_OU             = $preferencias_ldap->{'ldap_grupo'};
     my $LDAP_FILTER         = $LDAP_U_PREF.'='.$userid;
 
-  C4::AR::Debug::debug("checkPwEncriptada >> LDAP ldap_memberattribute ".$preferencias_ldap->{'ldap_memberattribute'} );
-  C4::AR::Debug::debug("checkPwEncriptada >> LDAP ldap_not_memberattribute ".$preferencias_ldap->{'ldap_not_memberattribute'} );
+  C4::AR::Debug::debug("AuthLdap.pm => checkPwEncriptada >> LDAP ldap_memberattribute ".$preferencias_ldap->{'ldap_memberattribute'} );
+  C4::AR::Debug::debug("AuthLdap.pm => checkPwEncriptada >> LDAP ldap_not_memberattribute ".$preferencias_ldap->{'ldap_not_memberattribute'} );
 
 
     if ($preferencias_ldap->{'ldap_memberattribute'}){
@@ -301,41 +303,41 @@ sub checkPwEncriptada{
             $LDAP_FILTER = "&(".$LDAP_FILTER.")(".$preferencias_ldap->{'ldap_memberattribute'}."=".$preferencias_ldap->{'ldap_memberattribute_isdn'}.")";
         } else {
             # Se niega la inclusión de un usuario en un grupo
-            $LDAP_FILTER = "&(".$LDAP_FILTER.")(!(".$preferencias_ldap->{'ldap_memberattribute'}."=".$preferencias_ldap->{'ldap_memberattribute_isdn'}."))";  
+            $LDAP_FILTER = "&(".$LDAP_FILTER.")(!(".$preferencias_ldap->{'ldap_memberattribute'}."=".$preferencias_ldap->{'ldap_memberattribute_isdn'}."))";
         }
     }
 
-  C4::AR::Debug::debug("checkPwEncriptada >> LDAP filter ".$LDAP_FILTER );
+  C4::AR::Debug::debug("AuthLdap.pm => checkPwEncriptada >> LDAP filter ".$LDAP_FILTER );
 
     my $passwordLDAP;
     my $ldapMsg             = undef;
     my $ldap                = _conectarLDAP();
 #    my $userDN              = $LDAP_ROOT.','.$LDAP_DB_PREF;
     my $userDN              = $LDAP_U_PREF.'='.$userid.','.$LDAP_DB_PREF;
- 
-    if ($LDAP_ROOT ne ''){    
+
+    if ($LDAP_ROOT ne ''){
         $ldapMsg = $ldap->bind( $LDAP_ROOT , password => $LDAP_PASS) or die "$@";
-        C4::AR::Debug::debug("checkPwEncriptada >> ERROR DEL LDAP con ".$LDAP_ROOT ." y ".$LDAP_PASS. " dio ".$ldapMsg->error);        
-    }else{    
-        $ldapMsg = $ldap->bind() or die "$@";        
+        C4::AR::Debug::debug("AuthLdap.pm => checkPwEncriptada >> ERROR DEL LDAP con ".$LDAP_ROOT ." y ".$LDAP_PASS. " dio ".$ldapMsg->error);
+    }else{
+        $ldapMsg = $ldap->bind() or die "$@";
     }
-    
+
     my $socio           = undef;
 
-    if ((defined $ldapMsg )&& (!$ldapMsg->code()) ) {   
+    if ((defined $ldapMsg )&& (!$ldapMsg->code()) ) {
         my $entries = $ldap->search(
             base   => $LDAP_DB_PREF,
             filter => "($LDAP_FILTER)"
         );
-        
-    C4::AR::Debug::debug("checkPwEncriptada >> search LDAP user  ".$LDAP_FILTER );
-        
+
+    C4::AR::Debug::debug("AuthLdap.pm => checkPwEncriptada >> search LDAP user  ".$LDAP_FILTER );
+
         my $entry = $entries->entry(0);
-     C4::AR::Debug::debug("checkPwEncriptada >> search LDAP user  ".$entry );  
-        if (defined $entry){        
+     C4::AR::Debug::debug("AuthLdap.pm => checkPwEncriptada >> search LDAP user  ".$entry );
+        if (defined $entry){
             $passwordLDAP = $entry->get_value("userPassword");
 
-            C4::AR::Debug::debug("checkPwEncriptada >> passLDAP  ".$passwordLDAP );
+            C4::AR::Debug::debug("AuthLdap.pm => checkPwEncriptada >> passLDAP  ".$passwordLDAP );
             if ($preferencias_ldap->{'ldap_passtype'} eq "sha1"){
                 #Las passwords encriptadas se limpian
                 $passwordLDAP =~ s/^\{SHA\}+|=+$//g;
@@ -344,12 +346,12 @@ sub checkPwEncriptada{
                 $passwordLDAP =~ s/^\{MD5\}+|=+$//g;
             }
 
-           $socio        =_verificar_password_con_metodo($userid,$password, $passwordLDAP, $nroRandom, $ldap);           
+           $socio        =_verificar_password_con_metodo($userid,$password, $passwordLDAP, $nroRandom, $ldap);
         }
-        
+
         $ldap->unbind;
     }
-    
+
     return $socio;
 }
 
@@ -366,15 +368,15 @@ sub checkPwEncriptada{
 =cut
 sub _verificar_password_con_metodo {
     my ($userid, $password, $passwordLDAP, $nroRandom, $ldap) = @_;
- C4::AR::Debug::debug("checkPwEncriptada >> passwordLDAP  ".$passwordLDAP);
+ C4::AR::Debug::debug("AuthLdap.pm => checkPwEncriptada >> passwordLDAP  ".$passwordLDAP);
 #    my $passwordParaComparar    = C4::AR::Auth::hashear_password($passwordLDAP, 'MD5_B64');
     my $passwordParaComparar       = C4::AR::Auth::hashear_password($passwordLDAP, C4::AR::Auth::getMetodoEncriptacion());
     $passwordParaComparar       = C4::AR::Auth::hashear_password($passwordParaComparar.$nroRandom, C4::AR::Auth::getMetodoEncriptacion());
- 
 
-   C4::AR::Debug::debug("checkPwEncriptada >> passwordParaComparar  ".$passwordParaComparar ."   ==  ".$password);
 
- 
+   C4::AR::Debug::debug("AuthLdap.pm => checkPwEncriptada >> passwordParaComparar  ".$passwordParaComparar ."   ==  ".$password);
+
+
     if ($password eq $passwordParaComparar) {
         #PASSWORD VALIDA
         return datosUsuario($userid,$ldap);
@@ -389,12 +391,12 @@ sub checkPassword{
     my $socio = undef;
     if (!C4::Context->config('plainPassword')){
 	    ($socio) = C4::AR::Authldap::checkPwEncriptada($userid,$password,$nroRandom);
-        C4::AR::Debug::debug("Devolviendo el socio".$socio);
+        C4::AR::Debug::debug("AuthLdap.pm => checkPassword => Devolviendo el socio".$socio);
 	}else{
-	    ($socio) = C4::AR::Authldap::checkPwPlana($userid,$password);       
+	    ($socio) = C4::AR::Authldap::checkPwPlana($userid,$password);
 	}
     return $socio;
-	
+
 }
 
 =item
@@ -405,12 +407,15 @@ sub checkPassword{
 =cut
 sub validarPassword{
     my ($userid,$password,$nuevaPassword,$nroRandom) = @_;
+    C4::AR::Debug::debug("AuthLdap.pm => validarPassword ");
+
 	my $socio       = undef;
     my $ldap        =_conectarLDAP();
-    
+
+
     #aca dentro ya se comparan que las dos passwords sean iguales
     ($socio) = checkPwEncriptada($userid,$password,$nroRandom);
-    
+
     if (!$socio){
         return undef;
     }
@@ -430,22 +435,22 @@ sub validarPassword{
     FIXME
     FIXME
     FIXME
-    
+
     QUEDA QUE VALIDE LAS CREDENCIALES --- OK
     BUSCAR LOGINS DE LDAP QUE PODAMOS USAR
     RESET PASSWORD EN AMBOS (MYSQL/LDAP) --- OK EN MYSQL
     SET PASSWORD EN LDAP (ESTE DE ACA ABAJO)
     CAPTCHA --- OK
-    
-    
+
+
 =cut
 sub setearPassword{
-    
+
     my ($socio,$nuevaPassword,$isReset) = @_;
     my $preferencias_ldap               = getLdapPreferences();
 
 
- C4::AR::Debug::debug("setearPassword>>> $nuevaPassword");
+ C4::AR::Debug::debug("AuthLdap => setearPassword>>> $nuevaPassword");
 
     my $LDAP_DB_PREF                    = $preferencias_ldap->{'ldap_prefijo_base'};
     my $LDAP_U_PREF                     = $preferencias_ldap->{'ldap_user_prefijo'};
@@ -458,7 +463,7 @@ sub setearPassword{
     my $ldap                            =_conectarLDAP();
 
     $isReset = $isReset || 0;
-    
+
     if ($LDAP_ROOT ne ''){
         $ldapMsg = $ldap->bind( $LDAP_ROOT , password => $LDAP_PASS) or die "$@";
         C4::AR::Debug::debug("bind es $LDAP_ROOT y pass $LDAP_PASS");
@@ -470,16 +475,16 @@ sub setearPassword{
 
     #si esto da error, es porque la codificacion falla, lo cual, seguramente no esté encriptada por ser un reseteo de password
     #si $isReset = 1, la $nuevaPassword ya viene en b64_md5, es el dni del socio hasheado
-    
+
     if (!$isReset){
    	#encriptar con md5_b64
 	$nuevaPassword    = C4::AR::Auth::hashear_password($nuevaPassword, 'MD5_B64');
- 
+
 
     }
 
-#    $ldapMsg = my $result = $ldap->modify(dn=>$LDAP_USER, replace=>{'userPassword'=>$nuevaPassword}); 
-    $ldapMsg = $ldap->modify(dn=>$LDAP_USER, replace=>{'userPassword'=>$nuevaPassword}); 
+#    $ldapMsg = my $result = $ldap->modify(dn=>$LDAP_USER, replace=>{'userPassword'=>$nuevaPassword});
+    $ldapMsg = $ldap->modify(dn=>$LDAP_USER, replace=>{'userPassword'=>$nuevaPassword});
     #LEER http://comments.gmane.org/gmane.comp.lang.perl.modules.ldap/2028
 #    $ldap->set_password( user =>$LDAP_U_PREF.'='.$socio->getNro_socio(), newpassword => $nuevaPassword );
 
@@ -487,7 +492,7 @@ sub setearPassword{
 
 
 sub _obtenerPassword{
-    
+
     my ($ldap,$LDAP_DB_PREF,$LDAP_FILTER) = @_;
     my $entries = $ldap->search(
             base   => $LDAP_DB_PREF,
@@ -499,13 +504,13 @@ sub _obtenerPassword{
     if (defined $entry){
             $passwordLDAP   = $entry->get_value("userPassword");
     }
-    
+
     return $passwordLDAP;
 
 }
 
 sub obtenerPassword{
-    
+
     my ($socio)             = @_;
     my $preferencias_ldap   = getLdapPreferences();
 
@@ -525,7 +530,7 @@ sub obtenerPassword{
     }else{
         $ldapMsg= $ldap->bind() or die "$@";
         }
-    
+
     #FIXME ESTO ES UNA PORQUERIA SE REHACE TODA LA CONEXION
     return _obtenerPassword($ldap,$LDAP_DB_PREF,$LDAP_FILTER);
 }
@@ -547,13 +552,13 @@ sub passwordsIguales{
     $nuevaPassword1 = C4::AR::Auth::hashear_password($nuevaPassword1, 'MD5_B64');
     $nuevaPassword1 = C4::AR::Auth::hashear_password($nuevaPassword1, C4::AR::Auth::getMetodoEncriptacion());
     $nuevaPassword1 = C4::AR::Auth::hashear_password($nuevaPassword1.C4::AR::Auth::getSessionNroRandom(), C4::AR::Auth::getMetodoEncriptacion());
-    
+
     $nuevaPassword2 = C4::AR::Auth::hashear_password($nuevaPassword2, 'MD5_B64');
     $nuevaPassword2 = C4::AR::Auth::hashear_password($nuevaPassword2, C4::AR::Auth::getMetodoEncriptacion());
     $nuevaPassword2 = C4::AR::Auth::hashear_password($nuevaPassword2.C4::AR::Auth::getSessionNroRandom(), C4::AR::Auth::getMetodoEncriptacion());
-    
 
-    return ($nuevaPassword1 eq $nuevaPassword2);	
+
+    return ($nuevaPassword1 eq $nuevaPassword2);
 }
 END { }       # module clean-up code here (global destructor)
 1;
