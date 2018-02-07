@@ -75,8 +75,8 @@ my %mensajesOPAC = (
     'U300' => 'Disculpe, no puede efectuar reservas porque no cumple la condici&oacute;n debido a las normas de la Biblioteca.',
     'U301' => 'Disculpe, no puede efectuar reservas porque usted no ha realizado a&uacute;n el curso para usuarios.',
     'U302' => 'El ejemplar que acaba de reservar puede ser retirado hasta el d&iacute;a: *?* a las *?*',
-    'U303' => 'En este momento no hay ejemplares disponibles para pr&eacute;stamo inmediato. 
-                Cuando haya alg&uacute;n ejemplar a su disposici&oacute;n se le informar&aacute; a 
+    'U303' => 'En este momento no hay ejemplares disponibles para pr&eacute;stamo inmediato.
+                Cuando haya alg&uacute;n ejemplar a su disposici&oacute;n se le informar&aacute; a
                 <br><i> *?* </i><br>Verifique que sus datos sean correctos ya que el mensaje se enviar&aacute; a esta direcci&oacute;n. <br>Para mayo seguridad, también puede verificar en su cuenta de MERAN.',
     'U304' => 'Disculpe, no puede reservar porque no hizo el curso para usuarios.',
     'U305' => 'El ejemplar que acaba de reservar puede ser retirado hasta el d&iacute;a: *?*',
@@ -85,6 +85,7 @@ my %mensajesOPAC = (
     'U338' => 'Se modificaron los datos del usuario correctamente.',
     'U339' => 'No se pudieron modificar los datos del usuario, intente nuevamente.',
     'U354' => 'Disculpe, usted no tiene permisos suficientes para acceder a esta p&aacute;gina.',
+    'U356' => 'Esta accediendo a MERAN desde una direcci&oacute;n IP diferente! Por favor ingrese nuevamente.',
     'U357' => 'Ha ingresado un nombre de usuario o password incorrecto. Por favor intente nuevamente.',
     'U358' => 'Ud. ha cerrado su sesion. Gracias por usar MERAN.',
     'U361' => 'El password actual NO coincide con el suyo.',
@@ -114,7 +115,7 @@ my %mensajesOPAC = (
     'RC04' => 'La recomendacion ha sido enviada',
     'VA001' => 'Error de parametros, inconsistentes o faltantes, don\'t HACK!!!!!!!!!!!!!!!!!!!!!!!!!!!!!',
     'VA002' => 'Por favor, complete todos los datos requeridos e intente nuevamente. Gracias.',
-    
+
     #Mensajes Upload Files
     'UP00' => 'Solo se permiten archivos del tipo ("*?*") [Fallo de extension]',
     'UP01' => 'Hay un error y el archivo no puede escribirse en el servidor',
@@ -131,7 +132,7 @@ my %mensajesOPAC = (
     'UP12' => 'Ocurrio un error subiendo las imagenes',
     'UP13' => 'El tipo de archivo subido no esta permitido',
     'UP14' => 'El manejo de archivos no esta habilitado',
- 
+
    #ERRORES DE BASE DE DATOS
     'B400' => 'Error al intentar reservar desde OPAC, funcion C4::AR::Reservas::reservarOPAC.',
     'B401' => '',
@@ -213,8 +214,8 @@ my %mensajesINTRA = (
     'U300' => 'El usuario no puede reservar porque no es un alumno regular.',
     'U301' => 'El usuario no puede reservar porque no ha realizado a&uacute;n el curso para usuarios.',
     'U302' => 'El libro que acaba de reservar puede ser retirado hasta del d&iacute;a: *?* a las *?*',
-    'U303' => 'En este momento no hay ejemplares disponibles para pr&eacute;stamo inmediato. 
-                Cuando haya alg&uacute;n ejemplar a su disposici&oacute;n se le informar&aacute; a 
+    'U303' => 'En este momento no hay ejemplares disponibles para pr&eacute;stamo inmediato.
+                Cuando haya alg&uacute;n ejemplar a su disposici&oacute;n se le informar&aacute; a
                 <br><i> *?* </i><br>Verifique que sus datos sean correctos ya que el mensaje se enviar&aacute; a esta direcci&oacute;n.',
     'U304' => 'El usuario no hizo el curso de MERAN.',
     'U305' => 'Disculpe, no se pudo eliminar el item con c&oacute;digo de barras *?*, intente nuevamente.',
@@ -686,14 +687,14 @@ sub getMensaje {
     my($codigo,$tipo,$param)    = @_;
     my $msj                     = "";
     $tipo                       = lc($tipo);
-    
+
     if($tipo eq 'opac'){
-    
+
         $msj = $mensajesOPAC{$codigo};
         # C4::AR::Debug::debug("mensaje de OPAC");
-        
+
     }else{
-    
+
         # C4::AR::Debug::debug("mensaje de INTRA");
         $msj = $mensajesINTRA{$codigo};
     }
@@ -757,9 +758,9 @@ sub create {
     $msg_object{'error'}    = 0;
     $msg_object{'messages'} = [];
     my $session = CGI::Session->load();
- 
+
     $session->{'msg_object'} = \%msg_object;
-    
+
     $msg_object{'tipo'}     = $session->param('type')||'INTRA';
 
     return \%msg_object;
@@ -805,7 +806,7 @@ sub add {
 #       my $messageString= &C4::AR::Mensajes::getMensaje($msg_hashref->{'codMsg'},$Message_hashref->{'tipo'},$msg_hashref->{'params'});
     my $session         = CGI::Session->load();
     my $tipo            = $msg_hashref->{'tipo'}||$session->param('type')||'INTRA';
-    
+
     #encodeamos en utf8 para mostrar bien los acentros
     encodeUtf8Msj($msg_hashref->{'params'});
 
@@ -816,7 +817,7 @@ sub add {
 # C4::AR::Debug::debug("Mensajes::add => params: ".$msg_hashref->{'params'}->[0]."\n");
 
     push (@{$session->{'msg_object'}->{'messages'}}, $msg_hashref);
-    
+
     push (@{$Message_hashref->{'messages'}}, $msg_hashref);
 }
 
