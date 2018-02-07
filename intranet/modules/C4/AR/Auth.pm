@@ -1470,23 +1470,32 @@ sub _autenticar{
   my ($userid, $password, $nroRandom,$metodo) = @_;
   my $socio = undef;
   eval{
-    C4::AR::Debug::debug("metodo ".$metodo." userid ".$userid . " nroRandom : " . $nroRandom);
+    C4::AR::Debug::debug("Auth.pm => _autenticar metodo => ".$metodo." userid ".$userid . " nroRandom : " . $nroRandom);
+
     switch ($metodo){
 			case "ldap" {
-				($socio) = C4::AR::Authldap::checkPassword($userid,$password,$nroRandom);
-				C4::AR::Debug::debug("Devolviendo casi al final el socio".$socio);
+
+		    # se verifica la preferencia para autenticación contra LDAP
+				if (!C4::AR::Preferencias::getValorPreferencia("ldapenabled")) {
+					C4::AR::Debug::debug("Auth.pm => _autenticar metodo => NO está habilitada la autenticación contra LDAP ".$socio);
+					$socio = undef ;
+				} else {
+					($socio) = C4::AR::Authldap::checkPassword($userid,$password,$nroRandom);
+					C4::AR::Debug::debug("Auth.pm => _autenticar metodo => Devolviendo casi al final el socio".$socio);
+				}
+
 			}
 			case "mysql"{
 				($socio) = C4::AR::AuthMysql::checkPassword($userid,$password,$nroRandom);
-				C4::AR::Debug::debug("Vamos bien???".$socio);
+				C4::AR::Debug::debug("Auth.pm => _autenticar metodo =>  Vamos bien???".$socio);
 			}
 			else{
 			}
     } #end switch
 		# if ( (defined $socio) && (! _checkRequisito($socio))  ){
-		C4::AR::Debug::debug("Auth => socio->cumpleRequisito() " . $socio->cumpleRequisito());
+		C4::AR::Debug::debug("Auth.pm => _autenticar metodo =>  socio->cumpleRequisito() " . $socio->cumpleRequisito());
 		if ( (defined $socio) && ( !$socio->cumpleRequisito() ) ) {
-			C4::AR::Debug::debug("Auth.pm => NO CUMPLE REQUISITO ".$socio);
+			C4::AR::Debug::debug("Auth.pm => _autenticar metodo => NO CUMPLE REQUISITO ".$socio);
 			$socio = undef ;
 
 		}elsif (defined $socio){
@@ -1727,7 +1736,7 @@ sub _checkpw {
 	my ($userid, $password, $nroRandom) = @_;
 	my ($socio)= C4::AR::Usuarios::getSocioInfoPorNroSocio($userid);
 	if ($socio){
-		 C4::AR::Debug::debug("_checkpw=> busco el socio ".$userid."\n");
+		 C4::AR::Debug::debug("Auth.pm => _checkpw=> busco el socio ".$userid."\n");
 		 return _verificar_password_con_metodo($password, $socio, $nroRandom, getMetodoEncriptacion());
 	}
 	return undef;
@@ -2043,12 +2052,13 @@ Esta funcion devuelve el password del socio desde el ultimo mecanismo utilizado 
 	use Switch;
 	switch ($auth_method){
 		case {"ldap" && C4::AR::Utilidades::existeInArray("ldap",@$metodosDeAutenticacion)} {
-			   ($password) = C4::AR::Authldap::obtenerPassword($socio);
-		}
-		else{
+	      if(C4::AR::Preferencias::getValorPreferencia("ldapenabled")){
+	        ($password) = C4::AR::Authldap::obtenerPassword($socio);
+	      }
+		} else {
 			#en este caso devuelve lo que tiene el obejto en la base de datos.
 			($password) = $socio->password;
-			}
+		}
 	}
 
 	return $password;

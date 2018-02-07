@@ -1,7 +1,7 @@
 package C4::AR::AuthMysql;
 
 =head1 NAME
-  C4::AR::AuthMysql 
+  C4::AR::AuthMysql
 =head1 SYNOPSIS
   use C4::AR::AuthMysql;
 =head1 DESCRIPTION
@@ -16,11 +16,11 @@ use vars qw(@ISA @EXPORT_OK );
 @ISA = qw(Exporter);
 @EXPORT_OK = qw(
     checkPassword
-    
+
 );
 
 
-=item 
+=item
     Funcion que recibe un userid y un password e intenta autenticarse ante un ldap, si lo logra devuelve un objeto Socio.
 =cut
 # sub _checkPwPlana{
@@ -30,12 +30,12 @@ use vars qw(@ISA @EXPORT_OK );
 
 sub _checkPwPlana{
     my ($userid, $password, $nroRandom) = @_;
-    #C4::AR::Debug::debug("AuthMysql => _checkPwPlana => busco el socio ".$userid."\n");
-    #C4::AR::Debug::debug("AuthMysql => _checkPwPlana => busco el password ".$password."\n");
+    C4::AR::Debug::debug("AuthMysql => _checkPwPlana => busco el socio ".$userid."\n");
+    C4::AR::Debug::debug("AuthMysql => _checkPwPlana => busco el password ".$password."\n");
     #C4::AR::Debug::debug("AuthMysql => _checkPwPlana => busco el nroRandom ".$nroRandom."\n");
     my ($socio) = C4::AR::Usuarios::getSocioInfoPorNroSocio($userid);
     if ($socio){
-         #C4::AR::Debug::debug("AuthMysql => _checkPwPlana => lo encontre!!! ".$userid."\n");
+         C4::AR::Debug::debug("AuthMysql => _checkPwPlana => lo encontre!!! ".$userid."\n");
          return _verificar_password_con_metodo($password, $socio, $nroRandom);
     }
 
@@ -47,11 +47,11 @@ sub _checkPwPlana{
 =cut
 sub _checkPwEncriptada{
     my ($userid, $password, $nroRandom) = @_;
-    #C4::AR::Debug::debug("_checkpw=> busco el socio ".$userid."\n");
-    #C4::AR::Debug::debug("_checkpw=> busco el password ".$password."\n");
+    C4::AR::Debug::debug("AuthMysql.pm => _checkPwEncriptada => busco el socio ".$userid."\n");
+    C4::AR::Debug::debug("AuthMysql.pm => _checkPwEncriptada => busco el password ".$password."\n");
     my ($socio)= C4::AR::Usuarios::getSocioInfoPorNroSocio($userid);
     if ($socio){
-         #C4::AR::Debug::debug("_checkpw=> lo encontre!!! ".$userid."\n");
+         C4::AR::Debug::debug("AuthMysql.pm => _checkPwEncriptada => lo encontre!!! ".$userid."\n");
          return _verificar_password_con_metodo($password, $socio, $nroRandom);
     }
     return undef;
@@ -59,7 +59,7 @@ sub _checkPwEncriptada{
 
 =item sub _verificar_password_con_metodo
 
-    Verifica la password ingresada por el usuario con la password recuperada de la base, todo esto con el metodo indicado por parametros   
+    Verifica la password ingresada por el usuario con la password recuperada de la base, todo esto con el metodo indicado por parametros
     Parametros:
     $socio: recuperada de la base
     $nroRandom: el nroRandom previamente generado
@@ -83,13 +83,13 @@ sub _checkPwEncriptada{
 
 sub _verificar_password_con_metodo {
     my ($password, $socio, $nroRandom) = @_;
-    #C4::AR::Debug::debug("AuthMysql.pm => _verificar_password_con_metodo => metodo? " . C4::AR::Auth::getMetodoEncriptacion());
-    my $socio_password      = (C4::Context->config('plainPassword'))?$socio->getPassword():C4::AR::Auth::hashear_password($socio->getPassword().$nroRandom, C4::AR::Auth::getMetodoEncriptacion());
+    C4::AR::Debug::debug("AuthMysql.pm => _verificar_password_con_metodo => metodo? " . C4::AR::Auth::getMetodoEncriptacion());
+    my $socio_password      = (C4::Context->config('plainPassword'))? $socio->getPassword():C4::AR::Auth::hashear_password($socio->getPassword().$nroRandom, C4::AR::Auth::getMetodoEncriptacion());
     my $password_ingresada  = (C4::Context->config('plainPassword'))?C4::AR::Auth::hashear_password($password, C4::AR::Auth::getMetodoEncriptacion()):$password;
-    #C4::AR::Debug::debug("AuthMysql.pm => _verificar_password_con_metodo => Password del socio $socio_password");
-    #C4::AR::Debug::debug("AuthMysql.pm => _verificar_password_con_metodo => Password del socio ingresado hasheada $password_ingresada");
-    #C4::AR::Debug::debug("AuthMysql.pm => _verificar_password_con_metodo => Password ingresado $password --- Nro_random $nroRandom");
-    
+    C4::AR::Debug::debug("AuthMysql.pm => _verificar_password_con_metodo => Password del socio $socio_password");
+    C4::AR::Debug::debug("AuthMysql.pm => _verificar_password_con_metodo => Password del socio ingresado hasheada $password_ingresada");
+    C4::AR::Debug::debug("AuthMysql.pm => _verificar_password_con_metodo => Password ingresado $password --- Nro_random $nroRandom");
+
     if ($password_ingresada eq $socio_password) {
         C4::AR::Debug::debug("ES VALIDO");
         #PASSWORD VALIDA
@@ -105,26 +105,28 @@ sub checkPassword{
     my ($userid,$password,$nroRandom) = @_;
     my $socio=undef;
 	if (!C4::Context->config('plainPassword')){
-	    ($socio) = _checkPwEncriptada($userid,$password,$nroRandom);
-	    
+    C4::AR::Debug::debug("AuthMysql => checkPassword => NOT PLAIN");
+    ($socio) = _checkPwEncriptada($userid,$password,$nroRandom);
+
 	}else{
-	    ($socio) = _checkPwPlana($userid,$password,$nroRandom);       
+    C4::AR::Debug::debug("AuthMysql => checkPassword => PLAIN");
+    ($socio) = _checkPwPlana($userid,$password,$nroRandom);
 	}
     return $socio;
-	
-}	
-	
-#TODO: checkear si viene plainPassword	
+
+}
+
+#TODO: checkear si viene plainPassword
 sub passwordsIguales{
 	my ($nuevaPassword1,$nuevaPassword2,$socio) = @_;
-	
+
     my $key         = $socio->getPassword;
-	
+
     $nuevaPassword1 = C4::AR::Auth::desencriptar($nuevaPassword1, $key);
     $nuevaPassword2 = C4::AR::Auth::desencriptar($nuevaPassword2, $key);
-	
+
 	return ($nuevaPassword1 eq $nuevaPassword2);
-	
+
 }
 
 =item
@@ -139,28 +141,28 @@ sub validarPassword{
     my $msg_object   = C4::AR::Mensajes::create();
 
     C4::AR::Debug::debug("AuthMysql => validarPassword => Password actual ".$password." Nuevo password ".$nuevaPassword);
-   
+
     ($socio) = _checkPwEncriptada($userid,$password,$nroRandom);
-            
+
     if (!$socio){
     	return undef;
     }
-            
+
     my $key         = $socio->getPassword;
-    
+
     $nuevaPassword = C4::AR::Auth::desencriptar($nuevaPassword,$key);
     $nuevaPassword = C4::AR::Auth::hashear_password($nuevaPassword,'MD5_B64');
     $nuevaPassword = C4::AR::Auth::hashear_password($nuevaPassword,C4::AR::Auth::getMetodoEncriptacion());
     $nuevaPassword = C4::AR::Auth::hashear_password($nuevaPassword.$nroRandom,C4::AR::Auth::getMetodoEncriptacion());
-    
+
     if (($socio) && ($password eq $nuevaPassword)){
-    
-        #esto quiere decir que el password actual es igual al nuevo  
+
+        #esto quiere decir que el password actual es igual al nuevo
         $msg_object->{'error'} = 1;
         C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U499', 'params' => []} );
-        
+
     }
-	
+
     return ($socio,$msg_object);
 }
 
@@ -170,15 +172,15 @@ sub validarPassword{
     usando como key = ( b64_sha256 ( b64_md5 ( passwordVieja ) ) ) => passwordVieja como esta en la base
 =cut
 sub setearPassword{
-    
+
     my ($socio,$nuevaPassword)  = @_;
     my $key                     = $socio->getPassword;
-        
+
     $nuevaPassword              = C4::AR::Auth::desencriptar($nuevaPassword,$key);
     $nuevaPassword              = C4::AR::Auth::hashear_password($nuevaPassword,'MD5_B64');
-    
+
     $nuevaPassword              = C4::AR::Auth::hashear_password($nuevaPassword,C4::AR::Auth::getMetodoEncriptacion());
-    $socio->setPassword($nuevaPassword);    
+    $socio->setPassword($nuevaPassword);
     return $socio;
 }
 
