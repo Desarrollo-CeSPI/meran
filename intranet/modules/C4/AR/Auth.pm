@@ -1786,6 +1786,12 @@ sub new_password_is_needed {
 	if (!$socio) {
 		$socio = C4::AR::Usuarios::getSocioInfoPorNroSocio($nro_socio);
 	}
+
+	# No se permite el cambio de contraseña desde el OPAC
+	if (!C4::AR::Preferencias::getValorPreferencia("permite_cambio_password_desde_opac")){
+		return 0;
+	}
+
 	my $days = C4::AR::Preferencias::getValorPreferencia("keeppasswordalive");
 	if ($days ne '0') {
 		my $err;
@@ -1889,6 +1895,7 @@ sub cambiarPassword {
 	if(!$msg_object->{'error'}){
 		#No hay error la validacion del password esta ok!
 		if( ($params->{'changePassword'} eq 1) && ($socio->getChange_password) ){
+			# FIXME esta asignación no tiene sentido
 			my $cambioDePasswordForzado= 1;
 		}
 	}
