@@ -2086,6 +2086,55 @@ sub exportarReporte {
 
 }
 
+sub reporteContenidoEstantesVirtuales{
+
+        my $estantes = C4::AR::Estantes::getListaEstantesPublicos();
+        my @reporte;
+        
+        foreach my $estante (@$estantes){
+            my $subEstantes = C4::AR::Estantes::getSubEstantes($estante->getId);
+            foreach my $subestante (@$subEstantes){
+                my $estante_completo =  C4::AR::Estantes::getEstanteConContenido($subestante->getId);
+                my $contenido = $estante_completo->contenido;
+                
+                if ($contenido){
+                    foreach my $c (@$contenido){
+
+                        my %info_estante;
+                        $info_estante{"padre"} = $estante->estante;
+                        $info_estante{"estante"} = $estante_completo->estante;
+
+                        my $niv1= $c->nivel2->nivel1;
+
+                        $info_estante{"titulo"} = $c->nivel2->nivel1->getTituloStringEscaped;
+                        $info_estante{"autor"} = $c->nivel2->nivel1->getAutorStringEscaped;
+                        $info_estante{"edicion"} = $c->nivel2->getEdicion;
+
+                        if($c->nivel2 && $c->nivel2->nivel1){
+                            my $niveles3 = C4::AR::Nivel3::getNivel3FromId2($c->nivel2->id);
+                            my $cantSala=0;
+                            my $cantPrestamo=0;
+
+                            foreach my $n3 (@$niveles3){
+                                    if ($n3->esParaSala()) {
+                                        $cantSala = $cantSala + 1;
+                                    } else {
+                                        $cantPrestamo = $cantPrestamo + 1;
+                                    }
+                            }
+                            $info_estante{"cantPrestamo"} = $cantPrestamo;
+                            $info_estante{"cantSala"} = $cantSala;
+                        }
+
+                        push( @reporte, \%info_estante );
+                    }
+                }
+            }
+        }
+        
+    return (\@reporte);
+}
+    
 
 END { }    # module clean-up code here (global destructor)
 
