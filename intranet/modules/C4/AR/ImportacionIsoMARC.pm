@@ -616,7 +616,7 @@ sub getEsquema{
     if ($limit){
         $detalle_esquema = C4::Modelo::IoImportacionIsoEsquemaDetalle::Manager->get_io_importacion_iso_esquema_detalle(
                                                                                                         query => \@filtros,
-                                                                                                        group_by => ['campo_origen,subcampo_origen'],
+                                                                                                        group_by => ['id_importacion_esquema,campo_origen,subcampo_origen'],
                                                                                                         limit   => $limit,
                                                                                                         offset  => $offset,
                                                                                                         sort_by => ['campo_origen']
@@ -624,7 +624,7 @@ sub getEsquema{
     }else{
         $detalle_esquema = C4::Modelo::IoImportacionIsoEsquemaDetalle::Manager->get_io_importacion_iso_esquema_detalle(
                                                                                                         query => \@filtros,
-                                                                                                        group_by => ['campo_origen,subcampo_origen'],
+                                                                                                        group_by => ['id_importacion_esquema,campo_origen,subcampo_origen'],
                                                                                                         sort_by => ['campo_origen']
         );
 
@@ -632,7 +632,7 @@ sub getEsquema{
 
     my $cant_total = C4::Modelo::IoImportacionIsoEsquemaDetalle::Manager->get_io_importacion_iso_esquema_detalle(
                                                                                                         query => \@filtros,
-                                                                                                        group_by => ['campo_origen,subcampo_origen'],
+                                                                                                        group_by => ['id_importacion_esquema,campo_origen,subcampo_origen'],
 
     );
 
@@ -1577,9 +1577,42 @@ sub detalleCompletoRegistro {
         }
     }
 
+    #Parche: BIBLIOTECA PUBLICA
+    if (C4::AR::Preferencias::getValorPreferencia("defaultUI") eq "DUN"){
+
+        #  Duplica Titulo
+        if ($nivel1->subfield('245','a')){
+            if (!$nivel1->field('222')){
+               $nivel1->append_fields(MARC::Field->new('222',' ',' ','a' => $nivel1->subfield('245','a')));
+            }
+            else{
+               $nivel1->field('222')->add_subfields(  'a' => $nivel1->subfield('245','a') );
+            }
+        }
+    }
+
     #Son revistas?
     if ( C4::AR::ImportacionIsoMARC::getTipoDocumentoFromMarcRecord_Object($detalle->{'grupos'}->[0]->{'grupo'})->getId_tipo_doc() eq 'REV') {
         C4::AR::Debug::debug(" REVISTAS!!! ");
+
+           #Parche: BIBLIOTECA PUBLICA
+            if (C4::AR::Preferencias::getValorPreferencia("defaultUI") eq "DUN"){
+                # Duplica Estado de colección
+                my $grupos = $detalle->{'grupos'};
+                foreach my $nivel2 (@$grupos){
+                    my $nivel2_marc = $nivel2->{'grupo'};
+                    if ($nivel2_marc->subfield('900','e')){
+                        if (!$nivel1->field('866')){
+                           $nivel1->append_fields(MARC::Field->new('866',' ',' ','a' => $nivel2_marc->subfield('900','e')));
+                        }
+                        else{
+                           $nivel1->field('866')->add_subfields(  'a' => $nivel2_marc->subfield('900','e') );
+                        }
+                    }
+                }
+            }
+
+
         my ($cantidad_ejemplares, $nuevos_grupos ) = procesarRevistas($detalle->{'grupos'});
         $detalle->{'grupos'} = $nuevos_grupos;
         $detalle->{'total_ejemplares'} = $cantidad_ejemplares;
