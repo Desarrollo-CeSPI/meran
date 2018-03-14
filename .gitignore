@@ -7,3 +7,4 @@
 
 # Ignore cover folder
 /files/intranet/uploads/covers/
+docs/integracionCalp/*.sql
