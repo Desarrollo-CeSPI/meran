@@ -375,7 +375,7 @@ update pref_preferencia_sistema set categoria="sistema" where variable ='titulo_
 
 CREATE TABLE indice_sugerencia (
 	id			INTEGER PRIMARY KEY AUTO_INCREMENT NOT NULL,
-	keyword		VARCHAR(255) NOT NULL,
+	keyword		VARCHAR(190) NOT NULL,
 	trigrams	VARCHAR(255) NOT NULL,
 	freq		INTEGER NOT NULL,
 	UNIQUE(keyword)
@@ -458,8 +458,8 @@ UPDATE rep_historial_circulacion SET tipo_operacion="NOTIFICACION CANCELACION" W
 
 ### 0.10.2 ###
 # se rompieron los dumps por las tablas de usuarios anonimizados.
-ALTER TABLE  usr_socio_anonymous  CHANGE   cumple_requisito    cumple_requisito  VARCHAR( 255 ) NOT NULL;
-ALTER TABLE  usr_socio_anonymous ADD  last_login_all TIMESTAMP NOT NULL AFTER  last_login;
+# ALTER TABLE  usr_socio_anonymous  CHANGE   cumple_requisito    cumple_requisito  VARCHAR( 255 ) NOT NULL;
+# ALTER TABLE  usr_socio_anonymous ADD  last_login_all TIMESTAMP NOT NULL AFTER  last_login;
 ALTER TABLE  usr_persona DROP id_categoria;
 
 DROP TABLE IF EXISTS ref_colaborador;

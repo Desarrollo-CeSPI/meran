@@ -1,0 +1,113 @@
+NameVirtualHost *:443
+
+<VirtualHost *:443>
+SetEnv MERAN_CONF "reemplazarCONFMERAN/meranreemplazarID.conf"
+PerlSwitches -wT 
+
+DirectoryIndex /meran/mainpage.pl 
+DocumentRoot reemplazarPATHBASE/reemplazarID/intranet/htdocs
+
+PerlPostConfigRequire reemplazarCONFMERAN/iniciandoreemplazarID.pl
+
+#Enabling Compression
+SetOutputFilter DEFLATE
+
+ServerAdmin koha@info.unlp.edu.ar
+ErrorLog /var/log/meran/reemplazarID/meran-error.log
+TransferLog /var/log/meran/reemplazarID/meran-access.log
+
+SSLEngine On
+SSLProtocol -all +SSLv3 +TLSv1
+SSLCipherSuite HIGH:MEDIUM
+SSLCertificateFile /etc/apache2/ssl/reemplazarID/apache.pem
+
+ErrorDocument 500 /meran/informacion/error.pl
+ErrorDocument 404 /meran/informacion/404notfound.pl
+<Directory reemplazarPATHBASE/reemplazarID/intranet/ >
+Order deny,allow
+Allow from all
+Deny from all
+</Directory>
+
+#CON MODPERL
+
+<Perl>
+push(@INC,"reemplazarPATHBASE/reemplazarID/intranet/modules");
+push(@INC,"reemplazarPATHBASE/reemplazarID/intranet/modules/C4/Share/share/perl/5.14.2/");
+push(@INC,"reemplazarPATHBASE/reemplazarID/intranet/modules/C4/Share/lib/perl/5.14.2/");
+push(@INC,"reemplazarPATHBASE/reemplazarID/intranet/modules/C4/Share/share/perl/5.14/");
+push(@INC,"reemplazarPATHBASE/reemplazarID/intranet/modules/C4/Share/share/perl/5.14.2/");
+push(@INC,"reemplazarPATHBASE/reemplazarID/intranet/modules/C4/Share/lib/perl5/");
+</Perl>
+
+
+
+Alias /meran/ reemplazarPATHBASE/reemplazarID/intranet/cgi-bin/
+<Location /meran/ >
+       SetHandler perl-script
+       PerlResponseHandler ModPerl::Registry
+       PerlOptions +ParseHeaders
+       Options +ExecCGI
+</Location>
+
+Alias /includes/ reemplazarPATHBASE/reemplazarID/includes/
+<Directory reemplazarPATHBASE/reemplazarID/includes/ >
+ Options  -Indexes
+  Order allow,deny
+  Allow from all
+</Directory>
+
+ServerSignature Off
+
+Alias /uploads/covers/ "reemplazarPATHBASE/reemplazarID/files/intranet/uploads/covers/"
+<Directory reemplazarPATHBASE/reemplazarID/files/intranet/uploads/covers/ >
+  Order allow,deny
+  Allow from all
+</Directory>
+
+Alias /uploads/covers-added/ "reemplazarPATHBASE/reemplazarID/files/intranet/uploads/covers-added/"
+<Directory reemplazarPATHBASE/reemplazarID/files/intranet/uploads/covers-added/ >
+ Order allow,deny
+ Allow from all
+</Directory>
+
+Alias /uploads/ "reemplazarPATHBASE/reemplazarID/files/intranet/uploads/"
+<Directory reemplazarPATHBASE/reemplazarID/files/intranet/uploads/ >
+Order allow,deny
+Allow from all
+</Directory>
+
+Alias /private-uploads/ "reemplazarPATHBASE/reemplazarID/files/intranet/private-uploads/"
+<Directory reemplazarPATHBASE/reemplazarID/files/intranet/private-uploads/ >
+Order allow,deny
+Allow from all
+</Directory>
+
+Alias /uploads/novedades-opac "reemplazarPATHBASE/reemplazarID/files/opac/uploads/novedades/"
+<Directory reemplazarPATHBASE/reemplazarID/files/opac/uploads/novedades >
+Order allow,deny
+Allow from all
+</Directory>
+
+Alias /uploads/portada "reemplazarPATHBASE/reemplazarID/files/opac/uploads/portada/"
+<Directory reemplazarPATHBASE/reemplazarID/files/opac/uploads/portada >
+Order allow,deny
+Allow from all
+</Directory>
+
+
+Alias /cron "reemplazarPATHBASE/reemplazarID/intranet/cgi-bin/cron/"
+<Directory reemplazarPATHBASE/reemplazarID/intranet/cgi-bin/cron/ >
+ Order deny,allow
+ Allow from 127.0.0.1/255.255.255.255
+ Deny from all
+</Directory>
+
+Alias /dev-plugins reemplazarPATHBASE/dev-plugins/
+<Directory reemplazarPATHBASE/dev-plugins/>
+Options  -Indexes
+Order allow,deny
+Allow from all
+</Directory>
+
+</VirtualHost>

@@ -11,4 +11,4 @@ libhttp-oai-perl \
 libxml-sax-writer-perl \
 libxml-libxslt-perl \
 libyaml-perl \
-sphinxsearch \
+sphinxsearch 

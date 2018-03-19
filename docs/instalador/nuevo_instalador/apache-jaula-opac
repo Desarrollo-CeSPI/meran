@@ -1,0 +1,69 @@
+NameVirtualHost *:80
+<VirtualHost *:80>
+DirectoryIndex /meran/opac-main.pl 
+DocumentRoot reemplazarPATHBASE/reemplazarID/opac/htdocs
+ErrorLog /var/log/meran/reemplazarID/opac-error.log
+TransferLog /var/log/meran/reemplazarID/opac-access.log
+SetEnv MERAN_CONF "reemplazarCONFMERAN/meranreemplazarID.conf"
+Header set Access-Control-Allow-Origin *
+#SetEnv PERL5LIB "reemplazarPATHBASE/reemplazarID/intranet/modules"
+
+Alias /meran/ reemplazarPATHBASE/reemplazarID/opac/cgi-bin/
+
+ErrorDocument 500 /meran/informacion/error.pl
+ErrorDocument 404 /meran/informacion/404notfound.pl
+
+
+<Location /meran/ >
+      SetHandler perl-script
+      PerlResponseHandler ModPerl::Registry
+      PerlOptions +ParseHeaders  
+      Options +ExecCGI
+</Location>
+
+
+Alias /oai reemplazarPATHBASE/reemplazarID/opac/cgi-bin/oai.pl
+<Location /oai >
+      SetHandler perl-script
+      PerlResponseHandler ModPerl::Registry
+      PerlOptions +ParseHeaders
+      Options +ExecCGI
+</Location>
+
+<Perl>
+push(@INC,"reemplazarPATHBASE/reemplazarID/intranet/modules");
+push(@INC,"reemplazarPATHBASE/reemplazarID/intranet/modules/C4/Share/share/perl/5.14.2/");
+push(@INC,"reemplazarPATHBASE/reemplazarID/intranet/modules/C4/Share/lib/perl/5.14.2/");
+push(@INC,"reemplazarPATHBASE/reemplazarID/intranet/modules/C4/Share/share/perl/5.14/");
+push(@INC,"reemplazarPATHBASE/reemplazarID/intranet/modules/C4/Share/share/perl/5.14.2/");
+push(@INC,"reemplazarPATHBASE/reemplazarID/intranet/modules/C4/Share/lib/perl5/");
+</Perl>
+
+PerlPostConfigRequire reemplazarCONFMERAN/iniciandoreemplazarID.pl
+
+Alias /includes/ "reemplazarPATHBASE/reemplazarID/includes/"
+<Directory reemplazarPATHBASE/reemplazarID/includes/ >
+ Options  -Indexes
+  Order allow,deny
+  Allow from all
+</Directory>
+
+Alias /uploads/covers/ "reemplazarPATHBASE/reemplazarID/files/intranet/uploads/covers/"
+<Directory reemplazarPATHBASE/reemplazarID/files/intranet/uploads/covers/ >
+  Order allow,deny
+  Allow from all
+</Directory>
+
+Alias /uploads/ "reemplazarPATHBASE/reemplazarID/files/opac/uploads/"
+<Directory reemplazarPATHBASE/reemplazarID/files/opac/uploads/ >
+Order allow,deny
+Allow from all
+</Directory>
+
+Alias /private-uploads/ "reemplazarPATHBASE/reemplazarID/files/intranet/private-uploads/"
+<Directory reemplazarPATHBASE/reemplazarID/files/intranet/private-uploads/ >
+Order allow,deny
+Allow from all
+</Directory>
+
+</VirtualHost>
