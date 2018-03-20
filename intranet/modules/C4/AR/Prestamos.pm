@@ -227,7 +227,7 @@ sub getTipoPrestamo {
 		my @filtros;
 
 		push (@filtros,(id_tipo_prestamo => {eq => $tipo_prestamo}) );
-		my  $circ_ref_tipo_prestamo = C4::Modelo::CircRefTipoPrestamo::Manager->get_circ_ref_tipo_prestamo( query => \@filtros,);
+		my  $circ_ref_tipo_prestamo = C4::Modelo::CircRefTipoPrestamo::Manager->get_circ_ref_tipo_prestamo( query => \@filtros, sort_by => ['id_tipo_prestamo ASC']);
 		if (scalar(@$circ_ref_tipo_prestamo)){
 				return($circ_ref_tipo_prestamo->[0]);
 		}else{

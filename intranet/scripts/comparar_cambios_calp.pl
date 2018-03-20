@@ -37,7 +37,7 @@ use C4::Modelo::CatRegistroMarcN2Analitica;
 
 
 my $db_driver =  "mysql";
-my $db_name   = 'meran_calp_2016';
+my $db_name   = 'meran_calp_2015';
 my $db_host   = 'db';
 my $db_user   = 'root';
 my $db_passwd = 'dev';
@@ -59,7 +59,7 @@ my $hash = ();
 print "Total Registros ".scalar(@$n1s)."\n";
 
 foreach my $n1 (@$n1s){
-
+   my $id1=$n1->getId1();
    my $old = "SELECT * FROM  cat_registro_marc_n1 WHERE   id = ".$n1->getId1()."; ";
    my $old_rec = $db_calp->prepare($old);
    $old_rec->execute();
@@ -77,9 +77,20 @@ foreach my $n1 (@$n1s){
 
    		if ($new_autor != $old_autor){
   			$distinto_autor_principal++;
-        $hash->{$n1}->{'distinto_autor_principal'}=1;
-        $hash->{$n1}->{'autor_anterior'}=$old_autor;
-        $hash->{$n1}->{'autor_actual'}=$new_autor;
+        $hash->{$id1}->{'distinto_autor_principal'}=1;
+
+        if($old_autor){
+          my $id_autor        = C4::AR::Catalogacion::getRefFromStringConArrobas($old_autor);
+          my $autor           = C4::Modelo::CatAutor->getByPk($id_autor);
+          $hash->{$id1}->{'autor_anterior'} = $autor->toString;
+        }
+
+        if($new_autor){
+        my $id_autor        = C4::AR::Catalogacion::getRefFromStringConArrobas($new_autor);
+        my $autor           = C4::Modelo::CatAutor->getByPk($id_autor);
+        $hash->{$id1}->{'autor_actual'} = $autor->toString;
+        }
+
    		}
 
       #Autores Secundarios
@@ -88,9 +99,26 @@ foreach my $n1 (@$n1s){
 
       if ( comparar(\@new_asec,\@old_asec)){
          $distintos_autores_secundarios++;
-         $hash->{$n1}->{'distintos_autores_secundarios'}=1;
-         $hash->{$n1}->{'asec_anteriores'}= join( " ", @old_asec );
-         $hash->{$n1}->{'asec_actuales'}= join( " ", @new_asec );
+         $hash->{$id1}->{'distintos_autores_secundarios'}=1;
+
+         if (!$hash->{$id1}->{'asec_anteriores'}){
+          $hash->{$id1}->{'asec_anteriores'}="";
+         }
+        if (!$hash->{$id1}->{'asec_actuales'}){
+          $hash->{$id1}->{'asec_actuales'}="";
+           }
+
+        foreach my $ref (@old_asec){
+          my $id_autor        = C4::AR::Catalogacion::getRefFromStringConArrobas($ref);
+          my $autor           = C4::Modelo::CatAutor->getByPk($id_autor);
+          $hash->{$id1}->{'asec_anteriores'}.= $autor->toString;
+        }
+
+        foreach my $ref (@new_asec){
+          my $id_autor        = C4::AR::Catalogacion::getRefFromStringConArrobas($ref);
+          my $autor           = C4::Modelo::CatAutor->getByPk($id_autor);
+          $hash->{$id1}->{'asec_actuales'}.= $autor->toString;
+        }
       }
 
    		#Temas
@@ -99,21 +127,55 @@ foreach my $n1 (@$n1s){
 
    		if ( comparar(\@new_temas,\@old_temas)){
 			   $distintos_temas++;
-         $hash->{$n1}->{'distintos_temas'}=1;
-         $hash->{$n1}->{'temas_anteriores'}= join( " ", @old_temas );
-         $hash->{$n1}->{'temas_actuales'}= join( " ", @new_temas );
-   		}
+         $hash->{$id1}->{'distintos_temas'}=1;
+         if (!$hash->{$id1}->{'temas_anteriores'}){
+          $hash->{$id1}->{'temas_anteriores'}="";
+         }
+        if (!$hash->{$id1}->{'temas_actuales'}){
+          $hash->{$id1}->{'temas_actuales'}="";
+           }
 
-      #Editores
-      my @new_editores = editores($n1->getId1(),$dbh);
-      my @old_editores = editores($n1->getId1(),$db_calp);
+        foreach my $ref (@old_temas){
+          my $id_tema        = C4::AR::Catalogacion::getRefFromStringConArrobas($ref);
+          my $tema           = C4::Modelo::CatTema->getByPk($id_tema);
+          $hash->{$id1}->{'temas_anteriores'}.= $tema->toString;
+        }
 
-      if ( comparar(\@new_editores,\@old_editores)){
-         $distintos_editores++;
-         $hash->{$n1}->{'distintos_editores'}=1;
-         $hash->{$n1}->{'editores_anteriores'}= join( " ", @old_editores );
-         $hash->{$n1}->{'editores_actuales'}= join( " ", @new_editores );
+        foreach my $ref (@new_temas){
+          my $id_tema        = C4::AR::Catalogacion::getRefFromStringConArrobas($ref);
+          my $tema           = C4::Modelo::CatTema->getByPk($id_tema);
+          $hash->{$id1}->{'temas_actuales'}.= $tema->toString;
+        }
+
       }
+
+       # my @new_editores = editores($n1->getId1(),$dbh);
+       # my @old_editores = editores($n1->getId1(),$db_calp);
+
+       # if ( comparar(\@new_editores,\@old_editores)){
+       #    $distintos_editores++;
+       #    $hash->{$n1}->{'distintos_editores'}=1;
+
+       #   if (!$hash->{$id1}->{'temas_anteriores'}){
+       #    $hash->{$id1}->{'temas_anteriores'}="";
+       #   }
+       #  if (!$hash->{$id1}->{'temas_actuales'}){
+       #    $hash->{$id1}->{'temas_actuales'}="";
+       #     }
+
+       #  foreach my $ref (@old_editores){
+       #    my $id_editor        = C4::AR::Catalogacion::getRefFromStringConArrobas($ref);
+       #    my $editor           = C4::Modelo::CatEditorial->getByPk($id_editor);
+       #    $hash->{$id1}->{'editores_anteriores'}.= $editor->toString;
+       #  }
+
+       #  foreach my $ref (@new_editores){
+       #    my $id_editor        = C4::AR::Catalogacion::getRefFromStringConArrobas($ref);
+       #    my $editor           = C4::Modelo::CatEditorial->getByPk($id_editor);
+       #    $hash->{$id1}->{'editores_actuales'}.= $editor->toString;
+       #  }
+
+       # }
 
    }
 }
