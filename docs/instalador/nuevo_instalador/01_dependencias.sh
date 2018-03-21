@@ -11,4 +11,12 @@ libhttp-oai-perl \
 libxml-sax-writer-perl \
 libxml-libxslt-perl \
 libyaml-perl \
-sphinxsearch 
+sphinxsearch \
+libcgi-session-perl \
+librose-db-perl \
+libsphinx-search-perl \
+build-essential \
+
+
+
+cpan -i Sphinx:Manager

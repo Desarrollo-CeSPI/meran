@@ -1,4 +1,3 @@
-NameVirtualHost *:80
 <VirtualHost *:80>
 DirectoryIndex /meran/opac-main.pl 
 DocumentRoot reemplazarPATHBASE/reemplazarID/opac/htdocs
@@ -32,11 +31,6 @@ Alias /oai reemplazarPATHBASE/reemplazarID/opac/cgi-bin/oai.pl
 
 <Perl>
 push(@INC,"reemplazarPATHBASE/reemplazarID/intranet/modules");
-push(@INC,"reemplazarPATHBASE/reemplazarID/intranet/modules/C4/Share/share/perl/5.14.2/");
-push(@INC,"reemplazarPATHBASE/reemplazarID/intranet/modules/C4/Share/lib/perl/5.14.2/");
-push(@INC,"reemplazarPATHBASE/reemplazarID/intranet/modules/C4/Share/share/perl/5.14/");
-push(@INC,"reemplazarPATHBASE/reemplazarID/intranet/modules/C4/Share/share/perl/5.14.2/");
-push(@INC,"reemplazarPATHBASE/reemplazarID/intranet/modules/C4/Share/lib/perl5/");
 </Perl>
 
 PerlPostConfigRequire reemplazarCONFMERAN/iniciandoreemplazarID.pl

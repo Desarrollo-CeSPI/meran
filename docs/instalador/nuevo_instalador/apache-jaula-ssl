@@ -1,5 +1,3 @@
-NameVirtualHost *:443
-
 <VirtualHost *:443>
 SetEnv MERAN_CONF "reemplazarCONFMERAN/meranreemplazarID.conf"
 PerlSwitches -wT 
@@ -17,7 +15,7 @@ ErrorLog /var/log/meran/reemplazarID/meran-error.log
 TransferLog /var/log/meran/reemplazarID/meran-access.log
 
 SSLEngine On
-SSLProtocol -all +SSLv3 +TLSv1
+SSLProtocol -all +TLSv1 +TLSv1.1 +TLSv1.2
 SSLCipherSuite HIGH:MEDIUM
 SSLCertificateFile /etc/apache2/ssl/reemplazarID/apache.pem
 
@@ -33,11 +31,6 @@ Deny from all
 
 <Perl>
 push(@INC,"reemplazarPATHBASE/reemplazarID/intranet/modules");
-push(@INC,"reemplazarPATHBASE/reemplazarID/intranet/modules/C4/Share/share/perl/5.14.2/");
-push(@INC,"reemplazarPATHBASE/reemplazarID/intranet/modules/C4/Share/lib/perl/5.14.2/");
-push(@INC,"reemplazarPATHBASE/reemplazarID/intranet/modules/C4/Share/share/perl/5.14/");
-push(@INC,"reemplazarPATHBASE/reemplazarID/intranet/modules/C4/Share/share/perl/5.14.2/");
-push(@INC,"reemplazarPATHBASE/reemplazarID/intranet/modules/C4/Share/lib/perl5/");
 </Perl>
 
 
