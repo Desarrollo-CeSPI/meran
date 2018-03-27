@@ -112,22 +112,22 @@ elsif ($tipoAccion eq 'AGREGAR_TIPO_PRESTAMO') {
 
 }
 # TODO falta validar que el tipo de prestamo no tenga referencias antes de eliminar
-# elsif ($tipoAccion eq 'BORRAR') {
-# 
-#     my ($userid, $session, $flags) = checkauth( $input, 
-#                                             $authnotrequired,
-#                                             {   ui => 'ANY', 
-#                                                 tipo_documento => 'ANY', 
-#                                                 accion => 'BAJA', 
-#                                                 entorno => 'undefined'},
-#                                             "intranet"
-#                                 );
-# 
-#     my $Message_arrayref = &C4::AR::Prestamos::t_eliminarTipoPrestamo($id_tipo_prestamo);
-#     my $infoOperacionJSON=to_json $Message_arrayref;
-#     C4::AR::Auth::print_header($session);
-#     print $infoOperacionJSON;
-# }
+elsif ($tipoAccion eq 'BORRAR') {
+ 
+     my ($userid, $session, $flags) = checkauth( $input, 
+                                             $authnotrequired,
+                                             {   ui => 'ANY', 
+                                                 tipo_documento => 'ANY', 
+                                                 accion => 'BAJA', 
+                                                 entorno => 'undefined'},
+                                             "intranet"
+                                 );
+ 
+     my $Message_arrayref = &C4::AR::Prestamos::t_eliminarTipoPrestamo($id_tipo_prestamo);
+     my $infoOperacionJSON=to_json $Message_arrayref;
+     C4::AR::Auth::print_header($session);
+     print $infoOperacionJSON;
+}
 
 
 if ($tipoAccion eq 'TIPOS_PRESTAMOS') {
