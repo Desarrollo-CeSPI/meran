@@ -289,5 +289,11 @@ sub getAllTipoPrestamo{
     return @id_tipo_prestamos_array;
 }
 
+sub enUso{
+    my ($self) = shift;
+    my $cantidad_prestamos=C4::AR::Prestamos::cantidadDeUsoTipoPrestamo($self->getId_tipo_prestamo);
+    return $cantidad_prestamos;
+}
+
 1;
 

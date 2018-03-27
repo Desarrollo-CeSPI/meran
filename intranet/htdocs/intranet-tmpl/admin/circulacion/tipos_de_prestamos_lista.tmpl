@@ -8,7 +8,7 @@
                                                 class           => "",
                                                 columns         => ['[% "C&oacute;digo" | i18n %]','[% "Descripci&oacute;n" | i18n %]','[% "M&aacute;xima cantidad de pr&eacute;stamos" | i18n %]
     ','[% "D&iacute;as de duraci&oacute;n del pr&eacute;stamo" | i18n %]','[% "Renovaciones" | i18n %]','[% "D&iacute;as de Renovaci&oacute;n" | i18n %]
-    ','[% "Cantidad de d&iacute;as para renovar" | i18n %]','[% "Para Sala" | i18n %]','[% "Habilitado" | i18n %]','[% "Editar" | i18n %]',
+    ','[% "Cantidad de d&iacute;as para renovar" | i18n %]','[% "Para Sala" | i18n %]','[% "Habilitado" | i18n %]','[% "Editar" | i18n %]','[% "Borrar" | i18n %]'
                                                                    ]
                                                 
                     ) ;
@@ -62,8 +62,20 @@
                                                                       title        => "",
                                       ) ;
                                 [% END %]
-
-
+            </td>
+            <td>
+                [% IF tipo_prestamo.enUso %]
+                    [% "En uso" | i18n %] ([% tipo_prestamo.enUso %] [% "pr&eacute;s." | i18n %])
+                [% ELSE %]
+                                [% PERL %]
+                                      print C4::AR::Filtros::action_button(
+                                                                      button       => "btn btn-danger click",
+                                                                      action       => 'eliminarTipoPrestamo("[% tipo_prestamo.getId_tipo_prestamo %]")',
+                                                                      icon         => "icon-white icon-remove",
+                                                                      title        => "",
+                                      ) ;
+                                [% END %]
+                [% END %]
             </td>
         </tr>
     [% END %]
