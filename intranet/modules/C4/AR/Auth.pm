@@ -866,14 +866,13 @@ sub checkauth {
 						# se logueo mal mas de 3 veces y se tiene configuración de recaptcha, debo verificar captcha
 
 						my $reCaptchaPrivateKey =  C4::AR::Preferencias::getValorPreferencia('re_captcha_private_key');
-						my $reCaptchaChallenge  = $_[0]->param('recaptcha_challenge_field');
-						my $reCaptchaResponse   = $_[0]->param('recaptcha_response_field');
+						my $reCaptchaResponse   = $_[0]->param('g-recaptcha-response');
 						use Captcha::reCAPTCHA;
 
 						my $c = Captcha::reCAPTCHA->new;
 
 						eval{
-						   $captchaResult = $c->check_answer($reCaptchaPrivateKey, $ENV{'REMOTE_ADDR'},$reCaptchaChallenge, $reCaptchaResponse);
+						   $captchaResult = $c->check_answer_v2($reCaptchaPrivateKey,$reCaptchaResponse,$ENV{'REMOTE_ADDR'});
 						};
 
 						C4::AR::Debug::debug("ERROR DE CAPTCHA: ".$captchaResult->{error});
