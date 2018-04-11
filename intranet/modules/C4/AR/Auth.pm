@@ -2191,13 +2191,17 @@ sub recoverPassword{
 
 	use Captcha::reCAPTCHA;
 	my $c = Captcha::reCAPTCHA->new;
-
-	my $captchaResult = $c->check_answer(
-		$reCaptchaPrivateKey, $ENV{'REMOTE_ADDR'},
-		$reCaptchaChallenge, $reCaptchaResponse
-	);
-
-	if ( $captchaResult->{is_valid} ){
+	my $captchaResult;
+	
+	if ($reCaptchaPrivateKey){
+		$captchaResult = $c->check_answer(
+			$reCaptchaPrivateKey, $ENV{'REMOTE_ADDR'},
+			$reCaptchaChallenge, $reCaptchaResponse
+		);
+	}
+	
+	#Si no está configurado el recaptcha, no se utiliza 
+	if ( !$reCaptchaPrivateKey || $captchaResult->{is_valid} ){
 		my $user_id = C4::AR::Utilidades::trim($params->{'user-id'});
 		my $socio   = C4::AR::Usuarios::getSocioInfoPorMixed($user_id);
 		if ($socio){
