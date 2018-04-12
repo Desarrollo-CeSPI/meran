@@ -2183,20 +2183,19 @@ sub recoverPassword{
 	my $message             = undef;
 	my $socio               = undef;
 	my $reCaptchaPrivateKey =  C4::AR::Preferencias::getValorPreferencia('re_captcha_private_key');
-	my $reCaptchaChallenge  = $params->{'recaptcha_challenge_field'};
 	my $reCaptchaResponse   = $params->{'recaptcha_response_field'};
 	my $isError             = 0;
 	use HTML::Entities;
 
 	use Captcha::reCAPTCHA;
 	my $c = Captcha::reCAPTCHA->new;
+	my $captchaResult;
+	
+	if ($reCaptchaPrivateKey){	
+		$c->check_answer_v2($reCaptchaPrivateKey,$reCaptchaResponse,$ENV{'REMOTE_ADDR'});
+	}
 
-	my $captchaResult = $c->check_answer(
-		$reCaptchaPrivateKey, $ENV{'REMOTE_ADDR'},
-		$reCaptchaChallenge, $reCaptchaResponse
-	);
-
-	if ( $captchaResult->{is_valid} ){
+	if (!$reCaptchaPrivateKey || $captchaResult->{is_valid} ){
 		my $user_id = C4::AR::Utilidades::trim($params->{'user-id'});
 		my $socio   = C4::AR::Usuarios::getSocioInfoPorMixed($user_id);
 		if ($socio){
