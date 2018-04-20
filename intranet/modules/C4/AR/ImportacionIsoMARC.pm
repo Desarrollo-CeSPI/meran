@@ -2383,6 +2383,7 @@ sub getEjemplarFromMarcRecord {
     $hash_nivel3{'marc_record'}             = $nivel3;
     $hash_nivel3{'tipo_documento'}          = $tipo_documento;
     $hash_nivel3{'barcode'}                 =  C4::AR::ImportacionIsoMARC::generaCodigoBarraFromMarcRecord($nivel3,$tipo_documento);
+  
   if($hash_nivel3{'barcode'} eq 'AUTOGENERADO'){
     $hash_nivel3{'generar_barcode'}=1;
     }
