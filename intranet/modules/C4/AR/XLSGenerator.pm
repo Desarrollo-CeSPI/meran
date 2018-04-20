@@ -129,14 +129,23 @@ sub exportarReporteReservasCirculacion{
             $responsable = C4::AR::Filtros::i18n("Material inexistente");
         }
         $fila_tabla[0] = decode('utf8', $responsable);
+        
+        eval {
+            if($historial_circulacion->nivel2){
+                if($historial_circulacion->nivel2->nivel1) {
+                    $fila_tabla[1] = decode('utf8', $historial_circulacion->nivel2->nivel1->getTituloStringEscaped());
+                    $fila_tabla[2] = decode('utf8', $historial_circulacion->nivel2->nivel1->getAutorStringEscaped());
+                }
+                else{
+                    $fila_tabla[1] =  C4::AR::Filtros::i18n("Material inexistente");
+                    $fila_tabla[2] =  C4::AR::Filtros::i18n("Material inexistente");
+                }
+            }
+        };
 
-        if($historial_circulacion->nivel2->nivel1) {
-            $fila_tabla[1] = decode('utf8', $historial_circulacion->nivel2->nivel1->getTituloStringEscaped());
-            $fila_tabla[2] = decode('utf8', $historial_circulacion->nivel2->nivel1->getAutorStringEscaped());
-        }
-        else{
-            $fila_tabla[1] =  C4::AR::Filtros::i18n("Material inexistente");
-            $fila_tabla[2] =  C4::AR::Filtros::i18n("Material inexistente");
+        if ($@){
+                $fila_tabla[1] =  C4::AR::Filtros::i18n("Material inexistente");
+                $fila_tabla[2] =  C4::AR::Filtros::i18n("Material inexistente");
         }
 
         eval {
@@ -146,13 +155,21 @@ sub exportarReporteReservasCirculacion{
             }
             else{
                 $fila_tabla[3] =  C4::AR::Filtros::i18n("Reserva de grupo");
-                $fila_tabla[4] =  $historial_circulacion->nivel2->getPrimerSignatura();
+                if($historial_circulacion->nivel2){
+                    $fila_tabla[4] =  $historial_circulacion->nivel2->getPrimerSignatura();
+                }else{
+                    $fila_tabla[4] =  C4::AR::Filtros::i18n("Material inexistente");
+                }
             }
         };
 
         if ($@){
             $fila_tabla[3] =  C4::AR::Filtros::i18n("Reserva de grupo");
-            $fila_tabla[4] =  $historial_circulacion->nivel2->getPrimerSignatura();
+            if($historial_circulacion->nivel2){
+                    $fila_tabla[4] =  $historial_circulacion->nivel2->getPrimerSignatura();
+            }else{
+                    $fila_tabla[4] =  C4::AR::Filtros::i18n("Material inexistente");
+            }
         }
 
 

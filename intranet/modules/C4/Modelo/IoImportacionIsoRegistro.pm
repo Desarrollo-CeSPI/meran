@@ -201,7 +201,10 @@ sub agregarDatoAMarcRecord {
                 my $subcampo=$detalle->getSubcampoDestino;
 
                 if($campo eq '650'){
-                    $marc_record->append_fields(MARC::Field->new($campo, $ind1, $ind2,$subcampo => C4::AR::Utilidades::trim($dato)));
+                    my @temas =  split(',', C4::AR::Utilidades::trim($dato));
+                    foreach my $tema (@temas){
+                        $marc_record->append_fields(MARC::Field->new($campo, $ind1, $ind2,$subcampo => C4::AR::Utilidades::trim($tema)));
+                    }                
                 }else{
 
                     if ((@fields)&&(($campo eq '100')&&($subcampo eq 'a'))){

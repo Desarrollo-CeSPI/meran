@@ -56,6 +56,11 @@ if ($accion eq 'eliminar'){
 my ($ini,$pageNumber,$cantR)            = C4::AR::Utilidades::InitPaginador($ini);
 my ($cant_mensajes,$mensajes_contacto)  = C4::AR::MensajesContacto::listar(0,$ini,$cantR);
 
+    foreach my $msg (@$mensajes_contacto) { 
+        $msg->setAsunto(CGI::unescapeHTML($msg->getAsunto()));
+        $msg->setMensaje(CGI::unescapeHTML($msg->getMensaje()));
+    }
+
 $t_params->{'paginador'}                = C4::AR::Utilidades::crearPaginadorOPAC($cant_mensajes,$cantR, $pageNumber,$url,$t_params);
 $t_params->{'mensajes_contacto'}        = $mensajes_contacto;
 $t_params->{'cant_mensajes'}            = $cant_mensajes;
