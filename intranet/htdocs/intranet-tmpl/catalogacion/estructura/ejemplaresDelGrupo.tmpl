@@ -133,13 +133,13 @@
 												                [% PERL %]
 												                    print C4::AR::Filtros::action_set_button(    
 					                                                        title           => '[% "Devolver" | i18n %]',
-					                                                        action          =>'devolverPrestamo("[% socio_prestamo.getNro_socio %]","[% socio_prestamo.persona.getApeYNom %]","[% id2 %]","[% prestamo.getId_prestamo %]")',
+					                                                        action          =>'devolverPrestamo("[% socio_prestamo.getNro_socio %]","[% socio_prestamo.persona.getNro_documento %]","[% id2 %]","[% prestamo.getId_prestamo %]")',
 					                                                        button          => 'btn btn-danger',
 					                                                        icon=>"icon-share-alt icon-white",
 					                                                        actions         => [
 					                                                                            [% IF prestamo.sePuedeRenovar %]
 					                                                                                {title => "Renovar", 
-					                                                                                 action=>'renovarPrestamo("[% socio_prestamo.getNro_socio %]","[% socio_prestamo.persona.getApeYNom %]","[% id2 %]","[% prestamo.getId_prestamo %]")', 
+					                                                                                 action=>'renovarPrestamo("[% socio_prestamo.getNro_socio %]","[% socio_prestamo.persona.getNro_documento %]","[% id2 %]","[% prestamo.getId_prestamo %]")', 
 					                                                                                 icon=>"icon-retweet"
 					                                                                                },
 					                                                                            [% END %]
