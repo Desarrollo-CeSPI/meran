@@ -27,7 +27,11 @@ use C4::Modelo::CatRegistroMarcN3::Manager;
 #995$t Signatura
 #995$o Disponibilidad
 #995$e Estado
+#995^m - Fecha de acceso
 #900$g Responsable carga
+#583^a - Nota de Acción
+#583^c - Fecha de la acción
+#583^k - Responsable de la acción
 
 
 
@@ -45,7 +49,12 @@ my @head=(
     'Inventario',
     'Disponibilidad',
     'Estado',
-    'Responsable de Carga');
+    'Fecha de acceso',
+    'Responsable de Carga',
+    'Nota de la acción',
+    'Fecha de la acción',
+    'Responsable de la acción',
+    );
 
 print join('~', @head);
 print "\n";
@@ -134,7 +143,13 @@ foreach my $nivel3 (@$ejemplares){
     }
 
     $ejemplar[12] = $nivel3->getEstado();
-    $ejemplar[13] = $marc_record3->subfield('900','g');
+
+    $ejemplar[13] = $marc_record3->subfield('995','m');
+    $ejemplar[14] = $marc_record3->subfield('900','g');
+
+    $ejemplar[15] = $marc_record1->subfield('583','a');
+    $ejemplar[16] = $marc_record1->subfield('583','c');
+    $ejemplar[17] = $marc_record1->subfield('583','k');
 
     print join('~', @ejemplar);
     print "\n";

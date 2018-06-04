@@ -74,8 +74,8 @@ function buscarTiposPrestamosSancionados(){
         objAH.debug             = true;
         objAH.showOverlay       = true;
         objAH.url=URL_PREFIX+"/admin/circulacion/sancionesDB.pl";
-        objAH.tipo_prestamo     = $("#tipo_prestamo_id_add").val();
-        objAH.categoria_socio   = $("#categoria_socio_id_add").val();
+        objAH.tipo_prestamo     = $("#tipo_prestamo_id").val();
+        objAH.categoria_socio   = $("#categoria_socio_id").val();
         objAH.tipoAccion        = "TIPOS_PRESTAMOS_SANCIONADOS";
         borrarDiv();
         objAH.sendToServer();

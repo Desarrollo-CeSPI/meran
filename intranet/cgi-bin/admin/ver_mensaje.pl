@@ -45,6 +45,8 @@ $obj=C4::AR::Utilidades::from_json_ISO($obj);
 
 my ($id_mensaje) = $obj->{'id'};
 my ($mensaje) = C4::AR::MensajesContacto::ver($id_mensaje);
+$mensaje->setAsunto(CGI::unescapeHTML($mensaje->getAsunto()));
+$mensaje->setMensaje(CGI::unescapeHTML($mensaje->getMensaje()));
 
 $t_params->{'mensaje'} = $mensaje;
 $t_params->{'page_sub_title'}=C4::AR::Filtros::i18n("Mensajes - Ver mensaje");
