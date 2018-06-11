@@ -18,12 +18,13 @@
                             <input type="user-id" name="user-id" id="user-id" tabindex="1" class="field" value="" />
                         </div>
                     </div>
-
+             
              [%  IF re_captcha_public_key  %]
                     <div id="captcha"> 
                         <div class="g-recaptcha" data-sitekey="[% re_captcha_public_key %]"></div>
                     </div>
              [% END %]
+
                     <div class="form-actions">
                         <button class="btn btn-large btn-primary" type="submit">[% 'Enviar' | i18n %]</button>
                     </div> 

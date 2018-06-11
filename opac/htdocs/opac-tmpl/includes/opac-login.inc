@@ -1,5 +1,9 @@
 [% USE HTML %]
 
+[%  IF mostrar_captcha  %]
+<script src='https://www.google.com/recaptcha/api.js'></script>
+[% END %]
+
 <script type="text/javascript">    
         function enviar(){
               [% IF plainPassword == 0 %]
@@ -10,20 +14,9 @@
                   $("#password").val($("#password_plain").val());
               [% END %]
               return true;
-      }
-      var RecaptchaOptions = {
-   
-        theme : 'white',
-      }
-
-      //onEnter con foco en input, ejecuta la busqueda
-      var RecaptchaOptions = {
-          theme : 'blue', /* tema color blanco */
-          lang : 'es' /* idioma español */
-      };    
+      }   
 
       onEnter("password",enviar);
-      
 
 </script>
 
@@ -71,17 +64,13 @@
                                         [% END %]
                             </div>                                
 
+                              [%  IF mostrar_captcha  %]
+                              <div class="alert alert-error" style="width:412px;" >[% 'Comprobaci&oacute;n de seguridad: Debido a que ha intentado iniciar sesi&oacute;n varias veces con el mismo usuario, deber&aacute; ingresar el siguiente c&oacute;digo de seguridad' | i18n %]</div>
+                                   <div id="captcha"> 
+                                    <div class="g-recaptcha" data-sitekey="[% re_captcha_public_key %]"></div>
+                                   </div>
+                              [% END %]
 
-            	              [%  IF mostrar_captcha  %]
-            	                  <div id=captcha>
-            	                    <script src="//www.google.com/recaptcha/api/challenge?k=[% re_captcha_public_key %]" type="text/javascript"></script>
-            	                    <noscript>
-                                		<iframe frameborder="0" height="300" src="//www.google.com/recaptcha/api/noscript?k=[% re_captcha_public_key %]" width="500"></iframe>
-                                        <textarea cols="40" name="recaptcha_challenge_field" rows="3"></textarea>
-                                        <input name="recaptcha_response_field" type="hidden" value="manual_challenge" />
-            	                    </noscript>
-            	                  </div>
-            	                [% END %]
                       </form>
                     </div>
                 </fieldset>
