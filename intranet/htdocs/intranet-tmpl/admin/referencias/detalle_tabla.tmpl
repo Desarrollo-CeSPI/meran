@@ -57,7 +57,7 @@
 	                            <th class="click"> [% campo %]</th>
 	                        [% END %]
 	                        [% IF mostrar_asignar %]
-    	                        <th>[% "Asignar" | i18n %]</th>
+    	                        <th>[% "Similares" | i18n %]</th>
     	                    [% END %]
 	                    </tr>
 	                </thead>
@@ -72,10 +72,9 @@
 	                                  print C4::AR::Filtros::action_button( 
 	                                                                  button    => "btn btn-warning click",
 	                                                                  action    => 'mostrarReferencias("[% tabla %]", "[% dato.getPkValue %]")', 
-	                                                                  icon      => "icon-move icon-white",
+	                                                                  icon      => "icon-search icon-white",
 	                                                                  title     => "",
 	                                                              ) ;
-	
 	
 	                                [% END %]
 		                            	

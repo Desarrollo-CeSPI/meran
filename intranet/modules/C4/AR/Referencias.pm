@@ -59,6 +59,7 @@ use vars qw(@EXPORT_OK @ISA);
                     obtenerDefaultUI
                     obtenerEstados
                     idCategoriaDeSocio
+                    getReferencia
         );
 
 
@@ -586,11 +587,12 @@ sub getTablaInstanceByTableName{
     my ($name) = @_;
    
     my $tabla;
-
+C4::AR::Debug::debug("getTablaInstanceByTableName()========================================= >TABLA POR NOMBRE ".$name);
    switch ($name) {
       case "cat_registro_marc_n1" { $tabla = C4::Modelo::CatRegistroMarcN1->new()  }
       case "cat_registro_marc_n2" { $tabla = C4::Modelo::CatRegistroMarcN2->new()  }
       case "cat_registro_marc_n3" { $tabla = C4::Modelo::CatRegistroMarcN3->new()  }
+      case "cat_tema" { $tabla = C4::Modelo::CatTema->new()  }
       case "usr_socio" { $tabla = C4::Modelo::UsrSocio->new()  }
       case "usr_persona" { $tabla = C4::Modelo::UsrPersona->new()  }
       case "circ_prestamo" { $tabla = C4::Modelo::CircPrestamo->new()  }
@@ -598,6 +600,20 @@ sub getTablaInstanceByTableName{
       case "usr_estado" { $tabla = C4::Modelo::UsrEstado->new()  }
       case "usr_regularidad" { $tabla = C4::Modelo::UsrRegularidad->new()  }
       case "usr_ref_categoria_socio" { $tabla = C4::Modelo::UsrRefCategoriaSocio->new()  }
+      case "cat_autor" { $tabla = C4::Modelo::CatAutor->new() }
+      case "usr_estado" { $tabla = C4::Modelo::UsrEstado->new() }
+      case "usr_ref_tipo_documento" { $tabla = C4::Modelo::UsrRefTipoDocumento->new()  }
+      case "cat_ref_tipo_nivel3" { $tabla = C4::Modelo::CatRefTipoNivel3->new() }
+      case "cat_editorial" { $tabla = C4::Modelo::CatEditorial->new()  }
+      case "ref_colaborador" { $tabla = C4::Modelo::RefColaborador->new()  }
+      case "circ_ref_tipo_prestamo" { $tabla = C4::Modelo::CircRefTipoPrestamo->new()  }
+      case "ref_soporte" { $tabla = C4::Modelo::RefSoporte->new()  }
+      case "ref_pais" { $tabla = C4::Modelo::RefPais->new()  }
+      case "ref_localidad" { $tabla = C4::Modelo::RefLocalidad->new()  }
+      case "ref_idioma" { $tabla = C4::Modelo::RefIdioma->new() }
+      case "ref_nivel_bibliografico" { $tabla = C4::Modelo::RefNivelBibliografico->new()  }
+      case "ref_disponibilidad" { $tabla = C4::Modelo::RefDisponibilidad->new()  }
+      case "pref_unidad_informacion" { $tabla = C4::Modelo::PrefUnidadInformacion->new()  }
 
       else { C4::AR::Debug::debug("getTablaInstanceByTableName()========================================= >TABLA POR NOMBRE INEXISTENTE") }
   }
@@ -621,6 +637,7 @@ sub mostrarReferenciasParaCatalogo{
         my $involved_count = $tabla_referente->getInvolvedCount($tabla_referencia,$value_id);
         $table_data{"tabla"} = $tabla_referente->meta->table;
         $table_data{"tabla_object"} = $tabla_referente;
+        $table_data{"nombre_tabla"} = getNombreTablaReferencia($table_data{"tabla"});
         $table_data{"cantidad"} = $involved_count;
         $table_data{"tabla_catalogo"} = 1;
         $global_references_count += $involved_count;
@@ -666,6 +683,7 @@ sub mostrarReferencias{
                 C4::AR::Debug::debug("EXITING INVOLVED COUNT ");
                 $table_data{"tabla"} = $tabla->getTabla_referente;
                 $table_data{"alias_tabla"} = $alias_tabla;
+                $table_data{"nombre_tabla"} = getNombreTablaReferencia($table_data{"tabla"});
                 $table_data{"tabla_object"} = $tabla;
                 $table_data{"cantidad"} = $involved_count;
                 $global_references_count += $involved_count;
@@ -999,6 +1017,59 @@ sub obtenerEstadosEjemplares{
     
     
 }
+
+sub getReferencia {
+    my ($alias,$id) = @_;
+    my ($clave,$tabla) = getTablaInstanceByAlias($alias);
+    my $refered;
+    
+    if ($tabla){
+        $refered = $tabla->getByPk($id);
+    }
+    if ($refered){
+         C4::AR::Debug::debug("REFERENCIA ======================== ".$refered);
+        return $refered;
+    }else{
+        return 0;
+    }
+
+}
+
+
+sub getNombreTablaReferencia{ 
+    my ($name) = @_;
+   
+    my $tabla="";
+
+   switch ($name) {
+      case "cat_registro_marc_n1" { $tabla = "Nivel 1"  }
+      case "cat_registro_marc_n2" { $tabla = "Nivel 2"  }
+      case "cat_registro_marc_n3" { $tabla = "Nivel 3"  }
+      case "usr_socio" { $tabla = "Usuario"  }
+      case "usr_persona" { $tabla = "Persona"  }
+      case "circ_prestamo" { $tabla = "Préstamo" }
+      case "cat_tema" { $tabla = "Tema"  }
+      case "cat_autor" { $tabla = "Autor"  }
+      case "usr_estado" { $tabla = "Estado"  }
+      case "usr_ref_tipo_documento" { $tabla = "Tipo de Documento de Usuario"  }
+      case "usr_ref_categoria_socio" { $tabla = "Categoría de Usuario"  }
+      case "cat_ref_tipo_nivel3" { $tabla = "Tipo de Documento"  }
+      case "cat_editorial" { $tabla = "Editorial"  }
+      case "ref_colaborador" { $tabla = "Referencia de Colaborador"  }
+      case "circ_ref_tipo_prestamo" { $tabla = "Tipo de Préstamo"  }
+      case "ref_soporte" { $tabla = "Soporte"  }
+      case "ref_pais" { $tabla = "País"  }
+      case "ref_localidad" { $tabla = "Localidad"  }
+      case "ref_idioma" { $tabla = "Idioma"  }
+      case "ref_nivel_bibliografico" { $tabla = "Nivel Bibliografico"  }
+      case "ref_disponibilidad" { $tabla = "Disponibilidad"  }
+      case "pref_unidad_informacion" { $tabla = "Unidad de Información"  }
+      else { C4::AR::Debug::debug("getNombreTablaReferencia()========================================= >TABLA POR NOMBRE ".$name." INEXISTENTE") }
+  }
+
+    return ($tabla);
+}
+
 END { }       # module clean-up code here (global destructor)
 
 1;

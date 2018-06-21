@@ -1,0 +1,66 @@
+[% USE HTML %]
+
+<div class="modal-header">
+  <a href="#" class="close" data-dismiss="modal">×</a>
+  <h4>Referidos de [% nombre_tabla %] para el t&eacute;rmino [% referencia %] </h4>
+</div>
+<div class="modal-body">
+    <table id="tablaResult_referidos" class="table table-striped">
+    <thead>
+      <tr class="titulo_tabla_referidos" id="related_header_title_temp">
+        <th> [% "T&iacute;tulo" | i18n %]</th> <th> [% "Autor" | i18n %]</th>
+      </tr>
+    </thead>
+    <tbody>
+      [% FOREACH ref IN referidos %]
+          <tr>
+            <td>
+            [% IF nombre_tabla == "Nivel 1" %]
+              [% ref.getTitulo %]
+            [% ELSE %]
+              [% IF nombre_tabla == "Nivel 2" %]
+                [% ref.nivel1.getTitulo %]
+              [% ELSE %]
+                [% IF nombre_tabla == "Nivel 3" %]
+                  [% ref.nivel1.getTitulo %]
+                [% ELSE %]
+                  -
+                [% END %]
+              [% END %]
+            [% END %]
+            </td>
+
+            <td>
+            [% IF nombre_tabla == "Nivel 1" %]
+              [% ref.getAutor %]
+            [% ELSE %]
+              [% IF nombre_tabla == "Nivel 2" %]
+                [% ref.nivel1.getAutor %]
+              [% ELSE %]
+                [% IF nombre_tabla == "Nivel 3" %]
+                  [% ref.nivel1.getAutor %]
+                [% ELSE %]
+                  -
+                [% END %]
+              [% END %]
+            [% END %]
+            </td>
+            <td>
+                [% PERL %]
+                  print C4::AR::Filtros::link_to( url=>"[% url_prefix %]/catalogacion/estructura/detalle.pl", 
+                                                  params =>   ["id1=[% ref.id1 %]"],
+                                                  title =>    "[% 'Mostrar Detalle del Registro' | i18n %]",
+                                                  button      => "btn btn-info click",
+                                                  icon        => "icon-search",
+                                                  blank => 1,
+                                                  );
+                [% END %]
+            </td>
+          </tr>      
+      [% END %]
+    </tbody>
+  </table>
+</div>
+<div class="modal-footer">
+     
+</div>
