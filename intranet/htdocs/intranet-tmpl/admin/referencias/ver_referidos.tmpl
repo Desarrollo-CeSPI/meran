@@ -2,7 +2,7 @@
 
 <div class="modal-header">
   <a href="#" class="close" data-dismiss="modal">×</a>
-  <h4>Referidos de [% nombre_tabla %] para el t&eacute;rmino [% referencia %] </h4>
+  <h4>Referidos de [% nombre_tabla %] para el t&eacute;rmino [% referencia %]</h4>
 </div>
 <div class="modal-body">
     <table id="tablaResult_referidos" class="table table-striped">
@@ -48,7 +48,7 @@
             <td>
                 [% PERL %]
                   print C4::AR::Filtros::link_to( url=>"[% url_prefix %]/catalogacion/estructura/detalle.pl", 
-                                                  params =>   ["id1=[% ref.id1 %]"],
+                                                  params =>   ["id1=[% ref.getId1 %]"],
                                                   title =>    "[% 'Mostrar Detalle del Registro' | i18n %]",
                                                   button      => "btn btn-info click",
                                                   icon        => "icon-search",
