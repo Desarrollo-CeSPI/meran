@@ -7,7 +7,7 @@
       });
 </script>
 <fieldset id="fieldset_tablaResult_involved">
-    <legend>[% "Registro " | i18n %]:</legend>
+    <legend>[% "Registro " | i18n %] [% tabla_related %]:</legend>
         <div class="datos_tabla_div_referenced" id="datos_tabla_div">
         
             <table id="tablaResult_involved" class="table table-striped">
@@ -72,7 +72,17 @@
                                 [% IF data.cantidad > 0%]
                                   [% write = 1 %]
                                   <tr>
-                                      <td> [% "El registro tiene " | i18n %] [% data.cantidad %] [% " entradas(s) relacionada(s) en los registros de " | i18n %]  [% IF data.alias_tabla %] [% data.alias_tabla %] [% ELSE %] [% data.tabla %] [% END %]</td>
+                                      <td> [% "El registro tiene " | i18n %] [% data.cantidad %] [% " entradas(s) relacionada(s) en los registros de " | i18n %]  [% IF data.alias_tabla %] [% data.nombre_tabla %] [% ELSE %]  [% data.nombre_tabla %] del catálogo.[% END %]
+                                      </td>
+                                      <td>  
+                                      [% PERL %]
+                                          print C4::AR::Filtros::action_button( 
+                                                  button      => "btn btn-info click",
+                                                  action      => 'showReferidos("[% data.tabla %]","[% referer_involved.meta.table %]","[% referer_involved.getPkValue %]");', 
+                                                  icon        => "icon-search icon-white",
+                                            ) ;
+                                      [% END %]
+                                      </td>
                                   </tr>
                                 [% END %]
                             [% END %]
@@ -92,7 +102,7 @@
 </br>
 </br>
 <fieldset>
-    <legend>[% "Similares " | i18n %]: [% tabla %]</legend>
+    <legend>[% "Registros Similares " | i18n %]: [% tabla %]</legend>
         <div class="datos_tabla_div_related" id="datos_tabla_div">
           [% IF related_referers_count %]
             <table id="tablaResult_similares" class="table table-striped">
@@ -149,3 +159,4 @@
       </div>
 </fieldset>
 
+<div id="mostrar_detalle_referido" class="modal hide fade"></div>

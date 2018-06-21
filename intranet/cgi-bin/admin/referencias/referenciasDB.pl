@@ -266,3 +266,37 @@ elsif ($accion eq "ELIMINAR_REFERENCIA"){
     C4::AR::Auth::print_header($session);
     print $infoOperacionJSON;
 }
+elsif ($accion eq "MOSTRAR_REFERIDOS"){
+
+    my $tabla= $obj->{'tabla'};
+    my $tabla_referencia = $obj->{'tabla_referencia'};
+    my $id_referencia = $obj->{'id_referencia'};
+
+    my ($template, $session, $t_params)  = get_template_and_user({  
+                            template_name => "admin/referencias/ver_referidos.tmpl",
+                            query => $input,
+                            type => "intranet",
+                            authnotrequired => 0,
+                            flagsrequired => {  ui => 'ANY', 
+                                                tipo_documento => 'ANY', 
+                                                accion => 'CONSULTA', 
+                                                entorno => 'permisos', 
+                                                tipo_permiso => 'general'},
+                            debug => 1,
+                    });
+
+    my ($clave_referente,$tabla_referente) = C4::AR::Referencias::getTablaInstanceByTableName($tabla);
+    if ($tabla_referente){
+        my ($clave,$tabla_ref) = C4::AR::Referencias::getTablaInstanceByTableName($tabla_referencia);
+        $t_params->{'referidos'} = $tabla_referente->getReferenced($tabla_ref,$id_referencia);
+        $t_params->{'nombre_tabla'} = C4::AR::Referencias::getNombreTablaReferencia($tabla); 
+
+        my $referencia = C4::AR::Referencias::getReferencia($tabla_referencia,$id_referencia);
+
+        if ($referencia){
+            $t_params->{'referencia'} = $referencia;
+        }
+    }
+
+    C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
+}

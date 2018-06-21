@@ -158,5 +158,20 @@ function asignarEliminarReferencia(tabla,related_id,referer_involved,referer_inv
         }
         $('#fieldset_tablaResult_involved').removeClass("warning");
     });
+}
 
+function showReferidos(tabla,tabla_referencia,id_referencia){
+    objAH=new AjaxHelper(updateShowReferidos);
+    objAH.url= URL_PREFIX+'/admin/referencias/referenciasDB.pl';
+    objAH.cache = false;
+    objAH.accion="MOSTRAR_REFERIDOS";
+    objAH.tabla = tabla;    
+    objAH.tabla_referencia = tabla_referencia;
+    objAH.id_referencia = id_referencia;
+    objAH.sendToServer();
+}
+
+function updateShowReferidos(responseText){
+    $('#mostrar_detalle_referido').html(responseText);
+    $('#mostrar_detalle_referido').modal();
 }
