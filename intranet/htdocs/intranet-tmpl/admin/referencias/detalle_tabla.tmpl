@@ -54,7 +54,7 @@
 	                <thead>
 	                    <tr class="titulo_tabla_resultado">
 	                        [% FOREACH campo IN campos %]
-	                            <th class="click"> [% campo %]</th>
+	                            <th class="click">[% USE String(campo) %][% String.capital %]</th>
 	                        [% END %]
 	                        [% IF mostrar_asignar %]
     	                        <th>[% "Similares" | i18n %]</th>

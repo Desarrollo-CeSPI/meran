@@ -170,6 +170,11 @@ elsif ($accion eq "MOSTRAR_REFERENCIAS"){
         $t_params->{'related_referers'} = $related_referers;
         $t_params->{'related_referers_count'} = scalar(@$related_referers);
         $t_params->{'tabla_related'} = $tabla_related;
+        
+        my ($clave,$tabla) = C4::AR::Referencias::getTablaInstanceByAlias($alias_tabla);
+        if($tabla){
+            $t_params->{'tabla_related_text'} = C4::AR::Referencias::getNombreTablaReferencia($tabla->meta->table);
+        }
     }
     C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
 }
