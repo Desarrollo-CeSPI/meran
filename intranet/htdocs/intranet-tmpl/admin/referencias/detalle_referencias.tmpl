@@ -7,7 +7,7 @@
       });
 </script>
 <fieldset id="fieldset_tablaResult_involved">
-    <legend>[% "Registro " | i18n %] [% tabla_related %]:</legend>
+    <legend>[% "Registro referencia:" | i18n %]<strong> [% tabla_related_text %]</strong></legend>
         <div class="datos_tabla_div_referenced" id="datos_tabla_div">
         
             <table id="tablaResult_involved" class="table table-striped">
@@ -15,7 +15,7 @@
                   <thead>
                       <tr class="titulo_tabla_resultado">
                           [% FOREACH campo IN referer_involved.getCamposAsArray %]
-                              <th> [% campo %]</th>
+                              <th>[% USE String(campo) %][% String.capital %]</th>
                           [% END %]
                           [% IF used == 0 %]
                               <th> [% "Eliminar" | i18n %] </th>
@@ -63,7 +63,7 @@
             <table id="tablaResult_relacionados" class="table table-striped">
                 <thead>
                     <tr class="titulo_tabla_resultado" id="related_header_title_temp">
-                            <th> [% "Registros relacionadas " | i18n %]</th>
+                            <th> [% "Registros relacionados " | i18n %]</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -78,6 +78,7 @@
                                       [% PERL %]
                                           print C4::AR::Filtros::action_button( 
                                                   button      => "btn btn-info click",
+                                                  title       => "Registros afectados",
                                                   action      => 'showReferidos("[% data.tabla %]","[% referer_involved.meta.table %]","[% referer_involved.getPkValue %]");', 
                                                   icon        => "icon-search icon-white",
                                             ) ;
@@ -110,10 +111,10 @@
                     [% IF referer_involved %]
                         <tr class="titulo_tabla_resultado">
                             [% FOREACH campo IN referer_involved.getCamposAsArray %]
-                                <th class="click"> [% campo %]</th>
+                                <th class="click">[% USE String(campo) %][% String.capital %]</th>
                             [% END %]
-                            <th>[% "Asignar" | i18n %]</th>
-                            <th>[% "Asignar y Eliminar" | i18n %]</th>
+                            <th>[% "Reemplazar" | i18n %]</th>
+                            <th>[% "Reemplazar y Eliminar" | i18n %]</th>
                         </tr>
                     [% END %]
                 </thead>
