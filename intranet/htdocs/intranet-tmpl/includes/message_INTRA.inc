@@ -165,20 +165,20 @@
 
     ADMIN_TITLE= "[% 'Advertencia de Administraci&oacute;n' | i18n %]";
 
-    TITLE_FIRST_ASSIGN_REFERENCIES = "[% 'Desea asignar el elemento ' | i18n %]";
+    TITLE_FIRST_ASSIGN_REFERENCIES = "[% '¿Desea asignar el elemento ' | i18n %]";
 
     TITLE_FIRST_ASSIGN_DELETE_REFERENCIES = "[% 'Desea asignar el elemento ' | i18n %]";
 
     TITLE_TO_ASSIGN_REFERENCIES = "[% ' a los registros que poseen ' | i18n %]";
 
-    TITLE_DELETE_REFERENCE = "[% ' Desea eliminar ' | i18n %]";
+    TITLE_DELETE_REFERENCE = "[% '¿Desea eliminar el elemento ' | i18n %]";
 
     /*=================================================Fin===Admin=======================================================*/
 
     /*====================================================Estante==========================================================*/
     ELIMINAR_ESTANTE_TITLE =  "[% 'Advertencia' | i18n %]";
     ELIMINAR_LOS_ESTANTES = "[% 'Usted est&aacute; a punto de eliminar los estantes' | i18n %]";
-    ELIMINAR_E_DOC= "[% 'Desea eliminar el documento digital seleccionado?' | i18n %]";
+    ELIMINAR_E_DOC= "[% '¿Desea eliminar el documento digital seleccionado?' | i18n %]";
     NO_SE_SELECCIONO_NINGUN_ESTANTE= "[% 'No seleccion&oacute; ning&uacute;n estante' | i18n %]";
 
     ELIMINAR_CONTENIDO_TITLE =  "[% 'Advertencia' | i18n %]";

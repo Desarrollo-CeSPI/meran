@@ -65,10 +65,10 @@ function updateObtenerTablaFiltrada(responseText){
 }
 
 
-function eliminarReferencia(tabla,id,name){
+function eliminarReferencia(tabla,id,name,nombre_tabla){
 
     $('#fieldset_tablaResult_involved').addClass("warning");
-    bootbox.confirm(TITLE_DELETE_REFERENCE+" <span class='label label-important'>"+name+"</span>?",function(confirmed){
+    bootbox.confirm(TITLE_DELETE_REFERENCE+" <span class='label label-important'>"+name+"</span> de la tabla de referencias <span class='label label-important'>"+nombre_tabla+"</span>?",function(confirmed){
         if (confirmed){
             objAH=new AjaxHelper(updateEliminarReferencia);
             objAH.url= URL_PREFIX+'/admin/referencias/referenciasDB.pl';
@@ -122,9 +122,9 @@ function mostrarReferencias(tabla,value_id){
 }
 
 
-function asignarReferencia(tabla,related_id,referer_involved,referer_involved_show,related_show){
+function asignarReferencia(tabla,related_id,referer_involved,referer_involved_show,related_show, nombre_tabla, cant_registros){
     $('#fieldset_tablaResult_involved').addClass("warning");
-    bootbox.confirm("Referencia de <b>"+tabla+"</b>:<br>"+TITLE_FIRST_ASSIGN_REFERENCIES+" <b>"+referer_involved_show+"</b> (id:"+referer_involved+") "+TITLE_TO_ASSIGN_REFERENCIES+" <b>"+related_show+"</b> (id:"+related_id+")?" ,function(confirmed){
+    bootbox.confirm("<span class='label label-info'>Referencia de "+nombre_tabla+"</span>:<br>"+TITLE_FIRST_ASSIGN_REFERENCIES+" <span class='label label-success'>"+related_show+"</span> "+TITLE_TO_ASSIGN_REFERENCIES+" <span class='label label-warning'>"+referer_involved_show+"</span>? <br>Hay <b>"+cant_registros+"</b> registros afectados." ,function(confirmed){
         if (confirmed){
             objAH=new AjaxHelper(updateObtenerTabla);
             objAH.url= URL_PREFIX+'/admin/referencias/referenciasDB.pl';
@@ -133,7 +133,7 @@ function asignarReferencia(tabla,related_id,referer_involved,referer_involved_sh
             objAH.showOverlay       = true;
             objAH.referer_involved= referer_involved;
             objAH.alias_tabla = tabla;
-            objAH.related_id = related_id;
+            objAH.related_id = related_id; 
             objAH.asignar       = 1;
             objAH.sendToServer();
         }
@@ -141,9 +141,9 @@ function asignarReferencia(tabla,related_id,referer_involved,referer_involved_sh
     });
 }
 
-function asignarEliminarReferencia(tabla,related_id,referer_involved,referer_involved_show,related_show){
+function asignarEliminarReferencia(tabla,related_id,referer_involved,referer_involved_show,related_show,nombre_tabla, cant_registros){
     $('#fieldset_tablaResult_involved').addClass("warning");
-    bootbox.confirm("Referencia de <b>"+tabla+"</b>:<br>"+TITLE_FIRST_ASSIGN_DELETE_REFERENCIES+" <b>"+referer_involved_show+"</b> (id:"+referer_involved+") "+TITLE_TO_ASSIGN_REFERENCIES+" <b>"+related_show+"</b> (id:"+related_id+") y luego eliminarlo?",function(confirmed){
+    bootbox.confirm("<span class='label label-info'>Referencia de "+nombre_tabla+"</span>:<br>"+TITLE_FIRST_ASSIGN_REFERENCIES+" <span class='label label-success'>"+related_show+"</span> "+TITLE_TO_ASSIGN_REFERENCIES+" <span class='label label-warning'>"+referer_involved_show+"</span> y luego eliminar este último? <br>Hay <b>"+cant_registros+"</b> registros afectados.",function(confirmed){
         if (confirmed){
             objAH=new AjaxHelper(updateObtenerTabla);
             objAH.url= URL_PREFIX+'/admin/referencias/referenciasDB.pl';
