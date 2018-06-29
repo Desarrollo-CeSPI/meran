@@ -31,7 +31,7 @@
                                 
                                   print C4::AR::Filtros::action_button( 
                                               button    => "btn btn-danger click",
-                                              action    => 'eliminarReferencia("[% tabla_related %]","[%  referer_involved.get_key_value %]", "[% referer_involved.toString %]")', 
+                                              action    => 'eliminarReferencia("[% tabla_related %]","[%  referer_involved.get_key_value %]", "[% referer_involved.toString %]","[%  tabla_related_text %]")', 
                                               icon      => "icon-white icon-remove",
                                               title     => "[% 'Eliminar' | i18n %]",
                                       ) ;
@@ -68,11 +68,13 @@
                 </thead>
                 <tbody>
                           [% write = 0 %]
+                          [% cant_registros = 0 %]
                             [% FOREACH data IN involved %]
                                 [% IF data.cantidad > 0%]
                                   [% write = 1 %]
+                                  [% cant_registros = cant_registros + data.cantidad %]
                                   <tr>
-                                      <td> [% "El registro tiene " | i18n %] [% data.cantidad %] [% " entradas(s) relacionada(s) en los registros de " | i18n %]  [% IF data.alias_tabla %] [% data.nombre_tabla %] [% ELSE %]  [% data.nombre_tabla %] del catálogo.[% END %]
+                                      <td> [% "El registro tiene " | i18n %] <b>[% data.cantidad %]</b> [% " entradas(s) relacionada(s) en los registros de " | i18n %]  <b>[% IF data.alias_tabla %] [% data.nombre_tabla %] [% ELSE %]  [% data.nombre_tabla %]</b> del catálogo.[% END %]
                                       </td>
                                       <td>  
                                       [% PERL %]
@@ -129,7 +131,7 @@
                                     [% PERL %]
                                         print C4::AR::Filtros::action_button( 
                                                 button      => "btn btn-warning click",
-                                                action      => 'asignarReferencia("[% tabla_related %]","[% related.getPkValue %]","[% referer_involved.getPkValue %]","[% referer_involved.toString %]","[% related.toString.squote %]");', 
+                                                action      => 'asignarReferencia("[% tabla_related %]","[% related.getPkValue %]","[% referer_involved.getPkValue %]","[% referer_involved.toString %]","[% related.toString.squote %]","[%  tabla_related_text %]", "[% cant_registros %]");', 
                                                 icon        => "icon-move icon-white",
                                           ) ;
 
@@ -142,7 +144,7 @@
                                     [% PERL %]
                                         print C4::AR::Filtros::action_button( 
                                                 button      => "btn btn-danger click",
-                                                action      => 'asignarEliminarReferencia("[% tabla_related %]","[% related.getPkValue %]","[% referer_involved.getPkValue %]","[% referer_involved.toString %]","[% related.toString.squote %]");', 
+                                                action      => 'asignarEliminarReferencia("[% tabla_related %]","[% related.getPkValue %]","[% referer_involved.getPkValue %]","[% referer_involved.toString %]","[% related.toString.squote %]","[%  tabla_related_text %]","[% cant_registros %]");', 
                                                 icon        => "icon-move icon-white",
                                           ) ;
 
