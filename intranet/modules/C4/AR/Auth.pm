@@ -2183,7 +2183,7 @@ sub recoverPassword{
 	my $message             = undef;
 	my $socio               = undef;
 	my $reCaptchaPrivateKey =  C4::AR::Preferencias::getValorPreferencia('re_captcha_private_key');
-	my $reCaptchaResponse   = $params->{'recaptcha_response_field'};
+	my $reCaptchaResponse   = $params->{'g-recaptcha-response'};
 	my $isError             = 0;
 	use HTML::Entities;
 
@@ -2191,10 +2191,13 @@ sub recoverPassword{
 	my $c = Captcha::reCAPTCHA->new;
 	my $captchaResult;
 	
-	if ($reCaptchaPrivateKey){	
-		$c->check_answer_v2($reCaptchaPrivateKey,$reCaptchaResponse,$ENV{'REMOTE_ADDR'});
+	if ($reCaptchaPrivateKey){
+		eval{
+			$captchaResult = $c->check_answer_v2($reCaptchaPrivateKey,$reCaptchaResponse,$ENV{'REMOTE_ADDR'});
+		};
+		C4::AR::Debug::debug("ERROR DE CAPTCHA: ".$captchaResult->{error});
 	}
-
+	
 	if (!$reCaptchaPrivateKey || $captchaResult->{is_valid} ){
 		my $user_id = C4::AR::Utilidades::trim($params->{'user-id'});
 		my $socio   = C4::AR::Usuarios::getSocioInfoPorMixed($user_id);
