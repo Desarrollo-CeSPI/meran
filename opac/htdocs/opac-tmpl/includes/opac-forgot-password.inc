@@ -20,9 +20,11 @@
                     </div>
              
              [%  IF re_captcha_public_key  %]
-                    <div id="captcha"> 
+                <div class="control-group">
+                    <div id="captcha" class="controls"> 
                         <div class="g-recaptcha" data-sitekey="[% re_captcha_public_key %]"></div>
                     </div>
+                </div>
              [% END %]
 
                     <div class="form-actions">
