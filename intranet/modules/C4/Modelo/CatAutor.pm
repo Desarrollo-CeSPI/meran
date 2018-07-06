@@ -30,6 +30,7 @@ __PACKAGE__->meta->setup(
 use C4::Modelo::CatRefTipoNivel3;
 use C4::Modelo::CatAutor::Manager;
 use Text::LevenshteinXS;
+use String::Similarity;
 
 =item
     Returns true (1) if the row was loaded successfully
@@ -280,12 +281,22 @@ sub getAll{
     my $match = 0;
     if ($matchig_or_not){
         my @matched_array;
+        my $similarity_level =  C4::AR::Preferencias::getValorPreferencia("similarity");
         foreach my $autor (@$ref_valores){
-          $match = ((distance($self_nombre,$autor->getNombre)<=1) || (distance($self_apellido,$autor->getApellido)<=1) || (distance($self_completo,$autor->getCompleto)<=1));
-          if ($match){
-            push (@matched_array,$autor);
+           my $similarity = similarity($self_completo, $autor->getCompleto, $similarity_level);
+         #  C4::AR::Debug::debug("CatAutor - SIMILARES => ".$self_completo."<=>".$autor->getCompleto." SIMILARIDAD=".$similarity);
+       #   $match = (distance($self_completo,$autor->getCompleto)<=1);
+          if ($similarity gt $similarity_level){
+            my %table_data = {};
+            $table_data{"similarity"} = $similarity;
+            $table_data{"tabla_object"} = $autor;
+            push (@matched_array, \%table_data);
+        #    C4::AR::Debug::debug("CatAutor - SIMILARES => ".$autor->getCompleto." SIMILARIDAD=".$similarity);
           }
         }
+        #Ordenampos por similaridad
+        my @sorted_matched = sort { $b->{"similarity"} <=> $a->{"similarity"} } @matched_array;
+        my @matched_array = map { $_->{"tabla_object"} } @sorted_matched;
         return (scalar(@matched_array),\@matched_array);
     }
     else{
