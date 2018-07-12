@@ -157,30 +157,33 @@ sub send_mail_PLANO {
                                             $mail_hash_ref->{'smtp_server'},
                                             Hello       => $mail_hash_ref->{'smtp_server'},
                                             Port        => $mail_hash_ref->{'smtp_port'},
-                                            User        => $mail_hash_ref->{'smtp_user'},
-                                            Password    => $mail_hash_ref->{'smtp_pass'},
                                             Timeout     => SMTP_TIME_OUT,
                                             Debug       => DEBUG
                                     );
-
         if ( not $mailer ) {
             $ok = 0;
             $msg_error = "Mail => send_mail_PLANO => No se pudo conectar con el servidor: ".$mail_hash_ref->{'smtp_server'};
             C4::AR::Debug::debug($msg_error);
         } else {
+
+            $ok = $mailer->auth($mail_hash_ref->{'smtp_user'},$mail_hash_ref->{'smtp_pass'});
+            if (!$ok) {
+                $msg_error = " Error en auth: ".$mail_hash_ref->{'smtp_user'}." error:".$mailer->message();
+                return ($ok, $msg_error);
+            }
+
             $ok = $mailer->mail($mail_from);
             if (!$ok) {
-                $msg_error = " Error en mail_from: ".$mail_hash_ref->{'mail_from'};
+                $msg_error = " Error en mail_from: ".$mail_hash_ref->{'mail_from'}." error:".$mailer->message();
                 return ($ok, $msg_error);
             }
 
-            $ok = $mailer->recipient($mail_to);
+            $ok = $mailer->to($mail_to);
             if (!$ok) {
-                $msg_error = " Error en mail_to: ".$mail_hash_ref->{'mail_to'};
+                $msg_error = " Error en mail_to: ".$mail_hash_ref->{'mail_to'}." error:".$mailer->message();
                 return ($ok, $msg_error);
             }
 
-            $mailer->to($mail_to);
             $mailer->data();
 
             if ($html_mail){
