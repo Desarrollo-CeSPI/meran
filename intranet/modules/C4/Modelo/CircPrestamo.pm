@@ -217,6 +217,22 @@ sub getTimestamp {
     return ( $self->timestamp );
 }
 
+
+sub toString {
+    my ($self) = shift;
+    my $string="";
+
+    if ($self->nivel3){
+        $string.= $self->nivel3->getCodigoBarra."\n";
+    }
+    if ($self->socio && $self->socio->persona){
+        $string.= "Prestado a: ".$self->socio->persona->getApeYNom."\n";
+    }
+    
+    return ($string);
+}
+
+
 =item
 agregar
 Funcion que agrega un prestamo
@@ -910,10 +926,12 @@ sub renovar {
 sub getInvolvedCount {
 
     my ($self) = shift;
-    my ( $campo, $value ) = @_;
+    my ( $tabla_rel_catalogo, $value , $referer_involved) = @_;
     my @filtros;
-    push (@filtros, ( $campo->getCampo_referente => $value ) );
-    C4::AR::Debug::debug("CircPrestamo=> getInvolvedCount => $campo || $value" );
+    
+    push (@filtros, ( $tabla_rel_catalogo->getCampo_referente => [ $value, $referer_involved->get_key_value])); 
+
+    C4::AR::Debug::debug("CircPrestamo=> getInvolvedCount => ".$tabla_rel_catalogo->alias_tabla." || $value || ".$referer_involved->get_key_value );
 
     my $circ_prestamo_count =  C4::Modelo::CircPrestamo::Manager->get_circ_prestamo_count(query => \@filtros );
     return ($circ_prestamo_count);
@@ -929,6 +947,28 @@ sub replaceBy {
         where => \@filtros,
         set   => { $campo => $new_value }
     );
+}
+
+sub getReferenced{
+
+    my ($self) = shift;
+    my ($tabla, $value)= @_;
+    my @filtros;
+   # my ($filter_string,$filtros) = $self->getInvolvedFilterString($tabla, $value);
+    my $tabla_ref  = $tabla->getByPk($value);
+
+    C4::AR::Debug::debug("CircPrestamo=> getReferenced => ".$tabla_ref." || $value ".$tabla_ref->get_key_value);
+    my $campo= "tipo_prestamo";
+    if ($tabla->getTableName eq "circ_ref_tipo_prestamo"){
+        $campo = "tipo_prestamo";
+    }  elsif ($tabla->getTableName eq "pref_unidad_informacion"){
+        $campo = "id_ui_prestamo";
+    }
+    
+    push (@filtros, ( $campo => [ $value, $tabla_ref->get_key_value]));
+    
+    my $circ_prestamo_ref =  C4::Modelo::CircPrestamo::Manager->get_circ_prestamo(query => \@filtros );
+    return ($circ_prestamo_ref);
 }
 
 1;

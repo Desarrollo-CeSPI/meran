@@ -17,7 +17,7 @@ __PACKAGE__->meta->setup(
 );
 use C4::Modelo::RefLocalidad;
 use C4::Modelo::RefEstado::Manager;
-use Text::LevenshteinXS;
+use String::Similarity;
 
 ########## CODIGOS DE DISPONIBILIDAD #############
 # Baja = STATE000
@@ -193,16 +193,22 @@ sub getAll{
     my $ref_cant = C4::Modelo::RefEstado::Manager->get_ref_estado_count(query => \@filtros,);
     my $self_nombre = $self->getNombre;
 
-    my $match = 0;
     if ($matchig_or_not){
         my @matched_array;
+        my $similarity_level =  C4::AR::Preferencias::getValorPreferencia("similarity");
         foreach my $each (@$ref_valores){
-            #SE DEBEN MOSTRAR TODOS
-          $match = 1;
-          if ($match){
-            push (@matched_array,$each);
+           my $similarity = similarity($self_nombre, $each->getNombre, $similarity_level);
+
+          if ($similarity gt $similarity_level){
+            my %table_data = {};
+            $table_data{"similarity"} = $similarity;
+            $table_data{"tabla_object"} = $each;
+            push (@matched_array, \%table_data);
           }
         }
+        #Ordenampos por similaridad
+        my @sorted_matched = sort { $b->{"similarity"} <=> $a->{"similarity"} } @matched_array;
+        my @matched_array = map { $_->{"tabla_object"} } @sorted_matched;
         return (scalar(@matched_array),\@matched_array);
     }
     else{

@@ -15,7 +15,7 @@ __PACKAGE__->meta->setup(
 );
 
 use C4::Modelo::CatEditorial::Manager;
-use Text::LevenshteinXS;
+use String::Similarity;
 
 sub toString{
 	my ($self) = shift;
@@ -149,15 +149,22 @@ sub getAll{
     my $ref_cant = C4::Modelo::CatEditorial::Manager->get_cat_editorial_count(query => \@filtros,);
     my $self_editorial = $self->getEditorial;
 
-    my $match = 0;
     if ($matchig_or_not){
         my @matched_array;
-        foreach my $editorial (@$ref_valores){
-          $match = ((distance($self_editorial,$editorial->getEditorial)<=1));
-          if ($match){
-            push (@matched_array,$editorial);
+        my $similarity_level =  C4::AR::Preferencias::getValorPreferencia("similarity");
+        foreach my $each (@$ref_valores){
+           my $similarity = similarity($self_editorial, $each->getEditorial, $similarity_level);
+
+          if ($similarity gt $similarity_level){
+            my %table_data = {};
+            $table_data{"similarity"} = $similarity;
+            $table_data{"tabla_object"} = $each;
+            push (@matched_array, \%table_data);
           }
         }
+        #Ordenampos por similaridad
+        my @sorted_matched = sort { $b->{"similarity"} <=> $a->{"similarity"} } @matched_array;
+        my @matched_array = map { $_->{"tabla_object"} } @sorted_matched;
         return (scalar(@matched_array),\@matched_array);
     }
     else{

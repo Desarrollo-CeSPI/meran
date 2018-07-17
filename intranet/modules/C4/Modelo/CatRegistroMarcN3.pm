@@ -610,6 +610,19 @@ sub setSignatura{
     $self->signatura($signatura);
 }
 
+
+sub toString {
+    my ($self) = shift;
+    my $string="";
+
+    if ($self->getSignatura){
+        $string.= $self->getSignatura." - ";
+    }
+
+    $string.= $self->getCodigoBarra();
+    return ($string);
+}
+
 sub getCodigoBarra{
     my ($self) = shift;
     return $self->codigo_barra;

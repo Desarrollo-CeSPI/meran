@@ -211,7 +211,7 @@ sub createFromAlias{
         case 'perfiles_opac' {return C4::Modelo::CatPerfilOpac->new()}
         case 'colaborador' {return C4::Modelo::RefColaborador->new()}
         case 'signatura' {return C4::Modelo::RefSignatura->new()}
-        case 'acm' {return C4::Modelo::RefAcm->new()}
+        case 'cdu' {return C4::Modelo::RefAcm->new()}
 # TODO para el link de analiticas
         case 'nivel2' {return C4::Modelo::CatRegistroMarcN2->new()}
         case 'usr_estado' {return C4::Modelo::UsrEstado->new()}

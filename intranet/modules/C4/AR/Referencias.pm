@@ -596,6 +596,7 @@ C4::AR::Debug::debug("getTablaInstanceByTableName()=============================
       case "usr_socio" { $tabla = C4::Modelo::UsrSocio->new()  }
       case "usr_persona" { $tabla = C4::Modelo::UsrPersona->new()  }
       case "circ_prestamo" { $tabla = C4::Modelo::CircPrestamo->new()  }
+      case "circ_reserva" { $tabla = C4::Modelo::CircReserva->new()  }
       case "cat_visualizacion_opac" { $tabla = C4::Modelo::CatVisualizacionOpac->new()  }
       case "usr_estado" { $tabla = C4::Modelo::UsrEstado->new()  }
       case "usr_regularidad" { $tabla = C4::Modelo::UsrRegularidad->new()  }
@@ -611,6 +612,7 @@ C4::AR::Debug::debug("getTablaInstanceByTableName()=============================
       case "ref_pais" { $tabla = C4::Modelo::RefPais->new()  }
       case "ref_localidad" { $tabla = C4::Modelo::RefLocalidad->new()  }
       case "ref_idioma" { $tabla = C4::Modelo::RefIdioma->new() }
+      case "ref_acm" { $tabla = C4::Modelo::RefAcm->new() }
       case "ref_nivel_bibliografico" { $tabla = C4::Modelo::RefNivelBibliografico->new()  }
       case "ref_disponibilidad" { $tabla = C4::Modelo::RefDisponibilidad->new()  }
       case "pref_unidad_informacion" { $tabla = C4::Modelo::PrefUnidadInformacion->new()  }
@@ -679,7 +681,7 @@ sub mostrarReferencias{
                 my $involved_count;
                 C4::AR::Debug::debug("ENTERING INVOLVED COUNT ");
                 C4::AR::Debug::debug("TABLA REFERENTE ".$tabla_referente);
-                $involved_count = $tabla_referente->getInvolvedCount($tabla,$value_id);
+                $involved_count = $tabla_referente->getInvolvedCount($tabla,$value_id,$referer_involved);
                 C4::AR::Debug::debug("EXITING INVOLVED COUNT ");
                 $table_data{"tabla"} = $tabla->getTabla_referente;
                 $table_data{"alias_tabla"} = $alias_tabla;
@@ -1048,6 +1050,7 @@ sub getNombreTablaReferencia{
       case "usr_socio" { $tabla = "Usuario"  }
       case "usr_persona" { $tabla = "Persona"  }
       case "circ_prestamo" { $tabla = "Préstamo" }
+      case "circ_reserva" { $tabla = "Reserva" }
       case "cat_tema" { $tabla = "Tema"  }
       case "cat_autor" { $tabla = "Autor"  }
       case "usr_estado" { $tabla = "Estado"  }

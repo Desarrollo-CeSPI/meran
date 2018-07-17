@@ -1133,12 +1133,11 @@ sub daysFromLastValidation{
     return $days;
 }
 sub getInvolvedCount{
- 
     my ($self) = shift;
-    my ($campo, $value)= @_;
+    my ($tabla_rel_catalogo, $value, $referer_involved)= @_;
     my @filtros;
-    C4::AR::Utilidades::printHASH($campo);
-    push (@filtros, ( $campo->getCampo_referente => $value ) );
+
+    push (@filtros, ( $tabla_rel_catalogo->getCampo_referente => [ $value, $referer_involved->get_key_value]));
     my $count = C4::Modelo::UsrSocio::Manager->get_usr_socio_count( query => \@filtros );
     return ($count);
 }
@@ -1280,4 +1279,28 @@ sub updateNroSocio{
                                                     );
     return ($self->save());
 }
+
+
+sub getReferenced{
+
+    my ($self) = shift;
+    my ($tabla, $value)= @_;
+    my @filtros;
+   # my ($filter_string,$filtros) = $self->getInvolvedFilterString($tabla, $value);
+    my $tabla_ref  = $tabla->getByPk($value);
+
+    C4::AR::Debug::debug("UsrSocio => getReferenced => ".$tabla_ref." || $value ".$tabla_ref->get_key_value);
+    my $campo= "id_categoria";
+    if ($tabla->getTableName eq "usr_ref_categoria_socio"){
+        $campo = "id_categoria";
+    }  elsif ($tabla->getTableName eq "pref_unidad_informacion"){
+        $campo = "id_ui";
+    }
+    
+    push (@filtros, ( $campo => [ $value, $tabla_ref->get_key_value]));
+    
+    my $usr_socio_ref =  C4::Modelo::UsrSocio::Manager->get_usr_socio(query => \@filtros );
+    return ($usr_socio_ref);
+}
+
 1;
