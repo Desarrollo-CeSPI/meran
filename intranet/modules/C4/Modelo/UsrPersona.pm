@@ -702,5 +702,27 @@ sub replaceBy{
                                                                         set   => { $campo => $new_value });
 }
 
+sub getReferenced{
+
+    my ($self) = shift;
+    my ($tabla, $value)= @_;
+    my @filtros;
+   # my ($filter_string,$filtros) = $self->getInvolvedFilterString($tabla, $value);
+    my $tabla_ref  = $tabla->getByPk($value);
+
+    C4::AR::Debug::debug("UsrPersona => getReferenced => ".$tabla_ref." || $value ".$tabla_ref->get_key_value);
+    my $campo= "tipo_documento";
+    if ($tabla->getTableName eq "usr_ref_tipo_documento"){
+        $campo = "tipo_documento";
+    }  elsif ($tabla->getTableName eq "ref_localidad"){
+        $campo = "ciudad";
+    }
+    
+    push (@filtros, ( $campo => [ $value, $tabla_ref->get_key_value]));
+    
+    my $usr_persona_ref =  C4::Modelo::UsrPersona::Manager->get_usr_persona(query => \@filtros );
+    return ($usr_persona_ref);
+}
+
 1;
 

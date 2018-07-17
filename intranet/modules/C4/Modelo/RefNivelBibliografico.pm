@@ -19,7 +19,7 @@ __PACKAGE__->meta->setup(
 );
 use C4::Modelo::RefNivelBibliografico::Manager;
 use C4::Modelo::CatTema;
-use Text::LevenshteinXS;
+use String::Similarity;
     
 
 
@@ -165,7 +165,35 @@ sub getAll{
                                                                    );
     }
     my $ref_cant = C4::Modelo::RefNivelBibliografico::Manager->get_ref_nivel_bibliografico_count(query => \@filtros,);
-    return($ref_cant,$ref_valores);
+    my $self_code = $self->getCode;
+    my $self_description = $self->getDescription;
+
+    if ($matchig_or_not){
+        my @matched_array;
+        my $similarity_level =  C4::AR::Preferencias::getValorPreferencia("similarity");
+        foreach my $each (@$ref_valores){
+           my $similarity1 = similarity($self_code, $each->getCode, $similarity_level);
+           my $similarity2 = similarity($self_description, $each->getDescription, $similarity_level);
+
+          if (($similarity1 gt $similarity_level)||($similarity2 gt $similarity_level)){
+            my %table_data = {};
+            if($similarity1 gt $similarity2){
+                $table_data{"similarity"} = $similarity1;
+            }else{
+                $table_data{"similarity"} = $similarity2;
+            }
+            $table_data{"tabla_object"} = $each;
+            push (@matched_array, \%table_data);
+          }
+        }
+        #Ordenampos por similaridad
+        my @sorted_matched = sort { $b->{"similarity"} <=> $a->{"similarity"} } @matched_array;
+        my @matched_array = map { $_->{"tabla_object"} } @sorted_matched;
+        return (scalar(@matched_array),\@matched_array);
+    }
+    else{
+      return($ref_cant,$ref_valores);
+    }
 }
 
 1;

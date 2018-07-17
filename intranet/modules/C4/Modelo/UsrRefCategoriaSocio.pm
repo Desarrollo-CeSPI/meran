@@ -29,7 +29,7 @@ __PACKAGE__->meta->setup
 
 use C4::Modelo::UsrRefTipoDocumento;
 use C4::Modelo::UsrRefCategoriaSocio::Manager;
-use Text::LevenshteinXS;
+use String::Similarity;
     
 
 sub toString{
@@ -60,6 +60,12 @@ sub conformarUsrRegularidad{
         $regularidad->agregar(\%data_hash);
     }    
     
+}
+
+sub get_key_value{
+    my ($self) = shift;
+    
+    return ($self->getCategory_code);
 }
 
 sub getId{
@@ -280,15 +286,21 @@ sub getAll{
     my $ref_cant = C4::Modelo::UsrRefCategoriaSocio::Manager->get_usr_ref_categoria_socio_count(query => \@filtros,);
     my $self_descripcion = $self->getDescription;
 
-    my $match = 0;
     if ($matchig_or_not){
         my @matched_array;
+        my $similarity_level =  C4::AR::Preferencias::getValorPreferencia("similarity");
         foreach my $each (@$ref_valores){
-          $match = ((distance($self_descripcion,$each->getDescription)<=1));
-          if ($match){
-            push (@matched_array,$each);
+           my $similarity = similarity($self_descripcion, $each->getDescription, $similarity_level);
+          if ($similarity gt $similarity_level){
+            my %table_data = {};
+            $table_data{"similarity"} = $similarity;
+            $table_data{"tabla_object"} = $each;
+            push (@matched_array, \%table_data);
           }
         }
+        #Ordenampos por similaridad
+        my @sorted_matched = sort { $b->{"similarity"} <=> $a->{"similarity"} } @matched_array;
+        my @matched_array = map { $_->{"tabla_object"} } @sorted_matched;
         return (scalar(@matched_array),\@matched_array);
     }
     else{

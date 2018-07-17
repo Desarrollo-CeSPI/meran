@@ -19,7 +19,6 @@ __PACKAGE__->meta->setup(
 
 use C4::Modelo::UsrRefCategoriaSocio;
 use C4::Modelo::CatTema::Manager;
-use Text::LevenshteinXS;
 use String::Similarity;
 
 sub toString{
@@ -152,9 +151,7 @@ sub getAll{
     my $ref_cant = C4::Modelo::CatTema::Manager->get_cat_tema_count(query => \@filtros,);
     my $self_nombre = $self->getNombre;
 
-    my $match = 0;
     if ($matchig_or_not){
-
         my @matched_array;
         my $similarity_level =  C4::AR::Preferencias::getValorPreferencia("similarity");
         foreach my $each (@$ref_valores){
@@ -171,7 +168,6 @@ sub getAll{
         my @sorted_matched = sort { $b->{"similarity"} <=> $a->{"similarity"} } @matched_array;
         my @matched_array = map { $_->{"tabla_object"} } @sorted_matched;
         return (scalar(@matched_array),\@matched_array);
-
     }
     else{
       return($ref_cant,$ref_valores);

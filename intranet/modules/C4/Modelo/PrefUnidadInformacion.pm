@@ -29,7 +29,7 @@ __PACKAGE__->meta->setup(
 
 use C4::Modelo::RefIdioma;
 use C4::Modelo::PrefUnidadInformacion::Manager;
-use Text::LevenshteinXS;
+use String::Similarity;
     
 sub toString{
     my ($self) = shift;
@@ -367,15 +367,27 @@ sub getAll{
     my $self_nombre = $self->getNombre;
     my $self_id_ui = $self->getId_ui;
 
-    my $match = 0;
     if ($matchig_or_not){
         my @matched_array;
-        foreach my $autor (@$ref_valores){
-          $match = ((distance($self_nombre,$autor->getNombre)<=1) or (distance($self_id_ui,$autor->getId_ui)<=1));
-          if ($match){
-            push (@matched_array,$autor);
+        my $similarity_level =  C4::AR::Preferencias::getValorPreferencia("similarity");
+        foreach my $each (@$ref_valores){
+           my $similarity1 = similarity($self_nombre, $each->getNombre, $similarity_level);
+           my $similarity2 = similarity($self_id_ui, $each->getId_ui, $similarity_level);
+
+          if (($similarity1 gt $similarity_level)||($similarity2 gt $similarity_level)){
+            my %table_data = {};
+            if($similarity1 gt $similarity2){
+                $table_data{"similarity"} = $similarity1;
+            }else{
+                $table_data{"similarity"} = $similarity2;
+            }
+            $table_data{"tabla_object"} = $each;
+            push (@matched_array, \%table_data);
           }
         }
+        #Ordenampos por similaridad
+        my @sorted_matched = sort { $b->{"similarity"} <=> $a->{"similarity"} } @matched_array;
+        my @matched_array = map { $_->{"tabla_object"} } @sorted_matched;
         return (scalar(@matched_array),\@matched_array);
     }
     else{

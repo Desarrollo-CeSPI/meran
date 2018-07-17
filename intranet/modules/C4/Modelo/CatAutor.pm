@@ -29,7 +29,6 @@ __PACKAGE__->meta->setup(
 );
 use C4::Modelo::CatRefTipoNivel3;
 use C4::Modelo::CatAutor::Manager;
-use Text::LevenshteinXS;
 use String::Similarity;
 
 =item
@@ -278,20 +277,16 @@ sub getAll{
     my $self_apellido = $self->getApellido;
     my $self_completo = $self->getCompleto;
 
-    my $match = 0;
     if ($matchig_or_not){
         my @matched_array;
         my $similarity_level =  C4::AR::Preferencias::getValorPreferencia("similarity");
         foreach my $autor (@$ref_valores){
            my $similarity = similarity($self_completo, $autor->getCompleto, $similarity_level);
-         #  C4::AR::Debug::debug("CatAutor - SIMILARES => ".$self_completo."<=>".$autor->getCompleto." SIMILARIDAD=".$similarity);
-       #   $match = (distance($self_completo,$autor->getCompleto)<=1);
           if ($similarity gt $similarity_level){
             my %table_data = {};
             $table_data{"similarity"} = $similarity;
             $table_data{"tabla_object"} = $autor;
             push (@matched_array, \%table_data);
-        #    C4::AR::Debug::debug("CatAutor - SIMILARES => ".$autor->getCompleto." SIMILARIDAD=".$similarity);
           }
         }
         #Ordenampos por similaridad
