@@ -11,10 +11,12 @@
     <thead>
       <tr class="titulo_tabla_referidos" id="related_header_title_temp">
          [% IF nombre_tabla == "Usuario" OR nombre_tabla == "Persona" %]
-          <th> [% "Apellido y Nombres" | i18n %]</th>
-          [% IF nombre_tabla == "Usuario" %]
-            <th> [% "Tarjeta Id." | i18n %]</th>
-          [% END %]
+            <th> [% "Apellido y Nombres" | i18n %]</th>
+            [% IF nombre_tabla == "Usuario" %]
+              <th> [% "Tarjeta Id." | i18n %]</th>
+            [% ELSE %]
+              <th> [% "Nro. Documento" | i18n %]</th>
+            [% END %]
           [% ELSE %]
           <th> [% "T&iacute;tulo" | i18n %]</th>
           <th> [% "Autor" | i18n %]</th>
@@ -26,51 +28,69 @@
     <tbody>
       [% FOREACH ref IN referidos %]
         <tr>
-        [% IF nombre_tabla == "Usuario" %]
-          <td>[% ref.persona.getApeYNom %]</td>
-          <td>[% ref.getNro_socio %]</td>
+        [% IF nombre_tabla == "Persona" %]
+          <td>[% ref.getApeYNom %]</td>
+          <td>[% ref.getNro_documento %]</td>
           <td>
-            [% PERL %]
-                      print C4::AR::Filtros::link_to( url=>"[% url_prefix %]/usuarios/reales/datosUsuario.pl", 
-                                                      params =>    ["nro_socio=[% ref.getNro_socio %]"],
-                                                      title =>    "[% 'Mostrar Detalle del Usuario' | i18n %]",
-                                                      button      => "btn btn-info click",
-                                                      icon        => "icon-search",
-                                                      blank => 1,
-                                                      );
+             [% PERL %]
+                        print C4::AR::Filtros::link_to( url=>"[% url_prefix %]/usuarios/reales/datosUsuario.pl", 
+                                                        params =>    ["nro_socio=[% ref.getNro_documento %]"],
+                                                        title =>    "[% 'Mostrar Detalle del Usuario' | i18n %]",
+                                                        button      => "btn btn-info click",
+                                                        icon        => "icon-search",
+                                                        blank => 1,
+                                                        );
+              [% END %]
+          </td>
+        [% ELSE %] 
+          [% IF nombre_tabla == "Usuario" %]
+            <td>[% IF ref.persona %][% ref.persona.getApeYNom %][% ELSE %]-[% END %]</td>
+            <td>[% ref.getNro_socio %]</td>
+            <td>
+              [% PERL %]
+                        print C4::AR::Filtros::link_to( url=>"[% url_prefix %]/usuarios/reales/datosUsuario.pl", 
+                                                        params =>    ["nro_socio=[% ref.getNro_socio %]"],
+                                                        title =>    "[% 'Mostrar Detalle del Usuario' | i18n %]",
+                                                        button      => "btn btn-info click",
+                                                        icon        => "icon-search",
+                                                        blank => 1,
+                                                        );
+              [% END %]
+            </td>
+          [% ELSE %]
+
+            [% titulo = '-' %]
+            [% autor = '-' %]
+            [% id1 = '-' %]
+            [% IF nombre_tabla == "Nivel 1" %][% titulo = ref.getTitulo %][% autor = ref.getAutor %][% id1 = ref.getId1 %]
+            [% ELSE %]
+            [% IF nombre_tabla == "Nivel 2" OR nombre_tabla == "Nivel 3" %]
+              [% IF ref.getId1 AND ref.nivel1 %][% titulo = ref.nivel1.getTitulo %][% autor = ref.nivel1.getAutor %][% id1 = ref.nivel1.getId1 %][% END %]
+            [% ELSE %]
+            [% IF nombre_tabla == "Préstamo" %]
+              [% IF ref.getId3 AND ref.nivel3 AND ref.nivel3.getId1 AND  ref.nivel3.nivel1 %][% titulo=ref.nivel3.nivel1.getTitulo %][% autor=ref.nivel3.nivel1.getAutor %][% id1 = ref.nivel3.nivel1.getId1 %][% END %]
+            [% END %][% END %][% END %]
+                  <td>[% titulo %]</td>
+
+                  <td>[% autor %]</td>
+            [% IF nombre_tabla != "Nivel 1" %]
+            <td>
+              [% IF nombre_tabla == "Nivel 2" OR nombre_tabla == "Nivel 3" OR nombre_tabla == "Préstamo" %][% ref.toString %][% END %]
+            </td>
             [% END %]
-          </td>
-        [% ELSE %]
-
-          [% titulo = '-' %]
-          [% autor = '-' %]
-          [% id1 = '-' %]
-          [% IF nombre_tabla == "Nivel 1" %][% titulo = ref.getTitulo %][% autor = ref.getAutor %][% id1 = ref.getId1 %]
-          [% ELSE %]
-          [% IF nombre_tabla == "Nivel 2" OR nombre_tabla == "Nivel 3" %][% titulo = ref.nivel1.getTitulo %][% autor = ref.nivel1.getAutor %][% id1 = ref.nivel1.getId1 %]
-          [% ELSE %]
-          [% IF nombre_tabla == "Préstamo" %][% titulo=ref.nivel3.nivel1.getTitulo %][% autor=ref.nivel3.nivel1.getAutor %][% id1 = ref.nivel3.nivel1.getId1 %]
-          [% END %][% END %][% END %]
-                <td>[% titulo %]</td>
-
-                <td>[% autor %]</td>
-          [% IF nombre_tabla != "Nivel 1" %]
-          <td>
-            [% IF nombre_tabla == "Nivel 2" OR nombre_tabla == "Nivel 3" OR nombre_tabla == "Préstamo" %][% ref.toString %][% END %]
-          </td>
-          [% END %]
-                <td>
-                    [% PERL %]
-                      print C4::AR::Filtros::link_to( url=>"[% url_prefix %]/catalogacion/estructura/detalle.pl", 
-                                                      params =>   ["id1=[% id1 %]"],
-                                                      title =>    "[% 'Mostrar Detalle del Registro' | i18n %]",
-                                                      button      => "btn btn-info click",
-                                                      icon        => "icon-search",
-                                                      blank => 1,
-                                                      );
-                    [% END %]
-                </td>
-         [% END %]
+                  <td>
+                      [% PERL %]
+                        print C4::AR::Filtros::link_to( url=>"[% url_prefix %]/catalogacion/estructura/detalle.pl", 
+                                                        params =>   ["id1=[% id1 %]"],
+                                                        title =>    "[% 'Mostrar Detalle del Registro' | i18n %]",
+                                                        button      => "btn btn-info click",
+                                                        icon        => "icon-search",
+                                                        blank => 1,
+                                                        );
+                      [% END %]
+                  </td>
+           [% END %]
+        [% END %]
         </tr>   
       [% END %]
     </tbody>
