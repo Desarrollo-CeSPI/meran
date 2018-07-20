@@ -700,6 +700,7 @@ sub replaceBy{
 
     my $replaced = C4::Modelo::UsrPersona::Manager->update_usr_persona(     where => \@filtros,
                                                                         set   => { $campo => $new_value });
+    return $replaced;
 }
 
 sub getReferenced{

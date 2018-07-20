@@ -197,7 +197,8 @@ elsif ($accion eq "ASIGNAR_REFERENCIA"){
                             debug => 1,
                     });
 
-    C4::AR::Referencias::asignarReferencia($alias_tabla,$related_id,$referer_involved,$usuario_logueado->getNro_socio);
+    my $msg_object = C4::AR::Referencias::asignarReferencia($alias_tabla,$related_id,$referer_involved,$usuario_logueado->getNro_socio);
+
     my ($used_or_not,$referer_involved,$items_involved)=C4::AR::Referencias::mostrarReferencias($alias_tabla,$related_id);
     my ($tabla_related,$related_referers) = C4::AR::Referencias::mostrarSimilares($alias_tabla,$related_id);
 
@@ -210,7 +211,7 @@ elsif ($accion eq "ASIGNAR_REFERENCIA"){
     $t_params->{'related_referers'} = $related_referers;
     $t_params->{'related_referers_count'} = scalar(@$related_referers);
     $t_params->{'tabla_related'} = $tabla_related;
-
+    $t_params->{'mensajes'} = $msg_object;
     C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
 }
 elsif ($accion eq "ASIGNAR_Y_ELIMINAR_REFERENCIA"){
@@ -231,7 +232,7 @@ elsif ($accion eq "ASIGNAR_Y_ELIMINAR_REFERENCIA"){
                                                 tipo_permiso => 'general'},
                             debug => 1,
                     });
-    C4::AR::Referencias::asignarYEliminarReferencia($alias_tabla,$related_id,$referer_involved,$usuario_logueado->getNro_socio);
+    my $msg_object = C4::AR::Referencias::asignarYEliminarReferencia($alias_tabla,$related_id,$referer_involved,$usuario_logueado->getNro_socio);
     my ($used_or_not,$referer_involved,$items_involved)=C4::AR::Referencias::mostrarReferencias($alias_tabla,$related_id);
     my ($tabla_related,$related_referers) = C4::AR::Referencias::mostrarSimilares($alias_tabla,$related_id);
 
@@ -243,6 +244,7 @@ elsif ($accion eq "ASIGNAR_Y_ELIMINAR_REFERENCIA"){
     $t_params->{'related_referers'} = $related_referers;
     $t_params->{'related_referers_count'} = scalar(@$related_referers);
     $t_params->{'tabla_related'} = $tabla_related;
+    $t_params->{'mensajes'} = $msg_object;
 
     C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
 }
@@ -265,8 +267,8 @@ elsif ($accion eq "ELIMINAR_REFERENCIA"){
                             debug => 1,
                     });
 
-    my ($msj_object) = C4::AR::Referencias::eliminarReferencia($alias_tabla,$item_id);
-    my $infoOperacionJSON=to_json $msj_object;
+    my ($msg_object) = C4::AR::Referencias::eliminarReferencia($alias_tabla,$item_id);
+    my $infoOperacionJSON=to_json $msg_object;
     
     C4::AR::Auth::print_header($session);
     print $infoOperacionJSON;
@@ -295,8 +297,9 @@ elsif ($accion eq "MOSTRAR_REFERIDOS"){
         my ($clave,$tabla_ref) = C4::AR::Referencias::getTablaInstanceByTableName($tabla_referencia);
         $t_params->{'referidos'} = $tabla_referente->getReferenced($tabla_ref,$id_referencia);
         $t_params->{'nombre_tabla'} = C4::AR::Referencias::getNombreTablaReferencia($tabla); 
+        $t_params->{'nombre_tabla_referencia'} = C4::AR::Referencias::getNombreTablaReferencia($tabla_referencia); 
 
-        my $referencia = C4::AR::Referencias::getReferencia($tabla_referencia,$id_referencia);
+        my $referencia = $tabla_ref->getByPk($id_referencia);
 
         if ($referencia){
             $t_params->{'referencia'} = $referencia;

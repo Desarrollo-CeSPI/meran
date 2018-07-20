@@ -4,7 +4,9 @@
 
 <div class="modal-header">
   <a href="#" class="close" data-dismiss="modal">×</a>
-  <h4>Referidos de [% nombre_tabla %] para el t&eacute;rmino [% referencia %]</h4>
+  <h5>Referidos de: <span class="label label-info">[% nombre_tabla %]</span></h5>
+  <h5>Tabla de Referencia: <span class="label label-info">[% nombre_tabla_referencia %]</span></h5>  
+  <h5>T&eacute;rmino buscado: <span class="label label-info">[% referencia.toString %]</span></h5>
 </div>
 <div class="modal-body">
     <table id="tablaResult_referidos" class="table table-striped">

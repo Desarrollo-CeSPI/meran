@@ -5043,6 +5043,17 @@ sub modificarCampoGlobalmente {
 
 }
 
+sub reemplazarValoresDeRegistroMarc{
+    my ($marc_record,$string_origen, $string_destino) = @_;
+   foreach my $campo ($marc_record->fields()){
+        foreach  my $subcampo ($campo->subfields()){
+            if ( $subcampo->[1] eq $string_origen){
+                $campo->update( $subcampo->[0] => $string_destino );
+            }
+        }
+   }
+}
+
 sub translateYesNo_fromNumber{
     my ($value) = @_;
 

@@ -947,6 +947,7 @@ sub replaceBy {
         where => \@filtros,
         set   => { $campo => $new_value }
     );
+    return $replaced;
 }
 
 sub getReferenced{

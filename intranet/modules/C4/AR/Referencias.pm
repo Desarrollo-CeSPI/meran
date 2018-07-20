@@ -721,106 +721,124 @@ sub asignarReferencia{
     my ($alias_tabla,$related_id,$referer_involved,$responsable) = @_;
 
     my ($clave,$tabla) = getTablaInstanceByAlias($alias_tabla);
-
+    
+    my @registros_modificados;
+    my $cant_registros_modificados=0;
     my $status = 0;
+    my $refOld="";
+    my $refNew="";
 
     if ($tabla){
         my $old_pk = $tabla->getByPk($referer_involved);
         
         my $new_instance = $tabla->getByPk($related_id);
+        $related_id = $new_instance->get_key_value();
         
-        $related_id =   $new_instance->get_key_value();
-        
-        $status = $old_pk->replaceByThis($related_id);
-    
-            ###Guardamos en registro de modificación###
-            my ($registro_modificacion) = C4::Modelo::RepRegistroModificacion->new();
-            my $data_hash;
-            $data_hash->{'responsable'}= $responsable; #Usuario logueado
-            $data_hash->{'tipo'}    = 'REFERENCIAS';
-            $data_hash->{'operacion'} = 'ASIGNACION';
-            $data_hash->{'id_rec'}    = '0';
-            $data_hash->{'nivel_rec'} ='0';
-            $data_hash->{'prev_rec'} = $old_pk->toString." (id:".$alias_tabla."@".$old_pk->get_key_value().")";
-            $data_hash->{'final_rec'} = $new_instance->toString." (id:".$alias_tabla."@".$new_instance->get_key_value().")";
-            my $dateformat = C4::Date::get_date_format();
-            my $hoy = C4::Date::format_date_in_iso(Date::Manip::ParseDate("today"),$dateformat);
-            $data_hash->{'fecha'}    = $hoy;
+        $refOld = $old_pk->toString;
+        $refNew = $new_instance->toString;
 
-            ### Asignamos Referencias ###
-            my $registros_modificados = asignarReferenciaParaCatalogo($alias_tabla,$related_id,$referer_involved);            
-            ### Asignamos Referencias Fin ###
+        C4::AR::Debug::debug(" ================== Buscamos Referencias ================== ".$old_pk->getAlias()." ".$old_pk->getPkValue);
+        #Buscamos Referencias
+        my ($used_or_not,$ref_inv,$data_array) = C4::AR::Referencias::mostrarReferencias($old_pk->getAlias(),$old_pk->getPkValue);
 
-            my $json_str = encode_json($registros_modificados); 
-            $data_hash->{'nota'}    = scalar(@$registros_modificados).' registros modificados => '.$json_str;
+        C4::AR::Debug::debug(" ================== Buscamos Referencias ================== Referencias afectadas ".$used_or_not);
 
-            $registro_modificacion->agregar($data_hash);
-            ###Guardamos en registro de modificación###
+        foreach my $tabla (@$data_array){
+            #Tablas del catálogo se tratan diferente al resto
+              C4::AR::Debug::debug("================== asignarReferencia ==== ".$tabla->{'tabla'}." es ".$tabla->{'tabla_catalogo'});
+            my $reg_mod;
+            if (!$tabla->{'tabla_catalogo'}){
+                my ($clave_tabla_referente,$tabla_referente) = C4::AR::Referencias::getTablaInstanceByTableName($tabla->{'tabla_object'}->getTabla_referente);
+                $reg_mod =$tabla_referente->replaceBy($tabla->{'tabla_object'}->getCampo_referente,$old_pk->get_key_value,$related_id);
+            
+            }else{
+                ### Asignamos Referencias de Catalogo ###
+                $reg_mod = C4::AR::Referencias::asignarReferenciaParaCatalogo($alias_tabla,$related_id,$referer_involved,$tabla->{'tabla'});            
+                ### Asignamos Referencias Fin ###
+            }
+            $cant_registros_modificados+=scalar(@$reg_mod);
+            push (@registros_modificados,@$reg_mod);
+        }
+
+        ###Guardamos en registro de modificación###
+        my ($registro_modificacion) = C4::Modelo::RepRegistroModificacion->new();
+        my $data_hash;
+        $data_hash->{'responsable'}= $responsable; #Usuario logueado
+        $data_hash->{'tipo'}    = 'REFERENCIAS';
+        $data_hash->{'operacion'} = 'ASIGNACION';
+        $data_hash->{'id_rec'}    = '0';
+        $data_hash->{'nivel_rec'} ='0';
+        $data_hash->{'prev_rec'} = $old_pk->toString." (id:".$alias_tabla."@".$old_pk->get_key_value().")";
+        $data_hash->{'final_rec'} = $new_instance->toString." (id:".$alias_tabla."@".$new_instance->get_key_value().")";
+        my $dateformat = C4::Date::get_date_format();
+        my $hoy = C4::Date::format_date_in_iso(Date::Manip::ParseDate("today"),$dateformat);
+        $data_hash->{'fecha'}    = $hoy;
+
+        my $json_str = encode_json(\@registros_modificados); 
+        $data_hash->{'nota'}    = scalar(@registros_modificados).' registros modificados => '.$json_str;
+
+        $registro_modificacion->agregar($data_hash);
+        ###Guardamos en registro de modificación###
+        $status=1;
     }
 
-    return ($status);
+
+    my $msg_object= C4::AR::Mensajes::create();
+    if (!$status){
+        $msg_object->{'error'}= 1;
+        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'REF3', 'params' => []} );
+    }else{
+        $msg_object->{'error'}= 0;
+        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'REF2', 'params' => [$refOld, $refNew, $cant_registros_modificados]} );
+    }
+    return ($msg_object);
 }
 
 
 sub asignarReferenciaParaCatalogo{
 
-  my ($alias_tabla,$related_id,$referer_involved) = @_;
-  my ($clave,$tabla) = getTablaInstanceByAlias($alias_tabla);
-  my $nombre_tabla = $tabla->meta->table;
+    my ($alias_tabla,$related_id,$referer_involved,$tabla_catalogo) = @_;
+    my ($clave,$tabla) = getTablaInstanceByAlias($alias_tabla);
+    my $nombre_tabla = $tabla->meta->table;
 
-  use C4::AR::Sphinx;
+    use C4::AR::Sphinx;
+    my $id_viejo = $referer_involved;
+    my $id_nuevo = $related_id;
+    my $old_ref= $nombre_tabla."@".$id_viejo;
+    my $new_ref= $nombre_tabla."@".$id_nuevo;
 
-  my $id_viejo = $referer_involved;
-  my $id_nuevo = $related_id;
-  my @id1_to_generate = ();
- #Nivel 1 
-  my $nivel = C4::Modelo::CatRegistroMarcN1->new();
-  my $registros = $nivel->getReferenced($tabla,$referer_involved);
+    my @id1_to_generate = ();
+    C4::AR::Debug::debug("================== reemplazarValoresDeRegistroMarc ==== ".$old_ref.">>>".$new_ref." en ".$tabla_catalogo);
 
-  foreach my $registro (@$registros){
-      my $marc = $registro->getMarcRecord;
-      $marc =~ s/$nombre_tabla\@$id_viejo/$nombre_tabla\@$id_nuevo/g;
-      $registro->setMarcRecord($marc);
-      $registro->save();
-      push (@id1_to_generate,$registro->getId1());
-  }
+    my ($clave,$tabla_referente) = getTablaInstanceByTableName($tabla_catalogo);
+    my $registros = $tabla_referente->getReferenced($tabla,$referer_involved);
+
+    C4::AR::Debug::debug("================== reemplazarValoresDeRegistroMarc ==== Registros = ".scalar(@$registros));
+
+    foreach my $registro (@$registros){
+       my $marc = $registro->getMarcRecordObject;
+
+       ### Reemplazamos Referencias ###     
+       
+       C4::AR::Utilidades::reemplazarValoresDeRegistroMarc($marc, $old_ref, $new_ref);
+
+       $registro->setMarcRecord($marc->as_usmarc);
+       $registro->save();
+
+       #Guardo el id1 para reindexar
+       if (!C4::AR::Utilidades::existeInArray($registro->getId1(),@id1_to_generate)){
+             push (@id1_to_generate,$registro->getId1());
+       }
+     }
   
- #Nivel 2 
-  my $nivel = C4::Modelo::CatRegistroMarcN2->new();
-  my $registros = $nivel->getReferenced($tabla,$referer_involved);
-
-  foreach my $registro (@$registros){
-      my $marc = $registro->getMarcRecord;
-      $marc =~ s/$nombre_tabla\@$id_viejo/$nombre_tabla\@$id_nuevo/g;
-      $registro->setMarcRecord($marc);
-      $registro->save();
-      if (!C4::AR::Utilidades::existeInArray($registro->getId1(),@id1_to_generate)){
-            push (@id1_to_generate,$registro->getId1());
-      }
-  }
-  
- #Nivel 3 
-  my $nivel = C4::Modelo::CatRegistroMarcN3->new();
-  my $registros = $nivel->getReferenced($tabla,$referer_involved);
-
-  foreach my $registro (@$registros){
-      my $marc = $registro->getMarcRecord;
-      $marc =~ s/$nombre_tabla\@$id_viejo/$nombre_tabla\@$id_nuevo/g;
-      $registro->setMarcRecord($marc);
-      $registro->save();
-      if (!C4::AR::Utilidades::existeInArray($registro->getId1(),@id1_to_generate)){
-            push (@id1_to_generate,$registro->getId1());
-      }
-  } 
-  #Se regenera el indice para todos los Id1
-  
-  foreach my $id1 (@id1_to_generate){
-        C4::AR::Sphinx::generar_indice($id1, 'R_PARTIAL', 'UPDATE');
-  }
+   foreach my $id1 (@id1_to_generate){
+         C4::AR::Sphinx::generar_indice($id1, 'R_PARTIAL', 'UPDATE');
+   }
  
     #Retorno los registros modificados
     return (\@id1_to_generate); 
 }
+
 
 
 sub eliminarReferencia{
@@ -869,8 +887,6 @@ sub eliminarReferencia{
         $msg_object->{'error'}= 0;
         C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'REF1', 'params' => []} );
     }
-
-
     return ($msg_object);
 }
 
@@ -878,11 +894,16 @@ sub asignarYEliminarReferencia{
 
     my ($alias_tabla,$related_id,$referer_involved,$responsable) = @_;
 
-    my $status_asignar = asignarReferencia($alias_tabla,$related_id,$referer_involved, $responsable);
+    my $msg_object1 = asignarReferencia($alias_tabla,$related_id,$referer_involved, $responsable);
     
-    my $status_eliminar = eliminarReferencia($alias_tabla,$referer_involved, $responsable);
+    my $msg_object2 = eliminarReferencia($alias_tabla,$referer_involved, $responsable);
 
-    return ($status_asignar && $status_eliminar);
+    C4::AR::Mensajes::add($msg_object1, $msg_object2);
+    if ($msg_object2->{'error'}){
+        $msg_object1->{'error'}= 1;
+    }
+
+    return ($msg_object1);
 }
 
 sub editarReferencia{
