@@ -449,6 +449,8 @@ my %mensajesINTRA = (
     'E018' => 'Disculpe, no se pudo eliminar el grupo (*?*), se encuentra contenido en al menos 1 estante. Debe quitarlo del estante antes. En caso de no visualizarse el estante, es porque se trata de un estante virtual privado).',
     'REF0' => 'La referencia no se ha podido eliminar, verifique que no se est&eacute; usando.',
     'REF1' => 'La referencia ha sido eliminada correctamente.',
+    'REF2' => 'La referencia a "*?*" ha sido reemplazada correctamente por "*?*". Se modificaron "*?*" registros.',
+    'REF3' => 'Se produjo un error al tratar de reemplazar la referencia.',
 #   Mensajes de Adquisicion Proveedores y Presupuestos
     'A001' => 'El proveedor ha sido agregado exitosamente.',
     'A002' => 'El nombre del proveedor no puede estar en blanco.',

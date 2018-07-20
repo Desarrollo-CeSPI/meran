@@ -70,7 +70,7 @@
                           [% write = 0 %]
                           [% cant_registros = 0 %]
                             [% FOREACH data IN involved %]
-                                [% IF data.cantidad > 0%]
+                                [% IF data.cantidad > 0 %]
                                   [% write = 1 %]
                                   [% cant_registros = cant_registros + data.cantidad %]
                                   <tr>
@@ -115,8 +115,11 @@
                             [% FOREACH campo IN referer_involved.getCamposAsArray %]
                                 <th class="click">[% USE String(campo) %][% String.capital %]</th>
                             [% END %]
+
+                            [% IF cant_registros > 0 %]
                             <th>[% "Reemplazar" | i18n %]</th>
                             <th>[% "Reemplazar y Eliminar" | i18n %]</th>
+                            [% END %]
                         </tr>
                     [% END %]
                 </thead>
@@ -126,6 +129,8 @@
                                 <span onClick="mostrarReferencias('[% related.getAlias %]','[% related.getPkValue %]')">
                                     [% related.printAsTableElement %]
                                 </span>
+
+                              [% IF cant_registros > 0 %]
                                 <td>
                                     
                                     [% PERL %]
@@ -152,6 +157,7 @@
                                     [% END %]
                                     
                                 </td>
+                              [% END %]
                             </tr>
                         [% END %]
               </tbody>

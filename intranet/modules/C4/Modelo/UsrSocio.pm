@@ -1150,6 +1150,7 @@ sub replaceBy{
     push (  @filtros, ( $campo => { eq => $value},) );
     my $replaced = C4::Modelo::UsrSocio::Manager->update_usr_socio(     where => \@filtros,
                                                                         set   => { $campo => $new_value });
+    return $replaced;
 }
 sub getId_categoria{
     my ($self) = shift;
