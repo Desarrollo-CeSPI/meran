@@ -1,5 +1,14 @@
 [% USE HTML %]
-
+  [% IF mensajes %]
+          <div  class="alert [% IF error %]alert-danger[% ELSE %]alert-success[% END %]">
+              <span>
+              <strong>[% 'Informaci&oacute;n' | i18n %]</strong><br>
+              [% FOREACH mensaje IN mensajes %]
+                [% mensaje.message %]<br>
+              [% END %] 
+              </span>
+          </div>
+  [% END %]
 <script type="text/javascript">
       $(document).ready(function() {
           makeDataTable('#tablaResult_similares');

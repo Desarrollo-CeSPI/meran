@@ -280,14 +280,17 @@ sub getAll{
     if ($matchig_or_not){
         my @matched_array;
         my $similarity_level =  C4::AR::Preferencias::getValorPreferencia("similarity");
-        foreach my $autor (@$ref_valores){
-           my $similarity = similarity($self_completo, $autor->getCompleto, $similarity_level);
-          if ($similarity gt $similarity_level){
-            my %table_data = {};
-            $table_data{"similarity"} = $similarity;
-            $table_data{"tabla_object"} = $autor;
-            push (@matched_array, \%table_data);
-          }
+        C4::AR::Debug::debug("CatAutor=>  similarity_level ".$similarity_level);
+        if ($similarity_level){
+            foreach my $autor (@$ref_valores){
+               my $similarity = similarity(lc($self_completo), lc($autor->getCompleto), $similarity_level);
+              if ($similarity gt $similarity_level){
+                my %table_data = {};
+                $table_data{"similarity"} = $similarity;
+                $table_data{"tabla_object"} = $autor;
+                push (@matched_array, \%table_data);
+              }
+            }
         }
         #Ordenampos por similaridad
         my @sorted_matched = sort { $b->{"similarity"} <=> $a->{"similarity"} } @matched_array;

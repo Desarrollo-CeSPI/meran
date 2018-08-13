@@ -211,7 +211,8 @@ elsif ($accion eq "ASIGNAR_REFERENCIA"){
     $t_params->{'related_referers'} = $related_referers;
     $t_params->{'related_referers_count'} = scalar(@$related_referers);
     $t_params->{'tabla_related'} = $tabla_related;
-    $t_params->{'mensajes'} = $msg_object;
+    $t_params->{'mensajes'} = $msg_object->{'messages'};
+    $t_params->{'error'} = $msg_object->{'error'};
     C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
 }
 elsif ($accion eq "ASIGNAR_Y_ELIMINAR_REFERENCIA"){
@@ -244,7 +245,8 @@ elsif ($accion eq "ASIGNAR_Y_ELIMINAR_REFERENCIA"){
     $t_params->{'related_referers'} = $related_referers;
     $t_params->{'related_referers_count'} = scalar(@$related_referers);
     $t_params->{'tabla_related'} = $tabla_related;
-    $t_params->{'mensajes'} = $msg_object;
+    $t_params->{'mensajes'} = $msg_object->{'messages'};
+    $t_params->{'error'} = $msg_object->{'error'};
 
     C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
 }

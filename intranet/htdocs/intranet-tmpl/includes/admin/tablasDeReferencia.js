@@ -43,7 +43,15 @@ function obtenerTabla(tabla){
 function updateObtenerTabla(responseText){
     $('#detalle_tabla').html(responseText);
     $('#basic-modal-content').modal('hide');
-
+    
+    var infoHash        = JSONstring.toObject(responseText);
+    var messageArray    = infoHash.mensajes;
+        var mensajes        = '';
+        var hayError=0;
+        for(i=0; i<messageArray.length;i++){
+            if (setMessages(messageArray[i]))
+                hayError = 1;
+        }
 }
 
 function obtenerTablaFiltrada(){
