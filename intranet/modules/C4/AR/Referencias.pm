@@ -789,7 +789,7 @@ sub asignarReferencia{
         C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'REF3', 'params' => []} );
     }else{
         $msg_object->{'error'}= 0;
-        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'REF2', 'params' => [$refOld, $refNew, $cant_registros_modificados]} );
+        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'REF2', 'params' => [$cant_registros_modificados]} );
     }
     return ($msg_object);
 }
@@ -895,15 +895,14 @@ sub asignarYEliminarReferencia{
     my ($alias_tabla,$related_id,$referer_involved,$responsable) = @_;
 
     my $msg_object1 = asignarReferencia($alias_tabla,$related_id,$referer_involved, $responsable);
-    
     my $msg_object2 = eliminarReferencia($alias_tabla,$referer_involved, $responsable);
 
-    C4::AR::Mensajes::add($msg_object1, $msg_object2);
-    if ($msg_object2->{'error'}){
-        $msg_object1->{'error'}= 1;
-    }
+    my $msg_object= C4::AR::Mensajes::create();
+    $msg_object->{'error'}= $msg_object1->{'error'} || $msg_object2->{'error'};
+    
+    C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'REF4', 'params' => []} );
 
-    return ($msg_object1);
+    return ($msg_object);
 }
 
 sub editarReferencia{

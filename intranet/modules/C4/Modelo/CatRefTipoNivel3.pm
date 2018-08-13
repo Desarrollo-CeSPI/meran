@@ -234,14 +234,16 @@ sub getAll{
     if ($matchig_or_not){
         my @matched_array;
         my $similarity_level =  C4::AR::Preferencias::getValorPreferencia("similarity");
-        foreach my $each (@$ref_valores){
-           my $similarity = similarity($self_descripcion, $each->getNombre, $similarity_level);
-          if ($similarity gt $similarity_level){
-            my %table_data = {};
-            $table_data{"similarity"} = $similarity;
-            $table_data{"tabla_object"} = $each;
-            push (@matched_array, \%table_data);
-          }
+        if ($similarity_level){
+            foreach my $each (@$ref_valores){
+               my $similarity = similarity(lc($self_descripcion), lc($each->getNombre), $similarity_level);
+              if ($similarity gt $similarity_level){
+                my %table_data = {};
+                $table_data{"similarity"} = $similarity;
+                $table_data{"tabla_object"} = $each;
+                push (@matched_array, \%table_data);
+              }
+            }
         }
         #Ordenampos por similaridad
         my @sorted_matched = sort { $b->{"similarity"} <=> $a->{"similarity"} } @matched_array;
