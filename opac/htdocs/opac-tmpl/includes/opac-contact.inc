@@ -1,3 +1,6 @@
+[%  IF re_captcha_public_key  %]
+    <script src='https://www.google.com/recaptcha/api.js'></script>
+[% END %]
 
 <form id="contactform" name="contactform" method="POST" action="[% url_prefix %]/opac-contact.pl" class="form-horizontal">
     <section class="center-section-form">
@@ -88,6 +91,15 @@
                 <textarea name="mensaje" id="mensaje" cols="45" required rows="10" tabindex="15">[% params_form.mensaje %]</textarea>
             </div>
         </div>
+
+        [%  IF re_captcha_public_key  %]
+            <div class="control-group">
+                <div id="captcha" class="controls"> 
+                    <div class="g-recaptcha" data-sitekey="[% re_captcha_public_key %]"></div>
+                </div>
+            </div>
+        [% END %]
+
         [% IF !no_submit %]
             <div class="form-actions" id="contact_submit_container">
                 <button class="btn btn-primary" type="submit" tabindex="16">[% 'Enviar Mensaje' | i18n %]</button>

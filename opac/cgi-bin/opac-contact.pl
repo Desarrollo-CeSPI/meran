@@ -41,6 +41,7 @@ my ($template, $session, $t_params)= get_template_and_user({
 
 $t_params->{'opac'};
 $t_params->{'content_title'}    = C4::AR::Filtros::i18n("Formulario de contacto");
+$t_params->{'re_captcha_public_key'} = C4::AR::Preferencias::getValorPreferencia('re_captcha_public_key');
 
 my $post = $query->param('post_message') || 0;
 
@@ -56,7 +57,21 @@ if ($post){
 
     $t_params->{'mensaje_error'} = 0;
         #verificamos que los campos requeridos tengan valor
-    if( ($params_hash->{'nombre'} eq "") || ($params_hash->{'apellido'} eq "") || ($params_hash->{'email'} eq "") || ($params_hash->{'mensaje'} eq "") ){
+
+
+    my $reCaptchaPrivateKey =  C4::AR::Preferencias::getValorPreferencia('re_captcha_private_key');
+    my $reCaptchaResponse   = $params_hash->{'g-recaptcha-response'};
+    use Captcha::reCAPTCHA;
+    my $c = Captcha::reCAPTCHA->new;
+    my $captchaResult;    
+    if ($reCaptchaPrivateKey){
+        eval{
+            $captchaResult = $c->check_answer_v2($reCaptchaPrivateKey,$reCaptchaResponse,$ENV{'REMOTE_ADDR'});
+        };
+        C4::AR::Debug::debug("ERROR DE CAPTCHA: ".$captchaResult->{error});
+    }
+
+    if(($reCaptchaPrivateKey && !$captchaResult->{is_valid} ) || ($params_hash->{'nombre'} eq "") || ($params_hash->{'apellido'} eq "") || ($params_hash->{'email'} eq "") || ($params_hash->{'mensaje'} eq "") ){
         $t_params->{'mensaje_error'} = 1;
         $t_params->{'mensaje_class'} = 'alert-error ';
         $t_params->{'mensaje'} = C4::AR::Mensajes::getMensaje('VA002','opac');

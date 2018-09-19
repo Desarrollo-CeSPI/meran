@@ -1,10 +1,8 @@
 [% USE HTML %]
 
-<script type="text/javascript">
-	var RecaptchaOptions = {
-	   lang : 'es',
-	};
-</script>
+[%  IF re_captcha_public_key  %]
+    <script src='https://www.google.com/recaptcha/api.js'></script>
+[% END %]
 
 <div>
     [% IF message %]
@@ -20,11 +18,15 @@
                             <input type="user-id" name="user-id" id="user-id" tabindex="1" class="field" value="" />
                         </div>
                     </div>
-
+             
              [%  IF re_captcha_public_key  %]
-                    <script src="//www.google.com/recaptcha/api/challenge?k=[% re_captcha_public_key %]" type="text/javascript"></script>
-                    <noscript><iframeframeborder="0" height="300" src="//www.google.com/recaptcha/api/noscript?k=[% re_captcha_public_key %]" width="500"></iframe><textarea cols="40" name="recaptcha_challenge_field" rows="3"></textarea><input name="recaptcha_response_field" type="hidden" value="manual_challenge" /></noscript>
+                <div class="control-group">
+                    <div id="captcha" class="controls"> 
+                        <div class="g-recaptcha" data-sitekey="[% re_captcha_public_key %]"></div>
+                    </div>
+                </div>
              [% END %]
+
                     <div class="form-actions">
                         <button class="btn btn-large btn-primary" type="submit">[% 'Enviar' | i18n %]</button>
                     </div> 
