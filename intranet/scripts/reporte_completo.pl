@@ -34,6 +34,7 @@ use C4::Modelo::CatRegistroMarcN3::Manager;
 #583^k - Responsable de la acción
 
 
+
 my @head=(
     'Título',
     'Resto del título',
@@ -142,6 +143,7 @@ foreach my $nivel3 (@$ejemplares){
     }
 
     $ejemplar[12] = $nivel3->getEstado();
+
     $ejemplar[13] = $marc_record3->subfield('995','m');
     $ejemplar[14] = $marc_record3->subfield('900','g');
 

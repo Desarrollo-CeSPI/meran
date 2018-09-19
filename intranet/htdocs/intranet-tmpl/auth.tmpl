@@ -32,12 +32,10 @@
 	<script type="text/javascript" src="/includes/md5-min.js"></script>
 	<script type="text/javascript" src="/includes/sha1-min.js"></script>
 	
-	<script type="text/javascript">
-		 var RecaptchaOptions = {
-		 };
-	</script>
-	
-	
+	[%  IF mostrar_captcha  %]
+	<script src='https://www.google.com/recaptcha/api.js'></script>
+	[% END %]
+
 	<script type="text/javascript">
 	    function enviar(){
 	        [% IF plainPassword == 0 %]
@@ -57,7 +55,7 @@
 	        //onEnter con foco en input, ejecuta la busqueda
 	          onEnter("username",enviar);
 	          onEnter("password_plain",enviar);
-	          onEnter("recaptcha_response_field",enviar);
+	          onEnter("g-recaptcha-response",enviar);
 	          $('#username').focus();
 	    });
 	
@@ -122,14 +120,8 @@
 						 <form action='[% url_prefix %]/mainpage.pl' method="post" name="datosAEnviar" id="datosAEnviar">
 						 [%  IF mostrar_captcha  %]
 						  		<div class="alert alert-error" style="width:412px;" >[% 'Comprobaci&oacute;n de seguridad: Debido a que ha intentado iniciar sesi&oacute;n varias veces con el mismo usuario, deber&aacute; ingresar el siguiente c&oacute;digo de seguridad' | i18n %]</div>
-					  
-
 					             <div id="captcha"> 
-					               <script src="https://www.google.com/recaptcha/api/challenge?k=[% re_captcha_public_key %]" type="text/javascript"></script>
-					               <noscript><iframe frameborder="0" height="30" src="http://www.google.com/recaptcha/api/noscript?k=[% re_captcha_public_key %]" width="500"></iframe>
-					                         <textarea cols="40" name="recaptcha_challenge_field" rows="3"></textarea>
-					                         <input name="recaptcha_response_field" type="hidden" value="manual_challenge" />
-					               </noscript>
+					             	<div class="g-recaptcha" data-sitekey="[% re_captcha_public_key %]"></div>
 					             </div>
 					        [% END %]
 					                <input type="hidden" name="userid" id="userid" >
