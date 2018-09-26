@@ -24,43 +24,51 @@ use C4::AR::Usuarios;
 use JSON;
 use CGI;
 use C4::Context;
-
+my $error=0;
+my $response_status ='200 OK';
 my $input  = new CGI;
 
 my %resp_hash=();
 
 my $api_token = C4::Context->config('api_token');
 my $token = $input->param('token');
-
+		my $nro_socio = $input->param('nro_socio');
 if (!$api_token){
-	$resp_hash{'error'} = '1';
-	$resp_hash{'error_msg'} = '500';
-} elsif($token != $api_token){
-	$resp_hash{'error'} = '1';
-	$resp_hash{'error_msg'} = 'Invalid Token';
+	$response_status = '500 Internal Server Error';
+	$error=1;
+} elsif((!$token)||(!$nro_socio)){
+	$response_status = '400 Bad Request';
+	$error=1;
+} elsif($token ne $api_token){
+	$response_status = '403 Forbidden';
+	$error=1;
 } else {
 	if( $ENV{ 'REQUEST_METHOD' } eq 'GET' ){
-		my $nro_socio = $input->param('nro_socio');
 		my $socio= C4::AR::Usuarios::getSocioInfoPorNroSocio($nro_socio);
 		if ( (!$socio) || ($socio == 0) ){
 		 #No existe el usuario 404
-		  $resp_hash{'error'} = '1';
-		  $resp_hash{'error_msg'} = '404';
+		 $response_status = '404 Not Found';
 		} else {
 			my $msg_object = C4::AR::Usuarios::_verificarLibreDeuda($nro_socio);
-			$resp_hash{'error'} = '0';
 			if (!C4::AR::Mensajes::hayError($msg_object)){
 			#Libre deuda aprobado
-				$resp_hash{'libre_deuda'} = 'APROBADO';
+				$resp_hash{'status'} = 'APROBADO';
 			} else {
 			#Libre deuda rechazado
-				$resp_hash{'libre_deuda'} = 'RECHAZADO';
-				$resp_hash{'libre_deuda_msg'} = $msg_object->{'messages'};
+				$resp_hash{'status'} = 'RECHAZADO';
+				$resp_hash{'status_msg'} = $msg_object->{'messages'};
 		 	}
 		
 		}
 	}
+	else
+	{
+	  $response_status = '405 Method Not Allowed';
+	  $error=1;
+	}
 }
-print $input->header('application/json');
+print $input->header();
+print $input->header('application/json', $response_status);
 my $json = encode_json \%resp_hash;
 print "$json\n";
+exit 0;

@@ -58,6 +58,20 @@ Alias /includes/ reemplazarPATHBASE/reemplazarID/includes/
 </Directory>
 
 ServerSignature Off
+ 
+Alias /api/ reemplazarPATHBASE/reemplazarID/intranet/cgi-bin/api/
+<Location /api/ >
+  SetHandler perl-script
+  PerlResponseHandler ModPerl::Registry
+  PerlOptions +ParseHeaders
+  Options +ExecCGI
+
+  ErrorDocument 400 ' '
+  ErrorDocument 403 ' '
+  ErrorDocument 404 ' '
+  ErrorDocument 405 ' '
+  ErrorDocument 500 ' '
+</Location>
 
 Alias /uploads/covers/ "reemplazarPATHBASE/reemplazarID/files/intranet/uploads/covers/"
 <Directory reemplazarPATHBASE/reemplazarID/files/intranet/uploads/covers/ >
