@@ -373,6 +373,41 @@ sub exportarReporteBusquedas{
         print $ss->data(); 
 }
 
+sub exportarReporteInventario{
+
+     my ($inventarios) = @_;
+
+     my @headers_tabla= (
+                decode('utf8', C4::AR::Filtros::i18n("Fecha de ingreso")),
+                decode('utf8', C4::AR::Filtros::i18n("Inventario")),
+                decode('utf8', C4::AR::Filtros::i18n("Autor")),
+                decode('utf8', C4::AR::Filtros::i18n("Título")),
+                decode('utf8', C4::AR::Filtros::i18n("Edición")),
+                decode('utf8', C4::AR::Filtros::i18n("Editor")),
+                decode('utf8', C4::AR::Filtros::i18n("Año de edición"))
+                ); 
+
+     my $ss = Spreadsheet::WriteExcel::Simple->new;
+#-------- Se escriben los headers en el excel con lo q contiene el array headers_tabla ------------
+     $ss->write_bold_row(\@headers_tabla);   
+
+#-------- Se escriben los datos en el excel con lo q contiene el array $tabla_a_exportar ------------
+     
+     foreach my $inventario (@$inventarios){
+        my @fila_tabla = ();
+        $fila_tabla[0] =  decode('utf8', $inventario->{'nivel3'}->getCreatedAt);
+        $fila_tabla[1] =  decode('utf8', $inventario->{'nivel3'}->getBarcode);
+        $fila_tabla[2] =  decode('utf8', $inventario->{'nivel3'}->nivel1->getAutorStringEscaped);
+        $fila_tabla[3] =  decode('utf8', $inventario->{'nivel3'}->nivel1->getTituloStringEscaped);
+        $fila_tabla[4] =  decode('utf8', $inventario->{'nivel3'}->nivel2->getEdicion);        
+        $fila_tabla[5] =  decode('utf8', $inventario->{'nivel3'}->nivel2->getEditor);
+        $fila_tabla[6] =  decode('utf8', $inventario->{'nivel3'}->nivel2->getAnio_publicacion);
+        
+        $ss->write_row(\@fila_tabla);       
+     }
+
+        print $ss->data(); 
+}
 
 sub exportarReporteUsuarios{
 

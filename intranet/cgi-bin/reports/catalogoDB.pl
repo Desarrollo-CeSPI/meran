@@ -155,11 +155,7 @@ if($tipoAccion eq "BUSQUEDAS"){
         C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
     }
 
-
 } elsif ($tipoAccion eq "REPORTE_GEN_ETIQUETAS") {
-
-# DEPRECATED
-      # my $tmpl = ($obj->{'tipo_reporte'} eq "sin_grupos")?"includes/partials/reportes/_reporte_gen_etiquetas_sin_grupos_result.inc":"includes/partials/reportes/_reporte_gen_etiquetas_result.inc";
 
       ($template, $session, $t_params)= C4::AR::Auth::get_template_and_user({
                                                 template_name   => "includes/partials/reportes/_reporte_gen_etiquetas_sin_grupos_result.inc",
@@ -182,6 +178,47 @@ if($tipoAccion eq "BUSQUEDAS"){
 
       C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
 
+} elsif ($tipoAccion eq "REPORTE_INVENTARIO") {
+
+    if ($obj->{'exportar'}){
+      if ($obj->{'formatoReporte'} eq 'XLS'){
+          
+          $obj->{'codBarra1'} = $input->param('codBarra1_inv');
+          $obj->{'codBarra2'} = $input->param('codBarra2_inv');
+
+          my ($cantidad, $array_nivel3)   = C4::AR::Reportes::reporteGenerarEtiquetas($obj, $session, 0, 0);
+          
+          C4::AR::Debug::debug("REPORTE_INVENTARIO =>  ".$cantidad."  cod1=".$obj->{'codBarra1'}." cod2=".$obj->{'codBarra2'});
+
+          #XLS
+          print C4::AR::XLSGenerator::xlsHeader(); 
+          C4::AR::XLSGenerator::exportarReporteInventario($array_nivel3);
+      }
+    }else{
+
+      ($template, $session, $t_params)= C4::AR::Auth::get_template_and_user({
+                                                template_name   => "includes/partials/reportes/_reporte_inventario_result.inc",
+                                                query           => $input,
+                                                type            => "intranet",
+                                                authnotrequired => 0,
+                                                flagsrequired   => {  ui            => 'ANY', 
+                                                                    tipo_documento  => 'ANY', 
+                                                                    accion          => 'CONSULTA', 
+                                                                    entorno         => 'undefined'},
+      });
+
+      my ($cantidad, $array_nivel3)   = C4::AR::Reportes::reporteGenerarEtiquetas($obj, $session, $ini, $cantR);
+
+      C4::AR::Debug::debug("REPORTE_INVENTARIO busqueda =>  ".$cantidad." ini=".$ini." cantR=".$cantR);
+      
+      $obj->{'cantidad'}              = $cantidad;
+      $t_params->{'paginador'}        = C4::AR::Utilidades::crearPaginador($cantidad,$cantR, $pageNumber,$funcion,$t_params);
+      $t_params->{'SEARCH_RESULTS'}   = $array_nivel3;
+      $t_params->{'cantidad'}         = $cantidad;
+
+
+      C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
+    }
 } elsif ($tipoAccion eq "REGISTROS_NO_INDEXADOS"){
 
       ($template, $session, $t_params)= C4::AR::Auth::get_template_and_user({

@@ -1840,16 +1840,26 @@ sub reporteGenEtiquetasPorRangoBarcode{
 
     my @datos_array;
     my @filtros;
+    my $cat_registro_marc_n3_array;
+
+      C4::AR::Debug::debug("REPORTE_INVENTARIO reporteGenEtiquetasPorRangoBarcode =>  cod1=".$params->{'codBarra1'}." cod2=".$params->{'codBarra2'});
 
     push(@filtros, ( codigo_barra   => { eq => $params->{'codBarra1'}, gt => $params->{'codBarra1'} } ) );
     push(@filtros, ( codigo_barra   => { eq => $params->{'codBarra2'}, lt => $params->{'codBarra2'} } ) );
 
-    my $cat_registro_marc_n3_array = C4::Modelo::CatRegistroMarcN3::Manager->get_cat_registro_marc_n3(
-                                                                query           => \@filtros,
-                                                                limit           => $cantR,
-                                                                offset          => $ini,
-                                                                with_objects    => ['nivel1', 'nivel2'],
-                                                            );
+    if ($cantR gt 0){
+        $cat_registro_marc_n3_array = C4::Modelo::CatRegistroMarcN3::Manager->get_cat_registro_marc_n3(
+                                                                    query           => \@filtros,
+                                                                    limit           => $cantR,
+                                                                    offset          => $ini,
+                                                                    with_objects    => ['nivel1', 'nivel2']
+                                                                );
+    } else {
+        $cat_registro_marc_n3_array = C4::Modelo::CatRegistroMarcN3::Manager->get_cat_registro_marc_n3(
+                                                                    query           => \@filtros,
+                                                                    with_objects    => ['nivel1', 'nivel2']
+                                                                );
+    }
 
     my $cat_registro_marc_n3_array_count = C4::Modelo::CatRegistroMarcN3::Manager->get_cat_registro_marc_n3_count(
                                                                 query           => \@filtros,
@@ -1991,14 +2001,14 @@ sub reporteGenerarEtiquetas{
     my ($params, $session, $ini, $cantR) = @_;
 
     if( (C4::AR::Utilidades::trim($params->{'signatura1'}) ne "") && (C4::AR::Utilidades::trim($params->{'signatura2'}) ne "") ){
-        reporteGenEtiquetasPorRangoSignatura($params, $session, $ini, $cantR);
+        return reporteGenEtiquetasPorRangoSignatura($params, $session, $ini, $cantR);
     }
     elsif( (C4::AR::Utilidades::trim($params->{'codBarra1'}) ne "") && (C4::AR::Utilidades::trim($params->{'codBarra2'}) ne "") ){
-        reporteGenEtiquetasPorRangoBarcode($params, $session, $ini, $cantR);
+        return reporteGenEtiquetasPorRangoBarcode($params, $session, $ini, $cantR);
     } elsif( ($params->{'fecha_ini'} ne "") && ($params->{'fecha_fin'} ne "") ){
-        reporteGenEtiquetasPorRangoFechas($params, $session, $ini, $cantR);
+        return reporteGenEtiquetasPorRangoFechas($params, $session, $ini, $cantR);
     } else {
-        reporteGenEtiquetas($params, $session);       
+        return reporteGenEtiquetas($params, $session);       
     }
 
 }

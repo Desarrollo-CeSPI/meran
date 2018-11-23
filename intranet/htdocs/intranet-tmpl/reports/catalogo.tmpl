@@ -13,6 +13,7 @@
                                  subtitulo => "[% 'Navegue por las pesta&ntilde;as para acceder a los distintos reportes' | i18n %]",
                                  content   => [ 
                                                 {id => 'labels', text => "[% 'Generaci&oacute;n de Etiquetas' | i18n %]"},
+                                                {id => 'inventario', text => "[% 'Reporte de Inventario' | i18n %]"},
                                                 {id => 'unindexed', text => "[% 'Registros no indexados' | i18n %]"},
                                                 {id => 'colecciones', text => "[% 'Colecciones' | i18n %]"},
                                                 {id => 'disponibilidad', text => "[% 'Disponibilidad de Ejemplares' | i18n %]"},
@@ -29,6 +30,9 @@
 
          <div class="tab-pane fade in active" id="labels">
             [% INCLUDE 'partials/reportes/_reporte_gen_etiquetas.inc' %]
+        </div>
+        <div class="tab-pane fade" id="inventario">
+            [% INCLUDE 'partials/reportes/_reporte_inventario.inc' %]
         </div>
         <div class="tab-pane fade " id="unindexed">
             [% INCLUDE 'partials/reportes/_registros_no_indexados.inc' %]
