@@ -1614,11 +1614,12 @@ sub getReporteCirculacionGeneral{
 
 
     # cantidad de ejemplares prestados (<> id3)
+    my @filtros_tmp0 = @filtros;
+    push(@filtros_tmp0, ('tipo_operacion' =>  {eq => 'PRESTAMO'} ));
     my $total_ejemplares_array = C4::Modelo::RepHistorialCirculacion::Manager->get_rep_historial_circulacion( 
-                                                                      query             => \@filtros,
+                                                                      query             => \@filtros_tmp0,
                                                                       require_objects   => [ 'nivel3', 'nivel2', 'socio', 'tipo_prestamo_ref', 'responsable_ref' ],
                                                                       select            => ['id3'],
-                                                                      distinct          => 1,
                                                         );
 
 
@@ -1633,19 +1634,19 @@ sub getReporteCirculacionGeneral{
 
 
     # cantidad de devoluciones 
-    my @filtros_tmp = @filtros;
-    push(@filtros_tmp, ('tipo_operacion' =>  {eq => 'DEVOLUCION'} ));
+    my @filtros_tmp1 = @filtros;
+    push(@filtros_tmp1, ('tipo_operacion' =>  {eq => 'DEVOLUCION'} ));
     my $cant_devoluciones = C4::Modelo::RepHistorialCirculacion::Manager->get_rep_historial_circulacion( 
-                                                                      query             => \@filtros_tmp,
+                                                                      query             => \@filtros_tmp1,
                                                                       require_objects   => [ 'nivel3', 'nivel2', 'socio', 'tipo_prestamo_ref', 'responsable_ref' ],
                                                                       select            => ['tipo_operacion'],
                                                         );
 
     # cantidad de renovaciones
-    my @filtros_tmp = @filtros;
-    push(@filtros_tmp, ('tipo_operacion' =>  {eq => 'RENOVACION'} ));
+    my @filtros_tmp2 = @filtros;
+    push(@filtros_tmp2, ('tipo_operacion' =>  {eq => 'RENOVACION'} ));
     my $cant_renovaciones = C4::Modelo::RepHistorialCirculacion::Manager->get_rep_historial_circulacion( 
-                                                                      query             => \@filtros_tmp,
+                                                                      query             => \@filtros_tmp2,
                                                                       require_objects   => [ 'nivel3', 'nivel2', 'socio', 'tipo_prestamo_ref', 'responsable_ref' ],
                                                                       select            => ['tipo_operacion'],
                                                         );
