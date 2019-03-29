@@ -236,7 +236,7 @@
             		<div class="page-header" style="border-bottom: none; padding-bottom: 0px;">
             			<h3>
 		            		[% IF buscoPor %]
-		            			[% buscoPor %]
+		            			[% buscoPor | html %]
 		            		[% END %]
 	            			<small>[% 'Se han encontrado' | i18n %] [% cantidad %] [% 'resultados' | i18n %]</small>
             			</h3>
