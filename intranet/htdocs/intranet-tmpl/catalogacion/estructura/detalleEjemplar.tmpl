@@ -74,7 +74,7 @@ var AUTO_GENERAR_COMPROBANTE = '[% auto_generar_comprobante_prestamo %]';
                            print C4::AR::Filtros::link_to( text => "[% nivel3.getId2 %]",
                                                            url=>"[% url_prefix %]/catalogacion/estructura/detalle.pl", 
                                                            params =>   ["id1=[% nivel3.nivel2.getId1 %]"],
-                                                           tooltip => "[% nivel3.nivel2.nivel1.getTitulo %]",
+                                                           tooltip => "[% HTML.escape(nivel3.nivel2.nivel1.getTitulo) %]",
                                                        ) ;
                        [% END %])
                   </small>

@@ -112,7 +112,7 @@
               <input type="text" name="string" id="search_bar" class="search-query span3" placeholder="[% 'Buscar' | i18n %]"
                    		  x-webkit-speech onwebkitspeechchange="javascript:startSearch();" 
                    		  speech onspeechchange="javascript:startSearch();"
-                   		  value="[% search_term %]"
+                   		  value="[% search_term | html %]"
               >
               <input type="hidden" name="tipoAccion" value="BUSQUEDA_COMBINABLE" />
               <input type="hidden" name="token" value="[% token %]" />
