@@ -30,7 +30,7 @@ my $input  = new CGI;
 
 my %resp_hash=();
 
-my $api_token = C4::Context->config('api_token');
+my $api_token = C4::Context->config('apitoken');
 my $token = $input->param('token');
 		my $nro_socio = $input->param('nro_socio');
 if (!$api_token){
