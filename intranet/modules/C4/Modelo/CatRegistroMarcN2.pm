@@ -448,6 +448,23 @@ sub getEditor{
     return ($editor);
 }
 
+
+sub getEditorObject{
+    my ($self)          = shift;
+
+    my $marc_record     = MARC::Record->new_from_usmarc($self->getMarcRecord());
+    my $ref             = C4::AR::Catalogacion::getRefFromStringConArrobas($self->getEditor());
+
+    my $soporte_object  = C4::Modelo::CatEditorial->getByPk($ref);
+
+    if(!$soporte_object){
+            C4::AR::Debug::debug("CatRegistroMarcN2 => getSoporteObject()=> EL OBJECTO (ID) RefSoporte NO EXISTE => ".$ref);
+            $soporte_object = C4::Modelo::RefSoporte->new();
+    }
+
+    return $soporte_object;
+}
+
 sub getDescripcionFisica{
     my ($self)          = shift;
 

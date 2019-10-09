@@ -2120,21 +2120,30 @@ sub reporteContenidoEstantesVirtuales{
                         $info_estante{"titulo"} = $c->nivel2->nivel1->getTituloStringEscaped;
                         $info_estante{"autor"} = $c->nivel2->nivel1->getAutorStringEscaped;
                         $info_estante{"edicion"} = $c->nivel2->getEdicion;
+                        $info_estante{"anio_publicacion"} = $c->nivel2->getAnio_publicacion;
 
                         if($c->nivel2 && $c->nivel2->nivel1){
                             my $niveles3 = C4::AR::Nivel3::getNivel3FromId2($c->nivel2->id);
                             my $cantSala=0;
                             my $cantPrestamo=0;
-
+                            my $inventarios='';
                             foreach my $n3 (@$niveles3){
-                                    if ($n3->esParaSala()) {
-                                        $cantSala = $cantSala + 1;
-                                    } else {
-                                        $cantPrestamo = $cantPrestamo + 1;
-                                    }
+                                if (!$inventarios) {
+                                    $inventarios = $n3->codigo_barra;
+                                }
+                                else{
+                                    $inventarios = $inventarios.",".$n3->codigo_barra;
+                                }
+
+                                if ($n3->esParaSala()) {
+                                    $cantSala = $cantSala + 1;
+                                } else {
+                                    $cantPrestamo = $cantPrestamo + 1;
+                                }
                             }
                             $info_estante{"cantPrestamo"} = $cantPrestamo;
                             $info_estante{"cantSala"} = $cantSala;
+                            $info_estante{"inventarios"} = $inventarios;
                         }
 
                         push( @reporte, \%info_estante );

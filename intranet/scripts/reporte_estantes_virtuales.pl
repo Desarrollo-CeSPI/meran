@@ -36,7 +36,7 @@ my $reporte = C4::AR::Reportes::reporteContenidoEstantesVirtuales();
 #Cantidad de ejemplares: DOMICILIARIO
 
 
-my @head=('Estante Padre','Estante','Título','Autor','Edición','Ejemplares Domicilio','Ejemplares Sala');
+my @head=('Estante Padre','Estante','Título','Autor','Edición','Año','Ejemplares Domicilio','Ejemplares Sala', 'Inventarios');
 print join('#', @head);
 print "\n";
 
@@ -48,8 +48,10 @@ foreach my $contenido (@$reporte){
     $estante[2] = $contenido->{"titulo"};
     $estante[3] = $contenido->{"autor"};
     $estante[4] = $contenido->{"edicion"}; 
+    $estante[4] = $contenido->{"anio_publicacion"};
     $estante[5] = $contenido->{"cantPrestamo"}; 
     $estante[6] = $contenido->{"cantSala"};
+    $estante[7] = $contenido->{"inventarios"};
 
     print join('#', @estante);
     print "\n";

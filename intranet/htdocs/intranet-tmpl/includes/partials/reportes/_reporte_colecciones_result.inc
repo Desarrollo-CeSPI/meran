@@ -21,6 +21,7 @@ function changePageBusquedas(ini){
 	                    selectAll_id    => "",
 	                    columns         => ['[% "T&iacute;tulo"|i18n %]','[% "Autor"|i18n %]',
 	                                        '[% "Edici&oacute;n" | i18n %]','[% "C&oacute;digo" | i18n %]', '[% "Signatura Topogr&aacute;fica" | i18n %]','[% "Fecha Alta" | i18n %]','[% "Operador" | i18n %]',
+	                                        '[% "Editor" | i18n %]','[% "ISBN" | i18n %]'
 	                                      ]
 	                                                    
 	                          ) ;
@@ -69,7 +70,13 @@ function changePageBusquedas(ini){
 	          </td>
 	          <td>
 	              [% res.getCreatedByToString %]
-	          </td>	          
+	          </td>
+	             <td>
+       [% res.nivel2.getEditorObject.getEditorial %]
+   </td>
+   <td>
+       [% res.nivel2.getISBN %]
+   </td>	          
 	      </tr>
 	    <!-- FOREACH PRIMERO -->
 		 [% CATCH %]

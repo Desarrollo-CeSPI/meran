@@ -7,16 +7,16 @@
 
 
     $(document).ready(function(){
-          onEnter('titulo',busqueda,true);
-          onEnter('autor',busqueda,true);
-          onEnter('codBarra',busqueda,true);
-          onEnter('signatura',busqueda,true);
-          onEnter('fecha_ini',busqueda,true);
-          onEnter('fecha_fin',busqueda,true);
-          onEnter('codBarra1',busqueda,true);
-          onEnter('codBarra2',busqueda,true);
-          onEnter('signatura1',busqueda,true);
-          onEnter('signatura2',busqueda,true);
+          onEnter('titulo',busquedaEtiquetas,true);
+          onEnter('autor',busquedaEtiquetas,true);
+          onEnter('codBarra',busquedaEtiquetas,true);
+          onEnter('signatura',busquedaEtiquetas,true);
+          onEnter('fecha_ini',busquedaEtiquetas,true);
+          onEnter('fecha_fin',busquedaEtiquetas,true);
+          onEnter('codBarra1',busquedaEtiquetas,true);
+          onEnter('codBarra2',busquedaEtiquetas,true);
+          onEnter('signatura1',busquedaEtiquetas,true);
+          onEnter('signatura2',busquedaEtiquetas,true);
 
           $('#titulo').click(clearRangos);
           $('#signatura').click(clearRangos);
@@ -32,9 +32,9 @@
           $('#signatura2').click(clearFromRangoPorSignatura);
     });
 
-    function busqueda(){
+    function busquedaEtiquetas(){
 
-        objAH_repE                   = new AjaxHelper(updateBusqueda);
+        objAH_repE                   = new AjaxHelper(updateBusquedaEtiquetas);
         // objAH_repE.debug             = true;
         objAH_repE.showOverlay       = true;
         //para busquedas combinables
@@ -115,7 +115,7 @@
     }
 
 
-    function updateBusqueda(responseText){
+    function updateBusquedaEtiquetas(responseText){
         $('#report_result_gen_etiquetas').html(responseText);
         $('#report_result_gen_etiquetas').show();
     }
@@ -160,7 +160,7 @@
                 (jQuery.trim($('#signatura1').val()) != '')||
                 (jQuery.trim($('#signatura2').val()) != '')
              ){ 
-                busqueda();
+                busquedaEtiquetas();
               }
 
 //           if (!cumple_limite) {

@@ -33,7 +33,7 @@
   <link rel="stylesheet" href="/includes/css/print-opac.css" type="text/css" media="print" />
 
   <script type="text/javascript">
-    var token               = '[% token %]';
+    var token               = '[% token | html %]';
     var imagesForJS         = '[% temas %]/[% tema %]/imagenes';
     var M_LIMITE_RESULTADOS = [% limite_resultados_autocompletables %] + "";
     var URL_PREFIX          = '[% url_prefix %]';
